@@ -851,7 +851,12 @@ async function chooseIndividualTrainingTrack(
   expect(trackName).toBeTruthy();
   await openTraining(page);
 
-  const cards = page.locator("#individualTrainingPicker .individual-training-card");
+  await page.locator("#teamChangeIndividualTraining").click();
+  const drawer = page.locator("#managerTeamChoiceDrawer");
+  await expect(drawer).toBeVisible();
+  await expect(drawer.locator("#individualTrainingPicker")).toBeVisible();
+
+  const cards = drawer.locator("#individualTrainingPicker .individual-training-card");
   const cardCount = await cards.count();
   expect(cardCount).toBeGreaterThan(0);
   let selectedCard = null;
@@ -886,6 +891,9 @@ async function chooseIndividualTrainingTrack(
       trackId: assignment?.trackId || null
     };
   }).toEqual({ week: before.week, trackId });
+
+  await drawer.locator(".manager-team-choice-done").click();
+  await expect(drawer).toBeHidden();
 
   return {
     week: before.week,
