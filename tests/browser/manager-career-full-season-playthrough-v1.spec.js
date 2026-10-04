@@ -279,9 +279,9 @@ async function openTraining(page) {
 async function readDisplayedTrainingIntensity(page) {
   const depth = page.locator("#trainingDepth");
   const load = page.locator("#trainingPlanLoad");
-  if (!(await depth.evaluate((element) => element.open))) {
-    await depth.locator("summary").click();
-  }
+  await depth.evaluate((element) => {
+    element.open = true;
+  });
   await expect(load).toBeVisible();
   const text = String(await load.textContent() || "").trim();
   const match = text.match(/intensitet\s+([0-9]+(?:[.,][0-9]+)?)/i);
