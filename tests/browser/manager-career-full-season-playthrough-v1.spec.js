@@ -938,7 +938,7 @@ async function seedCanonicalInjuryForStarter(page, weeksOut = 3) {
   );
   const chips = page.locator("#lineupSlots .player-chip[data-slot-id][data-player-id]");
   const chipCount = await chips.count();
-  const candidates = [];
+  const rawCandidates = [];
 
   for (let index = 0; index < chipCount; index += 1) {
     const chip = chips.nth(index);
@@ -948,8 +948,18 @@ async function seedCanonicalInjuryForStarter(page, weeksOut = 3) {
     const condition = conditionByPlayerId.get(playerId);
     if (!slotId || !playerId || !position || position === "GK") continue;
     if (!condition?.name || condition.injured) continue;
-    candidates.push({ slotId, playerId, position, condition });
+    rawCandidates.push({ slotId, playerId, position, condition });
   }
+
+  expect(rawCandidates.length).toBeGreaterThan(0);
+  const need = await readRotationNeed(page);
+  const planning = await readExactRotationPlanningState(page, need, rawCandidates[0].slotId);
+  const positionTokensByName = new Map(
+    planning.profiles.map((profile) => [profile.name, profile.positionTokens])
+  );
+  const candidates = rawCandidates.filter(({ position, condition }) =>
+    positionTokensByName.get(condition.name)?.includes(position)
+  );
 
   candidates.sort((a, b) => a.condition.load - b.condition.load || a.condition.name.localeCompare(b.condition.name));
   const target = candidates[0] || null;
