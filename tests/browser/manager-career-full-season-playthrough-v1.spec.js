@@ -276,14 +276,13 @@ async function openTraining(page) {
   await expect(page.locator("#managerTrainingDay")).toBeVisible();
 }
 
-async function readDisplayedTrainingIntensity(page) {
-  const depth = page.locator("#trainingDepth");
-  const load = page.locator("#trainingPlanLoad");
-  await depth.evaluate((element) => {
-    element.open = true;
-  });
-  await expect(load).toBeVisible();
-  const text = String(await load.textContent() || "").trim();
+async function readTrainingIntensity(page) {
+  const visibleLoad = page.locator("#trainingDayLoad");
+  const canonicalLoad = page.locator("#trainingPlanLoad");
+  await expect(visibleLoad).toBeVisible();
+  await expect(visibleLoad).not.toHaveText("Belastning beregnes fra valgt program.");
+  await expect(canonicalLoad).toBeAttached();
+  const text = String(await canonicalLoad.textContent() || "").trim();
   const match = text.match(/intensitet\s+([0-9]+(?:[.,][0-9]+)?)/i);
   expect(match).toBeTruthy();
   const intensity = Number(match[1].replace(",", "."));
@@ -1132,7 +1131,7 @@ async function chooseTrainingForCurrentWeek(page, choiceIndex = 0) {
     focusId,
     focusWeek: afterProgram.week
   });
-  const intensity = await readDisplayedTrainingIntensity(page);
+  const intensity = await readTrainingIntensity(page);
   return { programId, focusId, intensity };
 }
 
