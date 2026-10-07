@@ -312,7 +312,6 @@ async function readRotationNeed(page) {
     const conditions = Array.isArray(session.playerCondition)
       ? session.playerCondition
       : parse("hgfm.playerCondition.v1", []);
-    const lineup = session.lineup || {};
     const conditionByPlayerId = new Map(
       conditions
         .filter((entry) => entry?.playerId)
@@ -324,9 +323,19 @@ async function readRotationNeed(page) {
         .map((entry) => String(entry?.name || "").trim())
         .filter(Boolean)
     );
-    const candidates = Object.entries(lineup)
-      .map(([slotId, assignment]) => {
-        const playerId = assignment?.playerId || null;
+
+    // Rotasjonsbehovet skal vurderes mot den oppstillingen manageren faktisk
+    // ser og kan endre. `session.lineup` kan være et eldre storage-snapshot
+    // mellom UI-handlinger; DOM-brikkene er den operative lineupen som samme
+    // test straks manipulerer gjennom laguttaksflaten.
+    const lineup = Array.from(
+      document.querySelectorAll("#lineupSlots .player-chip[data-slot-id][data-player-id]")
+    ).map((chip) => ({
+      slotId: String(chip.getAttribute("data-slot-id") || "").trim(),
+      playerId: String(chip.getAttribute("data-player-id") || "").trim()
+    }));
+    const candidates = lineup
+      .map(({ slotId, playerId }) => {
         const condition = playerId ? conditionByPlayerId.get(playerId) : null;
         return {
           slotId,
