@@ -1024,13 +1024,36 @@ async function seedCanonicalInjuryForStarter(page, weeksOut = 3) {
   const target = candidates[0] || null;
   expect(target).toBeTruthy();
 
+  // League-startup reseeder alltid startelleveren og prioriterer friske
+  // spillere. En reload mens league er aktiv ville derfor automatisk tatt den
+  // seedede skadde starteren ut før manageren fikk gjøre uttaket selv.
+  //
+  // Bruk den eksisterende modusisolasjonen som rehydreringsgrense: gå ut av
+  // league via UI, legg KUN skade-preconditionen i den lagrede league-sessionen,
+  // reload mens scenario-sessionen er aktiv, og gå tilbake via UI. Da treffes
+  // startup-reseedingen av scenarioet, mens league-lineupen bevares urørt.
+  await page.locator("#settingsButton").click();
+  const settings = page.locator("#modalSettings");
+  await expect(settings).toBeVisible();
+  await settings.locator('[data-settings-action="mode"]').click();
+  await expect(page.locator("#onboardingScreen")).toBeVisible();
+  await page.locator('[data-start-mode="scenario"]').click();
+  await expect(page.locator("#secondaryModeBar")).toBeVisible();
+
+  await expect.poll(async () => page.evaluate(() => {
+    try {
+      return JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "null")?.activeMode || null;
+    } catch (_) {
+      return null;
+    }
+  })).toBe("scenario");
+
   await page.evaluate(({ playerId, weeks }) => {
     const raw = localStorage.getItem("hgfm.modeSessions.v1");
     const envelope = raw ? JSON.parse(raw) : null;
-    const activeMode = envelope?.activeMode;
-    const session = activeMode ? envelope?.sessions?.[activeMode] : null;
+    const session = envelope?.sessions?.league || null;
     if (!session || !Array.isArray(session.playerCondition)) {
-      throw new Error("Canonical mode session mangler playerCondition");
+      throw new Error("Canonical league-session mangler playerCondition");
     }
     const condition = session.playerCondition.find((entry) => entry?.playerId === playerId);
     if (!condition) throw new Error(`Fant ikke condition for ${playerId}`);
@@ -1038,17 +1061,32 @@ async function seedCanonicalInjuryForStarter(page, weeksOut = 3) {
       weeksOut: weeks,
       reason: "Deterministisk canonical skade-/returkjede"
     };
-    envelope.sessions[activeMode] = session;
+    envelope.sessions.league = session;
     localStorage.setItem("hgfm.modeSessions.v1", JSON.stringify(envelope));
   }, { playerId: target.playerId, weeks: weeksOut });
 
   await page.reload();
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
+  await expect(page.locator("#secondaryModeBar")).toBeVisible();
+  await page.locator("#returnToLeagueButton").click();
+  await expect(page.locator("#secondaryModeBar")).toBeHidden();
+
+  await expect.poll(async () => page.evaluate(() => {
+    try {
+      return JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "null")?.activeMode || null;
+    } catch (_) {
+      return null;
+    }
+  })).toBe("league");
+
   const seeded = await readProgress(page);
   const condition = seeded.conditionRows.find((entry) => entry.playerId === target.playerId);
   expect(condition).toBeTruthy();
   expect(condition.injuryWeeksOut).toBe(weeksOut);
+  await expect(
+    page.locator(`#lineupSlots .player-chip[data-slot-id="${target.slotId}"]`)
+  ).toHaveAttribute("data-player-id", target.playerId);
 
   return {
     slotId: target.slotId,
