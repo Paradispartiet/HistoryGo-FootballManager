@@ -873,7 +873,7 @@ async function chooseIndividualTrainingTrack(
   expect(trackName).toBeTruthy();
   await openTraining(page);
 
-  await page.locator("#teamChangeIndividualTraining").click();
+  await page.locator("#trainingDayChangeIndividual").click();
   const drawer = page.locator("#managerTeamChoiceDrawer");
   await expect(drawer).toBeVisible();
   await expect(drawer.locator("#individualTrainingPicker")).toBeVisible();
