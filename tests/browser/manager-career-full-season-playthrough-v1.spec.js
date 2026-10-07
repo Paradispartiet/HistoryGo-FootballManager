@@ -956,9 +956,25 @@ async function seedCanonicalInjuryForStarter(page, weeksOut = 3) {
   const positionTokensByName = new Map(
     planning.profiles.map((profile) => [profile.name, profile.positionTokens])
   );
-  const candidates = rawCandidates.filter(({ position, condition }) =>
-    positionTokensByName.get(condition.name)?.includes(position)
-  );
+  const candidates = rawCandidates
+    .filter(({ position, condition }) =>
+      positionTokensByName.get(condition.name)?.includes(position)
+    )
+    .map((candidate) => {
+      // Runde 6 krever at den seedede skaden faktisk kan håndteres gjennom
+      // samme eksakte laguttaksflyt som testen bruker senere. Det er ikke nok
+      // at starteren selv støtter slot-posisjonen: det må også finnes en lovlig
+      // erstatningssti når denne spilleren er utilgjengelig.
+      const seededNeed = {
+        ...need,
+        avoidNames: [...new Set([...(need.avoidNames || []), candidate.condition.name])]
+      };
+      return {
+        ...candidate,
+        rotationPath: planExactRotationPath(planning, seededNeed, candidate.slotId)
+      };
+    })
+    .filter((candidate) => Array.isArray(candidate.rotationPath) && candidate.rotationPath.length > 0);
 
   candidates.sort((a, b) => a.condition.load - b.condition.load || a.condition.name.localeCompare(b.condition.name));
   const target = candidates[0] || null;
