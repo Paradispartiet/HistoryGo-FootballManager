@@ -828,6 +828,50 @@ async function rotateTiredStarters(page, emergencySlots, maximumRotations = 4) {
   return rotations;
 }
 
+async function rotateCanonicalInjuryStarter(page, journey, emergencySlots) {
+  expect(journey?.playerId).toBeTruthy();
+
+  // Tidligere nødplasseringer må være ryddet før den deterministiske
+  // skadehistorien velger sin erstatningssti. Deretter leser vi state på nytt:
+  // forced injury skal bevises mot oppstillingen som faktisk gjelder i runde 6,
+  // ikke mot et snapshot fra da skaden ble seedet.
+  await repairEmergencyLineupAssignments(page, emergencySlots);
+
+  const need = await readRotationNeed(page);
+  const target = need.targets.find((entry) => entry.playerId === journey.playerId) || null;
+  expect(
+    target,
+    `Seeded injured starter ${journey.playerId} is not a current rotation target: ${JSON.stringify(need.targets)}`
+  ).toBeTruthy();
+  expect(target.injured).toBe(true);
+
+  const planning = await readExactRotationPlanningState(page, need, target.slotId);
+  const exactPath = planExactRotationPath(planning, need, target.slotId);
+  expect(
+    exactPath,
+    `No exact rotation path for seeded injury ${journey.playerId} in ${target.slotId}`
+  ).toBeTruthy();
+
+  const applied = await applyExactRotationPath(page, exactPath);
+  const targetAssignment = applied.at(-1);
+  expect(targetAssignment?.slotId).toBe(target.slotId);
+  expect(targetAssignment?.beforePlayerId).toBe(journey.playerId);
+  expect(targetAssignment?.afterPlayerId).toBeTruthy();
+
+  emergencySlots.delete(target.slotId);
+  return {
+    slotId: target.slotId,
+    outPlayerId: journey.playerId,
+    outName: target.name,
+    outLoad: target.load,
+    outInjured: target.injured,
+    inPlayerId: targetAssignment.afterPlayerId,
+    inName: targetAssignment.playerName,
+    exactPosition: true,
+    decisionTrace: null
+  };
+}
+
 async function chooseTrainingProgram(page, choiceIndex = 0) {
   await page.locator("#trainingDayChangeProgram").click();
   await expect(page.locator("#managerTeamChoiceDrawer")).toBeVisible();
@@ -1399,14 +1443,24 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     if (inbox.openedSubject) inboxSubjects.add(inbox.openedSubject);
 
     await advanceClubWeek(page, "training");
-    const rotations = await rotateTiredStarters(page, emergencyRotationSlots);
-    rotationEvents.push(...rotations.map((rotation) => ({ round, ...rotation })));
+    let rotations = [];
     if (round === 6) {
-      const injuryRotation = rotations.find((rotation) => rotation.outPlayerId === forcedInjuryJourney.playerId);
-      expect(injuryRotation).toBeTruthy();
+      const injuryRotation = await rotateCanonicalInjuryStarter(
+        page,
+        forcedInjuryJourney,
+        emergencyRotationSlots
+      );
       expect(injuryRotation.outInjured).toBe(true);
       forcedInjuryJourney.injuryRotationRound = round;
+      rotations.push(injuryRotation);
+
+      // Den canonicale skaden bruker én av rundens fire rotasjoner. La den
+      // vanlige fatigue-manageren håndtere inntil tre øvrige behov.
+      rotations.push(...await rotateTiredStarters(page, emergencyRotationSlots, 3));
+    } else {
+      rotations = await rotateTiredStarters(page, emergencyRotationSlots);
     }
+    rotationEvents.push(...rotations.map((rotation) => ({ round, ...rotation })));
 
     if (round === 3) {
       const recoveryState = await readProgress(page);
