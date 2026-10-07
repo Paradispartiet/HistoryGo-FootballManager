@@ -305,14 +305,22 @@ async function playVisibleMatchday(page, choiceIndex = 0) {
   for (let event = 0; event < 6; event += 1) {
     if (await nextWeek.isVisible()) break;
 
-    const skip = page.locator(".matchday-live-button.is-secondary:visible")
-      .filter({ hasText: "Hopp til pausen" })
-      .first();
-    if (await skip.isVisible()) await skip.click();
+    // Liveklokka bygger kontrollene på nytt mens perioden avdekkes.
+    // Gjør finn + klikk i samme browser-task, så interval-renderen ikke kan
+    // detach'e "Hopp til pausen" mellom Playwrights visibility-sjekk og klikk.
+    await page.evaluate(() => {
+      const skip = Array.from(document.querySelectorAll(".matchday-live-button.is-secondary"))
+        .find((button) =>
+          button instanceof HTMLElement &&
+          button.offsetParent !== null &&
+          String(button.textContent || "").includes("Hopp til pausen")
+        );
+      skip?.click();
+    });
 
     const decisions = page.locator(".matchday-decision-button:not([disabled]):visible");
+    await expect.poll(async () => decisions.count()).toBeGreaterThan(0);
     const decisionCount = await decisions.count();
-    expect(decisionCount).toBeGreaterThan(0);
     await decisions.nth((choiceIndex + event) % decisionCount).click();
   }
 
