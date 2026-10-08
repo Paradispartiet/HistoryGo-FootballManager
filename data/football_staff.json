@@ -1482,6 +1482,113 @@
         "goalkeeper_development"
       ],
       "warningWhenMisused": "Dokumentert som keepertrener i Tromsøs A-lagsapparat; profilen brukes kun i keepertrenerrollen."
+    },
+    {
+      "id": "geir_frigard_staff",
+      "name": "Geir Frigård",
+      "staffType": "assistant_coach",
+      "canBeHiredAs": [
+        "assistant_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "aalesund"
+      ],
+      "sourcePlaceIds": [
+        "color_line_stadion"
+      ],
+      "sourceUrl": "https://www.aafk.no/om-klubben/ansatte-i-aafk",
+      "profileSourceUrl": "https://www.aafk.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "assistant_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som assistenttrener for AaFK Herre; profilen tillegges ingen ekstra taktisk spesialisering uten egen kilde."
+    },
+    {
+      "id": "tor_hogne_aaroy_staff",
+      "name": "Tor Hogne Aarøy",
+      "staffType": "assistant_coach",
+      "canBeHiredAs": [
+        "assistant_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "aalesund"
+      ],
+      "sourcePlaceIds": [
+        "color_line_stadion"
+      ],
+      "sourceUrl": "https://www.aafk.no/om-klubben/ansatte-i-aafk",
+      "profileSourceUrl": "https://www.aafk.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "assistant_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som assistenttrener for AaFK Herre; profilen kan dekke en trenerkapasitet i managerlaget uten at kildens rolle omskrives."
+    },
+    {
+      "id": "sindre_eid_staff",
+      "name": "Sindre Eid",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "starterClubIds": [
+        "aalesund"
+      ],
+      "sourcePlaceIds": [
+        "color_line_stadion"
+      ],
+      "sourceUrl": "https://www.aafk.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "player_development_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som toppspillerutvikler i AaFKs herreapparat; profilen brukes som trener uten oppdiktede taktiske ekspertiser."
+    },
+    {
+      "id": "fredrick_pettersen_staff",
+      "name": "Fredrick Pettersen",
+      "staffType": "physio",
+      "canBeHiredAs": [
+        "physio"
+      ],
+      "starterClubIds": [
+        "aalesund"
+      ],
+      "sourcePlaceIds": [
+        "color_line_stadion"
+      ],
+      "sourceUrl": "https://www.aafk.no/lag",
+      "profileSourceUrl": "https://www.aafk.no/nyheter/pettersen-ny-fysio-pa-plass",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_physio"
+      ],
+      "warningWhenMisused": "Dokumentert som fysioterapeut i AaFKs herreapparat; profilen tillegges ingen ekstra medisinsk rating."
+    },
+    {
+      "id": "odd_einar_hatloy_staff",
+      "name": "Odd Einar Hatløy",
+      "staffType": "goalkeeper_coach",
+      "canBeHiredAs": [
+        "goalkeeper_coach"
+      ],
+      "starterClubIds": [
+        "aalesund"
+      ],
+      "sourcePlaceIds": [
+        "color_line_stadion"
+      ],
+      "sourceUrl": "https://www.aafk.no/lag",
+      "expertiseIds": [
+        "goalkeeper_training"
+      ],
+      "roles": [
+        "goalkeeper_development"
+      ],
+      "warningWhenMisused": "Dokumentert som keepertrener i AaFKs herreapparat; profilen brukes kun i keepertrenerrollen."
     }
   ]
 }
