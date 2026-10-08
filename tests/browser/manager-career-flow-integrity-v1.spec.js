@@ -103,7 +103,7 @@ test("Rosenborg kan engasjere hele kildekorrekte 1+3+1+1-staben", async ({ page 
   }
 
   await expect(page.locator("#managerStaffRosterV1")).toHaveAttribute("data-complete", "true");
-  await expect(page.locator("#managerStaffRosterV1 .staff-roster-total")).toHaveText("6/6 roller");
+  await expect(page.locator("#managerStaffRosterV1 .staff-roster-total")).toHaveText("6/6 starterstab");
   const metric = page.locator("#adminDriftMetrics .admin-metric").filter({ hasText: "Stab engasjert" });
   await expect(metric.locator(".admin-metric-value")).toHaveText("6/6");
 

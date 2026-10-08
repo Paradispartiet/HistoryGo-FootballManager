@@ -71,25 +71,13 @@ For 2. divisjon er det systematiske source-depth-gulvet **frosset ved minst to k
 
 ### P1 staff — klubbspesifikke startersett
 
-Etter fullført Manager Career Flow Integrity er staff fortsatt et synlig, men kildebegrenset innholdsgap. Generiske seksrollers-placeholders beholdes kun som fallback for ukurerte klubber. Kuraterte klubber kan bruke `starterClubIds`; et klubbsett tas bare i bruk når det alene dekker hele 1 assistent + 3 trenere + 1 fysio + 1 keepertrener.
+Manager Career Flow Integrity er ferdig. Staff er fortsatt et synlig innholdsgap, men ferdigdefinisjonen er korrigert: `staffRoles.json` beskriver `maxActive`-kapasitet, ikke et universelt krav om 1 assistent + 3 trenere + 1 fysio + 1 keepertrener i hver virkelig klubb.
 
-Rosenborg er første klubbsett, basert på klubbens offisielle A-lagsstab oppdatert 11.08.2026. Administrasjon bruker samtidig samme seksrollerskrav som før-sesong, slik at den gamle `6/1`-presentasjonen ikke kan komme tilbake.
+Før-sesongregelen er fortsatt eksplisitt: manageren må dekke starterstabens rollebehov før sesongen kan begynne. For en dokumentert overtatt klubb utledes behovet fra klubbens kildebelagte `starterClubIds`-sett, men kompatibel allerede-engasjert stab kan fylle samme rolle. For en klubb som ennå ikke er kuratert brukes det generiske seks-personers placeholder-gulvet.
 
-Brann er andre komplette klubbsett, kildebelagt fra klubbens offisielle A-lagsoversikt. Coverage-auditen står dermed på 2/16 komplette Eliteserie-sett; de øvrige klubbene bruker fortsatt hele det generiske placeholder-gulvet til et komplett klubbsett kan bevises.
+Ni Eliteserie-klubber har nå dokumenterte klubbsett: Rosenborg, Brann, Fredrikstad, Vålerenga, Lillestrøm, Sarpsborg 08, Start, Molde og Tromsø. De sju øvrige bruker fallback inntil deres faktiske støtteapparat er dokumentert. Et nytt klubbsett trenger ikke seks personer; det skal speile de kildebelagte aktive rollene vi faktisk kan dokumentere, uten å fylle tom kapasitet med gjetning.
 
-Fredrikstad er tredje komplette klubbsett, kildebelagt fra klubbens offisielle A-lagsoversikt. Coverage-auditen skal dermed stå på 3/16 komplette Eliteserie-sett; ufullstendige klubber beholder fortsatt hele placeholder-gulvet.
-
-Vålerenga er fjerde komplette klubbsett, kildebelagt fra klubbens offisielle støtteapparat. Coverage-auditen skal dermed stå på 4/16 komplette Eliteserie-sett; de resterende klubbene bruker fortsatt hele placeholder-gulvet fram til et komplett sett er dokumentert.
-
-Lillestrøm er femte komplette klubbsett, kildebelagt fra klubbens offisielle A-lagsoversikt. Coverage-auditen skal dermed stå på 5/16 komplette Eliteserie-sett; de resterende klubbene bruker fortsatt hele placeholder-gulvet fram til et komplett sett er dokumentert.
-
-Sarpsborg 08 er sjette komplette klubbsett, kildebelagt fra klubbens offisielle A-lagsoversikt. Coverage-auditen skal dermed stå på 6/16 komplette Eliteserie-sett; de resterende klubbene bruker fortsatt hele placeholder-gulvet fram til et komplett sett er dokumentert.
-
-Start er sjuende komplette klubbsett, kildebelagt fra klubbens offisielle A-lagsoversikt. Coverage-auditen skal dermed stå på 7/16 komplette Eliteserie-sett; de resterende klubbene bruker fortsatt hele placeholder-gulvet fram til et komplett sett er dokumentert. Dette er ikke grunnlag for å fylle de ni resterende klubbene med gjetning eller halvkomplette startersett.
-
-Molde er åttende komplette klubbsett, kildebelagt fra klubbens offisielle A-lagsoversikt og klubbens eksplisitte 2026-sak om Marius Bøe som assistenttrener. Coverage-auditen skal dermed stå på 8/16 komplette Eliteserie-sett; de åtte resterende klubbene bruker fortsatt hele placeholder-gulvet fram til et komplett sett er dokumentert.
-
-Tromsø er niende komplette klubbsett, kildebelagt fra klubbens offisielle A-lagsoversikt og ansatteoversikt. Coverage-auditen skal dermed stå på 9/16 komplette Eliteserie-sett; de sju resterende klubbene bruker fortsatt hele placeholder-gulvet fram til et komplett sett er dokumentert.
+Coverage-auditen måler derfor **dokumenterte klubbsett**, ikke hvor mange klubber som fyller alle seks kapasitetsslots. 1+3+1+1 beholdes som maksimal aktiv rollekapasitet og som generisk fallbackform.
 
 ## Reelt åpent arbeid
 

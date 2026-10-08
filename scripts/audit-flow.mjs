@@ -314,10 +314,11 @@ requireHandler("resetMiniSeason");
 // ---- 12) Ligaspill før-sesong gate -----------------------------------------
 stage("12. Ligaspill før-sesong gate");
 check(
-  "onboarding bruker rolledekning i valgt stab, ikke bare antall tilgjengelige",
-  app.includes("const staffRoster = summarizeStaffRoster(getHiredStaff())")
-    && app.includes("done: staffRoster.complete")
-    && app.includes("roller dekket. Mangler:")
+  "onboarding krever klubbens startersett, ikke full 1+3+1+1-kapasitet",
+  app.includes("const staffReadiness = getStarterStaffReadiness()")
+    && app.includes("done: staffReadiness.complete")
+    && app.includes("starterstaben engasjert")
+    && !app.includes("done: staffRoster.complete")
 );
 // Klubbidentitet kommer nå fra klubben spilleren OPPRETTER i onboardingen
 // (navn), ikke fra et History Go-stedsanker. Stedsanker er faset ut som

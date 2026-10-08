@@ -5,7 +5,7 @@ import {
   normalizePlayerPoolSquadState,
   normalizeRecruitmentState
 } from "./football-recruitment.js";
-import { decorateHiredStaffWithAssignments, selectStarterStaffCandidates, summarizeStaffRoster } from "./football-staff-roster.js";
+import { decorateHiredStaffWithAssignments, selectStarterStaffCandidates, summarizeStarterStaffReadiness } from "./football-staff-roster.js";
 import "./ui/manager-shell-elements.js";
 import { createMatchFlowSnapshot } from "./ui/manager-shell-view.js";
 import { createClubIdentityView, renderClubIdentity } from "./ui/manager-club-identity.js";
@@ -436,7 +436,6 @@ const CLUB_WEEK_EVENT_LOG_LIMIT = 12;
 const REQUIRED_SQUAD_SIZE = 15;
 const REQUIRED_STARTERS = 11;
 const REQUIRED_BENCH = 4;
-const REQUIRED_STAFF_SIZE = 6;
 
 // Standard y-bånd per lagdel (0 % = topp/angrep, 100 % = bunn/keeper).
 const LINE_Y = { keeper: 90, defense: 72, midfield: 50, attack: 24 };
@@ -2426,8 +2425,8 @@ function computeAvailability() {
   // engasjere personene selv. Erstatter den gamle stedsanker-baserte kilden.
   const starterStaff = getStarterSquadStaffCandidates(staff);
   const hasCuratedClubStarterStaff =
-    starterStaff.length >= REQUIRED_STAFF_SIZE &&
-    starterStaff.every((member) => member?.isPlaceholder !== true);
+    starterStaff.length > 0 &&
+    starterStaff.every((member) => member?.isPlaceholder !== true && member?.needsResearch !== true);
   // Når en etablert klubb har et komplett kuratert startersett, skal de
   // generiske spillbarhets-placeholderne ikke lekke inn igjen via andre
   // sted/unlock-kilder. De er bare fallback for ukurerte klubber.
@@ -2932,6 +2931,11 @@ function getHiredStaff() {
   return decorateHiredStaffWithAssignments(hired);
 }
 
+function getStarterStaffReadiness() {
+  const clubId = state.gameStartState?.takeoverClubId || null;
+  return summarizeStarterStaffReadiness(state.staff, clubId, getHiredStaff());
+}
+
 // Alle staff-typer en ansatt kan dekke (staffType + canBeHiredAs).
 function getStaffCoveredTypes(member) {
   const types = new Set();
@@ -3370,11 +3374,11 @@ function hireStaff(staffId) {
   renderApp();
 }
 
-// Sjekk om en ny ansatt holder seg innenfor staffRoles.maxActive. For
-// førstelagsstaben er den EFFEKTIVE 1+3+1+1-rollen sannheten: en dokumentert
-// assistent som også kan ansettes som coach kan derfor fylle en trenerplass
-// uten å bli blokkert som «assistent nummer to». Kildens staffType endres aldri.
-// Kandidater som ikke får en førstelagsrolle bruker fortsatt legacy-kategorien.
+// Sjekk om en ny ansatt holder seg innenfor staffRoles.maxActive. Den effektive
+// rollefordelingen beskriver kapasitet, ikke et universelt minimum: en dokumentert
+// assistent som også kan ansettes som coach kan fylle en ledig coach-kapasitet
+// uten at kildens staffType omskrives. Kandidater som ikke får en førstelagsrolle
+// bruker fortsatt legacy-kategorien.
 function canHireWithinStaffLimits(member) {
   const hiredIds = new Set(
     Array.isArray(state.teamMerits?.hiredStaffIds) ? state.teamMerits.hiredStaffIds.map(String) : []
@@ -5382,15 +5386,17 @@ function getLeagueOnboardingSteps(teamFit) {
   // Klubbidentitet = klubben du opprettet i onboardingen (navn), ikke et
   // stedsanker. Stedsanker er faset ut som identitetskilde.
   const hasClubIdentity = Boolean(getSavedClubName()) || (isLeagueSeasonActive() && Boolean(state.gameStartState?.activeLeagueSaveId));
-  const staffRoster = summarizeStaffRoster(getHiredStaff());
-  const hiredStaff = staffRoster.filledCount;
+  const staffReadiness = getStarterStaffReadiness();
   const hasFormation = Boolean(state.selectedFormationId);
   const hasTraining = Boolean(state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId);
   const leagueActive = isLeagueSeasonActive();
+  const staffMissingDetail = staffReadiness.missingLabel
+    ? ` Mangler: ${staffReadiness.missingLabel}.`
+    : "";
   return [
     { id: "klubb", title: "Opprett klubben", done: hasClubIdentity, detail: hasClubIdentity ? `Klubben er opprettet: ${getTemporaryClubName().name}.` : "Gi klubben et navn i startskjermen før laget behandles som en aktiv ligaklubb.", tab: "dashboard" },
     { id: "spillere", title: "Hent spillere", done: Number(roster.unlockedCount || 0) >= REQUIRED_SQUAD_SIZE, detail: `${Number(roster.unlockedCount || 0)}/${REQUIRED_SQUAD_SIZE} spillere tilgjengelig. Bruk samling, nærområde, klubblink eller auto-fyll.`, tab: "historygo" },
-    { id: "stab", title: "Velg stab", done: staffRoster.complete, detail: staffRoster.complete ? "Førstelagsstaben er komplett: assistenttrener, tre trenere, fysio og keepertrener." : `${hiredStaff}/${REQUIRED_STAFF_SIZE} roller dekket. Mangler: ${staffRoster.missingLabel || "rolledekning"}.`, tab: "admin" },
+    { id: "stab", title: "Velg stab", done: staffReadiness.complete, detail: staffReadiness.complete ? `Starterstaben er engasjert: ${staffReadiness.hiredCount}/${staffReadiness.requiredCount}.` : `${staffReadiness.hiredCount}/${staffReadiness.requiredCount} i starterstaben engasjert.${staffMissingDetail}`, tab: "admin" },
     { id: "ellever", title: "Sett førsteellever og benk", done: filled >= REQUIRED_STARTERS && bench >= REQUIRED_BENCH, detail: `Startellever ${Math.min(filled, REQUIRED_STARTERS)}/${REQUIRED_STARTERS} · benk ${Math.min(bench, REQUIRED_BENCH)}/${REQUIRED_BENCH}.`, tab: "tactics" },
     { id: "formasjon", title: "Velg formasjon", done: hasFormation, detail: hasFormation ? "Formasjonen er valgt og forklares på taktikkbrettet." : "Velg en spillbar formasjon før treningsuka låses inn.", tab: "tactics" },
     { id: "trening", title: "Velg trening", done: hasTraining, detail: hasTraining ? "Ukas treningsprogram er valgt." : "Velg treningsfokus eller program slik at laget går inn i serieåpningen med en plan.", tab: "trening" },
@@ -9642,6 +9648,7 @@ function renderDepartments() {
 function renderAdminRoom() {
   const roster = getAvailability().rosterReadiness || {};
   const staffCount = getHiredStaff().length;
+  const staffReadiness = getStarterStaffReadiness();
 
   if (elements.adminDriftMetrics) {
     elements.adminDriftMetrics.innerHTML = "";
@@ -9649,7 +9656,7 @@ function renderAdminRoom() {
       { label: "Spillere i stall", value: roster.unlockedCount, threshold: REQUIRED_SQUAD_SIZE },
       { label: "Startellever satt", value: roster.starterCount, threshold: REQUIRED_STARTERS },
       { label: "Benk", value: roster.benchCount, threshold: REQUIRED_BENCH },
-      { label: "Stab engasjert", value: staffCount, threshold: REQUIRED_STAFF_SIZE }
+      { label: "Stab engasjert", value: staffReadiness.hiredCount, threshold: staffReadiness.requiredCount }
     ];
     for (const metric of metrics) {
       const value = Number(metric.value);

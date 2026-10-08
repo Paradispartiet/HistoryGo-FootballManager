@@ -234,7 +234,7 @@ async function hireRosenborgStaff(page) {
     await card.getByRole("button", { name: "Engasjer" }).click();
   }
   await expect(page.locator("#managerStaffRosterV1")).toHaveAttribute("data-complete", "true");
-  await expect(page.locator("#managerStaffRosterV1 .staff-roster-total")).toHaveText("6/6 roller");
+  await expect(page.locator("#managerStaffRosterV1 .staff-roster-total")).toHaveText("6/6 starterstab");
 }
 
 async function choosePlayableFormation(page) {

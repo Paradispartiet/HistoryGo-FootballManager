@@ -53,25 +53,25 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator("#onboardingScreen")).toBeHidden();
 });
 
-test("viser 1 assistent, 3 trenere, fysio og keepertrener", async ({ page }) => {
+test("viser aktiv rollekapasitet og komplett generisk starterstab", async ({ page }) => {
   await openStaff(page);
   await expect(page.locator("#managerStaffRosterV1 .staff-role-slot")).toHaveCount(4);
-  await expect(page.locator("#managerStaffRosterV1 .staff-roster-total")).toHaveText("6/6 roller");
+  await expect(page.locator("#managerStaffRosterV1 .staff-roster-total")).toHaveText("6/6 starterstab");
   await expect(page.locator("#managerStaffRosterV1")).toHaveAttribute("data-complete", "true");
   await expect(page.locator("#managerStaffRosterV1")).toContainText("Assistenttrener");
-  await expect(page.locator("#managerStaffRosterV1")).toContainText("3/3");
+  await expect(page.locator("#managerStaffRosterV1")).toContainText("3/3 maks");
   await expect(page.locator("#managerStaffRosterV1")).toContainText("Fysio");
   await expect(page.locator("#managerStaffRosterV1")).toContainText("Keepertrener");
 });
 
-test("Administrasjon bruker samme 6-personers stabsgrense", async ({ page }) => {
+test("Administrasjon bruker startersettets størrelse som terskel", async ({ page }) => {
   await openStaff(page);
   const metric = page.locator("#adminDriftMetrics .admin-metric").filter({ hasText: "Stab engasjert" });
   await expect(metric).toHaveCount(1);
   await expect(metric.locator(".admin-metric-value")).toHaveText("6/6");
 });
 
-test("tre trenere er ikke komplett støtteapparat", async ({ page }) => {
+test("tre trenere alene fullfører ikke det generiske startersettet", async ({ page }) => {
   await openStaff(page);
   await page.evaluate(() => {
     const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
@@ -80,7 +80,7 @@ test("tre trenere er ikke komplett støtteapparat", async ({ page }) => {
     window.dispatchEvent(new CustomEvent("hgfm:team-merits-changed"));
   });
   await expect(page.locator("#managerStaffRosterV1")).toHaveAttribute("data-complete", "false");
-  await expect(page.locator("#managerStaffRosterV1 .staff-roster-total")).toHaveText("3/6 roller");
+  await expect(page.locator("#managerStaffRosterV1 .staff-roster-total")).toHaveText("3/6 starterstab");
 });
 
 test("390px uten overflow", async ({ page }) => {
