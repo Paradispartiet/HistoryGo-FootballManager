@@ -32,6 +32,8 @@ Molde er åttende dokumenterte klubbsett. Klubbens offisielle A-lagsoversikt på
 
 Tromsø er niende dokumenterte klubbsett. Klubbens offisielle A-lagsoversikt på `https://www.til.no/lag` dokumenterer Marius Jacobsen og Ola Rismo som trenere, Sigurd Pedersen som fysisk trener, Tom-Erik Richardsen som fysioterapeut og Eirik Sørensen som keepertrener. Lars Gunnar Johnsen er eksplisitt dokumentert som toppspillerutvikler/assistenttrener i klubbens ansatteoversikt på `https://www.til.no/om-klubben/ansatte/sporten`. Hovedtrener Jørgen Vik brukes ikke som starterstaff fordi manageren eier hovedtrenerrollen.
 
+Aalesund er tiende dokumenterte klubbsett og første permanente fempersonersbevis for den korrigerte staff-kontrakten. Klubbens offisielle ansatteoversikt på `https://www.aafk.no/om-klubben/ansatte-i-aafk` dokumenterer Geir Frigård og Tor Hogne Aarøy som assistenttrenere. A-lagsoversikten på `https://www.aafk.no/lag` dokumenterer Sindre Eid som toppspillerutvikler, Fredrick Pettersen som fysioterapeut og Odd Einar Hatløy som keepertrener. Settet dekker derfor fem starterroller og blir før-sesongklart ved 5/5; den ledige tredje trenerkapasiteten er ikke et krav om en sjette person.
+
 `Kontor → Klubbdrift → Stab & drift` viser aktiv rollebruk som kapasitet, for eksempel `2/3 maks` trenere. Selve før-sesongstatusen viser hvor mange av startersettets rolleplasser som er dekket, for eksempel `5/5 starterstab`. En ledig kapasitet er derfor ikke automatisk en manglende ansatt.
 
 ## Eliteserien-kø og ferdigdefinisjon
