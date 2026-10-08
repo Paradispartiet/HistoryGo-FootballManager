@@ -99,6 +99,18 @@ check(moldeDecorated.filter(m=>m.assignedStaffRole==="assistant_coach").length==
 check(moldeDecorated.filter(m=>m.assignedStaffRole==="training_coach").length===3,"Molde-rosteren bruker tre aktive trenerroller");
 check(moldeDecorated.filter(m=>m.assignedStaffRole==="physio").length===1,"Molde-rosteren bruker én fysiorolle");
 check(moldeDecorated.filter(m=>m.assignedStaffRole==="goalkeeper_coach").length===1,"Molde-rosteren bruker én keepertrenerrolle");
+const tromsoStarters=selectStarterStaffCandidates(staff,"tromso"); const tromsoSummary=summarizeStaffRoster(tromsoStarters);
+check(tromsoStarters.length===6,"Tromsø får seks klubbspesifikke starterprofiler");
+check(tromsoSummary.complete,"Tromsø-settet dekker 1+3+1+1-kontrakten");
+check(tromsoStarters.every(m=>m.isPlaceholder!==true&&m.needsResearch!==true),"Tromsø-settet inneholder ingen placeholders");
+check(tromsoStarters.every(m=>Array.isArray(m.starterClubIds)&&m.starterClubIds.includes("tromso")),"alle Tromsø-startere er eksplisitt klubbtilknyttet");
+check(tromsoStarters.filter(m=>m.sourceUrl==="https://www.til.no/lag").length===5,"fem Tromsø-startere bruker klubbens offisielle A-lagsoversikt som kilde");
+check(tromsoStarters.find(m=>m.id==="lars_gunnar_johnsen_staff")?.sourceUrl==="https://www.til.no/om-klubben/ansatte/sporten","Lars Gunnar Johnsens assistentrolle bruker klubbens offisielle ansatteoversikt");
+const tromsoDecorated=decorateHiredStaffWithAssignments(tromsoStarters);
+check(tromsoDecorated.filter(m=>m.assignedStaffRole==="assistant_coach").length===1,"Tromsø-rosteren bruker én aktiv assistentrolle");
+check(tromsoDecorated.filter(m=>m.assignedStaffRole==="training_coach").length===3,"Tromsø-rosteren bruker tre aktive trenerroller");
+check(tromsoDecorated.filter(m=>m.assignedStaffRole==="physio").length===1,"Tromsø-rosteren bruker én fysiorolle");
+check(tromsoDecorated.filter(m=>m.assignedStaffRole==="goalkeeper_coach").length===1,"Tromsø-rosteren bruker én keepertrenerrolle");
 const three=[{id:"a",staffType:"coach",canBeHiredAs:["coach"]},{id:"b",staffType:"coach",canBeHiredAs:["coach"]},{id:"c",staffType:"coach",canBeHiredAs:["coach"]}]; const incomplete=summarizeStaffRoster(three);
 check(!incomplete.complete,"tre vilkårlige trenere er ikke komplett stab"); check(incomplete.byRole.find(r=>r.id==="training_coach")?.filled===3,"tre trenere fyller bare trenerplassene"); check(incomplete.missing.some(r=>r.id==="assistant_coach"),"manglende assistent oppdages"); check(incomplete.missing.some(r=>r.id==="physio"),"manglende fysio oppdages"); check(incomplete.missing.some(r=>r.id==="goalkeeper_coach"),"manglende keepertrener oppdages");
 const assignments=assignFirstTeamStaff(starters); check(assignments.filter(e=>e.staffId).length===6,"seks rolleplasser tildeles"); check(new Set(assignments.filter(e=>e.staffId).map(e=>e.staffId)).size===6,"samme person fyller ikke to plasser"); const decorated=decorateHiredStaffWithAssignments(starters); check(decorated.filter(m=>m.assignedStaffRole).length===6,"coach-context får tildelte roller"); check(decorated.some(m=>m.staffType==="physio"),"fysiorollen mates videre"); check(decorated.some(m=>m.staffType==="goalkeeper_coach"),"keepertrenerrollen mates videre"); console.log(`\n${checks}/${checks} staff-roster-sjekker bestått.`);
