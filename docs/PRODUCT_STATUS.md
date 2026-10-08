@@ -89,6 +89,8 @@ Start er sjuende komplette klubbsett, kildebelagt fra klubbens offisielle A-lags
 
 Molde er åttende komplette klubbsett, kildebelagt fra klubbens offisielle A-lagsoversikt og klubbens eksplisitte 2026-sak om Marius Bøe som assistenttrener. Coverage-auditen skal dermed stå på 8/16 komplette Eliteserie-sett; de åtte resterende klubbene bruker fortsatt hele placeholder-gulvet fram til et komplett sett er dokumentert.
 
+Tromsø er niende komplette klubbsett, kildebelagt fra klubbens offisielle A-lagsoversikt og ansatteoversikt. Coverage-auditen skal dermed stå på 9/16 komplette Eliteserie-sett; de sju resterende klubbene bruker fortsatt hele placeholder-gulvet fram til et komplett sett er dokumentert.
+
 ## Reelt åpent arbeid
 
 Åpent arbeid skal være konkret og kilde- eller regelavklart. Per denne statusen er følgende typer arbeid gyldige uten å dikte produktregler:
