@@ -1,6 +1,9 @@
 // HG Football Manager — Role-based first-team staff roster v1
 // Pure deterministic model. No DOM, storage or network access.
 
+// Slottene under er aktiv rollekapasitet, ikke et universelt før-sesong-minimum.
+// staffRoles.json bruker maxActive-semantikk; klubbens dokumenterte startersett
+// avgjør hvor mange personer som faktisk må engasjeres før seriestart.
 export const STAFF_ROLE_REQUIREMENTS = Object.freeze([
   Object.freeze({ id: "assistant_coach", label: "Assistenttrener", required: 1, acceptedTypes: Object.freeze(["assistant_coach"]) }),
   Object.freeze({ id: "training_coach", label: "Trener", required: 3, acceptedTypes: Object.freeze(["training_coach", "coach", "physical_coach"]) }),
@@ -121,13 +124,51 @@ export function selectStarterStaffCandidates(staff = [], clubId = null) {
       asArray(member?.starterClubIds).map(String).includes(normalizedClubId)
     );
     const clubAssignments = assignFirstTeamStaff(clubStarters).filter((entry) => entry.staffId);
-    if (clubAssignments.length >= REQUIRED_FIRST_TEAM_STAFF) {
+    if (clubAssignments.length > 0) {
       const selectedIds = new Set(clubAssignments.map((entry) => entry.staffId));
       return clubStarters.filter((member) => selectedIds.has(staffId(member)));
     }
   }
 
+  // Ukurerte klubber beholder det generiske 1+3+1+1-gulvet slik at en ny save
+  // alltid er spillbar. Dette er fallback-kapasitet, ikke en påstand om klubbens
+  // virkelige organisering.
   const starters = asArray(staff).filter((member) => member?.starterStaff === true && staffId(member));
   const selectedIds = new Set(assignFirstTeamStaff(starters).filter((entry) => entry.staffId).map((entry) => entry.staffId));
   return starters.filter((member) => selectedIds.has(staffId(member)));
+}
+
+export function summarizeStarterStaffReadiness(staff = [], clubId = null, hiredStaff = []) {
+  const candidates = selectStarterStaffCandidates(staff, clubId);
+  const hiredIds = new Set(
+    asArray(hiredStaff)
+      .map((entry) => typeof entry === "string" ? entry : staffId(entry))
+      .filter(Boolean)
+      .map(String)
+  );
+  const candidateIds = candidates.map((member) => staffId(member));
+  const hiredCandidateIds = candidateIds.filter((id) => hiredIds.has(id));
+  const missing = candidates.filter((member) => !hiredIds.has(staffId(member)));
+  const normalizedClubId = clubId == null ? "" : String(clubId);
+  const usesCuratedClubSet =
+    Boolean(normalizedClubId) &&
+    candidates.length > 0 &&
+    candidates.every((member) =>
+      member?.isPlaceholder !== true &&
+      member?.needsResearch !== true &&
+      asArray(member?.starterClubIds).map(String).includes(normalizedClubId)
+    );
+
+  return {
+    candidates,
+    candidateIds,
+    hiredCandidateIds,
+    hiredCount: hiredCandidateIds.length,
+    requiredCount: candidateIds.length,
+    complete: candidateIds.length > 0 && missing.length === 0,
+    missing,
+    missingIds: missing.map((member) => staffId(member)),
+    missingNames: missing.map((member) => member?.name || staffId(member)),
+    usesCuratedClubSet
+  };
 }
