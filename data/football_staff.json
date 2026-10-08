@@ -1353,6 +1353,135 @@
         "goalkeeper_development"
       ],
       "warningWhenMisused": "Dokumentert som keepertrener i Moldes A-lagsapparat; profilen brukes kun i keepertrenerrollen."
+    },
+    {
+      "id": "lars_gunnar_johnsen_staff",
+      "name": "Lars Gunnar Johnsen",
+      "staffType": "assistant_coach",
+      "canBeHiredAs": [
+        "assistant_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "tromso"
+      ],
+      "sourcePlaceIds": [
+        "romssa_arena"
+      ],
+      "sourceUrl": "https://www.til.no/om-klubben/ansatte/sporten",
+      "sourceUpdatedAt": "2026-03-09",
+      "profileSourceUrl": "https://www.til.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "assistant_coach",
+        "player_development_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som toppspillerutvikler/assistenttrener for Tromsøs A-lag; profilen tillegges ingen ekstra taktisk spesialisering uten egen kilde."
+    },
+    {
+      "id": "marius_jacobsen_staff",
+      "name": "Marius Jacobsen",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "starterClubIds": [
+        "tromso"
+      ],
+      "sourcePlaceIds": [
+        "romssa_arena"
+      ],
+      "sourceUrl": "https://www.til.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som trener i Tromsøs A-lagsapparat; profilen brukes som trener uten oppdiktede taktiske ekspertiser."
+    },
+    {
+      "id": "ola_rismo_staff",
+      "name": "Ola Rismo",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "starterClubIds": [
+        "tromso"
+      ],
+      "sourcePlaceIds": [
+        "romssa_arena"
+      ],
+      "sourceUrl": "https://www.til.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som trener i Tromsøs A-lagsapparat; profilen brukes som trener uten oppdiktede taktiske ekspertiser."
+    },
+    {
+      "id": "sigurd_pedersen_staff",
+      "name": "Sigurd Pedersen",
+      "staffType": "physical_coach",
+      "canBeHiredAs": [
+        "physical_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "tromso"
+      ],
+      "sourcePlaceIds": [
+        "romssa_arena"
+      ],
+      "sourceUrl": "https://www.til.no/lag",
+      "expertiseIds": [
+        "physical_preparation"
+      ],
+      "roles": [
+        "physical_preparation_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som fysisk trener i Tromsøs A-lagsapparat; bare fysisk grunntrening er lagt til som canonical ekspertise."
+    },
+    {
+      "id": "tom_erik_richardsen_staff",
+      "name": "Tom-Erik Richardsen",
+      "staffType": "physio",
+      "canBeHiredAs": [
+        "physio"
+      ],
+      "starterClubIds": [
+        "tromso"
+      ],
+      "sourcePlaceIds": [
+        "romssa_arena"
+      ],
+      "sourceUrl": "https://www.til.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_physio"
+      ],
+      "warningWhenMisused": "Dokumentert som fysioterapeut i Tromsøs A-lagsapparat; profilen tillegges ingen ekstra medisinsk rating."
+    },
+    {
+      "id": "eirik_sorensen_staff",
+      "name": "Eirik Sørensen",
+      "staffType": "goalkeeper_coach",
+      "canBeHiredAs": [
+        "goalkeeper_coach"
+      ],
+      "starterClubIds": [
+        "tromso"
+      ],
+      "sourcePlaceIds": [
+        "romssa_arena"
+      ],
+      "sourceUrl": "https://www.til.no/lag",
+      "expertiseIds": [
+        "goalkeeper_training"
+      ],
+      "roles": [
+        "goalkeeper_development"
+      ],
+      "warningWhenMisused": "Dokumentert som keepertrener i Tromsøs A-lagsapparat; profilen brukes kun i keepertrenerrollen."
     }
   ]
 }
