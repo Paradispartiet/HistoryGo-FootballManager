@@ -28,6 +28,8 @@ Start er sjuende komplette klubbsett. Klubbens offisielle A-lagsoversikt på `ht
 
 Molde er åttende komplette klubbsett. Klubbens offisielle A-lagsoversikt på `https://www.moldefk.no/lag` dokumenterer Martin Falk (First Team Coach), Rune Bolseth (trener), Christian Thorbjørnsen (Coach/Fitness Coach), Andreas Ranvik (fysioterapeut) og Per Magne Misund (keepertrener). Marius Bøes assistentrolle er eksplisitt dokumentert i klubbens egen sak `https://www.moldefk.no/nyheter/marius-boe-blir-ny-assistenttrener`. Hovedtrener Sindre Tjelmeland brukes ikke som starterstaff fordi manageren eier hovedtrenerrollen.
 
+Tromsø er niende komplette klubbsett. Klubbens offisielle A-lagsoversikt på `https://www.til.no/lag` dokumenterer Marius Jacobsen og Ola Rismo som trenere, Sigurd Pedersen som fysisk trener, Tom-Erik Richardsen som fysioterapeut og Eirik Sørensen som keepertrener. Lars Gunnar Johnsen er eksplisitt dokumentert som toppspillerutvikler/assistenttrener i klubbens ansatteoversikt på `https://www.til.no/om-klubben/ansatte/sporten`. Hovedtrener Jørgen Vik brukes ikke som starterstaff fordi manageren eier hovedtrenerrollen.
+
 `Kontor → Klubbdrift → Stab & drift` viser rolledekningen som `1/1`, `3/3`, `1/1` og `1/1`. Før-sesongsgaten blir først komplett når alle fire rollefamiliene er dekket; seks personer med feil rollefordeling kan derfor ikke passere. Administrasjon bruker samme seks-personers krav, slik at «Stab engasjert» aldri kan vise `6/1`.
 
 
