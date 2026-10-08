@@ -5390,8 +5390,8 @@ function getLeagueOnboardingSteps(teamFit) {
   const hasFormation = Boolean(state.selectedFormationId);
   const hasTraining = Boolean(state.weeklyTrainingProgram?.programId || state.weeklyTrainingFocus?.focusId);
   const leagueActive = isLeagueSeasonActive();
-  const staffMissingDetail = staffReadiness.usesCuratedClubSet && staffReadiness.missingNames.length
-    ? ` Mangler: ${staffReadiness.missingNames.join(", ")}.`
+  const staffMissingDetail = staffReadiness.missingLabel
+    ? ` Mangler: ${staffReadiness.missingLabel}.`
     : "";
   return [
     { id: "klubb", title: "Opprett klubben", done: hasClubIdentity, detail: hasClubIdentity ? `Klubben er opprettet: ${getTemporaryClubName().name}.` : "Gi klubben et navn i startskjermen før laget behandles som en aktiv ligaklubb.", tab: "dashboard" },
