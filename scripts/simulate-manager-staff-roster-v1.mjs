@@ -111,6 +111,21 @@ check(tromsoDecorated.filter(m=>m.assignedStaffRole==="assistant_coach").length=
 check(tromsoDecorated.filter(m=>m.assignedStaffRole==="training_coach").length===3,"Tromsø-rosteren bruker tre aktive trenerroller");
 check(tromsoDecorated.filter(m=>m.assignedStaffRole==="physio").length===1,"Tromsø-rosteren bruker én fysiorolle");
 check(tromsoDecorated.filter(m=>m.assignedStaffRole==="goalkeeper_coach").length===1,"Tromsø-rosteren bruker én keepertrenerrolle");
+const aalesundStarters=selectStarterStaffCandidates(staff,"aalesund");
+const aalesundCapacity=summarizeStaffRoster(aalesundStarters);
+const aalesundReadiness=summarizeStarterStaffReadiness(staff,"aalesund",aalesundStarters);
+check(aalesundStarters.length===5,"Aalesund beholder fem dokumenterte starterprofiler uten oppdiktet sjette person");
+check(aalesundReadiness.complete&&aalesundReadiness.hiredCount===5&&aalesundReadiness.requiredCount===5,"Aalesund er før-sesongklart ved 5/5 starterstab");
+check(!aalesundCapacity.complete&&aalesundCapacity.filledCount===5&&aalesundCapacity.requiredCount===6,"Aalesund fyller fem av seks aktive kapasitetsslots uten at den sjette blir obligatorisk");
+check(aalesundStarters.every(m=>m.isPlaceholder!==true&&m.needsResearch!==true),"Aalesund-settet inneholder ingen placeholders");
+check(aalesundStarters.every(m=>Array.isArray(m.starterClubIds)&&m.starterClubIds.includes("aalesund")),"alle Aalesund-startere er eksplisitt klubbtilknyttet");
+check(aalesundStarters.filter(m=>m.sourceUrl==="https://www.aafk.no/om-klubben/ansatte-i-aafk").length===2,"to Aalesund-assistenter bruker klubbens eksplisitte ansatteoversikt");
+check(aalesundStarters.filter(m=>m.sourceUrl==="https://www.aafk.no/lag").length===3,"tre Aalesund-profiler bruker klubbens A-lagsoversikt");
+const aalesundDecorated=decorateHiredStaffWithAssignments(aalesundStarters);
+check(aalesundDecorated.filter(m=>m.assignedStaffRole==="assistant_coach").length===1,"Aalesund bruker én aktiv assistentrolle");
+check(aalesundDecorated.filter(m=>m.assignedStaffRole==="training_coach").length===2,"Aalesund bruker to aktive trenerroller");
+check(aalesundDecorated.filter(m=>m.assignedStaffRole==="physio").length===1,"Aalesund bruker én aktiv fysiorolle");
+check(aalesundDecorated.filter(m=>m.assignedStaffRole==="goalkeeper_coach").length===1,"Aalesund bruker én aktiv keepertrenerrolle");
 const variableClubStaff=[
   {id:"variable_assistant",name:"Assistent",staffType:"assistant_coach",canBeHiredAs:["assistant_coach","coach"],starterClubIds:["variable_club"]},
   {id:"variable_coach_a",name:"Trener A",staffType:"coach",canBeHiredAs:["coach"],starterClubIds:["variable_club"]},
