@@ -36,7 +36,7 @@ check(
 );
 check(shell.includes('manager-staff-workspace-v1.js'), "stabsflaten lastes");
 check(ui.includes("maks") && ui.includes("summarizeStarterStaffReadiness"), "UI skiller rollekapasitet fra starterkrav");
-check(ui.includes("Klubbens dokumenterte starterstab er engasjert."), "UI forklarer klubbspesifikk readiness");
+check(ui.includes("Starterstabens rollebehov er dekket."), "UI forklarer rollebasert starter-readiness");
 check(staff.filter((member) => member.starterStaff === true).length === 6, "seks generiske fallback-profiler finnes");
 check(staff.filter((member) => member.starterStaff === true).every((member) => member.isPlaceholder === true), "generisk fallback dikter ikke ekte personer");
 
