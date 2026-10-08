@@ -1,6 +1,6 @@
 # Rollebasert førstelagsstab v1
 
-Før seriestart må manageren **engasjere klubbens startersett**. For en dokumentert overtatt klubb er dette de kildebelagte profilene som er merket med klubbens id i `starterClubIds`. Antallet er derfor klubbspesifikt.
+Før seriestart må manageren **dekke rollebehovet i klubbens startersett**. For en dokumentert overtatt klubb utledes dette behovet fra de kildebelagte profilene som er merket med klubbens id i `starterClubIds`. Antallet og rollefordelingen er derfor klubbspesifikk; kompatibel allerede-engasjert History Go-stab kan fylle samme rolle uten at en bestemt person-id blir obligatorisk.
 
 `data/hgFootball/staffRoles.json` beskriver **maksimal aktiv kapasitet per rolle** (`maxActive`): én assistent, opptil tre trenere, én fysio og én keepertrener. Dette er ikke et universelt minstekrav. #172 tolket denne kapasitetsmatrisen som et obligatorisk 1+3+1+1-minimum; det var en modellfeil. Den opprinnelige før-sesongregelen fra #143 beholdes: stab må velges eksplisitt før sesongen starter.
 
@@ -12,7 +12,7 @@ Ukurerte klubber får fortsatt seks tydelig merkede placeholder-profiler i 1+3+1
 
 ## Klubbspesifikke startersett
 
-`starterClubIds` betyr medlemskap i et dokumentert startersett for en etablert klubb. `selectStarterStaffCandidates(staff, clubId)` bruker det dokumenterte settet når klubben har et slikt sett, også når det består av færre enn seks personer. Hvis klubben ikke har et dokumentert sett ennå, brukes hele det generiske placeholder-gulvet. Nye `starterClubIds` skal derfor først legges inn når kildene er gode nok til at settet kan behandles som klubbens starterstab; enkeltstående løse funn skal ikke merkes som startersett.
+`starterClubIds` betyr medlemskap i et dokumentert startersett for en etablert klubb. `selectStarterStaffCandidates(staff, clubId)` bruker det dokumenterte settet når klubben har et slikt sett, også når det består av færre enn seks personer. `summarizeStarterStaffReadiness(...)` utleder deretter rollebehovet fra dette settet og lar enhver kompatibel engasjert staff-profil dekke rollen. Hvis klubben ikke har et dokumentert sett ennå, brukes hele det generiske placeholder-gulvet. Nye `starterClubIds` skal derfor først legges inn når kildene er gode nok til at settet kan behandles som klubbens starterstab; enkeltstående løse funn skal ikke merkes som startersett.
 
 Rosenborg er første kuraterte klubbsett. A-lagsstaben er hentet fra Rosenborg Ballklubs offisielle oversikt, oppdatert 11.08.2026: `https://www.rbk.no/om-rbk/ansatte/a-lag-menn`. Alexander Lund Hansens keepertrenerprofil har i tillegg klubbens egen profilsak som provenance. Dataene bruker bare dokumenterte roller; taktiske ekspertiser legges ikke til uten særskilt kilde.
 
@@ -32,7 +32,7 @@ Molde er åttende dokumenterte klubbsett. Klubbens offisielle A-lagsoversikt på
 
 Tromsø er niende dokumenterte klubbsett. Klubbens offisielle A-lagsoversikt på `https://www.til.no/lag` dokumenterer Marius Jacobsen og Ola Rismo som trenere, Sigurd Pedersen som fysisk trener, Tom-Erik Richardsen som fysioterapeut og Eirik Sørensen som keepertrener. Lars Gunnar Johnsen er eksplisitt dokumentert som toppspillerutvikler/assistenttrener i klubbens ansatteoversikt på `https://www.til.no/om-klubben/ansatte/sporten`. Hovedtrener Jørgen Vik brukes ikke som starterstaff fordi manageren eier hovedtrenerrollen.
 
-`Kontor → Klubbdrift → Stab & drift` viser aktiv rollebruk som kapasitet, for eksempel `2/3 maks` trenere. Selve før-sesongstatusen viser hvor mange av klubbens starterprofiler som er engasjert, for eksempel `5/5 starterstab`. En ledig kapasitet er derfor ikke automatisk en manglende ansatt.
+`Kontor → Klubbdrift → Stab & drift` viser aktiv rollebruk som kapasitet, for eksempel `2/3 maks` trenere. Selve før-sesongstatusen viser hvor mange av startersettets rolleplasser som er dekket, for eksempel `5/5 starterstab`. En ledig kapasitet er derfor ikke automatisk en manglende ansatt.
 
 ## Eliteserien-kø og ferdigdefinisjon
 
