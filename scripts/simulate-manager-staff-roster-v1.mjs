@@ -87,6 +87,18 @@ check(startDecorated.filter(m=>m.assignedStaffRole==="assistant_coach").length==
 check(startDecorated.filter(m=>m.assignedStaffRole==="training_coach").length===3,"Start-rosteren bruker tre aktive trenerroller");
 check(startDecorated.filter(m=>m.assignedStaffRole==="physio").length===1,"Start-rosteren bruker én fysiorolle");
 check(startDecorated.filter(m=>m.assignedStaffRole==="goalkeeper_coach").length===1,"Start-rosteren bruker én keepertrenerrolle");
+const moldeStarters=selectStarterStaffCandidates(staff,"molde"); const moldeSummary=summarizeStaffRoster(moldeStarters);
+check(moldeStarters.length===6,"Molde får seks klubbspesifikke starterprofiler");
+check(moldeSummary.complete,"Molde-settet dekker 1+3+1+1-kontrakten");
+check(moldeStarters.every(m=>m.isPlaceholder!==true&&m.needsResearch!==true),"Molde-settet inneholder ingen placeholders");
+check(moldeStarters.every(m=>Array.isArray(m.starterClubIds)&&m.starterClubIds.includes("molde")),"alle Molde-startere er eksplisitt klubbtilknyttet");
+check(moldeStarters.filter(m=>m.sourceUrl==="https://www.moldefk.no/lag").length===5,"fem Molde-startere bruker klubbens offisielle A-lagsoversikt som kilde");
+check(moldeStarters.find(m=>m.id==="marius_boe_staff")?.sourceUrl==="https://www.moldefk.no/nyheter/marius-boe-blir-ny-assistenttrener","Marius Bøes assistentrolle bruker klubbens eksplisitte kildesak");
+const moldeDecorated=decorateHiredStaffWithAssignments(moldeStarters);
+check(moldeDecorated.filter(m=>m.assignedStaffRole==="assistant_coach").length===1,"Molde-rosteren bruker én aktiv assistentrolle");
+check(moldeDecorated.filter(m=>m.assignedStaffRole==="training_coach").length===3,"Molde-rosteren bruker tre aktive trenerroller");
+check(moldeDecorated.filter(m=>m.assignedStaffRole==="physio").length===1,"Molde-rosteren bruker én fysiorolle");
+check(moldeDecorated.filter(m=>m.assignedStaffRole==="goalkeeper_coach").length===1,"Molde-rosteren bruker én keepertrenerrolle");
 const three=[{id:"a",staffType:"coach",canBeHiredAs:["coach"]},{id:"b",staffType:"coach",canBeHiredAs:["coach"]},{id:"c",staffType:"coach",canBeHiredAs:["coach"]}]; const incomplete=summarizeStaffRoster(three);
 check(!incomplete.complete,"tre vilkårlige trenere er ikke komplett stab"); check(incomplete.byRole.find(r=>r.id==="training_coach")?.filled===3,"tre trenere fyller bare trenerplassene"); check(incomplete.missing.some(r=>r.id==="assistant_coach"),"manglende assistent oppdages"); check(incomplete.missing.some(r=>r.id==="physio"),"manglende fysio oppdages"); check(incomplete.missing.some(r=>r.id==="goalkeeper_coach"),"manglende keepertrener oppdages");
 const assignments=assignFirstTeamStaff(starters); check(assignments.filter(e=>e.staffId).length===6,"seks rolleplasser tildeles"); check(new Set(assignments.filter(e=>e.staffId).map(e=>e.staffId)).size===6,"samme person fyller ikke to plasser"); const decorated=decorateHiredStaffWithAssignments(starters); check(decorated.filter(m=>m.assignedStaffRole).length===6,"coach-context får tildelte roller"); check(decorated.some(m=>m.staffType==="physio"),"fysiorollen mates videre"); check(decorated.some(m=>m.staffType==="goalkeeper_coach"),"keepertrenerrollen mates videre"); console.log(`\n${checks}/${checks} staff-roster-sjekker bestått.`);
