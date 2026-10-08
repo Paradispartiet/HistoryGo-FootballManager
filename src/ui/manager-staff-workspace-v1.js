@@ -63,7 +63,7 @@ export function renderManagerStaffRoster() {
   const grid = el("div", "staff-role-grid"); capacity.byRole.forEach((role) => grid.append(roleCard(role)));
   const statusText = readiness.complete
     ? readiness.usesCuratedClubSet
-      ? "Klubbens dokumenterte starterstab er engasjert."
+      ? "Starterstabens rollebehov er dekket."
       : "Den generiske starterstaben er engasjert."
     : readiness.missingLabel
       ? `Mangler i starterstabens rolledekning: ${readiness.missingLabel}.`
