@@ -9647,6 +9647,7 @@ function renderDepartments() {
 // tropp- og stabsstate. Den oppretter ingen økonomi- eller kontraktstall.
 function renderAdminRoom() {
   const roster = getAvailability().rosterReadiness || {};
+  const staffCount = getHiredStaff().length;
   const staffReadiness = getStarterStaffReadiness();
 
   if (elements.adminDriftMetrics) {
