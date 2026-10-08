@@ -87,6 +87,8 @@ Sarpsborg 08 er sjette komplette klubbsett, kildebelagt fra klubbens offisielle 
 
 Start er sjuende komplette klubbsett, kildebelagt fra klubbens offisielle A-lagsoversikt. Coverage-auditen skal dermed stå på 7/16 komplette Eliteserie-sett; de resterende klubbene bruker fortsatt hele placeholder-gulvet fram til et komplett sett er dokumentert. Dette er ikke grunnlag for å fylle de ni resterende klubbene med gjetning eller halvkomplette startersett.
 
+Molde er åttende komplette klubbsett, kildebelagt fra klubbens offisielle A-lagsoversikt og klubbens eksplisitte 2026-sak om Marius Bøe som assistenttrener. Coverage-auditen skal dermed stå på 8/16 komplette Eliteserie-sett; de åtte resterende klubbene bruker fortsatt hele placeholder-gulvet fram til et komplett sett er dokumentert.
+
 ## Reelt åpent arbeid
 
 Åpent arbeid skal være konkret og kilde- eller regelavklart. Per denne statusen er følgende typer arbeid gyldige uten å dikte produktregler:

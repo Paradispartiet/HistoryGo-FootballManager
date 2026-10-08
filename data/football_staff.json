@@ -1226,6 +1226,133 @@
         "goalkeeper_development"
       ],
       "warningWhenMisused": "Dokumentert som keepertrener i Starts A-lagsapparat; profilen brukes kun i keepertrenerrollen."
+    },
+    {
+      "id": "marius_boe_staff",
+      "name": "Marius Bøe",
+      "staffType": "assistant_coach",
+      "canBeHiredAs": [
+        "assistant_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "molde"
+      ],
+      "sourcePlaceIds": [
+        "aker_stadion"
+      ],
+      "sourceUrl": "https://www.moldefk.no/nyheter/marius-boe-blir-ny-assistenttrener",
+      "profileSourceUrl": "https://www.moldefk.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "assistant_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som assistenttrener i Moldes A-lagsapparat; profilen tillegges ingen ekstra taktisk spesialisering uten egen kilde."
+    },
+    {
+      "id": "martin_falk_staff",
+      "name": "Martin Falk",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "starterClubIds": [
+        "molde"
+      ],
+      "sourcePlaceIds": [
+        "aker_stadion"
+      ],
+      "sourceUrl": "https://www.moldefk.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som First Team Coach i Moldes A-lagsapparat; profilen brukes som trener uten oppdiktede taktiske ekspertiser."
+    },
+    {
+      "id": "rune_bolseth_staff",
+      "name": "Rune Bolseth",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "starterClubIds": [
+        "molde"
+      ],
+      "sourcePlaceIds": [
+        "aker_stadion"
+      ],
+      "sourceUrl": "https://www.moldefk.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som trener i Moldes A-lagsapparat; profilen brukes som trener uten oppdiktede taktiske ekspertiser."
+    },
+    {
+      "id": "christian_thorbjornsen_staff",
+      "name": "Christian Thorbjørnsen",
+      "staffType": "physical_coach",
+      "canBeHiredAs": [
+        "physical_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "molde"
+      ],
+      "sourcePlaceIds": [
+        "aker_stadion"
+      ],
+      "sourceUrl": "https://www.moldefk.no/lag",
+      "expertiseIds": [
+        "physical_preparation"
+      ],
+      "roles": [
+        "physical_preparation_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som Coach/Fitness Coach i Moldes A-lagsapparat; bare fysisk grunntrening er lagt til som canonical ekspertise."
+    },
+    {
+      "id": "andreas_ranvik_staff",
+      "name": "Andreas Ranvik",
+      "staffType": "physio",
+      "canBeHiredAs": [
+        "physio"
+      ],
+      "starterClubIds": [
+        "molde"
+      ],
+      "sourcePlaceIds": [
+        "aker_stadion"
+      ],
+      "sourceUrl": "https://www.moldefk.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_physio"
+      ],
+      "warningWhenMisused": "Dokumentert som fysioterapeut i Moldes A-lagsapparat; profilen tillegges ingen ekstra medisinsk rating."
+    },
+    {
+      "id": "per_magne_misund_staff",
+      "name": "Per Magne Misund",
+      "staffType": "goalkeeper_coach",
+      "canBeHiredAs": [
+        "goalkeeper_coach"
+      ],
+      "starterClubIds": [
+        "molde"
+      ],
+      "sourcePlaceIds": [
+        "aker_stadion"
+      ],
+      "sourceUrl": "https://www.moldefk.no/lag",
+      "expertiseIds": [
+        "goalkeeper_training"
+      ],
+      "roles": [
+        "goalkeeper_development"
+      ],
+      "warningWhenMisused": "Dokumentert som keepertrener i Moldes A-lagsapparat; profilen brukes kun i keepertrenerrollen."
     }
   ]
 }

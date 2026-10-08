@@ -26,6 +26,8 @@ Sarpsborg 08 er sjette komplette klubbsett. Klubbens offisielle A-lagsoversikt p
 
 Start er sjuende komplette klubbsett. Klubbens offisielle A-lagsoversikt på `https://www.ikstart.no/lag` dokumenterer Joey Hardarson (assistenttrener), Kristoffer Vangen Lysgård (trener A-lag/analyse), Roger Risholt (toppspillerutvikler), Kristian Gjøstøl (fysisk trener), Jørgen Rostrup (fysio) og Alexander Aaser (keepertrener). Hovedtrener Azar Karadas brukes ikke som starterstaff fordi manageren eier hovedtrenerrollen.
 
+Molde er åttende komplette klubbsett. Klubbens offisielle A-lagsoversikt på `https://www.moldefk.no/lag` dokumenterer Martin Falk (First Team Coach), Rune Bolseth (trener), Christian Thorbjørnsen (Coach/Fitness Coach), Andreas Ranvik (fysioterapeut) og Per Magne Misund (keepertrener). Marius Bøes assistentrolle er eksplisitt dokumentert i klubbens egen sak `https://www.moldefk.no/nyheter/marius-boe-blir-ny-assistenttrener`. Hovedtrener Sindre Tjelmeland brukes ikke som starterstaff fordi manageren eier hovedtrenerrollen.
+
 `Kontor → Klubbdrift → Stab & drift` viser rolledekningen som `1/1`, `3/3`, `1/1` og `1/1`. Før-sesongsgaten blir først komplett når alle fire rollefamiliene er dekket; seks personer med feil rollefordeling kan derfor ikke passere. Administrasjon bruker samme seks-personers krav, slik at «Stab engasjert» aldri kan vise `6/1`.
 
 
