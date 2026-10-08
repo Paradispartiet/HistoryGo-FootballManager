@@ -65,8 +65,8 @@ export function renderManagerStaffRoster() {
     ? readiness.usesCuratedClubSet
       ? "Klubbens dokumenterte starterstab er engasjert."
       : "Den generiske starterstaben er engasjert."
-    : readiness.usesCuratedClubSet && readiness.missingNames.length
-      ? `Mangler fra klubbens startersett: ${readiness.missingNames.join(", ")}.`
+    : readiness.missingLabel
+      ? `Mangler i starterstabens rolledekning: ${readiness.missingLabel}.`
       : `Starterstab: ${readiness.hiredCount}/${readiness.requiredCount} engasjert.`;
   const status = el("p", "staff-roster-status", statusText); status.setAttribute("aria-live", "polite");
   surface.append(head, grid, status);
