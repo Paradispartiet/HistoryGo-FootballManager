@@ -139,16 +139,36 @@ export function selectStarterStaffCandidates(staff = [], clubId = null) {
 }
 
 export function summarizeStarterStaffReadiness(staff = [], clubId = null, hiredStaff = []) {
-  const candidates = selectStarterStaffCandidates(staff, clubId);
-  const hiredIds = new Set(
-    asArray(hiredStaff)
-      .map((entry) => typeof entry === "string" ? entry : staffId(entry))
-      .filter(Boolean)
-      .map(String)
+  const catalogue = asArray(staff);
+  const candidates = selectStarterStaffCandidates(catalogue, clubId);
+  const catalogueById = new Map(
+    catalogue.filter((member) => staffId(member)).map((member) => [staffId(member), member])
   );
-  const candidateIds = candidates.map((member) => staffId(member));
-  const hiredCandidateIds = candidateIds.filter((id) => hiredIds.has(id));
-  const missing = candidates.filter((member) => !hiredIds.has(staffId(member)));
+  const hiredMembers = asArray(hiredStaff)
+    .map((entry) => typeof entry === "string" ? catalogueById.get(String(entry)) : entry)
+    .filter((member) => staffId(member));
+
+  const requiredAssignments = assignFirstTeamStaff(candidates).filter((entry) => entry.staffId);
+  const hiredAssignments = assignFirstTeamStaff(hiredMembers).filter((entry) => entry.staffId);
+  const roleRequirements = STAFF_ROLE_REQUIREMENTS.map((role) => {
+    const required = requiredAssignments.filter((entry) => entry.roleId === role.id).length;
+    const hired = hiredAssignments.filter((entry) => entry.roleId === role.id).length;
+    const filled = Math.min(hired, required);
+    const missing = Math.max(0, required - hired);
+    return {
+      id: role.id,
+      label: role.label,
+      required,
+      hired,
+      filled,
+      missing,
+      complete: missing === 0
+    };
+  }).filter((role) => role.required > 0);
+
+  const requiredCount = roleRequirements.reduce((sum, role) => sum + role.required, 0);
+  const hiredCount = roleRequirements.reduce((sum, role) => sum + role.filled, 0);
+  const missing = roleRequirements.filter((role) => role.missing > 0);
   const normalizedClubId = clubId == null ? "" : String(clubId);
   const usesCuratedClubSet =
     Boolean(normalizedClubId) &&
@@ -161,14 +181,13 @@ export function summarizeStarterStaffReadiness(staff = [], clubId = null, hiredS
 
   return {
     candidates,
-    candidateIds,
-    hiredCandidateIds,
-    hiredCount: hiredCandidateIds.length,
-    requiredCount: candidateIds.length,
-    complete: candidateIds.length > 0 && missing.length === 0,
+    candidateIds: candidates.map((member) => staffId(member)),
+    roleRequirements,
+    hiredCount,
+    requiredCount,
+    complete: requiredCount > 0 && missing.length === 0,
     missing,
-    missingIds: missing.map((member) => staffId(member)),
-    missingNames: missing.map((member) => member?.name || staffId(member)),
+    missingLabel: missing.map((role) => `${role.label} ${role.hired}/${role.required}`).join(" · "),
     usesCuratedClubSet
   };
 }
