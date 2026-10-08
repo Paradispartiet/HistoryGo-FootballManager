@@ -73,7 +73,7 @@ For 2. divisjon er det systematiske source-depth-gulvet **frosset ved minst to k
 
 Manager Career Flow Integrity er ferdig. Staff er fortsatt et synlig innholdsgap, men ferdigdefinisjonen er korrigert: `staffRoles.json` beskriver `maxActive`-kapasitet, ikke et universelt krav om 1 assistent + 3 trenere + 1 fysio + 1 keepertrener i hver virkelig klubb.
 
-Før-sesongregelen er fortsatt eksplisitt: manageren må engasjere starterstaben før sesongen kan begynne. For en dokumentert overtatt klubb betyr det hele klubbens kildebelagte `starterClubIds`-sett. For en klubb som ennå ikke er kuratert brukes det generiske seks-personers placeholder-gulvet.
+Før-sesongregelen er fortsatt eksplisitt: manageren må dekke starterstabens rollebehov før sesongen kan begynne. For en dokumentert overtatt klubb utledes behovet fra klubbens kildebelagte `starterClubIds`-sett, men kompatibel allerede-engasjert stab kan fylle samme rolle. For en klubb som ennå ikke er kuratert brukes det generiske seks-personers placeholder-gulvet.
 
 Ni Eliteserie-klubber har nå dokumenterte klubbsett: Rosenborg, Brann, Fredrikstad, Vålerenga, Lillestrøm, Sarpsborg 08, Start, Molde og Tromsø. De sju øvrige bruker fallback inntil deres faktiske støtteapparat er dokumentert. Et nytt klubbsett trenger ikke seks personer; det skal speile de kildebelagte aktive rollene vi faktisk kan dokumentere, uten å fylle tom kapasitet med gjetning.
 
