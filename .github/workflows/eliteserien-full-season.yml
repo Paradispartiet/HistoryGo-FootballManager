@@ -1,0 +1,83 @@
+name: Eliteserien full-season club coverage
+
+on:
+  pull_request:
+    paths:
+      - "tests/browser/manager-career-full-season-playthrough-v1.spec.js"
+      - ".github/workflows/eliteserien-full-season.yml"
+      - "data/football_staff.json"
+      - "data/football_clubs.json"
+      - "src/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "tests/browser/manager-career-full-season-playthrough-v1.spec.js"
+      - ".github/workflows/eliteserien-full-season.yml"
+      - "data/football_staff.json"
+      - "data/football_clubs.json"
+      - "src/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: full-season-clubs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  club-seasons:
+    name: Full season - ${{ matrix.cohort }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - cohort: "01"
+            clubs: "viking,bodo_glimt,brann,molde"
+          - cohort: "02"
+            clubs: "tromso,fredrikstad,valerenga,lillestrom"
+          - cohort: "03"
+            clubs: "sarpsborg08,kristiansund,start,aalesund"
+          - cohort: "04"
+            clubs: "hamkam,sandefjord,kfum"
+    env:
+      HGFM_SEASON_CLUB_IDS: ${{ matrix.clubs }}
+      CI: "true"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build TypeScript engine
+        run: npm run build
+
+      - name: Audit documented starter sets
+        run: npm run audit:eliteserien-staff-coverage
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Play all selected club seasons in the browser
+        run: |
+          npx playwright test --project=chromium-full-season --no-deps --workers=2 \
+            --grep "ansetter dokumentert starterstab og spiller 30 serierunder"
+
+      - name: Upload Playwright traces on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-club-seasons-${{ matrix.cohort }}
+          path: |
+            test-results/
+          if-no-files-found: ignore

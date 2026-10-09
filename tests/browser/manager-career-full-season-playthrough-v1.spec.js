@@ -35,9 +35,19 @@ function substitutionPositionBand(position) {
 const ELITESERIEN_CLUBS = JSON.parse(readFileSync(new URL("../../data/football_clubs.json", import.meta.url), "utf8"))
   .clubs.filter((club) => club.tier === "eliteserien");
 const DOCUMENTED_STAFF = JSON.parse(readFileSync(new URL("../../data/football_staff.json", import.meta.url), "utf8")).staff;
-const STAFF_SEASON_PILOT = ["viking", "bodo_glimt"].map((id) => {
+// CI matrix overrides the two representative default cases with all 15 clubs.
+// Rosenborg keeps its pre-existing, more stringent deep full-season test.
+const STAFF_SEASON_CLUB_IDS = (process.env.HGFM_SEASON_CLUB_IDS || "viking,bodo_glimt")
+  .split(",")
+  .map((id) => id.trim())
+  .filter(Boolean);
+if (new Set(STAFF_SEASON_CLUB_IDS).size !== STAFF_SEASON_CLUB_IDS.length) {
+  throw new Error("Duplicate club in full-season club selection");
+}
+const STAFF_SEASON_CLUBS = STAFF_SEASON_CLUB_IDS.map((id) => {
+  if (id === "rosenborg") throw new Error("Rosenborg already has the canonical deep season test");
   const club = ELITESERIEN_CLUBS.find((entry) => entry.id === id);
-  if (!club) throw new Error(`Missing Eliteserien club in full-season pilot: ${id}`);
+  if (!club) throw new Error(`Missing Eliteserien club in full-season selection: ${id}`);
   return club;
 });
 
@@ -1383,9 +1393,20 @@ async function playCurrentMatch(
   for (let event = 0; event < 6; event += 1) {
     if (await nextWeek.isVisible()) break;
 
-    const skip = page.locator(".matchday-live-button.is-secondary:visible").filter({ hasText: "Hopp til pausen" }).first();
-    if (await skip.isVisible()) {
-      await skip.click();
+    // Liveknappen blir bygd på nytt mens kampklokken går. Finn og klikk
+    // samme synlige DOM-element atomisk; et separat isVisible()/click()
+    // kan ellers vente på en knapp som forsvant mellom de to handlingene.
+    const skippedToHalftime = await page.evaluate(() => {
+      const skip = [...document.querySelectorAll(".matchday-live-button.is-secondary")]
+        .find((button) =>
+          button.textContent?.includes("Hopp til pausen") &&
+          button.getClientRects().length > 0
+        );
+      if (!skip) return false;
+      skip.click();
+      return true;
+    });
+    if (skippedToHalftime) {
       if (substitutionPlan && !substitution) {
         substitution = await makeOneHalftimeSubstitution(page, {
           ...substitutionPlan,
@@ -2009,8 +2030,10 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
 
 // Klubbvis UI-gjennomspilling ved siden av Rosenborgs omfattende skade- og rotasjonsregresjon.
 // Ingen sesong-state forhåndsutfylles: alle handlinger skjer i spillerens vanlige grensesnitt.
-for (const club of STAFF_SEASON_PILOT) {
-  test(`blank ${club.name}-save ansetter dokumentert starterstab og spiller 30 serierunder til sesong 2`, async ({ page }) => {
+test.describe("Eliteserien club-specific staff and full-season playthroughs", () => {
+  test.describe.configure({ mode: "parallel" });
+  for (const club of STAFF_SEASON_CLUBS) {
+    test(`blank ${club.name}-save ansetter dokumentert starterstab og spiller 30 serierunder til sesong 2`, async ({ page }) => {
     test.setTimeout(720_000);
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.emulateMedia({ reducedMotion: "reduce" });
@@ -2081,5 +2104,6 @@ for (const club of STAFF_SEASON_PILOT) {
     expect(rollover.archiveCount).toBe(1);
     expect(rollover.hiredStaffCount).toBe(starters.length);
     expect(rollover.conditionMatchCount).toBe(0);
-  });
-}
+    });
+  }
+});
