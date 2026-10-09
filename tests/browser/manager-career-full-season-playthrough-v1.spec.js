@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
 
 const CANONICAL_FULL_SEASON_FORMATION_ID = "modern_433";
@@ -29,6 +30,16 @@ function substitutionPositionBand(position) {
   if (["LW", "RW", "ST", "CF"].includes(token)) return "attack";
   return token ? `other:${token}` : "unknown";
 }
+
+// Kildegrunnlaget for klubber og starterstab hentes fra de kanoniske datafilene.
+const ELITESERIEN_CLUBS = JSON.parse(readFileSync(new URL("../../data/football_clubs.json", import.meta.url), "utf8"))
+  .clubs.filter((club) => club.tier === "eliteserien");
+const DOCUMENTED_STAFF = JSON.parse(readFileSync(new URL("../../data/football_staff.json", import.meta.url), "utf8")).staff;
+const STAFF_SEASON_PILOT = ["viking", "bodo_glimt"].map((id) => {
+  const club = ELITESERIEN_CLUBS.find((entry) => entry.id === id);
+  if (!club) throw new Error(`Missing Eliteserien club in full-season pilot: ${id}`);
+  return club;
+});
 
 const ROSENBORG_STAFF = [
   "Jonathan Hartmann",
@@ -205,7 +216,7 @@ async function readProgress(page) {
   });
 }
 
-async function startLeagueAsRosenborg(page) {
+async function startLeagueAsClub(page, clubId) {
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await expect(page.locator("#onboardingScreen")).toBeVisible();
 
@@ -218,9 +229,9 @@ async function startLeagueAsRosenborg(page) {
   await expect(takeover).toBeVisible();
   await takeover.click();
 
-  const rosenborg = page.locator('.club-takeover-option[data-club-id="rosenborg"]');
-  await expect(rosenborg).toBeVisible();
-  await rosenborg.click();
+  const club = page.locator(`.club-takeover-option[data-club-id="${clubId}"]`);
+  await expect(club).toBeVisible();
+  await club.click();
   await page.locator("#onboardingCreateClub").click();
 
   await expect(page.locator("#onboardingScreen")).toBeHidden();
@@ -235,6 +246,27 @@ async function hireRosenborgStaff(page) {
   }
   await expect(page.locator("#managerStaffRosterV1")).toHaveAttribute("data-complete", "true");
   await expect(page.locator("#managerStaffRosterV1 .staff-roster-total")).toHaveText("6/6 starterstab");
+}
+
+async function hireDocumentedStarterStaff(page, club) {
+  const starters = DOCUMENTED_STAFF.filter((member) =>
+    member.isPlaceholder !== true &&
+    member.needsResearch !== true &&
+    Array.isArray(member.starterClubIds) &&
+    member.starterClubIds.includes(club.id)
+  );
+  expect(starters.length, `${club.name} needs a documented starter set`).toBeGreaterThan(0);
+  expect(new Set(starters.map((member) => member.id)).size).toBe(starters.length);
+  await expect(page.locator("#managerStaffRosterV1")).toHaveAttribute("data-complete", "false");
+  for (const member of starters) {
+    const card = page.locator("#availableStaffList .unlock-card").filter({ hasText: member.name });
+    await expect(card, `${club.name}: ${member.name} must be available to hire`).toHaveCount(1);
+    await card.getByRole("button", { name: "Engasjer" }).click();
+  }
+  await expect(page.locator("#managerStaffRosterV1")).toHaveAttribute("data-complete", "true");
+  await expect(page.locator("#managerStaffRosterV1 .staff-roster-total"))
+    .toHaveText(`${starters.length}/${starters.length} starterstab`);
+  return starters;
 }
 
 async function choosePlayableFormation(page) {
@@ -1400,7 +1432,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   expect(blankMerits.activeClassificationCount).toBe(0);
   expect(blankMerits.partnershipPairCount).toBe(0);
   // Null state-seeding: alt under skjer gjennom de samme kontrollene spilleren bruker.
-  await startLeagueAsRosenborg(page);
+  await startLeagueAsClub(page, "rosenborg");
   await hireRosenborgStaff(page);
   await choosePlayableFormation(page);
   await choosePreseasonTraining(page);
@@ -1974,3 +2006,80 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     })
   );
 });
+
+// Klubbvis UI-gjennomspilling ved siden av Rosenborgs omfattende skade- og rotasjonsregresjon.
+// Ingen sesong-state forhåndsutfylles: alle handlinger skjer i spillerens vanlige grensesnitt.
+for (const club of STAFF_SEASON_PILOT) {
+  test(`blank ${club.name}-save ansetter dokumentert starterstab og spiller 30 serierunder til sesong 2`, async ({ page }) => {
+    test.setTimeout(720_000);
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await installCanonicalLeagueSeed(page);
+    await page.goto("/");
+
+    const blank = await readProgress(page);
+    expect(blank.unlockedPlaceCount).toBe(0);
+    expect(blank.unlockedExpertiseCount).toBe(0);
+    await startLeagueAsClub(page, club.id);
+    const starters = await hireDocumentedStarterStaff(page, club);
+    await choosePlayableFormation(page);
+    await choosePreseasonTraining(page);
+    await startSeasonFromOnboarding(page);
+
+    const initial = await readProgress(page);
+    expect(initial.hiredStaffCount).toBe(starters.length);
+    expect(initial.currentRound).toBe(1);
+    expect(initial.seasonStatus).toBe("active");
+    const playedMatches = new Set();
+    const opponents = new Set();
+    const emergencyRotationSlots = new Set();
+
+    for (let round = 1; round <= 30; round += 1) {
+      const before = await readProgress(page);
+      expect({ week: before.week, phase: before.phase, round: before.currentRound })
+        .toEqual({ week: round, phase: "analysis", round });
+      await openCurrentOpponentAnalysis(page, round - 1);
+      await advanceClubWeek(page, "inbox");
+      await advanceClubWeek(page, "training");
+      await rotateTiredStarters(page, emergencyRotationSlots);
+      await chooseTrainingForCurrentWeek(page, round - 1);
+      await playCurrentMatch(page, round - 1);
+
+      const played = await readProgress(page);
+      expect(played.lastMatchRound).toBe(round);
+      expect(played.lastMatchId).toBeTruthy();
+      expect(played.lastOpponentId).toBeTruthy();
+      expect(played.leaguePlayed).toBe(round);
+      expect(played.leagueWon + played.leagueDrawn + played.leagueLost).toBe(round);
+      expect(played.activeMatchSession).toBe(false);
+      expect(played.conditionMatchCount).toBe(round);
+      playedMatches.add(played.lastMatchId);
+      opponents.add(played.lastOpponentId);
+      await rollToNextWeek(page, round + 1);
+    }
+
+    const completed = await readProgress(page);
+    expect(playedMatches.size).toBe(30);
+    expect(opponents.size).toBe(15);
+    expect(completed.week).toBe(31);
+    expect(completed.seasonStatus).toBe("completed");
+    expect(completed.seasonNumber).toBe(1);
+    expect(completed.leaguePlayed).toBe(30);
+    expect(completed.archiveCount).toBe(1);
+    expect(completed.archiveLatest?.played).toBe(30);
+
+    await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
+    await expect(page.locator("#seasonArchiveTable tbody tr")).toHaveCount(1);
+    await expect(page.locator("#startNewLeagueSeasonButton")).toBeVisible();
+    await expect(page.locator("#startNewLeagueSeasonButton")).toBeEnabled();
+    await page.locator("#startNewLeagueSeasonButton").click();
+    await expect.poll(async () => {
+      const progress = await readProgress(page);
+      return { season: progress.seasonNumber, status: progress.seasonStatus, round: progress.currentRound };
+    }).toEqual({ season: 2, status: "active", round: 1 });
+    const rollover = await readProgress(page);
+    expect(rollover.archiveCount).toBe(1);
+    expect(rollover.hiredStaffCount).toBe(starters.length);
+    expect(rollover.conditionMatchCount).toBe(0);
+  });
+}
