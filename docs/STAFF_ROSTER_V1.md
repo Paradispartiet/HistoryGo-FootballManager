@@ -34,6 +34,8 @@ Tromsø er niende dokumenterte klubbsett. Klubbens offisielle A-lagsoversikt på
 
 Aalesund er tiende dokumenterte klubbsett og første permanente fempersonersbevis for den korrigerte staff-kontrakten. Klubbens offisielle ansatteoversikt på `https://www.aafk.no/om-klubben/ansatte-i-aafk` dokumenterer Geir Frigård og Tor Hogne Aarøy som assistenttrenere. A-lagsoversikten på `https://www.aafk.no/lag` dokumenterer Sindre Eid som toppspillerutvikler, Fredrick Pettersen som fysioterapeut og Odd Einar Hatløy som keepertrener. Settet dekker derfor fem starterroller og blir før-sesongklart ved 5/5; den ledige tredje trenerkapasiteten er ikke et krav om en sjette person.
 
+HamKam er ellevte dokumenterte klubbsett og andre permanente fempersonersbevis. Klubbens offisielle herrestab dokumenterer Lars Brotangen som assistenttrener, Håkon T. Kristiansen som toppspillerutvikler og Yngve Sandbuløkken som keepertrener. Jacob Mollatts 2026-forlengelse dokumenterer at han holder i det fysiske arbeidet på A-laget, og Magnus Jordet-Nilsen er dokumentert som fysioterapeut også i 2026. Settet blir derfor før-sesongklart ved 5/5 og fyller 5/6 aktiv rollekapasitet uten oppdiktet ekstra trener.
+
 `Kontor → Klubbdrift → Stab & drift` viser aktiv rollebruk som kapasitet, for eksempel `2/3 maks` trenere. Selve før-sesongstatusen viser hvor mange av startersettets rolleplasser som er dekket, for eksempel `5/5 starterstab`. En ledig kapasitet er derfor ikke automatisk en manglende ansatt.
 
 ## Eliteserien-kø og ferdigdefinisjon
