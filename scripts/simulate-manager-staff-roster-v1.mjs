@@ -201,6 +201,26 @@ check(vikingDecorated.filter(m=>m.assignedStaffRole==="physio").length===1,"Viki
 check(vikingDecorated.filter(m=>m.assignedStaffRole==="goalkeeper_coach").length===1,"Viking bruker én aktiv keepertrenerrolle");
 const vikingPartialReadiness=summarizeStarterStaffReadiness(staff,"viking",vikingStarters.slice(0,3));
 check(!vikingPartialReadiness.complete&&vikingPartialReadiness.hiredCount===3&&vikingPartialReadiness.requiredCount===4,"Viking med tre av fire dokumenterte rolleplasser er ikke før-sesongklart");
+const kfumStarters=selectStarterStaffCandidates(staff,"kfum");
+const kfumCapacity=summarizeStaffRoster(kfumStarters);
+const kfumReadiness=summarizeStarterStaffReadiness(staff,"kfum",kfumStarters);
+check(kfumStarters.length===4,"KFUM Oslo beholder fire dokumenterte starterprofiler uten oppdiktede roller");
+check(kfumReadiness.complete&&kfumReadiness.hiredCount===4&&kfumReadiness.requiredCount===4,"KFUM Oslo er før-sesongklart ved 4/4 starterstab");
+check(!kfumCapacity.complete&&kfumCapacity.filledCount===4&&kfumCapacity.requiredCount===6,"KFUM Oslo har 4/6 aktiv kapasitet uten at to ekstra ansatte kreves");
+check(kfumStarters.every(m=>m.isPlaceholder!==true&&m.needsResearch!==true),"KFUMs starterstab inneholder ingen placeholders");
+check(kfumStarters.every(m=>m.starterClubIds?.includes("kfum")&&m.sourcePlaceIds?.includes("kfum_arena")),"alle KFUM-startere er eksplisitt klubb- og stadionkoblet");
+check(kfumStarters.every(m=>m.sourceUrl==="https://www.kaaffa.no/lag"),"alle KFUM-roller har klubbens oppdaterte A-lagsoversikt som kilde");
+check(kfumStarters.find(m=>m.id==="thomas_holm_kfum_staff")?.staffType==="assistant_coach","Holm beholder dokumentert assistentrolle");
+check(kfumStarters.find(m=>m.id==="moa_dajani_staff")?.staffType==="assistant_coach","Dajani beholder dokumentert assistentrolle");
+check(kfumStarters.find(m=>m.id==="fredrik_talsnes_staff")?.staffType==="physio","Talsnes beholder dokumentert fysioterapeutrolle");
+check(kfumStarters.find(m=>m.id==="kamil_olsztynski_staff")?.staffType==="goalkeeper_coach","Olsztynski beholder dokumentert keepertrenerrolle");
+const kfumDecorated=decorateHiredStaffWithAssignments(kfumStarters);
+check(kfumDecorated.filter(m=>m.assignedStaffRole==="assistant_coach").length===1,"KFUM bruker én aktiv assistentrolle");
+check(kfumDecorated.filter(m=>m.assignedStaffRole==="training_coach").length===1,"KFUM lar den andre dokumenterte assistenten fylle én trenerkapasitet");
+check(kfumDecorated.filter(m=>m.assignedStaffRole==="physio").length===1,"KFUM bruker én aktiv fysioterapeutrolle");
+check(kfumDecorated.filter(m=>m.assignedStaffRole==="goalkeeper_coach").length===1,"KFUM bruker én aktiv keepertrenerrolle");
+const kfumPartialReadiness=summarizeStarterStaffReadiness(staff,"kfum",kfumStarters.slice(0,3));
+check(!kfumPartialReadiness.complete&&kfumPartialReadiness.hiredCount===3&&kfumPartialReadiness.requiredCount===4,"KFUM med tre av fire dokumenterte rolleplasser er ikke før-sesongklart");
 const variableClubStaff=[
   {id:"variable_assistant",name:"Assistent",staffType:"assistant_coach",canBeHiredAs:["assistant_coach","coach"],starterClubIds:["variable_club"]},
   {id:"variable_coach_a",name:"Trener A",staffType:"coach",canBeHiredAs:["coach"],starterClubIds:["variable_club"]},
