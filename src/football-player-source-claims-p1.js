@@ -245,6 +245,16 @@ const documented = [
     claim: "«Han har teke stort ansvar, vore ein leiar i laget»",
     source: "https://brattvag-il.no/herrelag/herrelaget/takk-for-no-ulrik"
   },
+  // --- Sandefjord, 09.10.2026: documented P1 skill -----------------------
+  // Source explicitly calls Moen Foss "hurtig". Other descriptive words
+  // (e.g. "sterk i hodet") do not justify additional attribute tokens.
+  {
+    playerId: "sander_moen_foss",
+    placeId: "jotun_arena",
+    strengths: ["pace"],
+    claim: "Sandefjord Fotball beskriver Sander Moen Foss som hurtig: «En forsvarsspiller som er sterk i hodet, kan bruke begge bein og er hurtig.» Kun eksplisitt hurtighet føres som styrke.",
+    source: "https://www.sandefjordfotball.no/nyheter/moen-foss-forlenger-skal-ta-mer-ansvar"
+  },
 ];
 
 export const P1_NEW_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
