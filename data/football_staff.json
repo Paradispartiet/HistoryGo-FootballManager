@@ -2078,6 +2078,113 @@
         "goalkeeper_development"
       ],
       "warningWhenMisused": "Dokumentert som keepertrener i KFUMs oppdaterte A-lagsoversikt; tidligere keeperskapende profiler fra 2025 brukes ikke."
+    },
+    {
+      "id": "martin_reier_staff",
+      "name": "Martin Reier",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "starterClubIds": [
+        "bodo_glimt"
+      ],
+      "sourcePlaceIds": [
+        "aspmyra_stadion"
+      ],
+      "sourceUrl": "https://www.glimt.no/om-klubben/ansatte",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_coach"
+      ],
+      "warningWhenMisused": "Oppført som trener i Bodø/Glimts offisielle 2026-ansattoversikt; ingen spesialkompetanse eller assistenttittel er konstruert."
+    },
+    {
+      "id": "eirik_kolstad_staff",
+      "name": "Eirik Kolstad",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "starterClubIds": [
+        "bodo_glimt"
+      ],
+      "sourcePlaceIds": [
+        "aspmyra_stadion"
+      ],
+      "sourceUrl": "https://www.glimt.no/om-klubben/ansatte",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_coach"
+      ],
+      "warningWhenMisused": "Oppført som trener for Bodø/Glimts herrelag; ingen ekstra taktisk ekspertise eller assistenttittel er lagt til."
+    },
+    {
+      "id": "orjan_nygard_staff",
+      "name": "Ørjan Nygård",
+      "staffType": "physical_coach",
+      "canBeHiredAs": [
+        "physical_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "bodo_glimt"
+      ],
+      "sourcePlaceIds": [
+        "aspmyra_stadion"
+      ],
+      "sourceUrl": "https://www.glimt.no/om-klubben/ansatte",
+      "expertiseIds": [
+        "physical_preparation"
+      ],
+      "roles": [
+        "physical_preparation_coach"
+      ],
+      "warningWhenMisused": "Oppført som trener/fysisk trener på klubbens 2026-liste; aktiv trenerkapasitet bygger på den dokumenterte fysiske rollen."
+    },
+    {
+      "id": "jonas_ueland_kolstad_staff",
+      "name": "Jonas Ueland Kolstad",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach",
+        "goalkeeper_coach"
+      ],
+      "starterClubIds": [
+        "bodo_glimt"
+      ],
+      "sourcePlaceIds": [
+        "aspmyra_stadion"
+      ],
+      "sourceUrl": "https://www.glimt.no/om-klubben/ansatte",
+      "profileSourceUrl": "https://www.glimt.no/lag/jonas-uelandkolstad",
+      "expertiseIds": [
+        "goalkeeper_training"
+      ],
+      "roles": [
+        "goalkeeper_development"
+      ],
+      "warningWhenMisused": "Dagens ansatteoversikt kaller Kolstad trener; klubbens egen profil dokumenterer keepertrenerkompetanse. Aktiv keepertrenerplass er rollekompatibilitet, ikke en ny påstand om hans 2026-stillingstittel."
+    },
+    {
+      "id": "anders_braastad_staff",
+      "name": "Anders Braastad",
+      "staffType": "physio",
+      "canBeHiredAs": [
+        "physio"
+      ],
+      "starterClubIds": [
+        "bodo_glimt"
+      ],
+      "sourcePlaceIds": [
+        "aspmyra_stadion"
+      ],
+      "sourceUrl": "https://www.glimt.no/om-klubben/ansatte",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_physio"
+      ],
+      "warningWhenMisused": "Oppført som fysioterapeut under sport A-lag herrer hos Bodø/Glimt; ingen ekstra medisinsk rating er konstruert."
     }
   ]
 }
