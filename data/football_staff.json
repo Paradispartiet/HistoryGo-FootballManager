@@ -1805,6 +1805,112 @@
         "goalkeeper_development"
       ],
       "warningWhenMisused": "Dokumentert som keepertrener/materialforvalter i KBKs herrestab; starterprofilen dekker bare keepertrenerplassen."
+    },
+    {
+      "id": "per_verner_ronning_staff",
+      "name": "Per Verner Rønning",
+      "staffType": "assistant_coach",
+      "canBeHiredAs": [
+        "assistant_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "sandefjord"
+      ],
+      "sourcePlaceIds": [
+        "jotun_arena"
+      ],
+      "sourceUrl": "https://www.sandefjordfotball.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "assistant_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som assistenttrener på Sandefjord Fotballs herrelag; ingen egen taktisk spesialisering eller vurdering er tillagt."
+    },
+    {
+      "id": "henrik_gustavsen_staff",
+      "name": "Henrik Gustavsen",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "starterClubIds": [
+        "sandefjord"
+      ],
+      "sourcePlaceIds": [
+        "jotun_arena"
+      ],
+      "sourceUrl": "https://www.sandefjordfotball.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "player_development_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som toppspillerutvikler i Sandefjord; profilen dekker trenerkapasitet uten udokumentert taktisk ekspertise."
+    },
+    {
+      "id": "arnor_snaer_gudmundsson_staff",
+      "name": "Arnor Snær Gudmundsson",
+      "staffType": "physical_coach",
+      "canBeHiredAs": [
+        "physical_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "sandefjord"
+      ],
+      "sourcePlaceIds": [
+        "jotun_arena"
+      ],
+      "sourceUrl": "https://www.sandefjordfotball.no/lag",
+      "expertiseIds": [
+        "physical_preparation"
+      ],
+      "roles": [
+        "physical_preparation_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som fysisk trener i Sandefjords støtteapparat; bare fysisk forberedelse er lagt til som ekspertise."
+    },
+    {
+      "id": "ola_olsen_staff",
+      "name": "Ola Olsen",
+      "staffType": "physio",
+      "canBeHiredAs": [
+        "physio"
+      ],
+      "starterClubIds": [
+        "sandefjord"
+      ],
+      "sourcePlaceIds": [
+        "jotun_arena"
+      ],
+      "sourceUrl": "https://www.sandefjordfotball.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_physio"
+      ],
+      "warningWhenMisused": "Dokumentert som fysioterapeut i Sandefjords A-lagsoversikt; ingen ekstra medisinsk vurdering eller rating er tillagt."
+    },
+    {
+      "id": "jordi_cumelles_comas_staff",
+      "name": "Jordi Cumelles Comas",
+      "staffType": "goalkeeper_coach",
+      "canBeHiredAs": [
+        "goalkeeper_coach"
+      ],
+      "starterClubIds": [
+        "sandefjord"
+      ],
+      "sourcePlaceIds": [
+        "jotun_arena"
+      ],
+      "sourceUrl": "https://www.sandefjordfotball.no/lag",
+      "expertiseIds": [
+        "goalkeeper_training"
+      ],
+      "roles": [
+        "goalkeeper_development"
+      ],
+      "warningWhenMisused": "Dokumentert som keepertrener i Sandefjords A-lagsoversikt; profilen brukes kun som keepertrener."
     }
   ]
 }
