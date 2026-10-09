@@ -1589,6 +1589,116 @@
         "goalkeeper_development"
       ],
       "warningWhenMisused": "Dokumentert som keepertrener i AaFKs herreapparat; profilen brukes kun i keepertrenerrollen."
+    },
+    {
+      "id": "lars_brotangen_staff",
+      "name": "Lars Brotangen",
+      "staffType": "assistant_coach",
+      "canBeHiredAs": [
+        "assistant_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "hamkam"
+      ],
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "sourceUrl": "https://www.hamkam.no/om-klubben/administrasjon",
+      "profileSourceUrl": "https://www.hamkam.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "assistant_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som assistenttrener for HamKams herrelag; profilen tillegges ingen ekstra taktisk spesialisering uten egen kilde."
+    },
+    {
+      "id": "hakon_t_kristiansen_staff",
+      "name": "Håkon T. Kristiansen",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "starterClubIds": [
+        "hamkam"
+      ],
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "sourceUrl": "https://www.hamkam.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "player_development_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som toppspillerutvikler i HamKams A-lagsstøtteapparat; profilen brukes som trener uten oppdiktede taktiske ekspertiser."
+    },
+    {
+      "id": "jacob_mollatt_staff",
+      "name": "Jacob Mollatt",
+      "staffType": "physical_coach",
+      "canBeHiredAs": [
+        "physical_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "hamkam"
+      ],
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "sourceUrl": "https://www.hamkam.no/nyheter/forlenger-ut-2028",
+      "profileSourceUrl": "https://www.hamkam.no/lag",
+      "expertiseIds": [
+        "physical_preparation"
+      ],
+      "roles": [
+        "physical_preparation_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som ansvarlig for det fysiske på HamKams A-lag; bare fysisk grunntrening er lagt til som canonical ekspertise."
+    },
+    {
+      "id": "magnus_jordet_nilsen_staff",
+      "name": "Magnus Jordet-Nilsen",
+      "staffType": "physio",
+      "canBeHiredAs": [
+        "physio"
+      ],
+      "starterClubIds": [
+        "hamkam"
+      ],
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "sourceUrl": "https://www.hamkam.no/nyheter/blitt-min-favorittklubb-og-livstil",
+      "profileSourceUrl": "https://www.hamkam.no/om-klubben/administrasjon",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_physio"
+      ],
+      "warningWhenMisused": "Dokumentert som fysioterapeut for HamKams herrelag; profilen tillegges ingen ekstra medisinsk rating."
+    },
+    {
+      "id": "yngve_sandbulokken_staff",
+      "name": "Yngve Sandbuløkken",
+      "staffType": "goalkeeper_coach",
+      "canBeHiredAs": [
+        "goalkeeper_coach"
+      ],
+      "starterClubIds": [
+        "hamkam"
+      ],
+      "sourcePlaceIds": [
+        "briskeby_stadion"
+      ],
+      "sourceUrl": "https://www.hamkam.no/om-klubben/administrasjon",
+      "profileSourceUrl": "https://www.hamkam.no/lag",
+      "expertiseIds": [
+        "goalkeeper_training"
+      ],
+      "roles": [
+        "goalkeeper_development"
+      ],
+      "warningWhenMisused": "Dokumentert som keepertrener for HamKams herrelag; profilen brukes kun i keepertrenerrollen."
     }
   ]
 }
