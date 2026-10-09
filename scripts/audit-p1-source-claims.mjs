@@ -179,9 +179,12 @@ const totalStatusCounts = {
 // leadership claim for Ulrik Valderhaug Syversen. His canonical source identity
 // is Aalesund-P1, so the claim belongs in P1_NEW_DOCUMENTED while also deepening
 // Brattvåg through the existing club affiliation: 63 -> 64 and 858 -> 857.
-ok(totalStatusCounts.DOKUMENTERT === 64, `expected 64 total documented P1 profiles, got ${totalStatusCounts.DOKUMENTERT}`);
+// On 2026-10-09 Sandefjord's official 2021 player profile explicitly documented
+// Sander Moen Foss's pace. His Jotun-only P1 identity remains unchanged:
+// 64 -> 65 DOKUMENTERT and 857 -> 856 THIN-SOURCE.
+ok(totalStatusCounts.DOKUMENTERT === 65, `expected 64 total documented P1 profiles, got ${totalStatusCounts.DOKUMENTERT}`);
 ok(totalStatusCounts.DELVIS === 15, `expected 15 total partial P1 profiles, got ${totalStatusCounts.DELVIS}`);
-ok(totalStatusCounts["THIN-SOURCE"] === 857, `expected 857 total thin-source P1 profiles, got ${totalStatusCounts["THIN-SOURCE"]}`);
+ok(totalStatusCounts["THIN-SOURCE"] === 856, `expected 857 total thin-source P1 profiles, got ${totalStatusCounts["THIN-SOURCE"]}`);
 ok(Object.values(totalStatusCounts).reduce((sum, count) => sum + count, 0) === 936,
   "combined status distribution must cover 936/936");
 
