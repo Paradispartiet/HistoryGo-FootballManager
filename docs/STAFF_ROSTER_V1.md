@@ -36,6 +36,8 @@ Aalesund er tiende dokumenterte klubbsett og første permanente fempersonersbevi
 
 HamKam er ellevte dokumenterte klubbsett og andre permanente fempersonersbevis. Klubbens offisielle herrestab dokumenterer Lars Brotangen som assistenttrener, Håkon T. Kristiansen som toppspillerutvikler og Yngve Sandbuløkken som keepertrener. Jacob Mollatts 2026-forlengelse dokumenterer at han holder i det fysiske arbeidet på A-laget, og Magnus Jordet-Nilsen er dokumentert som fysioterapeut også i 2026. Settet blir derfor før-sesongklart ved 5/5 og fyller 5/6 aktiv rollekapasitet uten oppdiktet ekstra trener.
 
+Kristiansund er tolvte dokumenterte klubbsett og tredje permanente fempersonersbevis. Klubbens offisielle A-lagsoversikt på `https://www.kristiansundbk.no/lag` dokumenterer Karl Oskar Fjørtoft som assistenttrener, Andreas Eines Hopmark som toppspillerutvikler, Eirik Andersen som fysisk trener, Eirik Rundberg som fysioterapeut og Conny Månsson som keepertrener/materialforvalter. Hovedtrener Amund Skiri inngår ikke fordi manageren eier hovedtrenerrollen. Settet blir derfor før-sesongklart ved 5/5 og fyller 5/6 aktiv rollekapasitet uten oppdiktet ekstra trener.
+
 `Kontor → Klubbdrift → Stab & drift` viser aktiv rollebruk som kapasitet, for eksempel `2/3 maks` trenere. Selve før-sesongstatusen viser hvor mange av startersettets rolleplasser som er dekket, for eksempel `5/5 starterstab`. En ledig kapasitet er derfor ikke automatisk en manglende ansatt.
 
 ## Eliteserien-kø og ferdigdefinisjon

@@ -1699,6 +1699,112 @@
         "goalkeeper_development"
       ],
       "warningWhenMisused": "Dokumentert som keepertrener for HamKams herrelag; profilen brukes kun i keepertrenerrollen."
+    },
+    {
+      "id": "karl_oskar_fjortoft_staff",
+      "name": "Karl Oskar Fjørtoft",
+      "staffType": "assistant_coach",
+      "canBeHiredAs": [
+        "assistant_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "kristiansund"
+      ],
+      "sourcePlaceIds": [
+        "nordmore_stadion"
+      ],
+      "sourceUrl": "https://www.kristiansundbk.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "assistant_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som assistenttrener i Kristiansund BKs herrestab; ingen ekstra taktisk spesialisering er lagt til."
+    },
+    {
+      "id": "andreas_eines_hopmark_staff",
+      "name": "Andreas Eines Hopmark",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "starterClubIds": [
+        "kristiansund"
+      ],
+      "sourcePlaceIds": [
+        "nordmore_stadion"
+      ],
+      "sourceUrl": "https://www.kristiansundbk.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "player_development_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som toppspillerutvikler i KBKs herrestab; profilen brukes som trener uten udokumenterte taktiske ekspertiser."
+    },
+    {
+      "id": "eirik_andersen_staff",
+      "name": "Eirik Andersen",
+      "staffType": "physical_coach",
+      "canBeHiredAs": [
+        "physical_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "kristiansund"
+      ],
+      "sourcePlaceIds": [
+        "nordmore_stadion"
+      ],
+      "sourceUrl": "https://www.kristiansundbk.no/lag",
+      "expertiseIds": [
+        "physical_preparation"
+      ],
+      "roles": [
+        "physical_preparation_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som fysisk trener i KBKs herrestab; bare fysisk forberedelse er lagt til som canonical ekspertise."
+    },
+    {
+      "id": "eirik_rundberg_staff",
+      "name": "Eirik Rundberg",
+      "staffType": "physio",
+      "canBeHiredAs": [
+        "physio"
+      ],
+      "starterClubIds": [
+        "kristiansund"
+      ],
+      "sourcePlaceIds": [
+        "nordmore_stadion"
+      ],
+      "sourceUrl": "https://www.kristiansundbk.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_physio"
+      ],
+      "warningWhenMisused": "Dokumentert som fysioterapeut for KBKs herrelag; ingen ytterligere medisinsk vurdering eller rating er tillagt."
+    },
+    {
+      "id": "conny_mansson_staff",
+      "name": "Conny Månsson",
+      "staffType": "goalkeeper_coach",
+      "canBeHiredAs": [
+        "goalkeeper_coach"
+      ],
+      "starterClubIds": [
+        "kristiansund"
+      ],
+      "sourcePlaceIds": [
+        "nordmore_stadion"
+      ],
+      "sourceUrl": "https://www.kristiansundbk.no/lag",
+      "expertiseIds": [
+        "goalkeeper_training"
+      ],
+      "roles": [
+        "goalkeeper_development"
+      ],
+      "warningWhenMisused": "Dokumentert som keepertrener/materialforvalter i KBKs herrestab; starterprofilen dekker bare keepertrenerplassen."
     }
   ]
 }
