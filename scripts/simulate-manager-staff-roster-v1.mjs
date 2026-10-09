@@ -162,6 +162,25 @@ check(kristiansundDecorated.filter(m=>m.assignedStaffRole==="assistant_coach").l
 check(kristiansundDecorated.filter(m=>m.assignedStaffRole==="training_coach").length===2,"Kristiansund bruker to aktive trenerroller");
 check(kristiansundDecorated.filter(m=>m.assignedStaffRole==="physio").length===1,"Kristiansund bruker én aktiv fysioterapeutrolle");
 check(kristiansundDecorated.filter(m=>m.assignedStaffRole==="goalkeeper_coach").length===1,"Kristiansund bruker én aktiv keepertrenerrolle");
+const sandefjordStarters=selectStarterStaffCandidates(staff,"sandefjord");
+const sandefjordCapacity=summarizeStaffRoster(sandefjordStarters);
+const sandefjordReadiness=summarizeStarterStaffReadiness(staff,"sandefjord",sandefjordStarters);
+check(sandefjordStarters.length===5,"Sandefjord har fem dokumenterte starterprofiler uten oppdiktet sjette person");
+check(sandefjordReadiness.complete&&sandefjordReadiness.hiredCount===5&&sandefjordReadiness.requiredCount===5,"Sandefjord er før-sesongklart med 5/5 dokumenterte starterroller");
+check(!sandefjordCapacity.complete&&sandefjordCapacity.filledCount===5&&sandefjordCapacity.requiredCount===6,"Sandefjord fyller 5/6 aktiv kapasitet uten sjette krav");
+check(sandefjordStarters.every(m=>m.isPlaceholder!==true&&m.needsResearch!==true),"Sandefjord-staben inneholder ingen placeholders");
+check(sandefjordStarters.every(m=>m.starterClubIds?.includes("sandefjord")&&m.sourcePlaceIds?.includes("jotun_arena")),"alle Sandefjord-startere er eksplisitt knyttet til klubb og stadion");
+check(sandefjordStarters.every(m=>m.sourceUrl==="https://www.sandefjordfotball.no/lag"),"alle Sandefjord-rollene er dokumentert på klubbens offisielle A-lagsside");
+check(sandefjordStarters.find(m=>m.id==="per_verner_ronning_staff")?.staffType==="assistant_coach","Rønning beholder dokumentert assistentrolle");
+check(sandefjordStarters.find(m=>m.id==="henrik_gustavsen_staff")?.staffType==="coach","Gustavsen beholder toppspillerutviklerrolle som trenerkapasitet");
+check(sandefjordStarters.find(m=>m.id==="arnor_snaer_gudmundsson_staff")?.staffType==="physical_coach","Gudmundsson beholder dokumentert fysisk trenerrolle");
+check(sandefjordStarters.find(m=>m.id==="ola_olsen_staff")?.staffType==="physio","Olsen beholder dokumentert fysioterapeutrolle");
+check(sandefjordStarters.find(m=>m.id==="jordi_cumelles_comas_staff")?.staffType==="goalkeeper_coach","Comas beholder dokumentert keepertrenerrolle");
+const sandefjordDecorated=decorateHiredStaffWithAssignments(sandefjordStarters);
+check(sandefjordDecorated.filter(m=>m.assignedStaffRole==="assistant_coach").length===1,"Sandefjord bruker én aktiv assistentrolle");
+check(sandefjordDecorated.filter(m=>m.assignedStaffRole==="training_coach").length===2,"Sandefjord bruker to aktive trenerroller");
+check(sandefjordDecorated.filter(m=>m.assignedStaffRole==="physio").length===1,"Sandefjord bruker én aktiv fysioterapeutrolle");
+check(sandefjordDecorated.filter(m=>m.assignedStaffRole==="goalkeeper_coach").length===1,"Sandefjord bruker én aktiv keepertrenerrolle");
 const variableClubStaff=[
   {id:"variable_assistant",name:"Assistent",staffType:"assistant_coach",canBeHiredAs:["assistant_coach","coach"],starterClubIds:["variable_club"]},
   {id:"variable_coach_a",name:"Trener A",staffType:"coach",canBeHiredAs:["coach"],starterClubIds:["variable_club"]},
