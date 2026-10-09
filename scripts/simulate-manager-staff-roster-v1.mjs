@@ -221,6 +221,28 @@ check(kfumDecorated.filter(m=>m.assignedStaffRole==="physio").length===1,"KFUM b
 check(kfumDecorated.filter(m=>m.assignedStaffRole==="goalkeeper_coach").length===1,"KFUM bruker én aktiv keepertrenerrolle");
 const kfumPartialReadiness=summarizeStarterStaffReadiness(staff,"kfum",kfumStarters.slice(0,3));
 check(!kfumPartialReadiness.complete&&kfumPartialReadiness.hiredCount===3&&kfumPartialReadiness.requiredCount===4,"KFUM med tre av fire dokumenterte rolleplasser er ikke før-sesongklart");
+const glimtStarters=selectStarterStaffCandidates(staff,"bodo_glimt");
+const glimtCapacity=summarizeStaffRoster(glimtStarters);
+const glimtReadiness=summarizeStarterStaffReadiness(staff,"bodo_glimt",glimtStarters);
+check(glimtStarters.length===5,"Bodø/Glimt beholder fem dokumenterte starterprofiler uten oppdiktet assistent");
+check(glimtReadiness.complete&&glimtReadiness.hiredCount===5&&glimtReadiness.requiredCount===5,"Bodø/Glimt er før-sesongklart ved 5/5 starterstab");
+check(!glimtCapacity.complete&&glimtCapacity.filledCount===5&&glimtCapacity.requiredCount===6,"Bodø/Glimt fyller 5/6 aktiv kapasitet uten oppdiktet assistentplass");
+check(glimtStarters.every(m=>m.isPlaceholder!==true&&m.needsResearch!==true),"Bodø/Glimt har ingen placeholders");
+check(glimtStarters.every(m=>m.starterClubIds?.includes("bodo_glimt")&&m.sourcePlaceIds?.includes("aspmyra_stadion")),"alle Bodø/Glimt-profiler er klubb- og stadionkoblet");
+check(glimtStarters.every(m=>m.sourceUrl==="https://www.glimt.no/om-klubben/ansatte"),"alle Bodø/Glimt-profiler har offisiell ansatteoversikt som primærkilde");
+check(glimtStarters.find(m=>m.id==="martin_reier_staff")?.staffType==="coach","Reier beholder dokumentert trenerrolle");
+check(glimtStarters.find(m=>m.id==="eirik_kolstad_staff")?.staffType==="coach","Eirik Kolstad beholder dokumentert trenerrolle");
+check(glimtStarters.find(m=>m.id==="orjan_nygard_staff")?.staffType==="physical_coach","Nygård beholder fysisk trenerrolle");
+check(glimtStarters.find(m=>m.id==="anders_braastad_staff")?.staffType==="physio","Braastad beholder dokumentert fysioterapeutrolle");
+const jonasGlimt=glimtStarters.find(m=>m.id==="jonas_ueland_kolstad_staff");
+check(jonasGlimt?.staffType==="coach"&&jonasGlimt?.canBeHiredAs?.includes("goalkeeper_coach")&&jonasGlimt?.profileSourceUrl==="https://www.glimt.no/lag/jonas-uelandkolstad","Jonas Kolstad beholder nåværende trenertittel og kildebelagt keepertrenerkompatibilitet");
+const glimtDecorated=decorateHiredStaffWithAssignments(glimtStarters);
+check(glimtDecorated.filter(m=>m.assignedStaffRole==="assistant_coach").length===0,"Bodø/Glimt får ingen oppdiktet assistentrolle");
+check(glimtDecorated.filter(m=>m.assignedStaffRole==="training_coach").length===3,"Bodø/Glimt bruker tre trenerkapasiteter");
+check(glimtDecorated.filter(m=>m.assignedStaffRole==="physio").length===1,"Bodø/Glimt bruker én fysioterapeutrolle");
+check(glimtDecorated.filter(m=>m.assignedStaffRole==="goalkeeper_coach").length===1,"Bodø/Glimt fyller keepertrenerkapasitet med dokumentert kompatibilitet");
+const glimtPartialReadiness=summarizeStarterStaffReadiness(staff,"bodo_glimt",glimtStarters.slice(0,4));
+check(!glimtPartialReadiness.complete&&glimtPartialReadiness.hiredCount===4&&glimtPartialReadiness.requiredCount===5,"Bodø/Glimt med fire av fem kildebelagte starterroller er ikke før-sesongklart");
 const variableClubStaff=[
   {id:"variable_assistant",name:"Assistent",staffType:"assistant_coach",canBeHiredAs:["assistant_coach","coach"],starterClubIds:["variable_club"]},
   {id:"variable_coach_a",name:"Trener A",staffType:"coach",canBeHiredAs:["coach"],starterClubIds:["variable_club"]},
