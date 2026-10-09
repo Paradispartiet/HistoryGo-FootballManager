@@ -143,6 +143,25 @@ check(hamkamDecorated.filter(m=>m.assignedStaffRole==="assistant_coach").length=
 check(hamkamDecorated.filter(m=>m.assignedStaffRole==="training_coach").length===2,"HamKam bruker to aktive trenerroller");
 check(hamkamDecorated.filter(m=>m.assignedStaffRole==="physio").length===1,"HamKam bruker én aktiv fysiorolle");
 check(hamkamDecorated.filter(m=>m.assignedStaffRole==="goalkeeper_coach").length===1,"HamKam bruker én aktiv keepertrenerrolle");
+const kristiansundStarters=selectStarterStaffCandidates(staff,"kristiansund");
+const kristiansundCapacity=summarizeStaffRoster(kristiansundStarters);
+const kristiansundReadiness=summarizeStarterStaffReadiness(staff,"kristiansund",kristiansundStarters);
+check(kristiansundStarters.length===5,"Kristiansund har fem dokumenterte starterprofiler uten oppdiktet sjette person");
+check(kristiansundReadiness.complete&&kristiansundReadiness.hiredCount===5&&kristiansundReadiness.requiredCount===5,"Kristiansund er før-sesongklart med 5/5 dokumenterte starterroller");
+check(!kristiansundCapacity.complete&&kristiansundCapacity.filledCount===5&&kristiansundCapacity.requiredCount===6,"Kristiansund fyller 5/6 aktiv kapasitet uten sjette krav");
+check(kristiansundStarters.every(m=>m.isPlaceholder!==true&&m.needsResearch!==true),"Kristiansund-staben inneholder ingen placeholders");
+check(kristiansundStarters.every(m=>m.starterClubIds?.includes("kristiansund")&&m.sourcePlaceIds?.includes("nordmore_stadion")),"alle Kristiansund-startere er eksplisitt knyttet til klubb og stadion");
+check(kristiansundStarters.every(m=>m.sourceUrl==="https://www.kristiansundbk.no/lag"),"alle Kristiansund-rollene er dokumentert i klubbens offisielle A-lagsoversikt");
+check(kristiansundStarters.find(m=>m.id==="karl_oskar_fjortoft_staff")?.staffType==="assistant_coach","Fjørtoft beholder dokumentert assistentrolle");
+check(kristiansundStarters.find(m=>m.id==="andreas_eines_hopmark_staff")?.staffType==="coach","Hopmark beholder toppspillerutvikler som trenerkapasitet");
+check(kristiansundStarters.find(m=>m.id==="eirik_andersen_staff")?.staffType==="physical_coach","Andersen beholder dokumentert fysisk trenerrolle");
+check(kristiansundStarters.find(m=>m.id==="eirik_rundberg_staff")?.staffType==="physio","Rundberg beholder dokumentert fysioterapeutrolle");
+check(kristiansundStarters.find(m=>m.id==="conny_mansson_staff")?.staffType==="goalkeeper_coach","Månsson beholder dokumentert keepertrenerrolle");
+const kristiansundDecorated=decorateHiredStaffWithAssignments(kristiansundStarters);
+check(kristiansundDecorated.filter(m=>m.assignedStaffRole==="assistant_coach").length===1,"Kristiansund bruker én aktiv assistentrolle");
+check(kristiansundDecorated.filter(m=>m.assignedStaffRole==="training_coach").length===2,"Kristiansund bruker to aktive trenerroller");
+check(kristiansundDecorated.filter(m=>m.assignedStaffRole==="physio").length===1,"Kristiansund bruker én aktiv fysioterapeutrolle");
+check(kristiansundDecorated.filter(m=>m.assignedStaffRole==="goalkeeper_coach").length===1,"Kristiansund bruker én aktiv keepertrenerrolle");
 const variableClubStaff=[
   {id:"variable_assistant",name:"Assistent",staffType:"assistant_coach",canBeHiredAs:["assistant_coach","coach"],starterClubIds:["variable_club"]},
   {id:"variable_coach_a",name:"Trener A",staffType:"coach",canBeHiredAs:["coach"],starterClubIds:["variable_club"]},
