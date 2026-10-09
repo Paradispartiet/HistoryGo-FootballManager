@@ -212,6 +212,15 @@ const documented = [
     claim: "«en fantastisk redning av Sotras keeper hindret scoring»",
     source: "https://www.brann.no/nyheter/sloste-med-sjansene-mot-sotra",
     sourceKind: "club"
+  },
+  {
+    // Sandefjord 2021: daglig leder omtaler ham eksplisitt som leder.
+    playerId: "harmeet_singh",
+    clubId: "sandefjord",
+    strengths: ["leadership"],
+    claim: "«Harmeet er en klassespiller. Samtidig er han en rollemodell for de yngre spillerne våre, en leder på og utenfor banen», sier daglig leder Espen Bugge Pettersen.",
+    source: "https://www.sandefjordfotball.no/nyheter/harmeet-i-to-nye-ar--gleder-meg-til-a-fortsette-her",
+    sourceKind: "club"
   }
 ];
 
