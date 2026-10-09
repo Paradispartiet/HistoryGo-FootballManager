@@ -181,6 +181,26 @@ check(sandefjordDecorated.filter(m=>m.assignedStaffRole==="assistant_coach").len
 check(sandefjordDecorated.filter(m=>m.assignedStaffRole==="training_coach").length===2,"Sandefjord bruker to aktive trenerroller");
 check(sandefjordDecorated.filter(m=>m.assignedStaffRole==="physio").length===1,"Sandefjord bruker én aktiv fysioterapeutrolle");
 check(sandefjordDecorated.filter(m=>m.assignedStaffRole==="goalkeeper_coach").length===1,"Sandefjord bruker én aktiv keepertrenerrolle");
+const vikingStarters=selectStarterStaffCandidates(staff,"viking");
+const vikingCapacity=summarizeStaffRoster(vikingStarters);
+const vikingReadiness=summarizeStarterStaffReadiness(staff,"viking",vikingStarters);
+check(vikingStarters.length===4,"Viking beholder fire dokumenterte starterprofiler uten oppdiktede roller");
+check(vikingReadiness.complete&&vikingReadiness.hiredCount===4&&vikingReadiness.requiredCount===4,"Viking er før-sesongklart ved 4/4 starterstab");
+check(!vikingCapacity.complete&&vikingCapacity.filledCount===4&&vikingCapacity.requiredCount===6,"Viking har 4/6 aktiv kapasitet uten at to ekstra personer kreves");
+check(vikingStarters.every(m=>m.isPlaceholder!==true&&m.needsResearch!==true),"Viking-staben inneholder ingen placeholders");
+check(vikingStarters.every(m=>m.starterClubIds?.includes("viking")&&m.sourcePlaceIds?.includes("lyse_arena")),"alle Viking-profiler er klubb- og stadionkoblet");
+check(vikingStarters.every(m=>m.sourceUrl==="https://www.vikingfotball.no/lag"),"Viking bruker klubbens offisielle A-lagsoversikt som kilde");
+check(vikingStarters.find(m=>m.id==="stig_vik_nedrebo_staff")?.staffType==="assistant_coach","Nedrebø beholder dokumentert assistentrolle");
+check(vikingStarters.find(m=>m.id==="rune_repvik_staff")?.staffType==="coach","Repvik beholder toppspillerutviklerrolle som trenerkapasitet");
+check(vikingStarters.find(m=>m.id==="halvard_oen_grova_staff")?.staffType==="physio","Grova beholder dokumentert fysioterapeutrolle");
+check(vikingStarters.find(m=>m.id==="jason_wyn_jones_staff")?.staffType==="goalkeeper_coach","Wyn-Jones beholder dokumentert keepertrenerrolle");
+const vikingDecorated=decorateHiredStaffWithAssignments(vikingStarters);
+check(vikingDecorated.filter(m=>m.assignedStaffRole==="assistant_coach").length===1,"Viking bruker én aktiv assistentrolle");
+check(vikingDecorated.filter(m=>m.assignedStaffRole==="training_coach").length===1,"Viking bruker én aktiv trenerrolle");
+check(vikingDecorated.filter(m=>m.assignedStaffRole==="physio").length===1,"Viking bruker én aktiv fysioterapeutrolle");
+check(vikingDecorated.filter(m=>m.assignedStaffRole==="goalkeeper_coach").length===1,"Viking bruker én aktiv keepertrenerrolle");
+const vikingPartialReadiness=summarizeStarterStaffReadiness(staff,"viking",vikingStarters.slice(0,3));
+check(!vikingPartialReadiness.complete&&vikingPartialReadiness.hiredCount===3&&vikingPartialReadiness.requiredCount===4,"Viking med tre av fire dokumenterte rolleplasser er ikke før-sesongklart");
 const variableClubStaff=[
   {id:"variable_assistant",name:"Assistent",staffType:"assistant_coach",canBeHiredAs:["assistant_coach","coach"],starterClubIds:["variable_club"]},
   {id:"variable_coach_a",name:"Trener A",staffType:"coach",canBeHiredAs:["coach"],starterClubIds:["variable_club"]},

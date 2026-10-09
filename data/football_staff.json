@@ -1911,6 +1911,89 @@
         "goalkeeper_development"
       ],
       "warningWhenMisused": "Dokumentert som keepertrener i Sandefjords A-lagsoversikt; profilen brukes kun som keepertrener."
+    },
+    {
+      "id": "stig_vik_nedrebo_staff",
+      "name": "Stig Vik Nedrebø",
+      "staffType": "assistant_coach",
+      "canBeHiredAs": [
+        "assistant_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "viking"
+      ],
+      "sourcePlaceIds": [
+        "lyse_arena"
+      ],
+      "sourceUrl": "https://www.vikingfotball.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "assistant_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som assistenttrener og analyseansvarlig i Vikings herrelagsoversikt; profilen tillegges ingen udokumentert taktisk ekspertise eller rating."
+    },
+    {
+      "id": "rune_repvik_staff",
+      "name": "Rune Repvik",
+      "staffType": "coach",
+      "canBeHiredAs": [
+        "coach"
+      ],
+      "starterClubIds": [
+        "viking"
+      ],
+      "sourcePlaceIds": [
+        "lyse_arena"
+      ],
+      "sourceUrl": "https://www.vikingfotball.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "player_development_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som toppspillerutvikler i Vikings herrestab; bruker trenerkapasitet uten oppdiktet taktisk spesialisering."
+    },
+    {
+      "id": "halvard_oen_grova_staff",
+      "name": "Halvard Øen Grova",
+      "staffType": "physio",
+      "canBeHiredAs": [
+        "physio"
+      ],
+      "starterClubIds": [
+        "viking"
+      ],
+      "sourcePlaceIds": [
+        "lyse_arena"
+      ],
+      "sourceUrl": "https://www.vikingfotball.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_physio"
+      ],
+      "warningWhenMisused": "Dokumentert som fysioterapeut for Vikings herrelag; ingen medisinsk rating eller annet ansvar er lagt til."
+    },
+    {
+      "id": "jason_wyn_jones_staff",
+      "name": "Jason Wyn-Jones",
+      "staffType": "goalkeeper_coach",
+      "canBeHiredAs": [
+        "goalkeeper_coach"
+      ],
+      "starterClubIds": [
+        "viking"
+      ],
+      "sourcePlaceIds": [
+        "lyse_arena"
+      ],
+      "sourceUrl": "https://www.vikingfotball.no/lag",
+      "expertiseIds": [
+        "goalkeeper_training"
+      ],
+      "roles": [
+        "goalkeeper_development"
+      ],
+      "warningWhenMisused": "Dokumentert som keepertrener for Vikings herrelag; profilen brukes kun som keepertrener."
     }
   ]
 }

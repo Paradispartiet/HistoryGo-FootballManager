@@ -40,6 +40,8 @@ Kristiansund er tolvte dokumenterte klubbsett og tredje permanente fempersonersb
 
 Sandefjord er trettende dokumenterte klubbsett og fjerde permanente fempersonersbevis. Klubbens offisielle A-lagsoversikt på `https://www.sandefjordfotball.no/lag` dokumenterer Per Verner Rønning som assistenttrener, Henrik Gustavsen som toppspillerutvikler, Arnor Snær Gudmundsson som fysisk trener, Ola Olsen som fysioterapeut og Jordi Cumelles Comas som keepertrener. Hovedtrener Andreas Tegström inngår ikke fordi manageren eier hovedtrenerrollen. Ytterligere medisinsk personell, analyseansvarlig og keepertreneransvarlig fyller ikke kunstige trenerplasser. Dokumentert starterstab er dermed 5/5 og før-sesongklar; maksimal aktiv kapasitet er fortsatt 5/6.
 
+Viking er fjortende dokumenterte klubbsett og første permanente firepersonersbevis. Klubbens offisielle A-lagsoversikt på `https://www.vikingfotball.no/lag` dokumenterer Stig Vik Nedrebø som assistenttrener og analyseansvarlig, Rune Repvik som toppspillerutvikler, Halvard Øen Grova som fysioterapeut og Jason Wyn-Jones som keepertrener. Hovedtrenerne Bjarte Lunde Aarsheim og Morten Jensen er utelatt fordi spilleren selv er manager. Andre fysioterapeuter, mentaltrener og lege legges ikke til for å fylle en rolle som ikke er dokumentert. Settet er dermed før-sesongklart ved 4/4 og har 4/6 aktiv rollekapasitet; dette er ikke et krav om å ansette to ekstra personer.
+
 `Kontor → Klubbdrift → Stab & drift` viser aktiv rollebruk som kapasitet, for eksempel `2/3 maks` trenere. Selve før-sesongstatusen viser hvor mange av startersettets rolleplasser som er dekket, for eksempel `5/5 starterstab`. En ledig kapasitet er derfor ikke automatisk en manglende ansatt.
 
 ## Eliteserien-kø og ferdigdefinisjon
