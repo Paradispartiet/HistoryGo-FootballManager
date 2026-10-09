@@ -1393,9 +1393,20 @@ async function playCurrentMatch(
   for (let event = 0; event < 6; event += 1) {
     if (await nextWeek.isVisible()) break;
 
-    const skip = page.locator(".matchday-live-button.is-secondary:visible").filter({ hasText: "Hopp til pausen" }).first();
-    if (await skip.isVisible()) {
-      await skip.click();
+    // Liveknappen blir bygd på nytt mens kampklokken går. Finn og klikk
+    // samme synlige DOM-element atomisk; et separat isVisible()/click()
+    // kan ellers vente på en knapp som forsvant mellom de to handlingene.
+    const skippedToHalftime = await page.evaluate(() => {
+      const skip = [...document.querySelectorAll(".matchday-live-button.is-secondary")]
+        .find((button) =>
+          button.textContent?.includes("Hopp til pausen") &&
+          button.getClientRects().length > 0
+        );
+      if (!skip) return false;
+      skip.click();
+      return true;
+    });
+    if (skippedToHalftime) {
       if (substitutionPlan && !substitution) {
         substitution = await makeOneHalftimeSubstitution(page, {
           ...substitutionPlan,
