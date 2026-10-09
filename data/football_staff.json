@@ -1994,6 +1994,90 @@
         "goalkeeper_development"
       ],
       "warningWhenMisused": "Dokumentert som keepertrener for Vikings herrelag; profilen brukes kun som keepertrener."
+    },
+    {
+      "id": "thomas_holm_kfum_staff",
+      "name": "Thomas Holm",
+      "staffType": "assistant_coach",
+      "canBeHiredAs": [
+        "assistant_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "kfum"
+      ],
+      "sourcePlaceIds": [
+        "kfum_arena"
+      ],
+      "sourceUrl": "https://www.kaaffa.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "assistant_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som assistenttrener for KFUMs A-lag; profilens aktive trenerplass er en kapasitetsfordeling, ikke en ny påstand om stillingstittel."
+    },
+    {
+      "id": "moa_dajani_staff",
+      "name": "Moa Dajani",
+      "staffType": "assistant_coach",
+      "canBeHiredAs": [
+        "assistant_coach",
+        "coach"
+      ],
+      "starterClubIds": [
+        "kfum"
+      ],
+      "sourcePlaceIds": [
+        "kfum_arena"
+      ],
+      "sourceUrl": "https://www.kaaffa.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "assistant_coach"
+      ],
+      "warningWhenMisused": "Dokumentert som assistenttrener i KFUMs A-lagsoversikt; profilen kan fylle ledig trenerkapasitet uten å omskrive kildens stillingstittel."
+    },
+    {
+      "id": "fredrik_talsnes_staff",
+      "name": "Fredrik Talsnes",
+      "staffType": "physio",
+      "canBeHiredAs": [
+        "physio"
+      ],
+      "starterClubIds": [
+        "kfum"
+      ],
+      "sourcePlaceIds": [
+        "kfum_arena"
+      ],
+      "sourceUrl": "https://www.kaaffa.no/lag",
+      "expertiseIds": [],
+      "roles": [
+        "first_team_physio"
+      ],
+      "warningWhenMisused": "Dokumentert som fysioterapeut for KFUMs herrelag; ingen ekstra medisinsk kompetanserating er konstruert."
+    },
+    {
+      "id": "kamil_olsztynski_staff",
+      "name": "Kamil Olsztynski",
+      "staffType": "goalkeeper_coach",
+      "canBeHiredAs": [
+        "goalkeeper_coach"
+      ],
+      "starterClubIds": [
+        "kfum"
+      ],
+      "sourcePlaceIds": [
+        "kfum_arena"
+      ],
+      "sourceUrl": "https://www.kaaffa.no/lag",
+      "expertiseIds": [
+        "goalkeeper_training"
+      ],
+      "roles": [
+        "goalkeeper_development"
+      ],
+      "warningWhenMisused": "Dokumentert som keepertrener i KFUMs oppdaterte A-lagsoversikt; tidligere keeperskapende profiler fra 2025 brukes ikke."
     }
   ]
 }

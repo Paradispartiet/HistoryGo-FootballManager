@@ -42,6 +42,8 @@ Sandefjord er trettende dokumenterte klubbsett og fjerde permanente fempersoners
 
 Viking er fjortende dokumenterte klubbsett og første permanente firepersonersbevis. Klubbens offisielle A-lagsoversikt på `https://www.vikingfotball.no/lag` dokumenterer Stig Vik Nedrebø som assistenttrener og analyseansvarlig, Rune Repvik som toppspillerutvikler, Halvard Øen Grova som fysioterapeut og Jason Wyn-Jones som keepertrener. Hovedtrenerne Bjarte Lunde Aarsheim og Morten Jensen er utelatt fordi spilleren selv er manager. Andre fysioterapeuter, mentaltrener og lege legges ikke til for å fylle en rolle som ikke er dokumentert. Settet er dermed før-sesongklart ved 4/4 og har 4/6 aktiv rollekapasitet; dette er ikke et krav om å ansette to ekstra personer.
 
+KFUM Oslo er femtende dokumenterte klubbsett og andre permanente firepersonersbevis. Klubbens offisielle A-lagsoversikt på `https://www.kaaffa.no/lag` dokumenterer Thomas Holm og Moa Dajani som assistenttrenere, Fredrik Talsnes som fysioterapeut og Kamil Olsztynski som keepertrener. Hovedtrener Jørgen Isnes utelates fordi spilleren har managerrollen. De to assistentene kan dekke én assistentplass og én trenerkapasitet, uten at deres kildebelagte `staffType` omskrives. Andre fysioterapeuter, oppmenn og sportslige ledere blir ikke brukt for å fylle tomme trenerplasser. Før-sesongkravet er 4/4 dokumenterte starterroller og maksimal aktiv kapasitet 4/6.
+
 `Kontor → Klubbdrift → Stab & drift` viser aktiv rollebruk som kapasitet, for eksempel `2/3 maks` trenere. Selve før-sesongstatusen viser hvor mange av startersettets rolleplasser som er dekket, for eksempel `5/5 starterstab`. En ledig kapasitet er derfor ikke automatisk en manglende ansatt.
 
 ## Eliteserien-kø og ferdigdefinisjon
