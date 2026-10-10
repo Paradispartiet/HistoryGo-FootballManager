@@ -3,6 +3,10 @@ name: Verify and deploy Football Manager
 on:
   pull_request:
     branches: [main]
+    # Player-claim-only PRs are audited by ci.yml; don't duplicate Pages verification.
+    # Any additional changed path still triggers the normal Pages PR gate.
+    paths-ignore:
+      - "src/football-player-source-claims-depth.js"
   push:
     branches: [main]
   workflow_dispatch:
