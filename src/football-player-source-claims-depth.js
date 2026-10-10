@@ -383,6 +383,15 @@ const documented = [
     claim: "Sandefjord Fotball skildrer Eik-spillerens direkte frispark i 2025: «Sverre Martin Torp, skrur ballen rundt muren og rett i nettmaskene». Kun den observerte dødballutførelsen føres.",
     source: "https://www.sandefjordfotball.no/nyheter/det-endte-med-uavgjort-mot-fk-eik-tonsberg-871",
     sourceKind: "club"
+  },
+  // --- Sandefjord 2003: contemporary match report ---------------------------
+  {
+    playerId: "trym_bergman",
+    clubId: "sandefjord",
+    strengths: ["heading"],
+    claim: "Bergens Tidende beskriver første Sandefjord-målet mot Vålerenga 22.11.2003 som «en heading i krysset fra Trym Bergman» etter corner fra Frode Fredriksen. Kun det dokumenterte hodespillet føres.",
+    source: "https://www.bt.no/sport/i/K3pmRy/som-en-orgasme",
+    sourceKind: "press"
   }
 ];
 
