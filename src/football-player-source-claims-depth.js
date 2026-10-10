@@ -293,6 +293,46 @@ const documented = [
     claim: "Etter volley fra rundt 25 meter sa Knarvik: «Jeg står alltid i returrommet på cornere, og bruker å være flink til å komme til slike avlutninger».",
     source: "https://www.nettavisen.no/sport/dromme-scoringen-var-planlagt/s/12-95-715467",
     sourceKind: "press"
+  },
+  {
+    playerId: "iven_austbo",
+    clubId: "sandefjord",
+    strengths: ["command_of_area"],
+    claim: "Keepertrener Kurt Hegre: «Iven tar mye i feltet. Han har vist at han behersker den delen av spillet».",
+    source: "https://www.bt.no/sport/i/kJJn4k/austboe-forberedt-paa-keeperkrig-i-1-divisjon",
+    sourceKind: "press"
+  },
+  {
+    playerId: "kristoffer_normann_hansen",
+    clubId: "sandefjord",
+    strengths: ["finishing", "movement"],
+    claim: "Eurosport: «Er en fantastisk avslutter og er flink til å komme i avslutningsposisjon».",
+    source: "https://www.eurosport.no/fotball/obos-ligaen/2018/arets-lag-i-obos-ligaen-kanskje-ikke-den-kjekkeste-men-en-av-de-viktigstefot_sto7033434/story.shtml",
+    sourceKind: "press"
+  },
+  {
+    playerId: "kjell_rune_sellin",
+    clubId: "sandefjord",
+    strengths: ["pace", "finishing"],
+    claim: "Kongsvingers sportslige leder beskriver Sellin som «en gjennombruddshissig, hurtig spiss med gode avslutteregenskaper».",
+    source: "https://www.dagsavisen.no/sport/rbk-leier-ut/8323110",
+    sourceKind: "press"
+  },
+  {
+    playerId: "jorgen_jalland",
+    clubId: "sandefjord",
+    strengths: ["movement"],
+    claim: "Bergens Tidende om Jalland: «Søker mye inn i mellomrommet, og blir mer oppspillpunkt enn pasningsspiller».",
+    source: "https://www.bt.no/sport/i/Op3Oll/usikker-paa-fire-plasser",
+    sourceKind: "press"
+  },
+  {
+    playerId: "abdoulaye_seck",
+    clubId: "sandefjord",
+    strengths: ["strength"],
+    claim: "VG Live om Seck: «senegaleseren har en vanvittig fysikk».",
+    source: "https://vglive.vg.no/fotball/sandefjord-molde/6437/rapport",
+    sourceKind: "press"
   }
 
 ];
