@@ -248,6 +248,51 @@ const documented = [
     claim: "Aftenposten omtaler Vidar Ari Jónsson som «en hurtig høyreback/kantspiller». Kun hurtighet er ført som individuelt dokumentert styrke.",
     source: "https://www.aftenposten.no/sport/fotball/i/GGjLeV/tromsoe-tester-to-islendinger-vi-har-faatt-veldig-bra-rapporter-paa-dem",
     sourceKind: "press"
+  },
+  {
+    // Emil Dahle assessed Kirkevold's speed and strength in April 2015.
+    playerId: "pal_alexander_kirkevold",
+    clubId: "sandefjord",
+    strengths: ["pace", "strength"],
+    claim: "Emil Dahle: «han er ganske rask og sterk».",
+    source: "https://www.aftenbladet.no/sport/i/kJa0Ov/kompisduell-paa-soer-arena",
+    sourceKind: "press"
+  },
+  {
+    // 2018: Sarpsborg 08 quotes Ruud Tveter and its director on individual traits.
+    playerId: "alexander_ruud_tveter",
+    clubId: "sandefjord",
+    strengths: ["strength", "hold_up_play", "pace"],
+    claim: "Ruud Tveter: «en stor, sterk spiss som er god til å holde på ballen»; sportssjef Berntsen: «sterk, rask».",
+    source: "https://www.sarpsborg08.no/nyheter/siste-spissbrikke-pa-plass",
+    sourceKind: "club"
+  },
+  {
+    // 2022: editorial explicitly characterizes Høibråten's defending in duels.
+    playerId: "marius_hoibraten",
+    clubId: "sandefjord",
+    strengths: ["duels"],
+    claim: "Eurosport beskriver Marius Høibråten som «Kompromissløs duellstopper».",
+    source: "https://www.eurosport.no/fotball/eliteserien/2021/se-hele-listen-dette-var-eliteseriens-50-beste-spillere-i-2022_sto9292645/story.shtml",
+    sourceKind: "press"
+  },
+  {
+    // 2008: Bjørn Tore Kvarme describes Demidov's strength in direct contests.
+    playerId: "vadim_demidov",
+    clubId: "sandefjord",
+    strengths: ["duels"],
+    claim: "Bjørn Tore Kvarme om Demidov: «Han er sterk i duellspillet».",
+    source: "https://www.aftenposten.no/sport/fotball/i/4qbgBe/imponert-over-demidov",
+    sourceKind: "press"
+  },
+  {
+    // 2006: long-range volley after which Knarvik described his own repeatable skill.
+    playerId: "tommy_knarvik",
+    clubId: "sandefjord",
+    strengths: ["long_shots"],
+    claim: "Etter volley fra rundt 25 meter sa Knarvik: «Jeg står alltid i returrommet på cornere, og bruker å være flink til å komme til slike avlutninger».",
+    source: "https://www.nettavisen.no/sport/dromme-scoringen-var-planlagt/s/12-95-715467",
+    sourceKind: "press"
   }
 
 ];
