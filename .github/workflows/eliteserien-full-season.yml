@@ -8,16 +8,9 @@ on:
       - "data/football_staff.json"
       - "data/football_clubs.json"
       - "src/**"
-  push:
-    branches:
-      - main
-    paths:
-      - "tests/browser/manager-career-full-season-playthrough-v1.spec.js"
-      - ".github/workflows/eliteserien-full-season.yml"
-      - "data/football_staff.json"
-      - "data/football_clubs.json"
-      - "src/**"
   workflow_dispatch:
+  schedule:
+    - cron: "43 4 * * 0"
 
 permissions:
   contents: read
@@ -27,7 +20,36 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  scope:
+    name: Determine season-test scope
+    runs-on: ubuntu-latest
+    outputs:
+      lane: ${{ steps.classify.outputs.lane }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify routing classifier
+        run: node scripts/classify-player-ci.mjs --self-test
+      - name: Fetch PR base
+        if: github.event_name == 'pull_request'
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: git fetch --no-tags --depth=1 origin "$PR_BASE_SHA" || echo "Base unavailable: running full seasons"
+      - name: Route to full seasons only for code changes
+        id: classify
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: node scripts/classify-player-ci.mjs
+
   club-seasons:
+    needs: scope
+    if: needs.scope.outputs.lane == 'full'
     name: Full season - ${{ matrix.cohort }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
