@@ -410,6 +410,14 @@ const documented = [
     claim: "Sandefjords tidligere trener Tom Nordlie sier til Stavanger Aftenblad 25.10.2005 at Fevang er «god i lufta, kreativ» og teknisk/taktisk dyktig. Luftspill føres som heading, kreativitet som chance_creation i tråd med ferdighetsvokabularet; vision kan ikke utledes av formuleringen, og målstatistikk gir ingen avslutningsstyrke.",
     source: "https://www.aftenbladet.no/sport/i/pLLKnW/nordlie-henter-ny-sandefjord-spiller",
     sourceKind: "press"
+  },
+  {
+    playerId: "olav_zanetti",
+    clubId: "sandefjord",
+    strengths: ["crossing"],
+    claim: "Samtidig kampreferat fra Brann–Sandefjord i mars 2010 sier: «Olav Zanetti fosset frem på høyre og la et hardt og lavt innlegg». Bare det dokumenterte innlegget føres som crossing; fart eller avslutningsevne utledes ikke.",
+    source: "https://www.aftenbladet.no/sport/i/xR1y98/innbytter-guastavino-snudde-kampen",
+    sourceKind: "press"
   }
 ];
 
