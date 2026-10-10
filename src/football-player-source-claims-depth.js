@@ -250,49 +250,49 @@ const documented = [
     sourceKind: "press"
   },
   {
-    // 2015: teammate Emil Dahle specifies pace and physical strength.
+    // Emil Dahle assessed Kirkevold's speed and strength in April 2015.
     playerId: "pal_alexander_kirkevold",
     clubId: "sandefjord",
     strengths: ["pace", "strength"],
-    claim: "Emil Dahle om Kirkevold: «han er ganske rask og sterk».",
+    claim: "Emil Dahle: «han er ganske rask og sterk».",
     source: "https://www.aftenbladet.no/sport/i/kJa0Ov/kompisduell-paa-soer-arena",
     sourceKind: "press"
   },
   {
-    // 2023: club match report explicitly notes individual duel and physical strength.
-    playerId: "simon_amin",
+    // 2018: Sarpsborg 08 quotes Ruud Tveter and its director on individual traits.
+    playerId: "alexander_ruud_tveter",
     clubId: "sandefjord",
-    strengths: ["strength", "duels"],
-    claim: "Klubben omtaler Simon Amin som «en fysisk sterk duellspiller».",
-    source: "https://www.sandefjordfotball.no/nyheter/fotballsesongen-2023-er-i-full-gang",
+    strengths: ["strength", "hold_up_play", "pace"],
+    claim: "Ruud Tveter: «en stor, sterk spiss som er god til å holde på ballen»; sportssjef Berntsen: «sterk, rask».",
+    source: "https://www.sarpsborg08.no/nyheter/siste-spissbrikke-pa-plass",
     sourceKind: "club"
   },
   {
-    // 2022: Taaje explicitly describes his own heading and top speed.
-    playerId: "jesper_taaje",
+    // 2022: editorial explicitly characterizes Høibråten's defending in duels.
+    playerId: "marius_hoibraten",
     clubId: "sandefjord",
-    strengths: ["heading", "pace"],
-    claim: "Taaje omtaler seg som «en sterk hodespiller, har høy toppfart».",
-    source: "https://www.sandefjordfotball.no/nyheter/jesper-taaje-klar-som-sf-spiller",
-    sourceKind: "club"
+    strengths: ["duels"],
+    claim: "Eurosport beskriver Marius Høibråten som «Kompromissløs duellstopper».",
+    source: "https://www.eurosport.no/fotball/eliteserien/2021/se-hele-listen-dette-var-eliteseriens-50-beste-spillere-i-2022_sto9292645/story.shtml",
+    sourceKind: "press"
   },
   {
-    // 2023: Dunsby specifically identifies attacking one-v-one skill.
-    playerId: "jakob_dunsby",
+    // 2008: Bjørn Tore Kvarme describes Demidov's strength in direct contests.
+    playerId: "vadim_demidov",
     clubId: "sandefjord",
-    strengths: ["one_vs_one"],
-    claim: "Dunsby sier: «Jeg har kanskje min største styrke i en-mot-en offensivt».",
-    source: "https://www.sandefjordfotball.no/nyheter/jakob-dunsby-blir-sf-spiller-ut-sesongen-2023",
-    sourceKind: "club"
+    strengths: ["duels"],
+    claim: "Bjørn Tore Kvarme om Demidov: «Han er sterk i duellspillet».",
+    source: "https://www.aftenposten.no/sport/fotball/i/4qbgBe/imponert-over-demidov",
+    sourceKind: "press"
   },
   {
-    // 2024: teammate Hugo Keto identifies Berglie's physical and duel strengths.
-    playerId: "fredrik_berglie",
+    // 2006: long-range volley after which Knarvik described his own repeatable skill.
+    playerId: "tommy_knarvik",
     clubId: "sandefjord",
-    strengths: ["strength", "duels"],
-    claim: "Hugo Keto beskriver Berglie: «Han er sterk, solid i duellene og meget ballsikker».",
-    source: "https://www.sandefjordfotball.no/nyheter/sfs-solide-malvakt-hugo-keto-er-overbevist",
-    sourceKind: "club"
+    strengths: ["long_shots"],
+    claim: "Etter volley fra rundt 25 meter sa Knarvik: «Jeg står alltid i returrommet på cornere, og bruker å være flink til å komme til slike avlutninger».",
+    source: "https://www.nettavisen.no/sport/dromme-scoringen-var-planlagt/s/12-95-715467",
+    sourceKind: "press"
   }
 
 ];
