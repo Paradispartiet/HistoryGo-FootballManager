@@ -488,6 +488,13 @@ const documented = [
     strengths: ["heading"],
     claim: "Bergens Tidendes samtidige kampreferat 28.10.2012 om Sandefjord–Bryne 2–0 beskriver hvordan Panajotis Dimitriadis møtte hjørnesparket først med hodet og styrte det i lengste hjørne til 2–0. Kun dokumentert heading føres; resultat og målstatistikk gir ingen øvrige styrker.",
     source: "https://www.bt.no/sport/i/kJ3amL/kniven-paa-strupen-for-bryne-etter-nytt-tap"
+  },
+  {
+    playerId: "ebrima_sohna",
+    placeId: "jotun_arena",
+    strengths: ["work_rate", "tackling", "interceptions"],
+    claim: "Foroyaa 07.05.2020 beskriver Ebrima Sohna individuelt med «workaholic approach, tackles and interceptions» og som spesialist på duellpreget fotball. Arbeidsinnsats, taklinger og brudd føres som work_rate, tackling og interceptions; pasningsspill, teknikk og generell fysikk utledes ikke.",
+    source: "https://foroyaa.net/14-years-after-conquering-africa-bare-truth-of-what-became-of-the-2005-baby-scorpions/"
   }
 ];
 
