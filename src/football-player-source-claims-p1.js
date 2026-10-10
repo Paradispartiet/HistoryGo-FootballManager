@@ -438,6 +438,42 @@ const documented = [
     strengths: ["finishing"],
     claim: "Brann Fotballs kampreferat 12.04.2026 sier at Sander Risan Mørk «plasserte et godt skudd i hjørnet» som avgjorde 0–1-kampen. Kun den dokumenterte avslutningen (finishing) føres.",
     source: "https://www.brann.no/nyheter/tap-pa-stadion"
+  },
+  // --- Sandefjord 10.10.2026: five further historical source claims ---------
+  {
+    playerId: "pau_morer",
+    placeId: "jotun_arena",
+    strengths: ["dribbling"],
+    claim: "Sandefjord Fotballs eget kampreferat fra Molde 2017 beskriver at Pau Morer «driblet seg forbi en rekke Molde-spillere på lekkert vis inne i feltet». Kun eksplisitt dribling føres, ikke duellstyrke fra én ballvinning.",
+    source: "https://www.sandefjordfotball.no/nyheter/et-fyrverkeri-av-en-fotballkamp"
+  },
+  {
+    playerId: "tijan_jaiteh",
+    placeId: "jotun_arena",
+    strengths: ["duels", "pace"],
+    claim: "Samtidig fagkommentar om Sandnes Ulf i Dagsavisen 2014 omtaler Tijan Jaiteh som en spiller som «er duellsterk og har bra tempo». Kun eksplisitt duellspill og fart føres.",
+    source: "https://www.dagsavisen.no/nyheter/kommentarhva-er-galt-med-sandnes-ulf/8378838"
+  },
+  {
+    playerId: "tom_helge_jacobsen",
+    placeId: "jotun_arena",
+    strengths: ["heading"],
+    claim: "Dagbladets samtidige divisjonsreferat fra Sandefjord–Haugesund 2001 beskriver en «glimrende heading» fra Tom Helge Jacobsen etter innlegg av Jon Midttun Lie. Bare dokumentert hodespill føres.",
+    source: "https://www.dagbladet.no/sport/1-divisjonsbors---26-runde/65752444"
+  },
+  {
+    playerId: "jon_midttun_lie",
+    placeId: "jotun_arena",
+    strengths: ["set_pieces"],
+    claim: "Starts assistenttrener Bård Wiggen fremhevet i Aftenposten 2005 Jon Midttun Lie som en av lagets «gode servere» på dødball, og klubben bekrefter hans overgang fra Sandefjord til Start. Kun dødballutførelse føres.",
+    source: "https://www.aftenposten.no/sport/fotball/i/Vb4KmV/vil-bli-doedballspesialister"
+  },
+  {
+    playerId: "alexander_gabrielsen",
+    placeId: "jotun_arena",
+    strengths: ["heading"],
+    claim: "Samtidig Aftenbladet-referat fra Viking–Brann 26.03.2006 beskriver Alexander Gabrielsens målheading etter hjørnespark, som Brann-keeper Håkon Opdal ikke kunne avverge. Spilleren er identitetskontrollert mot NFFs karriereregister med senere Sandefjord-opphold. Kun hodespill føres.",
+    source: "https://www.aftenbladet.no/sport/i/K3B4AG/opdal-min-feil"
   }
 ];
 
