@@ -239,6 +239,15 @@ const documented = [
     claim: "Sandefjord Fotball omtaler Brice Wembangomo som «den hurtige høyrebacken». Bare hurtighet registreres som individuelt dokumentert styrke.",
     source: "https://www.sandefjordfotball.no/nyheter/brice-veldig-glad-i-sandefjord",
     sourceKind: "club"
+  },
+  {
+    // Sandefjord 2015: former teammate Emil Dahle described individual skills.
+    playerId: "pal_alexander_kirkevold",
+    clubId: "sandefjord",
+    strengths: ["pace", "strength"],
+    claim: "Tidligere lagkamerat Emil Dahle beskriver Kirkevold som «ganske rask og sterk». Bare hurtighet og fysisk styrke registreres.",
+    source: "https://www.aftenbladet.no/sport/i/kJa0Ov/kompisduell-paa-soer-arena",
+    sourceKind: "press"
   }
 
 ];
