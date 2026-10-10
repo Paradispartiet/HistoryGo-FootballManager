@@ -401,6 +401,15 @@ const documented = [
     claim: "Stavanger Aftenblad 12.04.2008 beskriver Sandefjords seiersmål mot Sandnes Ulf: «Tre minutter på overtid satte Espen Nystuen inn seiersmålet med pannebrasken». Bare det dokumenterte hodespillet føres.",
     source: "https://www.aftenbladet.no/sport/i/G1vk9q/sandnes-tap-paa-overtid",
     sourceKind: "press"
+  },
+  // --- Sandefjord 2005: coach's individual evaluation -----------------------
+  {
+    playerId: "geir_ludvig_fevang",
+    clubId: "sandefjord",
+    strengths: ["heading", "vision"],
+    claim: "Sandefjords tidligere trener Tom Nordlie sier til Stavanger Aftenblad 25.10.2005 at Fevang er «god i lufta, kreativ» og teknisk/taktisk dyktig. Bare luftspill og kreativt overblikk føres; målstatistikk gir ingen avslutningsstyrke.",
+    source: "https://www.aftenbladet.no/sport/i/pLLKnW/nordlie-henter-ny-sandefjord-spiller",
+    sourceKind: "press"
   }
 ];
 
