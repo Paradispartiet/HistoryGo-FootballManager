@@ -263,6 +263,14 @@ const documented = [
     claim: "Sandefjord Fotball beskriver i kamprapporten mot Odd at Jacob Storevik «viste ... stor reaksjonsevne» ved en redning fra kort hold. Kun reaksjonsevne dokumenteres.",
     source: "https://www.sandefjordfotball.no/nyheter/stor-stemning-men-mallost-i-derbyfesten"
   },
+  // --- Sandefjord 05.02.2022: source-verifiable individual skill -----------
+  {
+    playerId: "mohamed_ofkir",
+    placeId: "jotun_arena",
+    strengths: ["flair"],
+    claim: "Trener Hans Erik Ødegaard beskriver Ofkir: «Han virket livlig – og er uforutsigbar med ballen i beina.» Kun uforutsigbarheten er tatt som evidens for flair.",
+    source: "https://www.sandefjordfotball.no/nyheter/odegaard-det-aller-beste-er-at-sesongen-er-i-gang"
+  },
 ];
 
 export const P1_NEW_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
