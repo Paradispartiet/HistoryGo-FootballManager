@@ -495,6 +495,27 @@ const documented = [
     strengths: ["work_rate", "tackling", "interceptions"],
     claim: "Foroyaa 07.05.2020 beskriver Ebrima Sohna individuelt med «workaholic approach, tackles and interceptions» og som spesialist på duellpreget fotball. Arbeidsinnsats, taklinger og brudd føres som work_rate, tackling og interceptions; pasningsspill, teknikk og generell fysikk utledes ikke.",
     source: "https://foroyaa.net/14-years-after-conquering-africa-bare-truth-of-what-became-of-the-2005-baby-scorpions/"
+  },
+  {
+    playerId: "peter_skov_jensen",
+    placeId: "jotun_arena",
+    strengths: ["shot_stopping"],
+    claim: "Aftenpostens samtidige referat fra Rosenborg–Sandefjord 23.09.2007 beskriver at Peter Skov-Jensen bokset unna et frispark fra Marek Sapara og fistet et skudd fra Mikael Dorsin over mål. Kun de konkrete redningene føres som shot_stopping; ingen generell rangering eller reaksjonsevne utledes.",
+    source: "https://www.aftenposten.no/sport/fotball/i/50j0kO/komfortabelt"
+  },
+  {
+    playerId: "marc_vales",
+    placeId: "jotun_arena",
+    strengths: ["heading"],
+    claim: "Molde FK beskriver i sitt kampreferat fra Molde–Sandefjord 0–1 i 2020 at Marc Vales headet inn Sandefjords mål etter en corner fra Vidar Ari Jónsson i det sjette minuttet. Kun heading føres; ingen andre tekniske egenskaper utledes.",
+    source: "https://www.moldefk.no/om-klubben/var-historie/2020-2023/2020/eliteserien-2020/ni-mann-med-2-pa-borsen"
+  },
+  {
+    playerId: "daniel_seland_karlsbakk",
+    placeId: "jotun_arena",
+    strengths: ["heading"],
+    claim: "Norges Fotballforbunds kampreferat fra G19-kampen mot Serbia 07.06.2022 sier at Daniel Seland Karlsbakk headet inn Norges 2–3-redusering i det 82. minutt. Kun dokumentert heading føres; handlingen fant sted på landslaget, men gjelder samme spiller.",
+    source: "https://www.fotball.no/landslag/norge-gutter-19/2022/g19---vi-er-veldig-skuffa-over-at-vi-ikke-klarte-det/"
   }
 ];
 
