@@ -375,6 +375,15 @@ const documented = [
     sourceKind: "press"
   }
 
+  // --- Sandefjord base squad: club-documented direct free kick, 2025 --------
+  {
+    playerId: "martin_torp",
+    clubId: "sandefjord",
+    strengths: ["set_pieces"],
+    claim: "Sandefjord Fotball skildrer Eik-spillerens direkte frispark i 2025: «Sverre Martin Torp, skrur ballen rundt muren og rett i nettmaskene». Kun den observerte dødballutførelsen føres.",
+    source: "https://www.sandefjordfotball.no/nyheter/det-endte-med-uavgjort-mot-fk-eik-tonsberg-871",
+    sourceKind: "club"
+  }
 ];
 
 export const SOURCE_DEPTH_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
