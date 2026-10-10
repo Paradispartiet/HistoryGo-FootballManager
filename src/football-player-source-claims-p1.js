@@ -530,6 +530,51 @@ const documented = [
     strengths: ["passing_range"],
     claim: "Dagsavisens samtidige Sandnes Ulf–Strømmen-referat 28.10.2020 beskriver en presis spillvending fra Reppesgård Hansen til kantspiller Jonsson: «Reppersgård Hansen vender spillet strålende til Jonsson». Dette bærer bare passing_range (vending av spillet); ingen generell oversikt, fart eller andre pasningsstyrker utledes fra enkelthendelsen.",
     source: "https://www.dagsavisen.no/sport/sandnes-ulf-kan-skyte-seg-tilbake-pa-kvalikplass/7113489"
+  },
+  {
+    "playerId": "tor_hogne_aaroy",
+    "placeId": "color_line_stadion",
+    "strengths": [
+      "heading"
+    ],
+    "claim": "Start-trener Knut Tørum pekte 30.04.2010 konkret på at Tor Hogne Aarøy var spesielt farlig i hodespillet, og Start-spiller Ole Martin Årst beskrev ham som god i lufta. Fører heading; 203 cm høyde og målstatistikk gir ingen andre attributter.",
+    "source": "https://www.aftenbladet.no/sport/i/ng5JjJ/toerum-maa-ikke-la-oss-blende-av-aaroey"
+  },
+  {
+    "playerId": "sten_grytebust",
+    "placeId": "color_line_stadion",
+    "strengths": [
+      "shot_stopping"
+    ],
+    "claim": "Aftenpostens samtidige Stabæk–Aalesund-referat 14.06.2011 dokumenterer flere klasseredninger fra Sten Grytebust, omtalt individuelt også av Stabæk-trener Jörgen Lennartsson og landslagskeeper Jon Knudsen. Fører bare shot_stopping, ikke en generell keepertotal.",
+    "source": "https://www.aftenposten.no/sport/fotball/i/4qLd1G/rekdal-norges-neste-landslagskeeper"
+  },
+  {
+    "playerId": "michael_barrantes",
+    "placeId": "color_line_stadion",
+    "strengths": [
+      "set_pieces"
+    ],
+    "claim": "Samtidig Aalesund–Brann-referat 06.03.2011 beskriver at Michael Barrantes slo en presis corner på bakerste stolpe til Ville Jalastos heading og utførte et farlig frispark tidlig i kampen. Fører bare set_pieces, ikke pasningsregister eller skuddkraft.",
+    "source": "https://www.aftenbladet.no/sport/i/xRxl38/sen-scoring-avgjorde-for-aafk"
+  },
+  {
+    "playerId": "leke_james",
+    "placeId": "color_line_stadion",
+    "strengths": [
+      "work_rate"
+    ],
+    "claim": "Trener Trond Fredriksen fortalte 07.07.2015 at Leke James tidligere i sesongen hadde tatt mye av den defensive grovjobben og trengte å fordele arbeidsoppgavene for å være uthvilt i angrep; James bekreftet selv at han jobbet mye for laget. Fører work_rate, ikke finishing eller stamina.",
+    "source": "https://www.bt.no/sport/i/e8J8Al/leke-james-jeg-har-vaert-frustrert"
+  },
+  {
+    "playerId": "daniel_arnefjord",
+    "placeId": "color_line_stadion",
+    "strengths": [
+      "heading"
+    ],
+    "claim": "Bergens Tidendes samtidige referat fra Aalesund–Start 21.04.2014 dokumenterer at Daniel Arnefjord møtte Michael Barrantes' frispark og headet fra sju meter i mål. Fører kun heading som eksplisitt utført teknisk handling, ikke duellstyrke eller posisjonering.",
+    "source": "https://www.bt.no/sport/i/50G0xK/start-straffet-tafatt-aalesund"
   }
 ];
 
