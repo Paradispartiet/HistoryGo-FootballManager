@@ -392,6 +392,15 @@ const documented = [
     claim: "Bergens Tidende beskriver første Sandefjord-målet mot Vålerenga 22.11.2003 som «en heading i krysset fra Trym Bergman» etter corner fra Frode Fredriksen. Kun det dokumenterte hodespillet føres.",
     source: "https://www.bt.no/sport/i/K3pmRy/som-en-orgasme",
     sourceKind: "press"
+  },
+  // --- Sandefjord 2008: documented headed injury-time winner ---------------
+  {
+    playerId: "espen_nystuen",
+    clubId: "sandefjord",
+    strengths: ["heading"],
+    claim: "Stavanger Aftenblad 12.04.2008 beskriver Sandefjords seiersmål mot Sandnes Ulf: «Tre minutter på overtid satte Espen Nystuen inn seiersmålet med pannebrasken». Bare det dokumenterte hodespillet føres.",
+    source: "https://www.aftenbladet.no/sport/i/G1vk9q/sandnes-tap-paa-overtid",
+    sourceKind: "press"
   }
 ];
 
