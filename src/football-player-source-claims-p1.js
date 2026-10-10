@@ -321,6 +321,21 @@ const documented = [
     strengths: ["stamina"],
     claim: "Sekundær gjengivelse av spillestilen i biografien: «This was helped by good stamina». Originalavisens formulering er ikke kontrollert direkte.",
     source: "https://en.wikipedia.org/wiki/Thomas_Eftedal"
+  },
+  // --- Sandefjord 10.10.2026: contemporary press and club history -----------
+  {
+    playerId: "cheikhou_dieng",
+    placeId: "jotun_arena",
+    strengths: ["pace", "dribbling"],
+    claim: "VG-lupen 2015 beskriver Sandefjords kantspiller: «Che har bra fart og dribler gjerne». VGs analyse av laget bekrefter særskilt hurtigheten. Kun fart og observert driblestil er ført.",
+    source: "https://www.vg.no/spesial/2015/vglupen/viewteam/?plassering=8"
+  },
+  {
+    playerId: "frode_fredriksen",
+    placeId: "jotun_arena",
+    strengths: ["set_pieces"],
+    claim: "Starts egen sesonghistorikk fra 1999 beskriver hvordan Fredriksens skrå frispark fra høyre gikk direkte i mål mot Byåsen. Kun den dokumenterte dødballutførelsen føres.",
+    source: "https://www.ikstart.no/start-historien/sesongoversikter/sesongen-1999/sesongen-1999-var"
   }
 ];
 
