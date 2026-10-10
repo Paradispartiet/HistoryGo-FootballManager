@@ -412,14 +412,12 @@ const documented = [
     sourceKind: "press"
   },
   {
-    "playerId": "olav_zanetti",
-    "clubId": "sandefjord",
-    "strengths": [
-      "crossing"
-    ],
-    "claim": "Samtidig kampreferat fra Brann–Sandefjord i mars 2010 beskriver hvordan Olav Zanetti kom frem på høyresiden og la et hardt, lavt innlegg som førte til Sandefjords ledermål. Bare det dokumenterte innlegget føres som crossing; fart eller avslutningsevne utledes ikke.",
-    "source": "https://www.aftenbladet.no/sport/i/xR1y98/innbytter-guastavino-snudde-kampen",
-    "sourceKind": "press"
+    playerId: "olav_zanetti",
+    clubId: "sandefjord",
+    strengths: ["crossing"],
+    claim: "Samtidig kampreferat fra Brann–Sandefjord i mars 2010 beskriver hvordan Olav Zanetti kom frem på høyresiden og la et hardt, lavt innlegg som førte til Sandefjords ledermål. Bare det dokumenterte innlegget føres som crossing; fart eller avslutningsevne utledes ikke.",
+    source: "https://www.aftenbladet.no/sport/i/xR1y98/innbytter-guastavino-snudde-kampen",
+    sourceKind: "press"
   }
 ];
 
