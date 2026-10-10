@@ -336,6 +336,35 @@ const documented = [
     strengths: ["set_pieces"],
     claim: "Starts egen sesonghistorikk fra 1999 beskriver hvordan Fredriksens skrå frispark fra høyre gikk direkte i mål mot Byåsen. Kun den dokumenterte dødballutførelsen føres.",
     source: "https://www.ikstart.no/start-historien/sesongoversikter/sesongen-1999/sesongen-1999-var"
+  },
+  // --- Sandefjord: four sourced historical/modern club profiles, 10.10.2026 ---
+  {
+    playerId: "filip_ottosson",
+    placeId: "jotun_arena",
+    strengths: ["simple_passing", "vision", "duels"],
+    claim: "Sandefjord-trener Hans Erik Ødegaard beskriver Filip Ottossons presise korte/lange pasninger, gode overblikk og spilleforståelse, og trøkk i nærduellene. Kun disse eksplisitte kvalitetene føres.",
+    source: "https://www.sandefjordfotball.no/nyheter/filip-ottosson-har-signert-for-sf"
+  },
+  {
+    playerId: "andreas_tegstrom",
+    placeId: "jotun_arena",
+    strengths: ["dribbling"],
+    claim: "Dagbladets samtidige referat fra Sandefjord–Viking 24.09.2006 beskriver at Tegström driblet seg over halve banen før han scoret; han bekreftet selv at han også slo en tunnel. Kun dribling føres.",
+    source: "https://www.dagbladet.no/sport/mitt-fineste-mal-noensinne/66255977"
+  },
+  {
+    playerId: "stefan_ingi_sigurdarson",
+    placeId: "jotun_arena",
+    strengths: ["heading"],
+    claim: "Sandefjord Fotballs referat fra Kristiansund 17.08.2025 beskriver at Sigurdarson headet inn et innlegg fra Patoulidis ved bakerste stolpe. Kun denne dokumenterte hodeferdigheten føres.",
+    source: "https://www.sandefjordfotball.no/nyheter/det-endte-med-arets-forste-uavgjort-i-kristiansund"
+  },
+  {
+    playerId: "danilo_al_saed",
+    placeId: "jotun_arena",
+    strengths: ["pace", "one_vs_one", "pressing"],
+    claim: "Sandefjord Fotballs presentasjon 23.12.2022 beskriver Al-Saed som hurtig. Trener Hans Erik Ødegaard fremhever at han er god én mot én, utfordrer motstandere og er god i presspillet. Ingen øvrige egenskaper utledes.",
+    source: "https://www.sandefjordfotball.no/nyheter/danilo-andres-al-saed-klar-for-sandefjord-fotball"
   }
 ];
 
