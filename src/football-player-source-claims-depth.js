@@ -333,6 +333,46 @@ const documented = [
     claim: "VG Live om Seck: «senegaleseren har en vanvittig fysikk».",
     source: "https://vglive.vg.no/fotball/sandefjord-molde/6437/rapport",
     sourceKind: "press"
+  },
+  {
+    playerId: "espen_bugge_pettersen",
+    clubId: "sandefjord",
+    strengths: ["reflexes", "shot_stopping", "command_of_area"],
+    claim: "Lars Tjærnås: «Har hurtige reflekser, og er mest av alt en meget god skuddstopper. Har blitt flinkere til å time i feltarbeidet».",
+    source: "https://www.aftenbladet.no/sport/i/G1vyqx/lars-tjaernaas-kaarer-aarets-lag-i-eliteserien",
+    sourceKind: "press"
+  },
+  {
+    playerId: "andreas_augustsson",
+    clubId: "sandefjord",
+    strengths: ["strength", "duels", "simple_passing"],
+    claim: "Sandefjord-trener Tor Thodesen: «Han har alt; sterk fysikk, god i dueller og fine pasninger».",
+    source: "https://www.bt.no/sport/i/Addy2E/viking-saa-sandefjord-stopper-augustsson",
+    sourceKind: "press"
+  },
+  {
+    playerId: "lars_iver_strand",
+    clubId: "sandefjord",
+    strengths: ["stamina"],
+    claim: "Etter en løpstest: «På en såkalt jojotest (en løpstest lik blip-testen) for to uker siden var han best på laget».",
+    source: "https://www.bt.no/sport/i/2G833B/droemmejobb-for-strand",
+    sourceKind: "press"
+  },
+  {
+    playerId: "fredrik_thorsen",
+    clubId: "sandefjord",
+    strengths: ["pressing"],
+    claim: "ffksupporter.net beskriver Thorsen som «Norges beste defensive spiss» og fremhever at han fungerer som «førsteforsvarer».",
+    source: "https://ffksupporter.net/nyheter/1165-det-lekne-andreaaret/",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "havard_storbaek",
+    clubId: "sandefjord",
+    strengths: ["work_rate", "stamina", "late_runs"],
+    claim: "Vålerenga-trener Petter Myhre: «Han er en hardtarbeidende og løpssterk midtbanespiller som er flink til å komme inn i boksen og målfarlig».",
+    source: "https://www.nettavisen.no/sentrale-spillere-ute-mot-nybergsund/s/12-95-1245039",
+    sourceKind: "press"
   }
 
 ];
