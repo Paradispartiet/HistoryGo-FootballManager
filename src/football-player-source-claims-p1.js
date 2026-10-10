@@ -307,6 +307,21 @@ const documented = [
     claim: "NTBs kampreferat beskriver at Sødlund «fintet seg gjennom Sogndal-forsvaret» før en scoring. Kun den observerte driblingsteknikken føres.",
     source: "https://www.dagbladet.no/sport/hjemmeseier-etter-overtidsdrama-i-sogndal/67656716"
   }
+  // --- Sandefjord 10.10.2026: verified remaining base-squad claims ----------
+  {
+    playerId: "hjalmar_johansen",
+    placeId: "jotun_arena",
+    strengths: ["leadership"],
+    claim: "FFK-historikken beskriver Johansen: «Han var en naturlig leder for resten av spillergruppa». Dette belegger leadership, ikke en uverifisert angrepsferdighet.",
+    source: "https://ffksupporter.net/spillere/hjalmar_johansen/"
+  },
+  {
+    playerId: "thomas_eftedal",
+    placeId: "jotun_arena",
+    strengths: ["stamina"],
+    claim: "Sekundær gjengivelse av spillestilen i biografien: «This was helped by good stamina». Originalavisens formulering er ikke kontrollert direkte.",
+    source: "https://en.wikipedia.org/wiki/Thomas_Eftedal"
+  }
 ];
 
 export const P1_NEW_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
