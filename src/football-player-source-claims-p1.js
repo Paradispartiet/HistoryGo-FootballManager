@@ -373,6 +373,35 @@ const documented = [
     strengths: ["vision"],
     claim: "Eurosports 2020-tabelltips omtaler Rufo som Sandefjords kreative midtpunkt og sier at han er «flink til å gjøre andre gode» og ofte skaper uventede offensive løsninger. Bare offensivt overblikk/vision føres.",
     source: "https://www.eurosport.no/fotball/eliteserien/2020/her-er-eurosports-tabelltips-molde-ned-fra-tronen-og-odd-i-nedrykksstrid_sto7776226/story.shtml"
+  },
+  // --- Sandefjord: contemporary reports + 2026 individual scouting ---------
+  {
+    playerId: "victor_demba_bindia",
+    placeId: "jotun_arena",
+    strengths: ["pace"],
+    claim: "Lars Tjærnås beskriver Bindias fart i Aftenposten 17.03.2015: «han har større fart enn de andre aktuelle der» i stopperrollen. Antall kamper og løpemengde brukes ikke som ekstra styrker.",
+    source: "https://www.aftenposten.no/sport/fotball/i/JonOGR/sorry-sandefjord-tjaernaas-tipper-dere-paa-jumboplass"
+  },
+  {
+    playerId: "eirik_lamoy",
+    placeId: "jotun_arena",
+    strengths: ["pace"],
+    claim: "Lars Tjærnås vurderer Sandefjords venstrekant Eirik Lamøy som «nesten like hurtige» som Cheikhou Dieng i Aftenposten 17.03.2015. Bare hurtighet er dokumentert.",
+    source: "https://www.aftenposten.no/sport/fotball/i/JonOGR/sorry-sandefjord-tjaernaas-tipper-dere-paa-jumboplass"
+  },
+  {
+    playerId: "erik_mjelde",
+    placeId: "jotun_arena",
+    strengths: ["set_pieces"],
+    claim: "Samtidig kampreferat fra Sandefjord–Tromsø 05.07.2015: «Erik Mjelde et frispark fra 18 meter rett i mål». Denne direkte dødballscoringen bærer kun set_pieces.",
+    source: "https://www.bt.no/sport/i/dOwdXO/innbytteren-reddet-tromsoe-paa-overtid"
+  },
+  {
+    playerId: "zinedin_smajlovic",
+    placeId: "jotun_arena",
+    strengths: ["duels", "pace", "one_vs_one"],
+    claim: "Rabona klubbguide 06.03.2026 beskriver midtstopper Zinedin Smajlović som «kompromissløs i duellspillet, hurtig, sterk én mot én». Bare dueller, fart og én-mot-én-spill føres.",
+    source: "https://rabonapod.no/2026/03/06/klubbguiden-2026-nr-9/"
   }
 ];
 
