@@ -406,8 +406,8 @@ const documented = [
   {
     playerId: "geir_ludvig_fevang",
     clubId: "sandefjord",
-    strengths: ["heading", "vision"],
-    claim: "Sandefjords tidligere trener Tom Nordlie sier til Stavanger Aftenblad 25.10.2005 at Fevang er «god i lufta, kreativ» og teknisk/taktisk dyktig. Bare luftspill og kreativt overblikk føres; målstatistikk gir ingen avslutningsstyrke.",
+    strengths: ["heading", "chance_creation"],
+    claim: "Sandefjords tidligere trener Tom Nordlie sier til Stavanger Aftenblad 25.10.2005 at Fevang er «god i lufta, kreativ» og teknisk/taktisk dyktig. Luftspill føres som heading, kreativitet som chance_creation i tråd med ferdighetsvokabularet; vision kan ikke utledes av formuleringen, og målstatistikk gir ingen avslutningsstyrke.",
     source: "https://www.aftenbladet.no/sport/i/pLLKnW/nordlie-henter-ny-sandefjord-spiller",
     sourceKind: "press"
   }
