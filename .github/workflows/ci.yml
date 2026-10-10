@@ -1,7 +1,7 @@
 name: CI
 
 # PR runs once (not again on the feature-branch push). Only source-depth
-# record edits get player/group lanes; code changes and weekly/manual runs get
+# and P1 documented-record edits get player/group lanes; code changes and weekly/manual runs get
 # the full suite. Pages builds and deploys separately on main.
 on:
   pull_request:
@@ -54,6 +54,7 @@ jobs:
         if: steps.scope.outputs.lane != 'full'
         run: |
           npm run audit:source-depth-claims
+          node scripts/audit-p1-source-claims.mjs
           npm run audit:p2-source-claims
           npm run audit:attributes
           node scripts/audit-eliteserien-player-strength-coverage.mjs --check
