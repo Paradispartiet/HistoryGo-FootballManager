@@ -365,6 +365,14 @@ const documented = [
     strengths: ["pace", "one_vs_one", "pressing"],
     claim: "Sandefjord Fotballs presentasjon 23.12.2022 beskriver Al-Saed som hurtig. Trener Hans Erik Ødegaard fremhever at han er god én mot én, utfordrer motstandere og er god i presspillet. Ingen øvrige egenskaper utledes.",
     source: "https://www.sandefjordfotball.no/nyheter/danilo-andres-al-saed-klar-for-sandefjord-fotball"
+  },
+  // --- Sandefjord 2020: contemporary press scouting report -----------------
+  {
+    playerId: "rufo",
+    placeId: "jotun_arena",
+    strengths: ["vision"],
+    claim: "Eurosports 2020-tabelltips omtaler Rufo som Sandefjords kreative midtpunkt og sier at han er «flink til å gjøre andre gode» og ofte skaper uventede offensive løsninger. Bare offensivt overblikk/vision føres.",
+    source: "https://www.eurosport.no/fotball/eliteserien/2020/her-er-eurosports-tabelltips-molde-ned-fra-tronen-og-odd-i-nedrykksstrid_sto7776226/story.shtml"
   }
 ];
 
