@@ -221,6 +221,15 @@ const documented = [
     claim: "«Harmeet er en klassespiller. Samtidig er han en rollemodell for de yngre spillerne våre, en leder på og utenfor banen», sier daglig leder Espen Bugge Pettersen.",
     source: "https://www.sandefjordfotball.no/nyheter/harmeet-i-to-nye-ar--gleder-meg-til-a-fortsette-her",
     sourceKind: "club"
+  },
+  {
+    // Sandefjord 09.07.2021: club explicitly describes his pace.
+    playerId: "brice_wembangomo",
+    clubId: "sandefjord",
+    strengths: ["pace"],
+    claim: "Sandefjord Fotball omtaler Brice Wembangomo som «den hurtige høyrebacken». Bare hurtighet registreres som individuelt dokumentert styrke.",
+    source: "https://www.sandefjordfotball.no/nyheter/brice-veldig-glad-i-sandefjord",
+    sourceKind: "club"
   }
 ];
 
