@@ -516,6 +516,13 @@ const documented = [
     strengths: ["heading"],
     claim: "Norges Fotballforbunds kampreferat fra G19-kampen mot Serbia 07.06.2022 sier at Daniel Seland Karlsbakk headet inn Norges 2–3-redusering i det 82. minutt. Kun dokumentert heading føres; handlingen fant sted på landslaget, men gjelder samme spiller.",
     source: "https://www.fotball.no/landslag/norge-gutter-19/2022/g19---vi-er-veldig-skuffa-over-at-vi-ikke-klarte-det/"
+  },
+  {
+    playerId: "jan_fredrik_bjorntvedt",
+    placeId: "jotun_arena",
+    strengths: ["heading"],
+    claim: "VG 07.07.2002 dokumenterer vinnermålet i Sandefjord–Tromsø 3–2: «to minutter på overtid headet Jan Fredrik Bjørntvedt 3-2 etter et innøvd frispark». Bare det eksplisitt dokumenterte hodespillet føres; ingen øvrige egenskaper utledes fra målet.",
+    source: "https://www.vg.no/sport/i/L00QR4/foerste-serietap-for-tromsoe"
   }
 ];
 
