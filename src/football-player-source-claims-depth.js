@@ -259,12 +259,12 @@ const documented = [
     sourceKind: "press"
   },
   {
-    // 2023: Sandefjord's signing announcement states individual qualities.
-    playerId: "christopher_cheng",
+    // 2024: Sandefjord describes this defender's heading in individual terms.
+    playerId: "stian_kristiansen",
     clubId: "sandefjord",
-    strengths: ["pace", "duels"],
-    claim: "Klubbens spilleromtale betegner Cheng som «en hurtig og duellsterk spiller».",
-    source: "https://www.sandefjordfotball.no/nyheter/christopher-cheng-klar-for-sf",
+    strengths: ["heading", "duels"],
+    claim: "Sandefjord omtaler Kristiansen som «Kraftfull, sterk i hodeduellene».",
+    source: "https://www.sandefjordfotball.no/nyheter/nykommer-kristiansen-spiller-som-en-veteran",
     sourceKind: "club"
   },
   {
