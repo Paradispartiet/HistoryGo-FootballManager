@@ -221,7 +221,17 @@ const documented = [
     claim: "«Harmeet er en klassespiller. Samtidig er han en rollemodell for de yngre spillerne våre, en leder på og utenfor banen», sier daglig leder Espen Bugge Pettersen.",
     source: "https://www.sandefjordfotball.no/nyheter/harmeet-i-to-nye-ar--gleder-meg-til-a-fortsette-her",
     sourceKind: "club"
+  },
+  {
+    // Sandefjord-pilot: eksplisitte spilleregenskaper fra hovedtreneren.
+    playerId: "lars_grorud",
+    clubId: "sandefjord",
+    strengths: ["duels", "leadership"],
+    claim: "«strong in duels» og «He is a leader in the dressing room»",
+    source: "https://www.sandefjordfotball.no/nyheter/grorud-blir-med-videre",
+    sourceKind: "club"
   }
+
 ];
 
 export const SOURCE_DEPTH_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
