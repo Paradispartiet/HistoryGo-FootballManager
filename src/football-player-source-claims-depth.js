@@ -248,6 +248,51 @@ const documented = [
     claim: "Aftenposten omtaler Vidar Ari Jónsson som «en hurtig høyreback/kantspiller». Kun hurtighet er ført som individuelt dokumentert styrke.",
     source: "https://www.aftenposten.no/sport/fotball/i/GGjLeV/tromsoe-tester-to-islendinger-vi-har-faatt-veldig-bra-rapporter-paa-dem",
     sourceKind: "press"
+  },
+  {
+    // 2015: teammate Emil Dahle specifies pace and physical strength.
+    playerId: "pal_alexander_kirkevold",
+    clubId: "sandefjord",
+    strengths: ["pace", "strength"],
+    claim: "Emil Dahle om Kirkevold: «han er ganske rask og sterk».",
+    source: "https://www.aftenbladet.no/sport/i/kJa0Ov/kompisduell-paa-soer-arena",
+    sourceKind: "press"
+  },
+  {
+    // 2023: Sandefjord's signing announcement states individual qualities.
+    playerId: "christopher_cheng",
+    clubId: "sandefjord",
+    strengths: ["pace", "duels"],
+    claim: "Klubbens spilleromtale betegner Cheng som «en hurtig og duellsterk spiller».",
+    source: "https://www.sandefjordfotball.no/nyheter/christopher-cheng-klar-for-sf",
+    sourceKind: "club"
+  },
+  {
+    // 2022: Taaje explicitly describes his own heading and top speed.
+    playerId: "jesper_taaje",
+    clubId: "sandefjord",
+    strengths: ["heading", "pace"],
+    claim: "Taaje omtaler seg som «en sterk hodespiller, har høy toppfart».",
+    source: "https://www.sandefjordfotball.no/nyheter/jesper-taaje-klar-som-sf-spiller",
+    sourceKind: "club"
+  },
+  {
+    // 2023: Dunsby specifically identifies attacking one-v-one skill.
+    playerId: "jakob_dunsby",
+    clubId: "sandefjord",
+    strengths: ["one_vs_one"],
+    claim: "Dunsby sier: «Jeg har kanskje min største styrke i en-mot-en offensivt».",
+    source: "https://www.sandefjordfotball.no/nyheter/jakob-dunsby-blir-sf-spiller-ut-sesongen-2023",
+    sourceKind: "club"
+  },
+  {
+    // 2024: teammate Hugo Keto identifies Berglie's physical and duel strengths.
+    playerId: "fredrik_berglie",
+    clubId: "sandefjord",
+    strengths: ["strength", "duels"],
+    claim: "Hugo Keto beskriver Berglie: «Han er sterk, solid i duellene og meget ballsikker».",
+    source: "https://www.sandefjordfotball.no/nyheter/sfs-solide-malvakt-hugo-keto-er-overbevist",
+    sourceKind: "club"
   }
 
 ];
