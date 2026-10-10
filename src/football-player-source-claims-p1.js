@@ -523,6 +523,13 @@ const documented = [
     strengths: ["heading"],
     claim: "VG 07.07.2002 dokumenterer vinnermålet i Sandefjord–Tromsø 3–2: «to minutter på overtid headet Jan Fredrik Bjørntvedt 3-2 etter et innøvd frispark». Bare det eksplisitt dokumenterte hodespillet føres; ingen øvrige egenskaper utledes fra målet.",
     source: "https://www.vg.no/sport/i/L00QR4/foerste-serietap-for-tromsoe"
+  },
+  {
+    playerId: "christer_reppesgard_hansen",
+    placeId: "jotun_arena",
+    strengths: ["passing_range"],
+    claim: "Dagsavisens samtidige Sandnes Ulf–Strømmen-referat 28.10.2020 beskriver en presis spillvending fra Reppesgård Hansen til kantspiller Jonsson: «Reppersgård Hansen vender spillet strålende til Jonsson». Dette bærer bare passing_range (vending av spillet); ingen generell oversikt, fart eller andre pasningsstyrker utledes fra enkelthendelsen.",
+    source: "https://www.dagsavisen.no/sport/sandnes-ulf-kan-skyte-seg-tilbake-pa-kvalikplass/7113489"
   }
 ];
 
