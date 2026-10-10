@@ -241,6 +241,15 @@ const documented = [
     sourceKind: "club"
   },
   {
+    // Sandefjord: Aftenposten described the player as a fast right-back/winger.
+    playerId: "vidar_ari_jonsson",
+    clubId: "sandefjord",
+    strengths: ["pace"],
+    claim: "Aftenposten omtaler Vidar Ari Jónsson som «en hurtig høyreback/kantspiller». Kun hurtighet er ført som individuelt dokumentert styrke.",
+    source: "https://www.aftenposten.no/sport/fotball/i/GGjLeV/tromsoe-tester-to-islendinger-vi-har-faatt-veldig-bra-rapporter-paa-dem",
+    sourceKind: "press"
+  },
+  {
     // Sandefjord 2015: former teammate Emil Dahle described individual skills.
     playerId: "pal_alexander_kirkevold",
     clubId: "sandefjord",
