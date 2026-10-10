@@ -223,6 +223,15 @@ const documented = [
     sourceKind: "club"
   },
   {
+    // Sandefjord-pilot: eksplisitte spilleregenskaper fra hovedtreneren.
+    playerId: "lars_grorud",
+    clubId: "sandefjord",
+    strengths: ["duels", "leadership"],
+    claim: "«strong in duels» og «He is a leader in the dressing room»",
+    source: "https://www.sandefjordfotball.no/nyheter/grorud-blir-med-videre",
+    sourceKind: "club"
+  },
+  {
     // Sandefjord 09.07.2021: club explicitly describes his pace.
     playerId: "brice_wembangomo",
     clubId: "sandefjord",
@@ -231,6 +240,7 @@ const documented = [
     source: "https://www.sandefjordfotball.no/nyheter/brice-veldig-glad-i-sandefjord",
     sourceKind: "club"
   }
+
 ];
 
 export const SOURCE_DEPTH_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
