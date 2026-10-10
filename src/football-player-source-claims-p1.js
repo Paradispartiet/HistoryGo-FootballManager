@@ -575,6 +575,41 @@ const documented = [
     ],
     claim: "Bergens Tidendes samtidige referat fra Aalesund–Start 21.04.2014 dokumenterer at Daniel Arnefjord møtte Michael Barrantes' frispark og headet fra sju meter i mål. Fører kun heading som eksplisitt utført teknisk handling, ikke duellstyrke eller posisjonering.",
     source: "https://www.bt.no/sport/i/50G0xK/start-straffet-tafatt-aalesund"
+  },
+  {
+    playerId: "anders_lindegaard",
+    placeId: "color_line_stadion",
+    strengths: ["shot_stopping"],
+    claim: "Sunnmørspostens samtidige Rosenborg–Aalesund-omtale publisert 26.10.2009 beskriver flere sterke reaksjonsredninger fra Anders Lindegaard, spesielt at han slo et hardt, lavt skudd fra Rade Prica til corner. Bare konkret shot_stopping føres.",
+    source: "https://www.aftenbladet.no/sport/i/pL64G6/lindegaard-med-frysninger"
+  },
+  {
+    playerId: "peter_orry_larsen",
+    placeId: "color_line_stadion",
+    strengths: ["long_shots"],
+    claim: "Sunnmørspostens kampreferat publisert 03.04.2016 beskriver at Peter Orry Larsen scoret med et hardt og velplassert skudd fra rundt 18 meter mot Brann. Dette dokumenterer long_shots fra et konkret distanseforsøk, ikke et generelt målscorertalent.",
+    source: "https://www.aftenbladet.no/sport/i/p6J0LV/scoring-fattig-troest-for-orry-larsen-hadde-smakt-bedre-med-seier"
+  },
+  {
+    playerId: "andreas_lie",
+    placeId: "color_line_stadion",
+    strengths: ["shot_stopping"],
+    claim: "Aalesunds FKs samtidige kampreferat fra 2017 mot Tromsø beskriver at Andreas Lie avverget et tidlig frispark og senere beveget seg godt på streken for å slå Gjermund Åsens frispark på vei mot krysset unna. Fører bare shot_stopping, ikke reaksjonsfart som eget token.",
+    source: "https://www.aafk.no/nyheter/solid-snuoperasjon-gir-tre-poeng"
+  },
+  {
+    playerId: "enar_jaager",
+    placeId: "color_line_stadion",
+    strengths: ["set_pieces"],
+    claim: "Stavanger Aftenblads samtidige Aalesund–Rosenborg-referat 27.04.2012 beskriver at Enar Jääger slo et frispark fra midtbanen inn i feltet som Lars Fuhre styrte i mål. Fører konkret set_pieces, ikke generell pasningspresisjon eller crossing.",
+    source: "https://www.aftenbladet.no/sport/i/L0yMKx/dramaet-i-aalesund-endte-uavgjort"
+  },
+  {
+    playerId: "magnus_sylling_olsen",
+    placeId: "color_line_stadion",
+    strengths: ["finishing"],
+    claim: "Rosenborgs historiske kampreferat om avslutningen på Tippeligaen 2010 beskriver at Magnus Sylling Olsen kom gjennom fra venstresiden og banket ballen kontant i mål i siste ordinære minutt. Dette er en eksplisitt vellykket avslutning (finishing); ingen egenskap utledes av totalscoring.",
+    source: "https://www.rbk.no/nyheter/rbk-ubeseiret-i-2010"
   }
 ];
 
