@@ -373,7 +373,7 @@ const documented = [
     claim: "Vålerenga-trener Petter Myhre: «Han er en hardtarbeidende og løpssterk midtbanespiller som er flink til å komme inn i boksen og målfarlig».",
     source: "https://www.nettavisen.no/sentrale-spillere-ute-mot-nybergsund/s/12-95-1245039",
     sourceKind: "press"
-  }
+  },
 
   // --- Sandefjord base squad: club-documented direct free kick, 2025 --------
   {
