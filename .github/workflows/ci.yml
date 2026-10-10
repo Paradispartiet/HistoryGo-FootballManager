@@ -1,14 +1,13 @@
 name: CI
 
-# PR-/branch-sikkerhetsnett: kjører hele verifiseringssuiten før kode når main.
-# Deploy-workflowen (pages.yml) kjører kjernesjekkene på push til main; denne
-# kjører i tillegg alle sim-/audit-scriptene på PR-er og feature-branch-pushes.
-# Alle scriptene bruker kun standardbibliotek (ingen DOM/nett), så de er raske.
+# PR runs once (not again on the feature-branch push). Only source-depth
+# record edits get player/group lanes; code changes and weekly/manual runs get
+# the full suite. Pages builds and deploys separately on main.
 on:
   pull_request:
-  push:
-    branches-ignore:
-      - main
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * 0"
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -24,6 +23,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -31,21 +32,55 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Test CI routing
+        run: node scripts/classify-player-ci.mjs --self-test
+
+      - name: Fetch PR base for scope detection
+        if: github.event_name == 'pull_request'
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: git fetch --no-tags --depth=1 origin "$PR_BASE_SHA" || echo "Base unavailable - using full CI"
+
+      - name: Select CI lane
+        id: scope
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: node scripts/classify-player-ci.mjs
+
       - name: Install dependencies
         run: npm ci
 
+      - name: Player claim validation (each player)
+        if: steps.scope.outputs.lane != 'full'
+        run: |
+          npm run audit:source-depth-claims
+          npm run audit:p2-source-claims
+          npm run audit:attributes
+          node scripts/audit-eliteserien-player-strength-coverage.mjs --check
+
+      - name: Batch validation (five or more new players)
+        if: steps.scope.outputs.lane == 'group'
+        run: |
+          npm run sim:player-attributes
+          npm run sim:club-squad
+          npm run sim:mini-season
+
       - name: Typecheck TypeScript engine
+        if: steps.scope.outputs.lane == 'full'
         run: npm run typecheck
 
       - name: Build TypeScript engine
+        if: steps.scope.outputs.lane == 'full'
         run: npm run build
 
       - name: Audit Pages artifact
+        if: steps.scope.outputs.lane == 'full'
         run: |
           npm run stage:pages
           npm run audit:pages-artifact
 
       - name: Data audits
+        if: steps.scope.outputs.lane == 'full'
         run: |
           npm run audit:knowledge
           npm run audit:ci-coverage
@@ -72,6 +107,7 @@ jobs:
           node scripts/audit-p1-source-claims.mjs
 
       - name: UI-/flyt-vakter
+        if: steps.scope.outputs.lane == 'full'
         run: |
           node --check scripts/cleanup-merged-branches.mjs
           npm run check:syntax
@@ -100,6 +136,7 @@ jobs:
           node scripts/audit-manager-football-learning-loop-v1.mjs
 
       - name: Simuleringer (motorer ende-til-ende)
+        if: steps.scope.outputs.lane == 'full'
         run: |
           npm run sim:matchday
           npm run sim:mini-season
@@ -158,7 +195,9 @@ jobs:
           npm run sim:club-squad
 
       - name: Installer Chromium for nettleservakter
+        if: steps.scope.outputs.lane == 'full'
         run: npx playwright install --with-deps chromium
 
       - name: Responsive nettleservakter og visuelle differanser
+        if: steps.scope.outputs.lane == 'full'
         run: npm run test:browser
