@@ -271,6 +271,42 @@ const documented = [
     claim: "Trener Hans Erik Ødegaard beskriver Ofkir: «Han virket livlig – og er uforutsigbar med ballen i beina.» Kun uforutsigbarheten er tatt som evidens for flair.",
     source: "https://www.sandefjordfotball.no/nyheter/odegaard-det-aller-beste-er-at-sesongen-er-i-gang"
   },
+  // --- Sandefjord 10.10.2026: five source-backed P1 base-squad players ----
+  {
+    playerId: "jakob_maslo_dunsby",
+    placeId: "jotun_arena",
+    strengths: ["one_vs_one", "pressing"],
+    claim: "Dunsby om eget spill: «Jeg har kanskje min største styrke i en-mot-en offensivt. Også mener jeg at presspillet også fungerer bra for meg.»",
+    source: "https://www.sandefjordfotball.no/nyheter/jakob-dunsby-blir-sf-spiller-ut-sesongen-2023"
+  },
+  {
+    playerId: "orjan_royrane",
+    placeId: "jotun_arena",
+    strengths: ["pace"],
+    claim: "Spilleragent Thomas Raknes i BT: «En hurtig og meget god teknisk spiller»; bare hurtigheten er ført.",
+    source: "https://www.bt.no/sport/i/1nBXjB/politimann-og-fotballagent"
+  },
+  {
+    playerId: "vetle_walle_egeli",
+    placeId: "jotun_arena",
+    strengths: ["simple_passing"],
+    claim: "Sandefjord Fotball om Egeli: «en unggutt med god pasningsfot og trygg med ballen». Bare den eksplisitte pasningsferdigheten føres.",
+    source: "https://www.sandefjordfotball.no/nyheter/syv-debutanter-mot-odd"
+  },
+  {
+    playerId: "enric_valles",
+    placeId: "jotun_arena",
+    strengths: ["dribbling", "work_rate"],
+    claim: "Enric Vallès oppga ifølge gjengivelsen av Birmingham Citys spillerintervju at driblinger og arbeidsinnsats («dribbling and his work ethic») var hans fremste styrker.",
+    source: "https://en.wikipedia.org/wiki/Enric_Vall%C3%A8s"
+  },
+  {
+    playerId: "andre_sodlund",
+    placeId: "jotun_arena",
+    strengths: ["dribbling"],
+    claim: "NTBs kampreferat beskriver at Sødlund «fintet seg gjennom Sogndal-forsvaret» før en scoring. Kun den observerte driblingsteknikken føres.",
+    source: "https://www.dagbladet.no/sport/hjemmeseier-etter-overtidsdrama-i-sogndal/67656716"
+  }
 ];
 
 export const P1_NEW_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
