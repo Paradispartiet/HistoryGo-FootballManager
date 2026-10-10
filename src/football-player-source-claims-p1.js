@@ -474,6 +474,20 @@ const documented = [
     strengths: ["heading"],
     claim: "Samtidig Aftenbladet-referat fra Viking–Brann 26.03.2006 beskriver Alexander Gabrielsens målheading etter hjørnespark, som Brann-keeper Håkon Opdal ikke kunne avverge. Spilleren er identitetskontrollert mot NFFs karriereregister med senere Sandefjord-opphold. Kun hodespill føres.",
     source: "https://www.aftenbladet.no/sport/i/K3B4AG/opdal-min-feil"
+  },
+  {
+    playerId: "martin_jensen",
+    placeId: "jotun_arena",
+    strengths: ["set_pieces"],
+    claim: "Aftenpostens samtidige Sandefjord–Brann-referat 16.03.2009 beskriver et godt frispark slått av Martin Jensen, videre stusset av Espen Nystuen, i angrepet som endte med Erik Mjeldes 1–0-mål. Bare den konkret dokumenterte frisparkleveransen føres som set_pieces; ingen andre pasningsegenskaper utledes.",
+    source: "https://www.aftenposten.no/sport/fotball/i/lAMa4y/brann-ble-ydmyket"
+  },
+  {
+    playerId: "panajotis_dimitriadis",
+    placeId: "jotun_arena",
+    strengths: ["heading"],
+    claim: "Bergens Tidendes samtidige kampreferat 28.10.2012 om Sandefjord–Bryne 2–0 beskriver hvordan Panajotis Dimitriadis møtte hjørnesparket først med hodet og styrte det i lengste hjørne til 2–0. Kun dokumentert heading føres; resultat og målstatistikk gir ingen øvrige styrker.",
+    source: "https://www.bt.no/sport/i/kJ3amL/kniven-paa-strupen-for-bryne-etter-nytt-tap"
   }
 ];
 
