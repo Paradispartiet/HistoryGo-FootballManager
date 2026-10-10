@@ -402,6 +402,42 @@ const documented = [
     strengths: ["duels", "pace", "one_vs_one"],
     claim: "Rabona klubbguide 06.03.2026 beskriver midtstopper Zinedin Smajlović som «kompromissløs i duellspillet, hurtig, sterk én mot én». Bare dueller, fart og én-mot-én-spill føres.",
     source: "https://rabonapod.no/2026/03/06/klubbguiden-2026-nr-9/"
+  },
+  // --- Sandefjord 10.10.2026: primary/contemporary individual reports -------
+  {
+    playerId: "birger_madsen",
+    placeId: "jotun_arena",
+    strengths: ["pace", "duels", "leadership"],
+    claim: "Ved overgangen fra Sandefjord til Vålerenga i 2009 beskrev trener Martin Andresen Birger Madsen som en rask midtstopper, duellsterk og en naturlig ledertype, og viste til kapteinsrollen i Sandefjord. Kun de tre eksplisitte egenskapene føres.",
+    source: "https://www.dagbladet.no/sport/rask-og-ikke-sa-gammel/65270220"
+  },
+  {
+    playerId: "carlos_grossmuller",
+    placeId: "jotun_arena",
+    strengths: ["vision"],
+    claim: "VG Lives samtidige kampkommentar fra Sandefjord–Aalesund 01.10.2017 fremhever Carlos Grossmüllers «overblikk og en pasningsfot som går utenpå de fleste andre utpå her». Kun eksplisitt overblikk (vision) føres, ingen antatt pasningsrekkevidde.",
+    source: "https://vglive.vg.no/fotball/sandefjord-aalesund/6581/rapport"
+  },
+  {
+    playerId: "kari_arkivuo",
+    placeId: "jotun_arena",
+    strengths: ["dribbling", "crossing"],
+    claim: "Nettavisens kampreferat fra Aalesund–Sandefjord 2007 skildrer Arkivuos kontring ned venstrekanten: han passerte/lurte to navngitte forsvarere og leverte et innlegg som Adriano Muñoz scoret på. Kun dribling og innlegg (crossing) føres.",
+    source: "https://www.nettavisen.no/sport/min-beste-opplevelse/s/12-95-1253762"
+  },
+  {
+    playerId: "samuel_isaksen",
+    placeId: "jotun_arena",
+    strengths: ["pace"],
+    claim: "Lars Tjærnås' samtidige forhåndsvurdering av Sandefjord før Eliteserien 2009 nevner Samuel Isaksen blant lagets «spillere med stor fart». Kun eksplisitt dokumentert hurtighet føres.",
+    source: "https://www.aftenposten.no/sport/fotball/i/zGMwBb/slik-spiller-eliteserielagene"
+  },
+  {
+    playerId: "sander_risan_mork",
+    placeId: "jotun_arena",
+    strengths: ["finishing"],
+    claim: "Brann Fotballs kampreferat 12.04.2026 sier at Sander Risan Mørk «plasserte et godt skudd i hjørnet» som avgjorde 0–1-kampen. Kun den dokumenterte avslutningen (finishing) føres.",
+    source: "https://www.brann.no/nyheter/tap-pa-stadion"
   }
 ];
 
