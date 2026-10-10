@@ -255,6 +255,14 @@ const documented = [
     claim: "Sandefjord Fotball beskriver Sander Moen Foss som hurtig: «En forsvarsspiller som er sterk i hodet, kan bruke begge bein og er hurtig.» Kun eksplisitt hurtighet føres som styrke.",
     source: "https://www.sandefjordfotball.no/nyheter/moen-foss-forlenger-skal-ta-mer-ansvar"
   },
+  // --- Sandefjord, 09.10.2026: official match report ---------------------
+  {
+    playerId: "jacob_storevik",
+    placeId: "jotun_arena",
+    strengths: ["reflexes"],
+    claim: "Sandefjord Fotball beskriver i kamprapporten mot Odd at Jacob Storevik «viste ... stor reaksjonsevne» ved en redning fra kort hold. Kun reaksjonsevne dokumenteres.",
+    source: "https://www.sandefjordfotball.no/nyheter/stor-stemning-men-mallost-i-derbyfesten"
+  },
 ];
 
 export const P1_NEW_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
