@@ -188,9 +188,9 @@ const totalStatusCounts = {
 // On 2026-10-10 Sandefjord's 2022 coach interview describes Mohamed Ofkir
 // as unpredictable on the ball. An explicit flair claim changes the measured
 // distribution to 67 DOKUMENTERT and 854 THIN-SOURCE.
-ok(totalStatusCounts.DOKUMENTERT === 67, `expected 64 total documented P1 profiles, got ${totalStatusCounts.DOKUMENTERT}`);
+ok(totalStatusCounts.DOKUMENTERT === 72, `expected 72 total documented P1 profiles, got ${totalStatusCounts.DOKUMENTERT}`);
 ok(totalStatusCounts.DELVIS === 15, `expected 15 total partial P1 profiles, got ${totalStatusCounts.DELVIS}`);
-ok(totalStatusCounts["THIN-SOURCE"] === 854, `expected 857 total thin-source P1 profiles, got ${totalStatusCounts["THIN-SOURCE"]}`);
+ok(totalStatusCounts["THIN-SOURCE"] === 849, `expected 849 total thin-source P1 profiles, got ${totalStatusCounts["THIN-SOURCE"]}`);
 ok(Object.values(totalStatusCounts).reduce((sum, count) => sum + count, 0) === 936,
   "combined status distribution must cover 936/936");
 

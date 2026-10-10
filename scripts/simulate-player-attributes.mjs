@@ -894,7 +894,7 @@ const KJENT_UDOKUMENTERT = {
   araasen_stadion: 0.89,     // Lillestrøm
   nordmore_stadion: 1.01,    // Kristiansund
   kfum_arena: 0.93,          // KFUM Oslo
-  jotun_arena: 0.92,         // Sandefjord: Ofkir-flair, 37/41 eksklusive uten styrker
+  jotun_arena: 0.80,         // Sandefjord: fem nye P1-profiler, 32/41 eksklusive uten styrker
   bislett_stadion: 0.96,     // Lyn
   sor_arena: 0.96,           // Start
   bryne_stadion: 1.01,       // Bryne
