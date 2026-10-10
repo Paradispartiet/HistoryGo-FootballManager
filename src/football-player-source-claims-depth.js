@@ -230,6 +230,15 @@ const documented = [
     claim: "«strong in duels» og «He is a leader in the dressing room»",
     source: "https://www.sandefjordfotball.no/nyheter/grorud-blir-med-videre",
     sourceKind: "club"
+  },
+  {
+    // Sandefjord 09.07.2021: club explicitly describes his pace.
+    playerId: "brice_wembangomo",
+    clubId: "sandefjord",
+    strengths: ["pace"],
+    claim: "Sandefjord Fotball omtaler Brice Wembangomo som «den hurtige høyrebacken». Bare hurtighet registreres som individuelt dokumentert styrke.",
+    source: "https://www.sandefjordfotball.no/nyheter/brice-veldig-glad-i-sandefjord",
+    sourceKind: "club"
   }
 
 ];
