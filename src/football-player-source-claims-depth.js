@@ -259,12 +259,12 @@ const documented = [
     sourceKind: "press"
   },
   {
-    // 2024: Sandefjord describes this defender's heading in individual terms.
-    playerId: "stian_kristiansen",
+    // 2023: club match report explicitly notes individual duel and physical strength.
+    playerId: "simon_amin",
     clubId: "sandefjord",
-    strengths: ["heading", "duels"],
-    claim: "Sandefjord omtaler Kristiansen som «Kraftfull, sterk i hodeduellene».",
-    source: "https://www.sandefjordfotball.no/nyheter/nykommer-kristiansen-spiller-som-en-veteran",
+    strengths: ["strength", "duels"],
+    claim: "Klubben omtaler Simon Amin som «en fysisk sterk duellspiller».",
+    source: "https://www.sandefjordfotball.no/nyheter/fotballsesongen-2023-er-i-full-gang",
     sourceKind: "club"
   },
   {
