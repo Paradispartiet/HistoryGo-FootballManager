@@ -306,7 +306,7 @@ const documented = [
     strengths: ["dribbling"],
     claim: "NTBs kampreferat beskriver at Sødlund «fintet seg gjennom Sogndal-forsvaret» før en scoring. Kun den observerte driblingsteknikken føres.",
     source: "https://www.dagbladet.no/sport/hjemmeseier-etter-overtidsdrama-i-sogndal/67656716"
-  }
+  },
   // --- Sandefjord 10.10.2026: verified remaining base-squad claims ----------
   {
     playerId: "hjalmar_johansen",
