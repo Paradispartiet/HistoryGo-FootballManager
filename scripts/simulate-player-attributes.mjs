@@ -28,7 +28,7 @@ import {
   ATTRIBUTE_SCALE
 } from "../src/football-player-attributes.js";
 import { calculatePlayerMatchFit, calculateClassBonus, CLASS_BONUS_MAX } from "../src/football-fit-engine.js";
-import { applyP1SourceClaims, P1_HERITAGES } from "../src/football-player-source-claims-p1.js";
+import { applyP1SourceClaims, P1_HERITAGES, P1_NEW_DOCUMENTED } from "../src/football-player-source-claims-p1.js";
 import { applySourceDepthClaims } from "../src/football-player-source-claims-depth.js";
 
 // `Math.min(...liste)` sprer hele lista som ARGUMENTER, og argumentlista har en
@@ -1058,11 +1058,37 @@ for (const player of players) {
 // faktisk står på 100 % og betyr «ingen ferdighetsdokumentasjon i det hele
 // tatt», ikke «ikke målt».
 const takRegel = (andel) => Math.min(1.01, (Math.ceil(andel * 100) + 1) / 100);
+
+// P1's new heritages have an audited, fixed population and explicit source
+// claims. Their cap can tighten automatically as the documentation improves,
+// without rewriting executable simulation code for every new player.
+// Keep the historical hard-coded cap as a ceiling: source coverage can never
+// become *worse* than it was when that baseline was approved.
+const newP1Heritages = new Map(
+  P1_HERITAGES.filter((entry) => entry.generation === "new")
+    .map((entry) => [entry.placeId, entry])
+);
+const p1DocumentedByPlace = new Map();
+for (const claim of P1_NEW_DOCUMENTED) {
+  p1DocumentedByPlace.set(claim.placeId,
+    (p1DocumentedByPlace.get(claim.placeId) || 0) + 1);
+}
 const forLøse = [];
 for (const [placeId, tall] of eksklusivt) {
   if (tall.alle < 20) continue;
   const andel = tall.tomme / tall.alle;
-  const tak = KJENT_UDOKUMENTERT[placeId] ?? 0.05;
+  const approvedBaseline = KJENT_UDOKUMENTERT[placeId] ?? 0.05;
+  const p1Heritage = newP1Heritages.get(placeId);
+  let tak = approvedBaseline;
+  if (p1Heritage) {
+    const expectedTotal = p1Heritage.expectedExclusive;
+    const expectedEmpty = expectedTotal - (p1DocumentedByPlace.get(placeId) || 0);
+    check(`${placeId}: P1-populasjonen er fortsatt fast`,
+      tall.alle === expectedTotal, `${tall.alle} mot ${expectedTotal}`);
+    check(`${placeId}: P1-dekningen samsvarer med kildepostene`,
+      tall.tomme === expectedEmpty, `${tall.tomme} mot ${expectedEmpty}`);
+    tak = Math.min(approvedBaseline, takRegel(expectedEmpty / expectedTotal));
+  }
   check(`${placeId}: andelen uten dokumenterte styrker vokser ikke`, andel < tak,
     `${tall.tomme} av ${tall.alle} (${(andel * 100).toFixed(0)} %, tak ${(tak * 100).toFixed(0)} %)`);
   if (KJENT_UDOKUMENTERT[placeId] !== undefined && tak > takRegel(andel)) {
