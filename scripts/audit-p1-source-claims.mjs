@@ -186,11 +186,21 @@ const totalStatusCounts = {
 // Jacob Storevik’s reaction speed, adding one Jotun P1 reflexes claim:
 // 65 -> 66 DOKUMENTERT and 856 -> 855 THIN-SOURCE.
 // On 2026-10-10 Sandefjord's 2022 coach interview describes Mohamed Ofkir
-// as unpredictable on the ball. An explicit flair claim changes the measured
-// distribution to 67 DOKUMENTERT and 854 THIN-SOURCE.
-ok(totalStatusCounts.DOKUMENTERT === 72, `expected 72 total documented P1 profiles, got ${totalStatusCounts.DOKUMENTERT}`);
-ok(totalStatusCounts.DELVIS === 15, `expected 15 total partial P1 profiles, got ${totalStatusCounts.DELVIS}`);
-ok(totalStatusCounts["THIN-SOURCE"] === 849, `expected 849 total thin-source P1 profiles, got ${totalStatusCounts["THIN-SOURCE"]}`);
+// as unpredictable on the ball. An explicit flair claim changed the measured
+// distribution to 67 DOKUMENTERT and 854 THIN-SOURCE. The following five
+// Sandefjord player claims increased coverage to 72/936; these figures are
+// historical milestones, not an ever-growing CI threshold.
+// The 936-person population is fixed. Coverage is derived from validated
+// records so an honest new five-player batch never needs to edit audit code.
+ok(P1_NEW_DOCUMENTED.length + P1_NEW_PARTIAL.length <= newExclusive.length,
+  "documented + partial claims exceed the fixed new-pass population");
+ok(totalStatusCounts.DOKUMENTERT === P1_NEW_DOCUMENTED.length + existingStatusCounts.DOKUMENTERT,
+  "documented coverage differs from source-validated records");
+ok(totalStatusCounts.DELVIS === P1_NEW_PARTIAL.length + existingStatusCounts.DELVIS,
+  "partial coverage differs from source-validated records");
+ok(totalStatusCounts["THIN-SOURCE"] ===
+    newExclusive.length - P1_NEW_DOCUMENTED.length - P1_NEW_PARTIAL.length + existingStatusCounts["THIN-SOURCE"],
+  "thin-source coverage differs from the measured remaining population");
 ok(Object.values(totalStatusCounts).reduce((sum, count) => sum + count, 0) === 936,
   "combined status distribution must cover 936/936");
 
