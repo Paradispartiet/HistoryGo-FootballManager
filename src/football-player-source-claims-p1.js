@@ -268,60 +268,11 @@ const documented = [
     source: "https://www.aafk.no/historisk-arkiv/nyheter/da-fotballfeberen-brot-ut"
   },
   {
-    playerId: "jorgen_hatlehol",
-    placeId: "color_line_stadion",
-    strengths: ["crossing"],
-    claim: "AaFKs kampreferat fra Strømmen-kampen 11.08.2019 beskriver et knallhardt innlegg fra Jørgen Hatlehol som Pape Habib Gueye headet i mål. Fører crossing, ikke hurtighet eller pasningsregister.",
-    source: "https://www.aafk.no/nyheter/seiersrekka-fortsatte"
-  },
-  {
-    playerId: "holmbert_aron_fridjonsson",
-    placeId: "color_line_stadion",
-    strengths: ["heading"],
-    claim: "AaFKs kampreferat fra treningskampen mot Hødd beskriver at Hólmbert Friðjónsson styrte et innlegg med hodet i lengste hjørne til 2–0. Fører heading fra den dokumenterte handlingen.",
-    source: "https://www.aafk.no/nyheter/malrikt-da-aalesund-slo-hodd"
-  },
-  {
-    playerId: "pape_habib_gueye",
-    placeId: "color_line_stadion",
-    strengths: ["heading"],
-    claim: "AaFKs kampreferat mot Strømmen 11.08.2019 beskriver at Pape Habib Gueye møtte Hatlehols innlegg og dunket ballen i mål med hodet. Kun heading føres.",
-    source: "https://www.aafk.no/nyheter/seiersrekka-fortsatte"
-  },
-  {
-    playerId: "sigurd_haugen",
-    placeId: "color_line_stadion",
-    strengths: ["heading"],
-    claim: "AaFKs referat fra 6–2 mot Grorud 15.09.2021 beskriver at Sigurd Haugen scoret sitt andre mål med hodet etter innlegg fra Isak Dybvik Määttä. Fører bare heading.",
-    source: "https://www.aafk.no/nyheter/storseier_AaFK_Grorud"
-  },
-  {
     playerId: "kristian_hemmingsen_lonebu",
     placeId: "color_line_stadion",
     strengths: ["finishing", "heading"],
     claim: "AaFKs akademileder Sindre Eid beskriver Kristian Lonebu som «en god avslutter med begge bein og med hodet» ved proffkontrakten i desember 2024. Dette bærer finishing og heading, ikke øvrige kvaliteter fra målstatistikken.",
     source: "https://www.aafk.no/nyheter/forste-proffkontrakt-for-lokal-spiss"
-  },
-  {
-    playerId: "oddbjorn_lie",
-    placeId: "color_line_stadion",
-    strengths: ["crossing"],
-    claim: "AaFKs Skeid-referat fra 2019 beskriver at Oddbjørn Lie slo et «strøkent innlegg» som Hólmbert Friðjónsson headet i mål. Fører crossing fra konkret innlegg.",
-    source: "https://www.aafk.no/nyheter/islandsk-festkveld"
-  },
-  {
-    playerId: "aron_elis_randarson",
-    placeId: "color_line_stadion",
-    strengths: ["heading"],
-    claim: "AaFKs referat fra Sogndal-kampen 04.05.2019 beskriver at Aron Elís Þrándarson headet Jørgen Hatlehols innlegg i mål til 1–1. Fører kun heading.",
-    source: "https://www.aafk.no/nyheter/for-en-snuoperasjon-sogndal"
-  },
-  {
-    playerId: "markus_karlsbakk",
-    placeId: "color_line_stadion",
-    strengths: ["finishing"],
-    claim: "AaFKs 2.-lagsreferat 25.08.2018 beskriver at Markus Karlsbakk scoret 3–0 med en elegant lobb over keeperen. En konkret kontrollert avslutning dokumenterer finishing, ikke en generell talentvurdering.",
-    source: "https://www.aafk.no/nyheter/atte-seire-pa-rad"
   },
 
   // --- Sandefjord, 09.10.2026: documented P1 skill -----------------------
@@ -613,11 +564,10 @@ const documented = [
   {
     playerId: "tor_hogne_aaroy",
     placeId: "color_line_stadion",
-    strengths: [
-      "heading"
-    ],
-    claim: "Start-trener Knut Tørum pekte 30.04.2010 konkret på at Tor Hogne Aarøy var spesielt farlig i hodespillet, og Start-spiller Ole Martin Årst beskrev ham som god i lufta. Fører heading; 203 cm høyde og målstatistikk gir ingen andre attributter.",
-    source: "https://www.aftenbladet.no/sport/i/ng5JjJ/toerum-maa-ikke-la-oss-blende-av-aaroey"
+    strengths: ["heading", "hold_up_play", "combination_play"],
+    claim: "To samtidige beskrivelser dokumenterer mer enn luftspillet: Start-trener Tørum og Ole Martin Årst fremhever Aarøys luftstyrke. I Aftenposten 03.05.2008 beskriver Aarøy hvordan han møter oppspill langs bakken, legger av til en fremadstormende midtbanespiller og tilrettelegger for Diego Silva. Dette bærer heading, hold_up_play og combination_play, ikke fart eller avslutninger.",
+    source: "https://www.aftenposten.no/sport/fotball/i/LA6GMq/det-stemmer-for-aaroey",
+    supportingSources: ["https://www.aftenbladet.no/sport/i/ng5JjJ/toerum-maa-ikke-la-oss-blende-av-aaroey"]
   },
   {
     playerId: "sten_grytebust",
@@ -631,11 +581,10 @@ const documented = [
   {
     playerId: "michael_barrantes",
     placeId: "color_line_stadion",
-    strengths: [
-      "set_pieces"
-    ],
-    claim: "Samtidig Aalesund–Brann-referat 06.03.2011 beskriver at Michael Barrantes slo en presis corner på bakerste stolpe til Ville Jalastos heading og utførte et farlig frispark tidlig i kampen. Fører bare set_pieces, ikke pasningsregister eller skuddkraft.",
-    source: "https://www.aftenbladet.no/sport/i/xRxl38/sen-scoring-avgjorde-for-aafk"
+    strengths: ["vision", "simple_passing"],
+    claim: "VG-lupen 2014 beskriver Michael Barrantes som en av ligaens mest presise ballfordelere, med et spesielt overblikk og en rolle der han styrte kamper. Teksten beskriver at han helst spilte bak spissen, men også startet på kanten og trakk inn. Fører vision og simple_passing; enkeltcorneren mot Brann fra 2011 beholdes som hendelseskilde, ikke som permanent set_pieces-bevis.",
+    source: "https://www.vg.no/spesial/2014/vglupen/viewteam/?lag=Aalesund&plassering=8",
+    supportingSources: ["https://www.aftenbladet.no/sport/i/xRxl38/sen-scoring-avgjorde-for-aafk"]
   },
   {
     playerId: "leke_james",
@@ -646,50 +595,6 @@ const documented = [
     claim: "Trener Trond Fredriksen fortalte 07.07.2015 at Leke James tidligere i sesongen hadde tatt mye av den defensive grovjobben og trengte å fordele arbeidsoppgavene for å være uthvilt i angrep; James bekreftet selv at han jobbet mye for laget. Fører work_rate, ikke finishing eller stamina.",
     source: "https://www.bt.no/sport/i/e8J8Al/leke-james-jeg-har-vaert-frustrert"
   },
-  {
-    playerId: "daniel_arnefjord",
-    placeId: "color_line_stadion",
-    strengths: [
-      "heading"
-    ],
-    claim: "Bergens Tidendes samtidige referat fra Aalesund–Start 21.04.2014 dokumenterer at Daniel Arnefjord møtte Michael Barrantes' frispark og headet fra sju meter i mål. Fører kun heading som eksplisitt utført teknisk handling, ikke duellstyrke eller posisjonering.",
-    source: "https://www.bt.no/sport/i/50G0xK/start-straffet-tafatt-aalesund"
-  },
-  {
-    playerId: "anders_lindegaard",
-    placeId: "color_line_stadion",
-    strengths: ["shot_stopping"],
-    claim: "Sunnmørspostens samtidige Rosenborg–Aalesund-omtale publisert 26.10.2009 beskriver flere sterke reaksjonsredninger fra Anders Lindegaard, spesielt at han slo et hardt, lavt skudd fra Rade Prica til corner. Bare konkret shot_stopping føres.",
-    source: "https://www.aftenbladet.no/sport/i/pL64G6/lindegaard-med-frysninger"
-  },
-  {
-    playerId: "peter_orry_larsen",
-    placeId: "color_line_stadion",
-    strengths: ["long_shots"],
-    claim: "Sunnmørspostens kampreferat publisert 03.04.2016 beskriver at Peter Orry Larsen scoret med et hardt og velplassert skudd fra rundt 18 meter mot Brann. Dette dokumenterer long_shots fra et konkret distanseforsøk, ikke et generelt målscorertalent.",
-    source: "https://www.aftenbladet.no/sport/i/p6J0LV/scoring-fattig-troest-for-orry-larsen-hadde-smakt-bedre-med-seier"
-  },
-  {
-    playerId: "andreas_lie",
-    placeId: "color_line_stadion",
-    strengths: ["shot_stopping"],
-    claim: "Aalesunds FKs samtidige kampreferat fra 2017 mot Tromsø beskriver at Andreas Lie avverget et tidlig frispark og senere beveget seg godt på streken for å slå Gjermund Åsens frispark på vei mot krysset unna. Fører bare shot_stopping, ikke reaksjonsfart som eget token.",
-    source: "https://www.aafk.no/nyheter/solid-snuoperasjon-gir-tre-poeng"
-  },
-  {
-    playerId: "enar_jaager",
-    placeId: "color_line_stadion",
-    strengths: ["set_pieces"],
-    claim: "Stavanger Aftenblads samtidige Aalesund–Rosenborg-referat 27.04.2012 beskriver at Enar Jääger slo et frispark fra midtbanen inn i feltet som Lars Fuhre styrte i mål. Fører konkret set_pieces, ikke generell pasningspresisjon eller crossing.",
-    source: "https://www.aftenbladet.no/sport/i/L0yMKx/dramaet-i-aalesund-endte-uavgjort"
-  },
-  {
-    playerId: "magnus_sylling_olsen",
-    placeId: "color_line_stadion",
-    strengths: ["finishing"],
-    claim: "Rosenborgs historiske kampreferat om avslutningen på Tippeligaen 2010 beskriver at Magnus Sylling Olsen kom gjennom fra venstresiden og banket ballen kontant i mål i siste ordinære minutt. Dette er en eksplisitt vellykket avslutning (finishing); ingen egenskap utledes av totalscoring.",
-    source: "https://www.rbk.no/nyheter/rbk-ubeseiret-i-2010"
-  },
   // --- Aalesund, 11.10.2026: independently checked club and match sources ---
   {
     playerId: "joakim_austnes",
@@ -698,63 +603,15 @@ const documented = [
     claim: "AaFKs omtale 8. juni 2021 kaller Joakim Austnes en fotrapp driblefant og fryktet kantspiller. Det dokumenterer konkret hurtighet og dribling; verken mål eller rolle brukes som indirekte styrkebelegg.",
     source: "https://www.aafk.no/nyheter/manedens-spiller-i-fotspora-til-jokke"
   },
-  {
-    playerId: "abderrazak_hamdallah",
-    placeId: "color_line_stadion",
-    strengths: ["heading", "finishing"],
-    claim: "AaFKs historiske Viking-referat (kamp 25. oktober 2013) beskriver en kontrollert heading etter Phillips' innlegg, en senere presis avslutning og et kontant skudd fra 16 meter. Bare heading og finishing føres.",
-    source: "https://www.aafk.no/nyheter/hamed-allahs-store-kveld"
-  },
-  {
-    playerId: "demar_phillips",
-    placeId: "color_line_stadion",
-    strengths: ["crossing"],
-    claim: "AaFKs historiske Viking-referat beskriver Demar Phillips som slo et presist innlegg til Abderrazak Hamdallahs kontrollerte heading 25. oktober 2013. Kun crossing føres fra det konkrete innlegget.",
-    source: "https://www.aafk.no/nyheter/hamed-allahs-store-kveld"
-  },
-  {
-    playerId: "eirik_hoseth",
-    placeId: "color_line_stadion",
-    strengths: ["heading"],
-    claim: "Dagbladets samtidige referat fra Aalesund–Hødd 20. juli 2001 beskriver Eirik Hoseth som headet inn returen etter et reddet skudd fra Paulo dos Santos. Kun heading føres fra den konkrete scoringen.",
-    source: "https://www.dagbladet.no/sport/1-divisjon-20-juli/65740469"
-  },
-  {
-    playerId: "erling_yttis_ytterland",
-    placeId: "color_line_stadion",
-    strengths: ["set_pieces"],
-    claim: "Dagbladets samtidige Aalesund–Hødd-referat 20. juli 2001 beskriver en presis corner fra Erling Ytterland som Tor Hogne Aarøy headet i mål. Dette dokumenterer set_pieces, uten å utlede øvrig pasningskvalitet.",
-    source: "https://www.dagbladet.no/sport/1-divisjon-20-juli/65740469"
-  },
-  {
-    playerId: "amund_skiri",
-    placeId: "color_line_stadion",
-    strengths: ["set_pieces"],
-    claim: "Aftenpostens samtidige Aalesund–Lillestrøm-referat i 2003 beskriver et langt frispark fra Amund Skiri rett i beina på Eirik Hoseth, som avsluttet i mål. Kun set_pieces føres fra den dokumenterte dødballleveransen.",
-    source: "https://www.aftenposten.no/sport/fotball/i/2G9KMy/hoseths-blinkskudd"
-  },
-  {
-    playerId: "bjorn_erik_melland",
-    placeId: "color_line_stadion",
-    strengths: ["heading"],
-    claim: "AaFKs historiske omtale av stadionåpningen mot Odd 16. april 2005 beskriver at Bjørn Erik Melland headet et hjørnespark ut i feltet, før Lasse Olsen senere satte ballen i mål. Kun den konkret utførte headingen registreres, ikke generell duellstyrke.",
-    source: "https://www.aafk.no/historisk-arkiv/nyheter/vare-baner-color-line-stadion"
-  },
 
   // --- Aalesund, 11.10.2026: contemporary reports / quantified skill evidence ---
   {
     playerId: "fredrik_ulvestad",
     placeId: "color_line_stadion",
-    strengths: ["crossing", "finishing"],
-    claim: "Aftenpostens samtidige Aalesund–Stabæk-referat beskriver et «herlig innlegg» fra Fredrik Ulvestad til Leke James' heading, og at Ulvestad senere løp alene gjennom etter en kontring og satte ballen kontrollert forbi keeper. Fører bare crossing og finishing fra de to konkrete handlingene.",
-    source: "https://www.aftenposten.no/sport/fotball/i/AdRxbM/aalesund-knuste-stabaek"
-  },
-  {
-    playerId: "sander_post",
-    placeId: "color_line_stadion",
-    strengths: ["heading", "finishing"],
-    claim: "Stavanger Aftenblads cupreferat fra Tornado/Måløy–Aalesund 11.05.2011 beskriver at Sander Post stusset Solomon Okoronkwo gjennom til mål og vant flere luftdueller; han satte selv ballen i mål etter å ha blitt spilt gjennom. Fører bare heading og finishing.",
-    source: "https://www.aftenbladet.no/sport/i/XwGmK7/ingen-cupbombe-detonert-i-maaloey"
+    strengths: ["set_pieces"],
+    claim: "VG-lupen 2014 omtaler Fredrik Ulvestad uttrykkelig som «Straffeekspert». Dette bærer kun set_pieces i dagens vokabular, med presis avgrensning til straffespark. Enkeltinnlegget og kontringsscoringen mot Stabæk beholdes som hendelseskilde, ikke som varig crossing/finishing.",
+    source: "https://www.vg.no/spesial/2014/vglupen/viewteam/?lag=Aalesund&plassering=8",
+    supportingSources: ["https://www.aftenposten.no/sport/fotball/i/AdRxbM/aalesund-knuste-stabaek"]
   },
   {
     playerId: "mikkel_kirkeskov",
@@ -764,105 +621,288 @@ const documented = [
     source: "https://www.vg.no/spesial/2017/vglupen/?plassering=12"
   },
   {
-    playerId: "daniel_leo_gretarsson",
-    placeId: "color_line_stadion",
-    strengths: ["heading"],
-    claim: "AaFKs samtidige Strømmen-referat 11.08.2019 beskriver at Daníel Leó Grétarsson steg høyest på en corner og nikket inn 1–0. Kun heading føres fra den konkret dokumenterte scoringen.",
-    source: "https://www.aafk.no/nyheter/seiersrekka-fortsatte"
-  },
-  {
     playerId: "robert_sandnes",
     placeId: "color_line_stadion",
     strengths: ["work_rate"],
     claim: "Aalesunds FKs spillerpresentasjon «Sunnmøres stolthet del 1» 09.04.2018 omtaler Robert Sandnes eksplisitt som «den energiske og hardtarbeidende ålesunderen». Dette støtter bare work_rate, ikke hurtighet eller tekniske egenskaper.",
     source: "https://www.aafk.no/nyheter/sunnmores-stolthet-del-1"
   },
-  {
-    playerId: "john_kitolano",
-    placeId: "color_line_stadion",
-    strengths: ["crossing"],
-    claim: "AaFKs referat fra AaFK 2–Florø 12.10.2022 beskriver at Bjørn Martin Kristensen scoret etter innlegg fra John Kitolano i det 53. minutt. Kun det konkret utførte innlegget dokumenterer crossing.",
-    source: "https://www.aafk.no/nyheter/aafk-2-sikret-opprykket"
-  },
   // --- Aalesund 11.10.2026: official match reports and contemporary press ---
-  {
-    playerId: "tero_mantyla",
-    placeId: "color_line_stadion",
-    strengths: ["heading"],
-    claim: "AaFKs treningskampreferat mot Hødd publisert 27.01.2017 beskriver at Tero Mäntylä var riktig plassert på corner og headet inn 4–0. Bare den dokumenterte headingen tilordnes ham.",
-    source: "https://www.aafk.no/nyheter/knuste-hodd-pa-color-line-stadion"
-  },
-  {
-    playerId: "diego_silva",
-    placeId: "color_line_stadion",
-    strengths: ["dribbling", "crossing"],
-    claim: "Bergens Tidendes samtidige referat fra AaFK–Viking 28.02.2010 beskriver at Diego Silva ved flere anledninger rundlurte Vikings back Christian Landu Landu. Hans innlegg etter 16 minutter skapte en dobbeltsjanse. Kilden dokumenterer dribbling og crossing, ikke en generell spillerkarakter.",
-    source: "https://www.bt.no/sport/i/K3yPQ4/aalesund-naermest-seieren-mot-viking"
-  },
-  {
-    playerId: "david_fallman",
-    placeId: "color_line_stadion",
-    strengths: ["heading"],
-    claim: "AaFKs kampreferat mot Sandnes Ulf 24.10.2021 beskriver at David Fällman møtte David Kristjan Olafssons innlegg og headet inn 2–1 etter 51 minutter. Kun heading føres, ikke andre defensive egenskaper.",
-    source: "https://www.aafk.no/nyheter/holdt-til-uavgjort-av-sandnes-ulf"
-  },
-  {
-    playerId: "edvard_skagestad",
-    placeId: "color_line_stadion",
-    strengths: ["tackling"],
-    claim: "VG Lives samtidige referat fra AaFK–Strømsgodset 2–1 beskriver ved 59 minutter at Edvard Skagestad taklet til seg ballen i duell med Iver Fossum. Kun den konkret dokumenterte taklingen føres.",
-    source: "https://vglive.vg.no/kamp/aalesund-str%C3%B8msgodset/145384/rapport"
-  },
-  {
-    playerId: "henrik_molvaer_melland",
-    placeId: "color_line_stadion",
-    strengths: ["finishing"],
-    claim: "Lyns samtidige kampreferat fra Aalesund–Lyn 22.10.2025 beskriver at Henrik Molvær Melland avsluttet hurtig på returen etter Elias Heggland Myrlids stolpeskudd, og avgjorde kampen 2–1 i det 89. minutt. Kun finishing føres; skuddet beskrives ikke som langskudd.",
-    source: "https://www.lyn1896.no/nyheter/tung-avslutning-pa-color-line--tapte-i-siste-minutt"
-  }
 ,
   // --- Aalesund 11.10.2026: independently verified player-specific acts ---
-  {
-    playerId: "paulo_dos_santos",
-    placeId: "color_line_stadion",
-    strengths: ["set_pieces"],
-    claim: "Bergens Tidendes samtidige AaFK–Fredrikstad-referat 29.05.2005 beskriver at Paulo dos Santos skrudde et frispark fra cirka 16 meter direkte i mål, og at han selv forklarte hvordan han utnyttet keeperens posisjon. Dokumenterer kun set_pieces, ikke generell finishing eller skuddstyrke.",
-    source: "https://www.bt.no/sport/i/Opr4WE/aarsbeste-av-aafk"
-  },
-  {
-    playerId: "simen_vatne_haram",
-    placeId: "color_line_stadion",
-    strengths: ["heading"],
-    claim: "AaFKs cupreferat mot HamKam 20.05.2025 beskriver at Simen Vatne Haram møtte Kristoffer Nessøs presise innlegg på bakerste stolpe og headet sikkert i mål til 2–1. Bare heading føres.",
-    source: "https://www.aafk.no/nyheter/kvartfinalen-er-sikret"
-  },
-  {
-    playerId: "elias_heggland_myrlid",
-    placeId: "color_line_stadion",
-    strengths: ["dribbling", "finishing"],
-    claim: "AaFKs cupreferat fra Langevåg 2026 beskriver at Elias Heggland Myrlid fintet bort to motspillere før han satte ballen kontrollert i mål etter ni minutter. Den konkrete sekvensen dokumenterer dribbling og finishing, uten å utlede fart eller utholdenhet.",
-    source: "https://www.aafk.no/nyheter/aafk-videre-i-nm-etter-cupfest-i-langevagen"
-  },
-  {
-    playerId: "hakon_butli_hammer",
-    placeId: "color_line_stadion",
-    strengths: ["long_shots"],
-    claim: "Dagsavisens samtidige rapport fra Aalesund–Tromsø høsten 2023 beskriver at Håkon Butli Hammer banket til fra distanse og scoret med et skudd som overrasket keeper Jakob Haugaard. Dette dokumenterer long_shots fra en konkret distanseavslutning.",
-    source: "https://www.dagsavisen.no/sport/tabelljumbo-aalesund-slo-medaljejagende-tromso/6917197"
-  },
-  {
-    playerId: "frode_fagermo",
-    placeId: "color_line_stadion",
-    strengths: ["set_pieces"],
-    claim: "Dagbladets samtidige 1. divisjonsbørs 30.04.2001 beskriver at Aalesund utlignet mot L/F Hønefoss etter ett av Frode Fagermos lange innkast, som Sandø banket i mål. Dokumenterer en konkret dødballleveranse fra innkast, ikke generelt pasningsregister eller crossing.",
-    source: "https://www.dagbladet.no/sport/1-divisjonsbors---2-runde/65710337"
-  }
 
 ];
 
 export const P1_NEW_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
   ...entry,
   strengths: Object.freeze([...entry.strengths])
+})));
+
+// The following AaFK citations establish actions in particular matches, not stable
+// individual strengths. They are retained for history/provenance but MUST NOT
+// lift attributes. legacyTokens record only the old (withdrawn) strength tags.
+const eventOnly = [
+  {
+    playerId: "jorgen_hatlehol",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["crossing"],
+    claim: "AaFKs kampreferat fra Strømmen-kampen 11.08.2019 beskriver et knallhardt innlegg fra Jørgen Hatlehol som Pape Habib Gueye headet i mål.",
+    source: "https://www.aafk.no/nyheter/seiersrekka-fortsatte"
+  },
+  {
+    playerId: "holmbert_aron_fridjonsson",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["heading"],
+    claim: "AaFKs kampreferat fra treningskampen mot Hødd beskriver at Hólmbert Friðjónsson styrte et innlegg med hodet i lengste hjørne til 2–0.",
+    source: "https://www.aafk.no/nyheter/malrikt-da-aalesund-slo-hodd"
+  },
+  {
+    playerId: "pape_habib_gueye",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["heading"],
+    claim: "AaFKs kampreferat mot Strømmen 11.08.2019 beskriver at Pape Habib Gueye møtte Hatlehols innlegg og dunket ballen i mål med hodet.",
+    source: "https://www.aafk.no/nyheter/seiersrekka-fortsatte"
+  },
+  {
+    playerId: "sigurd_haugen",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["heading"],
+    claim: "AaFKs referat fra 6–2 mot Grorud 15.09.2021 beskriver at Sigurd Haugen scoret sitt andre mål med hodet etter innlegg fra Isak Dybvik Määttä.",
+    source: "https://www.aafk.no/nyheter/storseier_AaFK_Grorud"
+  },
+  {
+    playerId: "oddbjorn_lie",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["crossing"],
+    claim: "AaFKs Skeid-referat fra 2019 beskriver at Oddbjørn Lie slo et «strøkent innlegg» som Hólmbert Friðjónsson headet i mål.",
+    source: "https://www.aafk.no/nyheter/islandsk-festkveld"
+  },
+  {
+    playerId: "aron_elis_randarson",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["heading"],
+    claim: "AaFKs referat fra Sogndal-kampen 04.05.2019 beskriver at Aron Elís Þrándarson headet Jørgen Hatlehols innlegg i mål til 1–1.",
+    source: "https://www.aafk.no/nyheter/for-en-snuoperasjon-sogndal"
+  },
+  {
+    playerId: "markus_karlsbakk",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["finishing"],
+    claim: "AaFKs 2.-lagsreferat 25.08.2018 beskriver at Markus Karlsbakk scoret 3–0 med en elegant lobb over keeperen.",
+    source: "https://www.aafk.no/nyheter/atte-seire-pa-rad"
+  },
+  {
+    playerId: "daniel_arnefjord",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["heading"],
+    claim: "Bergens Tidendes samtidige referat fra Aalesund–Start 21.04.2014 dokumenterer at Daniel Arnefjord møtte Michael Barrantes' frispark og headet fra sju meter i mål.",
+    source: "https://www.bt.no/sport/i/50G0xK/start-straffet-tafatt-aalesund"
+  },
+  {
+    playerId: "anders_lindegaard",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["shot_stopping"],
+    claim: "Sunnmørspostens samtidige Rosenborg–Aalesund-omtale publisert 26.10.2009 beskriver flere sterke reaksjonsredninger fra Anders Lindegaard, spesielt at han slo et hardt, lavt skudd fra Rade Prica til corner.",
+    source: "https://www.aftenbladet.no/sport/i/pL64G6/lindegaard-med-frysninger"
+  },
+  {
+    playerId: "peter_orry_larsen",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["long_shots"],
+    claim: "Sunnmørspostens kampreferat publisert 03.04.2016 beskriver at Peter Orry Larsen scoret med et hardt og velplassert skudd fra rundt 18 meter mot Brann.",
+    source: "https://www.aftenbladet.no/sport/i/p6J0LV/scoring-fattig-troest-for-orry-larsen-hadde-smakt-bedre-med-seier"
+  },
+  {
+    playerId: "andreas_lie",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["shot_stopping"],
+    claim: "Aalesunds FKs samtidige kampreferat fra 2017 mot Tromsø beskriver at Andreas Lie avverget et tidlig frispark og senere beveget seg godt på streken for å slå Gjermund Åsens frispark på vei mot krysset unna.",
+    source: "https://www.aafk.no/nyheter/solid-snuoperasjon-gir-tre-poeng"
+  },
+  {
+    playerId: "enar_jaager",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["set_pieces"],
+    claim: "Stavanger Aftenblads samtidige Aalesund–Rosenborg-referat 27.04.2012 beskriver at Enar Jääger slo et frispark fra midtbanen inn i feltet som Lars Fuhre styrte i mål.",
+    source: "https://www.aftenbladet.no/sport/i/L0yMKx/dramaet-i-aalesund-endte-uavgjort"
+  },
+  {
+    playerId: "magnus_sylling_olsen",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["finishing"],
+    claim: "Rosenborgs historiske kampreferat om avslutningen på Tippeligaen 2010 beskriver at Magnus Sylling Olsen kom gjennom fra venstresiden og banket ballen kontant i mål i siste ordinære minutt.",
+    source: "https://www.rbk.no/nyheter/rbk-ubeseiret-i-2010"
+  },
+  {
+    playerId: "abderrazak_hamdallah",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["heading", "finishing"],
+    claim: "AaFKs historiske Viking-referat (kamp 25. oktober 2013) beskriver en kontrollert heading etter Phillips' innlegg, en senere presis avslutning og et kontant skudd fra 16 meter.",
+    source: "https://www.aafk.no/nyheter/hamed-allahs-store-kveld"
+  },
+  {
+    playerId: "demar_phillips",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["crossing"],
+    claim: "AaFKs historiske Viking-referat beskriver Demar Phillips som slo et presist innlegg til Abderrazak Hamdallahs kontrollerte heading 25. oktober 2013.",
+    source: "https://www.aafk.no/nyheter/hamed-allahs-store-kveld"
+  },
+  {
+    playerId: "eirik_hoseth",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["heading"],
+    claim: "Dagbladets samtidige referat fra Aalesund–Hødd 20. juli 2001 beskriver Eirik Hoseth som headet inn returen etter et reddet skudd fra Paulo dos Santos.",
+    source: "https://www.dagbladet.no/sport/1-divisjon-20-juli/65740469"
+  },
+  {
+    playerId: "erling_yttis_ytterland",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["set_pieces"],
+    claim: "Dagbladets samtidige Aalesund–Hødd-referat 20. juli 2001 beskriver en presis corner fra Erling Ytterland som Tor Hogne Aarøy headet i mål.",
+    source: "https://www.dagbladet.no/sport/1-divisjon-20-juli/65740469"
+  },
+  {
+    playerId: "amund_skiri",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["set_pieces"],
+    claim: "Aftenpostens samtidige Aalesund–Lillestrøm-referat i 2003 beskriver et langt frispark fra Amund Skiri rett i beina på Eirik Hoseth, som avsluttet i mål.",
+    source: "https://www.aftenposten.no/sport/fotball/i/2G9KMy/hoseths-blinkskudd"
+  },
+  {
+    playerId: "bjorn_erik_melland",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["heading"],
+    claim: "AaFKs historiske omtale av stadionåpningen mot Odd 16. april 2005 beskriver at Bjørn Erik Melland headet et hjørnespark ut i feltet, før Lasse Olsen senere satte ballen i mål.",
+    source: "https://www.aafk.no/historisk-arkiv/nyheter/vare-baner-color-line-stadion"
+  },
+  {
+    playerId: "sander_post",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["heading", "finishing"],
+    claim: "Stavanger Aftenblads cupreferat fra Tornado/Måløy–Aalesund 11.05.2011 beskriver at Sander Post stusset Solomon Okoronkwo gjennom til mål og vant flere luftdueller; han satte selv ballen i mål etter å ha blitt spilt gjennom.",
+    source: "https://www.aftenbladet.no/sport/i/XwGmK7/ingen-cupbombe-detonert-i-maaloey"
+  },
+  {
+    playerId: "daniel_leo_gretarsson",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["heading"],
+    claim: "AaFKs samtidige Strømmen-referat 11.08.2019 beskriver at Daníel Leó Grétarsson steg høyest på en corner og nikket inn 1–0.",
+    source: "https://www.aafk.no/nyheter/seiersrekka-fortsatte"
+  },
+  {
+    playerId: "john_kitolano",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["crossing"],
+    claim: "AaFKs referat fra AaFK 2–Florø 12.10.2022 beskriver at Bjørn Martin Kristensen scoret etter innlegg fra John Kitolano i det 53. minutt.",
+    source: "https://www.aafk.no/nyheter/aafk-2-sikret-opprykket"
+  },
+  {
+    playerId: "tero_mantyla",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["heading"],
+    claim: "AaFKs treningskampreferat mot Hødd publisert 27.01.2017 beskriver at Tero Mäntylä var riktig plassert på corner og headet inn 4–0.",
+    source: "https://www.aafk.no/nyheter/knuste-hodd-pa-color-line-stadion"
+  },
+  {
+    playerId: "diego_silva",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["dribbling", "crossing"],
+    claim: "Bergens Tidendes samtidige referat fra AaFK–Viking 28.02.2010 beskriver at Diego Silva ved flere anledninger rundlurte Vikings back Christian Landu Landu.",
+    source: "https://www.bt.no/sport/i/K3yPQ4/aalesund-naermest-seieren-mot-viking"
+  },
+  {
+    playerId: "david_fallman",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["heading"],
+    claim: "AaFKs kampreferat mot Sandnes Ulf 24.10.2021 beskriver at David Fällman møtte David Kristjan Olafssons innlegg og headet inn 2–1 etter 51 minutter.",
+    source: "https://www.aafk.no/nyheter/holdt-til-uavgjort-av-sandnes-ulf"
+  },
+  {
+    playerId: "edvard_skagestad",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["tackling"],
+    claim: "VG Lives samtidige referat fra AaFK–Strømsgodset 2–1 beskriver ved 59 minutter at Edvard Skagestad taklet til seg ballen i duell med Iver Fossum.",
+    source: "https://vglive.vg.no/kamp/aalesund-str%C3%B8msgodset/145384/rapport"
+  },
+  {
+    playerId: "henrik_molvaer_melland",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["finishing"],
+    claim: "Lyns samtidige kampreferat fra Aalesund–Lyn 22.10.2025 beskriver at Henrik Molvær Melland avsluttet hurtig på returen etter Elias Heggland Myrlids stolpeskudd, og avgjorde kampen 2–1 i det 89. minutt.",
+    source: "https://www.lyn1896.no/nyheter/tung-avslutning-pa-color-line--tapte-i-siste-minutt"
+  },
+  {
+    playerId: "paulo_dos_santos",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["set_pieces"],
+    claim: "Bergens Tidendes samtidige AaFK–Fredrikstad-referat 29.05.2005 beskriver at Paulo dos Santos skrudde et frispark fra cirka 16 meter direkte i mål, og at han selv forklarte hvordan han utnyttet keeperens posisjon.",
+    source: "https://www.bt.no/sport/i/Opr4WE/aarsbeste-av-aafk"
+  },
+  {
+    playerId: "simen_vatne_haram",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["heading"],
+    claim: "AaFKs cupreferat mot HamKam 20.05.2025 beskriver at Simen Vatne Haram møtte Kristoffer Nessøs presise innlegg på bakerste stolpe og headet sikkert i mål til 2–1.",
+    source: "https://www.aafk.no/nyheter/kvartfinalen-er-sikret"
+  },
+  {
+    playerId: "elias_heggland_myrlid",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["dribbling", "finishing"],
+    claim: "AaFKs cupreferat fra Langevåg 2026 beskriver at Elias Heggland Myrlid fintet bort to motspillere før han satte ballen kontrollert i mål etter ni minutter.",
+    source: "https://www.aafk.no/nyheter/aafk-videre-i-nm-etter-cupfest-i-langevagen"
+  },
+  {
+    playerId: "hakon_butli_hammer",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["long_shots"],
+    claim: "Dagsavisens samtidige rapport fra Aalesund–Tromsø høsten 2023 beskriver at Håkon Butli Hammer banket til fra distanse og scoret med et skudd som overrasket keeper Jakob Haugaard.",
+    source: "https://www.dagsavisen.no/sport/tabelljumbo-aalesund-slo-medaljejagende-tromso/6917197"
+  },
+  {
+    playerId: "frode_fagermo",
+    placeId: "color_line_stadion",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["set_pieces"],
+    claim: "Dagbladets samtidige 1. divisjonsbørs 30.04.2001 beskriver at Aalesund utlignet mot L/F Hønefoss etter ett av Frode Fagermos lange innkast, som Sandø banket i mål.",
+    source: "https://www.dagbladet.no/sport/1-divisjonsbors---2-runde/65710337"
+  }
+];
+
+export const P1_NEW_EVENT_ONLY = Object.freeze(eventOnly.map((entry) => Object.freeze({
+  ...entry,
+  legacyTokens: Object.freeze([...entry.legacyTokens])
 })));
 
 // DELVIS is reserved for a source actually inspected in this pass that documents
@@ -963,6 +1003,7 @@ export const P1_EXISTING_SUPPLEMENTS = Object.freeze(existingSupplements.map((en
 const NEW_PLACE_IDS = new Set(P1_HERITAGES.filter((entry) => entry.generation === "new").map((entry) => entry.placeId));
 const DOCUMENTED_BY_ID = new Map(P1_NEW_DOCUMENTED.map((entry) => [entry.playerId, entry]));
 const PARTIAL_BY_ID = new Map(P1_NEW_PARTIAL.map((entry) => [entry.playerId, entry]));
+const EVENT_ONLY_BY_ID = new Map(P1_NEW_EVENT_ONLY.map((entry) => [entry.playerId, entry]));
 const EXISTING_SUPPLEMENT_BY_ID = new Map(P1_EXISTING_SUPPLEMENTS.map((entry) => [entry.playerId, entry]));
 
 export function getP1HeritageForPlayer(player) {
@@ -976,6 +1017,8 @@ export function getP1NewSourceRecord(player) {
   if (!heritage || heritage.generation !== "new") return null;
   const documentedRecord = DOCUMENTED_BY_ID.get(player.id);
   if (documentedRecord) return { status: "DOKUMENTERT", ...documentedRecord };
+  const eventRecord = EVENT_ONLY_BY_ID.get(player.id);
+  if (eventRecord) return { status: "HENDELSE", ...eventRecord, strengths: [] };
   const partialRecord = PARTIAL_BY_ID.get(player.id);
   if (partialRecord) return { status: "DELVIS", ...partialRecord, strengths: [] };
   return {
