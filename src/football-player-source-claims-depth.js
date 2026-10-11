@@ -429,7 +429,7 @@ const documented = [
   },
   // --- Rosenborg: verified individual playing-style descriptions -----------
   {
-    playerId: "harald_martin_brattbakk",
+    playerId: "harald_brattbakk",
     clubId: "rosenborg",
     strengths: ["pace", "off_ball_runs", "positioning"],
     claim: "Odd Iversen fremhevet Brattbakks fart («Meget hurtig») og «en fin timing på løpene sine», og at han ofte kom «i fin posisjon for å score». Dermed dokumenteres hurtighet, løp uten ball og offensiv plassering, ikke antatt heading eller dødballer.",
