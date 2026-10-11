@@ -281,10 +281,11 @@ const documented = [
     playerId: "kristian_hemmingsen_lonebu",
     placeId: "color_line_stadion",
     evidenceKind: "direct_appraisal",
-    playingStyle: "Akademilederen beskriver avslutninger med begge bein og hodet som deler av spissens repertoar.",
-    strengths: ["finishing", "heading"],
-    claim: "AaFKs akademileder Sindre Eid beskriver Kristian Lonebu som «en god avslutter med begge bein og med hodet» ved proffkontrakten i desember 2024. Dette bærer finishing og heading, ikke øvrige kvaliteter fra målstatistikken.",
-    source: "https://www.aafk.no/nyheter/forste-proffkontrakt-for-lokal-spiss"
+    playingStyle: "Målrettet spissprofil: avslutter ifølge akademileder Sindre Eid godt med begge bein og hodet, mens Kjetil Rekdal beskriver ham som hardtarbeidende og med teft i scoringsposisjoner. Lonebu forteller at han har fått veiledning i feltposisjonering, bakromsløp og møtende bevegelser av Tor Hogne Aarøy; dette dokumenterer opplæring, ikke automatisk mestrede løpsegenskaper.",
+    strengths: ["finishing", "heading", "work_rate"],
+    claim: "AaFKs kontraktpresentasjon 03.12.2024 gjengir hovedtrener Kjetil Rekdals konkrete vurdering av Lonebu som en hardtarbeidende spiss med målteft, og utvikler Sindre Eids vurdering av avslutningsevne med begge bein og hodet. Lonebu opplyser selv at Aarøy har gitt ham tips om løp i bakrom, møtende bevegelser og posisjonering i feltet; tipsene registreres ikke som varige styrker.",
+    source: "https://www.aafk.no/nyheter/forste-proffkontrakt-for-lokal-spiss",
+    supportingSources: ["https://www.aafk.no/nyheter/lonebu-har-signert-ny-kontrakt"]
   },
 
   // --- Sandefjord, 09.10.2026: documented P1 skill -----------------------
@@ -577,32 +578,31 @@ const documented = [
     playerId: "tor_hogne_aaroy",
     placeId: "color_line_stadion",
     evidenceKind: "direct_appraisal",
-    playingStyle: "Møtende targetspiss som også kunne brukes som oppspillspunkt og legge av til fremrykkende medspillere.",
+    playingStyle: "Høyreist oppspillspunkt med dokumentert luftstyrke og møtende linkspill: Aarøy beskrev i 2008 hvordan han tok imot lave oppspill, la igjen ballen til framstormende midtbanespillere og la til rette for Diego Silva. Rekdal beskrev i 2011 hvordan AaFK senere flyttet tyngdepunktet fra den gamle langball-orienterte Aarøy-stilen til mer spill gjennom Barrantes. Dette er taktisk rollehistorie, ikke et tegn på høy fart eller generell teknisk overlegenhet.",
     strengths: ["heading", "hold_up_play", "combination_play"],
-    claim: "To samtidige beskrivelser dokumenterer mer enn luftspillet: Start-trener Tørum og Ole Martin Årst fremhever Aarøys luftstyrke. I Aftenposten 03.05.2008 beskriver Aarøy hvordan han møter oppspill langs bakken, legger av til en fremadstormende midtbanespiller og tilrettelegger for Diego Silva. Dette bærer heading, hold_up_play og combination_play, ikke fart eller avslutninger.",
+    claim: "Aftenposten 03.05.2008 dokumenterer Tor Hogne Aarøys møtende rolle langs bakken, avleveringer til midtbanespillere og hans arbeid som tilrettelegger for Diego Silva. Motstandertrener Knut Tørum og spiss Ole Martin Årst fremhevet hans luftspill i 2010. Kjetil Rekdal beskrev senere at Aalesund gikk bort fra en mer langballorientert Aarøy-stil da klubben ville spille mer gjennom Barrantes. Dette underbygger heading, hold_up_play og combination_play – med en tydelig taktisk kontekst.",
     source: "https://www.aftenposten.no/sport/fotball/i/LA6GMq/det-stemmer-for-aaroey",
-    supportingSources: ["https://www.aftenbladet.no/sport/i/ng5JjJ/toerum-maa-ikke-la-oss-blende-av-aaroey"]
+    supportingSources: ["https://www.aftenbladet.no/sport/i/ng5JjJ/toerum-maa-ikke-la-oss-blende-av-aaroey", "https://www.nettavisen.no/artikkel/kan-godt-hende-vi-driter-oss-ut/s/12-95-3267654"]
   },
   {
     playerId: "sten_grytebust",
     placeId: "color_line_stadion",
     evidenceKind: "direct_appraisal",
-    playingStyle: "Flere sterke redninger og positive individuelle vurderinger fra trenere/keepere; ingen bred keeperprofil er dokumentert.",
-    strengths: [
-      "shot_stopping"
-    ],
-    claim: "Aftenpostens samtidige Stabæk–Aalesund-referat 14.06.2011 dokumenterer flere klasseredninger fra Sten Grytebust, omtalt individuelt også av Stabæk-trener Jörgen Lennartsson og landslagskeeper Jon Knudsen. Fører bare shot_stopping, ikke en generell keepertotal.",
-    source: "https://www.aftenposten.no/sport/fotball/i/4qLd1G/rekdal-norges-neste-landslagskeeper"
+    playingStyle: "Bevegelig målvakt med dokumenterte reaksjonsredninger, god håndtering både på streken og i feltet og tydelig kommunikasjon med forsvaret. Landslagskeeper Jon Knudsen fremhevet feltarbeidet og bevegelsen, VG vurderte kommunikasjonen positivt i 2014, og AaFK-trener Christian Johnsen beskrev senere hans rolle som pådriver i treningsarbeidet. Ingen kilde gir grunnlag for ballfordeling eller én samlet keepertotal.",
+    strengths: ["shot_stopping", "command_of_area"],
+    claim: "Aftenposten 14.06.2011 beskriver flere svært gode redninger, samtidig som landslagskeeper Jon Knudsen vurderte Sten Grytebust som bevegelig og god i feltet og på streken. VG-lupen 2014 vurderte ham som en sterk skuddstopper som kommuniserte godt. Det dokumenterer shot_stopping og, snevert tolket, command_of_area (feltarbeid), men ikke keeperens distribusjon, langpasninger eller taktiske lederskap generelt.",
+    source: "https://www.aftenposten.no/sport/fotball/i/4qLd1G/rekdal-norges-neste-landslagskeeper",
+    supportingSources: ["https://www.vg.no/spesial/2014/vglupen/viewteam/?lag=Aalesund&plassering=8", "https://www.aafk.no/nyheter/en-julegave-fra-oss-til-dere"]
   },
   {
     playerId: "michael_barrantes",
     placeId: "color_line_stadion",
     evidenceKind: "editorial_appraisal",
-    playingStyle: "Presis ballfordeler med overblikk; rollen bak spissen kontra inntrekk fra kanten var sentral for lagets balanse.",
-    strengths: ["vision", "simple_passing"],
-    claim: "VG-lupen 2014 beskriver Michael Barrantes som en av ligaens mest presise ballfordelere, med et spesielt overblikk og en rolle der han styrte kamper. Teksten beskriver at han helst spilte bak spissen, men også startet på kanten og trakk inn. Fører vision og simple_passing; enkeltcorneren mot Brann fra 2011 beholdes som hendelseskilde, ikke som permanent set_pieces-bevis.",
-    source: "https://www.vg.no/spesial/2014/vglupen/viewteam/?lag=Aalesund&plassering=8",
-    supportingSources: ["https://www.aftenbladet.no/sport/i/xRxl38/sen-scoring-avgjorde-for-aafk"]
+    playingStyle: "Offensiv ballfordeler som helst opererte bak spissen, men også kunne starte fra høyre og trekke inn. Trener Kjetil Rekdal kalte ham en perfekt offensiv playmaker og la lagets ballspill mer gjennom Barrantes etter at Aarøy dro. VG fremhevet presis pasningsfordeling og spilleoversikt; Dagbladet dokumenterte et gjennombruddsskapende langt pasningsoppspill. Rollen varierer med form og medspillere.",
+    strengths: ["vision", "passing_range", "chance_creation"],
+    claim: "Kjetil Rekdal beskrev i 2012 Michael Barrantes som perfekt i rollen som offensiv playmaker; Aalesund dreide også spillestilen fra lange oppspill mot Aarøy til mer spill gjennom Barrantes. VGs 2014-vurdering omtaler ham som en av seriens mest presise ballfordelere med særlig overblikk, og at han trivdes best bak spissen. Dagbladet dokumenterte en konkret lang, målgivende pasning mot Hønefoss i 2013. Samlet støtter dette vision, passing_range og chance_creation; enkeltpasningen alene ville ikke kvalifisert som varig attributt.",
+    source: "https://www.bt.no/sport/i/op67BV/rekdal-aapner-for-to-nye-spisser",
+    supportingSources: ["https://www.vg.no/spesial/2014/vglupen/viewteam/?lag=Aalesund&plassering=8", "https://www.nettavisen.no/artikkel/kan-godt-hende-vi-driter-oss-ut/s/12-95-3267654", "https://www.dagbladet.no/sport/maldrama-da-aalesund-tok-sin-tredje-strake-seier/62942066"]
   },
   {
     playerId: "leke_james",
@@ -630,20 +630,20 @@ const documented = [
   {
     playerId: "fredrik_ulvestad",
     placeId: "color_line_stadion",
-    evidenceKind: "editorial_appraisal",
-    playingStyle: "Omtalt som straffesparkspesialist, ikke som generell hjørnespark-/frisparkekspert.",
-    strengths: ["set_pieces"],
-    claim: "VG-lupen 2014 omtaler Fredrik Ulvestad uttrykkelig som «Straffeekspert». Dette bærer kun set_pieces i dagens vokabular, med presis avgrensning til straffespark. Enkeltinnlegget og kontringsscoringen mot Stabæk beholdes som hendelseskilde, ikke som varig crossing/finishing.",
-    source: "https://www.vg.no/spesial/2014/vglupen/viewteam/?lag=Aalesund&plassering=8",
-    supportingSources: ["https://www.aftenposten.no/sport/fotball/i/AdRxbM/aalesund-knuste-stabaek"]
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Løpsterk indreløper som kombinerte ballgjenvinning med offensive midtbaneoppgaver. Kjetil Rekdal beskrev ham som en mellomting mellom Aalesunds ballvinner og deres offensive playmaker. Samtidige analyser beskriver ham som en av lagets tydelige løpere fra indreløperposisjon; den dokumenterte straffesparkkompetansen er et separat teknisk særtrekk.",
+    strengths: ["work_rate", "set_pieces"],
+    claim: "Trener Kjetil Rekdal uttalte i 2012 at Fredrik Ulvestad var en blanding av Jason Morrison (ballvinner) og Michael Barrantes (offensiv playmaker), uten å tilskrive ham en bestemt dribling, takling eller sistepasning. En egen 2014-analyse beskriver Ulvestad og Orry Larsen som løpssterke indreløpere. Bergens Tidendes landslagspresentasjon fra 2020 beskriver Ulvestad uttrykkelig som løpssterk og målfarlig, også en trygg straffeskytter. Derfor føres work_rate og set_pieces, med sistnevnte begrenset til straffespark.",
+    source: "https://www.bt.no/sport/i/op67BV/rekdal-aapner-for-to-nye-spisser",
+    supportingSources: ["https://www.bt.no/sport/i/XgbgPb/aafk-vil-savne-hamed-allah", "https://www.bt.no/sport/i/41z7eG/stor-presentasjon-dette-er-det-norske-noedlandslaget", "https://www.vg.no/spesial/2014/vglupen/viewteam/?lag=Aalesund&plassering=8"]
   },
   {
     playerId: "mikkel_kirkeskov",
     placeId: "color_line_stadion",
     evidenceKind: "season_statistics",
-    playingStyle: "Sesongbaserte tall for vunne taklinger og vellykkede innlegg, med særskilte frisparkscoringer.",
+    playingStyle: "Venstreback med målt, høy aktivitet i ballvinnende taklinger og levering av innlegg: i Eliteserien 2016 vant han 84 taklinger (flest) og traff med 61 innlegg (nest flest), ifølge VG. To direkte frisparksmål viser en konkret dødballspesialitet. Statistikken viser ikke automatisk overblikk, overlappinger eller generell defensiv spillelesning.",
     strengths: ["tackling", "crossing", "set_pieces"],
-    claim: "VG-lupen foran 2017-sesongen oppgir 84 vunne taklinger og 61 vellykkede innlegg for Mikkel Kirkeskov i 2016, samt to mål scoret direkte på frispark. Dette er konkrete underlag for tackling, crossing og set_pieces, ikke generelle forsvarsegenskaper.",
+    claim: "VG-lupen før 2017-sesongen dokumenterer at Mikkel Kirkeskov vant 84 taklinger i 2016 (flest i Eliteserien), traff på 61 innlegg (nest flest), og scoret to ganger direkte på frispark. Dette er sesongfordelte målinger av tackling og crossing, samt konkret belegg for set_pieces. Det er ikke kildegrunnlag for overlapping_runs, vision eller defensive_reading bare fordi han spilte venstreback.",
     source: "https://www.vg.no/spesial/2017/vglupen/?plassering=12"
   },
   {
@@ -658,6 +658,17 @@ const documented = [
   // --- Aalesund 11.10.2026: official match reports and contemporary press ---
   // Archived one-off actions are below in P1_NEW_EVENT_ONLY.
   // --- Aalesund 11.10.2026: independently verified player-specific acts ---
+
+  {
+    playerId: "aron_elis_randarson",
+    placeId: "color_line_stadion",
+    evidenceKind: "season_statistics",
+    playingStyle: "Fleksibel venstrekant, spiss og hengende spiss med målbar, gjentatt suksess i driblinger: VG oppga 38 vellykkede forsøk av 49 i 2016-sesongen. Fordelingen mellom 16 starter på venstre kant og resten i angrepsroller beskriver bruken, ikke en egen ferdighet. En enkelt heading i 2019 beholdes som historisk kamphendelse, ikke attributtgrunnlag.",
+    strengths: ["dribbling"],
+    claim: "VG-lupen 2017 beskriver at Aron Elís Þrándarson i 2016 lyktes med 38 av 49 avdriblinger over sesongen; dette er 77,6 prosent og et direkte sesongbasert belegg for dribbling. Han startet 23 kamper, 16 som venstrekant og resten som spiss/hengende spiss. AaFKs referat fra Sogndal-kampen 04.05.2019 dokumenterer én heading og oppbevares kun som supplerende hendelse, ikke som heading-styrke.",
+    source: "https://www.vg.no/spesial/2017/vglupen/?plassering=12",
+    supportingSources: ["https://www.aafk.no/nyheter/for-en-snuoperasjon-sogndal"]
+  },
 
 ];
 
@@ -709,14 +720,6 @@ const eventOnly = [
     legacyTokens: ["crossing"],
     claim: "AaFKs Skeid-referat fra 2019 beskriver at Oddbjørn Lie slo et «strøkent innlegg» som Hólmbert Friðjónsson headet i mål.",
     source: "https://www.aafk.no/nyheter/islandsk-festkveld"
-  },
-  {
-    playerId: "aron_elis_randarson",
-    placeId: "color_line_stadion",
-    evidenceKind: "single_match_event",
-    legacyTokens: ["heading"],
-    claim: "AaFKs referat fra Sogndal-kampen 04.05.2019 beskriver at Aron Elís Þrándarson headet Jørgen Hatlehols innlegg i mål til 1–1.",
-    source: "https://www.aafk.no/nyheter/for-en-snuoperasjon-sogndal"
   },
   {
     playerId: "markus_karlsbakk",
