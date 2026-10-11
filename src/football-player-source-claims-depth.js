@@ -437,6 +437,24 @@ const documented = [
     sourceKind: "press"
   },
 
+  // --- Rosenborg: repeatable performance and individual playing traits ------
+  {
+    playerId: "marius_broholm",
+    clubId: "rosenborg",
+    strengths: ["dribbling", "simple_passing"],
+    claim: "TACTIX' sesongbaserte spilleranalyse for 2025 vurderer Broholms «Passing (elite, 97th percentile) and Dribbling (elite, 94th percentile)» sammenlignet med 62 angripere i Eliteserien. Registreringen gjelder dokumentert drible- og pasningskvalitet, ikke langpasningsspesialisering eller antatt avslutningsevne.",
+    source: "https://tactix.football/player/m-broholm",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "ole_saeter",
+    clubId: "rosenborg",
+    strengths: ["heading"],
+    claim: "Rosenborg beskriver Ole Sæters særpreg ved innhoppet mot Mainz 21.08.2025 som «direkte spill og hodestyrke» og skriver at «Sæters hodestyrke» endret oppgjøret. Den generelle ferdighetsvurderingen støtter heading; ett mål i seg selv gir ikke finishing eller andre attributter.",
+    source: "https://www.rbk.no/nyheter/godt-utgangspunkt-etter-sen-saeter-scoring",
+    sourceKind: "club"
+  },
+
 ];
 
 export const SOURCE_DEPTH_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
