@@ -690,6 +690,57 @@ const documented = [
     claim: "Rosenborgs historiske kampreferat om avslutningen på Tippeligaen 2010 beskriver at Magnus Sylling Olsen kom gjennom fra venstresiden og banket ballen kontant i mål i siste ordinære minutt. Dette er en eksplisitt vellykket avslutning (finishing); ingen egenskap utledes av totalscoring.",
     source: "https://www.rbk.no/nyheter/rbk-ubeseiret-i-2010"
   }
+  // --- Aalesund, 11.10.2026: independently checked club and match sources ---
+  {
+    playerId: "joakim_austnes",
+    placeId: "color_line_stadion",
+    strengths: ["pace", "dribbling"],
+    claim: "AaFKs omtale 8. juni 2021 kaller Joakim Austnes en fotrapp driblefant og fryktet kantspiller. Det dokumenterer konkret hurtighet og dribling; verken mål eller rolle brukes som indirekte styrkebelegg.",
+    source: "https://www.aafk.no/nyheter/manedens-spiller-i-fotspora-til-jokke"
+  },
+  {
+    playerId: "abderrazak_hamdallah",
+    placeId: "color_line_stadion",
+    strengths: ["heading", "finishing"],
+    claim: "AaFKs historiske Viking-referat (kamp 25. oktober 2013) beskriver en kontrollert heading etter Phillips' innlegg, en senere presis avslutning og et kontant skudd fra 16 meter. Bare heading og finishing føres.",
+    source: "https://www.aafk.no/nyheter/hamed-allahs-store-kveld"
+  },
+  {
+    playerId: "demar_phillips",
+    placeId: "color_line_stadion",
+    strengths: ["crossing"],
+    claim: "AaFKs historiske Viking-referat beskriver Demar Phillips som slo et presist innlegg til Abderrazak Hamdallahs kontrollerte heading 25. oktober 2013. Kun crossing føres fra det konkrete innlegget.",
+    source: "https://www.aafk.no/nyheter/hamed-allahs-store-kveld"
+  },
+  {
+    playerId: "eirik_hoseth",
+    placeId: "color_line_stadion",
+    strengths: ["heading"],
+    claim: "Dagbladets samtidige referat fra Aalesund–Hødd 20. juli 2001 beskriver Eirik Hoseth som headet inn returen etter et reddet skudd fra Paulo dos Santos. Kun heading føres fra den konkrete scoringen.",
+    source: "https://www.dagbladet.no/sport/1-divisjon-20-juli/65740469"
+  },
+  {
+    playerId: "erling_yttis_ytterland",
+    placeId: "color_line_stadion",
+    strengths: ["set_pieces"],
+    claim: "Dagbladets samtidige Aalesund–Hødd-referat 20. juli 2001 beskriver en presis corner fra Erling Ytterland som Tor Hogne Aarøy headet i mål. Dette dokumenterer set_pieces, uten å utlede øvrig pasningskvalitet.",
+    source: "https://www.dagbladet.no/sport/1-divisjon-20-juli/65740469"
+  },
+  {
+    playerId: "amund_skiri",
+    placeId: "color_line_stadion",
+    strengths: ["set_pieces"],
+    claim: "Aftenpostens samtidige Aalesund–Lillestrøm-referat i 2003 beskriver et langt frispark fra Amund Skiri rett i beina på Eirik Hoseth, som avsluttet i mål. Kun set_pieces føres fra den dokumenterte dødballleveransen.",
+    source: "https://www.aftenposten.no/sport/fotball/i/2G9KMy/hoseths-blinkskudd"
+  },
+  {
+    playerId: "bjorn_erik_melland",
+    placeId: "color_line_stadion",
+    strengths: ["heading"],
+    claim: "AaFKs historiske omtale av stadionåpningen mot Odd 16. april 2005 beskriver at Bjørn Erik Melland headet et hjørnespark ut i feltet, før Lasse Olsen senere satte ballen i mål. Kun den konkret utførte headingen registreres, ikke generell duellstyrke.",
+    source: "https://www.aafk.no/historisk-arkiv/nyheter/vare-baner-color-line-stadion"
+  },
+
 ];
 
 export const P1_NEW_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
