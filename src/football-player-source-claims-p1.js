@@ -67,6 +67,8 @@ const documented = [
   {
     playerId: "frank_mathiesen",
     placeId: "color_line_stadion",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Historisk keeperomtale fremhever spektakulære redninger, spenst og rekkevidde.",
     strengths: ["shot_stopping", "jumping"],
     claim: "Aalesund's historical archive remembers Mathiesen for spectacular saves, enormous spring and exceptional reach on seemingly unreachable balls.",
     source: "https://www.aafk.no/historisk-arkiv/nyheter/da-fotballfeberen-brot-ut"
@@ -241,6 +243,8 @@ const documented = [
   {
     playerId: "ulrik_valderhaug_syversen",
     placeId: "color_line_stadion",
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Brattvåg omtaler ansvarstaking og tydelig lederrolle; øvrig ferdighetsprofil er ikke dokumentert.",
     strengths: ["leadership"],
     claim: "«Han har teke stort ansvar, vore ein leiar i laget»",
     source: "https://brattvag-il.no/herrelag/herrelaget/takk-for-no-ulrik"
@@ -249,6 +253,8 @@ const documented = [
   {
     playerId: "herman_ekeberg",
     placeId: "color_line_stadion",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Skuddfinten beskrives som et personlig kjennetegn i AaFKs historiske omtale.",
     strengths: ["dribbling"],
     claim: "AaFKs historiske 2002-gjennomgang beskriver at Herman Ekeberg «gjorde skuddfinta til sin egen». Den konkret omtalte ballfinten bærer dribbling; mål og antall kamper gir ingen tilleggsegenskaper.",
     source: "https://www.aafk.no/historisk-arkiv/nyheter/da-fotballfeberen-brot-ut"
@@ -256,6 +262,8 @@ const documented = [
   {
     playerId: "trond_fredriksen",
     placeId: "color_line_stadion",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Klubbens historiske tekst fremhever en gjennomgående stor arbeidsinnsats.",
     strengths: ["work_rate"],
     claim: "AaFKs historiske gjennomgang beskriver at Trond Fredriksen «la alltid ned en formidabel innsats». Kun arbeidsinnsats føres; omtalen av skuddfot tilordnes ikke et spesifikt skuddtoken.",
     source: "https://www.aafk.no/historisk-arkiv/nyheter/da-fotballfeberen-brot-ut"
@@ -263,6 +271,8 @@ const documented = [
   {
     playerId: "pal_stadsnes",
     placeId: "color_line_stadion",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Venstrefoten og farlige hjørnespark fremheves som særpreg i historisk klubbomtale.",
     strengths: ["set_pieces"],
     claim: "AaFK beskriver Pål Stadsnes som særlig farlig på hjørnespark med venstrefoten. Kun dødballferdigheter føres.",
     source: "https://www.aafk.no/historisk-arkiv/nyheter/da-fotballfeberen-brot-ut"
@@ -270,6 +280,8 @@ const documented = [
   {
     playerId: "kristian_hemmingsen_lonebu",
     placeId: "color_line_stadion",
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Akademilederen beskriver avslutninger med begge bein og hodet som deler av spissens repertoar.",
     strengths: ["finishing", "heading"],
     claim: "AaFKs akademileder Sindre Eid beskriver Kristian Lonebu som «en god avslutter med begge bein og med hodet» ved proffkontrakten i desember 2024. Dette bærer finishing og heading, ikke øvrige kvaliteter fra målstatistikken.",
     source: "https://www.aafk.no/nyheter/forste-proffkontrakt-for-lokal-spiss"
@@ -564,6 +576,8 @@ const documented = [
   {
     playerId: "tor_hogne_aaroy",
     placeId: "color_line_stadion",
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Møtende targetspiss som også kunne brukes som oppspillspunkt og legge av til fremrykkende medspillere.",
     strengths: ["heading", "hold_up_play", "combination_play"],
     claim: "To samtidige beskrivelser dokumenterer mer enn luftspillet: Start-trener Tørum og Ole Martin Årst fremhever Aarøys luftstyrke. I Aftenposten 03.05.2008 beskriver Aarøy hvordan han møter oppspill langs bakken, legger av til en fremadstormende midtbanespiller og tilrettelegger for Diego Silva. Dette bærer heading, hold_up_play og combination_play, ikke fart eller avslutninger.",
     source: "https://www.aftenposten.no/sport/fotball/i/LA6GMq/det-stemmer-for-aaroey",
@@ -572,6 +586,8 @@ const documented = [
   {
     playerId: "sten_grytebust",
     placeId: "color_line_stadion",
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Flere sterke redninger og positive individuelle vurderinger fra trenere/keepere; ingen bred keeperprofil er dokumentert.",
     strengths: [
       "shot_stopping"
     ],
@@ -581,6 +597,8 @@ const documented = [
   {
     playerId: "michael_barrantes",
     placeId: "color_line_stadion",
+    evidenceKind: "editorial_appraisal",
+    playingStyle: "Presis ballfordeler med overblikk; rollen bak spissen kontra inntrekk fra kanten var sentral for lagets balanse.",
     strengths: ["vision", "simple_passing"],
     claim: "VG-lupen 2014 beskriver Michael Barrantes som en av ligaens mest presise ballfordelere, med et spesielt overblikk og en rolle der han styrte kamper. Teksten beskriver at han helst spilte bak spissen, men også startet på kanten og trakk inn. Fører vision og simple_passing; enkeltcorneren mot Brann fra 2011 beholdes som hendelseskilde, ikke som permanent set_pieces-bevis.",
     source: "https://www.vg.no/spesial/2014/vglupen/viewteam/?lag=Aalesund&plassering=8",
@@ -589,6 +607,8 @@ const documented = [
   {
     playerId: "leke_james",
     placeId: "color_line_stadion",
+    evidenceKind: "period_appraisal",
+    playingStyle: "Tok mye av lagets defensive grovarbeid i deler av sesongen, noe som påvirket overskuddet i angrep.",
     strengths: [
       "work_rate"
     ],
@@ -599,6 +619,8 @@ const documented = [
   {
     playerId: "joakim_austnes",
     placeId: "color_line_stadion",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Fotrapp kantspiller som ble omtalt som en fryktet dribler.",
     strengths: ["pace", "dribbling"],
     claim: "AaFKs omtale 8. juni 2021 kaller Joakim Austnes en fotrapp driblefant og fryktet kantspiller. Det dokumenterer konkret hurtighet og dribling; verken mål eller rolle brukes som indirekte styrkebelegg.",
     source: "https://www.aafk.no/nyheter/manedens-spiller-i-fotspora-til-jokke"
@@ -608,6 +630,8 @@ const documented = [
   {
     playerId: "fredrik_ulvestad",
     placeId: "color_line_stadion",
+    evidenceKind: "editorial_appraisal",
+    playingStyle: "Omtalt som straffesparkspesialist, ikke som generell hjørnespark-/frisparkekspert.",
     strengths: ["set_pieces"],
     claim: "VG-lupen 2014 omtaler Fredrik Ulvestad uttrykkelig som «Straffeekspert». Dette bærer kun set_pieces i dagens vokabular, med presis avgrensning til straffespark. Enkeltinnlegget og kontringsscoringen mot Stabæk beholdes som hendelseskilde, ikke som varig crossing/finishing.",
     source: "https://www.vg.no/spesial/2014/vglupen/viewteam/?lag=Aalesund&plassering=8",
@@ -616,6 +640,8 @@ const documented = [
   {
     playerId: "mikkel_kirkeskov",
     placeId: "color_line_stadion",
+    evidenceKind: "season_statistics",
+    playingStyle: "Sesongbaserte tall for vunne taklinger og vellykkede innlegg, med særskilte frisparkscoringer.",
     strengths: ["tackling", "crossing", "set_pieces"],
     claim: "VG-lupen foran 2017-sesongen oppgir 84 vunne taklinger og 61 vellykkede innlegg for Mikkel Kirkeskov i 2016, samt to mål scoret direkte på frispark. Dette er konkrete underlag for tackling, crossing og set_pieces, ikke generelle forsvarsegenskaper.",
     source: "https://www.vg.no/spesial/2017/vglupen/?plassering=12"
@@ -623,6 +649,8 @@ const documented = [
   {
     playerId: "robert_sandnes",
     placeId: "color_line_stadion",
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Klubbens spilleromtale fremhever energi og arbeidsinnsats, uten å dokumentere tekniske styrker.",
     strengths: ["work_rate"],
     claim: "Aalesunds FKs spillerpresentasjon «Sunnmøres stolthet del 1» 09.04.2018 omtaler Robert Sandnes eksplisitt som «den energiske og hardtarbeidende ålesunderen». Dette støtter bare work_rate, ikke hurtighet eller tekniske egenskaper.",
     source: "https://www.aafk.no/nyheter/sunnmores-stolthet-del-1"
