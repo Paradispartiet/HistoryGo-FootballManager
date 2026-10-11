@@ -656,7 +656,7 @@ const documented = [
     source: "https://www.aafk.no/nyheter/sunnmores-stolthet-del-1"
   },
   // --- Aalesund 11.10.2026: official match reports and contemporary press ---
-,
+  // Archived one-off actions are below in P1_NEW_EVENT_ONLY.
   // --- Aalesund 11.10.2026: independently verified player-specific acts ---
 
 ];
