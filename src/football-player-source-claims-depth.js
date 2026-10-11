@@ -455,6 +455,40 @@ const documented = [
     sourceKind: "club"
   },
 
+  // --- Rosenborg: individually described historical playing qualities ------
+  {
+    playerId: "andre_hansen",
+    clubId: "rosenborg",
+    strengths: ["distribution"],
+    claim: "RBK-trener Kåre Ingebrigtsen begrunnet keepervalget i januar 2015 med at André Hansen var «svært god med beina» og «dyktig på frispilling». Dette støtter distribusjon og kontrollert frispilling; redninger og feltarbeid utledes ikke av beskrivelsen.",
+    source: "https://www.bt.no/sport/i/K3yxL7/andre-hansen-det-aa-maake-bort-ballen-har-jeg-ikke-sansen-for",
+    sourceKind: "press"
+  },
+  {
+    playerId: "anthony_annan",
+    clubId: "rosenborg",
+    strengths: ["simple_passing"],
+    claim: "Adresseavisens pasningsanalyse gjengitt i Stavanger Aftenblad i april 2010 viste at Anthony Annan hadde høyest pasningspresisjon på Rosenborg i den undersøkte kampen og foretrakk korte pasninger. Annan sa: «Jeg foretrekker den korte typen og å slå ballen i beina.» Dette underbygger simple_passing, men ikke lange gjennombruddspasninger eller presise taklingsattributter.",
+    source: "https://www.aftenbladet.no/sport/i/qnzxaw/annan-kjenner-seg-ikke-igjen-i-kritikken",
+    sourceKind: "press"
+  },
+  {
+    playerId: "pal_andre_helland",
+    clubId: "rosenborg",
+    strengths: ["set_pieces"],
+    claim: "Bergens Tidende beskrev Pål André Hellands direkte frispark i oppkjøringen 2014 og siterte Hellands formulering: «Frispark i så gode posisjoner skal i mål.» Han fortalte også om en fast frisparkavtale med trener Bård Wiggen og vurderinger av murens plassering. Dokumenterer direkte frisparkteknikk (set_pieces), ikke presisjon på alle former for dødball eller generell avslutningsevne.",
+    source: "https://www.bt.no/sport/i/706wno/varsler-rush-av-frisparkmaal",
+    sourceKind: "press"
+  },
+  {
+    playerId: "sigurd_rushfeldt",
+    clubId: "rosenborg",
+    strengths: ["strength"],
+    claim: "Dagbladet beskrev i juli 1999 Sigurd Rushfeldts spillestil som en spiss som kunne virke anonym før han scoret, og siterte sin tidligere karakteristikk av ham som «kynisk og råsterk målmaskin». «Råsterk» gir et individuelt belegg for fysisk styrke; målproduksjonen gir ikke automatisk finishing, heading eller positioning.",
+    source: "https://www.dagbladet.no/nyheter/rushlefot/65533532",
+    sourceKind: "press"
+  }
+
 ];
 
 export const SOURCE_DEPTH_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
