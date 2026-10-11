@@ -820,6 +820,43 @@ const documented = [
     claim: "Lyns samtidige kampreferat fra Aalesund–Lyn 22.10.2025 beskriver at Henrik Molvær Melland avsluttet hurtig på returen etter Elias Heggland Myrlids stolpeskudd, og avgjorde kampen 2–1 i det 89. minutt. Kun finishing føres; skuddet beskrives ikke som langskudd.",
     source: "https://www.lyn1896.no/nyheter/tung-avslutning-pa-color-line--tapte-i-siste-minutt"
   }
+,
+  // --- Aalesund 11.10.2026: independently verified player-specific acts ---
+  {
+    playerId: "paulo_dos_santos",
+    placeId: "color_line_stadion",
+    strengths: ["set_pieces"],
+    claim: "Bergens Tidendes samtidige AaFK–Fredrikstad-referat 29.05.2005 beskriver at Paulo dos Santos skrudde et frispark fra cirka 16 meter direkte i mål, og at han selv forklarte hvordan han utnyttet keeperens posisjon. Dokumenterer kun set_pieces, ikke generell finishing eller skuddstyrke.",
+    source: "https://www.bt.no/sport/i/Opr4WE/aarsbeste-av-aafk"
+  },
+  {
+    playerId: "simen_vatne_haram",
+    placeId: "color_line_stadion",
+    strengths: ["heading"],
+    claim: "AaFKs cupreferat mot HamKam 20.05.2025 beskriver at Simen Vatne Haram møtte Kristoffer Nessøs presise innlegg på bakerste stolpe og headet sikkert i mål til 2–1. Bare heading føres.",
+    source: "https://www.aafk.no/nyheter/kvartfinalen-er-sikret"
+  },
+  {
+    playerId: "elias_heggland_myrlid",
+    placeId: "color_line_stadion",
+    strengths: ["dribbling", "finishing"],
+    claim: "AaFKs cupreferat fra Langevåg 2026 beskriver at Elias Heggland Myrlid fintet bort to motspillere før han satte ballen kontrollert i mål etter ni minutter. Den konkrete sekvensen dokumenterer dribbling og finishing, uten å utlede fart eller utholdenhet.",
+    source: "https://www.aafk.no/nyheter/aafk-videre-i-nm-etter-cupfest-i-langevagen"
+  },
+  {
+    playerId: "hakon_butli_hammer",
+    placeId: "color_line_stadion",
+    strengths: ["long_shots"],
+    claim: "Dagsavisens samtidige rapport fra Aalesund–Tromsø høsten 2023 beskriver at Håkon Butli Hammer banket til fra distanse og scoret med et skudd som overrasket keeper Jakob Haugaard. Dette dokumenterer long_shots fra en konkret distanseavslutning.",
+    source: "https://www.dagsavisen.no/sport/tabelljumbo-aalesund-slo-medaljejagende-tromso/6917197"
+  },
+  {
+    playerId: "frode_fagermo",
+    placeId: "color_line_stadion",
+    strengths: ["set_pieces"],
+    claim: "Dagbladets samtidige 1. divisjonsbørs 30.04.2001 beskriver at Aalesund utlignet mot L/F Hønefoss etter ett av Frode Fagermos lange innkast, som Sandø banket i mål. Dokumenterer en konkret dødballleveranse fra innkast, ikke generelt pasningsregister eller crossing.",
+    source: "https://www.dagbladet.no/sport/1-divisjonsbors---2-runde/65710337"
+  }
 
 ];
 
