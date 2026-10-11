@@ -116,6 +116,40 @@ test("melding åpnes i drawer og kalenderdagen blir stående", async ({ page }) 
   await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Onsdag");
 });
 
+test("kalenderens klubbmail kan åpnes og lukkes gjentatte ganger i inbox-fasen", async ({ page }) => {
+  // Exercise the same phase and close button as the Rosenborg deep-season
+  // scenario without conflating drawer behavior with a 30-round timeout.
+  await page.evaluate(() => {
+    const key = "hgfm.teamMerits.v1";
+    const merits = JSON.parse(localStorage.getItem(key) || "{}");
+    merits.clubWeekState = { ...merits.clubWeekState, phase: "inbox" };
+    localStorage.setItem(key, JSON.stringify(merits));
+    window.dispatchEvent(new Event("updateProfile"));
+  });
+  await openOfficeCalendar(page);
+  await expect(page.locator("#managerCalendarNow")).toHaveText("Uke 3 · Tirsdag");
+
+  let message = null;
+  for (const day of [1, 3, 5]) {
+    await page.locator(`#managerCalendarDays [data-day="${day}"]`).click();
+    const candidate = page.locator('#managerCalendarTimeline [data-event-kind="message"]').first();
+    if (await candidate.count()) {
+      message = candidate;
+      break;
+    }
+  }
+  expect(message).toBeTruthy();
+  const drawer = page.locator("#managerCalendarMessageDrawer");
+  for (let repeat = 0; repeat < 3; repeat += 1) {
+    await message.click();
+    await expect(drawer).toBeVisible();
+    await expect(drawer.locator(".manager-club-mail")).toBeVisible();
+    await drawer.locator(".manager-calendar-drawer-close").click();
+    await expect(drawer).toBeHidden();
+    await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  }
+});
+
 test("kalenderfooteren viser dagens neste hendelse og åpner aktuell dag", async ({ page }) => {
   await openOfficeCalendar(page);
   await expect(page.locator("manager-next-action")).toBeVisible();
