@@ -784,6 +784,43 @@ const documented = [
     claim: "AaFKs referat fra AaFK 2–Florø 12.10.2022 beskriver at Bjørn Martin Kristensen scoret etter innlegg fra John Kitolano i det 53. minutt. Kun det konkret utførte innlegget dokumenterer crossing.",
     source: "https://www.aafk.no/nyheter/aafk-2-sikret-opprykket"
   }
+,
+  // --- Aalesund 11.10.2026: official match reports and contemporary press ---
+  {
+    playerId: "tero_mantyla",
+    placeId: "color_line_stadion",
+    strengths: ["heading"],
+    claim: "AaFKs treningskampreferat mot Hødd publisert 27.01.2017 beskriver at Tero Mäntylä var riktig plassert på corner og headet inn 4–0. Bare den dokumenterte headingen tilordnes ham.",
+    source: "https://www.aafk.no/nyheter/knuste-hodd-pa-color-line-stadion"
+  },
+  {
+    playerId: "diego_silva",
+    placeId: "color_line_stadion",
+    strengths: ["dribbling", "crossing"],
+    claim: "Bergens Tidendes samtidige referat fra AaFK–Viking 28.02.2010 beskriver at Diego Silva ved flere anledninger rundlurte Vikings back Christian Landu Landu. Hans innlegg etter 16 minutter skapte en dobbeltsjanse. Kilden dokumenterer dribbling og crossing, ikke en generell spillerkarakter.",
+    source: "https://www.bt.no/sport/i/K3yPQ4/aalesund-naermest-seieren-mot-viking"
+  },
+  {
+    playerId: "david_fallman",
+    placeId: "color_line_stadion",
+    strengths: ["heading"],
+    claim: "AaFKs kampreferat mot Sandnes Ulf 24.10.2021 beskriver at David Fällman møtte David Kristjan Olafssons innlegg og headet inn 2–1 etter 51 minutter. Kun heading føres, ikke andre defensive egenskaper.",
+    source: "https://www.aafk.no/nyheter/holdt-til-uavgjort-av-sandnes-ulf"
+  },
+  {
+    playerId: "edvard_skagestad",
+    placeId: "color_line_stadion",
+    strengths: ["tackling"],
+    claim: "VG Lives samtidige referat fra AaFK–Strømsgodset 2–1 beskriver ved 59 minutter at Edvard Skagestad taklet til seg ballen i duell med Iver Fossum. Kun den konkret dokumenterte taklingen føres.",
+    source: "https://vglive.vg.no/kamp/aalesund-str%C3%B8msgodset/145384/rapport"
+  },
+  {
+    playerId: "henrik_molvaer_melland",
+    placeId: "color_line_stadion",
+    strengths: ["finishing"],
+    claim: "Lyns samtidige kampreferat fra Aalesund–Lyn 22.10.2025 beskriver at Henrik Molvær Melland avsluttet hurtig på returen etter Elias Heggland Myrlids stolpeskudd, og avgjorde kampen 2–1 i det 89. minutt. Kun finishing føres; skuddet beskrives ikke som langskudd.",
+    source: "https://www.lyn1896.no/nyheter/tung-avslutning-pa-color-line--tapte-i-siste-minutt"
+  }
 
 ];
 
