@@ -429,14 +429,6 @@ const documented = [
   },
   // --- Rosenborg: verified individual playing-style descriptions -----------
   {
-    playerId: "roar_strand",
-    clubId: "rosenborg",
-    strengths: ["work_rate", "stamina", "tackling", "finishing"],
-    claim: "Store norske leksikon beskriver Roar Strand som «løpssterk» og fremhever «arbeidskapasiteten og aksjonsradiusen» samt at han var «taklingssterk» og hadde «gode avslutningsegenskaper». Dette dokumenterer de fire konkrete trekkene, ikke automatisk pasningsspill eller rollebonus.",
-    source: "https://snl.no/Roar_Strand",
-    sourceKind: "encyclopedia"
-  },
-  {
     playerId: "bent_skammelsrud",
     clubId: "rosenborg",
     strengths: ["simple_passing", "game_reading"],
