@@ -476,7 +476,7 @@ const documented = [
     playerId: "pal_andre_helland",
     clubId: "rosenborg",
     strengths: ["set_pieces"],
-    claim: "Bergens Tidende beskrev Pål André Hellands direkte frispark i oppkjøringen 2014 og siterte ham om den faste frisparkavtalen med trener Bård Wiggen og hans målrettede valg av plassering ved mur. Dokumenterer direkte frisparkteknikk (set_pieces), ikke presisjon på alle former for dødball eller generell avslutningsevne.",
+    claim: "Bergens Tidende beskrev Pål André Hellands direkte frispark i oppkjøringen 2014 og siterte Hellands formulering: «Frispark i så gode posisjoner skal i mål.» Han fortalte også om en fast frisparkavtale med trener Bård Wiggen og vurderinger av murens plassering. Dokumenterer direkte frisparkteknikk (set_pieces), ikke presisjon på alle former for dødball eller generell avslutningsevne.",
     source: "https://www.bt.no/sport/i/706wno/varsler-rush-av-frisparkmaal",
     sourceKind: "press"
   },
