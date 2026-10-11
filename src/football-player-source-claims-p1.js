@@ -741,6 +741,50 @@ const documented = [
     source: "https://www.aafk.no/historisk-arkiv/nyheter/vare-baner-color-line-stadion"
   },
 
+  // --- Aalesund, 11.10.2026: contemporary reports / quantified skill evidence ---
+  {
+    playerId: "fredrik_ulvestad",
+    placeId: "color_line_stadion",
+    strengths: ["crossing", "finishing"],
+    claim: "Aftenpostens samtidige Aalesund–Stabæk-referat beskriver et «herlig innlegg» fra Fredrik Ulvestad til Leke James' heading, og at Ulvestad senere løp alene gjennom etter en kontring og satte ballen kontrollert forbi keeper. Fører bare crossing og finishing fra de to konkrete handlingene.",
+    source: "https://www.aftenposten.no/sport/fotball/i/AdRxbM/aalesund-knuste-stabaek"
+  },
+  {
+    playerId: "sander_post",
+    placeId: "color_line_stadion",
+    strengths: ["heading", "finishing"],
+    claim: "Stavanger Aftenblads cupreferat fra Tornado/Måløy–Aalesund 11.05.2011 beskriver at Sander Post stusset Solomon Okoronkwo gjennom til mål og vant flere luftdueller; han satte selv ballen i mål etter å ha blitt spilt gjennom. Fører bare heading og finishing.",
+    source: "https://www.aftenbladet.no/sport/i/XwGmK7/ingen-cupbombe-detonert-i-maaloey"
+  },
+  {
+    playerId: "mikkel_kirkeskov",
+    placeId: "color_line_stadion",
+    strengths: ["tackling", "crossing", "set_pieces"],
+    claim: "VG-lupen foran 2017-sesongen oppgir 84 vunne taklinger og 61 vellykkede innlegg for Mikkel Kirkeskov i 2016, samt to mål scoret direkte på frispark. Dette er konkrete underlag for tackling, crossing og set_pieces, ikke generelle forsvarsegenskaper.",
+    source: "https://www.vg.no/spesial/2017/vglupen/?plassering=12"
+  },
+  {
+    playerId: "daniel_leo_gretarsson",
+    placeId: "color_line_stadion",
+    strengths: ["heading"],
+    claim: "AaFKs samtidige Strømmen-referat 11.08.2019 beskriver at Daníel Leó Grétarsson steg høyest på en corner og nikket inn 1–0. Kun heading føres fra den konkret dokumenterte scoringen.",
+    source: "https://www.aafk.no/nyheter/seiersrekka-fortsatte"
+  },
+  {
+    playerId: "robert_sandnes",
+    placeId: "color_line_stadion",
+    strengths: ["work_rate"],
+    claim: "Aalesunds FKs spillerpresentasjon «Sunnmøres stolthet del 1» 09.04.2018 omtaler Robert Sandnes eksplisitt som «den energiske og hardtarbeidende ålesunderen». Dette støtter bare work_rate, ikke hurtighet eller tekniske egenskaper.",
+    source: "https://www.aafk.no/nyheter/sunnmores-stolthet-del-1"
+  },
+  {
+    playerId: "john_kitolano",
+    placeId: "color_line_stadion",
+    strengths: ["crossing"],
+    claim: "AaFKs referat fra AaFK 2–Florø 12.10.2022 beskriver at Bjørn Martin Kristensen scoret etter innlegg fra John Kitolano i det 53. minutt. Kun det konkret utførte innlegget dokumenterer crossing.",
+    source: "https://www.aafk.no/nyheter/aafk-2-sikret-opprykket"
+  }
+
 ];
 
 export const P1_NEW_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
