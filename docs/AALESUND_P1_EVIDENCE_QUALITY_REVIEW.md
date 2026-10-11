@@ -40,3 +40,34 @@ De øvrige 11 bevarte kvalitetspostene har sine egne vurderingskilder og en eksp
 - Full CI, ikke lett spiller-CI, kreves ved denne semantiske overgangen.
 
 **Avgrensning:** Aalesund er metodisk pilot. Det er ikke gitt at andre klubbers P1/P2/source-depth-poster oppfyller denne strengere kvalitetsstandarden; de må senere vurderes hver for seg. Motor, posisjoner og råkatalog er uendret. Datalaget har bevisst redusert antall direkte spillerstyrker der grunnlaget var for svakt.
+
+
+## Andre kildepass – 11.10.2026: taktisk dybde, ikke ny attributtinflasjon
+
+Den første revisjonens 14 + 32 + 23 beskriver **status ved første gjennomgang** og beholdes som historisk sammenligningsgrunnlag. Dette kildepasset gir **15 dokumenterte varige profiler + 31 dokumenterte enkelthendelsesprofiler + 23 uten kvalifiserende styrkekilde = 69**. Alle 46 allerede kildeundersøkte spiller-ID-er er fortsatt bevart.
+
+| Spiller | Etter andre kildepass | Spesifikt nytt belegg |
+| --- | --- | --- |
+| Kristian Hemmingsen Lonebu | `finishing, heading, work_rate` | Hovedtrener Kjetil Rekdal kalte ham hardtarbeidende med målteft; Sindre Eid konkretiserte avslutninger med begge bein og hodet. Trening i feltposisjonering og løp er **ikke** tolket som mestrede ferdigheter. |
+| Fredrik Ulvestad | `work_rate, set_pieces` | Rekdal omtalte ham som en hybrid av ballvinner og offensiv playmaker; analyser beskriver løpssterk indreløper. Straffesparkbelegg beholdes som avgrenset dødballstyrke. |
+| Sten Grytebust | `shot_stopping, command_of_area` | Landslagskeeper Jon Knudsen vurderte ham som bevegelig og god i feltet og på streken, VG som sterk skuddstopper med god kommunikasjon. Verken ballfordeling eller bred lederskapsevne er utledet. |
+| Michael Barrantes | `vision, passing_range, chance_creation` | Rekdals offensive playmaker-rolle, VGs vurdering av særlig presis ballfordeling, samt en konkret langpasning som skapte mål dokumentert av Dagbladet. En enkelt langpasning ville ikke vært nok alene. `simple_passing` er erstattet med mer presise attributter. |
+| Tor Hogne Aarøy | `heading, hold_up_play, combination_play` | Ingen nye styrketoken, men mer detaljert historisk skille mellom oppspillspunkt, møtende spiss og skiftet fra langballspill til mer Barrantes-basert spill. |
+| Mikkel Kirkeskov | `tackling, crossing, set_pieces` | Ingen nye styrketoken. 2016-statistikken er presisert med **flest** vunnede taklinger i ligaen (84), **nest flest** vellykkede innlegg (61) og to direkte frisparksmål. Det gir ikke grunnlag for å finne på overlappinger eller spillelesning. |
+| Aron Elís Þrándarson | `dribbling` (fra `HENDELSE` til `DOKUMENTERT`) | VG oppgir **38 av 49** vellykkede driblinger i 2016, over en sesong; 16 av hans 23 starter var på venstre kant, resten som spiss eller hengende spiss. Den gamle enkeltheadingen fra 2019 oppbevares som supplerende historisk kilde, men skaper ingen heading-styrke. |
+
+### Nye eller styrkede kilder
+
+- [AaFK, Lonebus første proffkontrakt (2024)](https://www.aafk.no/nyheter/forste-proffkontrakt-for-lokal-spiss)
+- [BT, Rekdal om Aalesunds midtbaneroller (2012)](https://www.bt.no/sport/i/op67BV/rekdal-aapner-for-to-nye-spisser)
+- [BT, løpssterke Aalesund-indreløpere (2014)](https://www.bt.no/sport/i/XgbgPb/aafk-vil-savne-hamed-allah)
+- [BT, Ulvestads løpskraft og straffespark (2020)](https://www.bt.no/sport/i/41z7eG/stor-presentasjon-dette-er-det-norske-noedlandslaget)
+- [Aftenposten, Jon Knudsen om Grytebusts feltarbeid (2011)](https://www.aftenposten.no/sport/fotball/i/4qLd1G/rekdal-norges-neste-landslagskeeper)
+- [VG-lupen, Aalesund 2014](https://www.vg.no/spesial/2014/vglupen/viewteam/?lag=Aalesund&plassering=8)
+- [Nettavisen, Rekdal om skiftet fra Aarøy-stil til Barrantes (2011)](https://www.nettavisen.no/artikkel/kan-godt-hende-vi-driter-oss-ut/s/12-95-3267654)
+- [Dagbladet, Barrantes' lange målgivende oppspill (2013)](https://www.dagbladet.no/sport/maldrama-da-aalesund-tok-sin-tredje-strake-seier/62942066)
+- [VG-lupen, Aalesund 2017 (sesongtall fra 2016)](https://www.vg.no/spesial/2017/vglupen/?plassering=12)
+
+### Metodisk presisering
+
+Dette er **bare registreringer der kilden dokumenterer konkrete spilleegenskaper**. Rollebeskrivelser, trenernes historiske valg og observasjoner om opplæring brukes til å gjøre `playingStyle` mer nyansert, men løftes ikke automatisk til `strengths`. Avslutninger i én kamp, statistikk over mål eller bare posisjonsnavn gir fortsatt ingen nye ferdigheter. `P1_NEW_DOCUMENTED` og `P1_NEW_EVENT_ONLY` er gjensidig utelukkende.
