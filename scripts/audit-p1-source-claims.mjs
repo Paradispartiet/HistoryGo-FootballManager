@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import {
   P1_HERITAGES,
   P1_NEW_DOCUMENTED,
+  P1_NEW_EVENT_ONLY,
   P1_NEW_PARTIAL,
   P1_EXISTING_SUPPLEMENTS,
   getP1HeritageForPlayer,
@@ -58,7 +59,7 @@ for (const player of newExclusive) {
   ok(heritage?.generation === "new", `${player.id}: failed new-P1 heritage resolution`);
 }
 
-const explicitRecords = [...P1_NEW_DOCUMENTED, ...P1_NEW_PARTIAL, ...P1_EXISTING_SUPPLEMENTS];
+const explicitRecords = [...P1_NEW_DOCUMENTED, ...P1_NEW_EVENT_ONLY, ...P1_NEW_PARTIAL, ...P1_EXISTING_SUPPLEMENTS];
 ok(new Set(explicitRecords.map((record) => record.playerId)).size === explicitRecords.length,
   "explicit P1 records must not duplicate player IDs");
 
@@ -72,10 +73,45 @@ for (const record of P1_NEW_DOCUMENTED) {
   ok(typeof record.claim === "string" && record.claim.trim().length > 20,
     `${record.playerId}: documented claim must be concrete`);
   ok(/^https:\/\//.test(record.source || ""), `${record.playerId}: documented claim needs an https source`);
+  // Only AaFK was re-reviewed for durability in this pass. Requiring explicit
+  // evidence type prevents a future isolated match event from entering its
+  // lasting strengths silently; other clubs retain their existing contract.
+  if (record.placeId === "color_line_stadion") {
+    ok(["direct_appraisal", "editorial_appraisal", "historical_appraisal", "period_appraisal", "season_statistics"].includes(record.evidenceKind),
+      `${record.playerId}: AaFK durable claim needs non-event evidenceKind`);
+    ok(typeof record.playingStyle === "string" && record.playingStyle.trim().length >= 35,
+      `${record.playerId}: AaFK durable claim needs sourced playing-style context`);
+  }
+  for (const url of asArray(record.supportingSources)) {
+    ok(/^https:\/\//.test(url), `${record.playerId}: invalid supporting source URL`);
+  }
   ok(asArray(record.strengths).length > 0, `${record.playerId}: DOKUMENTERT requires at least one strength`);
   ok(new Set(record.strengths).size === record.strengths.length, `${record.playerId}: duplicate strength token`);
   for (const strength of record.strengths) {
     ok(validAttributes.has(strength), `${record.playerId}: unknown attribute token ${strength}`);
+  }
+}
+
+// A historical match action is a documented EVENT, not an automatic
+// high-value strength boost. Preserve its player, source and withdrawn tokens.
+for (const record of P1_NEW_EVENT_ONLY) {
+  const player = playerById.get(record.playerId);
+  ok(Boolean(player), `${record.playerId}: event-only player missing from catalogue`);
+  const heritage = getP1HeritageForPlayer(player);
+  ok(heritage?.generation === "new" && heritage.placeId === "color_line_stadion",
+    `${record.playerId}: event-only record must have exclusive Aalesund ownership`);
+  ok(record.evidenceKind === "single_match_event",
+    `${record.playerId}: event-only evidence kind must be explicit`);
+  ok(typeof record.claim === "string" && record.claim.trim().length > 20,
+    `${record.playerId}: event-only record needs a concrete event narrative`);
+  ok(/^https:\/\//.test(record.source || ""),
+    `${record.playerId}: event-only record requires source URL`);
+  ok(!Object.hasOwn(record, "strengths"),
+    `${record.playerId}: event-only record must not declare strengths`);
+  ok(asArray(record.legacyTokens).length > 0,
+    `${record.playerId}: preserve historical strength tokens as evidence only`);
+  for (const token of asArray(record.legacyTokens)) {
+    ok(validAttributes.has(token), `${record.playerId}: invalid legacy token ${token}`);
   }
 }
 
@@ -108,7 +144,7 @@ for (const record of P1_EXISTING_SUPPLEMENTS) {
   }
 }
 
-const statusCounts = { DOKUMENTERT: 0, DELVIS: 0, "THIN-SOURCE": 0 };
+const statusCounts = { DOKUMENTERT: 0, HENDELSE: 0, DELVIS: 0, "THIN-SOURCE": 0 };
 for (const player of newExclusive) {
   const record = getP1NewSourceRecord(player);
   ok(Boolean(record), `${player.id}: every new P1 profile must resolve to a source status`);
@@ -121,6 +157,10 @@ for (const player of newExclusive) {
 ok(Object.values(statusCounts).reduce((sum, count) => sum + count, 0) === 701,
   "new status distribution must cover 701/701 exactly once");
 ok(statusCounts.DOKUMENTERT === P1_NEW_DOCUMENTED.length, "DOKUMENTERT count drift");
+ok(statusCounts.HENDELSE === P1_NEW_EVENT_ONLY.length, "HENDELSE count drift");
+const aalesundDurable = P1_NEW_DOCUMENTED.filter((r) => r.placeId === "color_line_stadion").length;
+ok(aalesundDurable + P1_NEW_EVENT_ONLY.length >= 46,
+  "AaFK quality review must retain all 46 previously sourced player identities");
 ok(statusCounts.DELVIS === P1_NEW_PARTIAL.length, "DELVIS count drift");
 
 const overlaid = applyP1NewSourceClaims(players);
@@ -157,6 +197,7 @@ const existingStatusCounts = existingHeritages.reduce((totals, heritage) => {
 }, { DOKUMENTERT: 0, DELVIS: 0, "THIN-SOURCE": 0 });
 const totalStatusCounts = {
   DOKUMENTERT: statusCounts.DOKUMENTERT + existingStatusCounts.DOKUMENTERT,
+  HENDELSE: statusCounts.HENDELSE,
   DELVIS: statusCounts.DELVIS + existingStatusCounts.DELVIS,
   "THIN-SOURCE": statusCounts["THIN-SOURCE"] + existingStatusCounts["THIN-SOURCE"]
 };
@@ -192,14 +233,16 @@ const totalStatusCounts = {
 // historical milestones, not an ever-growing CI threshold.
 // The 936-person population is fixed. Coverage is derived from validated
 // records so an honest new five-player batch never needs to edit audit code.
-ok(P1_NEW_DOCUMENTED.length + P1_NEW_PARTIAL.length <= newExclusive.length,
-  "documented + partial claims exceed the fixed new-pass population");
+ok(P1_NEW_DOCUMENTED.length + P1_NEW_EVENT_ONLY.length + P1_NEW_PARTIAL.length <= newExclusive.length,
+  "documented + event + partial claims exceed the fixed new-pass population");
 ok(totalStatusCounts.DOKUMENTERT === P1_NEW_DOCUMENTED.length + existingStatusCounts.DOKUMENTERT,
   "documented coverage differs from source-validated records");
+ok(totalStatusCounts.HENDELSE === P1_NEW_EVENT_ONLY.length,
+  "event-only coverage differs from source-validated records");
 ok(totalStatusCounts.DELVIS === P1_NEW_PARTIAL.length + existingStatusCounts.DELVIS,
   "partial coverage differs from source-validated records");
 ok(totalStatusCounts["THIN-SOURCE"] ===
-    newExclusive.length - P1_NEW_DOCUMENTED.length - P1_NEW_PARTIAL.length + existingStatusCounts["THIN-SOURCE"],
+    newExclusive.length - P1_NEW_DOCUMENTED.length - P1_NEW_EVENT_ONLY.length - P1_NEW_PARTIAL.length + existingStatusCounts["THIN-SOURCE"],
   "thin-source coverage differs from the measured remaining population");
 ok(Object.values(totalStatusCounts).reduce((sum, count) => sum + count, 0) === 936,
   "combined status distribution must cover 936/936");
@@ -218,5 +261,5 @@ for (const record of explicitRecords) {
 
 console.log(`P1 source-claim audit PASS: ${checks} checks`);
 console.log(`P1 population: 936/936 across 18 heritages (701 new + 235 existing)`);
-console.log(`New-pass statuses: ${statusCounts.DOKUMENTERT} DOKUMENTERT · ${statusCounts.DELVIS} DELVIS · ${statusCounts["THIN-SOURCE"]} THIN-SOURCE`);
-console.log(`Combined P1 statuses: ${totalStatusCounts.DOKUMENTERT} DOKUMENTERT · ${totalStatusCounts.DELVIS} DELVIS · ${totalStatusCounts["THIN-SOURCE"]} THIN-SOURCE`);
+console.log(`New-pass statuses: ${statusCounts.DOKUMENTERT} DOKUMENTERT · ${statusCounts.HENDELSE} HENDELSE · ${statusCounts.DELVIS} DELVIS · ${statusCounts["THIN-SOURCE"]} THIN-SOURCE`);
+console.log(`Combined P1 statuses: ${totalStatusCounts.DOKUMENTERT} DOKUMENTERT · ${totalStatusCounts.HENDELSE} HENDELSE · ${totalStatusCounts.DELVIS} DELVIS · ${totalStatusCounts["THIN-SOURCE"]} THIN-SOURCE`);
