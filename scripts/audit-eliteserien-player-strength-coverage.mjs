@@ -3,7 +3,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import {
-  P1_NEW_DOCUMENTED, P1_EXISTING_SUPPLEMENTS,
+  P1_NEW_DOCUMENTED, P1_NEW_EVENT_ONLY, P1_EXISTING_SUPPLEMENTS,
   getP1HeritageForPlayer, getP1NewSourceRecord, applyP1SourceClaims
 } from "../src/football-player-source-claims-p1.js";
 import { P2_DOCUMENTED, getP2SourceRecord, applyP2SourceClaims }
@@ -30,6 +30,7 @@ const afterP2 = applyP2SourceClaims(afterP1);
 const effectivePlayers = applySourceDepthClaims(afterP2);
 const effectiveById = new Map(effectivePlayers.map((player) => [player.id, player]));
 const p1Documented = new Map(P1_NEW_DOCUMENTED.map((record) => [record.playerId, record]));
+const p1Events = new Map(P1_NEW_EVENT_ONLY.map((record) => [record.playerId, record]));
 const p1Supplements = new Map(P1_EXISTING_SUPPLEMENTS.map((record) => [record.playerId, record]));
 const p2Documented = new Map(P2_DOCUMENTED.map((record) => [record.playerId, record]));
 const depthDocumented = new Map(SOURCE_DEPTH_DOCUMENTED.map((record) => [record.playerId, record]));
@@ -39,6 +40,7 @@ function sourceFor(raw, effective) {
   const rawStrengths = arr(raw.strengths);
   const heritage = getP1HeritageForPlayer(raw);
   const p1Record = p1Documented.get(raw.id) || p1Supplements.get(raw.id);
+  const eventRecord = p1Events.get(raw.id);
   const p2Record = p2Documented.get(raw.id);
   const depthRecord = depthDocumented.get(raw.id);
   const p1Status = heritage?.generation === "new" ? getP1NewSourceRecord(raw)?.status : null;
@@ -65,7 +67,14 @@ function sourceFor(raw, effective) {
     p1Status,
     claim: record?.claim || null,
     sourceUrl: record?.source || null,
-    sourceKind: record?.sourceKind || (origin === "p2_snl" ? "encyclopedia" : null)
+    sourceKind: record?.sourceKind || (origin === "p2_snl" ? "encyclopedia" : null),
+    // A match citation is still accessible, but NEVER counts as a sourced strength.
+    eventClaim: eventRecord?.claim || null,
+    eventSourceUrl: eventRecord?.source || null,
+    eventLegacyTokens: eventRecord?.legacyTokens || [],
+    evidenceKind: p1Record?.evidenceKind || eventRecord?.evidenceKind || null,
+    playingStyle: p1Record?.playingStyle || null,
+    supportingSources: p1Record?.supportingSources || []
   };
 }
 
@@ -196,7 +205,9 @@ if (args.includes("--csv")) {
     "clubRelation", "clubAffiliationSource", "naturalPositions", "usablePositions",
     "primaryPosition", "playable", "inNoVisitBaseSquad",
     "rawStrengths", "effectiveStrengths", "strengthOrigin", "p1Heritage", "p1Status",
-    "sourceUrl", "sourceKind", "claim", "researchLane", "priority"
+    "sourceUrl", "sourceKind", "claim", "evidenceKind", "playingStyle",
+    "eventSourceUrl", "eventClaim", "eventLegacyTokens", "supportingSources",
+    "researchLane", "priority"
   ];
   const cell = (value) => {
     const text = Array.isArray(value) ? value.join("|") : String(value ?? "");
