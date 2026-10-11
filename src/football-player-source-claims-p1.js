@@ -245,6 +245,85 @@ const documented = [
     claim: "«Han har teke stort ansvar, vore ein leiar i laget»",
     source: "https://brattvag-il.no/herrelag/herrelaget/takk-for-no-ulrik"
   },
+  // --- Aalesund 11.10.2026: official club archive and match reports --------
+  {
+    playerId: "herman_ekeberg",
+    placeId: "color_line_stadion",
+    strengths: ["dribbling"],
+    claim: "AaFKs historiske 2002-gjennomgang beskriver at Herman Ekeberg «gjorde skuddfinta til sin egen». Den konkret omtalte ballfinten bærer dribbling; mål og antall kamper gir ingen tilleggsegenskaper.",
+    source: "https://www.aafk.no/historisk-arkiv/nyheter/da-fotballfeberen-brot-ut"
+  },
+  {
+    playerId: "trond_fredriksen",
+    placeId: "color_line_stadion",
+    strengths: ["work_rate"],
+    claim: "AaFKs historiske gjennomgang beskriver at Trond Fredriksen «la alltid ned en formidabel innsats». Kun arbeidsinnsats føres; omtalen av skuddfot tilordnes ikke et spesifikt skuddtoken.",
+    source: "https://www.aafk.no/historisk-arkiv/nyheter/da-fotballfeberen-brot-ut"
+  },
+  {
+    playerId: "pal_stadsnes",
+    placeId: "color_line_stadion",
+    strengths: ["set_pieces"],
+    claim: "AaFK beskriver Pål Stadsnes som særlig farlig på hjørnespark med venstrefoten. Kun dødballferdigheter føres.",
+    source: "https://www.aafk.no/historisk-arkiv/nyheter/da-fotballfeberen-brot-ut"
+  },
+  {
+    playerId: "jorgen_hatlehol",
+    placeId: "color_line_stadion",
+    strengths: ["crossing"],
+    claim: "AaFKs kampreferat fra Strømmen-kampen 11.08.2019 beskriver et knallhardt innlegg fra Jørgen Hatlehol som Pape Habib Gueye headet i mål. Fører crossing, ikke hurtighet eller pasningsregister.",
+    source: "https://www.aafk.no/nyheter/seiersrekka-fortsatte"
+  },
+  {
+    playerId: "holmbert_aron_fridjonsson",
+    placeId: "color_line_stadion",
+    strengths: ["heading"],
+    claim: "AaFKs kampreferat fra treningskampen mot Hødd beskriver at Hólmbert Friðjónsson styrte et innlegg med hodet i lengste hjørne til 2–0. Fører heading fra den dokumenterte handlingen.",
+    source: "https://www.aafk.no/nyheter/malrikt-da-aalesund-slo-hodd"
+  },
+  {
+    playerId: "pape_habib_gueye",
+    placeId: "color_line_stadion",
+    strengths: ["heading"],
+    claim: "AaFKs kampreferat mot Strømmen 11.08.2019 beskriver at Pape Habib Gueye møtte Hatlehols innlegg og dunket ballen i mål med hodet. Kun heading føres.",
+    source: "https://www.aafk.no/nyheter/seiersrekka-fortsatte"
+  },
+  {
+    playerId: "sigurd_haugen",
+    placeId: "color_line_stadion",
+    strengths: ["heading"],
+    claim: "AaFKs referat fra 6–2 mot Grorud 15.09.2021 beskriver at Sigurd Haugen scoret sitt andre mål med hodet etter innlegg fra Isak Dybvik Määttä. Fører bare heading.",
+    source: "https://www.aafk.no/nyheter/storseier_AaFK_Grorud"
+  },
+  {
+    playerId: "kristian_hemmingsen_lonebu",
+    placeId: "color_line_stadion",
+    strengths: ["finishing", "heading"],
+    claim: "AaFKs akademileder Sindre Eid beskriver Kristian Lonebu som «en god avslutter med begge bein og med hodet» ved proffkontrakten i desember 2024. Dette bærer finishing og heading, ikke øvrige kvaliteter fra målstatistikken.",
+    source: "https://www.aafk.no/nyheter/forste-proffkontrakt-for-lokal-spiss"
+  },
+  {
+    playerId: "oddbjorn_lie",
+    placeId: "color_line_stadion",
+    strengths: ["crossing"],
+    claim: "AaFKs Skeid-referat fra 2019 beskriver at Oddbjørn Lie slo et «strøkent innlegg» som Hólmbert Friðjónsson headet i mål. Fører crossing fra konkret innlegg.",
+    source: "https://www.aafk.no/nyheter/islandsk-festkveld"
+  },
+  {
+    playerId: "aron_elis_randarson",
+    placeId: "color_line_stadion",
+    strengths: ["heading"],
+    claim: "AaFKs referat fra Sogndal-kampen 04.05.2019 beskriver at Aron Elís Þrándarson headet Jørgen Hatlehols innlegg i mål til 1–1. Fører kun heading.",
+    source: "https://www.aafk.no/nyheter/for-en-snuoperasjon-sogndal"
+  },
+  {
+    playerId: "markus_karlsbakk",
+    placeId: "color_line_stadion",
+    strengths: ["finishing"],
+    claim: "AaFKs 2.-lagsreferat 25.08.2018 beskriver at Markus Karlsbakk scoret 3–0 med en elegant lobb over keeperen. En konkret kontrollert avslutning dokumenterer finishing, ikke en generell talentvurdering.",
+    source: "https://www.aafk.no/nyheter/atte-seire-pa-rad"
+  },
+
   // --- Sandefjord, 09.10.2026: documented P1 skill -----------------------
   // Source explicitly calls Moen Foss "hurtig". Other descriptive words
   // (e.g. "sterk i hodet") do not justify additional attribute tokens.
