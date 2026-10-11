@@ -689,7 +689,7 @@ const documented = [
     strengths: ["finishing"],
     claim: "Rosenborgs historiske kampreferat om avslutningen på Tippeligaen 2010 beskriver at Magnus Sylling Olsen kom gjennom fra venstresiden og banket ballen kontant i mål i siste ordinære minutt. Dette er en eksplisitt vellykket avslutning (finishing); ingen egenskap utledes av totalscoring.",
     source: "https://www.rbk.no/nyheter/rbk-ubeseiret-i-2010"
-  }
+  },
   // --- Aalesund, 11.10.2026: independently checked club and match sources ---
   {
     playerId: "joakim_austnes",
