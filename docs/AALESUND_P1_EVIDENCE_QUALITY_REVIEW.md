@@ -98,6 +98,3 @@ Dette dokumenterer produksjon, spissrolle og utfordringer med samhandling i **20
 
 **Metode:** Et gjentakende prestasjonsmål kan være relevant bakgrunn, men et kildebelegg for en navngitt ferdighet må fortsatt være direkte og avgrenset. Neste pass på Hamdallah krever en kvalifisert individuell spillestilsvurdering eller flere sammenlignbare, konkrete observationsdata. Ingen egenskap tilføyes på gjetning.
 
-### Separat CI-regresjon
-
-Den tidligere [Rosenborg-sak #381](https://github.com/Paradispartiet/HistoryGo-FootballManager/issues/381) gjelder en timeout i kalenderpaneltesten på PR #379. Den samme brede nettleserregresjonen og Rosenborg-sesongen bestod senere på [PR #380](https://github.com/Paradispartiet/HistoryGo-FootballManager/pull/380). Årsaken til den episodiske feilen er ikke verifisert; ingen endring i kalender eller UI gjøres som del av dette kildepasset.
