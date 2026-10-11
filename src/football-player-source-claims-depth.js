@@ -427,6 +427,32 @@ const documented = [
     source: "https://www.nettavisen.no/artikkel/start-kil-og-moss-vant-igjen/s/12-95-220771",
     sourceKind: "press"
   }
+  // --- Rosenborg: verified individual playing-style descriptions -----------
+  {
+    playerId: "roar_strand",
+    clubId: "rosenborg",
+    strengths: ["work_rate", "stamina", "tackling", "finishing"],
+    claim: "Store norske leksikon beskriver Roar Strand som «løpssterk» og fremhever «arbeidskapasiteten og aksjonsradiusen» samt at han var «taklingssterk» og hadde «gode avslutningsegenskaper». Dette dokumenterer de fire konkrete trekkene, ikke automatisk pasningsspill eller rollebonus.",
+    source: "https://snl.no/Roar_Strand",
+    sourceKind: "encyclopedia"
+  },
+  {
+    playerId: "bent_skammelsrud",
+    clubId: "rosenborg",
+    strengths: ["simple_passing", "game_reading"],
+    claim: "VG fremhevet Skammelsruds «teknikken, pasningssikkerheten, kløkten og rutinen» som avgjørende for hans Mesterliga-nivå. Pasningssikkerhet og spillekløkt støtter simple_passing og game_reading; meritter og kapteinsrolle gir ikke ekstra tokens.",
+    source: "https://e24.no/naeringsliv/i/9vrbW9/for-god-for-aeresrunder",
+    sourceKind: "press"
+  },
+  {
+    playerId: "harald_martin_brattbakk",
+    clubId: "rosenborg",
+    strengths: ["pace", "off_ball_runs", "positioning"],
+    claim: "Odd Iversen fremhevet Brattbakks fart («Meget hurtig») og «en fin timing på løpene sine», og at han ofte kom «i fin posisjon for å score». Dermed dokumenteres hurtighet, løp uten ball og offensiv plassering, ikke antatt heading eller dødballer.",
+    source: "https://www.aftenposten.no/sport/fotball/i/0n9PW2/ivers-synes-brattbakk-exit-er-vemodig",
+    sourceKind: "press"
+  },
+
 ];
 
 export const SOURCE_DEPTH_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
