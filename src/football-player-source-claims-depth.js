@@ -487,6 +487,31 @@ const documented = [
     claim: "Dagbladet beskrev i juli 1999 Sigurd Rushfeldts spillestil som en spiss som kunne virke anonym før han scoret, og siterte sin tidligere karakteristikk av ham som «kynisk og råsterk målmaskin». «Råsterk» gir et individuelt belegg for fysisk styrke; målproduksjonen gir ikke automatisk finishing, heading eller positioning.",
     source: "https://www.dagbladet.no/nyheter/rushlefot/65533532",
     sourceKind: "press"
+  },
+  // --- Rosenborg heritage: individually described wing and fullback skills --
+  {
+    playerId: "mini_jakobsen",
+    clubId: "rosenborg",
+    strengths: ["pace", "dribbling", "off_ball_runs"],
+    claim: "Store norske leksikons spillestilavsnitt beskriver Jahn Ivar «Mini» Jakobsen som «rask, driblesterk» og fremhever evnen til å «beregne løp og rykk» og variere tempo. Dette underbygger hurtighet, dribling og bevegelsestiming uten ball. Lavt tyngdepunkt og målstatistikk er ikke brukt til ekstra styrker.",
+    source: "https://snl.no/Jahn_Ivar_Jakobsen",
+    sourceKind: "encyclopedia"
+  },
+  {
+    playerId: "daniel_braaten",
+    clubId: "rosenborg",
+    strengths: ["pace", "strength", "dribbling"],
+    claim: "Store norske leksikon beskriver Daniel Omoya Braatens spillestil ved «hurtighet, kraftige fysikk og driblestyrke». Disse uttrykkelige individuelle egenskapene bærer pace, strength og dribbling. Posisjon, klubbmeritter og antall scoringer brukes ikke som kilde for nye ferdigheter.",
+    source: "https://snl.no/Daniel_Omoya_Braaten",
+    sourceKind: "encyclopedia"
+  },
+  {
+    playerId: "mikael_lustig",
+    clubId: "rosenborg",
+    strengths: ["crossing"],
+    claim: "RBK-trener Erik Hamrén fremhevet ved signeringen sommeren 2008 Lustigs offensive backspill og at han «slår presise innlegg». Dette er et direkte belegg for crossing, mens det at han kommer raskt frem i angrep ikke alene dokumenterer sprintfart, overlappinger eller presis defensiv posisjonering.",
+    source: "https://www.rbkweb.no/vis/6250",
+    sourceKind: "football_editorial"
   }
 
 ];
