@@ -71,3 +71,33 @@ Den første revisjonens 14 + 32 + 23 beskriver **status ved første gjennomgang*
 ### Metodisk presisering
 
 Dette er **bare registreringer der kilden dokumenterer konkrete spilleegenskaper**. Rollebeskrivelser, trenernes historiske valg og observasjoner om opplæring brukes til å gjøre `playingStyle` mer nyansert, men løftes ikke automatisk til `strengths`. Avslutninger i én kamp, statistikk over mål eller bare posisjonsnavn gir fortsatt ingen nye ferdigheter. `P1_NEW_DOCUMENTED` og `P1_NEW_EVENT_ONLY` er gjensidig utelukkende.
+
+
+## Tredje kildepass – 11.10.2026: Friðjónssons oppspill og Hamdallahs kildegrense
+
+Denne gjennomgangen tar for seg **Hólmbert Aron Friðjónsson** og **Abderrazak Hamdallah**. Etter kildepasset er AaFK-fordelingen **16 varige profiler + 30 historiske hendelsesprofiler + 23 profiler uten kvalifiserende belegg = 69 eksklusive identiteter**. Verken spilleridentitet, posisjon eller klubbtilhørighet er endret.
+
+### Hólmbert Aron Friðjónsson – fra `HENDELSE` til `DOKUMENTERT`
+
+Eurosport-ekspert Joacim Jonsson beskrev før 2020-sesongen Friðjónsson som Aalesunds X-faktor med spesielt hodespill, fysisk tilstedeværelse og evne til å fungere som oppspillspunkt som holder i ballen. Dette er et konkret, spillerrettet **redaksjonelt vurderingsbelegg** for `heading` og `hold_up_play`, ikke bare én målsituasjon.
+
+- [Eurosport, Joacim Jonssons AaFK-analyse](https://www.eurosport.no/fotball/joacims-blogg/2020/dette-mangler-bohinen-trodde-han-skulle-ha-en-litt-bedre-stall_sto7690243/story.shtml)
+- [OBOS-ligaen, Årets spiller i 2018](https://www.obos-ligaen.no/nyheter/fridjonsson-kares-til-arets-spiller-i-obos-ligaen): 19 mål gjennom sesongen og NTBs spillerbørspris, **kontekst** om betydningen i laget – ikke et selvstendig ferdighetsbelegg
+- [AaFK, heading i treningskamp mot Hødd](https://www.aafk.no/nyheter/malrikt-da-aalesund-slo-hodd): konkret kamphendelse som er bevart i `supportingSources`, ikke som separat `HENDELSE`-identitet
+
+`strength` er **ikke** automatisk tilordnet. Ekspertens uttrykk om ekstrem fysikk beskriver samlet fysisk tilstedeværelse, men gir ikke en måling eller individuell presis vurdering av ren styrke eller duellkraft. Han får heller ikke `finishing` bare på grunnlag av antall scoringer.
+
+### Abderrazak Hamdallah – beholdt som `HENDELSE`
+
+- [NFF, toppscorerlisten for Tippeligaen 2013](https://www.fotball.no/fotballdata/turnering/hjem/?fiksId=134365&underside=tabellen): 15 seriemål, andreplass bak Frode Johnsen (16)
+- [FBref, Aalesund 2013](https://fbref.com/en/players/fe73f8c6/): 27 kamper, 25 starter, 15 ligamål og fem målgivende pasninger (FBrefs registrering)
+- [Bergens Tidende, 14.05.2013](https://www.bt.no/sport/i/e8JlxM/derfor-loesnet-det-for-hamdallah-naa): spillerens egen beskrivelse av manglende kommunikasjon om hvor han ønsket ballen, dialog med Jan Jönsson og hat trick i én kamp. Han krevde et straffespark, men Jönsson presiserte at **Ulvestad var lagets utpekte straffeskytter**.
+- [AaFK, Viking-referatet](https://www.aafk.no/nyheter/hamed-allahs-store-kveld): heading og avslutninger i én kamp. Den opprinnelige `HENDELSE`-posten er bevart.
+
+Dette dokumenterer produksjon, spissrolle og utfordringer med samhandling i **2013-sesongen**, men ikke med nødvendig presisjon et varig særtrekk som `heading`, `box_presence`, `finishing`, `runs_behind` eller `set_pieces`. En scoring på straffe kan særlig **ikke** overstyre trenerens opplysning om hvem som var fast straffeskytter.
+
+**Metode:** Et gjentakende prestasjonsmål kan være relevant bakgrunn, men et kildebelegg for en navngitt ferdighet må fortsatt være direkte og avgrenset. Neste pass på Hamdallah krever en kvalifisert individuell spillestilsvurdering eller flere sammenlignbare, konkrete observationsdata. Ingen egenskap tilføyes på gjetning.
+
+### Separat CI-regresjon
+
+Den tidligere [Rosenborg-sak #381](https://github.com/Paradispartiet/HistoryGo-FootballManager/issues/381) gjelder en timeout i kalenderpaneltesten på PR #379. Den samme brede nettleserregresjonen og Rosenborg-sesongen bestod senere på [PR #380](https://github.com/Paradispartiet/HistoryGo-FootballManager/pull/380). Årsaken til den episodiske feilen er ikke verifisert; ingen endring i kalender eller UI gjøres som del av dette kildepasset.
