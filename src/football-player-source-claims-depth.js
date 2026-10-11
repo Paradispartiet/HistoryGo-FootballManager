@@ -425,8 +425,8 @@ const documented = [
     strengths: ["work_rate"],
     claim: "NTBs samtidige kampreferat fra Vard-Haugesund–Sandefjord 02.05.2004, gjengitt i Nettavisen: «Målscorer Magne Sturød jobbet godt gjennom store deler av kampen». Denne konkrete individuelle vurderingen dokumenterer bare arbeidsinnsats (work_rate); mål, spilleminutter og poeng gir ingen andre styrker.",
     source: "https://www.nettavisen.no/artikkel/start-kil-og-moss-vant-igjen/s/12-95-220771",
-    sourceKind: "press"
-  }
+    sourceKind: "press" 
+  },
   // --- Rosenborg: verified individual playing-style descriptions -----------
   {
     playerId: "roar_strand",
