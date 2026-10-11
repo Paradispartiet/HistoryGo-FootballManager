@@ -24,6 +24,14 @@ const read = (file) => JSON.parse(fs.readFileSync(new URL(`../data/${file}`, imp
 const players = read("football_players.json").players;
 const validStrengths = new Set(read("football_attributes.json").attributes.map((entry) => entry.id));
 const byId = new Map(players.map((player) => [player.id, player]));
+// Temporary Rosenborg eligibility diagnostic; remove before merge.
+const rosenborgEligible = players.filter((p) =>
+  p.clubAffiliations?.some((a) => a.clubId === "rosenborg" && a.source === "belagt") &&
+  (!p.strengths || p.strengths.length === 0) &&
+  !getP1HeritageForPlayer(p) && !getP2SourceRecord(p)
+).map((p) => ({ id: p.id, name: p.name, positions: p.positions || p.naturalPositions || [] }));
+console.log("ROSENBORG_ELIGIBLE:", JSON.stringify(rosenborgEligible));
+
 const allowedSourceKinds = new Set(["club", "press", "football_editorial", "encyclopedia"]);
 
 let checks = 0;
