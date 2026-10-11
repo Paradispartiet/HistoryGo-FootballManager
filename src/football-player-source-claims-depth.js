@@ -468,7 +468,7 @@ const documented = [
     playerId: "anthony_annan",
     clubId: "rosenborg",
     strengths: ["simple_passing"],
-    claim: "Adresseavisens pasningsanalyse gjengitt i Stavanger Aftenblad i april 2010 viste at Anthony Annan hadde høyest pasningspresisjon på Rosenborg i den undersøkte kampen og foretrakk korte pasninger. Annan beskrev selv å slå presist til nærmeste ledige medspiller. Dette underbygger simple_passing, men ikke lange gjennombruddspasninger eller presise taklingsattributter.",
+    claim: "Adresseavisens pasningsanalyse gjengitt i Stavanger Aftenblad i april 2010 viste at Anthony Annan hadde høyest pasningspresisjon på Rosenborg i den undersøkte kampen og foretrakk korte pasninger. Annan sa: «Jeg foretrekker den korte typen og å slå ballen i beina.» Dette underbygger simple_passing, men ikke lange gjennombruddspasninger eller presise taklingsattributter.",
     source: "https://www.aftenbladet.no/sport/i/qnzxaw/annan-kjenner-seg-ikke-igjen-i-kritikken",
     sourceKind: "press"
   },
