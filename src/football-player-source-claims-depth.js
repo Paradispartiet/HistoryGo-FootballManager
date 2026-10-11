@@ -429,14 +429,6 @@ const documented = [
   },
   // --- Rosenborg: verified individual playing-style descriptions -----------
   {
-    playerId: "bent_skammelsrud",
-    clubId: "rosenborg",
-    strengths: ["simple_passing", "game_reading"],
-    claim: "VG fremhevet Skammelsruds «teknikken, pasningssikkerheten, kløkten og rutinen» som avgjørende for hans Mesterliga-nivå. Pasningssikkerhet og spillekløkt støtter simple_passing og game_reading; meritter og kapteinsrolle gir ikke ekstra tokens.",
-    source: "https://e24.no/naeringsliv/i/9vrbW9/for-god-for-aeresrunder",
-    sourceKind: "press"
-  },
-  {
     playerId: "harald_martin_brattbakk",
     clubId: "rosenborg",
     strengths: ["pace", "off_ball_runs", "positioning"],
