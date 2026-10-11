@@ -455,6 +455,16 @@ const documented = [
     sourceKind: "club"
   },
 
+  // --- Rosenborg 2025: backens egen ferdighetsbeskrivelse ------------------
+  {
+    playerId: "jonas_mortensen",
+    clubId: "rosenborg",
+    strengths: ["pace", "work_rate"],
+    claim: "I Rosenborgs presentasjon 06.01.2025 beskriver Jonas Mortensen selv sin spillestil: «Jeg er en hurtig spiller og jeg er løpevillig.» Kilden støtter pace og work_rate, men utsagn om at han ønsker å bidra offensivt beviser ikke konkrete crossing- eller overlapping_runs-ferdigheter.",
+    source: "https://www.rbk.no/nyheter/mortensen-klar-for-rosenborg",
+    sourceKind: "club"
+  }
+
 ];
 
 export const SOURCE_DEPTH_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
