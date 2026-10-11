@@ -783,8 +783,7 @@ const documented = [
     strengths: ["crossing"],
     claim: "AaFKs referat fra AaFK 2–Florø 12.10.2022 beskriver at Bjørn Martin Kristensen scoret etter innlegg fra John Kitolano i det 53. minutt. Kun det konkret utførte innlegget dokumenterer crossing.",
     source: "https://www.aafk.no/nyheter/aafk-2-sikret-opprykket"
-  }
-,
+  },
   // --- Aalesund 11.10.2026: official match reports and contemporary press ---
   {
     playerId: "tero_mantyla",
