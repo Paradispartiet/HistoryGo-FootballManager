@@ -670,6 +670,17 @@ const documented = [
     supportingSources: ["https://www.aafk.no/nyheter/for-en-snuoperasjon-sogndal"]
   },
 
+  {
+    playerId: "holmbert_aron_fridjonsson",
+    placeId: "color_line_stadion",
+    evidenceKind: "editorial_appraisal",
+    playingStyle: "Fysisk dominerende midtspiss og oppspillspunkt med fremhevet hodespill. Ekspert Joacim Jonsson beskrev før 2020-sesongen hvordan Friðjónsson kunne ta imot og holde på ballen når AaFK skulle styre kampen eller avlaste forsvaret. Hans 2018-pris som årets OBOS-liga-spiller gir sesonghistorisk kontekst, ikke ekstra ferdighetsattributter.",
+    strengths: ["heading", "hold_up_play"],
+    claim: "Eurosports ekspert Joacim Jonsson fremhevet i sin AaFK-vurdering før 2020-sesongen Friðjónssons ekstreme fysikk, hodespill og funksjon som oppspillspunkt som kunne holde i ballen. Dette er en individuell, gjentakende rolle- og ferdighetsvurdering som direkte bærer heading og hold_up_play. OBOS-ligaens dokumentasjon av prisen som årets spiller i 2018 støtter betydningen for laget, men brukes ikke alene til å tilskrive flere ferdigheter. En heading i treningskampen mot Hødd beholdes som historisk hendelseskilde.",
+    source: "https://www.eurosport.no/fotball/joacims-blogg/2020/dette-mangler-bohinen-trodde-han-skulle-ha-en-litt-bedre-stall_sto7690243/story.shtml",
+    supportingSources: ["https://www.obos-ligaen.no/nyheter/fridjonsson-kares-til-arets-spiller-i-obos-ligaen", "https://www.aafk.no/nyheter/malrikt-da-aalesund-slo-hodd"]
+  },
+
 ];
 
 export const P1_NEW_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
@@ -688,14 +699,6 @@ const eventOnly = [
     legacyTokens: ["crossing"],
     claim: "AaFKs kampreferat fra Strømmen-kampen 11.08.2019 beskriver et knallhardt innlegg fra Jørgen Hatlehol som Pape Habib Gueye headet i mål.",
     source: "https://www.aafk.no/nyheter/seiersrekka-fortsatte"
-  },
-  {
-    playerId: "holmbert_aron_fridjonsson",
-    placeId: "color_line_stadion",
-    evidenceKind: "single_match_event",
-    legacyTokens: ["heading"],
-    claim: "AaFKs kampreferat fra treningskampen mot Hødd beskriver at Hólmbert Friðjónsson styrte et innlegg med hodet i lengste hjørne til 2–0.",
-    source: "https://www.aafk.no/nyheter/malrikt-da-aalesund-slo-hodd"
   },
   {
     playerId: "pape_habib_gueye",
