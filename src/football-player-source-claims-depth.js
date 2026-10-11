@@ -437,6 +437,15 @@ const documented = [
     sourceKind: "press"
   },
 
+  {
+    playerId: "sander_tangvik",
+    clubId: "rosenborg",
+    strengths: ["distribution"],
+    claim: "Rosenborgs keepertrener Alexander Lund Hansen beskrev Sander Tangvik som «en moderne keeper som er god med beina» og «godt teknisk skolert». Denne individuelle vurderingen støtter keeperens distribusjon/spill med beina, ikke automatisk shot_stopping eller command_of_area.",
+    source: "https://www.rbk.no/nyheter/proffkontrakt-til-tangvik",
+    sourceKind: "club"
+  },
+
 ];
 
 export const SOURCE_DEPTH_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
