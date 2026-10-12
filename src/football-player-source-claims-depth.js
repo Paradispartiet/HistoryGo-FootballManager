@@ -512,6 +512,47 @@ const documented = [
     claim: "RBK-trener Erik Hamrén fremhevet ved signeringen sommeren 2008 Lustigs offensive backspill og at han «slår presise innlegg». Dette er et direkte belegg for crossing, mens det at han kommer raskt frem i angrep ikke alene dokumenterer sprintfart, overlappinger eller presis defensiv posisjonering.",
     source: "https://www.rbkweb.no/vis/6250",
     sourceKind: "football_editorial"
+  },
+  // --- Rosenborg: goalkeepers and defensive skill descriptions --------------
+  {
+    playerId: "espen_johnsen",
+    clubId: "rosenborg",
+    strengths: ["reflexes", "shot_stopping"],
+    claim: "Store norske leksikons avsnitt om Espen Johnsens spillestil beskriver ham som «reaksjonssterk og god på streken». Dette støtter refleksredninger og skuddstopping. Den samme kilden nevner svakheter i feltarbeid og med ballen i beina, så command_of_area og distribution blir ikke tilført.",
+    source: "https://snl.no/Espen_Johnsen_-_norsk_fotballspiller",
+    sourceKind: "encyclopedia"
+  },
+  {
+    playerId: "arni_gautur_arason",
+    clubId: "rosenborg",
+    strengths: ["shot_stopping", "reflexes"],
+    claim: "Knut Espen Svegaardens spilleromtale i Rabonas tiårslag fra 2000-tallet beskriver Árni Gautur Arason som «Glimrende skuddstopper, og reaksjonssterk som få.» Dette dokumenterer shot_stopping og reflexes; ingen styrke utledes av seriegull, kamptall eller hans øvrige klubber.",
+    source: "https://rabonapod.no/2025/07/23/tiarslagene-2000-tallet/",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "tore_reginiussen",
+    clubId: "rosenborg",
+    strengths: ["game_reading", "duels", "pace"],
+    claim: "Tromsø ILs historiske spillerbiografi, publisert i statistikkarkivet i 2014, beskriver Tore Reginiussen slik: «unik evne til å lese spillet, han er duellsterk, kjapp». Disse ordene gir game_reading, duels og pace; klubbstatus eller forsvarsposisjon gir ingen andre egenskaper. Beskrivelsen gjelder hans tidligere TIL-periode, ikke spesifikt Rosenborg-sesongene.",
+    source: "https://statistikk.til.no/spiller/tore-reginiussen",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "birger_meling",
+    clubId: "rosenborg",
+    strengths: ["pace", "game_reading"],
+    claim: "Landslagstrener Lars Lagerbäck forklarte overfor Eurosport i oktober 2017 at Birger Meling var aktuell som back «på grunn av farta hans, spilleforståelsen og hans gode offensive bidrag». Fart og spilleforståelse dokumenterer pace og game_reading; generelle offensive bidrag gir ikke automatisk crossing eller overlapping_runs.",
+    source: "https://www.eurosport.no/fotball/vm-kvalifisering/2018/birger-melings-strategiske-valg-derfor-satset-jeg-pa-venstrebackenfot_sto6354821/story.shtml",
+    sourceKind: "press"
+  },
+  {
+    playerId: "mikael_dorsin",
+    clubId: "rosenborg",
+    strengths: ["strength"],
+    claim: "Knut Espen Svegaarden beskriver Rosenborg-backen Mikael Dorsin i Rabonas 2000-tallslag som «vrien å passere, fysisk meget sterk». Dette gir direkte belegg for fysisk styrke. Uttrykket «vrien å passere» gjelder defensivt backspill, mens attributtet one_vs_one i katalogen gjelder offensiv dribling, og er derfor ikke brukt.",
+    source: "https://rabonapod.no/2025/07/23/tiarslagene-2000-tallet/",
+    sourceKind: "football_editorial"
   }
 
 ];
