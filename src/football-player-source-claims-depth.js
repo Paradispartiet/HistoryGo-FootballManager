@@ -549,8 +549,8 @@ const documented = [
   {
     playerId: "mikael_dorsin",
     clubId: "rosenborg",
-    strengths: ["strength", "one_vs_one"],
-    claim: "Knut Espen Svegaarden beskriver Rosenborg-backen Mikael Dorsin i Rabonas 2000-tallslag som «vrien å passere, fysisk meget sterk». Omtalen dokumenterer fysisk styrke og defensiv én-mot-én-evne, men sier ikke at Dorsin var spesielt hurtig eller presis på innlegg.",
+    strengths: ["strength"],
+    claim: "Knut Espen Svegaarden beskriver Rosenborg-backen Mikael Dorsin i Rabonas 2000-tallslag som «vrien å passere, fysisk meget sterk». Dette gir direkte belegg for fysisk styrke. Uttrykket «vrien å passere» gjelder defensivt backspill, mens attributtet one_vs_one i katalogen gjelder offensiv dribling, og er derfor ikke brukt.",
     source: "https://rabonapod.no/2025/07/23/tiarslagene-2000-tallet/",
     sourceKind: "football_editorial"
   }
