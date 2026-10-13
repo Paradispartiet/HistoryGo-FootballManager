@@ -1,13 +1,8 @@
 name: Verify and deploy Football Manager
 
+# PRs are validated by ci.yml. Pages verifies again before actual
+# publication from main, but does not duplicate that PR validation.
 on:
-  pull_request:
-    branches: [main]
-    # Source-depth/P1 claim-only PRs are audited by ci.yml, not Pages.
-    # Mixed or executable changes still trigger the normal Pages PR gate.
-    paths-ignore:
-      - "src/football-player-source-claims-depth.js"
-      - "src/football-player-source-claims-p1.js"
   push:
     branches: [main]
   workflow_dispatch:
