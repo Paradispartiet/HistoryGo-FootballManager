@@ -12,10 +12,13 @@ async function expectNoHorizontalOverflow(page) {
   expect(overflow).toBeLessThanOrEqual(1);
 }
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page }, testInfo) => {
+  const initialPhase = testInfo.title === "kalenderens klubbmail kan åpnes og lukkes gjentatte ganger i inbox-fasen"
+    ? "inbox"
+    : "training";
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.addInitScript(() => {
+  await page.addInitScript((phase) => {
     localStorage.setItem("hgfm.onboarded.v1", "1");
     localStorage.setItem("hgfm.gameStartState.v1", JSON.stringify({
       selectedMode: "league",
@@ -34,7 +37,7 @@ test.beforeEach(async ({ page }) => {
       localStart: { enabled: false, playerIds: [] },
       clubWeekState: {
         week: 3,
-        phase: "training",
+        phase,
         boardTrust: 50,
         playerMorale: 50,
         tacticalClarity: 50,
@@ -42,7 +45,7 @@ test.beforeEach(async ({ page }) => {
         mediaPressure: 50
       }
     }));
-  });
+  }, initialPhase);
   await page.goto("/");
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
@@ -117,19 +120,9 @@ test("melding åpnes i drawer og kalenderdagen blir stående", async ({ page }) 
 });
 
 test("kalenderens klubbmail kan åpnes og lukkes gjentatte ganger i inbox-fasen", async ({ page }) => {
-  // Exercise the same phase and close button as the Rosenborg deep-season
-  // scenario without conflating drawer behavior with a 30-round timeout.
-  await page.evaluate(() => {
-    const key = "hgfm.teamMerits.v1";
-    const merits = JSON.parse(localStorage.getItem(key) || "{}");
-    merits.clubWeekState = { ...merits.clubWeekState, phase: "inbox" };
-    localStorage.setItem(key, JSON.stringify(merits));
-  });
-  // The running manager retains its canonical week state in memory. Reload
-  // the save so the inbox phase is read at startup instead of only replacing
-  // the localStorage snapshot beneath a running training-phase session.
-  await page.reload();
-  await expect(page.locator("#onboardingScreen")).toBeHidden();
+  // Seed the inbox phase before bootstrap and mode-session hydration.
+  // Mutating only localStorage after startup can be overwritten by the active
+  // league session, so it does not establish a valid inbox test precondition.
   await openOfficeCalendar(page);
   await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}")?.clubWeekState?.phase)).toBe("inbox");
   await expect(page.locator("#managerCalendarNow")).toHaveText("Uke 3 · Tirsdag");
