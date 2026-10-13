@@ -84,7 +84,11 @@ for (const [playerId, attributeId, expected] of [
   ["borek_dockal", "crossing", 16],
   ["borek_dockal", "decisions", 15],
   ["vegar_eggen_hedenstad", "set_pieces", 15],
-  ["anders_konradsen", "work_rate", 16]
+  ["anders_konradsen", "work_rate", 16],
+  ["pal_andre_helland", "set_pieces", 16],
+  ["birger_meling", "pace", 16],
+  ["andre_hansen", "distribution", 15],
+  ["mikael_lustig", "crossing", 15]
 ]) {
   const profile = profiles[playerId];
   check(`${playerId} har vurdert ${attributeId}=${expected}`,
