@@ -553,6 +553,47 @@ const documented = [
     claim: "Knut Espen Svegaarden beskriver Rosenborg-backen Mikael Dorsin i Rabonas 2000-tallslag som «vrien å passere, fysisk meget sterk». Dette gir direkte belegg for fysisk styrke. Uttrykket «vrien å passere» gjelder defensivt backspill, mens attributtet one_vs_one i katalogen gjelder offensiv dribling, og er derfor ikke brukt.",
     source: "https://rabonapod.no/2025/07/23/tiarslagene-2000-tallet/",
     sourceKind: "football_editorial"
+  },
+  // --- Rosenborg: documented keeper, fullback and forward qualities --------
+  {
+    playerId: "daniel_orlund",
+    clubId: "rosenborg",
+    strengths: ["command_of_area", "shot_stopping"],
+    claim: "Rosenborgs keepertrener Jørn Jamtfall beskrev Daniel Örlunds dokumenterte styrker til Aftenposten i oktober 2010: «Trenger vi at han er god i feltet, er han det. Men han er også god på strek.» Direkte belegg for feltarbeid og skuddredninger på streken, ikke for refleksfart eller distribusjon.",
+    source: "https://www.aftenposten.no/sport/fotball/i/6jB0Mz/orlund-sprer-trygghet-i-rbk-rekkene",
+    sourceKind: "press"
+  },
+  {
+    playerId: "vegard_heggem",
+    clubId: "rosenborg",
+    strengths: ["pace"],
+    claim: "Vegard Heggem fortalte NTB/Dagbladet i oktober 1998, om rollen på høyrekanten etter Rosenborg: «Jobben min blir å bruke farten og få til innlegg eller gjennombrudd». Utsagnet beskriver hans egen hurtighet og støtter pace; en plan om innlegg er ikke i seg selv dokumentasjon på crossing.",
+    source: "https://www.dagbladet.no/sport/heggem-husker-ikke/65483720",
+    sourceKind: "press"
+  },
+  {
+    playerId: "jorgen_skjelvik",
+    clubId: "rosenborg",
+    strengths: ["pace"],
+    claim: "Rosenborg-trener Kåre Ingebrigtsen begrunnet cupfinaleuttaket i november 2015 med at «Jørgen har også ekstrem fart», særlig nyttig mot mulige kontringer. Det er direkte belegg for pace, men ingen presis påstand om pasningsteknikk, spenst eller defensive duellferdigheter.",
+    source: "https://www.bt.no/sport/i/naQbXn/rosenborg-overrasker-med-laguttaket-i-cupfinalen",
+    sourceKind: "press"
+  },
+  {
+    playerId: "ole_christer_basma",
+    clubId: "rosenborg",
+    strengths: ["pace"],
+    claim: "Knut Espen Svegaardens historiske 2000-tallsvurdering beskriver Christer Basmas individuelle backegenskap: «Hurtigheten var Basmas styrke». Dette dokumenterer pace for Ole Christer Basmas eksisterende Lerkendal-profil, ikke Stabæk-katalogens separate christer_basma-identitet.",
+    source: "https://rabonapod.no/2025/07/23/tiarslagene-2000-tallet/",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "thorstein_helstad",
+    clubId: "rosenborg",
+    strengths: ["pace"],
+    claim: "Knut Espen Svegaarden skrev om Thorstein Helstad i Rabonas historiske tiårslag: «Han måtte utnytte det som var hans store styrke: Farten.» Kilden dokumenterer pace; betegnelsen målscorer og klubbens resultater gir ikke automatisk finishing eller positioning.",
+    source: "https://rabonapod.no/2025/07/23/tiarslagene-2000-tallet/",
+    sourceKind: "football_editorial"
   }
 
 ];
