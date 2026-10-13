@@ -925,3 +925,48 @@ Fire bitetester, alle bekreftet:
 | Oppdiktet `belagt`-påstand | provenance-sjekken mot `strengths` |
 | Samlescoren gjeninnført i motoren | «ingen posisjonsvektet samlescore» |
 | Profilen sortert etter posisjonen igjen | «app.js sorterer etter spillerens egne toppferdigheter» |
+
+## Permanent metode: historisk spillresearch og direkte ferdighetsverdier (13.10.2026)
+
+Historiske utgaver av FIFA/EA FC, Football Manager og fantasy kan brukes som
+**research- og kryssjekkilder** til konkrete, individuelle egenskaper.
+Vurderinger fra andre spill er historiske redaksjonelle vurderinger, ikke
+objektive målinger. Årgang og relevant karriereperiode må oppgis; en 2016-rating
+kan ikke automatisk settes lik en 2012-prestasjon.
+
+**Ingen separat kalibreringsmotor eller ny spillerdatabase.** Kildene ligger på
+eksisterende spillerposter i `football-player-source-claims-p1.js`,
+`football-player-source-claims-p2.js` eller
+`football-player-source-claims-depth.js`, avhengig av eksisterende kildeeierskap.
+Eksisterende `strengths` beholdes, og de konkret undersøkte egenskapene kan få
+`attributeValues: { token: 1–20 }` og `attributeSources` i den samme posten.
+Attributtmotoren leser de eksakte tallene i den effektive spillerprofilen og
+bruker sin vanlige avledning for øvrige ferdigheter. Alle tall i spillprofilene
+forblir på **1–20**, uten `overall` eller en ny samlescore.
+
+Arbeidsregelen for nye tall:
+1. Identifiser eksakt canonical spiller-ID og finn hvilket eksisterende
+   kilderegister som eier spilleren; ikke dupliser påstander mellom P1/P2/depth.
+2. Velg relevant kamp- eller sesongperiode. Finn historiske spillvurderinger for
+   **samme person**, og merk klart hvis spillets årgang ligger etter perioden.
+3. Kontroller konkret egenskap mot individuell trenerbeskrivelse, spillanalyse
+   eller andre selvstendige kilder, ikke bare posisjon, meritter eller antall mål.
+4. Fastsett et **eget, begrunnet 1–20-tall** for den navngitte ferdigheten.
+   Ingen mekanisk multiplikasjon av 0–99 eller massedumping av andre databaser.
+5. Registrer `attributeValues` og en `attributeSources`-post per tall med
+   `evidenceUrl`, `comparisonUrl`, `period` og `rationale`.
+6. Audit kontrollerer canonical token, heltall på skalaen, én-til-én-kilder,
+   ingen duplisert kildepost og at andre spillerfelt er urørt. Simuleringen
+   bekrefter at de faktiske tallene brukes direkte av motoren.
+
+### Første kontrollert kalibrerte spillere
+
+| Spiller | Eksakt 1–20-tall | Primærkilde | Historisk sammenligning |
+| --- | --- | --- | --- |
+| Peter Ankersen | `pace: 16` | RBKweb, Hoftun om fart, 2012 | FIFA 16, senere sesong |
+| Nicklas Bendtner | `strength: 17`, `heading: 17` | Rosenborgs kampomtale 8. april 2018 | FIFA 18 |
+| Per Ciljan Skjelbred | `stamina: 17` | RBKweb, Per Joar Hansen, 12. juni 2005 | FIFA 15, senere sesong |
+| Didier Ya Konan | `finishing: 15` | RBKweb, Knut Tørum ved overgang 2006 | FIFA 14, senere sesong |
+
+Dette er våre egne, kildeforklarte spillvurderinger; ingen av tallene er en
+direkte kopi av spillenes opprinnelige 0–99-attributt.

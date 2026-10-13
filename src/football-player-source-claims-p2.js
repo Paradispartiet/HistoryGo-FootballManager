@@ -164,6 +164,13 @@ const documented = [
   {
     playerId: "per_ciljan_skjelbred",
     strengths: ["first_touch", "vision"],
+    attributeValues: { stamina: 17 },
+    attributeSources: { stamina: {
+      period: "Rosenborg 2005; sammenligning 2014/15",
+      evidenceUrl: "https://www.rbkweb.no/vis/3653",
+      comparisonUrl: "https://fifaindex.com/players/152996-per-ciljan-skjelbred/fifa15",
+      rationale: "Per Joar Hansen beskrev løpskapasitet og en enorm motor i 2005; FIFA 15 brukes som senere kontroll. SNL-styrkene first_touch og vision er uendret."
+    } },
     claim: "«Per Ciljan Skjelbred er regnet som teknisk habil spiller med godt overblikk.»",
     source: "https://snl.no/Per_Ciljan_Skjelbred"
   },
@@ -282,7 +289,14 @@ export function applyP2SourceClaimsToPlayer(player) {
   const record = BY_ID.get(player?.id);
   if (!record) return player;
   if (Array.isArray(player.strengths) && player.strengths.length > 0) return player;
-  return { ...player, strengths: [...record.strengths] };
+  return {
+    ...player,
+    strengths: [...record.strengths],
+    ...(record.attributeValues ? {
+      attributeValues: { ...(player.attributeValues || {}), ...record.attributeValues },
+      attributeSources: { ...(player.attributeSources || {}), ...record.attributeSources }
+    } : {})
+  };
 }
 
 export function applyP2SourceClaims(players) {

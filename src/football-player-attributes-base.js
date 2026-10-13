@@ -429,8 +429,19 @@ export function derivePlayerAttributes(player, { catalogue, roles = [], scaling 
     if (direct.has(id)) { raw += LIFT.strength; source = "belagt"; }
     if (poorOnly.has(id)) raw += LIFT.poorFitOnly;
 
-    values[id] = rawOnly ? raw : applyClassCeiling(scaleRawValue(raw, scaling), ceiling);
-    provenance[id] = source;
+    // Numeric research is stored on the existing source-claim record and
+    // applied directly to the player's effective profile on the native 1–20 scale.
+    // Raw scaling and all other attributes remain unchanged.
+    const researched = player?.attributeValues?.[id];
+    const evidence = player?.attributeSources?.[id]?.evidenceUrl;
+    if (!rawOnly && Number.isInteger(researched) && researched >= ATTRIBUTE_SCALE.floor
+      && researched <= ATTRIBUTE_SCALE.max && typeof evidence === "string" && evidence.startsWith("https://")) {
+      values[id] = researched;
+      provenance[id] = "belagt";
+    } else {
+      values[id] = rawOnly ? raw : applyClassCeiling(scaleRawValue(raw, scaling), ceiling);
+      provenance[id] = source;
+    }
   }
 
   const numbers = Object.values(values);

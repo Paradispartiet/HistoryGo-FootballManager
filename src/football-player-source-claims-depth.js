@@ -774,6 +774,13 @@ const documented = [
     playerId: "didier_konan_ya",
     clubId: "rosenborg",
     strengths: ["finishing"],
+    attributeValues: { finishing: 15 },
+    attributeSources: { finishing: {
+      period: "Rosenborg 2006–2009",
+      evidenceUrl: "https://www.rbkweb.no/spiller/konan",
+      comparisonUrl: "https://fifaindex.com/players/179589-didier-ya-konan/fifa14",
+      rationale: "Egen 1–20-kalibrering fra Tørums beskrivelse. FIFA 14 gjelder Hannover-perioden, ikke 2007."
+    } },
     claim: "Ved Rosenborgs kjøp av Didier Ya Konan fra ASEC i desember 2006 beskrev trener Knut Tørum ham som en offensiv midtbanespiller med «god pasningsfot og gode avslutningsferdigheter», gjengitt i RBKwebs spillerbiografi. Den konkrete vurderingen av avslutninger belegger finishing; den generelle omtalen av pasningsfot og bevegelighet gir ikke i seg selv spesifikk passing_range, set_pieces eller off_ball_runs. Vurderingen gjelder ankomsten til RBK, ikke en bestemt senere kamp.",
     source: "https://www.rbkweb.no/spiller/konan",
     sourceKind: "football_editorial"
@@ -785,6 +792,46 @@ const documented = [
     claim: "Ved prøvespillet på Gran Canaria i januar 2006 beskrev Rosenborg-trener Per-Mathias Høgmo Yssouf Koné som «hurtig», gjengitt i RBKwebs spillerbiografi. Dette er direkte belegg for pace. Han ble også omtalt som god i lufta og med gode skuddbein, men de brede formuleringene tilordnes ikke egne heading- eller finishing-tokens uten mer presis dokumentasjon. Vurderingen gjelder prøvespillet før overgangen til RBK.",
     source: "https://www.rbkweb.no/spiller/kone",
     sourceKind: "football_editorial"
+  },
+  // Historisk spillresearch sammenholdt med samtidige trener- og klubbkilder.
+  // Tallene er selvstendige 1–20-vurderinger, ikke kopierte FIFA-/FM-ratings.
+  {
+    playerId: "peter_ankersen",
+    clubId: "rosenborg",
+    strengths: ["pace"],
+    attributeValues: { pace: 16 },
+    attributeSources: { pace: {
+      period: "Rosenborg 2012",
+      evidenceUrl: "https://www.rbkweb.no/spiller/ankersen",
+      comparisonUrl: "https://fifaindex.com/players/208564-peter-ankersen/fifa16",
+      rationale: "Erik Hoftun beskrev backen som hurtig og fotrapp i 2012; FIFA 16 er senere kryssjekk."
+    } },
+    claim: "Erik Hoftun beskrev Peter Ankersen ved overgangen til Rosenborg våren 2012 som «bra fart» og «fotrapp», gjengitt av RBKweb. Dette gir belegg for pace; spillerposisjon alene er ikke brukt som ferdighetsbevis. Historisk FIFA 16 er bare sammenligningsgrunnlag fra hans senere karriere.",
+    source: "https://www.rbkweb.no/spiller/ankersen",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "nicklas_bendtner",
+    clubId: "rosenborg",
+    strengths: ["strength", "heading"],
+    attributeValues: { strength: 17, heading: 17 },
+    attributeSources: {
+      strength: {
+        period: "Rosenborg 2018",
+        evidenceUrl: "https://www.rbk.no/nyheter/rosenborg-knuste-molde",
+        comparisonUrl: "https://fifaindex.com/players/167706-nicklas-bendtner/fifa18",
+        rationale: "Klubbens kampomtale beskriver Bendtner som knallsterk; FIFA 18 er samtidig kontroll."
+      },
+      heading: {
+        period: "Rosenborg 2018",
+        evidenceUrl: "https://www.rbk.no/nyheter/rosenborg-knuste-molde",
+        comparisonUrl: "https://fifaindex.com/players/167706-nicklas-bendtner/fifa18",
+        rationale: "RBKs samtidige beskrivelse av hodeduell og luftspill, kryssjekket mot FIFA 18."
+      }
+    },
+    claim: "Rosenborg beskrev Nicklas Bendtner som «knallsterk» og fortalte konkret hvordan han overvant oppasseren i hodeduell mot Molde 8. april 2018. Det belegger styrke og hodespill, ikke fart eller arbeidskapasitet. FIFA 18 brukes kun som historisk sammenligning.",
+    source: "https://www.rbk.no/nyheter/rosenborg-knuste-molde",
+    sourceKind: "club"
   }
 
 ];
@@ -804,7 +851,14 @@ export function applySourceDepthClaimsToPlayer(player) {
   const record = BY_ID.get(player?.id);
   if (!record) return player;
   if (Array.isArray(player.strengths) && player.strengths.length > 0) return player;
-  return { ...player, strengths: [...record.strengths] };
+  return {
+    ...player,
+    strengths: [...record.strengths],
+    ...(record.attributeValues ? {
+      attributeValues: { ...(player.attributeValues || {}), ...record.attributeValues },
+      attributeSources: { ...(player.attributeSources || {}), ...record.attributeSources }
+    } : {})
+  };
 }
 
 export function applySourceDepthClaims(players) {
