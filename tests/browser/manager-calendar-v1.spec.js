@@ -124,9 +124,14 @@ test("kalenderens klubbmail kan åpnes og lukkes gjentatte ganger i inbox-fasen"
     const merits = JSON.parse(localStorage.getItem(key) || "{}");
     merits.clubWeekState = { ...merits.clubWeekState, phase: "inbox" };
     localStorage.setItem(key, JSON.stringify(merits));
-    window.dispatchEvent(new Event("updateProfile"));
   });
+  // The running manager retains its canonical week state in memory. Reload
+  // the save so the inbox phase is read at startup instead of only replacing
+  // the localStorage snapshot beneath a running training-phase session.
+  await page.reload();
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
   await openOfficeCalendar(page);
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}")?.clubWeekState?.phase)).toBe("inbox");
   await expect(page.locator("#managerCalendarNow")).toHaveText("Uke 3 · Tirsdag");
 
   let message = null;
