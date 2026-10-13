@@ -896,7 +896,7 @@ const documented = [
     claim: "Rosenborg beskrev Nicklas Bendtner som «knallsterk» og fortalte konkret hvordan han overvant oppasseren i hodeduell mot Molde 8. april 2018. Det belegger styrke og hodespill, ikke fart eller arbeidskapasitet. FIFA 18 brukes kun som historisk sammenligning.",
     source: "https://www.rbk.no/nyheter/rosenborg-knuste-molde",
     sourceKind: "club"
-  }
+  },
 
   // Rosenborg: grouped source pass for established historical squad profiles.
   {
