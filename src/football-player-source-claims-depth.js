@@ -624,6 +624,13 @@ const documented = [
     playerId: "cristian_gamboa",
     clubId: "rosenborg",
     strengths: ["pace"],
+    attributeValues: { pace: 18 },
+    attributeSources: { pace: {
+      period: "Rosenborg 2012–2014",
+      evidenceUrl: "https://www.rbkweb.no/spiller/gamboa",
+      comparisonUrl: "https://fifaindex.com/players/198553-cristian-gamboa/fifa14",
+      rationale: "Hoftun kalte hurtigheten ekstrem i 2012; FIFA 14 vurderte fart til 88 (topp 5 %). Vår 18-er er selvstendig for RBK-perioden, ikke omregnet fra FIFA."
+    } },
     claim: "Rosenborgs Erik Hoftun beskrev Cristian Gamboa ved klubbens leieavtale i 2012 som en back med «ekstrem hurtighet, offensiv innstilling og en god fot», gjengitt i RBKwebs spillerbiografi. Dette belegger pace. Offensiv innstilling og god fot blir ikke tolket som crossing eller dribbling uten mer presis kilde.",
     source: "https://www.rbkweb.no/spiller/gamboa",
     sourceKind: "football_editorial"
@@ -715,6 +722,13 @@ const documented = [
     playerId: "vegar_eggen_hedenstad",
     clubId: "rosenborg",
     strengths: ["set_pieces"],
+    attributeValues: { set_pieces: 15 },
+    attributeSources: { set_pieces: {
+      period: "Rosenborg 2017–2020; FIFA 18",
+      evidenceUrl: "https://www.rbkweb.no/spiller/hedenstad",
+      comparisonUrl: "https://fifaindex.com/players/186267-vegar-eggen-hedenstad/fifa18",
+      rationale: "RBKweb framhever hans farlige dødballer i Rosenborg-perioden; FIFA 18 viser blant annet 71 i frisparkpresisjon. Vår samlede dødballvurdering er 15."
+    } },
     claim: "RBKwebs historiske spillerbiografi sier om Vegar Eggen Hedenstads Rosenborg-periode 2017–2020 at han «bidro også framover med mål og farlige dødballer». Dette er direkte belegg for set_pieces, men generelle utsagn om å være en god kombinasjonsspiller er ikke nok til å anta særskilt pasningspresisjon eller dribling.",
     source: "https://www.rbkweb.no/spiller/hedenstad",
     sourceKind: "football_editorial"
@@ -724,6 +738,21 @@ const documented = [
     playerId: "borek_dockal",
     clubId: "rosenborg",
     strengths: ["crossing", "decisions"],
+    attributeValues: { crossing: 16, decisions: 15 },
+    attributeSources: {
+      crossing: {
+        period: "Rosenborg 2011–2013",
+        evidenceUrl: "https://www.rbkweb.no/spiller/dockal",
+        comparisonUrl: "https://fifaindex.com/es-mx/jugadores/181271-borek-dockal/fifa13",
+        rationale: "Speider Torbjørnsen kalte innleggsfoten hans fremste varemerke; FIFA 13 oppførte crossing 72 i RBK-perioden. Egen vurdering 16."
+      },
+      decisions: {
+        period: "Rosenborg 2011–2013",
+        evidenceUrl: "https://www.rbkweb.no/spiller/dockal",
+        comparisonUrl: "https://fifaindex.com/es-mx/jugadores/181271-borek-dockal/fifa13",
+        rationale: "Torbjørnsen kalte ham klok i valgene på banen. FIFA 13 er tidssammenligning, men har ikke en identisk decisions-egenskap; egen vurdering 15."
+      }
+    },
     claim: "Rosenborg-speider Stig Torbjørnsen beskrev Bořek Dočkal ved signeringen i 2011: «Han har først og fremst en veldig god innleggsfot» og «er klok i valgene han gjør på banen», gjengitt i RBKwebs spillerbiografi. Det belegger crossing og decisions. Utsagn om generell pasningskvalitet blir ikke utvidet til passing_range uten særskilt belegg for lange pasninger.",
     source: "https://www.rbkweb.no/spiller/dockal",
     sourceKind: "football_editorial"
@@ -732,6 +761,13 @@ const documented = [
     playerId: "anders_konradsen",
     clubId: "rosenborg",
     strengths: ["work_rate", "ball_carrying"],
+    attributeValues: { work_rate: 16 },
+    attributeSources: { work_rate: {
+      period: "Rosenborg fra 2015; FIFA 15",
+      evidenceUrl: "https://www.rbkweb.no/spiller/konradsen",
+      comparisonUrl: "https://fifaindex.com/players/187042-anders-konradsen/fifa15",
+      rationale: "Ingebrigtsen beskrev ham som hardtarbeidende; FIFA 15 oppga høy/høy arbeidsinnsats og stamina 92, uten at utholdenhet likestilles med work_rate. Egen vurdering 16."
+    } },
     claim: "Rosenborg-trener Kåre Ingebrigtsen beskrev Anders Konradsen ved overgangen i 2015 som «en hardtarbeidende spiller» med «godt driv med ball», gjengitt i RBKwebs biografi. Det støtter work_rate og ball_carrying. «Kvikk i steget» gjelder ikke nødvendigvis toppfarten pace og er derfor ikke brukt som fartsvurdering.",
     source: "https://www.rbkweb.no/spiller/konradsen",
     sourceKind: "football_editorial"
