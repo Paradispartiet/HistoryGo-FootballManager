@@ -5,9 +5,8 @@ on:
     paths:
       - "tests/browser/manager-career-full-season-playthrough-v1.spec.js"
       - ".github/workflows/eliteserien-full-season.yml"
-      - "data/football_staff.json"
-      - "data/football_clubs.json"
-      - "src/**"
+      # Core code/data PRs already run the focused checks in ci.yml;
+      # complete multi-club seasons run on manual dispatch and weekly schedule.
   workflow_dispatch:
   schedule:
     - cron: "43 4 * * 0"
