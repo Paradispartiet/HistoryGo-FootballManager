@@ -898,6 +898,127 @@ const documented = [
     sourceKind: "club"
   }
 
+  // Rosenborg: grouped source pass for established historical squad profiles.
+  {
+    playerId: "yann_erik_de_lanlay",
+    clubId: "rosenborg",
+    strengths: ["one_vs_one","pace"],
+    claim: "Kåre Ingebrigtsen beskrev de Lanlay ved signeringen i 2015 som «veldig god én mot én» med «bra fart» og sterk evne til å passere motspillere. Disse to egenskapene registreres; mål og andre egenskaper avledes ikke av overgangsbeløpet.",
+    source: "https://rbkweb.no/spiller/lanlay",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "tarik_elyounoussi",
+    clubId: "rosenborg",
+    strengths: ["pace"],
+    claim: "Erik Hoftun beskrev Tarik Elyounoussi ved overgangen til RBK i august 2012 som en spiller som tilfører «hurtighet» og er «gjennombruddshissig». Det gir belegg for pace, ikke automatisk finishing.",
+    source: "https://www.rbkweb.no/spiller/elyounoussi",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "tobias_mikkelsen",
+    clubId: "rosenborg",
+    strengths: ["one_vs_one","finishing"],
+    claim: "Trener Per Joar Hansen sa ved RBK-signeringen i 2013 at Mikkelsen kunne «ta av folk én-mot-én» og var «en bra avslutter». Det belegger one_vs_one og finishing; spilleren beskrives før Rosenborg-kampene.",
+    source: "https://www.rbkweb.no/spiller/mikkelsen",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "rade_prica",
+    clubId: "rosenborg",
+    strengths: ["strength","hold_up_play"],
+    claim: "Rosenborgs sportslige leder Erik Hoftun beskrev i 2011 Rade Prica som «sterk» og «flink ... i oppspillsfasen». Dette underbygger fysisk styrke og evnen til å fungere som oppspillspunkt, ikke en anslått målscore.",
+    source: "https://www.rbkweb.no/vis/7995",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "nicki_bille_nielsen",
+    clubId: "rosenborg",
+    strengths: ["strength","hold_up_play","pace"],
+    claim: "Nicki Bille beskrev seg selv ved Rosenborg-overgangen i 2013 som «sterk», god til å «holde ... fast på ballen», og «hurtig». Dette er spillerens egen vurdering før RBK-perioden, som underbygger styrke, oppspill og fart, men ikke automatisk avslutninger.",
+    source: "https://www.rbkweb.no/vis/9347",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "trond_olsen",
+    clubId: "rosenborg",
+    strengths: ["pace","off_ball_runs"],
+    claim: "Sportslig leder Erik Hoftun fremhevet ved kjøpet i 2009 at Olsen hadde «utrolig bra fart» og var «flink til å starte». Dette er belegg for fart og eksplisitte offensive løpsstarter.",
+    source: "https://www.rbkweb.no/spiller/tolsen",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "karim_essediri",
+    clubId: "rosenborg",
+    strengths: ["crossing"],
+    claim: "RBKwebs spillerbiografi om Karim Essediri beskriver høyrekantspilleren som innehaver av «den gode innleggsfoten» fra Tromsø-perioden før RBK i 2006. Dette er belegg for crossing, ikke dødballer generelt.",
+    source: "https://www.rbkweb.no/spiller/essediri",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "alexander_soderlund",
+    clubId: "rosenborg",
+    strengths: ["strength","hold_up_play","work_rate"],
+    claim: "Nettavisens vurdering av 2015-sesongen beskriver Søderlund som «stor og sterk», et viktig «oppspillspunkt», og som en spiller med «enorm innsats uten ball». Dette gjelder hans dokumenterte Rosenborg-spill, ikke bare målstatistikk.",
+    source: "https://www.nettavisen.no/artikkel/her-er-arets-lag-i-tippeligaen-2015/s/12-95-3423157027",
+    sourceKind: "press"
+  },
+  {
+    playerId: "dagfinn_enerly",
+    clubId: "rosenborg",
+    strengths: ["set_pieces"],
+    claim: "RBKwebs spillerbiografi forteller at Enerly scoret «to vakre frispark» mot Stabæk og Sogndal høsten 2002. Den eksplisitt dokumenterte dødballutførelsen gir et avgrenset set_pieces-signal; ingen generell avslutningsvurdering utledes.",
+    source: "https://www.rbkweb.no/spiller/enerly",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "morten_moldskred",
+    clubId: "rosenborg",
+    strengths: ["pace"],
+    claim: "Landslagstrener Egil «Drillo» Olsen begrunnet uttaket av Morten Moldskred i 2009 med at han hadde «stor fart». Utsagnet gjelder spillerens Tromsø-periode før Rosenborg, men dokumenterer den individuelle pace-egenskapen.",
+    source: "https://www.aftenbladet.no/sport/i/BRJzE0/doffen-paa-landslaget",
+    sourceKind: "press"
+  },
+  {
+    playerId: "erik_botheim",
+    clubId: "rosenborg",
+    strengths: ["strength"],
+    claim: "HamKams omtale av Norges G19-landslag i 2018 kalte Botheim en «stor og fysisk Rosenborg-spiss», etter en kamp hvor han spilte i det fysiske boks- og duellspillet. Bare fysisk styrke registreres; scoringen er ikke belegg for en særskilt finishing-vurdering.",
+    source: "https://www.hamkam.no/nyheter/snuoperasjon-av-norge-g19",
+    sourceKind: "club"
+  },
+  {
+    playerId: "samuel_adegbenro",
+    clubId: "rosenborg",
+    strengths: ["one_vs_one","pace"],
+    claim: "Dagbladets kampreferat fra BATE–Rosenborg sommeren 2019 fremhevet eksplisitt Adegbenros «dribleferdigheter og hurtighet» da han utfordret BATEs høyreback. Dette belegger offensivt én-mot-én-spill og fart.",
+    source: "https://www.dagbladet.no/sport/champions-league-hapet-lever-for-rbk/71429565",
+    sourceKind: "press"
+  },
+  {
+    playerId: "johan_laedre_bjordal",
+    clubId: "rosenborg",
+    strengths: ["duels"],
+    claim: "Vikings sportsdirektør Egil Østenstad beskrev Johan Lædre Bjørdal i 2011 som «duellsterk og uredd». Dette gjelder hans periode før Rosenborg, og gir kun duels som dokumentert ferdighet.",
+    source: "https://www.bt.no/sport/i/AdlLMq/johan-laedre-bjoerdal-klar-for-viking",
+    sourceKind: "press"
+  },
+  {
+    playerId: "mikkel_konradsen_ceide",
+    clubId: "rosenborg",
+    strengths: ["duels","ball_carrying"],
+    claim: "Rotsekks kampvurdering mot HamKam i september 2026 omtaler Mikkel Ceïde som «Sterk i duellene» og «flinkere til å ta med seg ballen forbi ledd». Dette underbygger duels og ball_carrying for en navngitt, datert RBK-opptreden, uten å gjøre én kamp til en generell teknisk totaldom.",
+    source: "https://rotsekk.com/borsen/a0522391-2f1d-4543-ba8f-bb635e333233",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "aslak_fonn_witry",
+    clubId: "rosenborg",
+    strengths: ["crossing"],
+    claim: "Rotsekks kampvurdering mot HamKam i september 2026 fremhever eksplisitt at Witry har «så god innlegsfot». Dette belegger crossing, mens «høyt tempo» i omtalen ikke uten videre tolkes som individuell sprintfart.",
+    source: "https://rotsekk.com/borsen/a0522391-2f1d-4543-ba8f-bb635e333233",
+    sourceKind: "football_editorial"
+  },
 ];
 
 export const SOURCE_DEPTH_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
