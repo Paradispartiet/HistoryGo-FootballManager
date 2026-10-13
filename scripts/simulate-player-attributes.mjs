@@ -72,6 +72,24 @@ for (const role of roles) role.requiredSkills = splitRoleRequirements(catalogue,
 const { scaling, profiles } = derivePlayerAttributeIndex(players, { catalogue, roles });
 for (const player of players) player.attributes = profiles[player.id];
 
+// Research values belong directly to the existing effective player profile,
+// not to a parallel calibration engine or a separate rating system.
+for (const [playerId, attributeId, expected] of [
+  ["peter_ankersen", "pace", 16],
+  ["nicklas_bendtner", "heading", 17],
+  ["nicklas_bendtner", "strength", 17],
+  ["per_ciljan_skjelbred", "stamina", 17],
+  ["didier_konan_ya", "finishing", 15]
+]) {
+  const profile = profiles[playerId];
+  check(`${playerId} har vurdert ${attributeId}=${expected}`,
+    profile?.values[attributeId] === expected,
+    `fikk ${profile?.values[attributeId]}`);
+  check(`${playerId} har kildeproveniens for ${attributeId}`,
+    profile?.provenance[attributeId] === "belagt",
+    String(profile?.provenance[attributeId]));
+}
+
 // ---------------------------------------------------------------------------
 // 1. Alle får en profil, og den er deterministisk
 // ---------------------------------------------------------------------------
@@ -967,7 +985,7 @@ const KJENT_UDOKUMENTERT = {
   // mest dokumentasjon av alle og lavest dekning av de fire, fordi mesteparten
   // handler om meritter og kampmengde. Haugesund har halvparten så mye tekst og
   // dobbelt så mange spillerbeskrivelser.
-  lerkendal_stadion: 0.56,   // Rosenborg: forventet 45 av 83 eksklusive profiler uten styrker etter Konan/Koné (0.5422)
+  lerkendal_stadion: 0.53,   // Rosenborg: forventet 43 av 83 eksklusive profiler uten styrker etter Ankersen/Bendtner (0.5181)
   aker_stadion: 0.72,        // Molde: målt 41 av 54
   marienlyst_stadion: 0.76,  // Strømsgodset: målt 63 av 84
   haugesund_stadion: 0.59,   // Haugesund/Haugar/Djerv: målt 50 av 87
@@ -1367,16 +1385,20 @@ check("fallback uten profil bruker klassehøyden", Math.abs(calculateClassBonus(
 // ---------------------------------------------------------------------------
 // 7. Ingen påstand kilden ikke bærer
 // ---------------------------------------------------------------------------
-// Hver eneste `belagt`-verdi må kunne spores tilbake til spillerens egne
-// `strengths`. Finner motoren på en påstand om en ekte fotballspiller, faller
-// dette.
+// Hver `belagt`-verdi må kunne spores til spillerens eksisterende
+// strengths ELLER et eksakt 1–20-tall med egen dokumentasjonslenke i den
+// samme effektive kilderegistreringen. Manglende proveniens feiler fortsatt.
 for (const player of players) {
   const profile = profiles[player.id];
   const tokens = new Set((player.strengths || []).map((token) =>
     catalogue.byId.has(token) ? token : catalogue.aliases[token]).filter(Boolean));
   for (const [id, source] of Object.entries(profile.provenance)) {
     if (source !== "belagt") continue;
-    check(`${player.name}: «${id}» er belagt fordi den står i strengths`, tokens.has(id), id);
+    const researched = player.attributeValues?.[id] === profile.values[id]
+      && typeof player.attributeSources?.[id]?.evidenceUrl === "string"
+      && player.attributeSources[id].evidenceUrl.startsWith("https://");
+    check(`${player.name}: «${id}» har individuelt styrkebelegg eller direkte kildefestet tall`,
+      tokens.has(id) || researched, id);
   }
 }
 

@@ -36,8 +36,15 @@ function synchronizeSourceClaims(players) {
     const sourceStrengths = effective[index]?.strengths;
     if (!Array.isArray(sourceStrengths)) continue;
     const currentStrengths = Array.isArray(players[index]?.strengths) ? players[index].strengths : [];
-    if (JSON.stringify(currentStrengths) === JSON.stringify(sourceStrengths)) continue;
-    players[index].strengths = [...sourceStrengths];
+    if (JSON.stringify(currentStrengths) !== JSON.stringify(sourceStrengths)) {
+      players[index].strengths = [...sourceStrengths];
+    }
+    // As for strengths, reuse the existing P1/P2/depth precedence instead of
+    // building another source layer. The original catalogue stays untouched.
+    if (effective[index]?.attributeValues) {
+      players[index].attributeValues = { ...effective[index].attributeValues };
+      players[index].attributeSources = { ...effective[index].attributeSources };
+    }
   }
   return players;
 }

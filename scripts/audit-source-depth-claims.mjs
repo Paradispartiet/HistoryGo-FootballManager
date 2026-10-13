@@ -24,6 +24,12 @@ const read = (file) => JSON.parse(fs.readFileSync(new URL(`../data/${file}`, imp
 const players = read("football_players.json").players;
 const validStrengths = new Set(read("football_attributes.json").attributes.map((entry) => entry.id));
 const byId = new Map(players.map((player) => [player.id, player]));
+const validResearchAttribute = (id, value, source) =>
+  validStrengths.has(id) && Number.isInteger(value) && value >= 4 && value <= 20
+  && /^https:\/\//.test(source?.evidenceUrl || "")
+  && /^https:\/\//.test(source?.comparisonUrl || "")
+  && typeof source?.period === "string" && source.period.length > 3
+  && typeof source?.rationale === "string" && source.rationale.length >= 20;
 const allowedSourceKinds = new Set(["club", "press", "football_editorial", "encyclopedia"]);
 
 let checks = 0;
@@ -66,10 +72,21 @@ for (const record of SOURCE_DEPTH_DOCUMENTED) {
   ), `${record.playerId}: mangler kildebelagt klubbtilknytning til ${record.clubId}`);
 
   const after = applySourceDepthClaimsToPlayer(player);
+  for (const [id, value] of Object.entries(record.attributeValues || {})) {
+    ok(validResearchAttribute(id, value, record.attributeSources?.[id]),
+      `${record.playerId}: tallfestet ferdighet ${id} mangler gyldig verdi eller kilder`);
+  }
+  if (record.attributeValues) {
+    ok(Object.keys(record.attributeSources || {}).length === Object.keys(record.attributeValues).length,
+      `${record.playerId}: kildekoblinger og tallverdier er ikke 1:1`);
+  }
+  assert.deepEqual(after.attributeValues || {}, record.attributeValues || {},
+    `${record.playerId}: tallverdiene kom ikke gjennom`);
+  
   assert.deepEqual(
-    { ...after, strengths: null },
-    { ...player, strengths: null },
-    `${record.playerId}: source-depth endret annet enn strengths`
+    { ...after, strengths: null, attributeValues: null, attributeSources: null },
+    { ...player, strengths: null, attributeValues: null, attributeSources: null },
+    `${record.playerId}: source-depth endret identitet eller andre spillerfelt`
   );
   assert.deepEqual(after.strengths, [...record.strengths],
     `${record.playerId}: source-depth-styrkene kom ikke gjennom`);

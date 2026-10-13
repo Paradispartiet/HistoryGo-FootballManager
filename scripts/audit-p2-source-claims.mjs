@@ -19,6 +19,13 @@ const players = les("football_players.json").players;
 const clubs = les("football_clubs.json").clubs;
 const gyldige = new Set(les("football_attributes.json").attributes.map((a) => a.id));
 const byId = new Map(players.map((p) => [p.id, p]));
+const validResearchAttribute = (id, value, source) =>
+  gyldige.has(id) && Number.isInteger(value) && value >= 4 && value <= 20
+  && /^https:\/\//.test(source?.evidenceUrl || "")
+  && /^https:\/\//.test(source?.comparisonUrl || "")
+  && typeof source?.period === "string" && source.period.length > 3
+  && typeof source?.rationale === "string" && source.rationale.length >= 20;
+
 
 let sjekker = 0;
 const krev = (betingelse, melding) => { sjekker += 1; assert.ok(betingelse, melding); };
@@ -48,10 +55,21 @@ for (const rad of P2_DOCUMENTED) {
 
   // Registeret rører ikke identitet. Det legger på styrker, og bare det.
   const etter = applyP2SourceClaimsToPlayer(p);
+  for (const [id, value] of Object.entries(rad.attributeValues || {})) {
+    krev(validResearchAttribute(id, value, rad.attributeSources?.[id]),
+      `${rad.playerId}: tallfestet ferdighet ${id} mangler gyldig verdi eller kilder`);
+  }
+  if (rad.attributeValues) {
+    krev(Object.keys(rad.attributeSources || {}).length === Object.keys(rad.attributeValues).length,
+      `${rad.playerId}: kildekoblinger og tallverdier er ikke 1:1`);
+  }
+  assert.deepEqual(etter.attributeValues || {}, rad.attributeValues || {},
+    `${rad.playerId}: tallverdiene kom ikke gjennom`);
+  
   assert.deepEqual(
-    { ...etter, strengths: null },
-    { ...p, strengths: null },
-    `${rad.playerId}: overlayet endret noe annet enn styrkene`
+    { ...etter, strengths: null, attributeValues: null, attributeSources: null },
+    { ...p, strengths: null, attributeValues: null, attributeSources: null },
+    `${rad.playerId}: overlayet endret identitet eller andre spillerfelt`
   );
   assert.deepEqual(etter.strengths, [...rad.strengths], `${rad.playerId}: styrkene kom ikke gjennom`);
 }
