@@ -460,6 +460,13 @@ const documented = [
     playerId: "andre_hansen",
     clubId: "rosenborg",
     strengths: ["distribution"],
+    attributeValues: { distribution: 15 },
+    attributeSources: { distribution: {
+      period: "Rosenborg 2015–2016; sammenligning FIFA 16",
+      evidenceUrl: "https://www.bt.no/sport/i/K3yxL7/andre-hansen-det-aa-maake-bort-ballen-har-jeg-ikke-sansen-for",
+      comparisonUrl: "https://fifaindex.com/fr/joueurs/190459-andre-hansen/fifa16",
+      rationale: "Ingebrigtsen beskrev Hansen som svært god med beina og dyktig til frispilling i januar 2015; Hansen ønsket å bygge opp spillet bakfra. FIFA 16 måler keeper-kicking til 73, som ikke er identisk med kontrollert frispilling. Vår distribution=15 er selvstendig og tar høyde for dette skillet."
+    } },
     claim: "RBK-trener Kåre Ingebrigtsen begrunnet keepervalget i januar 2015 med at André Hansen var «svært god med beina» og «dyktig på frispilling». Dette støtter distribusjon og kontrollert frispilling; redninger og feltarbeid utledes ikke av beskrivelsen.",
     source: "https://www.bt.no/sport/i/K3yxL7/andre-hansen-det-aa-maake-bort-ballen-har-jeg-ikke-sansen-for",
     sourceKind: "press"
@@ -476,6 +483,13 @@ const documented = [
     playerId: "pal_andre_helland",
     clubId: "rosenborg",
     strengths: ["set_pieces"],
+    attributeValues: { set_pieces: 16 },
+    attributeSources: { set_pieces: {
+      period: "Rosenborg 2014–2015; sammenligning FIFA 15",
+      evidenceUrl: "https://www.bt.no/sport/i/706wno/varsler-rush-av-frisparkmaal",
+      comparisonUrl: "https://fifaindex.com/players/183336-pal-andre-helland/fifa15",
+      rationale: "BT dokumenterte bevisste frisparkvalg og to frisparkmål i januar 2014. FIFA 15 viser frisparkpresisjon 72 (topp 5 %), men måler ikke alle typer dødball. Vår 16-er er selvstendig, begrenset til dokumentert spesialkompetanse."
+    } },
     claim: "Bergens Tidende beskrev Pål André Hellands direkte frispark i oppkjøringen 2014 og siterte Hellands formulering: «Frispark i så gode posisjoner skal i mål.» Han fortalte også om en fast frisparkavtale med trener Bård Wiggen og vurderinger av murens plassering. Dokumenterer direkte frisparkteknikk (set_pieces), ikke presisjon på alle former for dødball eller generell avslutningsevne.",
     source: "https://www.bt.no/sport/i/706wno/varsler-rush-av-frisparkmaal",
     sourceKind: "press"
@@ -509,6 +523,13 @@ const documented = [
     playerId: "mikael_lustig",
     clubId: "rosenborg",
     strengths: ["crossing"],
+    attributeValues: { crossing: 15 },
+    attributeSources: { crossing: {
+      period: "Rosenborg 2008–2011; senere sammenligning FIFA 13",
+      evidenceUrl: "https://www.rbkweb.no/vis/6250",
+      comparisonUrl: "https://fifaindex.com/players/176942-mikael-lustig/fifa13",
+      rationale: "Erik Hamrén beskrev allerede i juli 2008 Lustigs presise innlegg. FIFA 13 registrerer crossing 70, men gjelder Celtic-perioden etter Rosenborg. Vår crossing=15 bygger primært på Hamréns samtidige vurdering, ikke en konvertering av FIFA-tallet."
+    } },
     claim: "RBK-trener Erik Hamrén fremhevet ved signeringen sommeren 2008 Lustigs offensive backspill og at han «slår presise innlegg». Dette er et direkte belegg for crossing, mens det at han kommer raskt frem i angrep ikke alene dokumenterer sprintfart, overlappinger eller presis defensiv posisjonering.",
     source: "https://www.rbkweb.no/vis/6250",
     sourceKind: "football_editorial"
@@ -542,6 +563,13 @@ const documented = [
     playerId: "birger_meling",
     clubId: "rosenborg",
     strengths: ["pace", "game_reading"],
+    attributeValues: { pace: 16 },
+    attributeSources: { pace: {
+      period: "Rosenborg 2017–2018; sammenligning FIFA 18",
+      evidenceUrl: "https://www.eurosport.no/fotball/vm-kvalifisering/2018/birger-melings-strategiske-valg-derfor-satset-jeg-pa-venstrebackenfot_sto6354821/story.shtml",
+      comparisonUrl: "https://fifaindex.com/es/jugadores/219466-birger-solberg-meling/fifa18",
+      rationale: "Landslagstrener Lagerbäck trakk spesielt fram Melings fart i oktober 2017; FIFA 18 oppgir acceleration 79 og sprint speed 78 i Rosenborg-perioden. Egen hurtighetsvurdering 16."
+    } },
     claim: "Landslagstrener Lars Lagerbäck forklarte overfor Eurosport i oktober 2017 at Birger Meling var aktuell som back «på grunn av farta hans, spilleforståelsen og hans gode offensive bidrag». Fart og spilleforståelse dokumenterer pace og game_reading; generelle offensive bidrag gir ikke automatisk crossing eller overlapping_runs.",
     source: "https://www.eurosport.no/fotball/vm-kvalifisering/2018/birger-melings-strategiske-valg-derfor-satset-jeg-pa-venstrebackenfot_sto6354821/story.shtml",
     sourceKind: "press"
