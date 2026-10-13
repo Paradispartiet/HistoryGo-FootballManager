@@ -701,6 +701,23 @@ const documented = [
     claim: "Molde-trener Ole Gunnar Solskjær vurderte Even Hovland etter en kamp mot Rosenborg i oktober 2013: «Han viste fart og styrke, var rolig med ballen og god i lufta.» Dette gir konkret belegg for pace og strength. Vurderingen gjelder Hovlands Molde-periode før Rosenborg-overgangen; øvrige ferdigheter utledes ikke automatisk av ros for én kamp.",
     source: "https://www.aftenbladet.no/sport/i/BJ7e1w/even-var-helt-fantastisk",
     sourceKind: "press"
+  },
+  // --- Rosenborg: bounded individual qualities from later assessments --------
+  {
+    playerId: "erlend_dahl_reitan",
+    clubId: "rosenborg",
+    strengths: ["pace"],
+    claim: "Rabona vurderte Erlend Dahl Reitan i Starts klubbguide før 2026-sesongen etter over 200 Rosenborg-kamper: «Reitan bidrar med hurtighet og erfaring, og har sin styrke defensivt.» Hurtighet dokumenterer pace, men den generelle defensive karakteristikken gir ikke et spesifikt taklings- eller posisjoneringsattributt. Vurderingen gjelder Start i 2026, ikke et særskilt Rosenborg-år.",
+    source: "https://rabonapod.no/2026/03/13/rabonas-klubbguide-2026-start/",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "vegar_eggen_hedenstad",
+    clubId: "rosenborg",
+    strengths: ["set_pieces"],
+    claim: "RBKwebs historiske spillerbiografi sier om Vegar Eggen Hedenstads Rosenborg-periode 2017–2020 at han «bidro også framover med mål og farlige dødballer». Dette er direkte belegg for set_pieces, men generelle utsagn om å være en god kombinasjonsspiller er ikke nok til å anta særskilt pasningspresisjon eller dribling.",
+    source: "https://www.rbkweb.no/spiller/hedenstad",
+    sourceKind: "football_editorial"
   }
 
 ];
