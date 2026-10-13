@@ -1100,6 +1100,71 @@ const documented = [
     source: "https://rabonapod.no/2026/03/06/klubbguiden-2026-nr-8/",
     sourceKind: "football_editorial"
   },
+  // Rosenborg: combined follow-up evidence, independent player descriptions.
+  {
+    playerId: "nils_arne_eggen",
+    clubId: "rosenborg",
+    strengths: ["determination","game_reading","vision"],
+    claim: "Store norske leksikons avsnitt om Eggens egen spillestil omtaler ham som «en viljesterk fighter, taktisk klok og med godt blikk for spillet». Dette gir individuelt grunnlag for viljestyrke (determination), fotballforståelse og overblikk; trenerkarrieren er ikke brukt som ferdighetsbevis.",
+    source: "https://snl.no/Nils_Arne_Eggen",
+    sourceKind: "encyclopedia"
+  },
+  {
+    playerId: "matthias_vilhjalmsson",
+    clubId: "rosenborg",
+    strengths: ["heading"],
+    claim: "Rosenborg-trener Kåre Ingebrigtsen sa ved kjøpet i 2015 at Vilhjálmsson «har en spisskompetanse i lufta, der han kanskje er Tippeligaens beste sammen med Frode Johnsen». Dette belegger heading spesifikt; spilleren får ikke automatisk generell styrke eller finishing.",
+    source: "https://www.rbkweb.no/spiller/vilhjalmsson",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "sebastian_eguren",
+    clubId: "rosenborg",
+    strengths: ["simple_passing","leadership"],
+    claim: "Sportsdirektør Rune Bratseth beskrev Eguren ved signeringen i 2005 med «en meget god høyrefot som gjør ham til en god pasningslegger» og sa at han «er dessuten en ledertype». Dette dokumenterer pasningskvalitet og lederskap, men ikke noen særskilt langpasningsegenskap eller langskudd alene.",
+    source: "https://www.rbkweb.no/spiller/eguren",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "mix_diskerud",
+    clubId: "rosenborg",
+    strengths: ["stamina","vision","composure"],
+    claim: "Fotballekspert Lars Tjærnås skrev om Mikkel «Mix» Diskerud høsten 2012 at han kom med «en imponerende løpskapasitet kombinert med ro og overblikk med ball». Dette er konkret belegg for løpskapasitet, overblikk og ro med ballen, ikke antatte dødballferdigheter.",
+    source: "https://www.aftenposten.no/sport/meninger/i/jdLgaL/slik-vurderer-tjaernaas-sesonginnspurten",
+    sourceKind: "press"
+  },
+  {
+    playerId: "besart_berisha",
+    clubId: "rosenborg",
+    strengths: ["determination"],
+    claim: "Rosenborg-trener Erik Hamrén beskrev Besart Berisha etter debuten mot Molde i august 2008: «Han har en riktig god vinnermentalitet, som lyser i øynene på ham». Dette gir et avgrenset belegg for determination; to debutmål alene regnes ikke som dokumentasjon av finishing.",
+    source: "https://www.rbkweb.no/vis/6303",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "tore_andre_dahlum",
+    clubId: "rosenborg",
+    strengths: ["dribbling","runs_behind"],
+    claim: "I et eget intervju gjengitt i Norges Fotballforbunds UEFA A-lisensmateriale beskrev Tore André Dahlum hvordan han ofte scoret etter «dribling/løp i bakrom» og nevnte egne «teknikk og koordinasjon». Det gir konkret grunnlag for dribling og bakromsløp; måltall er ikke brukt til å beregne attributter.",
+    source: "https://www.fotball.no/kretser/agder/spillerutvikling/artikler/Hvordantrenepaascoremasomangrepsspiller/oppgave-uefa-a-lisens-tor-henning-hamre/",
+    sourceKind: "club"
+  },
+  {
+    playerId: "mushaga_bakenga",
+    clubId: "rosenborg",
+    strengths: ["pace","determination"],
+    claim: "Lars Tjærnås beskrev Mushaga Bakenga i Rosenborgs 2011-forhåndsvurdering med «Stor fart, stor vilje og stor selvtillit». Dette er konkret grunnlag for pace og determination, ikke en automatisk finishing-verdi ut fra antall mål.",
+    source: "https://www.aftenbladet.no/sport/i/8wbJ22/her-er-laget-ditt-jonsson",
+    sourceKind: "press"
+  },
+  {
+    playerId: "trond_henriksen",
+    clubId: "rosenborg",
+    strengths: ["bravery"],
+    claim: "Bergens Tidende skildret Trond Henriksen som en «knalltøff back» som fikk tilnavnet Rambo for sin «oppofrende spillestil». Dette underbygger bravery som villighet til å gå helhjertet inn i forsvarsspillet, men ikke en egen taklings- eller sprintfartvurdering.",
+    source: "https://www.bt.no/sport/i/xP4d7X/eplet-som-falt-et-stykke-fra-stammen",
+    sourceKind: "press"
+  },
 ];
 
 export const SOURCE_DEPTH_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
