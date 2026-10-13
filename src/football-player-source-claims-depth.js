@@ -643,6 +643,47 @@ const documented = [
     claim: "Aftenposten beskrev Jan-Derek Sørensen i november 2005 som en særpreget vingtype med «Ekstremt hurtige spillere med god innleggsfot» som sjelden kombinasjon. Det belegger pace og crossing, men vurderingen er fra spillerens Lyn-periode og ikke en påstand om en konkret Rosenborg-kamp.",
     source: "https://www.aftenposten.no/norge/i/JQn74/landslagsaktuell-uten-aa-vite-det-selv",
     sourceKind: "press"
+  },
+  // --- Rosenborg: individual 2005/06 assessments and historical defenders ---
+  {
+    playerId: "lars_hirschfeld",
+    clubId: "rosenborg",
+    strengths: ["reflexes"],
+    claim: "Adresseavisens sportsredaksjon oppsummerte Lars Hirschfelds 2006-sesong med at han «Prater mye, sprer trygghet og er reaksjonssterk». Reaksjonsstyrken belegger reflexes. Den samme vurderingen sier at han «Kan bli bedre i feltarbeidet», så command_of_area tilføres ikke på grunnlag av generell trygghet.",
+    source: "https://www.bt.no/sport/i/AdP3Vx/rbk-importene-er-boersvinnerne",
+    sourceKind: "press"
+  },
+  {
+    playerId: "miika_koppinen",
+    clubId: "rosenborg",
+    strengths: ["duels"],
+    claim: "Adresseavisens 2006-evaluering beskriver Miika Koppinen med «Finnen har vært god i duellspillet, og vært tidvis suveren i luftrommet». Dette dokumenterer duels; den samme kilden omtaler pasningsspillet som ujevnt, så det legges ikke til pasningsstyrker.",
+    source: "https://www.bt.no/sport/i/AdP3Vx/rbk-importene-er-boersvinnerne",
+    sourceKind: "press"
+  },
+  {
+    playerId: "bjorn_tore_kvarme",
+    clubId: "rosenborg",
+    strengths: ["duels"],
+    claim: "Rosenborg-trener Per Joar Hansen beskrev Bjørn Tore Kvarme ved tilbakekomsten i januar 2005 som «en veldig god duellspiller og spesielt godt en-mot-en». Dette dokumenterer defensive duels. Kildens defensive en-mot-en er ikke offensiv one_vs_one i attributtkatalogen.",
+    source: "https://www.bt.no/sport/i/wPO885/hoftun-faar-konkurranse",
+    sourceKind: "press"
+  },
+  {
+    playerId: "holmar_orn_eyjolfsson",
+    clubId: "rosenborg",
+    strengths: ["duels"],
+    claim: "Erik Hoftun beskrev Hólmar Örn Eyjólfsson ved Rosenborg-signeringen i 2014: «Han er en veldig duellsterk stopper». RBKweb gjengir også at han ikke var superhurtig og kunne utvikle pasningsspillet. Derfor legges duels til, ikke pace eller simple_passing.",
+    source: "https://www.rbkweb.no/spiller/eyjolfsson",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "oyvind_storflor",
+    clubId: "rosenborg",
+    strengths: ["one_vs_one"],
+    claim: "Adresseavisens vurdering av Rosenborg-vingen Øyvind Storflor etter 2006-sesongen sier «God én mot én, men bør score langt flere mål». Her gjelder det offensivt én-mot-én-spill og belegger one_vs_one; omtalen gir ikke grunnlag for finishing.",
+    source: "https://www.bt.no/sport/i/AdP3Vx/rbk-importene-er-boersvinnerne",
+    sourceKind: "press"
   }
 
 ];
