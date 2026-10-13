@@ -1019,6 +1019,87 @@ const documented = [
     source: "https://rotsekk.com/borsen/a0522391-2f1d-4543-ba8f-bb635e333233",
     sourceKind: "football_editorial"
   },
+  // Rosenborg: historic-and-modern full-club source review, independently cited.
+  {
+    playerId: "jan_christiansen",
+    clubId: "rosenborg",
+    strengths: ["simple_passing","tempo_control"],
+    claim: "Aftenpostens historiske Rosenborg-kåring (2010) beskriver Jan Christiansen som «dirigenten med stor D» som «regisserte midtbanen, og slo de gode pasningene». Dette dokumenterer pasningsspill og organisering av spillets rytme; det er ikke et belegg for sprintfart eller dødballer.",
+    source: "https://www.aftenposten.no/sport/fotball/i/Jo6LWX/tolv-aars-svar-paa-tiltale",
+    sourceKind: "press"
+  },
+  {
+    playerId: "trond_sollied",
+    clubId: "rosenborg",
+    strengths: ["heading"],
+    claim: "Rabona beskriver i tilbakeblikket på 1980-tallet Trond Sollied som en «solid midtstopper som var farlig i motstanderens sone» og viser konkret til at han headet inn Rosenborgs avgjørende seriegullmål i 1988. Hendelsen gir et avgrenset, dokumentert signal om heading; den viser ikke automatisk styrke eller fart.",
+    source: "https://rabonapod.no/2025/06/26/tiarslagene-80-tallet/",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "arne_dokken",
+    clubId: "rosenborg",
+    strengths: ["duels","heading"],
+    claim: "Arne Dokken beskriver selv spillestilen fra den aktive karrieren: «Tøff i duellene, og ga som vanlig alt.» Han forklarer også at Panathinaikos ønsket en spiss som tok for seg «i duellene. Ikke minst i lufta». Det underbygger duellspill og luftstyrke; intervjuet i 2025 er et retrospektivt vitnesbyrd, ikke en samtidsscore.",
+    source: "https://bydrammen.no/arne-dokken-indre-drive/",
+    sourceKind: "press"
+  },
+  {
+    playerId: "mattias_bjarsmyr",
+    clubId: "rosenborg",
+    strengths: ["duels"],
+    claim: "Adresseavisens samtidige vurdering ved Bjärsmyrs Rosenborg-overgang 30. august 2010, gjengitt i Stavanger Aftenblad, karakteriserer ham som «duellsterk og god med ballen». Det første gir konkret belegg for duels; «god med ballen» er ikke tilstrekkelig spesifikt for noen bestemt pasningsegenskap.",
+    source: "https://www.aftenbladet.no/sport/i/wEMono/liker-at-klubben-er-vant-til-aa-vinne",
+    sourceKind: "press"
+  },
+  {
+    playerId: "noah_jean_holm",
+    clubId: "rosenborg",
+    strengths: ["strength","hold_up_play"],
+    claim: "Noah Holm sa i juni 2024, etter ros fra trener Johansson for spissinnsatsen: «Jobben til en spiss i Rosenborg-systemet er at du skal være fysisk sterk og holde på ballen ... Det var deilig å kunne hjelpe laget mitt på den måten.» Utsagnet gjelder konkret utført spissarbeid, og belegger styrke og ballholding, ikke generell avslutningskvalitet.",
+    source: "https://www.rbkweb.no/vis/17339",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "dino_islamovic",
+    clubId: "rosenborg",
+    strengths: ["pressing","hold_up_play","work_rate"],
+    claim: "Rosenborg-trener Alfred Johansson vurderte Islamović etter Tromsø-kampen 27. juli 2025 slik: «bidrar ekstremt mye i presspillet, i returløp, på defensive dødballer og som oppspillspunkt mot mann-mann-press». Treneren fremhevet også at han fortsatte å «jobbe hardt for laget». Dette belegger press, oppspillspunkt og arbeidsinnsats; fire scoringer i én kamp er ikke brukt til å anslå finishing.",
+    source: "https://www.rbkweb.no/vis/17925",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "janne_saarinen",
+    clubId: "rosenborg",
+    strengths: ["set_pieces"],
+    claim: "RBKweb dokumenterer at Janne Saarinen før Rosenborg-overgangen ble matchvinner i den finske cupfinalen med «et susende frispark». Registreringen gir et begrenset set_pieces-belegg for direkte frispark, ikke bevis for kvalitet på alle dødballer.",
+    source: "https://www.rbkweb.no/spiller/saarinen",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "christer_george",
+    clubId: "rosenborg",
+    strengths: ["movement"],
+    claim: "Nils Arne Eggen vurderte Christer Georges spissbevegelse i mai 2002: «Christer kommer seg ofte til mange fine sjanser. Det er bare snakk om å være presis nok i avslutningene». Det underbygger offensive bevegelser som fører til avslutningsposisjoner, men ikke finishing; kilden peker tvert imot på upresise avslutninger.",
+    source: "https://www.rbkweb.no/vis/994",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "edvard_sandvik_tagseth",
+    clubId: "rosenborg",
+    strengths: ["stamina","positioning"],
+    claim: "RBK-trener Alfred Johansson fremhevet Edvard Tagseths «god løpskraft» og høye intensitet etter kamp i mai 2024, og beskrev ham som «veldig dyktig på å posisjonere seg». Utsagnene gjelder løpskapasitet og plassering for å bli spillbar; de gir ikke grunnlag for å tallfeste kreativitet eller skudd.",
+    source: "https://www.aftenbladet.no/sport/i/yE30Kr/oensker-at-rbk-profilen-blir-i-trondheim",
+    sourceKind: "press"
+  },
+  {
+    playerId: "jesper_reitan_sunde",
+    clubId: "rosenborg",
+    strengths: ["work_rate"],
+    claim: "Rabona sin Rosenborg-gjennomgang før 2026-sesongen trekker fram at Jesper Reitan-Sunde «viser vilje og innsats» selv om det foreløpig ikke løsner i angrepsspillet. Sammen med lagkamerat Noah Holms vurdering i 2024 om at Jesper «la ned en utrolig jobb» gir det belegg for arbeidsinnsats, ikke for pasning eller avslutning.",
+    source: "https://rabonapod.no/2026/03/06/klubbguiden-2026-nr-8/",
+    sourceKind: "football_editorial"
+  },
 ];
 
 export const SOURCE_DEPTH_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
