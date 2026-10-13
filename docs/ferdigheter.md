@@ -967,6 +967,10 @@ Arbeidsregelen for nye tall:
 | Nicklas Bendtner | `strength: 17`, `heading: 17` | Rosenborgs kampomtale 8. april 2018 | FIFA 18 |
 | Per Ciljan Skjelbred | `stamina: 17` | RBKweb, Per Joar Hansen, 12. juni 2005 | FIFA 15, senere sesong |
 | Didier Ya Konan | `finishing: 15` | RBKweb, Knut Tørum ved overgang 2006 | FIFA 14, senere sesong |
+| Cristian Gamboa | `pace: 18` | RBKweb, Hoftun ved ankomst 2012 | FIFA 14, samme RBK-periode |
+| Bořek Dočkal | `crossing: 16`, `decisions: 15` | RBKweb, Torbjørnsen om innlegg og valg 2011 | FIFA 13, samme RBK-periode; ingen direkte decisions-ekvivalent |
+| Vegar Eggen Hedenstad | `set_pieces: 15` | RBKweb, dødballer i 2017–2020 | FIFA 18, samme RBK-periode |
+| Anders Konradsen | `work_rate: 16` | RBKweb, Ingebrigtsen ved overgang 2015 | FIFA 15, samme RBK-periode |
 
 Dette er våre egne, kildeforklarte spillvurderinger; ingen av tallene er en
 direkte kopi av spillenes opprinnelige 0–99-attributt.
