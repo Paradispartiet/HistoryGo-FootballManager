@@ -684,6 +684,23 @@ const documented = [
     claim: "Adresseavisens vurdering av Rosenborg-vingen Øyvind Storflor etter 2006-sesongen sier «God én mot én, men bør score langt flere mål». Her gjelder det offensivt én-mot-én-spill og belegger one_vs_one; omtalen gir ikke grunnlag for finishing.",
     source: "https://www.bt.no/sport/i/AdP3Vx/rbk-importene-er-boersvinnerne",
     sourceKind: "press"
+  },
+  // --- Rosenborg: two documented centre-backs, with source-era limits ---------
+  {
+    playerId: "alejandro_lago",
+    clubId: "rosenborg",
+    strengths: ["duels", "positioning"],
+    claim: "Rosenborgs daværende sportslige leder Erik Hoftun sa i juni 2008 at Alejandro Lago var «en utrolig duellsterk stopper» og «smart i plasseringene». Dette dokumenterer duels og positioning. Hoftun presiserte samtidig at Lago ikke var særlig rask, så pace tilføres ikke. Uttalelsen om defensivt en-mot-en-spill gir heller ikke det offensive one_vs_one-attributtet.",
+    source: "https://www.bt.no/sport/i/MR1gV5/vil-forlenge-med-lago",
+    sourceKind: "press"
+  },
+  {
+    playerId: "even_hovland",
+    clubId: "rosenborg",
+    strengths: ["pace", "strength"],
+    claim: "Molde-trener Ole Gunnar Solskjær vurderte Even Hovland etter en kamp mot Rosenborg i oktober 2013: «Han viste fart og styrke, var rolig med ballen og god i lufta.» Dette gir konkret belegg for pace og strength. Vurderingen gjelder Hovlands Molde-periode før Rosenborg-overgangen; øvrige ferdigheter utledes ikke automatisk av ros for én kamp.",
+    source: "https://www.aftenbladet.no/sport/i/BJ7e1w/even-var-helt-fantastisk",
+    sourceKind: "press"
   }
 
 ];
