@@ -1,12 +1,8 @@
 name: Eliteserien full-season club coverage
 
+# Long multi-club UI seasons are release/milestone checks, not PR gates.
+# PRs continue to receive targeted motor and browser checks from ci.yml.
 on:
-  pull_request:
-    paths:
-      - "tests/browser/manager-career-full-season-playthrough-v1.spec.js"
-      - ".github/workflows/eliteserien-full-season.yml"
-      # Core code/data PRs already run the focused checks in ci.yml;
-      # complete multi-club seasons run on manual dispatch and weekly schedule.
   workflow_dispatch:
   schedule:
     - cron: "43 4 * * 0"
