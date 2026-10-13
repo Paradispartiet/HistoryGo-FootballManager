@@ -751,6 +751,23 @@ const documented = [
     claim: "Anders Trondsen uttalte selv under Rosenborg-perioden i 2020 at han hadde «bra potensial der, både med pasningsfot, hurtighet og som førsteforsvarer» om venstrebackrollen, gjengitt av Adresseavisen/Aftenposten. Hurtighet gir konkret grunnlag for pace; den brede betegnelsen pasningsfot spesifiserer ikke crossing, passing_range eller set_pieces.",
     source: "https://www.aftenposten.no/sport/fotball/i/g7o9nJ/aapenhjertig-rbk-profil-jeg-passer-ikke-inn-i-spillestilen",
     sourceKind: "press"
+  },
+  // --- Rosenborg: named pre-transfer assessments of two creative midfielders --
+  {
+    playerId: "fredrik_midtsjo",
+    clubId: "rosenborg",
+    strengths: ["game_reading"],
+    claim: "Rosenborgs sportslige leder Erik Hoftun beskrev Fredrik Midtsjø i september 2009: «Han er veldig fotballklok. Han er flink til å orientere seg i forkant», gjengitt av RBKwebs 2mas med henvisning til Bladets intervju «Vi har trua på Fredrik». Beskrivelsen av fotballklokskap og orientering i forkant gir belegg for game_reading. Den dokumenterer ikke særskilt anticipation, som krever posisjonering før ballen kommer. «Bra pasningsfot» er for lite spesifikt til automatisk å gi passing_range eller set_pieces. Kilden beskriver ungdomsperioden, ikke en bestemt senere førstelagskamp.",
+    source: "https://www.rbkweb.no/forum/viewtopic.php?t=5540&start=0",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "john_chibuike",
+    clubId: "rosenborg",
+    strengths: ["chance_creation"],
+    claim: "Rosenborgs talentspeider Stig Torbjørnsen beskrev John Chibuike før signeringen fra Häcken i 2011 slik: «Han er kreativ og har en god pasningsfot. I tillegg scorer han mål og skaper mange sjanser.» «Skaper mange sjanser» belegger chance_creation. Ett utsagn om «ganske tungt skudd» gir ikke automatisk long_shots, som særskilt krever dokumentert skudd fra distanse. Evalueringen gjelder Häcken før Rosenborg-perioden.",
+    source: "https://www.rbkweb.no/vis/8371",
+    sourceKind: "football_editorial"
   }
 
 ];
