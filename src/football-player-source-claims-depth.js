@@ -768,6 +768,23 @@ const documented = [
     claim: "Rosenborgs talentspeider Stig Torbjørnsen beskrev John Chibuike før signeringen fra Häcken i 2011 slik: «Han er kreativ og har en god pasningsfot. I tillegg scorer han mål og skaper mange sjanser.» «Skaper mange sjanser» belegger chance_creation. Ett utsagn om «ganske tungt skudd» gir ikke automatisk long_shots, som særskilt krever dokumentert skudd fra distanse. Evalueringen gjelder Häcken før Rosenborg-perioden.",
     source: "https://www.rbkweb.no/vis/8371",
     sourceKind: "football_editorial"
+  },
+  // --- Rosenborg: named individual assessments before arrival, 2006 ---
+  {
+    playerId: "didier_konan_ya",
+    clubId: "rosenborg",
+    strengths: ["finishing"],
+    claim: "Ved Rosenborgs kjøp av Didier Ya Konan fra ASEC i desember 2006 beskrev trener Knut Tørum ham som en offensiv midtbanespiller med «god pasningsfot og gode avslutningsferdigheter», gjengitt i RBKwebs spillerbiografi. Den konkrete vurderingen av avslutninger belegger finishing; den generelle omtalen av pasningsfot og bevegelighet gir ikke i seg selv spesifikk passing_range, set_pieces eller off_ball_runs. Vurderingen gjelder ankomsten til RBK, ikke en bestemt senere kamp.",
+    source: "https://www.rbkweb.no/spiller/konan",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "yssouf_kone",
+    clubId: "rosenborg",
+    strengths: ["pace"],
+    claim: "Ved prøvespillet på Gran Canaria i januar 2006 beskrev Rosenborg-trener Per-Mathias Høgmo Yssouf Koné som «hurtig», gjengitt i RBKwebs spillerbiografi. Dette er direkte belegg for pace. Han ble også omtalt som god i lufta og med gode skuddbein, men de brede formuleringene tilordnes ikke egne heading- eller finishing-tokens uten mer presis dokumentasjon. Vurderingen gjelder prøvespillet før overgangen til RBK.",
+    source: "https://www.rbkweb.no/spiller/kone",
+    sourceKind: "football_editorial"
   }
 
 ];
