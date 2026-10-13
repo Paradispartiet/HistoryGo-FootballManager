@@ -12,10 +12,13 @@ async function expectNoHorizontalOverflow(page) {
   expect(overflow).toBeLessThanOrEqual(1);
 }
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page }, testInfo) => {
+  const initialPhase = testInfo.title === "kalenderens klubbmail kan åpnes og lukkes gjentatte ganger i inbox-fasen"
+    ? "inbox"
+    : "training";
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.addInitScript(() => {
+  await page.addInitScript((phase) => {
     localStorage.setItem("hgfm.onboarded.v1", "1");
     localStorage.setItem("hgfm.gameStartState.v1", JSON.stringify({
       selectedMode: "league",
@@ -34,7 +37,7 @@ test.beforeEach(async ({ page }) => {
       localStart: { enabled: false, playerIds: [] },
       clubWeekState: {
         week: 3,
-        phase: "training",
+        phase,
         boardTrust: 50,
         playerMorale: 50,
         tacticalClarity: 50,
@@ -42,7 +45,7 @@ test.beforeEach(async ({ page }) => {
         mediaPressure: 50
       }
     }));
-  });
+  }, initialPhase);
   await page.goto("/");
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
@@ -114,6 +117,35 @@ test("melding åpnes i drawer og kalenderdagen blir stående", async ({ page }) 
   await expect(page.locator("#managerCalendarMessageDrawer")).toBeHidden();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Onsdag");
+});
+
+test("kalenderens klubbmail kan åpnes og lukkes gjentatte ganger i inbox-fasen", async ({ page }) => {
+  // Seed the inbox phase before bootstrap and mode-session hydration.
+  // Mutating only localStorage after startup can be overwritten by the active
+  // league session, so it does not establish a valid inbox test precondition.
+  await openOfficeCalendar(page);
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}")?.clubWeekState?.phase)).toBe("inbox");
+  await expect(page.locator("#managerCalendarNow")).toHaveText("Uke 3 · Tirsdag");
+
+  let message = null;
+  for (const day of [1, 3, 5]) {
+    await page.locator(`#managerCalendarDays [data-day="${day}"]`).click();
+    const candidate = page.locator('#managerCalendarTimeline [data-event-kind="message"]').first();
+    if (await candidate.count()) {
+      message = candidate;
+      break;
+    }
+  }
+  expect(message).toBeTruthy();
+  const drawer = page.locator("#managerCalendarMessageDrawer");
+  for (let repeat = 0; repeat < 3; repeat += 1) {
+    await message.click();
+    await expect(drawer).toBeVisible();
+    await expect(drawer.locator(".manager-club-mail")).toBeVisible();
+    await drawer.locator(".manager-calendar-drawer-close").click();
+    await expect(drawer).toBeHidden();
+    await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  }
 });
 
 test("kalenderfooteren viser dagens neste hendelse og åpner aktuell dag", async ({ page }) => {

@@ -18,6 +18,7 @@ const shellView = read("src/ui/manager-shell-view.js");
 const scouting = read("src/ui/manager-scouting-workspace-v1.js");
 const calendar = read("src/ui/manager-calendar-workspace-v1.js");
 const workflow = read(".github/workflows/ci.yml");
+const fullSeasonWorkflow = read(".github/workflows/eliteserien-full-season.yml");
 const packageJson = read("package.json");
 const seasonPresentation = read("src/ui/manager-season-presentation.js");
 
@@ -65,7 +66,13 @@ check("CSS-skallet har egen foundation", /manager-shell-foundation\.css/.test(re
 check("responsive nettleservakter dekker 390/768/1280", [390, 768, 1280].every((width) => browser.includes(`width: ${width}`)));
 check("visuell regresjon finnes på isolert kampkomponent", /toHaveScreenshot\(/.test(postMatchBrowser) && /matchday-post-match-score/.test(postMatchBrowser));
 check("shell og kampdag låser ikke IA med helskjermbilder", !/toHaveScreenshot\(/.test(browser) && !/toHaveScreenshot\(/.test(matchdayBrowser));
-check("CI kjører nettleservaktene uten å omskrive baseliner", /run: npm run test:browser\s*$/.test(workflow) && !/update-snapshots/.test(workflow));
+check("CI kjører nettleservaktene uten å omskrive baseliner",
+  /run: npm run test:browser -- --project=chromium\s*$/m.test(workflow)
+  && /rosenborg-deep-season:/.test(fullSeasonWorkflow)
+  && /--project=chromium-full-season --no-deps --workers=1/.test(fullSeasonWorkflow)
+  && /--grep "blank Rosenborg-save spiller full sesong/.test(fullSeasonWorkflow)
+  && /--grep "ansetter dokumentert starterstab og spiller 30 serierunder"/.test(fullSeasonWorkflow)
+  && !/update-snapshots/.test(workflow + fullSeasonWorkflow));
 check("tilgjengelighet testes med axe", /AxeBuilder/.test(browser) && /wcag2aa/.test(browser));
 check("tastatur og fokusfelle testes", /Shift\+Tab/.test(browser) && /toBeFocused/.test(browser));
 check("horisontal overflow testes", /scrollWidth - document\.documentElement\.clientWidth/.test(browser));

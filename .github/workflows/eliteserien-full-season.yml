@@ -103,3 +103,47 @@ jobs:
           path: |
             test-results/
           if-no-files-found: ignore
+
+  rosenborg-deep-season:
+    needs: scope
+    if: needs.scope.outputs.lane == 'full'
+    name: Rosenborg deep full-season regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      CI: "true"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build TypeScript engine
+        run: npm run build
+
+      - name: Audit documented starter sets
+        run: npm run audit:eliteserien-staff-coverage
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Play Rosenborg's complete deep season and season-two rollover
+        run: |
+          npx playwright test --project=chromium-full-season --no-deps --workers=1 \
+            --grep "blank Rosenborg-save spiller full sesong med varierte valg"
+
+      - name: Upload deep season traces on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-rosenborg-deep-season
+          path: |
+            test-results/
+          if-no-files-found: ignore

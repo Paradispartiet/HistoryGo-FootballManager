@@ -1440,7 +1440,13 @@ async function rollToNextWeek(page, expectedWeek) {
 }
 
 test("blank Rosenborg-save spiller full sesong med varierte valg og går canonicalt inn i sesong 2 gjennom ekte UI", async ({ page }) => {
-  test.setTimeout(720_000);
+  // This scenario exercises 30 full UI rounds, injuries, substitutions and an
+  // additional season-two round. The 12-minute budget was exhausted while
+  // checking a calendar drawer, which also passes in its focused UI test.
+  // The four lighter club playthroughs need 20.6 minutes for four clubs with
+  // two workers (CI 38154923421). Reserve a measured deep-run budget here;
+  // dedicated CI isolates it from the ordinary browser suite.
+  test.setTimeout(1_800_000);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await installCanonicalLeagueSeed(page);
@@ -1494,7 +1500,11 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
   let ordinaryIndividualTraining = null;
   let forcedInjuryJourney = null;
 
+  // Round milestones disambiguate a true UI failure from an aggregate timeout.
+  // They do not change the game clock or any season decisions.
+  const deepSeasonStartedAt = performance.now();
   for (let round = 1; round <= 30; round += 1) {
+    if (process.env.CI) console.log(`Rosenborg deep season START round ${round}/30 at ${Math.round((performance.now() - deepSeasonStartedAt) / 1000)}s`);
     await expect.poll(async () => {
       const progress = await readProgress(page);
       return { week: progress.week, phase: progress.phase, round: progress.currentRound };
@@ -1751,6 +1761,7 @@ test("blank Rosenborg-save spiller full sesong med varierte valg og går canonic
     });
 
     await rollToNextWeek(page, round + 1);
+    if (process.env.CI) console.log(`Rosenborg deep season DONE round ${round}/30 at ${Math.round((performance.now() - deepSeasonStartedAt) / 1000)}s`);
     if (round === 3 && ordinaryIndividualTraining) {
       const recovered = await readProgress(page);
       const target = recovered.conditionRows.find((entry) => entry.playerId === ordinaryIndividualTraining.playerId);

@@ -199,6 +199,9 @@ jobs:
         if: steps.scope.outputs.lane == 'full'
         run: npx playwright install --with-deps chromium
 
+      # Complete 30-round UI seasons (including Rosenborg's deeper scenario)
+      # run in eliteserien-full-season.yml, where they have dedicated time and
+      # failure traces. Keep ordinary responsive/browser guards in this job.
       - name: Responsive nettleservakter og visuelle differanser
         if: steps.scope.outputs.lane == 'full'
-        run: npm run test:browser
+        run: npm run test:browser -- --project=chromium
