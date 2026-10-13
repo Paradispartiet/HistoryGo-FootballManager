@@ -594,6 +594,55 @@ const documented = [
     claim: "Knut Espen Svegaarden skrev om Thorstein Helstad i Rabonas historiske tiårslag: «Han måtte utnytte det som var hans store styrke: Farten.» Kilden dokumenterer pace; betegnelsen målscorer og klubbens resultater gir ikke automatisk finishing eller positioning.",
     source: "https://rabonapod.no/2025/07/23/tiarslagene-2000-tallet/",
     sourceKind: "football_editorial"
+  },
+  // --- Rosenborg: source-described historical goalkeeping and field skills ---
+  {
+    playerId: "jorn_jamtfall",
+    clubId: "rosenborg",
+    strengths: ["distribution"],
+    claim: "Dagbladets Rosenborg-spilleranalyse foran Juventus-kampen i desember 1998 beskriver Jørn Jamtfalls igangsettinger med «presise og raske utkast». Det dokumenterer keeperens distribution, ikke reflexes eller shot_stopping som artikkelen ikke vurderer.",
+    source: "https://www.dagbladet.no/sport/11-grunner-til-seier/65493302",
+    sourceKind: "press"
+  },
+  {
+    playerId: "bjorn_otto_bragstad",
+    clubId: "rosenborg",
+    strengths: ["duels"],
+    claim: "Dagbladets individuelle Champions League-vurdering i desember 1998 beskriver Bjørn Otto Bragstad som «Meget god som førsteforsvarer, sterk både langs bakken og i lufta». Dette underbygger defensive duels. Den samme omtalen advarer om hurtige angripere i bakrom, og gir derfor ikke grunnlag for pace.",
+    source: "https://www.dagbladet.no/sport/11-grunner-til-seier/65493302",
+    sourceKind: "press"
+  },
+  {
+    playerId: "kris_stadsgaard",
+    clubId: "rosenborg",
+    strengths: ["pace"],
+    claim: "Erik Hoftun karakteriserte Rosenborgs nye midtstopper Kris Stadsgaard i 2008 som «en hurtig, klok og ballsikker midtstopper». RBKwebs senere biografi forklarer også at hurtigheten lot RBK stå med større bakrom. pace er direkte dokumentert; klok og ballsikker er for generelle alene til å tilordne særskilte pasnings- eller beslutningsattributter.",
+    source: "https://www.rbkweb.no/spiller/stadsgaard",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "cristian_gamboa",
+    clubId: "rosenborg",
+    strengths: ["pace"],
+    claim: "Rosenborgs Erik Hoftun beskrev Cristian Gamboa ved klubbens leieavtale i 2012 som en back med «ekstrem hurtighet, offensiv innstilling og en god fot», gjengitt i RBKwebs spillerbiografi. Dette belegger pace. Offensiv innstilling og god fot blir ikke tolket som crossing eller dribbling uten mer presis kilde.",
+    source: "https://www.rbkweb.no/spiller/gamboa",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "stale_stensaas",
+    clubId: "rosenborg",
+    strengths: ["crossing"],
+    claim: "Aftenpostens landslagsvurdering av Ståle Stensaas i april 2004 beskriver Rosenborg-backen som «Tryggere defensivt enn John Arne Riise, og med minst like god innleggsfot». Dette underbygger crossing, men en sammenlignende generell defensiv vurdering gir ikke grunnlag for defensive_reading eller tackling.",
+    source: "https://www.aftenposten.no/norge/i/Mn59o/slik-blir-laget",
+    sourceKind: "press"
+  },
+  {
+    playerId: "jan_derek_sorensen",
+    clubId: "rosenborg",
+    strengths: ["pace", "crossing"],
+    claim: "Aftenposten beskrev Jan-Derek Sørensen i november 2005 som en særpreget vingtype med «Ekstremt hurtige spillere med god innleggsfot» som sjelden kombinasjon. Det belegger pace og crossing, men vurderingen er fra spillerens Lyn-periode og ikke en påstand om en konkret Rosenborg-kamp.",
+    source: "https://www.aftenposten.no/norge/i/JQn74/landslagsaktuell-uten-aa-vite-det-selv",
+    sourceKind: "press"
   }
 
 ];
