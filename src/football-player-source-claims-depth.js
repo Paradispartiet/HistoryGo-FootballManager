@@ -718,6 +718,39 @@ const documented = [
     claim: "RBKwebs historiske spillerbiografi sier om Vegar Eggen Hedenstads Rosenborg-periode 2017–2020 at han «bidro også framover med mål og farlige dødballer». Dette er direkte belegg for set_pieces, men generelle utsagn om å være en god kombinasjonsspiller er ikke nok til å anta særskilt pasningspresisjon eller dribling.",
     source: "https://www.rbkweb.no/spiller/hedenstad",
     sourceKind: "football_editorial"
+  },
+  // --- Rosenborg: individual central-midfield and wide-play qualities --------
+  {
+    playerId: "borek_dockal",
+    clubId: "rosenborg",
+    strengths: ["crossing", "decisions"],
+    claim: "Rosenborg-speider Stig Torbjørnsen beskrev Bořek Dočkal ved signeringen i 2011: «Han har først og fremst en veldig god innleggsfot» og «er klok i valgene han gjør på banen», gjengitt i RBKwebs spillerbiografi. Det belegger crossing og decisions. Utsagn om generell pasningskvalitet blir ikke utvidet til passing_range uten særskilt belegg for lange pasninger.",
+    source: "https://www.rbkweb.no/spiller/dockal",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "anders_konradsen",
+    clubId: "rosenborg",
+    strengths: ["work_rate", "ball_carrying"],
+    claim: "Rosenborg-trener Kåre Ingebrigtsen beskrev Anders Konradsen ved overgangen i 2015 som «en hardtarbeidende spiller» med «godt driv med ball», gjengitt i RBKwebs biografi. Det støtter work_rate og ball_carrying. «Kvikk i steget» gjelder ikke nødvendigvis toppfarten pace og er derfor ikke brukt som fartsvurdering.",
+    source: "https://www.rbkweb.no/spiller/konradsen",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "marius_lundemo",
+    clubId: "rosenborg",
+    strengths: ["vision", "work_rate"],
+    claim: "Rosenborg-trener Kåre Ingebrigtsen vurderte Marius Lundemo ved signeringen før 2017 som en spiller med «bra overblikk» og «en arbeidssom herremann», gjengitt i RBKwebs spillerbiografi. Overblikk og arbeidsinnsats gir konkret grunnlag for vision og work_rate; generell «god fot» gir ikke i seg selv passing_range eller set_pieces.",
+    source: "https://www.rbkweb.no/spiller/lundemo",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "anders_trondsen",
+    clubId: "rosenborg",
+    strengths: ["pace"],
+    claim: "Anders Trondsen uttalte selv under Rosenborg-perioden i 2020 at han hadde «bra potensial der, både med pasningsfot, hurtighet og som førsteforsvarer» om venstrebackrollen, gjengitt av Adresseavisen/Aftenposten. Hurtighet gir konkret grunnlag for pace; den brede betegnelsen pasningsfot spesifiserer ikke crossing, passing_range eller set_pieces.",
+    source: "https://www.aftenposten.no/sport/fotball/i/g7o9nJ/aapenhjertig-rbk-profil-jeg-passer-ikke-inn-i-spillestilen",
+    sourceKind: "press"
   }
 
 ];
