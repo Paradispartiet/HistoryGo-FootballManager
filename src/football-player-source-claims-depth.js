@@ -1165,6 +1165,71 @@ const documented = [
     source: "https://www.bt.no/sport/i/xP4d7X/eplet-som-falt-et-stykke-fra-stammen",
     sourceKind: "press"
   },
+  // Rosenborg: consolidated historical-player follow-up, documented existing affiliations.
+  {
+    playerId: "karl_petter_loken",
+    clubId: "rosenborg",
+    strengths: ["pace"],
+    claim: "Adresseavisens Rosenborg-jury beskrev Karl-Petter Løken med «stor fart» som høyreving. Dette underbygger pace, ikke en ubestemt liste av offensive spesialferdigheter.",
+    source: "https://www.aftenposten.no/sport/fotball/i/zGMV5w/den-lynhurtige-akademikeren",
+    sourceKind: "press"
+  },
+  {
+    playerId: "geir_karlsen",
+    clubId: "rosenborg",
+    strengths: ["shot_stopping"],
+    claim: "RBKweb dokumenterer en rekke redninger fra Geir Karlsen i 1971 og beskriver «en av sine mest klassiske redninger» mot Varegg. Dette belegger skuddredninger, ikke utledet ferdighet fra lagets baklengsstatistikk.",
+    source: "https://www.rbkweb.no/vis/11344",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "kare_ronnes",
+    clubId: "rosenborg",
+    strengths: ["game_reading"],
+    claim: "Adresseavisens historiske RBK-jury karakteriserte Kåre Rønnes med «Enormt god fotballforståelse». Avisens portrett trekker også fram evnen til å lese spillet som forsvarer. Dette dokumenterer game_reading.",
+    source: "https://www.aftenposten.no/sport/fotball/i/GG05lq/den-foerste-kontinuitetsbaereren",
+    sourceKind: "press"
+  },
+  {
+    playerId: "tore_pedersen_rbk",
+    clubId: "rosenborg",
+    strengths: ["pace","crossing"],
+    claim: "Adresseavisens kåring av RBKs høyrevinger forteller at Tore Pedersen «var hurtig» og «slo gode innlegg». Det gir konkret belegg for pace og crossing, ikke automatisk langskudd eller generell avslutningspresisjon.",
+    source: "https://www.aftenposten.no/sport/fotball/i/zGMV5w/den-lynhurtige-akademikeren",
+    sourceKind: "press"
+  },
+  {
+    playerId: "jan_hansen",
+    clubId: "rosenborg",
+    strengths: ["work_rate"],
+    claim: "Adresseavisens historiske RBK-portrett beskriver Jan Hansen (1975–1988) som «hardtarbeidende midtbanesliteren». Det belegger work_rate, ikke automatisk toppfart eller pasningsrepertoar.",
+    source: "https://www.aftenposten.no/sport/fotball/i/Jo6LWX/tolv-aars-svar-paa-tiltale",
+    sourceKind: "press"
+  },
+  {
+    playerId: "alexander_lund_hansen",
+    clubId: "rosenborg",
+    strengths: ["reflexes"],
+    claim: "Tidligere lagkamerat Atle Roar Håland fortalte i 2010 at Alexander Lund Hansen hadde «gode reflekser». Dette underbygger reflexes. Evnen til å dirigere forsvaret forveksles ikke med spesifikk styring av keeperfeltet.",
+    source: "https://www.aftenbladet.no/sport/i/7lXgjw/en-av-norges-beste-duellstoppere",
+    sourceKind: "press"
+  },
+  {
+    playerId: "bjorn_wirkola",
+    clubId: "rosenborg",
+    strengths: ["pace"],
+    claim: "Nils Arne Eggen sa om Bjørn Wirkola i et Dagbladet-intervju i 2016: «Bjørn hadde stor fart» da Eggen hadde sett ham spille for Melhus før RBK-overgangen. Dette er dokumentasjon av pace som fotballspiller, ikke en ekstrapolering fra skihoppingen.",
+    source: "https://www.dagbladet.no/nyheter/livet-etter-tapet-av-sonnene---minnene-er-en-del-av-det-gode-liv/60331729",
+    sourceKind: "press"
+  },
+  {
+    playerId: "hassan_el_fakiri",
+    clubId: "rosenborg",
+    strengths: ["game_reading"],
+    claim: "Bergens Tidende beskriver Hassan El Fakiri som en spiller som «alltid vært teknisk og taktisk sterk» og som foretrakk lavrisiko ballbruk. Taktisk styrke dokumenterer game_reading, men ikke spesifikk langpasnings- eller dribleverdi.",
+    source: "https://www.bt.no/sport/i/RRGmxx/vet-hva-hele-bergen-krever",
+    sourceKind: "press"
+  },
 ];
 
 export const SOURCE_DEPTH_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
