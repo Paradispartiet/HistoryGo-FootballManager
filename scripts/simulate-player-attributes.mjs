@@ -79,7 +79,12 @@ for (const [playerId, attributeId, expected] of [
   ["nicklas_bendtner", "heading", 17],
   ["nicklas_bendtner", "strength", 17],
   ["per_ciljan_skjelbred", "stamina", 17],
-  ["didier_konan_ya", "finishing", 15]
+  ["didier_konan_ya", "finishing", 15],
+  ["cristian_gamboa", "pace", 18],
+  ["borek_dockal", "crossing", 16],
+  ["borek_dockal", "decisions", 15],
+  ["vegar_eggen_hedenstad", "set_pieces", 15],
+  ["anders_konradsen", "work_rate", 16]
 ]) {
   const profile = profiles[playerId];
   check(`${playerId} har vurdert ${attributeId}=${expected}`,
