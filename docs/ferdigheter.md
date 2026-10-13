@@ -971,6 +971,10 @@ Arbeidsregelen for nye tall:
 | Bořek Dočkal | `crossing: 16`, `decisions: 15` | RBKweb, Torbjørnsen om innlegg og valg 2011 | FIFA 13, samme RBK-periode; ingen direkte decisions-ekvivalent |
 | Vegar Eggen Hedenstad | `set_pieces: 15` | RBKweb, dødballer i 2017–2020 | FIFA 18, samme RBK-periode |
 | Anders Konradsen | `work_rate: 16` | RBKweb, Ingebrigtsen ved overgang 2015 | FIFA 15, samme RBK-periode |
+| Pål André Helland | `set_pieces: 16` | BT, frispark og teknikkvalg 30.01.2014 | FIFA 15, frisparkpresisjon 72; ingen automatisk skalakonvertering |
+| Birger Meling | `pace: 16` | Eurosport, Lagerbäcks fartsvurdering oktober 2017 | FIFA 18, sprint 78 / akselerasjon 79, RBK-perioden |
+| André Hansen | `distribution: 15` | BT, Ingebrigtsen og Hansens frispillingsbeskrivelse januar 2015 | FIFA 16, keeper-kicking 73; ikke identisk med kort frispilling |
+| Mikael Lustig | `crossing: 15` | RBKweb, Hamrén om presise innlegg juli 2008 | FIFA 13, crossing 70; senere Celtic-periode, kun krysskontroll |
 
 Dette er våre egne, kildeforklarte spillvurderinger; ingen av tallene er en
 direkte kopi av spillenes opprinnelige 0–99-attributt.
