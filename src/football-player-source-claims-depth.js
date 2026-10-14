@@ -1229,7 +1229,32 @@ const documented = [
     claim: "Bergens Tidende beskriver Hassan El Fakiri som en spiller som «alltid vært teknisk og taktisk sterk» og som foretrakk lavrisiko ballbruk. Taktisk styrke dokumenterer game_reading, men ikke spesifikk langpasnings- eller dribleverdi.",
     source: "https://www.bt.no/sport/i/RRGmxx/vet-hva-hele-bergen-krever",
     sourceKind: "press"
+  },,
+  // Rosenborg: final thin-source review, dated individual evidence.
+  {
+    playerId: "torbjorn_lysaker_heggem",
+    clubId: "rosenborg",
+    strengths: ["strength"],
+    claim: "Ranheim-trener Svein Maalen beskrev Rosenborg-eide Torbjørn Lysaker Heggem ved utlånet i januar 2019 som «en fysisk sterk og spillende midtstoppertype». Det er konkret belegg for styrke på samme tidspunkt som RBK-tilknytningen; «spillende» alene er ikke en presis pasningsvurdering.",
+    source: "https://www.ranheimfotball.no/nyheter/torbjorn-heggem-klar-for-ranheim",
+    sourceKind: "club"
   },
+  {
+    playerId: "abdou_razack_traore",
+    clubId: "rosenborg",
+    strengths: ["pace","work_rate","simple_passing"],
+    claim: "En individuell forhåndsprofil til Afrikamesterskapet i 2013 beskriver tidligere RBK-spiller Abdou Razack Traoré som «a quick, hard working player» og fremhever «deft passing ability». Dette underbygger fart, arbeidskapasitet og kortpasningsspill, ikke antatte driblingstall. Kilden gjelder tiden etter RBK-oppholdet.",
+    source: "https://africacup2013.wordpress.com/group-c/burkina-faso/",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "tom_kare_staurvik",
+    clubId: "rosenborg",
+    strengths: ["set_pieces","vision"],
+    claim: "En navngitt retrospektiv fotballtekst fra mars 2011 beskriver Tom Kåre Staurviks frispark med «fantastisk tilslag» og kaller overblikket hans «hovmesterblikket». Dette underbygger dødballutførelse og overblikk; bloggen er en retrospektiv vurdering, ikke samtidig kampanalyse, og gir ikke automatisk en tallfestet rating.",
+    source: "https://materazzia.blogspot.com/2011/03/fredagslisten-9.html",
+    sourceKind: "football_editorial"
+  }
 ];
 
 export const SOURCE_DEPTH_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
