@@ -84,7 +84,11 @@ for (const [playerId, attributeId, expected] of [
   ["borek_dockal", "crossing", 16],
   ["borek_dockal", "decisions", 15],
   ["vegar_eggen_hedenstad", "set_pieces", 15],
-  ["anders_konradsen", "work_rate", 16]
+  ["anders_konradsen", "work_rate", 16],
+  ["pal_andre_helland", "set_pieces", 16],
+  ["birger_meling", "pace", 16],
+  ["andre_hansen", "distribution", 15],
+  ["mikael_lustig", "crossing", 15]
 ]) {
   const profile = profiles[playerId];
   check(`${playerId} har vurdert ${attributeId}=${expected}`,
@@ -990,7 +994,7 @@ const KJENT_UDOKUMENTERT = {
   // mest dokumentasjon av alle og lavest dekning av de fire, fordi mesteparten
   // handler om meritter og kampmengde. Haugesund har halvparten så mye tekst og
   // dobbelt så mange spillerbeskrivelser.
-  lerkendal_stadion: 0.53,   // Rosenborg: forventet 43 av 83 eksklusive profiler uten styrker etter Ankersen/Bendtner (0.5181)
+  lerkendal_stadion: 0.30,   // Rosenborg: 24/83 eksklusive uten dokumenterte styrker (28.92 %); målt etter samlet klubbpass 2026-10-13
   aker_stadion: 0.72,        // Molde: målt 41 av 54
   marienlyst_stadion: 0.76,  // Strømsgodset: målt 63 av 84
   haugesund_stadion: 0.59,   // Haugesund/Haugar/Djerv: målt 50 av 87
