@@ -1230,6 +1230,39 @@ const documented = [
     source: "https://www.bt.no/sport/i/RRGmxx/vet-hva-hele-bergen-krever",
     sourceKind: "press"
   },
+  // Rosenborg: final residual evidence review, four sourced historical players.
+  {
+    playerId: "arne_hanssen",
+    clubId: "rosenborg",
+    strengths: ["strength"],
+    claim: "Tidligere Tromsø-spiller Tore Nilsen husker Arne Hanssen fra en cupkamp mot Bodø/Glimt som «stor og sterk». Dette beskriver fysisk styrke hos samme spiss som tidligere spilte Rosenborg, men gjelder hans senere Glimt-periode. Det brukes ikke som belegg for hurtighet eller avslutningspresisjon.",
+    source: "https://www.til.no/nyheter/det-forste-malet-var-spesielt",
+    sourceKind: "club"
+  },
+  {
+    playerId: "knut_torbjorn_eggen",
+    clubId: "rosenborg",
+    strengths: ["bravery"],
+    claim: "Lagkamerat Sverre Brandhaug omtalte i 2012 Knut Torbjørn Eggen som en «kompromissløs midtstopper» fra Rosenborgs 1980-tall. Beskrivelsen gir avgrenset belegg for et uredd, oppofrende forsvarsspill (bravery), ikke en beregnet taklings- eller pasningsverdi.",
+    source: "https://www.dagsavisen.no/sport/knut-torbjorn-eggen-er-dod/4991305",
+    sourceKind: "press"
+  },
+  {
+    playerId: "tom_kare_staurvik",
+    clubId: "rosenborg",
+    strengths: ["long_shots"],
+    claim: "En samtidig Aftenbladet/Sunnmørsposten-omtale fra august 2003 beskrev Tom Kåre Staurvik som «den hardtskytende Staurvik» og fremhevet hans «voldsomme tilslag». Det er belegg for utpreget skuddkraft, registrert avgrenset under long_shots, men ikke for høy presisjon eller hurtighet.",
+    source: "https://www.aftenbladet.no/sport/i/kaqgAj/lokket-med-klippfisk-gryte",
+    sourceKind: "press"
+  },
+  {
+    playerId: "sverre_fornes",
+    clubId: "rosenborg",
+    strengths: ["shot_stopping"],
+    claim: "Adresseavisens minneartikkel om keeper Sverre Fornes beskriver hans debut som 16-åring mot Freidig i 1948: «både Gunnar Dahlen og Jan Sørdal ble stoppet av en 16-åring denne dagen – RBK vant 1–0». Det gir et konkret historisk eksempel på skuddredninger, ikke en direkte numerisk ferdighetsvurdering.",
+    source: "https://www.aftenbladet.no/sport/i/v53yL5/han-var-mannen-bak-troillongan-naa-har-rbk-kjempen-gaatt-bort",
+    sourceKind: "press"
+  },
 ];
 
 export const SOURCE_DEPTH_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
