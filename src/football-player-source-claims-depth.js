@@ -1229,7 +1229,7 @@ const documented = [
     claim: "Bergens Tidende beskriver Hassan El Fakiri som en spiller som «alltid vært teknisk og taktisk sterk» og som foretrakk lavrisiko ballbruk. Taktisk styrke dokumenterer game_reading, men ikke spesifikk langpasnings- eller dribleverdi.",
     source: "https://www.bt.no/sport/i/RRGmxx/vet-hva-hele-bergen-krever",
     sourceKind: "press"
-  },,
+  },
   // Rosenborg: final thin-source review, dated individual evidence.
   {
     playerId: "torbjorn_lysaker_heggem",
