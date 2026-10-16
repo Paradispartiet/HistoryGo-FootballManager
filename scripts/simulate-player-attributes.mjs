@@ -994,7 +994,7 @@ const KJENT_UDOKUMENTERT = {
   // mest dokumentasjon av alle og lavest dekning av de fire, fordi mesteparten
   // handler om meritter og kampmengde. Haugesund har halvparten så mye tekst og
   // dobbelt så mange spillerbeskrivelser.
-  lerkendal_stadion: 0.30,   // Rosenborg: 24/83 eksklusive uten dokumenterte styrker (28.92 %); målt etter samlet klubbpass 2026-10-13
+  lerkendal_stadion: 0.15,   // Rosenborg: 11/83 eksklusive uten dokumenterte styrker (13,25 %); tak 15 % etter historisk kildepass 2026-10-16
   aker_stadion: 0.72,        // Molde: målt 41 av 54
   marienlyst_stadion: 0.76,  // Strømsgodset: målt 63 av 84
   haugesund_stadion: 0.59,   // Haugesund/Haugar/Djerv: målt 50 av 87
