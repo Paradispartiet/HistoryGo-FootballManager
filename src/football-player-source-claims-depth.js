@@ -13,6 +13,39 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Rosenborg: dokumenterte historiske ferdigheter fra klubbens egne arkiver.
+  {
+    playerId: "birger_tingstad",
+    clubId: "rosenborg",
+    strengths: ["set_pieces"],
+    claim: "«Birger Tingstad sendte et av sine spesial-frispark helt oppe i hjørnet.»",
+    source: "https://www.rbk.no/nyheter/62-ar-siden-62",
+    sourceKind: "club"
+  },
+  {
+    playerId: "kjell_hvidsand",
+    clubId: "rosenborg",
+    strengths: ["pace","tackling"],
+    claim: "«Som spiller var Kjell det vi må kalle en moderne back, offensiv og hurtig. Ikke minst var han taklingssterk»",
+    source: "https://statistikk.rbk.no/spiller/250-kjell-hvidsand",
+    sourceKind: "club"
+  },
+  {
+    playerId: "tor_kleveland",
+    clubId: "rosenborg",
+    strengths: ["pace"],
+    claim: "«Da Odd kom på besøk til serieleder RBK i niende runde hadde den kjappe venstrevingen ennå ikke skåret i serien.»",
+    source: "https://www.rbk.no/nyheter/bedre-enn-originalen",
+    sourceKind: "club"
+  },
+  {
+    playerId: "eldar_hansen",
+    clubId: "rosenborg",
+    strengths: ["dribbling"],
+    claim: "«Ti minutter ut i andre omgang driblet Eldar Hansen halve Sarpsborg-laget»",
+    source: "https://www.rbk.no/om-rbk/historie/fra-odd-til-nordens-stolthet/sesongen-1964",
+    sourceKind: "club"
+  },
   // Rosenborg 2026-10-16: dokumenterte ferdighetsbeskrivelser fra eldre og nyere kilder.
   {
     playerId: "einar_jorum",
