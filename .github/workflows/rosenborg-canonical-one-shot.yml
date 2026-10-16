@@ -1,0 +1,29 @@
+# Midlertidig storfil-migrering: fjernes fra grenen før PR/merge.
+name: Rosenborg canonical one-shot
+on:
+  push:
+    branches:
+      - content/rosenborg-historical-six-20261016
+    paths:
+      - .github/workflows/rosenborg-canonical-one-shot.yml
+permissions:
+  contents: write
+jobs:
+  write-catalog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Patch only six documented canonical affiliations
+        run: |
+          node scripts/rosenborg-historical-six-canonical.mjs
+          git diff --check
+          test "$(git diff --name-only)" = "data/football_players.json"
+      - name: Commit canonical update to branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/football_players.json
+          git commit -m "Rosenborg: document six historical club affiliations"
+          git push
