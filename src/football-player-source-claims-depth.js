@@ -13,6 +13,39 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Rosenborg 2026-10-16: dokumenterte ferdighetsbeskrivelser fra eldre og nyere kilder.
+  {
+    playerId: "einar_jorum",
+    clubId: "rosenborg",
+    strengths: ["heading","simple_passing"],
+    claim: "Sportsmandens kampvurdering: «Med frapperende sterkt hodespill, gode skudd og godt innsiktede pasninger.»",
+    source: "https://jarlesvifstatistikk.bravesites.com/historikk",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "abdou_razack_traore",
+    clubId: "rosenborg",
+    strengths: ["pace","strength"],
+    claim: "José Mourinho nevner Traoré blant tre Rosenborg-angripere og beskriver gruppen: «De virker sterke, teknisk dyktige og hurtige.»",
+    source: "https://www.aftenposten.no/sport/fotball/i/y3gdRa/mourinhos-verden",
+    sourceKind: "press"
+  },
+  {
+    playerId: "trond_egil_soltvedt",
+    clubId: "rosenborg",
+    strengths: ["work_rate","tackling","first_touch"],
+    claim: "11v11: «He is a hard-working midfield player who is strong in the tackle and has good ball-control skills.»",
+    source: "https://www.11v11.com/players/trond-egil-soltvedt-450/",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "torbjorn_lysaker_heggem",
+    clubId: "rosenborg",
+    strengths: ["simple_passing"],
+    claim: "Carlos Corberán: «He is a player who is capable of taking responsibility for the ball, playing out from the back and managing the ball well with both feet.»",
+    source: "https://www.wba.co.uk/news/albion-complete-torbjorn-heggem-transfer",
+    sourceKind: "club"
+  },
   {
     playerId: "ivar_johannes_jakobsen_unhjem",
     clubId: "junkeren",
