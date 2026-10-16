@@ -13,6 +13,17 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Rosenborg 1960: Adresseavisens samtidige individuelle kampvurdering,
+  // bevart i klubbens offisielle statistikkarkiv.
+  {
+    playerId: "olav_wang",
+    clubId: "rosenborg",
+    strengths: ["stamina"],
+    claim: "Adresseavisen: «Med sin rutine, kondisjon og teknikk laget han et sidehalfspill av høy klasse». Bare kondisjon registreres som dokumentert styrke.",
+    source: "https://statistikk.rbk.no/kamp/1572/sandefjord-rosenborg",
+    sourceKind: "press"
+  },
+
   // Rosenborg: dokumenterte historiske ferdigheter fra klubbens egne arkiver.
   {
     playerId: "birger_tingstad",
