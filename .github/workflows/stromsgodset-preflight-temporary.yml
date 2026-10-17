@@ -1,0 +1,32 @@
+name: Temporary Strømsgodset data preflight
+on:
+  push:
+    branches: [content/stromsgodset-18-claims-20261017]
+    paths: [.github/workflows/stromsgodset-preflight-temporary.yml]
+permissions: {contents: read}
+jobs:
+  data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read source claims and exclusive coverage
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import {applyP1SourceClaims} from './src/football-player-source-claims-p1.js';
+          import {applySourceDepthClaims} from './src/football-player-source-claims-depth.js';
+          const raw=JSON.parse(fs.readFileSync('data/football_players.json','utf8')).players;
+          const players=applySourceDepthClaims(applyP1SourceClaims(raw));
+          const exclusive=players.filter(p=>p.sourcePlaceIds?.length===1&&p.sourcePlaceIds[0]==='marienlyst_stadion');
+          const missing=exclusive.filter(p=>!(p.strengths||[]).length);
+          const ratio=missing.length/exclusive.length;
+          const cap=(Math.ceil(ratio*100)+1)/100;
+          const pool=players.filter(p=>p.clubAffiliations?.some(a=>a.clubId==='stromsgodset'));
+          console.log('RESULT '+JSON.stringify({exclusiveTotal:exclusive.length,exclusiveMissing:missing.length,ratio,cap,poolTotal:pool.length,poolMissing:pool.filter(p=>!(p.strengths||[]).length).length}));
+          for(const id of ['viljar_myhra','lars_jorgen_salvesen','marko_farji','logi_tomasson','marcus_pedersen','adama_diomande','kristoffer_tokstad','tobias_gulliksen','muhamed_keita','gustav_wikheim','mostafa_mos_abdellaoue','jon_knudsen','jarl_andre_storbaek','fredrik_nordkvelle','lasse_olsen','rune_elvis_hagen','lars_saetra','mounir_hamoud']){
+            const p=players.find(p=>p.id===id);
+            console.log('ENTRY '+JSON.stringify({id,exists:!!p,strengths:p?.strengths,places:p?.sourcePlaceIds,aff:p?.clubAffiliations?.filter(a=>a.clubId==='stromsgodset')}));
+          }
+          NODE
+      - name: Targeted source audit
+        run: node scripts/audit-source-depth-claims.mjs
