@@ -58,7 +58,7 @@ const documented = [
     playerId: "haris_hajradinovi",
     clubId: "haugesund",
     strengths: ["chance_creation"],
-    claim: "Flashscores tilbakeblikk på Süper Lig 2024/25 fremhever Hajradinović for ligaens flest skapte sjanser (94) og gjennombruddspasninger (22), og beskriver ham som en fremtredende offensiv bidragsyter for Kasımpaşa. Bare eksplisitt dokumentert sjanseskaping registreres; det gjelder senere karriere, ikke en gitt FKH-kamp.",
+    claim: "Flashscores tilbakeblikk på Süper Lig 2024/25 fremhever Hajradinović med «the most chances created (94), and the most through balls (22)» og beskriver ham som en fremtredende offensiv bidragsyter for Kasımpaşa. Bare eksplisitt dokumentert sjanseskaping registreres; det gjelder senere karriere, ikke en gitt FKH-kamp.",
     source: "https://www.flashscoreusa.com/news/soccer-super-lig-turkish-super-lig-weekly-victor-osimhen-and-galatasaray-dominate-the-team-of-the-season/SMW1e3Sa/",
     sourceKind: "press"
   },
