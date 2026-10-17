@@ -996,7 +996,7 @@ const KJENT_UDOKUMENTERT = {
   // dobbelt så mange spillerbeskrivelser.
   lerkendal_stadion: 0.14,   // Rosenborg: 10/83 eksklusive uten dokumenterte styrker (12,05 %); tak 14 % etter kildepass 2026-10-17
   aker_stadion: 0.72,        // Molde: målt 41 av 54
-  marienlyst_stadion: 0.74,  // Strømsgodset: 61/84 eksklusive uten dokumenterte styrker (72,62 %); tak 74 % etter kildepass 2026-10-17
+  marienlyst_stadion: 0.66,  // Strømsgodset: 54/84 eksklusive uten dokumenterte styrker (64,29 %); tak 66 % etter samlet kildepass 2026-10-17
   haugesund_stadion: 0.57,   // Haugesund/Haugar/Djerv: 48/87 eksklusive uten dokumenterte styrker (55,17 %); tak 57 % etter kildepass 2026-10-17
   // Andre pulje kildepass, og den viser hva aksen koster i den lave enden.
   // Vålerenga lander på linje med Rosenborg fordi klubbens eget nyhetsarkiv
