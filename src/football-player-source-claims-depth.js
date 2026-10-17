@@ -13,6 +13,64 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // FK Haugesund: kildebelagte individuelle spillestilprofiler, fortsettelse 2026-10-17.
+  {
+    playerId: "joakim_vage_nilsen",
+    clubId: "haugesund",
+    strengths: ["game_reading"],
+    claim: "Aftenpostens individuelle talentvurdering i 2010 omtaler Våge Nilsen som «Offensiv og trygg venstreback med en god venstrefot» og med «Godt blikk for spillet». Bare det uttrykkelige spilleblikket gir game_reading; venstrefot alene gir ingen spesifikk pasningsstyrke.",
+    source: "https://www.aftenbladet.no/sport/i/kaqnQv/tenaaringsboomen",
+    sourceKind: "press"
+  },
+  {
+    playerId: "trygve_nygaard",
+    clubId: "haugesund",
+    strengths: ["work_rate"],
+    claim: "FKH-trener Jostein Grindhaug om Nygaard i 2013: «Også har han en voldsom drive i seg. Det er aldri noe sutring. Han kommer på trening, og gjør jobben sin» og «I gjenvinningsspillet var han viktig». Arbeidsinnsatsen registreres, men ikke et spesifikt taklings- eller pasningstoken.",
+    source: "https://www.aftenbladet.no/sport/i/EW4Po3/dette-er-trygve-nygaards-karrierehoeydepunkt",
+    sourceKind: "press"
+  },
+  {
+    playerId: "roope_riski",
+    clubId: "haugesund",
+    strengths: ["finishing","positioning"],
+    claim: "Yles intervju med Riski fra Ilves-perioden i 2026 beskriver ham som «yksi parhaista maalintekijöistä» og «suomalaisittain poikkeuksellisen hyvä maalintekijä». Riski sier om egen avslutningsutvikling at treningsrepetisjoner har skapt «luontaista valmiutta sijoittua oikein». Dette dokumenterer avslutning og posisjonering, ikke tallrating eller FKH-spesifikk form.",
+    source: "https://yle.fi/a/74-20217176",
+    sourceKind: "press"
+  },
+  {
+    playerId: "thore_pedersen",
+    clubId: "haugesund",
+    strengths: ["work_rate","stamina","combination_play"],
+    claim: "Pedersen om egen spillestil ved overgangen fra Haugesund til Brann i 2023: «Jeg er energisk og spiller med mye vilje og løpskraft. Jeg er god til å holde på ballen, og en god kombinasjonsspiller». Arbeidsinnsats, løpskapasitet og kombinasjonsspill registreres direkte, ikke dribling eller numerisk rating.",
+    source: "https://www.brann.no/nyheter/pedersen-har-signert-for-brann",
+    sourceKind: "club"
+  },
+  {
+    playerId: "liban_abdi",
+    clubId: "haugesund",
+    strengths: ["pace"],
+    claim: "Liban Abdi sier selv i samtidig Karmøynytt-intervju i april 2017 under Haugesund-perioden: «Jeg har trent bra i vinter og føler meg veldig kjapp». Hurtighet føres, mens artikkelens dribleoverskrift ikke alene brukes som et generelt dribletoken.",
+    source: "https://www.karmoynytt.no/abdi-driblet-til-den-store-gullmedalje/s/25-161-26399",
+    sourceKind: "press"
+  },
+  {
+    playerId: "haris_hajradinovi",
+    clubId: "haugesund",
+    strengths: ["chance_creation"],
+    claim: "Flashscores tilbakeblikk på Süper Lig 2024/25 fremhever Hajradinović for ligaens flest skapte sjanser (94) og gjennombruddspasninger (22), og beskriver ham som en fremtredende offensiv bidragsyter for Kasımpaşa. Bare eksplisitt dokumentert sjanseskaping registreres; det gjelder senere karriere, ikke en gitt FKH-kamp.",
+    source: "https://www.flashscoreusa.com/news/soccer-super-lig-turkish-super-lig-weekly-victor-osimhen-and-galatasaray-dominate-the-team-of-the-season/SMW1e3Sa/",
+    sourceKind: "press"
+  },
+  {
+    playerId: "filip_kiss",
+    clubId: "haugesund",
+    strengths: ["tackling"],
+    claim: "VG-lupens 2017-vurdering dokumenterer 97 taklinger for FK Haugesund i 2016-sesongen, 68 vunnet («nest best i klassen»). Dette er et direkte, individuelt mål på utførte vellykkede taklinger, ikke en antakelse fra ankerrolle, kort eller kampmengde; ingen tallrating føres.",
+    source: "https://www.vg.no/spesial/2017/vglupen/?plassering=10",
+    sourceKind: "press"
+  },
+
   // FK Haugesund: individuelt dokumentert spillerbolk 2026-10-17.
   {
     playerId: "bala_garba",
