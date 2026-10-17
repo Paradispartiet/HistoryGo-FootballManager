@@ -13,6 +13,55 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Rosenborg: seks kildebelagte historiske ferdighetsprofiler, samlet dataleveranse.
+  {
+    playerId: "harald_petersen",
+    clubId: "rosenborg",
+    strengths: ["work_rate","leadership"],
+    claim: "Adresseavisen om Petersen i 1937: «spilte meget energisk» og «dirigerte laget på en utmerket måte». Konkrete arbeids- og lederegenskaper, ikke slutning fra fem scoringer.",
+    source: "https://www.rbk.no/nyheter/forste-gang-forbi-2.runde",
+    sourceKind: "club"
+  },
+  {
+    playerId: "tore_lindseth",
+    clubId: "rosenborg",
+    strengths: ["pace","dribbling"],
+    claim: "Historisk spillervurdering omtaler Lindseth som «den raske driblevingen fra Kvarvingsdalen». Bare fart og dribling registreres.",
+    source: "https://stabbursloftet.substack.com/p/tidenes-beste-i-den-gule-trya",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "oystein_wormdal",
+    clubId: "rosenborg",
+    strengths: ["ball_carrying"],
+    claim: "Adresseavisens historiske RBK-jury: «Han var god til å ta med seg ballen fra eget forsvar og til angrep».",
+    source: "https://www.aftenposten.no/sport/fotball/i/4qbxjV/juryens-favoritt-oeystein-wormdahl",
+    sourceKind: "press"
+  },
+  {
+    playerId: "erling_meirik",
+    clubId: "rosenborg",
+    strengths: ["pace"],
+    claim: "Adresseavisens RBK-omtale: «Han var i tillegg hurtig, noe han brukte aktivt ved å være med i angrepsspillet».",
+    source: "https://www.aftenposten.no/sport/fotball/i/4qbxjV/juryens-favoritt-oeystein-wormdahl",
+    sourceKind: "press"
+  },
+  {
+    playerId: "terje_morkved",
+    clubId: "rosenborg",
+    strengths: ["pace"],
+    claim: "Historisk RBK-spilleromtale beskriver Terje Mørkved som «lynkjapp». Skuddkraft alene brukes ikke til å utlede presisjon eller langskudd.",
+    source: "https://www.aftenposten.no/sport/fotball/i/Qo5aRA/maal-etter-maal",
+    sourceKind: "press"
+  },
+  {
+    playerId: "harald_gulbrandsen",
+    clubId: "rosenborg",
+    strengths: ["game_reading","positioning"],
+    claim: "Rosenborgs minneord sier: «klokskap og plasseringsevne som få». Dette dokumenterer spilleforståelse og posisjonering, ikke hurtighet.",
+    source: "https://www.rbk.no/nyheter/minneord-om-harald-gulbrandsen",
+    sourceKind: "club"
+  },
   // Rosenborg 1960: Adresseavisens samtidige individuelle kampvurdering,
   // bevart i klubbens offisielle statistikkarkiv.
   {
