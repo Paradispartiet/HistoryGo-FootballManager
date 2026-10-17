@@ -1,0 +1,57 @@
+name: Temporary Molde affiliation production
+on:
+  push:
+    branches: [content/molde-affiliations-and-strengths-20261017]
+    paths: [.github/workflows/molde-affiliations-produce-temporary.yml]
+permissions:
+  contents: write
+jobs:
+  produce:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          ref: content/molde-affiliations-and-strengths-20261017
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Document batch in canonical player catalogue
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const file='data/football_players.json';
+          const data=JSON.parse(fs.readFileSync(file,'utf8'));
+          const ledger=JSON.parse(fs.readFileSync('data/research/molde-affiliations-2026-10-17.json','utf8'));
+          const byId=new Map(data.players.map(p=>[p.id,p]));
+          let updated=0, already=0;
+          for(const row of ledger.entries){
+            const p=byId.get(row.playerId);
+            assert.ok(p,'missing player: '+row.playerId);
+            const a=p.clubAffiliations?.find(a=>a.clubId==='molde');
+            assert.ok(a,'missing Molde affiliation: '+row.playerId);
+            assert.equal(a.relation,'played_for','not a senior Molde membership: '+row.playerId);
+            assert.ok(['belagt','utledet'].includes(a.source));
+            const status=p.clubStatus?.aker_stadion;
+            if(a.source==='belagt'){already++;continue}
+            a.source='belagt';
+            if(status){
+              p.clubStatusSource??={};
+              p.clubStatusSource.aker_stadion='belagt';
+            }
+            updated++;
+          }
+          assert.ok(updated>=40,'unexpected number of upgrades: '+updated);
+          fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n');
+          console.log('AFFILIATIONS_UPDATED '+JSON.stringify({updated,already,requested:ledger.entries.length}));
+          NODE
+          node scripts/sync-club-affiliations.mjs
+      - name: Commit exact canonical player update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/football_players.json
+          git diff --cached --quiet && exit 1
+          git commit -m "Document 58 historical Molde first-team affiliations from official archive"
+          git push origin HEAD:content/molde-affiliations-and-strengths-20261017
