@@ -13,6 +13,16 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Rosenborg: Erling Næss forteller selv om dribling og konkrete finter i RBK-tiden.
+  {
+    playerId: "erling_naess",
+    clubId: "rosenborg",
+    strengths: ["dribbling"],
+    claim: "Næss: «Jeg driblet dermed helt til jeg mistet ballen eller scoret! Derfor ble jeg naturlig nok skikkelig god til å drible.» Han forteller også om da han «fintet» Trygve Bornø i en RBK–Skeid-kamp. Bare dribling registreres.",
+    source: "https://www.rbkweb.no/vis/18105",
+    sourceKind: "football_editorial"
+  },
+
   // Rosenborg: seks kildebelagte historiske ferdighetsprofiler, samlet dataleveranse.
   {
     playerId: "harald_petersen",
