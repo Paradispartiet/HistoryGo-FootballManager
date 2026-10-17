@@ -18934,7 +18934,7 @@
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -18942,7 +18942,7 @@
           "clubId": "rosenborg",
           "relation": "played_for",
           "status": "squad_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -19001,7 +19001,7 @@
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -19009,7 +19009,7 @@
           "clubId": "rosenborg",
           "relation": "played_for",
           "status": "squad_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -19401,7 +19401,7 @@
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -19409,7 +19409,7 @@
           "clubId": "rosenborg",
           "relation": "played_for",
           "status": "squad_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -19535,7 +19535,7 @@
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -19543,7 +19543,7 @@
           "clubId": "rosenborg",
           "relation": "played_for",
           "status": "squad_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -19600,7 +19600,7 @@
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -19608,7 +19608,7 @@
           "clubId": "rosenborg",
           "relation": "played_for",
           "status": "squad_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -19669,7 +19669,7 @@
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -19677,7 +19677,7 @@
           "clubId": "rosenborg",
           "relation": "played_for",
           "status": "squad_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -20002,7 +20002,7 @@
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -20010,7 +20010,7 @@
           "clubId": "rosenborg",
           "relation": "played_for",
           "status": "squad_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -20204,7 +20204,7 @@
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -20212,7 +20212,7 @@
           "clubId": "rosenborg",
           "relation": "played_for",
           "status": "squad_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -20763,7 +20763,7 @@
         "lerkendal_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "lerkendal_stadion": "utledet"
+        "lerkendal_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -20771,7 +20771,7 @@
           "clubId": "rosenborg",
           "relation": "played_for",
           "status": "squad_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
