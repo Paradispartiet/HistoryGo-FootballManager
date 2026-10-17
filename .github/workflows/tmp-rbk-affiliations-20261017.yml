@@ -1,0 +1,29 @@
+# Temporary, one-time GitHub-local patch for large canonical catalog.
+name: Rosenborg affiliation one-shot
+on:
+  push:
+    branches:
+      - content/rosenborg-final-affiliation-pass-20261017
+    paths:
+      - .github/workflows/tmp-rbk-affiliations-20261017.yml
+permissions:
+  contents: write
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Update exactly nine documented Rosenborg affiliations
+        run: |
+          node scripts/tmp-rbk-affiliations-20261017.mjs
+          git diff --check
+          test "$(git diff --name-only)" = "data/football_players.json"
+      - name: Commit canonical catalog back to the branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/football_players.json
+          git commit -m "Rosenborg: document nine historical club affiliations"
+          git push
