@@ -1,0 +1,35 @@
+name: Temporary Haugesund source inventory
+on:
+  push:
+    branches: [content/haugesund-individual-skill-batch-20261017]
+    paths: [.github/workflows/haugesund-source-inventory-temporary.yml]
+permissions: {contents: read}
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check player IDs, affiliations and effective coverage
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import {applyP1SourceClaims} from './src/football-player-source-claims-p1.js';
+          import {applyP2SourceClaims} from './src/football-player-source-claims-p2.js';
+          import {applySourceDepthClaims} from './src/football-player-source-claims-depth.js';
+          const raw=JSON.parse(fs.readFileSync('data/football_players.json','utf8')).players;
+          const effective=applySourceDepthClaims(applyP2SourceClaims(applyP1SourceClaims(raw)));
+          const selected=['bala_garba','nikola_ur_i','fredrik_pallesen_knudsen','morten_konradsen','maic_sema','samuel_kari_fridjonsson','sory_ibrahim_diarra','frederik_gytkjaer','kristoffer_haraldseid','sondre_liseth'];
+          for(const id of selected){
+            const p=effective.find(p=>p.id===id);
+            const aff=p?.clubAffiliations?.find(a=>a.clubId==='haugesund');
+            console.log('PLAYER '+JSON.stringify({id,exists:!!p,affiliation:aff?.source,relation:aff?.relation,strengths:p?.strengths,exclusivePlace:p?.sourcePlaceIds?.length===1?p.sourcePlaceIds[0]:null}));
+            if(!p||aff?.source!=='belagt'||!(p.strengths||[]).length)process.exitCode=1;
+          }
+          const pool=effective.filter(p=>p.clubAffiliations?.some(a=>a.clubId==='haugesund'));
+          const exclusive=effective.filter(p=>p.sourcePlaceIds?.length===1&&p.sourcePlaceIds[0]==='haugesund_stadion');
+          const empty=exclusive.filter(p=>!p.strengths?.length);
+          const cap=(Math.ceil(100*empty.length/exclusive.length)+1)/100;
+          console.log('COVERAGE '+JSON.stringify({poolTotal:pool.length,poolMissing:pool.filter(p=>!p.strengths?.length).length,exclusive:exclusive.length,exclusiveMissing:empty.length,cap}));
+          NODE
+      - name: Targeted source-depth audit
+        run: node scripts/audit-source-depth-claims.mjs
