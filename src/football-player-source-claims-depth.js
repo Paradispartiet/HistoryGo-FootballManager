@@ -13,6 +13,96 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Strømsgodset: ytterligere elleve individuelt kildebelagte profiler, 2026-10-17.
+  {
+    playerId: "thomas_grogaard",
+    clubId: "stromsgodset",
+    strengths: ["pace","stamina"],
+    claim: "Ved signeringen sier Godsets sportssjef Jostein Flo om Thomas Grøgaard: «Han er rask, løpssterk og er god på ball.» Bare direkte støttet fart og løpskapasitet føres, ikke et spesifikt pasningstoken.",
+    source: "https://www.godset.no/nyheter/grogaard-er-klar-for-godset",
+    sourceKind: "club"
+  },
+  {
+    playerId: "johan_hove",
+    clubId: "stromsgodset",
+    strengths: ["stamina","finishing","determination"],
+    claim: "Nettavisens jury beskriver Godset-spiller Johan Hove i 2020 med «enorm løpskapasitet, vinnervilje og gode avslutningsegenskaper». De tre uttrykkelige kvalitetsordene gir tre tilsvarende styrketoken.",
+    source: "https://www.nettavisen.no/sport/disse-vinner-nettavisen-prisen-2020/s/12-95-3424064452",
+    sourceKind: "press"
+  },
+  {
+    playerId: "thomas_lehne_olsen",
+    clubId: "stromsgodset",
+    strengths: ["pace","strength"],
+    claim: "Tidligere U-landslagstrener Bård Flovik karakteriserer Thomas Lehne Olsen i desember 2015, ved utgangen av Godset-perioden, som «en ganske hurtig og kraftfull spiller som har målscoreregenskaper». Bare hurtighet og fysisk kraft registreres.",
+    source: "https://www.aftenposten.no/sport/fotball/i/pLMr0W/han-kan-bli-kobras-erstatter",
+    sourceKind: "press"
+  },
+  {
+    playerId: "sondre_fosnaess_hanssen",
+    clubId: "stromsgodset",
+    strengths: ["pace","strength"],
+    claim: "Hødd-trener Marius Bøe beskriver Sondre Fosnæss Hanssen ved overgangen etter Strømsgodset med «Hurtig, kraft og ballsikker». Direkte kildebelegg for fart og fysisk kraft, ikke en bestemt pasningstype.",
+    source: "https://www.hodd.no/nyheiter/spelar-med-nesten-40-eliteserie-kampar-klar-for-hodd",
+    sourceKind: "club"
+  },
+  {
+    playerId: "jorgen_horn",
+    clubId: "stromsgodset",
+    strengths: ["duels","heading","game_reading"],
+    claim: "Nettavisens profil av U21-landslagsspiller Jørgen Horn: «Duellsterk, god på hodet og leser spillet på en god måte». Kilden beskriver Horn i Vålerenga-tiden; egenskapene følger spilleren, ikke en bestemt Godset-kamp.",
+    source: "https://www.nettavisen.no/14-mann-for-norge/s/12-95-1292915",
+    sourceKind: "press"
+  },
+  {
+    playerId: "martin_ronning_ovenstad",
+    clubId: "stromsgodset",
+    strengths: ["combination_play"],
+    claim: "Kråkevingenes 2023-tabelltips omtaler tidligere Godset-spiller Martin Rønning Ovenstad som «En slepen teknikker som er kombinasjonssterk». Bare direkte kombinasjonsspill tas inn.",
+    source: "https://www.kraakevingen.no/tabelltips-2023/",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "morten_saetra",
+    clubId: "stromsgodset",
+    strengths: ["shot_stopping"],
+    claim: "Strømsgodsets 2023-rapport fra Team SIF-kampen mot Stjørdals-Blink beskriver «gjentatte redninger fra en meget god Morten Sætra». Dette dokumenterer keeperens redningsarbeid; ingen numerisk kvalitet utledes.",
+    source: "https://www.godset.no/utvikling/nyheter/team-sif-med-sterkt-bortepoeng",
+    sourceKind: "club"
+  },
+  {
+    playerId: "odd_johnsen",
+    clubId: "stromsgodset",
+    strengths: ["finishing"],
+    claim: "Fotballskribentens historiske spilleromtale av Odd Johnsen, som spilte for blant annet Mjøndalen, Brann og Strømsgodset, lyder «Teknisk og målfarlig». Bare avslutningsevne registreres fra den eksplisitte målfarlig-beskrivelsen.",
+    source: "https://www.aftenbladet.no/sport/i/MRR3v0/paa-dette-droemmelaget-faar-landslagssjef-hoegmo-plass-som-spiller",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "adam_larsen_kwarasey",
+    clubId: "stromsgodset",
+    strengths: ["command_of_area","shot_stopping"],
+    claim: "Samtidig 2011-vurdering av Godset-keeper Adam Larsen Kwarasey omtaler ham som «God i feltet og voldsomt god på strek». Konkret beskrivelser av feltbeherskelse og skuddredninger, ikke reflekser eller distribusjon.",
+    source: "https://norsktoppfotball.blogspot.com/2011/10/keeperne-i-tippeligaen.html",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "flamur_kastrati",
+    clubId: "stromsgodset",
+    strengths: ["pace"],
+    claim: "Samtidig Fædrelandsvennen-referat fra Strømsgodset–Sandnes Ulf 2014 omtaler Flamur Kastrati som «Lynvingen». Dette beskriver hurtighet; pasningen som mislyktes i samme situasjon gis ingen kvalitet.",
+    source: "https://www.fvn.no/sport/i/WLnmAk/droemmescoring-senket-sandnes-ulf",
+    sourceKind: "press"
+  },
+  {
+    playerId: "bassel_jradi",
+    clubId: "stromsgodset",
+    strengths: ["chance_creation"],
+    claim: "Strømsgodsets referat etter 3–1-tapet mot RBK 2017 sier at Bassel Jradi «hadde regien bak det meste offensivt» mot slutten. Den konkrete kampvurderingen dokumenterer sjanseskaping i denne kampen, ikke et generelt ratingtall.",
+    source: "https://www.godset.no/nyheter/tap-mot-rosenborg",
+    sourceKind: "club"
+  },
+
   // Strømsgodset: samlet kildedokumentert spillerbolk 2026-10-17.
   {
     playerId: "viljar_myhra",
