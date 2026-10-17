@@ -1,0 +1,33 @@
+name: Temporary Haugesund final-profile preflight
+on:
+  push:
+    branches: [content/haugesund-historical-source-20261017]
+    paths: [.github/workflows/fkh-final-preflight-temporary.yml]
+permissions: {contents: read}
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate five sourced records and calculate exact coverage
+        run: |
+          node scripts/audit-source-depth-claims.mjs
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import {applyP1SourceClaims} from './src/football-player-source-claims-p1.js';
+          import {applyP2SourceClaims} from './src/football-player-source-claims-p2.js';
+          import {applySourceDepthClaims} from './src/football-player-source-claims-depth.js';
+          const raw=JSON.parse(fs.readFileSync('data/football_players.json','utf8')).players;
+          const data=applySourceDepthClaims(applyP2SourceClaims(applyP1SourceClaims(raw)));
+          for(const id of ['henrik_kildentoft','milan_koji','dean_mooney','juska_savolainen','du_an_cvetinovi']){
+            const p=data.find(x=>x.id===id);
+            const aff=p?.clubAffiliations?.find(a=>a.clubId==='haugesund');
+            console.log('PLAYER '+JSON.stringify({id,found:!!p,aff:aff?.source,relation:aff?.relation,strengths:p?.strengths,places:p?.sourcePlaceIds}));
+            if(!p || aff?.source!=='belagt' || !p.strengths?.length) process.exitCode=1;
+          }
+          const pool=data.filter(p=>p.clubAffiliations?.some(a=>a.clubId==='haugesund'));
+          const exclusive=data.filter(p=>p.sourcePlaceIds?.length===1&&p.sourcePlaceIds[0]==='haugesund_stadion');
+          const missing=exclusive.filter(p=>!(p.strengths||[]).length);
+          const cap=(Math.ceil(100*missing.length/exclusive.length)+1)/100;
+          console.log('COVERAGE '+JSON.stringify({poolTotal:pool.length,poolMissing:pool.filter(p=>!(p.strengths||[]).length).length,exclusive:exclusive.length,exclusiveMissing:missing.length,cap}));
+          NODE
