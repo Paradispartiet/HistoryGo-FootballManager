@@ -50,8 +50,8 @@ const documented = [
     playerId: "maic_sema",
     clubId: "haugesund",
     strengths: ["pace","game_reading"],
-    claim: "Sylvia-trener Mats Olsson beskrev den unge Maic Sema som «teknisk och kvick» med hurtighet; Hammarby-omtalen fra 2008 beskriver «mycket fin spelförståelse». Kildene gjelder tiden før FKH; kun tempo og spilleforståelse føres.",
-    source: "https://image.svenskafans.com/fotboll/245786",
+    claim: "Sportstatistik.nus individuelle omtale beskriver Maic Sema med «snabbhet och spelförståelse». Dette underbygger fart og spilleforståelse, uten antakelser om avslutningsevne eller dribling.",
+    source: "https://sportstatistik.nu/fotboll/spelare/maic-sema",
     sourceKind: "football_editorial"
   },
   {
@@ -82,7 +82,7 @@ const documented = [
     playerId: "kristoffer_haraldseid",
     clubId: "haugesund",
     strengths: ["set_pieces"],
-    claim: "VG-lupen 2017 dokumenterer at Haraldseids begge seriemål i 2016 kom direkte på frispark; Nettavisens kampreferat beskriver konkret et frispark han skrudde i krysset mot Brann. Dette underbygger dødballteknikk, ikke generell skuddstyrke.",
+    claim: "VG-lupen 2017 dokumenterer at Haraldseids begge seriemål i 2016 kom direkte på frispark; Nettavisens kampreferat sier «skrude han ballen inn i krysset» om frisparkmålet mot Brann. Dette underbygger dødballteknikk, ikke generell skuddstyrke.",
     source: "https://www.nettavisen.no/sport/fotball/snudde-kampen-mot-brann/s/12-95-3423256201",
     sourceKind: "press"
   },
