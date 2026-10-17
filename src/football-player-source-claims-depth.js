@@ -150,6 +150,38 @@ const documented = [
     sourceKind: "club"
   },
   {
+    playerId: "birger_tingstad",
+    clubId: "rosenborg",
+    strengths: ["vision","game_reading"],
+    claim: "«Birger var en lagspiller av rang, med godt blikk, god teknikk og et meget godt skuddbein.» «… sitt utsøkte blikk og forståelse for spillet.»",
+    source: "https://statistikk.rbk.no/spiller/253-birger-tingstad",
+    sourceKind: "club"
+  },
+  {
+    playerId: "kjell_hvidsand",
+    clubId: "rosenborg",
+    strengths: ["pace","tackling"],
+    claim: "«Som spiller var Kjell det vi må kalle en moderne back, offensiv og hurtig. Ikke minst var han taklingssterk …»",
+    source: "https://statistikk.rbk.no/spiller/250-kjell-hvidsand",
+    sourceKind: "club"
+  },
+  {
+    playerId: "olav_wang",
+    clubId: "rosenborg",
+    strengths: ["stamina"],
+    claim: "«Med sin rutine, kondisjon og teknikk laget han et sidehalfspill av høy klasse»",
+    source: "https://statistikk.rbk.no/kamp/1572/sandefjord-rosenborg",
+    sourceKind: "press"
+  },
+  {
+    playerId: "torbjorn_lysaker_heggem",
+    clubId: "rosenborg",
+    strengths: ["one_vs_one"],
+    claim: "Ståle Solbakken: «Han har midstopperkropp, og har klart seg veldig bra en mot en i Championship mot ganske utfordrende vinger i ganske høyt tempo.»",
+    source: "https://www.dagbladet.no/sport/odegaard-ikke-med/82014184",
+    sourceKind: "press"
+  },
+  {
     playerId: "ivar_johannes_jakobsen_unhjem",
     clubId: "junkeren",
     strengths: ["pace", "finishing"],
