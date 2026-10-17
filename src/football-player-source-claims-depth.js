@@ -13,6 +13,152 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Strømsgodset: samlet kildedokumentert spillerbolk 2026-10-17.
+  {
+    playerId: "viljar_myhra",
+    clubId: "stromsgodset",
+    strengths: ["shot_stopping","reflexes","positioning"],
+    claim: "Lars Tjærnås i intervju etter overgangen fra Godset: «en god shotstopper», med «god positionering» og «hurtige reflekser». Dette er keeperens individuelle kvaliteter; ingen tallverdi.",
+    source: "https://obstemmer.dk/interview-viljar-myhra-er-en-god-og-stabil-maalmand/",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "lars_jorgen_salvesen",
+    clubId: "stromsgodset",
+    strengths: ["heading","duels"],
+    claim: "Strømsgodsets referat fra Mjøndalen 2019: «en sterk Salvesen» vant duellen bak i feltet og «headet ballen i en bue» i mål. Konkrete demonstrasjoner av hodespill og duellspill, ikke numerisk score.",
+    source: "https://www.godset.no/nyheter/uavgjort-i-aelv-classico",
+    sourceKind: "club"
+  },
+  {
+    playerId: "marko_farji",
+    clubId: "stromsgodset",
+    strengths: ["crossing"],
+    claim: "Godsets kampreferater i mai 2025 beskriver flere presise innlegg fra Farji: «igjen etter innlegg fra Marko Farjis høyrefot» og innlegg til mål mot Kristiansund. Den gjentatte presise innleggsleveransen dokumenterer crossing.",
+    source: "https://www.godset.no/nyheter/storseier-i-treningskampen",
+    sourceKind: "club"
+  },
+  {
+    playerId: "logi_tomasson",
+    clubId: "stromsgodset",
+    strengths: ["crossing"],
+    claim: "Godsets referat mot RB Linense 2024 beskriver flere vellykkede innlegg fra Logi Tómasson: «Logi slo et godt innlegg» og «Logi Tómasson fant denne gangen Herman Stengel». Flere konkrete innlegg underbygger crossing.",
+    source: "https://www.godset.no/nyheter/linense-godset",
+    sourceKind: "club"
+  },
+  {
+    playerId: "marcus_pedersen",
+    clubId: "stromsgodset",
+    strengths: ["pace","strength","work_rate","hold_up_play"],
+    claim: "Martin Andresens spillerbeskrivelse fra 2012, etter Godset-oppholdet: «rask og sterk, gjennombruddshissig, bevegelig» og «jobber han godt for laget og er sterk feilvendt». Dokumenterer fart, fysikk, arbeidsinnsats og feilvendt spill.",
+    source: "https://www.aftenposten.no/sport/fotball/i/kJpJKj/marcus-pedersen-klar-for-vaalerenga",
+    sourceKind: "press"
+  },
+  {
+    playerId: "adama_diomande",
+    clubId: "stromsgodset",
+    strengths: ["work_rate","duels","pace"],
+    claim: "Stabæk-kaptein Morten Skjønsberg beskriver tidligere Godset-spiller Diomande i 2015: «Arbeidsinnsatsen hans er enorm», «en god duellspiller» og «han er hurtig». Kilden gjelder senere Stabæk-periode.",
+    source: "https://www.aftenposten.no/sport/fotball/i/Opy8el/stabaek-stjernen-kan-vrake-norge-bestemmer-meg-ikke-foer-hoegmo-ringer",
+    sourceKind: "press"
+  },
+  {
+    playerId: "kristoffer_tokstad",
+    clubId: "stromsgodset",
+    strengths: ["pace","stamina"],
+    claim: "Aftenpostens 2014-spillervurdering beskriver Tokstad med «best løpskapasitet, en kombinasjon av hurtighet og utholdenhet som er sjelden». Ferdighetsbeskrivelsen er fra før Godset-perioden.",
+    source: "https://www.aftenposten.no/sport/fotball/i/EWzy33/sorry-sarpsborg-dere-rykker-ned",
+    sourceKind: "press"
+  },
+  {
+    playerId: "tobias_gulliksen",
+    clubId: "stromsgodset",
+    strengths: ["chance_creation"],
+    claim: "Godsets toppspillerutvikler Kjetil Lundebakken beskrev unggutten Gulliksen: «god på små flater» og «kreativ i siste tredjedel». Konkret kildebelegg for kreativ sjanseskaping, ikke automatisk driblerating.",
+    source: "https://www.godset.no/nyheter/lofter-opp-lokale-unggutter",
+    sourceKind: "club"
+  },
+  {
+    playerId: "muhamed_keita",
+    clubId: "stromsgodset",
+    strengths: ["dribbling","game_reading"],
+    claim: "Godset-trener Bjørn Petter Ingebretsen sier i 2019 om Keita: «en som kan gå av motstandere og skape ubalanse på egenhånd» og «veldig fotballsmart». Dette underbygger dribling og spilleforståelse.",
+    source: "https://www.godset.no/nyheter/velkommen-hjem-keita",
+    sourceKind: "club"
+  },
+  {
+    playerId: "gustav_wikheim",
+    clubId: "stromsgodset",
+    strengths: ["pace","one_vs_one"],
+    claim: "Djurgårdens offisielle spillerprofil omtaler den tidligere Godset-vingen som «kvickfotade Gustav som gillar att utmana ute på kanten». Hurtige føtter og offensive én-mot-én-utfordringer dokumenteres i senere karriereperiode.",
+    source: "https://frontend-stage.dif.se/spelare/herrar/2020-2029/gustav-wikheim",
+    sourceKind: "club"
+  },
+  {
+    playerId: "mostafa_mos_abdellaoue",
+    clubId: "stromsgodset",
+    strengths: ["work_rate","off_ball_runs","finishing"],
+    claim: "Dagbladets U21-spilleroversikt om Mostafa Abdellaoue: «Hardtarbeidende spiller», «Spilleklok i forhold til bevegelser» og «Goalgetter med hurtig avslutningsteknikk». Vurderingen gjelder en tidligere Tromsø-periode.",
+    source: "https://www.dagbladet.no/sport/disse-skal-ta-norge-til-vm-i-2014/63513121",
+    sourceKind: "press"
+  },
+  {
+    playerId: "jon_knudsen",
+    clubId: "stromsgodset",
+    strengths: ["composure","distribution"],
+    claim: "Aftenpostens keepervurdering av Jon Knudsen fra Stabæk-perioden: «Mest av alt trygg og kald, gjør veldig sjelden tabber. Viktig og god som igangsetter.» Bare ro under press og igangsetting registreres.",
+    source: "https://www.aftenposten.no/sport/fotball/i/naLjR5/best-paa-papiret",
+    sourceKind: "press"
+  },
+  {
+    playerId: "jarl_andre_storbaek",
+    clubId: "stromsgodset",
+    strengths: ["set_pieces"],
+    claim: "Aftenpostens samtidige kampreferat fra 2007 omtaler Storbæks frisparksmål: «Jarl-André Storbæk ... kan sende frispark i vinkelen». Dette dokumenterer et konkret teknisk dødballspark fra Vålerenga-perioden, ikke tallrating.",
+    source: "https://www.aftenbladet.no/sport/i/ngkgbd/laquogullet-ska-hemraquo",
+    sourceKind: "press"
+  },
+  {
+    playerId: "fredrik_nordkvelle",
+    clubId: "stromsgodset",
+    strengths: ["stamina","long_shots"],
+    claim: "Aftenpostens spilleromtale før Brann-overgangen i 2011: «Nordkvelle er ekstremt løpssterk og er alltid i bevegelse» og «et godt skuddbein». Underbygger utholdenhet og skuddfot, men langskuddskategorien tolkes snevert.",
+    source: "https://www.aftenposten.no/sport/meninger/i/dOvLeX/doddo-blogg-paa-tide-at-haugen-faar-starte",
+    sourceKind: "press"
+  },
+  {
+    playerId: "lasse_olsen",
+    clubId: "stromsgodset",
+    strengths: ["pace"],
+    claim: "Strømsgodsets offisielle klubbhistorie omtaler signeringen i 1997: «Lasse Olsen – lynrask ving fra Gjelleråsen». Dette beskriver individuell hurtighet.",
+    source: "https://www.godset.no/om-klubben/historien-om-stromsgodset",
+    sourceKind: "club"
+  },
+  {
+    playerId: "rune_elvis_hagen",
+    clubId: "stromsgodset",
+    strengths: ["dribbling"],
+    claim: "Strømsgodsets offisielle klubbhistorie beskriver 1997-laget og «Rune Hagen - driblesterk ving fra Veme». Dette gir direkte belegg for dribling.",
+    source: "https://www.godset.no/om-klubben/historien-om-stromsgodset",
+    sourceKind: "club"
+  },
+  {
+    playerId: "lars_saetra",
+    clubId: "stromsgodset",
+    strengths: ["ball_carrying"],
+    claim: "Aftenpostens rangering av tenåringstalenter beskriver Godset-stopper Lars Sætra som en «offensiv, drivende og spillende midtstoppertype, som er god til å føre ballen oppover banen». Underbygger ballføring, ikke kun posisjon.",
+    source: "https://www.aftenbladet.no/sport/i/kaqnQv/tenaaringsboomen",
+    sourceKind: "press"
+  },
+  {
+    playerId: "mounir_hamoud",
+    clubId: "stromsgodset",
+    strengths: ["pace"],
+    claim: "Aftenpostens 2005-omtale av Lyns vingalternativer beskriver «så raske folk som Mounir Hamoud og Ezekiel Bala». Kun individuell hurtighet for Hamoud registreres, ikke øvrige ferdigheter.",
+    source: "https://www.aftenposten.no/sport/fotball/i/mRMWjp/derek-skal-frem-som-spiss",
+    sourceKind: "press"
+  },
+
   // Strømsgodset og FK Haugesund: samlet individuelt kildepass 2026-10-17.
   {
     playerId: "thorodd_presberg",
