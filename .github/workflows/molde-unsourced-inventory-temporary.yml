@@ -1,0 +1,28 @@
+name: Temporary Molde unsourced inventory
+on:
+  push:
+    branches: [content/molde-strength-batch-20261017-b]
+    paths: [.github/workflows/molde-unsourced-inventory-temporary.yml]
+permissions: {contents: read}
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enumerate all unsourced Molde profiles
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import {applyP1SourceClaims} from './src/football-player-source-claims-p1.js';
+          import {applyP2SourceClaims} from './src/football-player-source-claims-p2.js';
+          import {applySourceDepthClaims} from './src/football-player-source-claims-depth.js';
+          const raw=JSON.parse(fs.readFileSync('data/football_players.json','utf8')).players;
+          const all=applySourceDepthClaims(applyP2SourceClaims(applyP1SourceClaims(raw)));
+          const pool=all.filter(p=>p.clubAffiliations?.some(x=>x.clubId==='molde'));
+          for(const p of pool.filter(p=>!(p.strengths||[]).length)){
+            const a=p.clubAffiliations.find(x=>x.clubId==='molde');
+            console.log('MISSING '+JSON.stringify({id:p.id,name:p.name,aff:a.source,relation:a.relation,positions:p.naturalPositions,sourcePlaceIds:p.sourcePlaceIds}));
+          }
+          const exclusive=all.filter(p=>p.sourcePlaceIds?.length===1&&p.sourcePlaceIds[0]==='aker_stadion');
+          console.log('SUMMARY '+JSON.stringify({total:pool.length,missing:pool.filter(p=>!p.strengths?.length).length,exclusive:exclusive.length,exclusiveMissing:exclusive.filter(p=>!p.strengths?.length).length}));
+          NODE
