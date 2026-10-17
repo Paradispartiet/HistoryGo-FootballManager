@@ -13,6 +13,96 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Strømsgodset og FK Haugesund: samlet individuelt kildepass 2026-10-17.
+  {
+    playerId: "thorodd_presberg",
+    clubId: "stromsgodset",
+    strengths: ["composure"],
+    claim: "Strømsgodsets historikk beskriver Presberg som «kald som is» før det avgjørende straffesparket mot Skeid i 1970. I cupfinalen mot Lyn viste han ifølge klubben «ingen nerver». Begge hendelsene dokumenterer ro under press, ikke en tallrating.",
+    source: "https://www.godset.no/om-klubben/historien-om-stromsgodset",
+    sourceKind: "club"
+  },
+  {
+    playerId: "iver_fossum",
+    clubId: "stromsgodset",
+    strengths: ["game_reading"],
+    claim: "Aftenpostens kampanalyse omtaler Fossum direkte: «Iver Fossum har situasjonsforståelse og ballfølelse over gjennomsnittet». Situasjonsforståelse dokumenterer spillelesning; det registreres ingen skudd- eller pasningsstyrke fra scoringsepisoden.",
+    source: "https://www.aftenposten.no/sport/meninger/i/qLJavw/godset-henger-etter",
+    sourceKind: "press"
+  },
+  {
+    playerId: "moses_mawa",
+    clubId: "stromsgodset",
+    strengths: ["work_rate"],
+    claim: "KFUMs historiske spilleromtale fra tiden før Strømsgodset sier om Mawa at han «har satt en høy standard for hvordan en Kåffa-spiss skal løpe for laget». Dette beskriver arbeidsinnsats og bevegelse for laget, ikke avslutningsferdighet.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere",
+    sourceKind: "club"
+  },
+  {
+    playerId: "ola_kamara",
+    clubId: "stromsgodset",
+    strengths: ["work_rate","heading","off_ball_runs"],
+    claim: "Samtidig scoutingvurdering av Kamara i Strømsgodset kaller ham «hardtarbeidende», sier «solid hodespill» og beskriver «Smarte bevegelser» som frigjør ham fra oppasseren i innleggssituasjoner. Bare arbeidsinnsats, hodespill og løp uten ball registreres; ingen numerisk verdi.",
+    source: "https://www.scan-scout.com/2013/09/30/scouting-report-ola-kamara-stromsgodset/",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "frode_olsen",
+    clubId: "stromsgodset",
+    strengths: ["reflexes"],
+    claim: "Store norske leksikon omtaler Frode Olsen som «en reaksjonssterk målvakt». Dette dokumenterer reflekser. Leksikonet nevner også defensive én-mot-én-situasjoner, men dette oversettes ikke til offensivt one_vs_one-token.",
+    source: "https://snl.no/Frode_Olsen_-_fotballspiller",
+    sourceKind: "encyclopedia"
+  },
+  {
+    playerId: "ibrahima_wadji",
+    clubId: "haugesund",
+    strengths: ["pace","work_rate"],
+    claim: "FK Haugesund skriver at Wadji bruker «hurtighet» og siterer daværende trener Eirik Horneland: «Han er en steinhard løpsmaskin med en smittende energi». Hurtighet og arbeidskapasitet er direkte beskrevet, ikke utledet fra antall mål.",
+    source: "https://www.fkh.no/nyheter/wadji-signerte-for-fkh",
+    sourceKind: "club"
+  },
+  {
+    playerId: "alexander_stolas",
+    clubId: "haugesund",
+    strengths: ["set_pieces"],
+    claim: "FK Haugesund omtaler Alexander Stølås som «landets beste frisparkskytter» i klubbens egen nyhetssak om hans venstrefot. Dette dokumenterer dødballferdighet; ingen egen tallrating settes.",
+    source: "https://www.fkh.no/nyheter/alex-i-alle-kanaler",
+    sourceKind: "club"
+  },
+  {
+    playerId: "mikkel_desler",
+    clubId: "haugesund",
+    strengths: ["stamina"],
+    claim: "Ved signeringen beskrev FK Haugesund-trener Jostein Grindhaug Desler som en spiller med «veldig fin frekvens og motor». Samtidig omtale beskriver ham som «løpssterke backen». Samlet belegg for løpskapasitet/utholdenhet; ingen sprintfart utledes.",
+    source: "https://www.fkh.no/nyheter/desler-har-signert",
+    sourceKind: "club"
+  },
+  {
+    playerId: "martin_bjornbak",
+    clubId: "haugesund",
+    strengths: ["duels"],
+    claim: "Haugesunds Avis-journalisten Terje Flateby beskriver Bjørnbak i en spilleromtale gjengitt i Bergens Tidende: «Duellsterk stopper.» Dette gir direkte belegg for duellspill, ikke tallfestet forsvarsrating.",
+    source: "https://www.bt.no/sport/i/JoQAm7/se-opp-for-disse-talentene",
+    sourceKind: "press"
+  },
+  {
+    playerId: "christian_grindheim",
+    clubId: "haugesund",
+    strengths: ["work_rate","stamina"],
+    claim: "Store norske leksikon om Grindheims spillestil: «en hardtarbeidende midtbanespiller med stor løpskapasitet». Dette dokumenterer arbeidsinnsats og utholdenhet, ikke pasnings- eller skuddferdigheter.",
+    source: "https://snl.no/Christian_Grindheim",
+    sourceKind: "encyclopedia"
+  },
+  {
+    playerId: "sondre_tronstad",
+    clubId: "haugesund",
+    strengths: ["work_rate","simple_passing","game_reading"],
+    claim: "Tveit IL beskriver Tronstads senere Championship-periode slik: «Med sin arbeidskapasitet, pasningssikkerhet og kloke fotballhode». Dette underbygger arbeidsinnsats, presise enkle pasninger og spilleforståelse; kilden gjelder Blackburn-tiden, ikke en bestemt Haugesund-kamp.",
+    source: "https://tveitil.no/klubben/sondre-tronstad-tveit-gutten-som-kan-rykke-opp-til-premier-league",
+    sourceKind: "club"
+  },
+
   // Rosenborg: Erling Næss forteller selv om dribling og konkrete finter i RBK-tiden.
   {
     playerId: "erling_naess",
