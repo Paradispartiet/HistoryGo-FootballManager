@@ -13,6 +13,88 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // FK Haugesund: individuelt dokumentert spillerbolk 2026-10-17.
+  {
+    playerId: "bala_garba",
+    clubId: "haugesund",
+    strengths: ["pace","flair"],
+    claim: "Torgeir Katlas historiske FKH-spillerkåring fra 2015 beskriver Garba som «Rask, uforutsigbar». Dette dokumenterer fart og uforutsigbart spill; målstatistikken brukes ikke som belegg for avslutningsevne.",
+    source: "https://www.aftenposten.no/sport/fotball/i/GGPrdx/de-ti-beste-i-haugesunds-historie",
+    sourceKind: "press"
+  },
+  {
+    playerId: "nikola_ur_i",
+    clubId: "haugesund",
+    strengths: ["work_rate","finishing"],
+    claim: "Historisk FKH-spillervurdering av Đurđić: «Han jaget og løp på alt» og omtaler uttrykkelig hans «Arbeidsmoralen og målteften». Arbeidsinnsats og avslutningsevne føres, ikke rating fra scoringstall.",
+    source: "https://www.aftenposten.no/sport/fotball/i/GGPrdx/de-ti-beste-i-haugesunds-historie",
+    sourceKind: "press"
+  },
+  {
+    playerId: "fredrik_pallesen_knudsen",
+    clubId: "haugesund",
+    strengths: ["duels"],
+    claim: "Branns offisielle spillerprofil kaller Fredrik Pallesen Knudsen en «duellsterk ung midtstopper». Beskrivelsen gjelder spillerens tidlige karriere; kilden bekrefter individuell duellstyrke, ikke høydebasert antagelse.",
+    source: "https://www.brann.no/lag/fredrik-pallesen-knudsen",
+    sourceKind: "club"
+  },
+  {
+    playerId: "morten_konradsen",
+    clubId: "haugesund",
+    strengths: ["stamina"],
+    claim: "Morten Konradsen sier selv ved overgangen til FKH i 2023: «Jeg er en offensiv og løpssterk spiller». Kun dokumentert løpskapasitet registreres som stamina, ikke mål/tempo fra midtbaneposisjonen.",
+    source: "https://www.fkh.no/nyheter/morten-konradsen-til-fk-haugesund",
+    sourceKind: "club"
+  },
+  {
+    playerId: "maic_sema",
+    clubId: "haugesund",
+    strengths: ["pace","game_reading"],
+    claim: "Sportstatistik.nus individuelle omtale beskriver Maic Sema med «snabbhet och spelförståelse». Dette underbygger fart og spilleforståelse, uten antakelser om avslutningsevne eller dribling.",
+    source: "https://sportstatistik.nu/fotboll/spelare/maic-sema",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "samuel_kari_fridjonsson",
+    clubId: "haugesund",
+    strengths: ["vision","simple_passing","passing_range","stamina"],
+    claim: "Viking-trener Bjarne Berntsen beskriver Friðjónsson i 2019 med «godt overblikk», god på «både korte og lange pasninger» og «veldig bra løpskraft». Disse fire ferdighetene gjelder spillerens tidligere Viking-periode; ikke utledet fra rollevalg.",
+    source: "https://www.vikingfotball.no/nyheter/-han-har-vaert-veldig-bra",
+    sourceKind: "club"
+  },
+  {
+    playerId: "sory_ibrahim_diarra",
+    clubId: "haugesund",
+    strengths: ["strength","pace","finishing"],
+    claim: "FKHs sportssjef Eirik Opedal beskrev Diarra ved signeringen i februar 2023 som en spiller med «solid fysikk, fin fart og gode avslutteregenskaper». Tre direkte egenskaper dokumenteres, uten å utlede hodespill fra høyde.",
+    source: "https://www.aftenposten.no/sport/fotball/i/BWkg2E/haugesund-henter-spiller-fra-mali",
+    sourceKind: "press"
+  },
+  {
+    playerId: "frederik_gytkjaer",
+    clubId: "haugesund",
+    strengths: ["movement"],
+    claim: "VG-lupens individuelle FKH-profil i 2017 beskriver Frederik Gytkjær som «Mer bevegelig enn storebror». Kun dokumentert bevegelighet føres; scoringsstatistikk gir ikke automatisk finishing.",
+    source: "https://www.vg.no/spesial/2017/vglupen/?plassering=10",
+    sourceKind: "press"
+  },
+  {
+    playerId: "kristoffer_haraldseid",
+    clubId: "haugesund",
+    strengths: ["set_pieces"],
+    claim: "VG-lupen 2017 dokumenterer at Haraldseids begge seriemål i 2016 kom direkte på frispark; Nettavisens kampreferat sier «skrude han ballen inn i krysset» om frisparkmålet mot Brann. Dette underbygger dødballteknikk, ikke generell skuddstyrke.",
+    source: "https://www.nettavisen.no/sport/fotball/snudde-kampen-mot-brann/s/12-95-3423256201",
+    sourceKind: "press"
+  },
+  {
+    playerId: "sondre_liseth",
+    clubId: "haugesund",
+    strengths: ["heading"],
+    claim: "NTBs samtidige kvalifiseringsreferat fra Haugesund–Moss i 2024 beskriver Liseth som møtte et presist innlegg og «stanget ballen i nettet». Det er konkret belegg for hodespill i situasjonen, ikke en tallvurdering av generell avslutningsevne.",
+    source: "https://www.dagsavisen.no/sport/fkh-beholdt-plassen-i-eliteserien-tounekti-knuste-drommene-til-moss/5663055",
+    sourceKind: "press"
+  },
+
   // Strømsgodset: ytterligere elleve individuelt kildebelagte profiler, 2026-10-17.
   {
     playerId: "thomas_grogaard",
