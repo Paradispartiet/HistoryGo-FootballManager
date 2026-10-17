@@ -1,28 +1,36 @@
-name: Temporary Molde unsourced inventory
+name: Temporary Molde final production audit
 on:
   push:
     branches: [content/molde-strength-batch-20261017-b]
     paths: [.github/workflows/molde-unsourced-inventory-temporary.yml]
 permissions: {contents: read}
 jobs:
-  inventory:
+  audit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Enumerate all unsourced Molde profiles
+      - name: Check sourced Molde attributes and measure exact exclusive coverage
         run: |
+          node scripts/audit-source-depth-claims.mjs
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
+          import assert from 'node:assert/strict';
           import {applyP1SourceClaims} from './src/football-player-source-claims-p1.js';
           import {applyP2SourceClaims} from './src/football-player-source-claims-p2.js';
           import {applySourceDepthClaims} from './src/football-player-source-claims-depth.js';
+          const ids='bjorn_bergmann_sigur_arson arthur_albiston mame_biram_diouf orjan_nyland joona_toivio stian_gregersen etzaz_hussain ohi_omoijuanfo andreas_lund tor_fuglset jan_berg thomas_mork odd_inge_olsen clayton_zane jo_tessem marel_baldvinsson magne_simonsen trond_strande per_egil_flo stein_olav_hestad daniel_chima_chukwu ulrich_moller ole_bjorn_sundgot knut_anders_fostervold oystein_neerland eddie_gustafsson einar_sekkeseter'.split(' ');
           const raw=JSON.parse(fs.readFileSync('data/football_players.json','utf8')).players;
-          const all=applySourceDepthClaims(applyP2SourceClaims(applyP1SourceClaims(raw)));
-          const pool=all.filter(p=>p.clubAffiliations?.some(x=>x.clubId==='molde'));
-          for(const p of pool.filter(p=>!(p.strengths||[]).length)){
-            const a=p.clubAffiliations.find(x=>x.clubId==='molde');
-            console.log('MISSING '+JSON.stringify({id:p.id,name:p.name,aff:a.source,relation:a.relation,positions:p.naturalPositions,sourcePlaceIds:p.sourcePlaceIds}));
+          const players=applySourceDepthClaims(applyP2SourceClaims(applyP1SourceClaims(raw)));
+          for(const id of ids){
+            const p=players.find(x=>x.id===id);
+            assert.ok(p,'missing player '+id);
+            assert.ok(p.clubAffiliations?.some(a=>a.clubId==='molde'&&a.source==='belagt'),id+' no Molde source');
+            assert.ok(p.strengths?.length>0,id+' no strengths');
+            console.log('PROFILE '+JSON.stringify({id,strengths:p.strengths,places:p.sourcePlaceIds}));
           }
-          const exclusive=all.filter(p=>p.sourcePlaceIds?.length===1&&p.sourcePlaceIds[0]==='aker_stadion');
-          console.log('SUMMARY '+JSON.stringify({total:pool.length,missing:pool.filter(p=>!p.strengths?.length).length,exclusive:exclusive.length,exclusiveMissing:exclusive.filter(p=>!p.strengths?.length).length}));
+          const pool=players.filter(p=>p.clubAffiliations?.some(a=>a.clubId==='molde'));
+          const ex=players.filter(p=>p.sourcePlaceIds?.length===1&&p.sourcePlaceIds[0]==='aker_stadion');
+          const missing=ex.filter(p=>!p.strengths?.length).length;
+          const cap=(Math.ceil(100*missing/ex.length)+1)/100;
+          console.log('RESULT '+JSON.stringify({verified:ids.length,poolTotal:pool.length,poolMissing:pool.filter(p=>!p.strengths?.length).length,exclusiveTotal:ex.length,exclusiveMissing:missing,cap}));
           NODE
