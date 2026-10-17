@@ -13,6 +13,224 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Molde: 27 individuelt kildebelagte spillere i samlet 2026-10-17 produksjonsrunde.
+  {
+    playerId: "bjorn_bergmann_sigur_arson",
+    clubId: "molde",
+    strengths: ["work_rate"],
+    claim: "Kanari-Fansens historiske spillerbiografi beskriver Björn Bergmann Sigurðarson med «oppofrende spillestil og enorme arbeidsinnsats» i Lillestrøm-perioden, før Molde. Bare dokumentert arbeidsinnsats registreres.",
+    source: "https://www.kfl.no/wiki/index.php?title=Bj%C3%B6rn_Bergmann_Sigur%C3%B0arson",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "arthur_albiston",
+    clubId: "molde",
+    strengths: ["tackling","positioning","pace","game_reading"],
+    claim: "Historisk United-supporteranalyse av Arthur Albiston: «tackling, positional-sense, turn of pace, tenacity and the ability to read the play». Dokumenterer taklinger, posisjonering, fart og spilleforståelse fra Manchester United-perioden, før Molde.",
+    source: "https://mufc1878web.wordpress.com/2022/06/30/top-three-lists-left-backs/",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "mame_biram_diouf",
+    clubId: "molde",
+    strengths: ["pace"],
+    claim: "Samtidig Premier League-kampanalyse fra Stoke-perioden om Mame Biram Diouf: «showed early on the pace he had as he raced away from the City's defence». Dokumenterer individuell fart i senere karriere; mål og FIFA-ratings brukes ikke.",
+    source: "https://flirtingwithfootball.wordpress.com/2014/09/01/barclays-premier-league-gameweek-3-review-3/",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "orjan_nyland",
+    clubId: "molde",
+    strengths: ["reflexes"],
+    claim: "Dagsavisens analyse fra Norge–Serbia i 2022 omtaler spesifikt Ørjan Nyland som «en reaksjonssterk keeper». Kilden gjelder senere landslagsperiode, ikke en udokumentert særskilt Molde-kamp.",
+    source: "https://www.dagsavisen.no/kommentar/drommestart-signert-haaland-nytt-niva-norge/5356854",
+    sourceKind: "press"
+  },
+  {
+    playerId: "joona_toivio",
+    clubId: "molde",
+    strengths: ["duels","set_pieces"],
+    claim: "Nettavisens cupfinalevurdering 2014 beskriver Toivio som «som vanlig tøff og kontant i duellene». Moldes klubbhistorie om Stabæk-kampen i mai 2017 beskriver «perfekt frisparkscoring» av Toivio. Duellspill og dødballer har hvert sitt eksplisitte belegg.",
+    source: "https://www.nettavisen.no/artikkel/slik-spilte-cupfinale-lagene/s/12-95-8512556",
+    sourceKind: "press"
+  },
+  {
+    playerId: "stian_gregersen",
+    clubId: "molde",
+    strengths: ["pace","duels"],
+    claim: "TV-kommentator Morten Langli sitert av Sportsbibelen etter Molde-kamp: «Rask og duellsterk». Begge egenskapene tilskrives Gregersen individuelt; ingen tallverdi.",
+    source: "https://sportsbibelen.no/imponert-over-eliteserie-spilleren-ikke-mange-norske-fotballspillere-som-er-bedre-defensivt/",
+    sourceKind: "press"
+  },
+  {
+    playerId: "etzaz_hussain",
+    clubId: "molde",
+    strengths: ["final_pass"],
+    claim: "Nettavisens samtidige cupfinalevurdering 2014 av Etzaz Hussain: «noen fine pasninger som løste opp spillet». Dokumenterer konkrete spilleåpnende pasninger, ikke en generell teknikk- eller pasningsrating.",
+    source: "https://www.nettavisen.no/artikkel/slik-spilte-cupfinale-lagene/s/12-95-8512556",
+    sourceKind: "press"
+  },
+  {
+    playerId: "ohi_omoijuanfo",
+    clubId: "molde",
+    strengths: ["heading","duels"],
+    claim: "Moldes kampreferat fra Kristiansund 2021 beskriver Ohi Omoijuanfo: «Spissen raget høyest og vant duellen mot KBK-stopperne», fulgt av et godt hodestøt som krevde en stor redning. Konkret hode- og duellspill.",
+    source: "https://www.moldefk.no/nyheter/tungt-tap-i-kristiansund",
+    sourceKind: "club"
+  },
+  {
+    playerId: "andreas_lund",
+    clubId: "molde",
+    strengths: ["heading"],
+    claim: "Moldes offisielle 1998-arkiv: «Andreas Lund headet et perfekt innlegg fra Odd Inge Olsen i mål» mot Brann og hadde en heading reddet senere i omgangen. Direkte hodespillbelegg, ikke generelt antall mål.",
+    source: "https://www.moldefk.no/om-klubben/var-historie/1990-1999/1998-var",
+    sourceKind: "club"
+  },
+  {
+    playerId: "tor_fuglset",
+    clubId: "molde",
+    strengths: ["heading"],
+    claim: "Molde-arkivet etter Skarbøvik-kampen i 1968 sier eksplisitt om Tor Fuglset: «hans hodespill var imponerende». Direkte kvalitativ beskrivelse, ikke avledet fra spissposisjon.",
+    source: "https://www.moldefk.no/om-klubben/var-historie/1960-1969/1968",
+    sourceKind: "club"
+  },
+  {
+    playerId: "jan_berg",
+    clubId: "molde",
+    strengths: ["dribbling"],
+    claim: "Moldes 1984-arkiv beskriver Jan Berg som «driblet av dene ene etter den andre av mostpilleren»; i 1986 omtales det at han «kjørte ... karusell med Træffspillerne». Dokumenterer konkret dribling fra to historiske kamper.",
+    source: "https://www.moldefk.no/om-klubben/var-historie/1980-1989/1984",
+    sourceKind: "club"
+  },
+  {
+    playerId: "thomas_mork",
+    clubId: "molde",
+    strengths: ["set_pieces","crossing"],
+    claim: "Moldes 1999-arkiv om Skeid-kampen: Thomas Mork slo flere hjørnespark til scoringer, blant annet «et kvarter senere la Mork inn nok en corner, og Andreas Lund headet inn 2-0». Dokumenterer dødballleveranser og innlegg.",
+    source: "https://www.moldefk.no/om-klubben/var-historie/1990-1999/1999-host",
+    sourceKind: "club"
+  },
+  {
+    playerId: "odd_inge_olsen",
+    clubId: "molde",
+    strengths: ["dribbling","set_pieces"],
+    claim: "Moldes 1998-kampreferat omtaler «fine dribleraid ... av ... Odd Inge Olsen», og beskriver at han «skrudd ballen knallhardt på bakerste stolpe» på frispark. To individuelt beskrevne tekniske situasjoner.",
+    source: "https://www.moldefk.no/om-klubben/var-historie/1990-1999/1998-var",
+    sourceKind: "club"
+  },
+  {
+    playerId: "clayton_zane",
+    clubId: "molde",
+    strengths: ["heading"],
+    claim: "Molde-arkivets 2000-kampreferat mot Haugesund: «Clayton Zane stusset et innlegg fra Thomas Mork ned i beina på Anders Hasselgård». En konkret presis hodestuss som førte til mål; ikke målteft utledet fra statistikk.",
+    source: "https://www.moldefk.no/om-klubben/var-historie/2000-2010/2000",
+    sourceKind: "club"
+  },
+  {
+    playerId: "jo_tessem",
+    clubId: "molde",
+    strengths: ["heading"],
+    claim: "Molde-arkivets 1998-kamp mot Vålerenga beskriver at «Jo Tessem stupheadet inn 1-0» etter forarbeid på dødball. Konkret belegg for hodespill, ikke en rating basert på antall mål.",
+    source: "https://www.moldefk.no/om-klubben/var-historie/1990-1999/1998-var",
+    sourceKind: "club"
+  },
+  {
+    playerId: "marel_baldvinsson",
+    clubId: "molde",
+    strengths: ["heading"],
+    claim: "Molde-arkivets kamp mot Kongsvinger i september 2007: «Etter 54 minutter headet han inn 2-1 på et innlegg fra Thomas Mork», om Marel Baldvinsson. Hendelsen dokumenterer hodespill.",
+    source: "https://www.moldefk.no/om-klubben/var-historie/2000-2010/2007-manedsvis/2007-september",
+    sourceKind: "club"
+  },
+  {
+    playerId: "magne_simonsen",
+    clubId: "molde",
+    strengths: ["crossing"],
+    claim: "Molde-arkivets kampomtale fra juli 2012 beskriver at «Magne Simonsens innlegg etter 34 minutter gikk rett i mål». Dokumenterer et konkret farlig innlegg, ikke generell målscoringsevne.",
+    source: "https://www.moldefk.no/om-klubben/var-historie/2011-2019/2012-manedsvis/2012-juli",
+    sourceKind: "club"
+  },
+  {
+    playerId: "trond_strande",
+    clubId: "molde",
+    strengths: ["passing_range"],
+    claim: "Molde-arkivets cupreferat fra 2001 beskriver «Magne Hoseth på en lang gjennombruddpasning fra Trond Strande». Denne presise, lange pasningen gir konkret belegg for pasningsrekkevidde, ikke en modellert vurdering fra forsvarsposisjon.",
+    source: "https://www.moldefk.no/om-klubben/var-historie/2000-2010/2001",
+    sourceKind: "club"
+  },
+  {
+    playerId: "per_egil_flo",
+    clubId: "molde",
+    strengths: ["set_pieces"],
+    claim: "Samtidig Aftenbladet-kampreferat mot Mjøndalen i 2014 beskriver Per Egil Flo som «slo et presist innoverskrudd frispark», som Chima Chukwu headet i mål. Dødballteknikk dokumenteres fra konkret kamp.",
+    source: "https://www.aftenbladet.no/sport/i/Jo1m0P/molde-enkelt-videre-i-cupen",
+    sourceKind: "press"
+  },
+  {
+    playerId: "stein_olav_hestad",
+    clubId: "molde",
+    strengths: ["set_pieces"],
+    claim: "Molde-arkivet fra 1984 beskriver «Stein Olav Hestad [som] skrudde et frispark inn i feltet», der Åge Hareide scoret etterpå. Dokumenterer gjennomført dødballleveranse uten å gi tallrating.",
+    source: "https://www.moldefk.no/om-klubben/var-historie/1980-1989/1984",
+    sourceKind: "club"
+  },
+  {
+    playerId: "daniel_chima_chukwu",
+    clubId: "molde",
+    strengths: ["heading"],
+    claim: "Aftenbladets samtidige cupreferat fra Mjøndalen i 2014: «Chima Chukwu kontant satte [frisparket] i høyre hjørne med pannebrasken». Dokumenterer avsluttende hodestøt i én konkret kamp.",
+    source: "https://www.aftenbladet.no/sport/i/Jo1m0P/molde-enkelt-videre-i-cupen",
+    sourceKind: "press"
+  },
+  {
+    playerId: "ulrich_moller",
+    clubId: "molde",
+    strengths: ["set_pieces"],
+    claim: "Molde-arkivet i 1984 beskriver Ulrich Møller som avsender av et frispark inn i feltet: «Ulrich Møller et frispark inn i feltet», videreformidlet av Knut Nesbø til Jan Bergs scoring. Kun konkret dødballleveranse registreres.",
+    source: "https://www.moldefk.no/om-klubben/var-historie/1980-1989/1984",
+    sourceKind: "club"
+  },
+  {
+    playerId: "ole_bjorn_sundgot",
+    clubId: "molde",
+    strengths: ["heading"],
+    claim: "Molde-arkivet fra 1995 beskriver «Ole Bjørn Sundgot headet inn et innlegg fra Arild Stavrum» mot HamKam; 1996-arkivet beskriver senere heading i krysset. To dokumenterte hodespillhendelser.",
+    source: "https://www.moldefk.no/om-klubben/var-historie/1990-1999/1995-host",
+    sourceKind: "club"
+  },
+  {
+    playerId: "knut_anders_fostervold",
+    clubId: "molde",
+    strengths: ["crossing"],
+    claim: "Molde-arkivet fra 1995 beskriver «Ole Gunnar headet inn nr.4 på et presist innlegg fra Knut Anders Fostervold» mot Brann. En konkret presis innleggsleveranse fra spilleren.",
+    source: "https://www.moldefk.no/om-klubben/var-historie/1990-1999/1995-var",
+    sourceKind: "club"
+  },
+  {
+    playerId: "oystein_neerland",
+    clubId: "molde",
+    strengths: ["heading"],
+    claim: "Molde-arkivet fra 1991: «Etter fire minutters spill i andre omgang headet Øystein Neerland inn en corner fra Bjørn Nilsen». Dokumentert hodestøt på corner, ikke antatt styrke fra posisjon.",
+    source: "https://www.moldefk.no/om-klubben/var-historie/1990-1999/1991",
+    sourceKind: "club"
+  },
+  {
+    playerId: "eddie_gustafsson",
+    clubId: "molde",
+    strengths: ["shot_stopping"],
+    claim: "Molde-arkivet fra mai 2002 gjengir VGs vurdering av keeper Eddie Gustafsson med «to geniale redninger». Direkte kampbelegg for skuddredninger, uten modellert reaksjonsrating.",
+    source: "https://www.moldefk.no/om-klubben/var-historie/2000-2010/2002-manedsvis/2002-mai",
+    sourceKind: "club"
+  },
+  {
+    playerId: "einar_sekkeseter",
+    clubId: "molde",
+    strengths: ["marking"],
+    claim: "Molde-arkivet om seriepremieren mot Aalesund i 1971 sier «Einar Sekkeseter nøytraliserte farlige Kallen Johannesen». Konkret vellykket personlig oppfølging i kamp; registreres som marking, ikke generell duellfysikk.",
+    source: "https://www.moldefk.no/om-klubben/var-historie/1970-1979/1971",
+    sourceKind: "club"
+  },
+
   // Molde 2026-10-17: individuelt kildebelagte styrker etter katalogpass for 58 tilknytninger.
   {
     playerId: "mohamed_elyounoussi",
