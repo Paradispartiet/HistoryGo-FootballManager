@@ -13,6 +13,48 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // FKH, Haugar og Djerv: historiske individuelt kildebelagte styrker 2026-10-17.
+  {
+    playerId: "henrik_kildentoft",
+    clubId: "haugesund",
+    strengths: ["aggression","bravery"],
+    claim: "Brøndbys jubileumsbok «Vores klub! Fodbold i 1964–2004» beskriver Henrik Kildentoft som «Kompromisløs i defensiven, aggressiv, elegant og god med bolden». Det direkte belegg gjelder aggressiv og kompromissløs forsvarsspillestil fra Brøndby-perioden, før FKH. Ikke en påstand om spesifikk taklingsstyrke.",
+    source: "https://www.yumpu.com/da/document/view/18526684/vores-klub-fodbold-i-1964-2004-brondbycom",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "milan_koji",
+    clubId: "haugesund",
+    strengths: ["heading","simple_passing"],
+    claim: "Canadian National Soccer League History beskriver Kojić før overgangen til FKH: «Milan further developed his passing ability and skill in the air to become a dangerous two-way player.» Registrerer generelt pasningsspill og spill i luften, ikke heading utledet fra kroppshøyde eller målstatistikk.",
+    source: "https://thecnsl.com/2026/03/17/milan-kojic/",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "dean_mooney",
+    clubId: "haugesund",
+    strengths: ["heading"],
+    claim: "Vikings offisielle historie om cupfinalen i 1979 beskriver konkret at «Dean Mooney med discohåret headet ballen i vinkelen» for Haugar. Registrerer bare dokumentert hodespill fra en spesifikk situasjon, ikke generell avslutningsrating.",
+    source: "https://www.vikingfotball.no/nyheter/da-viking-tok-gull-gull-og-gull",
+    sourceKind: "club"
+  },
+  {
+    playerId: "juska_savolainen",
+    clubId: "haugesund",
+    strengths: ["crossing"],
+    claim: "VG Lives samtidige kampreferat fra Strømsgodset–FKH beskriver Savolainens offensive innlegg: «Savolainen slår godt inn fra venstre, og Sørum header like utenfor!» Dokumenterer en god innleggsleveranse i FKH-perioden, ikke at alle dødballer er gode.",
+    source: "https://vglive.vg.no/fotball/str%C3%B8msgodset-haugesund/590600/rapport",
+    sourceKind: "press"
+  },
+  {
+    playerId: "du_an_cvetinovi",
+    clubId: "haugesund",
+    strengths: ["duels"],
+    claim: "FootyStats' målte data for Cvetinović i serbisk SuperLiga 2025/26: «Aerial Duels Won 33», med 93. persentil i spillerutvalget. Dette er konkret målt styrke i luftdueller i en langt senere karriereperiode, ikke en konklusjon fra posisjon eller målpoeng; ingen numerisk rating settes.",
+    source: "https://footystats.org/players/serbia/dusan-cvetinovic",
+    sourceKind: "football_editorial"
+  },
+
   // FK Haugesund: kildebelagte individuelle spillestilprofiler, fortsettelse 2026-10-17.
   {
     playerId: "joakim_vage_nilsen",
