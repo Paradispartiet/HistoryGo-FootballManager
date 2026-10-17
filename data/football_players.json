@@ -3293,7 +3293,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -3301,7 +3301,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -5292,7 +5292,7 @@
       },
       "clubStatusSource": {
         "sarpsborg_stadion": "belagt",
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -5300,7 +5300,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "key_player",
-          "source": "utledet"
+          "source": "belagt"
         },
         {
           "clubId": "sarpsborg08",
@@ -27967,7 +27967,7 @@
       },
       "clubStatusSource": {
         "araasen_stadion": "utledet",
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -27981,7 +27981,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -28221,7 +28221,7 @@
       },
       "clubStatusSource": {
         "araasen_stadion": "utledet",
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -28235,7 +28235,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -28883,7 +28883,7 @@
       },
       "clubStatusSource": {
         "araasen_stadion": "utledet",
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -28897,7 +28897,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -30383,7 +30383,7 @@
       "clubStatusSource": {
         "lyse_arena": "belagt",
         "romssa_arena": "belagt",
-        "aker_stadion": "utledet",
+        "aker_stadion": "belagt",
         "bryne_stadion": "belagt"
       },
       "eraSource": "utledet",
@@ -30398,7 +30398,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "key_player",
-          "source": "utledet"
+          "source": "belagt"
         },
         {
           "clubId": "tromso",
@@ -41546,7 +41546,7 @@
         "aker_stadion": "key_player"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -41554,7 +41554,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "key_player",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -41825,7 +41825,7 @@
         "aker_stadion": "key_player"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -41833,7 +41833,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "key_player",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -41962,7 +41962,7 @@
         "hoddvoll": "elite_career"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet",
+        "aker_stadion": "belagt",
         "hoddvoll": "belagt"
       },
       "eraSource": "utledet",
@@ -41977,7 +41977,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "key_player",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -42225,7 +42225,7 @@
         "aker_stadion": "key_player"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -42233,7 +42233,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "key_player",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -42354,7 +42354,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -42362,7 +42362,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -42413,7 +42413,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -42421,7 +42421,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -42474,7 +42474,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -42482,7 +42482,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -42596,7 +42596,7 @@
         "nadderud_stadion": "academy_export"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet",
+        "aker_stadion": "belagt",
         "nordmore_stadion": "utledet",
         "nadderud_stadion": "belagt"
       },
@@ -42612,7 +42612,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         },
         {
           "clubId": "stabak",
@@ -42667,7 +42667,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -42675,7 +42675,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -42727,7 +42727,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -42735,7 +42735,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -42786,7 +42786,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -42794,7 +42794,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -42968,7 +42968,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -42976,7 +42976,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -43026,7 +43026,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -43034,7 +43034,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -43147,7 +43147,7 @@
         "raufoss_arena": "elite_career"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet",
+        "aker_stadion": "belagt",
         "raufoss_arena": "utledet"
       },
       "eraSource": "utledet",
@@ -43156,7 +43156,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         },
         {
           "clubId": "raufoss",
@@ -43214,7 +43214,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -43222,7 +43222,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -43278,7 +43278,7 @@
         "skagerak_arena": "elite_career"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet",
+        "aker_stadion": "belagt",
         "fredrikstad_stadion": "belagt",
         "skagerak_arena": "belagt"
       },
@@ -43294,7 +43294,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         },
         {
           "clubId": "odd",
@@ -43354,7 +43354,7 @@
         "mellos_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet",
+        "aker_stadion": "belagt",
         "mellos_stadion": "belagt"
       },
       "eraSource": "utledet",
@@ -43363,7 +43363,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         },
         {
           "clubId": "moss",
@@ -43426,7 +43426,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -43434,7 +43434,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -43486,7 +43486,7 @@
         "mellos_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet",
+        "aker_stadion": "belagt",
         "mellos_stadion": "belagt"
       },
       "eraSource": "utledet",
@@ -43495,7 +43495,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         },
         {
           "clubId": "moss",
@@ -43615,7 +43615,7 @@
         "nadderud_stadion": "club_legend"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet",
+        "aker_stadion": "belagt",
         "nadderud_stadion": "belagt"
       },
       "eraSource": "utledet",
@@ -43624,7 +43624,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         },
         {
           "clubId": "stabak",
@@ -43685,7 +43685,7 @@
         "nadderud_stadion": "academy_export"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet",
+        "aker_stadion": "belagt",
         "nadderud_stadion": "belagt"
       },
       "eraSource": "utledet",
@@ -43694,7 +43694,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         },
         {
           "clubId": "stabak",
@@ -43879,7 +43879,7 @@
         "haugesund_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet",
+        "aker_stadion": "belagt",
         "haugesund_stadion": "belagt"
       },
       "eraSource": "utledet",
@@ -43894,7 +43894,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -43946,7 +43946,7 @@
         "sor_arena": "elite_career"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet",
+        "aker_stadion": "belagt",
         "sor_arena": "belagt"
       },
       "eraSource": "belagt",
@@ -43955,7 +43955,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         },
         {
           "clubId": "start",
@@ -44013,7 +44013,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -44021,7 +44021,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -44073,7 +44073,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -44081,7 +44081,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -44133,7 +44133,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -44141,7 +44141,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -44193,7 +44193,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -44201,7 +44201,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -44258,7 +44258,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -44266,7 +44266,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -44315,7 +44315,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -44323,7 +44323,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -44374,7 +44374,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -44382,7 +44382,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -44433,7 +44433,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -44441,7 +44441,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -44493,7 +44493,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -44501,7 +44501,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -44551,7 +44551,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -44559,7 +44559,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -44615,7 +44615,7 @@
         "aka_arena": "elite_career"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet",
+        "aker_stadion": "belagt",
         "bislett_stadion": "belagt",
         "hoddvoll": "belagt",
         "aka_arena": "utledet"
@@ -44644,7 +44644,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -44698,7 +44698,7 @@
         "bislett_stadion": "club_legend"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet",
+        "aker_stadion": "belagt",
         "bislett_stadion": "belagt"
       },
       "eraSource": "utledet",
@@ -44713,7 +44713,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -44770,7 +44770,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -44778,7 +44778,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -44829,7 +44829,7 @@
         "bislett_stadion": "key_player"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet",
+        "aker_stadion": "belagt",
         "bislett_stadion": "belagt"
       },
       "eraSource": "utledet",
@@ -44844,7 +44844,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -44894,7 +44894,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -44902,7 +44902,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -44957,7 +44957,7 @@
         "norac_stadion": "club_icon"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet",
+        "aker_stadion": "belagt",
         "norac_stadion": "belagt"
       },
       "eraSource": "utledet",
@@ -44972,7 +44972,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -45022,7 +45022,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -45030,7 +45030,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -45082,7 +45082,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -45090,7 +45090,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -45207,7 +45207,7 @@
         "fosshaugane_campus": "club_icon"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet",
+        "aker_stadion": "belagt",
         "fosshaugane_campus": "belagt"
       },
       "eraSource": "utledet",
@@ -45216,7 +45216,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         },
         {
           "clubId": "sogndal",
@@ -45274,7 +45274,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -45282,7 +45282,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -45405,7 +45405,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -45413,7 +45413,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -45466,7 +45466,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -45474,7 +45474,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -45585,7 +45585,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -45593,7 +45593,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -45645,7 +45645,7 @@
         "fredrikstad_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet",
+        "aker_stadion": "belagt",
         "fredrikstad_stadion": "belagt"
       },
       "eraSource": "utledet",
@@ -45660,7 +45660,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -45710,7 +45710,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -45718,7 +45718,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -45770,7 +45770,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -45778,7 +45778,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -45829,7 +45829,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -45837,7 +45837,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -45887,7 +45887,7 @@
         "aker_stadion": "club_profile"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -45895,7 +45895,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "club_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -45945,7 +45945,7 @@
         "aker_stadion": "key_player"
       },
       "clubStatusSource": {
-        "aker_stadion": "utledet"
+        "aker_stadion": "belagt"
       },
       "eraSource": "utledet",
       "clubAffiliations": [
@@ -45953,7 +45953,7 @@
           "clubId": "molde",
           "relation": "played_for",
           "status": "key_player",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
