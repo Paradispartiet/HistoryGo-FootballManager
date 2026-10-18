@@ -31,7 +31,7 @@ const documented = [
     "strengths": [
       "set_pieces"
     ],
-    "claim": "Blå Armés historiske cupfinalereferat fra Rosenborg–Strømsgodset 1991 identifiserer Geir Andersen som cornerleggeren da Odd Johnsen styrte corneren fra høyre i mål. Den navngitte, målgivende dødballen underbygger set_pieces, men ikke en generell pasnings- eller tallrating.",
+    "claim": "Blå Armés historiske cupfinalereferat fra Rosenborg–Strømsgodset 1991 beskriver direkte: «Etter 28 minutter la Geir Andersen corner fra høyre». Odd Johnsen styrte denne corneren i mål. Den navngitte, målgivende dødballen underbygger set_pieces, men ikke en generell pasnings- eller tallrating.",
     "source": "https://baof.wordpress.com/2011/07/16/jakten-pa-pokaler/",
     "sourceKind": "football_editorial"
   },
@@ -41,7 +41,7 @@ const documented = [
     "strengths": [
       "long_shots"
     ],
-    "claim": "Blå Armés cupfinaleomtale av Rosenborg–Strømsgodset 1991 beskriver Trond Nordeides presise avslutning fra 18 meter som gikk i en bue inn til 3–1; en annen gjengivelse siterer spilleren på at han bevisst løftet ballen i motsatt vinkel. Dette er en konkret avslutning fra distanse, ikke en ferdighet utledet fra antall mål.",
+    "claim": "Blå Armés cupfinaleomtale av Rosenborg–Strømsgodset 1991 skriver at «Trond Nordeide traff perfekt fra 18 meter», og at ballen gikk i bue inn til 3–1; en annen gjengivelse siterer spilleren på at han bevisst løftet ballen i motsatt vinkel. Dette er en konkret avslutning fra distanse, ikke en ferdighet utledet fra antall mål.",
     "source": "https://baof.wordpress.com/2005/11/01/cupfinalen-1991/",
     "sourceKind": "football_editorial"
   },
@@ -51,7 +51,7 @@ const documented = [
     "strengths": [
       "heading"
     ],
-    "claim": "NTBs samtidige referat fra Viking–Strømsgodset i 2016 beskriver hvordan Kim André Madsen headet på mål etter 17 minutter, og keeper Iven Austbø måtte redde headingen til corner. Det dokumenterer én velrettet heading fra SIF-perioden, ikke antall mål eller generell stopperstatus.",
+    "claim": "NTBs samtidige referat fra Viking–Strømsgodset i 2016 skriver at «hans heading ble reddet til corner av Austbø» etter 17 minutter. Det dokumenterer én velrettet heading fra SIF-perioden, ikke antall mål eller generell stopperstatus.",
     "source": "https://www.dagsavisen.no/sport/keita-ga-stromsgodset-tre-poeng/5800306",
     "sourceKind": "press"
   },
@@ -61,7 +61,7 @@ const documented = [
     "strengths": [
       "final_pass"
     ],
-    "claim": "Aftenbladets/NTBs kampreferat fra Notodden–Hødd i 2012 beskriver at Paal Christian Alsaker fant Andreas Granerud på sekstenmeteren, hvor Granerud fintet og skjøt i mål. Den konkrete sistepasningen belegger final_pass fra en senere Notodden-periode; dette er ikke en dokumentert Godset-kamp.",
+    "claim": "Aftenbladets/NTBs kampreferat fra Notodden–Hødd i 2012 skriver at «Paal Christian Alsaker fant Andreas Granerud på sekstenmeteren», før Granerud fintet og skjøt i mål. Den konkrete sistepasningen belegger final_pass fra en senere Notodden-periode; dette er ikke en dokumentert Godset-kamp.",
     "source": "https://www.aftenbladet.no/sport/i/4d6EWq/hoedd-reddet-av-selvmaal",
     "sourceKind": "press"
   },
