@@ -13,6 +13,48 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Strømsgodset: fjerde kildepass 2026-10-18; konkrete individuelle ferdigheter.
+  {
+    "playerId": "arild_mathisen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "final_pass"
+    ],
+    "claim": "Historisk cupfinalereferat fra 1970 gir en konkret målgivende situasjon: «På pasninger fra Arild Mathisen og Bjørn Oddmar Andersen scoret Ingar Pettersen to ganger». Mathisens pasning inngår i en direkte navngitt målsituasjon. Kun sistepasning føres, ikke en generell pasningsrating.",
+    "source": "https://baof.wordpress.com/2018/11/25/bla-armes-cupfinalespesial/",
+    "sourceKind": "football_editorial"
+  },
+  {
+    "playerId": "juro_kuvicek",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "long_shots"
+    ],
+    "claim": "Vålerengas 1997-cuphistorie beskriver Juro Kuviceks volleyscoring: «rundt 25 meters hold. Lot ballen sprette en gang og klinte til med venstrebeinet på volley og pang i nettet». Dette dokumenterer distanseskudd i senere Vålerenga-periode, ikke en separat Strømsgodset-kamp.",
+    "source": "https://jarlesvifstatistikk.bravesites.com/historikk",
+    "sourceKind": "football_editorial"
+  },
+  {
+    "playerId": "prosper_mendy",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "heading"
+    ],
+    "claim": "Godsets referat fra hjemmekampen mot Odd i 2019 beskriver Prosper Mendy som fikk et hjørnespark ved første stolpe og «stanget inn utligningen». Et direkte og vellykket hodespill fra SIF-perioden; ingen andre ferdigheter utledes.",
+    "source": "https://www.godset.no/nyheter/odd-seiret-pa-marienlyst",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "enock_kwakwa",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "long_shots"
+    ],
+    "claim": "Enock Kwakwas karriereomtale beskriver Strømsgodsets reservelag i 2012: «impressed, in particular with a great goal from 40 meters». Dette er et konkret langskudd fra andrelaget, ikke en ferdighetsvurdering fra hans korte førstelagsdebut.",
+    "source": "https://en.wikipedia.org/wiki/Enock_Kwakwa",
+    "sourceKind": "encyclopedia"
+  },
+
   // Strømsgodset 2026-10-18: etterpass med bekreftede individuelle kilder.
   {
     "playerId": "egil_olsen",

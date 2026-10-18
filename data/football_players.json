@@ -68463,7 +68463,7 @@
         "marienlyst_stadion": "golden_era_core"
       },
       "clubStatusSource": {
-        "marienlyst_stadion": "utledet"
+        "marienlyst_stadion": "belagt"
       },
       "eraSource": "belagt",
       "clubAffiliations": [
@@ -68471,7 +68471,7 @@
           "clubId": "stromsgodset",
           "relation": "played_for",
           "status": "golden_era_core",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -68522,7 +68522,7 @@
         "marienlyst_stadion": "golden_era_core"
       },
       "clubStatusSource": {
-        "marienlyst_stadion": "utledet"
+        "marienlyst_stadion": "belagt"
       },
       "eraSource": "belagt",
       "clubAffiliations": [
@@ -68530,7 +68530,7 @@
           "clubId": "stromsgodset",
           "relation": "played_for",
           "status": "golden_era_core",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -68580,7 +68580,7 @@
         "marienlyst_stadion": "squad_profile"
       },
       "clubStatusSource": {
-        "marienlyst_stadion": "utledet"
+        "marienlyst_stadion": "belagt"
       },
       "eraSource": "belagt",
       "clubAffiliations": [
@@ -68588,7 +68588,7 @@
           "clubId": "stromsgodset",
           "relation": "played_for",
           "status": "squad_profile",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -68704,7 +68704,7 @@
         "marienlyst_stadion": "golden_era_core"
       },
       "clubStatusSource": {
-        "marienlyst_stadion": "utledet"
+        "marienlyst_stadion": "belagt"
       },
       "eraSource": "belagt",
       "clubAffiliations": [
@@ -68712,7 +68712,7 @@
           "clubId": "stromsgodset",
           "relation": "played_for",
           "status": "golden_era_core",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -68887,7 +68887,7 @@
         "marienlyst_stadion": "golden_era_core"
       },
       "clubStatusSource": {
-        "marienlyst_stadion": "utledet"
+        "marienlyst_stadion": "belagt"
       },
       "eraSource": "belagt",
       "clubAffiliations": [
@@ -68895,7 +68895,7 @@
           "clubId": "stromsgodset",
           "relation": "played_for",
           "status": "golden_era_core",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -70347,7 +70347,7 @@
         "raufoss_arena": "elite_career"
       },
       "clubStatusSource": {
-        "marienlyst_stadion": "utledet",
+        "marienlyst_stadion": "belagt",
         "raufoss_arena": "utledet"
       },
       "eraSource": "belagt",
@@ -70362,7 +70362,7 @@
           "clubId": "stromsgodset",
           "relation": "played_for",
           "status": "short_stay_star",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -71696,7 +71696,7 @@
         "marienlyst_stadion": "golden_era_core"
       },
       "clubStatusSource": {
-        "marienlyst_stadion": "utledet"
+        "marienlyst_stadion": "belagt"
       },
       "eraSource": "belagt",
       "clubAffiliations": [
@@ -71704,7 +71704,7 @@
           "clubId": "stromsgodset",
           "relation": "played_for",
           "status": "golden_era_core",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -72273,7 +72273,7 @@
         "mellos_stadion": "elite_career"
       },
       "clubStatusSource": {
-        "marienlyst_stadion": "utledet",
+        "marienlyst_stadion": "belagt",
         "mellos_stadion": "belagt"
       },
       "eraSource": "belagt",
@@ -72288,7 +72288,7 @@
           "clubId": "stromsgodset",
           "relation": "played_for",
           "status": "golden_era_core",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -72725,7 +72725,7 @@
         "marienlyst_stadion": "golden_era_core"
       },
       "clubStatusSource": {
-        "marienlyst_stadion": "utledet"
+        "marienlyst_stadion": "belagt"
       },
       "eraSource": "belagt",
       "clubAffiliations": [
@@ -72733,7 +72733,7 @@
           "clubId": "stromsgodset",
           "relation": "played_for",
           "status": "golden_era_core",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
@@ -74200,7 +74200,7 @@
         "marienlyst_stadion": "short_stay_star"
       },
       "clubStatusSource": {
-        "marienlyst_stadion": "utledet"
+        "marienlyst_stadion": "belagt"
       },
       "eraSource": "belagt",
       "clubAffiliations": [
@@ -74208,7 +74208,7 @@
           "clubId": "stromsgodset",
           "relation": "played_for",
           "status": "short_stay_star",
-          "source": "utledet"
+          "source": "belagt"
         }
       ]
     },
