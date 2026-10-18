@@ -13,6 +13,164 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Molde: 2026-10-18 – kildepass av de 23 siste; kun dokumenterte individuelle ferdigheter.
+  {
+    "playerId": "mattias_mostrom",
+    "clubId": "molde",
+    "strengths": [
+      "pace",
+      "work_rate",
+      "chance_creation"
+    ],
+    "claim": "Moldes avskjedsartikkel omtaler Mattias Moström som «den svenske lynvingen» og fremhever uttrykkelig «hurtighet, arbeidskapasitet og evne til å skape mål». Tre navngitte, individuelle ferdighetsbeskrivelser; 17 sesonger alene brukes ikke som belegg.",
+    "source": "https://www.moldefk.no/nyheter/mattias-mostrom-takkes-av-etter-17-ar-i-mfk",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "ethan_horvath",
+    "clubId": "molde",
+    "strengths": [
+      "shot_stopping"
+    ],
+    "claim": "RTÉs samtidige kampreferat fra Celtic–Molde i 2015 beskriver Horvaths redning på et hardt skudd som «pulled off a brilliant save», og en annen situasjon der han vippet et skudd over mål. Dokumenterer skuddredninger i Molde-perioden; ingen generell tallrating.",
+    "source": "https://www.rte.ie/sport/soccer/2015/1105/739891-celtic-molde/",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "toni_kallio",
+    "clubId": "molde",
+    "strengths": [
+      "heading"
+    ],
+    "claim": "Aftenbladets kampreferat fra Moldes møte med Skonto i 2006 beskriver Toni Kallio som var nær ved å score med «heading i stolpen». En eksplisitt hodespillhendelse, ikke en posisjonsavledet styrke.",
+    "source": "https://www.aftenbladet.no/sport/i/VblMxV/svakt-av-molde",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "matej_mavric",
+    "clubId": "molde",
+    "strengths": [
+      "heading"
+    ],
+    "claim": "UEFAs kampreferat fra 2006 beskriver at «Matej Mavrič» headet en corner i mål i første omgang mot Skonto Riga. Kun hodespill registreres fra den navngitte avslutningen.",
+    "source": "https://www.uefa.com/uefaeuropaleague/news/01b8-0e6da08d0a27-74e958a69305-1000--newcastle-held-but-still-progress/",
+    "sourceKind": "football_editorial"
+  },
+  {
+    "playerId": "odd_berg",
+    "clubId": "molde",
+    "strengths": [
+      "crossing",
+      "heading"
+    ],
+    "claim": "Moldes 1971-arkiv beskriver «et innlegg fra Odd Berg» til Jon Risas scoring og senere «en nydelig heading av Odd Berg». Innlegg og hodespill har hvert sitt konkrete, navngitte kampbelegg.",
+    "source": "https://www.moldefk.no/om-klubben/var-historie/1970-1979/1971",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "morten_bakke",
+    "clubId": "molde",
+    "strengths": [
+      "shot_stopping"
+    ],
+    "claim": "Moldes offisielle 1993-historikk skriver at «Morten Bakke hadde som vanlig en rekke glimrende redninger» og omtaler ham som «fantastisk i mål». Dokumenterer skuddredninger, ikke bare at han var målvakt.",
+    "source": "https://www.moldefk.no/om-klubben/var-historie/1990-1999/1993",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "jarkko_wiss",
+    "clubId": "molde",
+    "strengths": [
+      "tackling",
+      "long_shots"
+    ],
+    "claim": "Den individuelle spillerbiografien om Jarkko Wiss beskriver ham som «known for his powerful shots with both feet and as a hard tackler». Kilden dokumenterer harde taklinger og kraftfulle skudd; beskrivelsen er karrieregenerell, ikke særskilt fra Molde-perioden.",
+    "source": "https://en.wikipedia.org/wiki/Jarkko_Wiss",
+    "sourceKind": "encyclopedia"
+  },
+  {
+    "playerId": "inge_bratteteig",
+    "clubId": "molde",
+    "strengths": [
+      "shot_stopping",
+      "reflexes"
+    ],
+    "claim": "Moldes offisielle 1985-arkiv gjengir beskrivelsen av keeper Inge Bratteteig med «lynsnare redninger og freidige utrusninger». Den uttrykkelige reaksjonshurtigheten og redningene begrunner refleks- og skuddredningstoken, ikke en tallverdi.",
+    "source": "https://www.moldefk.no/om-klubben/var-historie/1980-1989/1985",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "petter_singsaas",
+    "clubId": "molde",
+    "strengths": [
+      "heading"
+    ],
+    "claim": "Moldes 1999-arkiv omtaler Petter Singsaas' mål slik: «Petter gjorde 1-0 på en kjempeheading». Bare det individuelt beskrevne hodespillet registreres.",
+    "source": "https://www.moldefk.no/om-klubben/var-historie/1990-1999/1999-host",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "arild_stavrum",
+    "clubId": "molde",
+    "strengths": [
+      "crossing"
+    ],
+    "claim": "Moldes 1995-arkiv forteller at «Ole Bjørn Sundgot headet inn et innlegg fra Arild Stavrum». Det konkrete innlegget dokumenterer crossing; scoringstilfang eller rolle som angriper gir ingen ytterligere token.",
+    "source": "https://www.moldefk.no/om-klubben/var-historie/1990-1999/1995-host",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "emmanuel_ekpo",
+    "clubId": "molde",
+    "strengths": [
+      "dribbling"
+    ],
+    "claim": "Columbus Crews kampreferat beskriver at Emmanuel Ekpo «split two defenders» og deretter passerte enda en forsvarer før han kom til avslutning. En konkret driblingssekvens fra Columbus-perioden, før Molde; ingen ukildet Molde-spesifikk vurdering.",
+    "source": "https://www.columbuscrew.com/news/recap-crew-vs-municipal-x3750",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "kare_elvsaas",
+    "clubId": "molde",
+    "strengths": [
+      "heading"
+    ],
+    "claim": "Moldes 1960-historikk omtaler at «Kåre Elvsaas» scoret «på en heading etter corner fra Finn Haukebø» mot Aalesund. Navngitt hodespill, ikke antatt styrke fra spissrolle.",
+    "source": "https://www.moldefk.no/om-klubben/var-historie/1960-1969/1960",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "jon_palmer_austnes",
+    "clubId": "molde",
+    "strengths": [
+      "crossing",
+      "dribbling"
+    ],
+    "claim": "Moldes 1965-arkiv beskriver et «fint innlegg fra Jon Palmer Austnes» og at han «gang på gang trillet han ball i hatt med Clausenengen-forsvarerne». Begge token bæres av individuelle kampbeskrivelser.",
+    "source": "https://www.moldefk.no/om-klubben/var-historie/1960-1969/1965",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "ole_erik_stavrum",
+    "clubId": "molde",
+    "strengths": [
+      "heading"
+    ],
+    "claim": "Moldes 1988-arkiv beskriver hvordan «Ole Erik Stavrum» headet i mål etter frispark og stusset videre med hodet i en annen målsituasjon. De navngitte hendelsene dokumenterer heading, ikke en generell scorer-rating.",
+    "source": "https://www.moldefk.no/om-klubben/var-historie/1980-1989/1988",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "sindre_rekdal",
+    "clubId": "molde",
+    "strengths": [
+      "heading"
+    ],
+    "claim": "Moldes offisielle 1992-arkiv beskriver at «Sindre Rekdal» headet inn 3–0 på et innlegg fra Bjørn Nilsen mot Brann. Det direkte belegget gjelder hodespill, uten videre generelle vurderinger.",
+    "source": "https://www.moldefk.no/om-klubben/var-historie/1990-1999/1992",
+    "sourceKind": "club"
+  },
+
   // Molde: 27 individuelt kildebelagte spillere i samlet 2026-10-17 produksjonsrunde.
   {
     playerId: "bjorn_bergmann_sigur_arson",
