@@ -13,6 +13,99 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Strømsgodset: 2026-10-18 etterpass med 9 kontrollerte ferdighetsbeskrivelser.
+  {
+    "playerId": "arne_erlandsen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "set_pieces"
+    ],
+    "claim": "I historikken fra Strømsgodsets privatkamp mot Manchester United 29. juli 1991 heter det at «Arne ERLANDSEN scoret på et frispark fra kanten av 16-meteren» og at ballen gikk i motsatt hjørne. Konkret dødballtreff, ikke generell teknikkrating.",
+    "source": "https://www.united.no/pa-denne-dag/579825",
+    "sourceKind": "football_editorial"
+  },
+  {
+    "playerId": "bent_sormo",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "ball_carrying",
+      "chance_creation"
+    ],
+    "claim": "Kristiansund BKs kampreferat mot Viking i 2020 beskriver at «Bent Sørmo på et fabelaktig raid fra midtlinja» kom til 16-meteren og la ut til Pellegrino som scoret. Ballføring og konkret sjanseskaping dokumenteres fra KBK-perioden, ikke særskilt fra Godset.",
+    "source": "https://www.kristiansundbk.no/nyheter/tap-mot-viking-i-malbonanza",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "ousman_nyan",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "finishing"
+    ],
+    "claim": "Dagbladet beskriver Strømsgodsets bortekamp mot Sandefjord 17. juni 2007: Ousman Nyan observerte keeperens plassering og avsluttet med en «følsom «chipp» i lengste kryss». Dette er individuelt kampbelegg for presis avslutning.",
+    "source": "https://www.dagbladet.no/sport/nyans-kunstverk-avgjorde-sekspoengs-krigen/66351317",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "razak_nuhu",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "crossing"
+    ],
+    "claim": "Aftenpostens samtidige Rosenborg–Godset-referat fra 2012 beskriver «herlig innlegg fra Nuhu» som ga Ola Kamara scoring. Dette er ett vellykket individuelt innlegg i Strømsgodset-perioden, ikke en antatt backferdighet.",
+    "source": "https://www.aftenposten.no/sport/fotball/i/MR61mo/gulldroemmen-over-for-rosenborg",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "lars_stubhaug",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "shot_stopping"
+    ],
+    "claim": "Bergens Tidendes kampreferat fra Godset–Lillestrøm 7. november 2010 beskriver «en flott redning av reservekeeper Lars Stubhaug» på Anthony Ujahs store overtidssjanse. Konkret kampredning fra Godset-perioden.",
+    "source": "https://www.bt.no/sport/i/705oOw/godset-vant-cupfinale-vorspielet",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "niklas_gunnarsson",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "heading"
+    ],
+    "claim": "Strømsgodsets offisielle referat mot Brann 29. juli 2020 beskriver Niklas Gunnarsson på streken: «midtstopperen headet ballen unna» og hindret scoring. Et dokumentert defensivt hodestøt, ikke et målbasert token.",
+    "source": "https://www.godset.no/nyheter/senket-brann-pa-marienlyst",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "komlan_amewou",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "dribbling"
+    ],
+    "claim": "Dagbladets samtidige referat fra Godset–Molde i 2008 beskriver at «Komlan Amewou lurte en Moldenser opp på tribunen» før et chipforsøk. Kun driblingsbevegelsen registreres; det mislykkede skuddet gir ikke avslutningsstyrke.",
+    "source": "https://www.dagbladet.no/sport/en-dag-da-ingenting-fungerte/66503332",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "david_nielsen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "heading"
+    ],
+    "claim": "Aftenpostens treningskampreferat fra Brann–Godset i februar 2009: «etter bare seks minutter headet han inn 1-0», om David Nielsen. Kilden dokumenterer hodespill i Brann-perioden etter spillertiden i Godset.",
+    "source": "https://www.aftenposten.no/sport/fotball/i/MR5p9K/nielsen-festen-ble-spolert",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "gardar_johannsson",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "finishing"
+    ],
+    "claim": "UEFAs rapport om den islandske cupfinalen i 2012 beskriver «Gardar Jóhannsson's powerful finish» som ga Stjarnan ledelsen. En navngitt kraftfull avslutning i Stjarnan-perioden etter Strømsgodset, uten utledet Godset-spesifikk form.",
+    "source": "https://www.uefa.com/news-media/news/0200-0f88146a645d-c26e213090c7-1000--kr-secure-13th-icelandic-cup-crown/",
+    "sourceKind": "football_editorial"
+  },
+
   // Strømsgodset: samlet kildepass 2026-10-18, individuelle beskrivelser fra klubbhistorie og kampreferater.
   {
     "playerId": "odd_arild_amundsen",
