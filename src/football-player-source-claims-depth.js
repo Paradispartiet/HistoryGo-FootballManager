@@ -13,6 +13,79 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Strømsgodset 2026-10-18: konkret kildepass (kamphandlinger, også karriereperioder utenfor Godset).
+  {
+    "playerId": "mattias_andersson",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "finishing",
+      "crossing"
+    ],
+    "claim": "Aftenbladets samtidige Strømsgodset–Odd-referat fra 9. april 2007 beskriver at Mattias Andersson alene med keeper «gjorde ... ingen feil» og få minutter senere slo «et presist innlegg» som Peter Kovacs headet i mål. To navngitte situasjoner fra Godset-perioden dokumenterer avslutning og innlegg, ikke et tall fra målstatistikken.",
+    "source": "https://www.aftenbladet.no/sport/i/8mlJjw/godset-tilbake-med-seier",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "steffen_nystrom",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "dribbling"
+    ],
+    "claim": "Dagbladets Strømsgodset–Tromsø-referat fra 2008 omtaler venstrekanten Steffen Nystrøm som den som «kjørte gang på gang karusell» med Tromsø-back Roger Risholt, og skildrer flere individuelle forseringer. Kun den konkret beskrevne driblingsevnen er registrert.",
+    "source": "https://www.dagbladet.no/sport/vinner-vi-neste-kan-alt-skje/66521805",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "krister_aunan",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "crossing"
+    ],
+    "claim": "Drammens Tidendes samtidige 2010-kampreferat beskriver at Krister Aunans «lave innlegg fra høyre» skapte Strømsgodsets seiersmål mot Viking. Scoringen ble formelt registrert som selvmål, så bare det navngitte innlegget gir ferdighetstoken.",
+    "source": "https://www.dt.no/godset/godset/drommescoring-satte-fyr-pa-godset/s/2-2.1748-1.5073388",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "marius_amundsen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "heading"
+    ],
+    "claim": "Lillestrøms offisielle kampreferat fra 3. oktober 2020 beskriver at Marius Amundsen «møtte innlegget på bakre stolpe og headet til Aleksander Melgalvis», som satte ballen i mål. Det belegger hodespill fra en senere LSK-periode, ikke en antatt Godset-kamp.",
+    "source": "https://www.lsk.no/nyheter/lekestue-og-4-1-seier-over-stjordals-blink",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "glenn_arne_hansen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "shot_stopping"
+    ],
+    "claim": "Et øyenvitnes referat fra cupfinalen Follo–Strømsgodset 2010 sier eksplisitt at «Follokeeper Glenn Arne Hansen» hadde «et par gigantredninger på en-mot-en-situasjoner». Konkrete skuddredninger dokumenteres i en senere Follo-periode; dette er ingen utledet keeperrating.",
+    "source": "https://materazzia.blogspot.com/2010/11/",
+    "sourceKind": "football_editorial"
+  },
+  {
+    "playerId": "thomas_andre_odegaard",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "shot_stopping"
+    ],
+    "claim": "Aftenpostens kampreferat fra Bryne–Strømsgodset 12. juli 2006 gjengir Bjørn Ingvar Kydlands beskrivelse av et skudd fra bakre stolpe: «målvakten gjorde en god redning». Navngitt kampoppstilling bekrefter Thomas André Ødegaard i SIF-målet; én konkret skuddredning er kilden, ikke en generell posisjonsmal.",
+    "source": "https://www.aftenposten.no/sport/fotball/i/RR6P88/bryne-videre-i-cupen",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "jason_morrison",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "finishing"
+    ],
+    "claim": "Dagbladets referat fra cupsemifinalen 2010 oppgir at Jason Morrison «pirket ballen forbi Andreas Lie» etter 100 minutter og ga Strømsgodset ledelsen mot Odd. Den konkrete avslutningen dokumenterer finishing i Godset-perioden; det gir ingen numerisk spillerverdi.",
+    "source": "https://www.dagbladet.no/sport/deila-sammenligner-semi-seieren-med-vil-du-bli-millionaer/64654478",
+    "sourceKind": "press"
+  },
+
   // Strømsgodset: fjerde kildepass 2026-10-18; konkrete individuelle ferdigheter.
   {
     "playerId": "arild_mathisen",
