@@ -13,6 +13,49 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Strømsgodset 2026-10-18: etterpass med bekreftede individuelle kilder.
+  {
+    "playerId": "egil_olsen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "work_rate"
+    ],
+    "claim": "Strømsgodsets jubileumshistorie om 1970-laget sier at «ingen løp flere meter for Strømsgodset enn elegante og tekniske Egil Olsen». Dette belegger dokumentert individuell løps-/arbeidsinnsats, ikke ukildet dribling eller utholdenhetstall.",
+    "source": "https://www.godset.no/nyheter/50-ar-siden-seriegullet",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "jan_kristiansen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "duels"
+    ],
+    "claim": "Klubbens 1970-tilbakeblikk omtaler Jan Kristiansen som «en klippe i midtforsvaret» og «Tøff i duellene». Duellstyrken er en konkret individuell ferdighetsbeskrivelse, ikke utledet fra stopperposisjon.",
+    "source": "https://www.godset.no/nyheter/50-ar-siden-seriegullet",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "alexander_aas",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "duels",
+      "simple_passing"
+    ],
+    "claim": "Lars Tjærnås' spilleranalyse i Bergens Tidende beskriver Alexander Aas slik: «God igangsetter, trygg med ball, stadig bedre i duellspillet». Det bærer duellspill og enkel igangsettende pasningskvalitet; Aas' dødballtrussel alene er ikke bevis for dødballtaking.",
+    "source": "https://www.bt.no/sport/i/4qq6Je/her-er-laquoaarets-lagraquo-i-eliteserien-saa-langt",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "francisco_junior",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "vision"
+    ],
+    "claim": "Bergens Tidendes vurdering av Godsets lag fra 2017 omtaler spesifikt Francisco Junior med «sin selvfølgelige teknikk og lure pasninger». Kreativt pasningsblikk gir belegg for vision; ingen påstått langpasningsrekkevidde eller tallrating.",
+    "source": "https://www.bt.no/sport/i/vQOe25/oppturen-som-er-umulig-aa-forklare",
+    "sourceKind": "press"
+  },
+
   // Strømsgodset: 2026-10-18 etterpass med 9 kontrollerte ferdighetsbeskrivelser.
   {
     "playerId": "arne_erlandsen",
