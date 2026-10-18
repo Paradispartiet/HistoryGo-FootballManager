@@ -13,6 +13,49 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Strømsgodset 2026-10-18: fire individuelle presse- og spilleromtaler, også fra senere/tidligere klubber.
+  {
+    "playerId": "andre_hanssen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "stamina",
+      "duels"
+    ],
+    "claim": "Aftenpostens samtidige overgangsoversikt fra 2005 omtaler André Hanssen ved navn som «løpssterk og god i duellspillet». Dette dokumenterer utholdenhet og duellspill fra Heerenveen-perioden, før hans senere Strømsgodset-opphold; ingen styrker utledes fra posisjon eller antall kamper.",
+    "source": "https://www.aftenposten.no/sport/fotball/i/MR5nWo/brann-jakter-islandsk-spiss",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "fritjof_wilborn",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "pace"
+    ],
+    "claim": "Dagbladets portrett av Fritjof (Frithjof) Wilborn forteller at Aftenposten kalte ham «hjemmelagets svar på Carl Lewis: Frithjof Wilborn» i Godset-perioden, og beskriver hans senere Brann-karriere med «Frithjof var så rask at han løp fra ballen». Begge beskriver eksplisitt løpshurtighet; den enkeltstående headingen i Brann-perioden føres ikke som en generell styrke.",
+    "source": "https://www.dagbladet.no/magasinet/fritt-wilt/66309468",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "kenneth_widemann_karlsen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "heading"
+    ],
+    "claim": "Dagbladets/NTBs kamprapport fra Strømsgodset–Viking i 1999 fremhever luftstyrken til midtstopper Kenneth Karlsen direkte: «Han var omtrent like god i lufta som Flo var på den andre siden av banen». Det gir en individuell hodespillpåstand fra Godset-perioden, ikke en generell defensiv posisjonsmal.",
+    "source": "https://www.dagbladet.no/sport/bare-flo-scorer-for-godset/65523432",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "kenneth_nysaether",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "strength"
+    ],
+    "claim": "Tidligere lagkamerat Stian Davidsens personlige tilbakeblikk på Skjetten-spillere omtaler «Midtstopper: Kenneth Nysæther» og beskriver ham med «Masse rutine, sterk og trygg». Den eksplisitte «sterk»-beskrivelsen underbygger fysisk styrke fra hans senere Skjetten-periode; rollebytte og trygghet oversettes ikke til nye Godset-posisjoner eller udokumenterte ferdigheter.",
+    "source": "https://www.lokalfotballen.blog/2017/11/07/mitt-favorittlag-stian-davidsen-alt-handler-om-skjetten/",
+    "sourceKind": "football_editorial"
+  },
+
   // Strømsgodset 2026-10-18: individuelt klubbminne med navngitte ferdigheter.
   {
     "playerId": "johnny_vidar_pedersen",
