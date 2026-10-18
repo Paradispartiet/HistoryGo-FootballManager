@@ -13,6 +13,176 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Strømsgodset: samlet kildepass 2026-10-18, individuelle beskrivelser fra klubbhistorie og kampreferater.
+  {
+    "playerId": "odd_arild_amundsen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "long_shots",
+      "vision",
+      "passing_range"
+    ],
+    "claim": "Klubbens 50-årsartikkel om seriegullet beskriver Odd Arild Amundsen med «tunge skudd, geniale overblikk og sterke pasningsfot». Individuell omtale av skudd fra distanse, overblikk og pasningsfot i Godset-perioden; mål og meritter gir ingen flere token.",
+    "source": "https://www.godset.no/nyheter/50-ar-siden-seriegullet",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "ingar_pettersen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "heading"
+    ],
+    "claim": "Strømsgodsets tilbakeblikk på 1970-laget beskriver Ingar Pettersens «store styrke i lufta». Dette er en eksplisitt individuell hodespillbeskrivelse og ikke en avledning fra målantall.",
+    "source": "https://www.godset.no/nyheter/50-ar-siden-seriegullet",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "per_rune_wolner",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "tackling"
+    ],
+    "claim": "Strømsgodsets offisielle 50-årsartikkel sier «Per Runes sklitaklinger fortsatt prates om på Gulskogen». Bare taklinger registreres fra den individuelt beskrevne ferdigheten.",
+    "source": "https://www.godset.no/nyheter/50-ar-siden-seriegullet",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "mohammed_abu",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "ball_carrying",
+      "vision",
+      "chance_creation"
+    ],
+    "claim": "Fotballekspert Lars Tjærnås beskriver Mohammed Abu i 2011 som «en liten artist med ball» med «oversikt og ballfølelse» som «bryter ned et forsvar med kreative løsninger». Dokumenterer ballføring under press, overblikk og sjanseskaping, ikke målantall.",
+    "source": "https://www.aftenposten.no/sport/meninger/i/4qbLmg/ingen-fra-molde-eller-rbk-gode-nok-for-tjaernaas",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "henning_hauger",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "simple_passing",
+      "work_rate",
+      "teamwork",
+      "leadership"
+    ],
+    "claim": "Sportssjef Jostein Flo beskrev Hauger ved 2017-signering som «dyktig ballfordeler», med «stor arbeidskapasitet» som «flink til å spille andre gode» og med «lederegenskaper». Dette bærer pasningsspill, arbeidsinnsats, samspill og ledelse; egenskapene beskriver ham ved overgangstidspunktet.",
+    "source": "https://www.godset.no/nyheter/hauger-valgte-godset",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "jonathan_parr",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "pace"
+    ],
+    "claim": "I Dagbladets 2011-kampomtale forteller Parr selv «jeg er ganske hurtig jeg også» og reporter beskriver at han «spurtet fra Ji-Sung Park». Den individuelle fartsvurderingen gjelder Crystal Palace-perioden før Strømsgodset.",
+    "source": "https://www.dagbladet.no/sport/hvorfor-skyter-du-derfra/63437672",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "stian_ringstad",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "dribbling",
+      "crossing"
+    ],
+    "claim": "Godsets 2019-referat mot Tromsø beskriver hvordan Ringstad «forserte rett gjennom Tromsøs forsvar» før han fra dødlinja «la han ballen 45 grader ut mot Martin Rønning Ovenstad» til scoring. Dokumenterer ballføring/dribling og sluttprodukt fra kanten.",
+    "source": "https://www.godset.no/nyheter/kjempet-seg-til-seier-pa-marienlyst",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "simen_brenne",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "heading"
+    ],
+    "claim": "Dagbladets samtidige referat fra Sarpsborg–Strømsgodset 2013 beskriver «Simen Brenne satte hodet på et innlegg fra Martin Rønning Ovenstad» og scoret. Kun heading, ikke avslutningsrating fra antall mål.",
+    "source": "https://www.dagbladet.no/sport/godset-vant-endelig-pa-bortebane-i-tippeligaen-igjen/62716306",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "abdisalam_ibrahim",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "dribbling"
+    ],
+    "claim": "BTs referat fra Strømsgodset–Brann i mai 2013 sier «Abdisalam Ibrahim lekte seg gjennom Brann-forsvaret» før en avslutning utenfor. Hendelsen dokumenterer individuell dribling, men ikke avslutningsstyrke.",
+    "source": "https://www.bt.no/sport/i/xP3vbn/klasseforskjell-da-godset-senket-brann",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "martin_hansen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "shot_stopping"
+    ],
+    "claim": "Godsets 2019-kampreferat fra Mjøndalen beskriver «Martin Hansen gjorde dog en kjempredning» og viser også til en tidligere «god redning» fra Fredrik Brustad. To navngitte skuddredninger i Godset-perioden.",
+    "source": "https://www.godset.no/nyheter/uavgjort-i-aelv-classico",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "duplexe_tchamba",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "tackling"
+    ],
+    "claim": "Godsets 2019-kampreferat mot Lillestrøm beskriver at Daniel Gustafsson kom forbi keeper, men «ikke Duplexe Tchamba», og at «Duplexe sin takling» hindret angrepet. Bare den konkrete taklingsegenskapen føres, ikke generell duellstyrke.",
+    "source": "https://www.godset.no/nyheter/uavgjort-mot-lillestrom",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "joel_riddez",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "crossing"
+    ],
+    "claim": "Godsets historiske tilbakeblikk på Rosenborg-kamper omtaler «et glimrende innlegg fra Joel Riddez» som Ola Kamara scoret på i 2010. Navngitt, vellykket innlegg gir crossing, ikke ukildet generell teknikk.",
+    "source": "https://www.godset.no/nyheter/kampene-vi-husker-sa-godt",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "amahl_pellegrino",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "finishing"
+    ],
+    "claim": "Godsets referat fra treningskamp mot HamKam i februar 2019 beskriver at Vilsvik slo et utsøkt innlegg og «Pelle var kontant foran kassa». Konkret kontant avslutning i Godset-perioden, ikke målstatistikk.",
+    "source": "https://www.godset.no/nyheter/praktscoring-fra-hasan-mot-ham-kam",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "marco_tagbajumi",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "finishing"
+    ],
+    "claim": "Godsets seriepremiere mot Haugesund i april 2017 beskriver Marco Tagbajumi som «banket ballen flott i det lengste hjørnet på hel volley» etter Høilands framspill. Én teknisk konkret avslutning gir finishing, uten antatt generell fysisk styrke.",
+    "source": "https://www.godset.no/nyheter/snudde-til-seier-i-premieren",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "glenn_andersen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "heading"
+    ],
+    "claim": "Aftenbladets samtidige kampreferat fra Godset–Viking i september 2011 forteller at «Glenn Andersen headet inn 2-2» etter corner. Ytterligere beskriver Aftenbladet 2011 en heading i tverrliggeren. Konkret individuelt hodespill.",
+    "source": "https://www.aftenbladet.no/sport/i/xR19el/dommeren-tok-fra-oss-seieren",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "thomas_sorum",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "heading"
+    ],
+    "claim": "Dagbladets kampreferat fra Haugesund–Tromsø 2010 beskriver Thomas Sørum som «strekte ... seg høyest på et innlegg og headet ballen i krysset og ut». Kilden gjelder Haugesund-perioden, mellom opphold i Godset; kun konkret hodespill.",
+    "source": "https://www.dagbladet.no/sport/haper-jeg-far-sove-i-natt/64611217",
+    "sourceKind": "press"
+  },
+
   // Molde: 2026-10-18 – kildepass av de 23 siste; kun dokumenterte individuelle ferdigheter.
   {
     "playerId": "mattias_mostrom",
