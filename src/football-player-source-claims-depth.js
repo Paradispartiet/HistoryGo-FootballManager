@@ -13,6 +13,20 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Strømsgodset 2026-10-18: individuelt klubbminne med navngitte ferdigheter.
+  {
+    "playerId": "johnny_vidar_pedersen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "game_reading",
+      "long_shots",
+      "work_rate"
+    ],
+    "claim": "Strømsgodsets minneord om Johnny Vidar Pedersen fra 5. august 2020 beskriver ham som en spiller med «god forståelse, god teknikk og et godt skudd», og at han «jobbet hardt og alltid ga sitt ytterste for klubben». Klubben forteller dessuten konkret om semifinalemålet mot HamKam i 1969: «et stjernetreff fra 20 meter i vinkelen». Spilleforståelse, langskudd og arbeidsinnsats er dermed individuelt kildebelagt; generell teknikk oversettes ikke til et uspesifisert ferdighetstoken.",
+    "source": "https://www.godset.no/nyheter/johnny-vidar-pedersen-er-dod",
+    "sourceKind": "club"
+  },
+
   // Strømsgodset 2026-10-18: fem nye individuelle kildeprofiler etter PR #422.
   {
     "playerId": "havard_beckstrom",
