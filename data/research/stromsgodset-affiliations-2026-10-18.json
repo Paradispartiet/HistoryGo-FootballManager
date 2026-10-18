@@ -2,7 +2,7 @@
   "schema": "historygo-football-manager.stromsgodset-affiliation-evidence.v1",
   "asOf": "2026-10-18",
   "clubId": "stromsgodset",
-  "method": "Only individually named official club history, NFF cup-winning squad, match lineup or NFF career season register supports the played_for affiliation. These do not imply strengths.",
+  "method": "Individually identified first-team evidence only: official Strømsgodset club history and match reports, NFF cup-winning squads, NFF career registers, and FBref season appearances. An affiliation is not evidence of individual skill; positions, goals and squad memberships never create strength claims.",
   "entries": [
     {
       "playerId": "egil_olsen",
