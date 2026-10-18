@@ -995,7 +995,7 @@ const KJENT_UDOKUMENTERT = {
   // handler om meritter og kampmengde. Haugesund har halvparten så mye tekst og
   // dobbelt så mange spillerbeskrivelser.
   lerkendal_stadion: 0.14,   // Rosenborg: 10/83 eksklusive uten dokumenterte styrker (12,05 %); tak 14 % etter kildepass 2026-10-17
-  aker_stadion: 0.37,        // Molde: 19/54 eksklusive profiler uten dokumenterte styrker (35,19 %); tak 37 % etter samlet kildepass 2026-10-17
+  aker_stadion: 0.13,        // Molde: 6/54 eksklusive uten styrker (11,11 %); tak 13 % etter kildepass 2026-10-18
   marienlyst_stadion: 0.62,  // Strømsgodset: 51/84 eksklusive profiler uten individuelle styrker (60,71 %); tak 62 % etter kildepass 2026-10-17
   haugesund_stadion: 0.38,   // Haugesund/Haugar/Djerv: 32/87 eksklusive uten styrker (36,78 %); tak 38 % etter kildepass 2026-10-17
   // Andre pulje kildepass, og den viser hva aksen koster i den lave enden.
