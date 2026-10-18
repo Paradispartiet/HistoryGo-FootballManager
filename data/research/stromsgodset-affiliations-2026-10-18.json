@@ -1,0 +1,102 @@
+{
+  "schema": "historygo-football-manager.stromsgodset-affiliation-evidence.v1",
+  "asOf": "2026-10-18",
+  "clubId": "stromsgodset",
+  "method": "Only individually named official club history, NFF cup-winning squad, match lineup or NFF career season register supports the played_for affiliation. These do not imply strengths.",
+  "entries": [
+    {
+      "playerId": "egil_olsen",
+      "sourceUrl": "https://www.godset.no/nyheter/50-ar-siden-seriegullet",
+      "evidence": "1970-team named in official Strømsgodset article"
+    },
+    {
+      "playerId": "johnny_vidar_pedersen",
+      "sourceUrl": "https://www.godset.no/nyheter/50-ar-siden-seriegullet",
+      "evidence": "1970-team named as back and midfielder"
+    },
+    {
+      "playerId": "havard_beckstrom",
+      "sourceUrl": "https://www.godset.no/nyheter/50-ar-siden-seriegullet",
+      "evidence": "1970 era player, official club history"
+    },
+    {
+      "playerId": "jan_kristiansen",
+      "sourceUrl": "https://www.godset.no/nyheter/50-ar-siden-seriegullet",
+      "evidence": "1970-team regular centre back"
+    },
+    {
+      "playerId": "sverre_rorvik",
+      "sourceUrl": "https://www.godset.no/nyheter/50-ar-siden-seriegullet",
+      "evidence": "1970-team member and Nantes match"
+    },
+    {
+      "playerId": "frode_johannessen",
+      "sourceUrl": "https://www.fotball.no/tema/om-nff/statistikk-og-historikk/norgesmestere-menn-/",
+      "evidence": "1991 NFF cup-winning squad"
+    },
+    {
+      "playerId": "jan_wendelborg",
+      "sourceUrl": "https://www.fotball.no/tema/om-nff/statistikk-og-historikk/norgesmestere-menn-/",
+      "evidence": "1991 NFF cup-winning squad"
+    },
+    {
+      "playerId": "trond_nordeide",
+      "sourceUrl": "https://www.fotball.no/tema/om-nff/statistikk-og-historikk/norgesmestere-menn-/",
+      "evidence": "1991 NFF cup-winning squad"
+    },
+    {
+      "playerId": "geir_andersen",
+      "sourceUrl": "https://www.fotball.no/tema/om-nff/statistikk-og-historikk/norgesmestere-menn-/",
+      "evidence": "1991 NFF cup-winning squad"
+    },
+    {
+      "playerId": "glenn_knutsen",
+      "sourceUrl": "https://www.fotball.no/tema/om-nff/statistikk-og-historikk/norgesmestere-menn-/",
+      "evidence": "1991 NFF cup-winning squad"
+    },
+    {
+      "playerId": "kenneth_nysaether",
+      "sourceUrl": "https://www.fotball.no/tema/om-nff/statistikk-og-historikk/norgesmestere-menn-/",
+      "evidence": "1991 NFF cup-winning squad"
+    },
+    {
+      "playerId": "robert_pedersen",
+      "sourceUrl": "https://www.fotball.no/tema/om-nff/statistikk-og-historikk/norgesmestere-menn-/",
+      "evidence": "1991 NFF cup-winning squad"
+    },
+    {
+      "playerId": "john_williams",
+      "sourceUrl": "https://www.fotball.no/fotballdata/kamp/?fiksId=3464222",
+      "evidence": "1991 listed as substitute against Fyllingen"
+    },
+    {
+      "playerId": "glenn_arne_hansen",
+      "sourceUrl": "https://www.fotball.no/fotballdata/person/profil/?fiksId=1942079",
+      "evidence": "NFF seasons with Strømsgodset, 1996–2001"
+    },
+    {
+      "playerId": "thomas_andre_odegaard",
+      "sourceUrl": "https://www.fotball.no/fotballdata/person/profil/?fiksId=3727153",
+      "evidence": "NFF seasons with Strømsgodset 1994–2006"
+    },
+    {
+      "playerId": "paal_christian_alsaker",
+      "sourceUrl": "https://www.fotball.no/fotballdata/person/profil/?fiksId=3802913",
+      "evidence": "NFF seasons with Strømsgodset 2000–2003"
+    }
+  ],
+  "positionCorrection": {
+    "playerId": "ole_johnny_friise",
+    "from": "CM",
+    "to": "GK",
+    "sourceUrl": "https://www.godset.no/nyheter/50-ar-siden-seriegullet",
+    "evidence": "The official club history explicitly identifies Friise as goalkeeper. His canonical ID and non-role fields remain unchanged."
+  },
+  "deferredIdentityReview": {
+    "playerIds": [
+      "nana_boateng",
+      "bismark_adjei_boateng"
+    ],
+    "reason": "Potential alias/duplicate with differing academy vs played_for record semantics; keep canonical IDs and save references unchanged until a designed migration."
+  }
+}
