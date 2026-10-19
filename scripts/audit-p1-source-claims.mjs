@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { calculateRoleFit } from "../src/football-fit-engine.js";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -181,6 +182,25 @@ ok(P1_NEW_EVENT_ONLY.filter((r) => r.placeId === "jotun_arena").length === 19,
   "Sandefjord: 19 historical event records must be retained without skill boosts");
 ok(P1_NEW_PARTIAL.filter((r) => r.placeId === "jotun_arena").length === 2,
   "Sandefjord: 2 secondary biographical sources require verification");
+
+// Evidence must change a real tactical calculation, not just a profile label.
+// Neutralize preferred roles/tactics only in the comparison fixture so that
+// the added, source-backed skills are the sole independent variable.
+const filip = P1_NEW_DOCUMENTED.find((r) => r.playerId === "filip_ottosson");
+const deepPlaymaker = readJson("data/football_roles.json").roles.find((r) => r.id === "deep_playmaker");
+ok(Boolean(filip && deepPlaymaker), "Sandefjord: Filip and deep-playmaker role must resolve");
+const isolatedPlayer = {
+  preferredRoles: [], needs: [], likesTactics: [], dislikesTactics: [],
+  strengths: ["simple_passing", "vision", "duels"]
+};
+const previousRoleFit = calculateRoleFit(isolatedPlayer, deepPlaymaker);
+const improvedRoleFit = calculateRoleFit({ ...isolatedPlayer, strengths: [...filip.strengths] }, deepPlaymaker);
+ok(improvedRoleFit > previousRoleFit,
+  "Sandefjord: stronger sourced passing profile must improve deep-playmaker role fit");
+const storevik = getP1NewSourceRecord({ id: "jacob_storevik", sourcePlaceIds: ["jotun_arena"] });
+ok(storevik?.status === "HENDELSE" && storevik.strengths.length === 0
+    && storevik.legacyTokens.includes("reflexes"),
+  "Sandefjord: one match save must remain an event without sourced reflexes");
 
 
 const overlaid = applyP1NewSourceClaims(players);
