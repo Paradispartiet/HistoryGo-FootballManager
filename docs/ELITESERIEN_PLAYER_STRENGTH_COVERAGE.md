@@ -109,3 +109,41 @@ Dette er en **kvalitetsforbedring med lavere antall dokumenterte styrker**,
 ikke et mål om å nå en prosentkvote. Neste bolker prioriterer bredde mellom
 spillertyper i de øvrige Eliteserie-klubbene og deretter OBOS-ligaen; en
 enkelthendelse skal ikke brukes for å få dekningsprosenten til å se bedre ut.
+
+
+## KFUM Oslo: individuell rollespredning 19.10.2026
+
+En ny kildebasert produksjonsbolk tar utgangspunkt i KFUMs egen
+[historiske vurdering av 50 tidligere A-lagsspillere](https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere).
+Der skiller klubbens redaksjon mellom ulike spillertyper med navngitte og
+konkrete ferdigheter. **26 tidligere udokumenterte P1-profiler** er tilført
+`strengths`, `evidenceKind: historical_appraisal` og individuell
+`playingStyle` uten å endre ID, posisjon eller spillernivå. KFUM har nå
+**30 kildebelagte profiler i sin eksklusive P1-populasjon på 46**; de
+øvrige er ikke fylt med modellgenererte styrker.
+
+Utvalget er bevisst differensiert:
+
+- Pasningssterke midtbanetyper: Robin Rasch har overblikk og trygg
+  pasningsbruk; Ståle Andersen har i tillegg dokumentert langpasningsrekkevidde.
+- Forsvarsvalg: Jørgen Hammer har tidlige brudd, luftstyrke og autoritet;
+  Thomas Sæther har balanse, fart og én-mot-én-forsvar; John Rasmussen har
+  fysisk styrke og hodespill.
+- Hurtighet og bakrom: Cato Valøy er beskrevet som en hurtig bakromsspiller;
+  Dennis Obengs profil kombinerer fart, driblinger og duellstyrke.
+- Keeperroller: Kenneth Rakvåg er særlig reaksjonsrask; Stian De Wahl har
+  dokumentert evne til å bygge opp spillet med føttene; Arnstein Langnes
+  har ballfordeling og lederskap.
+
+Kilden beskriver fotballstilen til disse spillerne over tid, ikke en
+enkeltstående scoring. Den brukes ikke til å anslå upubliserte tall i
+1–20-skalaen. Den permanente P1-auditen beskytter identiteter og
+kildemetadata, og bruker eksisterende `calculatePlayerMatchFit` til å
+sammenligne to midtbanespillere i **samme posisjon og rolle** med de øvrige
+forholdene holdt konstant. Ulik kildebelagt pasningskompetanse må gi en
+målbar forskjell i både `roleFit` og `matchScore`.
+
+**Videre avgrensning:** Dette beviser forskjell i individuell kampfit,
+ikke at hele kampsimuleringen allerede modellerer alle konsekvenser av
+spillerspesifikke kvaliteter. Full lag- og kampkonsekvens må testes separat
+før realistisk laguttak betegnes ferdig.
