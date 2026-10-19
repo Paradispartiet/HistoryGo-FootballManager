@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import { calculateTeamFit } from "../src/football-team-fit-engine.js";
 import { calculateTeamFit as calculateLiveTypescriptTeamFit } from "../dist/index.js";
-import { calculateMatchStrength, simulateMatchday, createMatchdaySession, finalizeMatchdaySession, OPPONENT_PROFILES } from "../src/football-matchday-engine.js";
+import { calculateMatchStrength, simulateMatchday, createMatchdaySession, advanceMatchClock, applyMatchdaySubstitution, finalizeMatchdaySession, OPPONENT_PROFILES } from "../src/football-matchday-engine.js";
 
 const read = (path) => JSON.parse(fs.readFileSync(new URL("../data/" + path, import.meta.url), "utf8"));
 const formation = read("football_formations.json").formations.find((item) => item.id === "4-3-3");
@@ -147,6 +147,64 @@ assert.equal(lowFast.sourcedSkillTendencies.restDefenseScore.bonus, 0,
   "pace under a low line is not automatically a high-line defensive bonus");
 assert.equal(lowFast.baseMetrics.restDefenseScore, lowPass.baseMetrics.restDefenseScore,
   "without high-line conditions no invented speed advantage should appear");
+
+
+// An actual in-match substitution must change the tactical snapshot and the
+// *next* period's chances, without rewriting already played periods.
+// Give both bench candidates the exact same slot fit so the existing freshness,
+// coach and situational substitution effects cancel out.
+const fastBenchPlayer = sourced("hurtig_innbytter", ["pace", "acceleration"]);
+const passingBenchPlayer = sourced("pasnings_innbytter", ["passing_range", "composure"]);
+const liveKickoff = createMatchdaySession({
+  teamFit: neutralMatch(passer), formation, tactic, opponent, roles,
+  benchPlayers: [fastBenchPlayer, passingBenchPlayer],
+  activeClassifications: []
+});
+const firstHalf = advanceMatchClock(advanceMatchClock(liveKickoff));
+const leveledBench = firstHalf.benchSnapshot.map((benchPlayer) => ({
+  ...benchPlayer,
+  fitBySlot: {
+    ...benchPlayer.fitBySlot,
+    [cbSlot.slotId]: {
+      ...benchPlayer.fitBySlot[cbSlot.slotId],
+      matchScore: 75, misusePenalty: 0
+    }
+  }
+}));
+const controlledHalf = { ...firstHalf, benchSnapshot: leveledBench };
+const swap = (inPlayerId) => applyMatchdaySubstitution(controlledHalf, {
+  outPlayerId: "pasningssterk_stopper", inPlayerId, minute: 45, gameState: "level"
+});
+const speedSub = swap("hurtig_innbytter");
+const passingSub = swap("pasnings_innbytter");
+assert.equal(speedSub.substitutions.length, 1, "real match engine must accept documented CB substitute");
+assert.deepEqual(speedSub.substitutions[0].effects, passingSub.substitutions[0].effects,
+  "equal fit, fatigue and situation must leave only sourced traits different");
+assert.ok(speedSub.teamFitSnapshot.tacticalProfile.restDefenseScore
+  > passingSub.teamFitSnapshot.tacticalProfile.restDefenseScore,
+  "documented CB speed must improve live high-line defence");
+assert.ok(passingSub.teamFitSnapshot.tacticalProfile.buildUpScore
+  > speedSub.teamFitSnapshot.tacticalProfile.buildUpScore,
+  "documented CB passing must improve live buildup");
+assert.ok(speedSub.substitutions[0].reasons.some((line) => line.includes("Kildebelagte styrker")),
+  "substitution rationale must disclose live tactical changes");
+const nextWithSpeed = advanceMatchClock(JSON.parse(JSON.stringify(speedSub)));
+const nextWithPassing = advanceMatchClock(JSON.parse(JSON.stringify(passingSub)));
+const speedPeriod = nextWithSpeed.timeline.at(-1);
+const passingPeriod = nextWithPassing.timeline.at(-1);
+assert.ok(speedPeriod.expectedGoals.against < passingPeriod.expectedGoals.against,
+  "live source-backed speed must cut next-period expected chances against");
+assert.ok(passingPeriod.expectedGoals.for > speedPeriod.expectedGoals.for,
+  "live source-backed passing must improve next-period expected chances for");
+assert.deepEqual(nextWithSpeed.timeline.slice(0, 2), controlledHalf.timeline,
+  "a substitute must not rewrite past chance generation");
+const formerSave = { ...controlledHalf };
+delete formerSave.sourcedSubstitutionVersion;
+const legacySwap = applyMatchdaySubstitution(formerSave, {
+  outPlayerId: "pasningssterk_stopper", inPlayerId: "hurtig_innbytter", minute: 45
+});
+assert.deepEqual(legacySwap.teamFitSnapshot, formerSave.teamFitSnapshot,
+  "legacy in-progress match sessions must keep their original tactical snapshot");
 
 console.log(JSON.stringify({
   ok: true, completeCount: 11,
