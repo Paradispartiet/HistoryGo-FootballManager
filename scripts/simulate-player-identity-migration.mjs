@@ -13,6 +13,7 @@ const catalogue = JSON.parse(readFileSync(new URL("../data/football_players.json
 const playable = normalizePlayablePlayerCatalog(catalogue);
 assert.equal(playable.filter((player) => player.id === canonical).length, 1);
 assert.equal(playable.some((player) => player.id === legacy), false);
+assert.equal(playable.find((player) => player.id === canonical).nationality, "Ghana");
 assert.equal(playable.length, catalogue.length - 1, "one redundant historic record is hidden from gameplay");
 assert.equal(canonicalPlayerId(legacy), canonical);
 assert.equal(canonicalPlayerId("nana_boateng_other"), "nana_boateng_other");
