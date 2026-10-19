@@ -1964,7 +1964,14 @@ function currentExpectedGoalRate(session) {
     missing,
     planEdge: num(session.planMatchup?.edge)
   });
-  const totals = sumDecisionEffects([...asArray(session.decisions), ...asArray(session.planChanges)]);
+  // Only decisions already made can affect the NEXT period. Substitutions
+  // belong here as much as plan changes and tactical calls: without them,
+  // the live chances ignore the substitute's evaluated gain or cost.
+  const totals = sumDecisionEffects([
+    ...asArray(session.decisions),
+    ...asArray(session.planChanges),
+    ...asArray(session.substitutions)
+  ]);
   return {
     for: base.expectedGoalsFor + totals.xgDeltaFor + totals.momentumDelta * 0.04,
     against:
@@ -2382,6 +2389,19 @@ export function finalizeMatchdaySession(session) {
 
   expectedGoalsFor = clampRange(round2(expectedGoalsFor), 0.2, 4.0);
   expectedGoalsAgainst = clampRange(round2(expectedGoalsAgainst), 0.1, 4.0);
+
+  // The full-time xG must also be what the player watched accumulate across
+  // the periods. Reusing the final (post-substitution) rate for all 90 minutes
+  // would give credit for changes that only happened late in the game.
+  // Keep legacy/direct-finalize sessions on their original calculation.
+  const playedPeriods = asArray(session.timeline);
+  if (playedPeriods.length > 0 && playedPeriods.every((period) =>
+    Number.isFinite(Number(period?.expectedGoals?.for))
+    && Number.isFinite(Number(period?.expectedGoals?.against))
+  )) {
+    expectedGoalsFor = round2(playedPeriods.reduce((total, period) => total + Number(period.expectedGoals.for), 0));
+    expectedGoalsAgainst = round2(playedPeriods.reduce((total, period) => total + Number(period.expectedGoals.against), 0));
+  }
 
   // Er kampen spilt periode for periode, ER stillingen resultatet — den ble
   // bygget underveis og manageren har sett den. Å rulle et nytt sluttresultat
