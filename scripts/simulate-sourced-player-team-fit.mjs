@@ -206,6 +206,72 @@ const legacySwap = applyMatchdaySubstitution(formerSave, {
 assert.deepEqual(legacySwap.teamFitSnapshot, formerSave.teamFitSnapshot,
   "legacy in-progress match sessions must keep their original tactical snapshot");
 
+
+// Repeated substitutions at a 100-point ceiling must be order-independent.
+// A new sourced CB enters at RCB and later the original LCB is replaced.
+// The uncapped sourced bonus changes twice, but the final profile must still
+// be calculated from the original kickoff rather than a clipped midpoint.
+const otherCBSlot = formation.slots.find((slot) =>
+  slot.position === "CB" && slot.slotId !== cbSlot.slotId);
+assert.ok(otherCBSlot, "test formation must contain both centre-back slots");
+const cappedProfile = {
+  ...liveKickoff.teamFitSnapshot.tacticalProfile,
+  buildUpScore: 100
+};
+const cappedSession = {
+  ...liveKickoff,
+  teamFitSnapshot: {
+    ...liveKickoff.teamFitSnapshot,
+    tacticalProfile: cappedProfile
+  },
+  sourcedSubstitutionBaseline: {
+    ...liveKickoff.sourcedSubstitutionBaseline,
+    tacticalProfile: {
+      ...liveKickoff.sourcedSubstitutionBaseline.tacticalProfile,
+      buildUpScore: 100
+    }
+  }
+};
+const firstCapped = applyMatchdaySubstitution(cappedSession, {
+  outPlayerId: baseLineup[otherCBSlot.slotId].playerId,
+  inPlayerId: "pasnings_innbytter", minute: 40
+});
+const cappedFinal = applyMatchdaySubstitution(firstCapped, {
+  outPlayerId: "pasningssterk_stopper",
+  inPlayerId: "hurtig_innbytter", minute: 60
+});
+const reverseFirst = applyMatchdaySubstitution(cappedSession, {
+  outPlayerId: "pasningssterk_stopper",
+  inPlayerId: "hurtig_innbytter", minute: 40
+});
+const reverseFinal = applyMatchdaySubstitution(reverseFirst, {
+  outPlayerId: baseLineup[otherCBSlot.slotId].playerId,
+  inPlayerId: "pasnings_innbytter", minute: 60
+});
+assert.equal(firstCapped.teamFitSnapshot.tacticalProfile.buildUpScore, 100,
+  "the cap must remain at 100 when sourced supply increases");
+assert.equal(cappedFinal.teamFitSnapshot.tacticalProfile.buildUpScore, 100,
+  "later lost sourced supply must not create phantom penalties at cap");
+assert.deepEqual(
+  Object.fromEntries(["buildUpScore", "restDefenseScore"].map((key) =>
+    [key, cappedFinal.teamFitSnapshot.tacticalProfile[key]])),
+  Object.fromEntries(["buildUpScore", "restDefenseScore"].map((key) =>
+    [key, reverseFinal.teamFitSnapshot.tacticalProfile[key]])),
+  "identical final eleven must have identical live tactical metrics regardless of swap order"
+);
+const cappedSaved = JSON.parse(JSON.stringify(firstCapped));
+assert.deepEqual(cappedSaved.sourcedSubstitutionBaseline,
+  cappedSession.sourcedSubstitutionBaseline,
+  "stable kickoff baseline must survive JSON persistence");
+
+// An old v1 live session still follows v1, without relying on the new field.
+const olderV1 = { ...controlledHalf, sourcedSubstitutionVersion: 1 };
+delete olderV1.sourcedSubstitutionBaseline;
+assert.equal(applyMatchdaySubstitution(olderV1, {
+  outPlayerId: "pasningssterk_stopper",
+  inPlayerId: "hurtig_innbytter", minute: 45
+}).substitutions.length, 1, "an older v1 live session must remain playable");
+
 console.log(JSON.stringify({
   ok: true, completeCount: 11,
   ballPlayingCB: {

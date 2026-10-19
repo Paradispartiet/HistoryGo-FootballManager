@@ -68,7 +68,7 @@ export function sourcedMetricBonusesForAssignment(assignment, tactic) {
   ]));
 }
 
-function aggregateSourcedMetricBonuses(lineup) {
+export function aggregateSourcedMetricBonuses(lineup) {
   return Object.fromEntries(SOURCED_METRICS.map((metric) => [
     metric,
     Math.min(6, asArray(lineup).reduce((sum, entry) =>
@@ -76,11 +76,29 @@ function aggregateSourcedMetricBonuses(lineup) {
   ]));
 }
 
-function sourcedChangesForSwap(lineup, outgoingId, incomingBonuses) {
+function sourcedChangesForSwap(session, outgoingId, incomingBonuses) {
+  const lineup = asArray(session.lineupSnapshot);
   const before = aggregateSourcedMetricBonuses(lineup);
-  const afterLineup = asArray(lineup).map((entry) =>
+  const afterLineup = lineup.map((entry) =>
     entry.playerId === outgoingId ? { ...entry, sourcedMetricBonuses: incomingBonuses } : entry);
   const after = aggregateSourcedMetricBonuses(afterLineup);
+
+  // For v2 sessions, derive each live value from the ORIGINAL kick-off
+  // tactical profile and the CURRENT set of players, not the previous
+  // rounded/clamped value. Repeated substitutions then cannot accumulate
+  // 100-point clipping errors or depend on their order.
+  const kickoff = session?.sourcedSubstitutionBaseline;
+  const currentProfile = session?.teamFitSnapshot?.tacticalProfile;
+  if (session?.sourcedSubstitutionVersion === 2
+      && kickoff?.tacticalProfile && kickoff?.bonuses && currentProfile) {
+    return Object.fromEntries(SOURCED_METRICS.map((metric) => {
+      const target = clamp(num(kickoff.tacticalProfile[metric])
+        + after[metric] - num(kickoff.bonuses[metric]), 0, 100);
+      return [metric, target - clamp(num(currentProfile[metric]), 0, 100)];
+    }));
+  }
+
+  // v1 sessions created before this adjustment keep their existing rules.
   return Object.fromEntries(SOURCED_METRICS.map((metric) => [
     metric, after[metric] - before[metric]
   ]));
@@ -207,9 +225,9 @@ export function evaluateSubstitution({ session, outPlayerId, inPlayerId, minute 
   const misuse = num(fit.misusePenalty);
   // Old saved sessions are deliberately left on their original tactical model.
   const sourcedMetricBonusesAfter = fit.sourcedMetricBonuses || {};
-  const sourcedMetricChanges = session?.sourcedSubstitutionVersion === 1
+  const sourcedMetricChanges = Number(session?.sourcedSubstitutionVersion) >= 1
     && session?.teamFitSnapshot?.tacticalProfile
-    ? sourcedChangesForSwap(session.lineupSnapshot, outPlayerId, sourcedMetricBonusesAfter)
+    ? sourcedChangesForSwap(session, outPlayerId, sourcedMetricBonusesAfter)
     : Object.fromEntries(SOURCED_METRICS.map((metric) => [metric, 0]));
 
   const cost = switchCost(session, minute);
@@ -336,7 +354,7 @@ export function applySubstitution(session, { outPlayerId, inPlayerId, minute = 0
   };
 
   const tacticalProfile = session.teamFitSnapshot?.tacticalProfile;
-  const adjustedProfile = session.sourcedSubstitutionVersion === 1 && tacticalProfile
+  const adjustedProfile = Number(session.sourcedSubstitutionVersion) >= 1 && tacticalProfile
     ? {
         ...tacticalProfile,
         ...Object.fromEntries(SOURCED_METRICS.map((metric) => [

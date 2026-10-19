@@ -1,5 +1,5 @@
 import { createLineupSnapshot, attributeGoal, createMatchPlayerStats } from "./football-player-stats.js";
-import { applySubstitution, createBenchSnapshot, playedPlayersFor, sourcedMetricBonusesForAssignment } from "./football-substitutions.js";
+import { applySubstitution, aggregateSourcedMetricBonuses, createBenchSnapshot, playedPlayersFor, sourcedMetricBonusesForAssignment } from "./football-substitutions.js";
 import { evaluateTrainingDecisionSupport } from "./football-training-week.js";
 import { buildMatchExplanation } from "./football-match-explanation-engine.js";
 import { evaluateHistoricalOpponentMatchup } from "./football-historical-opponent-profiles.js";
@@ -1766,10 +1766,23 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     .filter((assignment) => assignment?.player?.id && assignment?.slot?.slotId)
     .map((assignment) => [assignment.slot.slotId,
       sourcedMetricBonusesForAssignment(assignment, tactic)]));
+  const sourcedLineupSnapshot = createLineupSnapshot(teamFit, {
+    freshnessByPlayerId: conditionByPlayerId || {}
+  }).map((entry) => ({
+    ...entry,
+    sourcedMetricBonuses: sourcedBySlot.get(entry.slotId) || {}
+  }));
+  const kickoffSourcedBonuses = aggregateSourcedMetricBonuses(sourcedLineupSnapshot);
+  const sourcedSubstitutionBaseline = {
+    tacticalProfile: Object.fromEntries(Object.keys(kickoffSourcedBonuses)
+      .map((metric) => [metric, clamp(num(tacticalProfile[metric]))])),
+    bonuses: kickoffSourcedBonuses
+  };
 
   return {
     version: 2,
-    sourcedSubstitutionVersion: 1,
+    sourcedSubstitutionVersion: 2,
+    sourcedSubstitutionBaseline,
     id: `matchday-session-${Date.now()}`,
     createdAt: new Date().toISOString(),
     phase: "pre_match",
@@ -1810,10 +1823,7 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     ),
     // Elleveren slik den står ved avspark. Uten den tilhørte målene ingen, og
     // sesongen kunne ikke fortelle hvem som faktisk leverte.
-    lineupSnapshot: createLineupSnapshot(teamFit, { freshnessByPlayerId: conditionByPlayerId || {} })
-      .map((entry) => ({ ...entry,
-        sourcedMetricBonuses: sourcedBySlot.get(entry.slotId) || {}
-      })),
+    lineupSnapshot: sourcedLineupSnapshot,
     // Benken, med hvor godt hver spiller ville passet på hver av de elleve
     // plassene. Regnet én gang her, slik at et innbytte kan vurderes uten at
     // sesjonen må bære roller og taktikk videre.
