@@ -61,13 +61,51 @@ Prioriteten må aldri automatisk generere eller estimere styrker:
 4. **covered**: har allerede en registrert effektiv styrke. Disse kan fortsatt
    ha svak proveniens og dermed trenge egen kildekontroll.
 
-Pilotproduksjon begynner med **Sandefjord**, så **Aalesund**, med én egen PR
-per klubb. Bruk CSV-rapportens klubbfilter og kontroller hver konkret
-ferdighetspåstand mot kildehierarkiet. Et manglende funn skal aldri erstattes
-med antatt spillestil, klubbstatus, meritter, classHeight eller målstatistikk.
+Sandefjord og Aalesund er piloter for skillet mellom varige ferdighetsbeskrivelser og enkelthendelser. Bruk CSV-rapportens klubbfilter og kontroller hver konkret ferdighetspåstand mot kildehierarkiet. Et manglende funn skal aldri erstattes med antatt spillestil, klubbstatus, meritter, classHeight eller målstatistikk.
 
 ## Avgrensning
 
 Auditen endrer ingen spilleridentiteter, klubbtilknytninger, posisjoner,
 styrker, kampmotor eller skjulte totalscorer. CI validerer registerets
 integritet, ikke et måltall for antall ferdighetsbeskrivelser.
+
+## Sandefjord: kvalitetsrevisjon 19.10.2026
+
+Revisjonen gjelder Sandefjords 41 eksklusive Jotun-profiler i P1. Før passet
+hadde 40 profiler `DOKUMENTERT`-status, men flere av disse var basert på
+en enkelt kampsekvens: én redning, én heading, ett frispark eller én dribling.
+Aalesunds allerede innførte kildekrav brukes også her, uten å endre
+spilleridentiteter, posisjoner, klubbtilknytning eller historiens kamphendelser.
+
+| Kildekategori | Sandefjord etter revisjon | Hvordan spillet bruker den |
+| --- | ---: | --- |
+| DOKUMENTERT: varig spillerstyrke | 19 | Kan gi direkte attributtløft |
+| HENDELSE: én konkret kampsekvens | 19 | Historisk belegg bevart, ingen direkte attributtløft |
+| DELVIS: sekundær omtale uten verifisert original | 2 | Uavklart; ingen direkte attributtløft |
+| THIN-SOURCE | 1 | Modellerte posisjons-/rolleverdier, ingen oppdiktet kilde |
+| **Unike profiler** | **41** | Samme identiteter som før |
+
+De 19 kampsekvensene beholder opprinnelig kilde, spiller-ID og tidligere
+ferdighetstoken under `P1_NEW_EVENT_ONLY`. To Wikipedia-gjengivelser
+(Enric Vallès og Thomas Eftedal) står i `P1_NEW_PARTIAL` til originalkilde
+kan kontrolleres. De 19 varige styrkeprofilene har nå både `evidenceKind`
+og kildeforankret `playingStyle`.
+
+**Ny taktisk dybde, ikke flere antakelser:** Filip Ottosson har nå
+`passing_range`, `game_reading` og `tempo_control` i tillegg til de
+tre tidligere styrkene. Sandefjords trenerbeskrivelse fra 2022 beskriver
+lange/korte presise pasninger, overblikk og spilleforståelse; klubbomtalen
+fra mars 2024 beskriver bevisst valg mellom lange og korte pasninger.
+Kilder: [signeringsomtale 2022](https://www.sandefjordfotball.no/nyheter/filip-ottosson-har-signert-for-sf)
+og [klubbvurdering mars 2024](https://www.sandefjordfotball.no/nyheter/bunnsolid-generalprove-i-skien).
+
+`scripts/audit-p1-source-claims.mjs` kontrollerer identitetsdekning og
+at en tidligere engangshendelse (Jacob Storeviks reaksjonsredning) ikke lenger
+er en kildebelagt ferdighet. Den sammenligner dessuten den faktiske
+`calculateRoleFit`-funksjonen for Ottosson før og etter de nye, kildebelagte
+ferdighetene, med øvrige preferanser holdt konstante.
+
+Dette er en **kvalitetsforbedring med lavere antall dokumenterte styrker**,
+ikke et mål om å nå en prosentkvote. Neste bolker prioriterer bredde mellom
+spillertyper i de øvrige Eliteserie-klubbene og deretter OBOS-ligaen; en
+enkelthendelse skal ikke brukes for å få dekningsprosenten til å se bedre ut.
