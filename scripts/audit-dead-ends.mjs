@@ -764,7 +764,10 @@ stage("18. Statistikk");
   // Sjekker INTENSJONEN, ikke den nøyaktige teksten: snapshotet bygges fra
   // teamFit. Argumentlista utvides når nye lag kobles på (friskhet ved avspark),
   // uten at noe faktisk er galt.
-  check("kampmotoren tar vare på elleveren ved avspark", /lineupSnapshot: createLineupSnapshot\(teamFit[,)]/.test(engine));
+  check("kampmotoren tar vare på elleveren ved avspark",
+    /lineupSnapshot:\s*createLineupSnapshot\(teamFit[,)]/.test(engine)
+    || (/const sourcedLineupSnapshot = createLineupSnapshot\(teamFit[,)]/.test(engine)
+      && /lineupSnapshot:\s*sourcedLineupSnapshot/.test(engine)));
   check("kampresultatet bærer spillerstatistikk", /playerStats: createMatchPlayerStats\(/.test(engine));
   check("app.js akkumulerer statistikken per sesong", /registerMatchInPlayerStats\(/.test(app));
   check("statistikken er isolert per modus", /"playerSeasonStats"/.test(modeSessions));
