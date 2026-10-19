@@ -12,7 +12,8 @@ const roles = read("football_roles.json").roles;
 const tactics = read("football_tactics.json").tactics;
 const tactic = {
   ...tactics.find((item) => item.id === "central_possession_4231"),
-  tags: ["possession", "structured_build_up", "high_line", "rest_defense"]
+  // Leave room below the 100-point cap so sourced CB qualities stay visible.
+  tags: ["high_line", "rest_defense"]
 };
 assert.ok(formation?.slots?.length === 11 && tactic.id, "fixture must use actual formations/tactics");
 
@@ -54,6 +55,7 @@ const evaluate = (player, chosenTactic = tactic) => {
 
 const passer = evaluate(sourced("pasningssterk_stopper", ["passing_range", "composure"]));
 const fast = evaluate(sourced("hurtig_stopper", ["pace", "game_reading"]));
+console.log("Pre-adjustment tactical comparison:", JSON.stringify({ passer: passer.baseMetrics, fast: fast.baseMetrics, sourcedPasser: passer.sourcedSkillTendencies, sourcedFast: fast.sourcedSkillTendencies }));
 assert.ok(passer.baseMetrics.buildUpScore > fast.baseMetrics.buildUpScore,
   "documented passing must improve actual team build-up for identical CB role");
 assert.ok(fast.baseMetrics.restDefenseScore > passer.baseMetrics.restDefenseScore,
