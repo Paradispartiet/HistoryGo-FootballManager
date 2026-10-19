@@ -572,6 +572,241 @@ const documented = [
     source: "https://www.eurosport.no/fotball/joacims-blogg/2020/dette-mangler-bohinen-trodde-han-skulle-ha-en-litt-bedre-stall_sto7690243/story.shtml",
     supportingSources: ["https://www.obos-ligaen.no/nyheter/fridjonsson-kares-til-arets-spiller-i-obos-ligaen", "https://www.aafk.no/nyheter/malrikt-da-aalesund-slo-hodd"]
   },
+  // KFUM: 26 klubbhistoriske, spillerindividuelle styrkeprofiler.
+  {
+    playerId: "robin_rasch",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En spillfordeler med godt overblikk og presis pasningsbruk som kan styre lagets offensive oppbygging.",
+    strengths: ["vision","simple_passing"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En spillfordeler med godt overblikk og presis pasningsbruk som kan styre lagets offensive oppbygging.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "jorgen_hammer",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En midtstopper som bryter foran angriperne, er sterk i luftrommet og opptrer med autoritet.",
+    strengths: ["interceptions","heading","leadership"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En midtstopper som bryter foran angriperne, er sterk i luftrommet og opptrer med autoritet.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "erlend_skaga",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En fotballklok spiller med høy fart og raske bevegelser med ballen på små flater.",
+    strengths: ["pace","game_reading","agility"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En fotballklok spiller med høy fart og raske bevegelser med ballen på små flater.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "torstein_andersen_aase",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En kraftfull spiss med overblikk og særskilt evne til å komme i avslutningsposisjon.",
+    strengths: ["strength","vision","box_presence"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En kraftfull spiss med overblikk og særskilt evne til å komme i avslutningsposisjon.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "thomas_saether",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En balansert og hurtig midtstopper med særlig gode defensive ferdigheter i én-mot-én-situasjoner.",
+    strengths: ["balance","one_vs_one","pace"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En balansert og hurtig midtstopper med særlig gode defensive ferdigheter i én-mot-én-situasjoner.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "eivind_saether",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En oppofrende og aggressiv kapteinstype som også utmerker seg i hodespillet.",
+    strengths: ["aggression","bravery","leadership","heading"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En oppofrende og aggressiv kapteinstype som også utmerker seg i hodespillet.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "hakon_haga",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En drivende ballfører som samtidig har overblikk og evne til å sette medspillere i spill.",
+    strengths: ["ball_carrying","vision"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En drivende ballfører som samtidig har overblikk og evne til å sette medspillere i spill.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "john_rasmussen",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En robust og samlende midtstopper med stor luftstyrke og tydelig lederautoritet.",
+    strengths: ["strength","heading","leadership"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En robust og samlende midtstopper med stor luftstyrke og tydelig lederautoritet.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "dennis_obeng",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En hurtig, driblesterk og fysisk krevende angrepsspiller som truer forsvarere på flere måter.",
+    strengths: ["pace","dribbling","duels"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En hurtig, driblesterk og fysisk krevende angrepsspiller som truer forsvarere på flere måter.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "conrad_aslund",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En fysisk røff spiss med god balanse, som kan holde på ballen under press.",
+    strengths: ["strength","balance"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En fysisk røff spiss med god balanse, som kan holde på ballen under press.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "sindre_ek",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En kantspiller som utmerker seg med vedvarende løpskapasitet og arbeidsradius.",
+    strengths: ["stamina"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En kantspiller som utmerker seg med vedvarende løpskapasitet og arbeidsradius.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "pal_pernes",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En sterk avslutter som også er kjent for effektive skudd fra distanse.",
+    strengths: ["finishing","long_shots"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En sterk avslutter som også er kjent for effektive skudd fra distanse.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "stale_andersen",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En ballsentral med balanse og overblikk som kan flytte spillet med presise langpasninger.",
+    strengths: ["vision","balance","passing_range"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En ballsentral med balanse og overblikk som kan flytte spillet med presise langpasninger.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "jon_andre_saether",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En spiss som dokumentert binder sammen angrepsspillet, uten at målstatistikken brukes som ferdighetsbevis.",
+    strengths: ["combination_play"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En spiss som dokumentert binder sammen angrepsspillet, uten at målstatistikken brukes som ferdighetsbevis.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "christian_dymbe",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En hurtig og kontant midtstopper som kan håndtere løpsdueller bak forsvaret.",
+    strengths: ["pace"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En hurtig og kontant midtstopper som kan håndtere løpsdueller bak forsvaret.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "cato_valoy",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En ekstremt rask angriper som bruker tempoet til gjentatte løp bak forsvarslinjen.",
+    strengths: ["pace","runs_behind"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En ekstremt rask angriper som bruker tempoet til gjentatte løp bak forsvarslinjen.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "knut_lie",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En teknisk midtbanespiller med god ballbehandling på små flater og gode avslutninger.",
+    strengths: ["first_touch","finishing"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En teknisk midtbanespiller med god ballbehandling på små flater og gode avslutninger.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "nicolai_bonke_hagen",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En instinktiv dribler og ballfører som skaper offensive muligheter med egne gjennombrudd.",
+    strengths: ["dribbling","ball_carrying","chance_creation"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En instinktiv dribler og ballfører som skaper offensive muligheter med egne gjennombrudd.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "rune_hansen",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En teknisk trygg ballspiller som beholder ro og kontroll i pressede situasjoner.",
+    strengths: ["first_touch","composure"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En teknisk trygg ballspiller som beholder ro og kontroll i pressede situasjoner.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "bjorn_frode_torp",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En svært hurtig og klok midtstopper som kan lese spillet og gripe inn tidlig.",
+    strengths: ["pace","game_reading"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En svært hurtig og klok midtstopper som kan lese spillet og gripe inn tidlig.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "ivar_stromsmo",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En lynrask dribler med dokumentert evne til lange, direkte sprintdrag.",
+    strengths: ["pace","dribbling"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En lynrask dribler med dokumentert evne til lange, direkte sprintdrag.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "marius_brevig",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En back med gjennomgående god fysisk kapasitet gjennom en lengre karriereperiode.",
+    strengths: ["stamina"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En back med gjennomgående god fysisk kapasitet gjennom en lengre karriereperiode.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "oyvind_monn_iversen",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En klok midtbanespiller med tydelig driblekompetanse fra klubbens storhetstid.",
+    strengths: ["dribbling","game_reading"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En klok midtbanespiller med tydelig driblekompetanse fra klubbens storhetstid.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "kenneth_rakvaag",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En keeper med spesielt god reaksjonsevne i redningssituasjoner.",
+    strengths: ["reflexes"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En keeper med spesielt god reaksjonsevne i redningssituasjoner.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "stian_dewahl",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En keeper som skiller seg ut gjennom fotarbeid og presis oppbygging bakfra.",
+    strengths: ["distribution"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En keeper som skiller seg ut gjennom fotarbeid og presis oppbygging bakfra.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
+  {
+    playerId: "arnstein_langnes",
+    placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "En keeper med fint balltilslag og en tydelig samlende lederrolle.",
+    strengths: ["distribution","leadership"],
+    claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En keeper med fint balltilslag og en tydelig samlende lederrolle.",
+    source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
+  },
 
 ];
 
