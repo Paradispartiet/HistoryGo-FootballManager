@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { calculateRoleFit } from "../src/football-fit-engine.js";
+import { calculateRoleFit, calculatePlayerMatchFit } from "../src/football-fit-engine.js";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -76,7 +76,7 @@ for (const record of P1_NEW_DOCUMENTED) {
   ok(/^https:\/\//.test(record.source || ""), `${record.playerId}: documented claim needs an https source`);
   // Re-review of AaFK and Sandefjord: a match event cannot masquerade as
   // a persistent player skill. Both reviewed clubs require playing-style context.
-  if (["color_line_stadion", "jotun_arena"].includes(record.placeId)) {
+  if (["color_line_stadion", "jotun_arena", "kfum_arena"].includes(record.placeId)) {
     ok(["direct_appraisal", "editorial_appraisal", "historical_appraisal", "period_appraisal", "season_statistics"].includes(record.evidenceKind),
       `${record.playerId}: reviewed club durable claim needs non-event evidenceKind`);
     ok(typeof record.playingStyle === "string" && record.playingStyle.trim().length >= 35,
@@ -164,6 +164,40 @@ const aalesundEvents = P1_NEW_EVENT_ONLY.filter((r) => r.placeId === "color_line
 ok(aalesundDurable + aalesundEvents >= 46,
   "AaFK quality review must retain all 46 previously sourced player identities");
 ok(statusCounts.DELVIS === P1_NEW_PARTIAL.length, "DELVIS count drift");
+
+// KFUM's official all-time player descriptions are direct historical evidence.
+// Distinct position/role skillsets must survive the P1 overlay, and a same-role
+// player swap must change the EXISTING fit engine rather than a display label.
+const kfumProfiles = P1_NEW_DOCUMENTED.filter((r) => r.placeId === "kfum_arena");
+ok(kfumProfiles.length === 30, "KFUM: original four plus 26 historic profiles");
+const byKfumId = new Map(kfumProfiles.map((r) => [r.playerId, r]));
+ok(byKfumId.size === 30, "KFUM: no duplicate historical profiles");
+for (const [playerId, skill] of [
+  ["robin_rasch", "vision"], ["jorgen_hammer", "interceptions"],
+  ["cato_valoy", "runs_behind"], ["kenneth_rakvaag", "reflexes"],
+  ["stale_andersen", "passing_range"], ["stian_dewahl", "distribution"]
+]) {
+  ok(asArray(byKfumId.get(playerId)?.strengths).includes(skill),
+    "KFUM: individual documented skill " + playerId + "/" + skill);
+}
+const midfieldRole = readJson("data/football_roles.json").roles.find((r) => r.id === "deep_playmaker");
+const neutralMidfielder = (id) => ({
+  id, name: id, classHeight: 85,
+  naturalPositions: ["CM"], usablePositions: [], poorFits: [],
+  preferredRoles: [], needs: [], likesTactics: [], dislikesTactics: [],
+  archetypes: [], warningWhenMisused: "",
+  strengths: [...byKfumId.get(id).strengths]
+});
+const kfumTactic = { id: "possession", tags: ["possession"] };
+const raschAsPlaymaker = calculatePlayerMatchFit(
+  neutralMidfielder("robin_rasch"), { position: "CM" }, midfieldRole, kfumTactic);
+const andersenAsPlaymaker = calculatePlayerMatchFit(
+  neutralMidfielder("stale_andersen"), { position: "CM" }, midfieldRole, kfumTactic);
+ok(andersenAsPlaymaker.roleFit > raschAsPlaymaker.roleFit,
+  "KFUM: source-backed passing range must change role fit on a same-position player swap");
+ok(andersenAsPlaymaker.matchScore > raschAsPlaymaker.matchScore,
+  "KFUM: sourced player differences must also change existing individual match fit");
+
 
 // Sandefjord source-revision: all 40 previously documented identities remain
 // traceable (19 durable, 19 single-match historical events, 2 unresolved
