@@ -180,6 +180,7 @@ jobs:
           npm run sim:role-familiarity
           npm run sim:league-season
           npm run sim:mode-isolation
+          npm run sim:player-identity-migration
           npm run sim:first-time
           npm run sim:first-run-real-seed
           npm run sim:first-run-football-book-qa

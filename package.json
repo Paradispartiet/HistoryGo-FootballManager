@@ -16,6 +16,7 @@
     "sim:mini-season": "node scripts/simulate-mini-season.mjs",
     "sim:league-season": "node scripts/simulate-real-league-season.mjs",
     "sim:mode-isolation": "node scripts/simulate-mode-isolation.mjs",
+    "sim:player-identity-migration": "node scripts/simulate-player-identity-migration.mjs",
     "build": "tsc",
     "stage:pages": "node scripts/stage-pages-artifact.mjs",
     "audit:pages-artifact": "node scripts/audit-pages-artifact.mjs",

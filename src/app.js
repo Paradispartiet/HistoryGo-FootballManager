@@ -1,3 +1,4 @@
+import { migrateSavedPlayerIdentityStorage, normalizePlayablePlayerCatalog } from "./football-player-identity.js";
 import { FOOTBALL_POSITIONS } from "./football-fit-engine.js";
 import {
   buildSelectedSquadPlayerIds,
@@ -17476,7 +17477,7 @@ async function loadStartupData() {
     loadJson(DATA_PATHS.scenarios).catch(() => null)
   ]);
 
-  state.players = playersData.players || [];
+  state.players = normalizePlayablePlayerCatalog(playersData.players || []);
   state.scenarios = normalizeScenarios(scenariosData);
   state.tournamentDefinitions = Array.isArray(tournamentsData?.tournaments) ? tournamentsData.tournaments : [];
   state.tournamentNations = Array.isArray(tournamentsData?.nations) ? tournamentsData.nations : [];
@@ -17775,6 +17776,8 @@ async function init() {
   const managerEngineReady = preloadManagerEngine();
 
   try {
+    // Repair historical IDs before any league save or mode session is hydrated.
+    migrateSavedPlayerIdentityStorage(localStorage);
     await loadStartupData();
     await hydratePersistedUiState();
     runStartupValidation();
