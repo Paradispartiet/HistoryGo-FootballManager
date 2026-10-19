@@ -89,3 +89,10 @@ Følgende systemer er sannhetskilder:
 Kampmotoren velger fortsatt to situasjoner fra den aktive formasjonsfamilien og én fra motstanderens spillestil. Utvalget tar nå også hensyn til registrert kampkontekst (`matchId`, `round`, `homeAway`) når dette er tilgjengelig. Dette gjør at møter med samme motstander ikke alltid har identiske valgsituasjoner. Det sterkest prioriterte situasjonsbehovet beholdes, mens den andre situasjonen kan variere mellom de tre øverste øvrige. For bortekamper har de fem etablerte motstanderstilene hver en egen alternativ, fotballfaglig situasjon, med eksisterende checks, risiko og effekter. Dette er generiske spillsituasjoner, ikke historiske faktapåstander om navngitte klubber.
 
 Ingen nye taktiske poengsummer, styrkejusteringer, lagringsnøkler eller separate kampmotorer er innført. Utvalget er deterministisk for samme kontekst og kontrolleres i den eksisterende `sim:matchday`-testen.
+
+
+## Løpende bytter og ærlig xG (19. oktober 2026)
+
+Innbytteeffekter er nå med i beregningen av **neste spilte kampperiode**, ikke bare i totalsummen etter kampen. Et sent bytte påvirker ikke allerede spilte minutter. Sluttrapporten summerer de samme periodenes xG som spilleren så bygge seg opp gjennom kampen. Historiske kampsesjoner uten periodedata bruker fortsatt den tidligere sluttberegningen.
+
+Ukas treningsråd og rapport vurderer den faktiske ligaklubbens `baseStyleId` når den finnes, ikke bare klubb-ID. Motstanderstilene beskrives i den eksisterende klubbprofilkatalogen; vi tillegger ikke klubber nye taktikker.

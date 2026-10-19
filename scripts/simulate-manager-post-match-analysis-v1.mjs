@@ -38,7 +38,10 @@ function resultFixture(outcome = "win", { injury = false } = {}) {
       ]
     },
     substitutions: [
-      { minute: 66, playerOutName: "Kari Kant", playerInName: "Sara Hurtig" }
+      { minute: 66, playerOutName: "Kari Kant", playerInName: "Sara Hurtig", tone: "positive", reasons: ["Sara gir oss friske bein på kanten."] }
+    ],
+    planChanges: [
+      { fromPlanName: "Høyt press", toPlanName: "Lavere blokk", tone: "negative", feedback: "Omstillingen åpnet rom mellom lagdelene." }
     ],
     decisions: [
       {
@@ -121,6 +124,10 @@ check("positive, negative og nøytrale grep telles uten ny vurdering",
 check("målscorer vises", winModel.goals[0]?.label.includes("Ada Angriper"));
 check("målgivende vises", winModel.goals[0]?.detail.includes("Mina Midtbane"));
 check("spillerbidrag aggregeres uten overall", winModel.contributors[0]?.detail === "2 mål");
+check("etterkamp viser faktisk innbytte og vurdering",
+  winModel.substitutions[0]?.label.includes("Sara Hurtig") && winModel.substitutions[0]?.detail.includes("friske bein"));
+check("etterkamp viser faktisk omstilling og kostnaden",
+  winModel.planChanges[0]?.label.includes("Lavere blokk") && winModel.planChanges[0]?.detail.includes("rom mellom lagdelene"));
 check("klubbkonsekvenser vises", winModel.consequences.effects.length === 3);
 check("formasjonstilvenning vises", winModel.consequences.familiarityLabel.includes("+3"));
 check("lagret treningsrapport føres til presentasjonsmodellen", winModel.trainingEvidence?.focusId === "pressing");

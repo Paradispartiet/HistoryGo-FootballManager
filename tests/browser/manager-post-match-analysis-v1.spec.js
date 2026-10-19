@@ -22,7 +22,8 @@ function reportFixture() {
         { minute: 78, scorerName: "Ada Angriper", assistName: null }
       ]
     },
-    substitutions: [{ minute: 66, playerOutName: "Kari Kant", playerInName: "Sara Hurtig" }],
+    substitutions: [{ minute: 66, playerOutName: "Kari Kant", playerInName: "Sara Hurtig", tone: "positive", reasons: ["Innbytteren kom inn med friske bein."] }],
+    planChanges: [{ fromPlanName: "Høyt press", toPlanName: "Lavere blokk", tone: "negative", feedback: "Omstillingen ga større mellomrom." }],
     decisions: [
       {
         eventTitle: "Etter pause", optionLabel: "Press høyere",
@@ -122,6 +123,9 @@ test("etterkampen viser resultat, forklaring, managergrep, spillerbidrag og kons
   await expect(page.locator(".matchday-post-match-decision-step")).toHaveCount(2);
   await expect(page.locator(".matchday-post-match-decision-step").first()).toContainText("Press høyere");
   await expect(page.locator(".matchday-post-match-decision-step").last()).toContainText("Grepet slo feil");
+  await expect(page.locator(".matchday-post-match-adjustment")).toHaveCount(2);
+  await expect(page.locator(".matchday-post-match-adjustment").first()).toContainText("Lavere blokk");
+  await expect(page.locator(".matchday-post-match-adjustment").last()).toContainText("friske bein");
   await expect(page.locator(".matchday-post-match-panel")).toHaveCount(2);
   await expect(page.locator(".matchday-post-match-event")).toHaveCount(2);
   await expect(page.locator(".matchday-post-match-effect")).toHaveCount(3);
@@ -141,6 +145,7 @@ test("etterkampen har ingen mobil overflow", async ({ page }) => {
   await expectNoHorizontalOverflow(page);
   await expect(page.locator(".matchday-post-match-primary")).toBeVisible();
   await expect(page.locator(".matchday-post-match-decision-step")).toHaveCount(2);
+  await expect(page.locator(".matchday-post-match-adjustment")).toHaveCount(2);
 });
 
 test("etterkampen har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) => {

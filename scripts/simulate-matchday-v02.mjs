@@ -29,6 +29,7 @@ import {
   getFormationFamily,
   generateMatchdayEvents,
   createMatchdaySession,
+  advanceMatchClock,
   resolveMatchdayDecision,
   finalizeMatchdaySession,
   getSessionEventIndex
@@ -389,6 +390,57 @@ check("History Go-hint finnes", typeof result.historyGoHint === "string" && resu
 const report = createMatchReport(result);
 check("createMatchReport tar med v0.2-feltene", report.decisions.length === 3 && Boolean(report.formationVerdict) && Boolean(report.opponentStyle));
 check("treningshypotesen følger urørt til resultat og rapport", result.trainingExerciseHypothesis?.setup === session.trainingExerciseHypothesis.setup && report.trainingExerciseHypothesis === result.trainingExerciseHypothesis);
+
+// --- 3a) Live match: substitutions must affect the actual next period -----
+console.log("\nLive bytter og xG som stemmer med kampforløpet:");
+const liveBaseline = createMatchdaySession({
+  teamFit: strongFit, formation: wmFormation, tactic,
+  activeClassifications: [], coachContext: strongCoach, opponent: pickOpponentProfile(1)
+});
+const firstPeriod = advanceMatchClock(liveBaseline);
+const goodSubEffect = {
+  xgDeltaFor: 1.2, xgDeltaAgainst: -0.4,
+  momentumDelta: 1, riskDelta: 0, tacticalClarityDelta: 0
+};
+const badSubEffect = {
+  xgDeltaFor: -0.8, xgDeltaAgainst: 0.8,
+  momentumDelta: -1, riskDelta: 2, tacticalClarityDelta: -1
+};
+const withGoodSub = {
+  ...firstPeriod, substitutions: [{ inPlayerId: "reserve_a", effects: goodSubEffect }]
+};
+const withBadSub = {
+  ...firstPeriod, substitutions: [{ inPlayerId: "reserve_a", effects: badSubEffect }]
+};
+const goodNextPeriod = advanceMatchClock(withGoodSub);
+const badNextPeriod = advanceMatchClock(withBadSub);
+const normalNextPeriod = advanceMatchClock(firstPeriod);
+const nextIndex = firstPeriod.timeline.length;
+check("positivt innbytte øker xG i neste spilte periode",
+  goodNextPeriod.timeline[nextIndex].expectedGoals.for > normalNextPeriod.timeline[nextIndex].expectedGoals.for);
+check("negativt innbytte senker xG i neste spilte periode",
+  badNextPeriod.timeline[nextIndex].expectedGoals.for < normalNextPeriod.timeline[nextIndex].expectedGoals.for);
+check("risikabelt innbytte øker xG imot i neste spilte periode",
+  badNextPeriod.timeline[nextIndex].expectedGoals.against > normalNextPeriod.timeline[nextIndex].expectedGoals.against);
+check("innbytte før neste periode endrer ikke xG allerede spilt",
+  goodNextPeriod.timeline[0].expectedGoals.for === firstPeriod.timeline[0].expectedGoals.for);
+
+let completeLive = goodNextPeriod;
+while (completeLive.timeline.length < completeLive.events.length + 1) {
+  completeLive = advanceMatchClock(completeLive);
+}
+const completeResult = finalizeMatchdaySession(completeLive);
+const summedPeriodXg = completeLive.timeline.reduce((a, period) => ({
+  for: a.for + period.expectedGoals.for,
+  against: a.against + period.expectedGoals.against
+}), { for: 0, against: 0 });
+check("sluttrapportens xG er summen av de faktiske kampperiodene",
+  Math.abs(completeResult.expectedGoals.for - Math.round(summedPeriodXg.for * 100) / 100) < 0.001
+  && Math.abs(completeResult.expectedGoals.against - Math.round(summedPeriodXg.against * 100) / 100) < 0.001);
+check("sluttrapporten inkluderer innbytteeffekt nøyaktig én gang",
+  Math.abs(completeResult.decisionTotals.xgDeltaFor - goodSubEffect.xgDeltaFor) < 0.001);
+check("direkte sluttberegning uten kampklokke er fortsatt støttet",
+  Number.isFinite(result.expectedGoals.for) && result.expectedGoals.for > 0);
 
 // --- 3b) Match Explanation v1.5 ---------------------------------------------
 console.log("\nKampforklaring (Match Explanation v1.5):");

@@ -64,3 +64,8 @@ Scenen viser skade- og belastningssignaler når de finnes i kampens eksisterende
 - `sim:manager-post-match-analysis-v1`
 - Playwright: struktur, navigasjon, mobil overflow, WCAG 2 A/AA og 768 px visuell baseline
 - simulering av seier, uavgjort, tap og kamp med eksisterende skadesignal
+
+
+## Reelle innbytter og planbytter (19. oktober 2026)
+
+Etterkampen viser nå en kompakt oversikt over **registrerte kampplanendringer og innbytter**, inkludert navn på byttene og motorens lagrede feedback/begrunnelser. Effektene regnes ikke på nytt av UI-et. Når eldre lagringer mangler vurderinger, vises en nøktern melding fremfor en oppdiktet dom. Innbyttene påvirker også den løpende sjanseberegningen fra byttet gjøres, og sluttrapporten summerer xG fra de faktiske kampperiodene.
