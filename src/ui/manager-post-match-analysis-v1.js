@@ -269,8 +269,18 @@ export function createPostMatchAnalysisModel({ lastMatch = null, report = null }
     goals,
     contributors,
     substitutions: list(lastMatch.substitutions).slice(0, 5).map((entry) => ({
+      kind: "Innbytte",
       label: `${text(entry?.playerOutName || entry?.outName, "Spiller ut")} → ${text(entry?.playerInName || entry?.inName, "Spiller inn")}`,
-      detail: number(entry?.minute) > 0 ? `${number(entry.minute)}. minutt` : text(entry?.reason, "Bytte")
+      minute: number(entry?.minute) > 0 ? `${number(entry.minute)}. minutt` : "",
+      tone: ["positive", "neutral", "negative"].includes(entry?.tone) ? entry.tone : "neutral",
+      detail: text(list(entry?.reasons).join(" "), text(entry?.reason, "Innbytte registrert uten vurdering."))
+    })),
+    planChanges: list(lastMatch.planChanges).slice(0, 5).map((change) => ({
+      kind: "Kampplan",
+      label: `${text(change?.fromPlanName, "Startplan")} → ${text(change?.toPlanName, "Ny plan")}`,
+      minute: "",
+      tone: ["positive", "neutral", "negative"].includes(change?.tone) ? change.tone : "neutral",
+      detail: text(change?.feedback, "Kampplanendring registrert uten vurdering.")
     })),
     consequences,
     trainingEvidence,
@@ -413,6 +423,28 @@ export function renderPostMatchAnalysis(model, onOpenTarget) {
     decisions.append(sequence);
   }
   section.append(decisions);
+
+  // The match engine already records the consequences of plan switches and
+  // substitutions. They must be readable after the game, not only as tiny
+  // entries in the live match log. Do not invent verdicts for old saves.
+  const adjustments = [...model.planChanges, ...model.substitutions];
+  if (adjustments.length) {
+    const panel = node("section", "matchday-post-match-adjustments");
+    panel.append(node("div", "matchday-post-match-section-head", "Kampplan og innbytter"));
+    const adjustmentList = node("div", "matchday-post-match-adjustment-list");
+    adjustments.forEach((change) => {
+      const item = node("article", "matchday-post-match-adjustment");
+      item.dataset.tone = change.tone;
+      item.append(
+        node("span", "", [change.kind, change.minute].filter(Boolean).join(" · ")),
+        node("strong", "", change.label),
+        node("p", "", change.detail)
+      );
+      adjustmentList.append(item);
+    });
+    panel.append(adjustmentList);
+    section.append(panel);
+  }
 
   const lower = node("div", "matchday-post-match-lower");
   const players = node("section", "matchday-post-match-panel");
