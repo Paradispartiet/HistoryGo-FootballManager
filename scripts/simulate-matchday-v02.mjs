@@ -206,6 +206,38 @@ familyExpectations.forEach(([id]) => {
   check(`${id}: familiehendelser har sesongdybde utover gamle tre`, familyEventIds.size >= 4);
 });
 
+// Returkamper: dokumentert kampkontekst velger nye situasjoner uten ny motor,
+// og den konkrete motstanderstilen får en egen bortekampsituasjon.
+const returnFormation = getFormationById("classic_442");
+const returnMetrics = {
+  balanceScore: 50, widthScore: 50, depthScore: 50, buildUpScore: 50,
+  pressScore: 50, restDefenseScore: 50, roleFitAverage: 50, relationshipScore: 50
+};
+const returnOpponent = { ...OPPONENT_PROFILES[0], id: "club_example", baseStyleId: "high_press_opponent" };
+const fixtureSequences = new Set();
+for (let round = 1; round <= 30; round += 1) {
+  const fixture = { ...returnOpponent, round, homeAway: round <= 15 ? "home" : "away" };
+  const events = generateMatchdayEvents({
+    formation: returnFormation, tacticalProfile: returnMetrics, opponent: fixture
+  });
+  fixtureSequences.add(events.map((event) => event.id).join("|"));
+  const repeat = generateMatchdayEvents({
+    formation: returnFormation, tacticalProfile: returnMetrics, opponent: fixture
+  });
+  check(`runde ${round}: hendelser er stabile ved identisk terminlistekontekst`,
+    JSON.stringify(events) === JSON.stringify(repeat));
+  check(`runde ${round}: tre konkrete valgsituasjoner`,
+    events.length === 3 && events.every((event) => event.options.length >= 2));
+  check(`runde ${round}: klubbens pressprofil beholdes`,
+    events[1].id === (round <= 15 ? "opp_high_press" : "opp_press_second_balls"));
+}
+check("30 runder mot samme stil kan gi minst tre ulike beslutningsrekker", fixtureSequences.size >= 3,
+  String(fixtureSequences.size));
+const oldStyleEvents = generateMatchdayEvents({
+  formation: returnFormation, tacticalProfile: returnMetrics, opponent: OPPONENT_PROFILES[0]
+});
+check("eldre kall uten kampkontekst bruker original situasjon", oldStyleEvents[1]?.id === "opp_high_press");
+
 // Analyseplan: fokus skal endre HVA kampen løfter fram, aldri option-impact.
 console.log("\nMotstanderanalyse → kampsituasjon:");
 const neutralProfile = {
