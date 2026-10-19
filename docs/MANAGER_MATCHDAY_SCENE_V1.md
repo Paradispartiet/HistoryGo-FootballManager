@@ -82,3 +82,10 @@ Følgende systemer er sannhetskilder:
 - scene-audit krever presentasjonsmodul, foldet dybde, permanente CI-porter og uendrede motorgrenser;
 - Playwright kontrollerer scenehierarki, første blokkering, kampforberedelse, mobil overflow, WCAG 2 A/AA og visuell baseline;
 - eksisterende kamp-, liga-, trening-, spillerform-, managergrep- og flyttester skal fortsatt bestå.
+
+
+## Returkampvariasjon (19. oktober 2026)
+
+Kampmotoren velger fortsatt to situasjoner fra den aktive formasjonsfamilien og én fra motstanderens spillestil. Utvalget tar nå også hensyn til registrert kampkontekst (`matchId`, `round`, `homeAway`) når dette er tilgjengelig. Dette gjør at møter med samme motstander ikke alltid har identiske valgsituasjoner. Det sterkest prioriterte situasjonsbehovet beholdes, mens den andre situasjonen kan variere mellom de tre øverste øvrige. For bortekamper har de fem etablerte motstanderstilene hver en egen alternativ, fotballfaglig situasjon, med eksisterende checks, risiko og effekter. Dette er generiske spillsituasjoner, ikke historiske faktapåstander om navngitte klubber.
+
+Ingen nye taktiske poengsummer, styrkejusteringer, lagringsnøkler eller separate kampmotorer er innført. Utvalget er deterministisk for samme kontekst og kontrolleres i den eksisterende `sim:matchday`-testen.

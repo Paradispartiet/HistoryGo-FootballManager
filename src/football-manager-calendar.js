@@ -120,6 +120,7 @@ function eventsForDay(dayIndex, {
   opponent,
   opponentName,
   trainingSelected,
+  trainingStatus,
   lineupReady,
   mediaPressure,
   lastMatch
@@ -142,15 +143,25 @@ function eventsForDay(dayIndex, {
   }
 
   if (dayIndex === 3) {
+    const hasDetailedStatus = trainingStatus && typeof trainingStatus === "object";
+    const hasProgram = hasDetailedStatus ? Boolean(trainingStatus.programSelected) : trainingSelected;
+    const hasFocus = hasDetailedStatus ? Boolean(trainingStatus.focusSelected) : trainingSelected;
+    const needsTrainingChoice = !hasProgram || !hasFocus;
+    const trainingDetail = !hasProgram && !hasFocus
+      ? "Treningsprogram mangler. Velg program og fokus før økta gjennomføres."
+      : !hasProgram
+        ? "Treningsprogram mangler. Du har valgt fokus, men trenger også et program for en samlet treningsplan."
+        : !hasFocus
+          ? "Treningsfokus mangler. Programmet er valgt; velg også hva laget skal prioritere."
+          : "Ukas treningsramme er valgt. Åpne treningen for å se program, fokus og belastning.";
+    const trainingAction = !hasProgram ? "Velg program" : !hasFocus ? "Velg fokus" : "Åpne trening";
     return [
       event("training-meeting", "09:30", "Trenermøte", "Avklar dagens hensikt, belastning og coachingpunkter før laget går ut på feltet.", { owner: "Lag · Trening", target: "trening" }),
-      event("team-training", "11:00", "Trening", trainingSelected
-        ? "Ukas treningsramme er valgt. Åpne treningen for å se program, fokus og belastning."
-        : "Treningsprogram mangler. Velg program og fokus før økta gjennomføres.", {
+      event("team-training", "11:00", "Trening", trainingDetail, {
           owner: "Lag · Trening",
           target: "trening",
-          attention: !trainingSelected,
-          actionLabel: trainingSelected ? "Åpne trening" : "Velg program"
+          attention: needsTrainingChoice,
+          actionLabel: trainingAction
         }),
       event("training-feedback", "14:30", "Oppfølging etter økta", "Se belastning, individuelle signaler og hva trenerteamet tar med seg videre.", { owner: "Lag · Trening", target: "trening" })
     ];
@@ -188,7 +199,7 @@ function eventsForDay(dayIndex, {
     const venue = opponent?.homeAway === "away" ? "Bortekamp" : opponent?.homeAway === "home" ? "Hjemmekamp" : "Ligakamp";
     return [
       event("matchday", "15:00", title, opponentName
-        ? `${venue}${opponent?.round ? ` · runde ${opponent.round}` : ""}. Kampmotoren og kampvalgene er uendret.`
+        ? `${venue}${opponent?.round ? ` · runde ${opponent.round}` : ""}. Se hvordan lagets plan fungerer mot denne motstanderen, og ta grep underveis.`
         : "Spill ukas kamp og ta managergrep underveis.", { owner: "Kamp", target: "kamp", actionLabel: "Åpne kampdag" })
     ];
   }
@@ -204,6 +215,7 @@ export function createManagerWeekCalendar({
   clubWeekState = {},
   opponent = null,
   trainingSelected = false,
+  trainingStatus = null,
   lineupReady = false,
   lastMatch = null,
   communications = []
@@ -218,6 +230,7 @@ export function createManagerWeekCalendar({
     opponent,
     opponentName,
     trainingSelected,
+    trainingStatus,
     lineupReady,
     mediaPressure: clubWeekState?.mediaPressure,
     lastMatch

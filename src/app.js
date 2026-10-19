@@ -6472,6 +6472,8 @@ function leagueOpponentProfile(opponent) {
     displayName: opponent.name,
     strength: opponent.strength,
     homeAway: opponent.homeAway,
+    round: opponent.round,
+    matchId: opponent.matchId || opponent.fixtureId || null,
     ground: opponent.ground,
     tacticalIdentity: opponent.tacticalIdentity,
     archetypeName: clubProfile?.styleName || base.archetypeName || null,
@@ -6617,6 +6619,8 @@ function getMiniSeasonNextOpponent() {
         displayName: playoffOpponent.name,
         strength: playoffOpponent.strength,
         homeAway: playoffOpponent.homeAway,
+        round: playoffOpponent.round || null,
+        matchId: playoffOpponent.matchId || null,
         ground: playoffOpponent.ground,
         archetypeName: playoffProfile?.styleName || playoffBase.archetypeName || null,
         isClubProfile: Boolean(playoffProfile),
@@ -6646,6 +6650,8 @@ function getMiniSeasonNextOpponent() {
       // Klubbens egen styrke gjelder — profilen leverer stilen, ikke nivået.
       strength: opponent.strength,
       homeAway: opponent.homeAway,
+      round: opponent.round,
+      matchId: opponent.matchId || null,
       ground: opponent.ground,
       tacticalIdentity: opponent.tacticalIdentity,
       // Kampbriefen leser `archetypeName`; for en klubb er det spillestilen
