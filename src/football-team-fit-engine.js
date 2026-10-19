@@ -112,7 +112,7 @@ const SOURCED_TEAM_SKILLS = Object.freeze({
   ]
 });
 
-function sourcedTeamSkillTendencies(assignments, tactic) {
+export function sourcedTeamSkillTendencies(assignments, tactic) {
   const result = {};
   for (const [metric, rules] of Object.entries(SOURCED_TEAM_SKILLS)) {
     let points = 0;
