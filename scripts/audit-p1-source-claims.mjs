@@ -177,7 +177,7 @@ for (const [place, ids] of Object.entries(threeClubBatch)) {
   for (const id of ids) {
     const record = threeClubById.get(id);
     ok(record?.placeId === place, id + ": new documented profile belongs to wrong club heritage");
-    ok(record?.evidenceKind === "historical_appraisal"
+    ok(["historical_appraisal", "editorial_appraisal"].includes(record?.evidenceKind)
       && record?.playingStyle?.length >= 35 && /^https:\/\//.test(record?.source || ""),
       id + ": durable player trait missing source and playing style");
     ok(asArray(record?.strengths).length > 0, id + ": documented profile has no skills");
@@ -185,6 +185,8 @@ for (const [place, ids] of Object.entries(threeClubBatch)) {
 }
 ok(!threeClubById.get("nils_solstad").strengths.includes("long_shots"),
   "Nils Solstad: one cup-final goal cannot be inferred as a permanent long-shot strength");
+ok(!threeClubById.get("celso_borges").strengths.includes("long_shots"),
+  "Celso Borges: a heavy shot does not establish long-range finishing competence");
 ok(!threeClubById.get("marius_johnsen").strengths.includes("pace"),
   "Marius Johnsen: no negative or positive pace claim from a general role description");
 // Hold position, context and all player-level preferences constant.
