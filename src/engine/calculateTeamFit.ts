@@ -475,7 +475,7 @@ function buildTeamReport(input: {
 
   // Kun kildebekreftet topp fra den virkelige elleveren, direkte i den
   // eksisterende lagrapporten. Ingen nye UI- eller ratingsystemer.
-  const sourcedLabels = {
+  const sourcedLabels: Record<string, string> = {
     buildUpScore: "oppbyggingsspillet",
     restDefenseScore: "restforsvaret",
     pressScore: "pressarbeidet",
