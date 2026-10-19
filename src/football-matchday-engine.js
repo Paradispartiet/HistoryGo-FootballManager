@@ -1791,6 +1791,16 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
       tacticalProfile,
       historicalScore: num(historical.historicalScore)
     },
+    // Kildebelagte individuelle bidrag VED AVSPARK. Ved et senere innbytte
+    // kan ikke originalspilleren krediteres alle 90 minuttene.
+    sourcedStartersSnapshot: Object.fromEntries(
+      Object.entries(teamFit?.sourcedSkillTendencies || {})
+        .filter(([, contribution]) => Number(contribution?.bonus) > 0)
+        .map(([metric, contribution]) => [metric, {
+          bonus: Math.min(6, Math.max(0, num(contribution.bonus))),
+          players: asArray(contribution.players).filter((name) => typeof name === "string").slice(0, 3)
+        }])
+    ),
     // Elleveren slik den står ved avspark. Uten den tilhørte målene ingen, og
     // sesongen kunne ikke fortelle hvem som faktisk leverte.
     lineupSnapshot: createLineupSnapshot(teamFit, { freshnessByPlayerId: conditionByPlayerId || {} }),
@@ -2441,6 +2451,27 @@ export function finalizeMatchdaySession(session) {
 
   // Kampanalyse: kort beslutningsoppsummering pluss systembildet.
   const analysis = [];
+  // Rapporterer hva spillerne brakte med inn i kampplanen, ikke en påstand
+  // om at de avgjorde kampens faktiske hendelser. Eksisterende analyseramme.
+  const skillDimensionLabels = {
+    buildUpScore: "oppbyggingen",
+    restDefenseScore: "restforsvaret",
+    pressScore: "presset",
+    depthScore: "bakromstrusselen",
+    widthScore: "breddespillet",
+    balanceScore: "balansen"
+  };
+  const kickoffEvidence = Object.entries(session.sourcedStartersSnapshot || {})
+    .filter(([metric, item]) => skillDimensionLabels[metric]
+      && Number(item?.bonus) > 0 && asArray(item.players).length > 0)
+    .sort((a, b) => num(b[1].bonus) - num(a[1].bonus)
+      || a[0].localeCompare(b[0]))
+    .slice(0, 2);
+  if (kickoffEvidence.length > 0) {
+    const details = kickoffEvidence.map(([metric, item]) =>
+      `${asArray(item.players).slice(0, 2).join(" og ")} ga dokumentert støtte til ${skillDimensionLabels[metric]}`);
+    analysis.push(`Spillerprofilene ved avspark: ${details.join("; ")}.`);
+  }
   if (session.opponentAnalysisPlan?.focusLabel) {
     analysis.push(
       `Analyseplanen prioriterte ${String(session.opponentAnalysisPlan.focusLabel).toLowerCase()}. Vurder kampsignalene mot observasjonspunktet: ${session.opponentAnalysisPlan.watch || "se om hypotesen stemte."}`
