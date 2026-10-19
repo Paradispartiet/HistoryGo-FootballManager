@@ -147,3 +147,49 @@ målbar forskjell i både `roleFit` og `matchScore`.
 ikke at hele kampsimuleringen allerede modellerer alle konsekvenser av
 spillerspesifikke kvaliteter. Full lag- og kampkonsekvens må testes separat
 før realistisk laguttak betegnes ferdig.
+
+
+## Start, Tromsø og Fredrikstad: nye spillerprofiler 19.10.2026
+
+Denne produksjonsbolken tilfører **12 varige, individuelt dokumenterte
+styrkeprofiler** uten endringer i spilleridentiteter, posisjoner, ratingregler
+eller kampmotor. Spillerne har historisk kilde, `evidenceKind:
+historical_appraisal`, individuell `playingStyle` og avgrenset(e)
+`strengths`. Ingen nye negative ferdighetsdommer genereres.
+
+| Klubb | Antall nye | Fotballfaglige kontraster |
+| --- | ---: | --- |
+| Tromsø | 5 | Espejords pasning/dueller, Christensens løpskraft/skudd, Ingebrigtsens dribling/fart, Solstads taklinger og Flems strafferedninger |
+| Fredrikstad | 5 | Piirojas luftdueller, Ringbergs målteft/ledelse, Rambergs arbeidskapasitet, Wests hurtighet og Borges' luftspill/skuddkraft |
+| Start | 2 | Johnsens hodespill fra back og Strandlis spenstige luftdueller som spiss |
+
+Kildegrunnlaget er kontrollert på spiller- og periode-nivå:
+
+- **Tromsø:** `statistikk.til.no/spiller/` sine biografier for
+  Torfinn Ingebrigtsen, Bjarte Flem, Lars Espejord, Nils Solstad og
+  Roar Christensen. Disse inneholder konkrete, gjennomgående
+  spillestilbeskrivelser. Trond Johansen er ikke inkludert i dette
+  P1-passet fordi hans historiske spilleridentitet har mer enn ett
+  kilde-/stedstilknytningspunkt og dermed ikke tilhører eksklusiv P1.
+- **Fredrikstad:** FFKsupporters historiske spillerbiografier for Raio
+  Piiroja, Markus Ringberg og Hans Erik Ramberg, samt redaksjonelle
+  lagvurderinger av Brian West (2004) og Celso Borges (2010).
+- **Start:** Aftenpostens fagvurdering av Marius Johnsen fra 2005 og
+  Dagbladets vurdering av Frank Strandlis spillertype. Kildene knytter
+  egenskapene til virkelige spillerperioder, uten å projisere alle
+  ferdigheter fra en enkelt kamp eller statistikk alene.
+
+### Kontroll av reell beslutningsforskjell
+
+Den eksisterende `calculatePlayerMatchFit` brukes for en isolert
+sammenligning med identisk CM-posisjon, holding_midfielder-rolle og
+taktikk. Lars Espejord får `roleFit 47` / `matchScore 80`,
+Roar Christensen får `roleFit 42` / `matchScore 79`.
+Forskjellen bæres av de kildebelagte ferdighetene – ikke
+`classHeight`, posisjon, rollepreferanser eller ny samlet spillerverdi.
+En permanent test i `audit-p1-source-claims.mjs` verner dette
+som en endringsrelevant kontroll.
+
+Dette er dokumentasjon av **individuell rolle-/kampfit**, ikke enda et
+bevis på at samme egenskapsforskjeller flytter alle lagmetrikkene eller
+hele kampsimuleringen. Det er et videre, separat kvalitetsmål.
