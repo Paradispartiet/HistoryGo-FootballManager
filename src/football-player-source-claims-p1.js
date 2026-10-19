@@ -891,7 +891,7 @@ const documented = [
   {
     playerId: "brian_west",
     placeId: "fredrikstad_stadion",
-    evidenceKind: "historical_appraisal",
+    evidenceKind: "editorial_appraisal",
     playingStyle: "Særlig hurtig kantspiller som gir en direkte kontrings- og bakromsdimensjon.",
     strengths: ["pace"],
     claim: "FFKs redaksjonelle sesongforhåndsvurdering i 2004 karakteriserer West som ekstremt rask og beskriver hvordan hurtigheten kunne utfordre venstrebackene.",
@@ -900,16 +900,16 @@ const documented = [
   {
     playerId: "celso_borges",
     placeId: "fredrikstad_stadion",
-    evidenceKind: "historical_appraisal",
-    playingStyle: "Luftsterk offensiv midtbanespiller med kraftfulle avslutninger fra distanse.",
-    strengths: ["heading","long_shots"],
-    claim: "FFKsupporters forhåndsanalyse i 2010 beskriver Borges som hodesterk og med et tungt skudd. Det brukes til de avgrensede ferdighetene hodespill og kraftfulle skudd.",
+    evidenceKind: "editorial_appraisal",
+    playingStyle: "Luftsterk offensiv midtbanespiller. Kilden beskriver også skuddkraft, men ikke dokumentert langskuddpresisjon.",
+    strengths: ["heading"],
+    claim: "FFKsupporters forhåndsanalyse i 2010 beskriver Borges som hodesterk og med et tungt skudd. Hodespill kan registreres som styrke, men skuddkraft uten dokumentert distanse eller presisjon gir ikke automatisk long_shots.",
     source: "https://ffksupporter.net/nyheter/1911-1-plass-fredrikstad-fk/"
   },
   {
     playerId: "marius_johnsen",
     placeId: "sor_arena",
-    evidenceKind: "historical_appraisal",
+    evidenceKind: "editorial_appraisal",
     playingStyle: "Back med særskilt dokumentert luftstyrke og hodespill.",
     strengths: ["heading"],
     claim: "Aftenpostens 2005-analyse omtaler hodespillet til Starts Marius Johnsen som en spisskompetanse i europeisk toppklasse. Kraftig venstrefot brukes ikke til å anta langskuddpresisjon.",
@@ -918,7 +918,7 @@ const documented = [
   {
     playerId: "frank_strandli",
     placeId: "sor_arena",
-    evidenceKind: "historical_appraisal",
+    evidenceKind: "editorial_appraisal",
     playingStyle: "Kraftig, spenstig oppspillsspiss som vinner mye i lufta.",
     strengths: ["heading","jumping","duels"],
     claim: "Dagbladets spillerkåring beskriver Strandli som spenstig og sterk i lufta; samtidige kampvurderinger dokumenterer høy vunnet duellandel og det samme kjennetegnet.",
