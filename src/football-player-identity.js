@@ -21,9 +21,16 @@ export function normalizePlayablePlayerCatalog(players) {
     if (selected.has(id)) return false;
     selected.add(id);
     return true;
-  }).map((player) => player.id === LEGACY_BOATENG_ID
-    ? { ...player, id: CANONICAL_BOATENG_ID, name: "Bismark Adjei-Boateng" }
-    : player);
+  }).map((player) => {
+    const canonical = player.id === LEGACY_BOATENG_ID
+      ? { ...player, id: CANONICAL_BOATENG_ID, name: "Bismark Adjei-Boateng" }
+      : player;
+    // Colorado Rapids' own player profile records citizenship as Ghana.
+    // The historic catalogue incorrectly says Norge for both old entries.
+    return canonical.id === CANONICAL_BOATENG_ID
+      ? { ...canonical, nationality: "Ghana" }
+      : canonical;
+  });
 }
 
 export function canonicalPlayerId(value) {
