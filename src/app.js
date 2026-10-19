@@ -11296,6 +11296,14 @@ function appendMatchSubstitutions(card, session) {
       const why = document.createElement("span");
       why.textContent = entry.reasons?.[0] || "";
       item.append(head, why);
+      const sourceEffect = entry.reasons?.find((reason) =>
+        reason.startsWith("Kildebelagte styrker")) || "";
+      if (sourceEffect) {
+        const evidence = document.createElement("span");
+        evidence.className = "match-subs-evidence";
+        evidence.textContent = sourceEffect;
+        item.append(evidence);
+      }
       log.append(item);
     });
     wrap.append(log);
@@ -11375,6 +11383,16 @@ function appendMatchSubstitutions(card, session) {
       const arrow = entry.fitDelta > 0 ? `+${entry.fitDelta}` : `${entry.fitDelta}`;
       meta.textContent = `passform ${entry.matchScoreAfter} (${arrow}) · ${entry.reasons[0] || ""}`;
       button.append(name, meta);
+      // Show sourced tactical differences BEFORE a player commits to the
+      // substitution. The existing ranking still prioritizes slot fit.
+      const sourceEffect = entry.reasons.find((reason) =>
+        reason.startsWith("Kildebelagte styrker")) || "";
+      if (sourceEffect) {
+        const evidence = document.createElement("small");
+        evidence.className = "match-subs-evidence";
+        evidence.textContent = sourceEffect;
+        button.append(evidence);
+      }
       button.addEventListener("click", () => makeSubstitution(state.matchSubOutId, entry.inPlayerId));
       inList.append(button);
     });
