@@ -13,6 +13,18 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Strømsgodset 2026-10-19: individuell handling i dokumentert cupfinale.
+  {
+    "playerId": "finn_aksel_olsen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "runs_behind"
+    ],
+    "claim": "Strømsgodsets detaljert beskrevne cupfinale fra 21. oktober 1973 sier: «Thorodd tverrvendte og sendte Finn Aksel Olsen igjennom, og i en løpeduell inne i RBK feltet falt Finn Aksel»; gjennombruddsløpet skaffet lagets avgjørende straffespark. Dette gir et konkret, navngitt eksempel på løp bak forsvarslinjen (runs_behind), men én episode gir ikke grunnlag for pace, dribbling eller numerisk ferdighetsrating.",
+    "source": "https://www.godset.no/nyheter/50-ar-siden-i-dag-den-tredje-kongepokalen",
+    "sourceKind": "club"
+  },
+
   // Strømsgodset 2026-10-19: originale spillerbeskrivelser bevart via Web Archive.
   {
     "playerId": "erik_eriksen",
