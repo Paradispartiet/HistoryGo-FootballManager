@@ -46,6 +46,8 @@ export type PlayerMatchFitStatus = "feilbrukt" | "perfekt" | "god" | "brukbar";
 /** Ferdighetsprofilen slik den henges på spilleren ved innlasting. */
 export type FitAttributeProfile = {
   values: Record<string, number>;
+  /** Documented versus derived skill provenance from the existing attribute engine. */
+  provenance?: Record<string, string>;
 };
 
 export type FitPlayer = {

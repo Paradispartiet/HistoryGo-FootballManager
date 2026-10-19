@@ -195,3 +195,67 @@ bevis på at samme egenskapsforskjeller flytter alle lagmetrikkene eller
 hele kampsimuleringen. Det er et videre, separat kvalitetsmål.
 
 Kildeavgrensning: FFK-omtalen beskriver Borges som hodesterk og med tungt skudd, men den gir ikke tilstrekkelig belegg for `long_shots` som presise avslutninger fra distanse. Derfor er bare `heading` ført som varig attributt; skuddkraften står i kildebeskrivelsen uten en oppdiktet ferdighet.
+
+
+## Fra dokumentert spillerprofil til faktisk lag- og kampeffekt (19.10.2026)
+
+Kildearbeidet for 38 nye profiler avdekket at eksisterende
+`calculateTeamFit` i stor grad rangerte lagets oppbygging, bredde,
+dybde, press og restforsvar fra **rollenavn**, også etter at spilleren i
+rollen ble byttet. Den individuelle `calculatePlayerMatchFit` ble
+påvirket, men de seks lagdimensjonene trengte å kunne skille spillere
+med ulikt dokumentert særpreg.
+
+Den etablerte lagfit-motoren leser nå **bare direkte dokumenterte**
+ferdighetsmarkører som allerede er gitt
+`attributes.provenance[token] === "belagt"` av den eksisterende
+attributtmotoren, og krever samtidig at samme token finnes i
+spillerens `strengths`. Ukjent, utledet eller manglende proveniens
+gir nøyaktig null tillegg – ikke negativ spillervurdering.
+
+Tillegget gjelder **de eksisterende** lagdimensjonene og er konservativt
+(maks +6 i én dimensjon):
+
+- Pasningsrekkefølge/overblikk hos dyp playmaker og ballspillende
+  stopper gir oppbyggingsstøtte.
+- Dokumentert hurtighet/spilleforståelse hos midtstopper gir sikring
+  av bakrom bare når laget faktisk spiller med `high_line`.
+- Arbeidsinnsats hos pressroller bidrar i presset, og dokumenterte
+  bakromsløp gir en mer reell dybdetrussel.
+- Dokumentert innlegg/dribling teller i bredderoller; en sikrende
+  midtbanespillers posisjonering støtter balanse og restforsvar.
+
+Den eksisterende lagrapporten forklarer opptil to slike bidrag med
+spillerens navn. Ingen ny overall-rating, fremtidig markedsverdi,
+ny kampmotor eller fiktiv ferdighet er innført.
+
+**Reproduserbar målrettet test:**
+`npm run sim:sourced-player-team-fit`. Sammenligner to syntetiske
+kildeprofiler i *samme midtstopperrolle*, med identisk komplett ellever,
+taktikk og formasjon. Den pasningssterke stopperen skal forbedre
+`buildUpScore`; den hurtige stopperen skal forbedre
+`restDefenseScore` med høy linje. Forskjellene må overleve
+historisk formasjonsfit og være synlige i kampmotorens
+`tacticalProfile`. Testen krever samtidig at utledede/ukjente
+ferdigheter er nøytrale og at hurtighet ikke gir bakromsbonus
+under lavere forsvarslinje.
+
+Et siste kontrollledd er lagt til i samme regresjonstest: kampmotorens
+eksisterende `simulateMatchday` må bruke lagdimensjonene i forventede mål
+(`expectedGoals.for` og `expectedGoals.against`). Med identisk ellever
+unntatt én stopper og lik fastsatt `teamScore`/historisk faktor skal en
+kildebelagt pasningsstopper gi bedre forventet sjanseskaping, mens en
+kildebelagt hurtig midtstopper under høy linje skal redusere forventede
+baklengssjanser. Ingen tilfeldig terningkaststyrt sluttstilling brukes som
+testkriterium.
+
+Den spillbare kampdag-sesjonen lagrer også en lett kopi av kildebelagte
+bidrag **ved avspark**. Sluttrapportens eksisterende `analysis` kan
+dermed navngi spillere som ga laget støtte til for eksempel oppbygging
+eller restforsvar. Dette tilskrives kampplanens startgrunnlag; ved
+innbytter påstår den ikke at spilleren bestemte resten av kampen.
+
+Dette beviser at selve **kampens taktiske input** endres når det
+byttes spiller. Det er ikke et bevis på at en enkelt spiller alltid
+skal endre kampresultat, xG eller vinnersannsynlighet dramatisk:
+kamputfall er sammensatt, og ferdighetsbidragene er bevisst begrenset.

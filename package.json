@@ -63,6 +63,7 @@
     "sim:individual-training": "node scripts/simulate-individual-training.mjs",
     "sim:player-weaknesses": "node scripts/simulate-player-weaknesses.mjs",
     "sim:player-attributes": "node scripts/simulate-player-attributes.mjs",
+    "sim:sourced-player-team-fit": "node scripts/simulate-sourced-player-team-fit.mjs",
     "audit:clubs": "node scripts/audit-clubs.mjs",
     "audit:club-heritage": "node scripts/audit-club-heritage.mjs",
     "audit:import-club-heritage": "node scripts/audit-import-club-heritage.mjs",
