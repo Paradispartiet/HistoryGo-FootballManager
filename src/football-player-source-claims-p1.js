@@ -118,6 +118,8 @@ const documented = [
   {
     playerId: "stian_sortevik",
     placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Ballsterk og fotballklok midtbanespiller med overblikk og evne til å styre offensivt kombinasjonsspill.",
     strengths: ["strength", "vision"],
     claim: "KFUM's all-time player feature describes Sortevik's extreme ball control, understanding, strength and overview; only directly mappable catalogue skills are retained.",
     source: "https://www.kaaffa.no/nyheter/han-er-tidenes-kaffa-spiller"
@@ -125,6 +127,8 @@ const documented = [
   {
     playerId: "klaus_odden",
     placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Teknisk og fysisk allsidig spiller med særegen balanse, kraftige skudd og defensive taklinger.",
     strengths: ["balance", "long_shots", "tackling"],
     claim: "KFUM's all-time player feature explicitly describes Odden's exceptional balance, heavy shot and strong tackles.",
     source: "https://www.kaaffa.no/nyheter/han-er-tidenes-kaffa-spiller"
@@ -132,6 +136,8 @@ const documented = [
   {
     playerId: "eivind_arnevag",
     placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Spiss med spesielt gode tekniske og taktiske avslutningsferdigheter i og rundt målområdet.",
     strengths: ["finishing"],
     claim: "KFUM's all-time player feature explicitly describes Arnevåg as an extremely skilled finisher.",
     source: "https://www.kaaffa.no/nyheter/han-er-tidenes-kaffa-spiller"
@@ -139,6 +145,8 @@ const documented = [
   {
     playerId: "christoffer_dahl",
     placeId: "kfum_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Elegant, kreativ midtbanespiller med lange løp, aggressive taklinger og sterk tilstedeværelse i luftrommet.",
     strengths: ["tackling", "duels", "stamina", "long_shots"],
     claim: "KFUM's all-time player feature describes Dahl as very strong at running, capable of forceful tackles and strong aerial duels, with notable shooting range.",
     source: "https://www.kaaffa.no/nyheter/han-er-tidenes-kaffa-spiller"
