@@ -13,6 +13,28 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Strømsgodset 2026-10-19: originale spillerbeskrivelser bevart via Web Archive.
+  {
+    "playerId": "erik_eriksen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "bravery"
+    ],
+    "claim": "Strømsgodsets historiske spillerprofil om Erik J. Eriksen beskriver ham som «knallhard» venstreback, og presiserer at om «han fikk skuldra ut av ledd» ble skulderen satt på plass før «han spilte videre». Det er eksplisitt belegg for bravery gjennom oppofrende, uredd spill; senere temperament som trener tolkes ikke som en spillerferdighet. Arkivet bruker mellominitial J. om samme 1960-/70-tallsspiller som katalogen kaller Erik Eriksen.",
+    "source": "https://web.archive.org/web/20171004140200/http://www.godsetmedia.no/spillere/erik-j.-eriksen/id/5",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "svein_dahl_andersen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "pace"
+    ],
+    "claim": "Strømsgodsets arkiverte individuelle spillerprofil beskriver Svein Dahl Andersen som «en enormt frisk og rask venstre back». Ordet «rask» dokumenterer pace i Godset-perioden. «Frisk» brukes ikke til å utlede stamina eller natural_fitness, og dagens naturlige posisjonsregistrering blir stående uendret.",
+    "source": "https://web.archive.org/web/20170218063131/http://www.godsetmedia.no/spillere/svein-dahl-andersen/id/51",
+    "sourceKind": "club"
+  },
+
   // Strømsgodset 2026-10-19: individuelt dokumenterte egenskaper fra klubbarkiv og spilleruttalelser.
   {
     "playerId": "bismark_adjei_boateng",
