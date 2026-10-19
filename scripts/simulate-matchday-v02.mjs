@@ -238,6 +238,17 @@ const oldStyleEvents = generateMatchdayEvents({
 });
 check("eldre kall uten kampkontekst bruker original situasjon", oldStyleEvents[1]?.id === "opp_high_press");
 
+// Ekte ligaflyt må sende terminlistens identifikator videre til kampmotoren.
+// Uten denne koblingen ville den syntetiske rundevariasjonen ikke nå brukeren.
+const appSource = readFileSync(join(ROOT, "src/app.js"), "utf8");
+const opponentAdapter = appSource.split("function getMiniSeasonNextOpponent()")[1]?.split("function registerMatchInMiniSeason(")[0] || "";
+check("ligakampen sender faktisk runde til beslutningsmotoren",
+  opponentAdapter.includes("round: opponent.round,"));
+check("ligakampen sender faktisk terminliste-ID til beslutningsmotoren",
+  opponentAdapter.includes("matchId: opponent.matchId || null,"));
+check("kvalifiseringskampen beholder sin egen terminliste-ID",
+  opponentAdapter.includes("matchId: playoffOpponent.matchId || null,"));
+
 // Analyseplan: fokus skal endre HVA kampen løfter fram, aldri option-impact.
 console.log("\nMotstanderanalyse → kampsituasjon:");
 const neutralProfile = {
