@@ -165,6 +165,47 @@ ok(aalesundDurable + aalesundEvents >= 46,
   "AaFK quality review must retain all 46 previously sourced player identities");
 ok(statusCounts.DELVIS === P1_NEW_PARTIAL.length, "DELVIS count drift");
 
+// Next Eliteserien production batch: explicit permanent traits, not position
+// guesses, one-off match actions or mandatory 100%-coverage targets.
+const threeClubBatch = {
+  romssa_arena: ["torfinn_ingebrigtsen", "bjarte_flem", "lars_espejord", "nils_solstad", "roar_christensen"],
+  fredrikstad_stadion: ["raio_piiroja", "markus_ringberg", "hans_erik_ramberg", "brian_west", "celso_borges"],
+  sor_arena: ["marius_johnsen", "frank_strandli"]
+};
+const threeClubById = new Map(P1_NEW_DOCUMENTED.map((record) => [record.playerId, record]));
+for (const [place, ids] of Object.entries(threeClubBatch)) {
+  for (const id of ids) {
+    const record = threeClubById.get(id);
+    ok(record?.placeId === place, id + ": new documented profile belongs to wrong club heritage");
+    ok(record?.evidenceKind === "historical_appraisal"
+      && record?.playingStyle?.length >= 35 && /^https:\/\//.test(record?.source || ""),
+      id + ": durable player trait missing source and playing style");
+    ok(asArray(record?.strengths).length > 0, id + ": documented profile has no skills");
+  }
+}
+ok(!threeClubById.get("nils_solstad").strengths.includes("long_shots"),
+  "Nils Solstad: one cup-final goal cannot be inferred as a permanent long-shot strength");
+ok(!threeClubById.get("marius_johnsen").strengths.includes("pace"),
+  "Marius Johnsen: no negative or positive pace claim from a general role description");
+// Hold position, context and all player-level preferences constant.
+// Compare actual source-backed strengths using the EXISTING fit engine.
+const holdingRole = readJson("data/football_roles.json").roles.find((role) => role.id === "holding_midfielder");
+const testMidfielder = (id) => ({
+  id, name: id, classHeight: 85, naturalPositions: ["CM"], usablePositions: [],
+  poorFits: [], preferredRoles: [], needs: [], likesTactics: [], dislikesTactics: [],
+  archetypes: [], warningWhenMisused: "", strengths: [...threeClubById.get(id).strengths]
+});
+const fixedPossessionTactic = { id: "possession", tags: ["possession"] };
+const espejordHold = calculatePlayerMatchFit(
+  testMidfielder("lars_espejord"), { position: "CM" }, holdingRole, fixedPossessionTactic);
+const christensenHold = calculatePlayerMatchFit(
+  testMidfielder("roar_christensen"), { position: "CM" }, holdingRole, fixedPossessionTactic);
+ok(espejordHold.roleFit > christensenHold.roleFit,
+  "Tromso: Espejord's documented reliable passing must change holding-role suitability");
+ok(espejordHold.matchScore > christensenHold.matchScore,
+  "Tromso: player selection must change in the existing match-fit engine");
+
+
 // KFUM's official all-time player descriptions are direct historical evidence.
 // Distinct position/role skillsets must survive the P1 overlay, and a same-role
 // player swap must change the EXISTING fit engine rather than a display label.
