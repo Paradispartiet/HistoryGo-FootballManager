@@ -4,6 +4,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import { calculateTeamFit } from "../src/football-team-fit-engine.js";
+import { calculateTeamFit as calculateLiveTypescriptTeamFit } from "../dist/index.js";
 import { calculateMatchStrength, simulateMatchday, createMatchdaySession, finalizeMatchdaySession, OPPONENT_PROFILES } from "../src/football-matchday-engine.js";
 
 const read = (path) => JSON.parse(fs.readFileSync(new URL("../data/" + path, import.meta.url), "utf8"));
@@ -44,14 +45,16 @@ const sourced = (id, strengths, evidence = "belagt") => ({
     provenance: Object.fromEntries(strengths.map((skill) => [skill, evidence]))
   }
 });
-const evaluate = (player, chosenTactic = tactic) => {
+const evaluateInEngine = (player, engine, chosenTactic = tactic) => {
   const players = baseline.filter((item) => item.id !== baseId).concat(player);
   const lineup = { ...baseLineup,
     [cbSlot.slotId]: { playerId: player.id, roleId: "ball_playing_centre_back" } };
-  const fit = calculateTeamFit({ lineup, formation, tactic: chosenTactic, players, roles });
+  const fit = engine({ lineup, formation, tactic: chosenTactic, players, roles });
   assert.equal(fit.completeCount, 11, "both candidate teams must have a real eleven");
   return fit;
 };
+const evaluate = (player, chosenTactic = tactic) => evaluateInEngine(player, calculateTeamFit, chosenTactic);
+const evaluateTyped = (player, chosenTactic = tactic) => evaluateInEngine(player, calculateLiveTypescriptTeamFit, chosenTactic);
 
 const passer = evaluate(sourced("pasningssterk_stopper", ["passing_range", "composure"]));
 const fast = evaluate(sourced("hurtig_stopper", ["pace", "game_reading"]));
@@ -64,6 +67,27 @@ assert.ok(passer.metrics.buildUpScore > fast.metrics.buildUpScore,
   "historical formation & badge adjustments must preserve build-up contrast");
 assert.ok(fast.metrics.restDefenseScore > passer.metrics.restDefenseScore,
   "historical formation & badge adjustments must preserve defensive contrast");
+
+// Browser gets the compiled TypeScript engine, not the JS fallback.
+// Compare both against the same entire starting XI and tactical input.
+for (const [candidate, label] of [
+  [sourced("pasningssterk_stopper", ["passing_range", "composure"]), "passing"],
+  [sourced("hurtig_stopper", ["pace", "game_reading"]), "high_line_defence"],
+  [sourced("utledet_stopper", ["passing_range"], "utledet"), "unknown_source"],
+]) {
+  const fromJs = evaluate(candidate);
+  const fromTs = evaluateTyped(candidate);
+  assert.deepEqual(fromTs.sourcedSkillTendencies, fromJs.sourcedSkillTendencies,
+    label + ": live TypeScript engine must carry identical sourced contribution");
+  assert.deepEqual(fromTs.baseMetrics, fromJs.baseMetrics,
+    label + ": live TypeScript base tactical metrics must match JS");
+  assert.deepEqual(fromTs.metrics, fromJs.metrics,
+    label + ": matchday tactical profile must match in TS and JS");
+  assert.equal(fromTs.teamScore, fromJs.teamScore,
+    label + ": final team scores must match live TS versus fallback JS");
+  assert.deepEqual(fromTs.report, fromJs.report,
+    label + ": manager must see the same player-specific explanations in both engines");
+}
 
 const passerMatch = calculateMatchStrength({ teamFit: passer, formation });
 const fastMatch = calculateMatchStrength({ teamFit: fast, formation });
