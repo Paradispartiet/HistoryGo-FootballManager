@@ -4,7 +4,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import { calculateTeamFit } from "../src/football-team-fit-engine.js";
-import { calculateMatchStrength } from "../src/football-matchday-engine.js";
+import { calculateMatchStrength, simulateMatchday, createMatchdaySession, finalizeMatchdaySession, OPPONENT_PROFILES } from "../src/football-matchday-engine.js";
 
 const read = (path) => JSON.parse(fs.readFileSync(new URL("../data/" + path, import.meta.url), "utf8"));
 const formation = read("football_formations.json").formations.find((item) => item.id === "4-3-3");
@@ -72,6 +72,41 @@ assert.ok(passerMatch.tacticalProfile.buildUpScore > fastMatch.tacticalProfile.b
 assert.ok(fastMatch.tacticalProfile.restDefenseScore > passerMatch.tacticalProfile.restDefenseScore,
   "player substitution must reach matchday defensive risk");
 
+// The same match engine uses the team dimensions to create chances for/against.
+// Freeze other contributors to isolate the actual sourced role-specific effect;
+// do NOT assert stochastic goal results, only deterministic xG.
+const opponent = OPPONENT_PROFILES.find((profile) => profile.id === "high_press_opponent");
+assert.ok(opponent, "fixed opponent profile must exist");
+const neutralMatch = (fit) => ({
+  ...fit,
+  teamScore: 72,
+  historicalFormationFit: { historicalScore: 65, historicalBonus: 0, historicalPenalty: 0 },
+  relationships: { relationshipScore: 60 }
+});
+const passerOutcome = simulateMatchday({
+  teamFit: neutralMatch(passer), formation, opponent, activeClassifications: []
+});
+const fastOutcome = simulateMatchday({
+  teamFit: neutralMatch(fast), formation, opponent, activeClassifications: []
+});
+assert.ok(passerOutcome.expectedGoals.for > fastOutcome.expectedGoals.for,
+  "documented CB passing should raise expected chances through real matchday xG");
+assert.ok(fastOutcome.expectedGoals.against < passerOutcome.expectedGoals.against,
+  "documented CB pace & reading under a high line must cut chances conceded");
+
+// The playable v0.2 session must preserve and display starter evidence, without
+// pretending that a substituted player was responsible for the full 90 minutes.
+const kickoff = createMatchdaySession({
+  teamFit: neutralMatch(passer), formation, tactic, opponent,
+  roles, activeClassifications: []
+});
+assert.ok(kickoff.sourcedStartersSnapshot?.buildUpScore?.players.includes("pasningssterk_stopper"),
+  "kickoff must retain name and source-backed team contribution");
+const report = finalizeMatchdaySession(kickoff);
+assert.ok(report?.analysis?.some((line) =>
+  line.includes("Spillerprofilene ved avspark") && line.includes("pasningssterk_stopper")),
+  "completed in-game match analysis must explain sourced starter contribution");
+
 const inferred = evaluate(sourced("modellert_stopper", ["passing_range", "composure"], "utledet"));
 const missing = evaluate(sourced("ukjent_stopper", ["passing_range", "composure"], ""));
 assert.equal(inferred.baseMetrics.buildUpScore, missing.baseMetrics.buildUpScore,
@@ -96,5 +131,10 @@ console.log(JSON.stringify({
     pace: { buildUp: fast.metrics.buildUpScore, restDefense: fast.metrics.restDefenseScore }
   },
   matchdayReceivesBothDifferences: true,
+  xGComparison: {
+    passingCB: passerOutcome.expectedGoals,
+    fastCB: fastOutcome.expectedGoals
+  },
+  kickoffEvidenceAppearsInFinalReport: true,
   modeledAndMissingEvidenceNeutral: true
 }, null, 2));
