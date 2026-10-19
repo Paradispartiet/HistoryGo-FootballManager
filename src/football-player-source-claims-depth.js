@@ -13,6 +13,18 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Strømsgodset 2026-10-19: lagkamerat beskriver konkret lederrolle.
+  {
+    "playerId": "ulf_camitz",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "leadership"
+    ],
+    "claim": "I Strømsgodsets intervju «Blå Legender: Arne Gustavsen» beskriver lagkamerat Gustavsen samholdet i 1987 og forteller at spillerne «tilbrakte veldig mye tid sammen også utenfor treningene, ofte hjemme hos Ulf Camitz, som nok var et naturlig midtpunkt». Samme klubbhistorie identifiserer Camitz som lagkaptein da han ble med videre i kriseperioden. Samlet dokumenterer dette en konkret ledende og samlende rolle i spillergruppen (leadership), ikke ferdigheter utledet fra kamptall, scoringer eller generell kapteinsstatus alene.",
+    "source": "https://www.godset.no/nyheter/bla-legender-arne-gustavsen",
+    "sourceKind": "club"
+  },
+
   // Strømsgodset 2026-10-19: individuell handling i dokumentert cupfinale.
   {
     "playerId": "finn_aksel_olsen",
