@@ -4,6 +4,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import { calculateTeamFit } from "../src/football-team-fit-engine.js";
+import { buildSourcedLineupInsights } from "../src/football-sourced-lineup-insights.js";
 import { calculateTeamFit as calculateLiveTypescriptTeamFit } from "../dist/index.js";
 import { calculateMatchStrength, simulateMatchday, createMatchdaySession, advanceMatchClock, applyMatchdaySubstitution, finalizeMatchdaySession, OPPONENT_PROFILES } from "../src/football-matchday-engine.js";
 
@@ -271,6 +272,28 @@ assert.equal(applyMatchdaySubstitution(olderV1, {
   outPlayerId: "pasningssterk_stopper",
   inPlayerId: "hurtig_innbytter", minute: 45
 }).substitutions.length, 1, "an older v1 live session must remain playable");
+
+
+// Evidence in the LIVE lineup: all six existing dimensions, never an invented
+// skill deficit when provenance is unknown.
+const passingOverview = buildSourcedLineupInsights(passer);
+const speedOverview = buildSourcedLineupInsights(fast);
+assert.equal(passingOverview.length, 6, "starting XI must show all six sourced dimensions");
+assert.ok(passingOverview.find((row) => row.key === "buildUpScore")?.hasEvidence,
+  "documented passer must appear in the live lineup insight");
+assert.ok(passingOverview.find((row) => row.key === "buildUpScore")?.detail.includes("pasningssterk_stopper"),
+  "manager must see the named player behind build-up");
+assert.ok(speedOverview.find((row) => row.key === "restDefenseScore")?.hasEvidence,
+  "documented pace must show in high-line defensive support");
+assert.ok(speedOverview.find((row) => row.key === "restDefenseScore")?.detail.includes("hurtig_stopper"),
+  "manager must see the named defender behind high-line support");
+const unknownOverview = buildSourcedLineupInsights(inferred);
+assert.ok(unknownOverview.every((row) => !row.hasEvidence),
+  "unproven attributes must not be shown as documented player strengths");
+assert.ok(unknownOverview.every((row) => row.detail.includes("Ingen direkte dokumenterte")),
+  "unknown player evidence must be described as unknown, not a player weakness");
+assert.deepEqual(buildSourcedLineupInsights(null), [],
+  "empty team fit must not produce invented contribution figures");
 
 console.log(JSON.stringify({
   ok: true, completeCount: 11,

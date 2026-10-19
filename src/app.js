@@ -177,6 +177,7 @@ import {
   buildTrainingFocusOffPitchEvent
 } from "./football-training-week.js";
 import { createSuggestedSetups } from "./football-suggested-setups.js";
+import { buildSourcedLineupInsights } from "./football-sourced-lineup-insights.js";
 import { computeNextActions, NEXT_ACTION_TYPES } from "./football-next-action.js";
 import { selectDefaultFormation, selectDefaultMatchPlan } from "./football-default-formation.js";
 import { evaluateMatchdayReadiness } from "./football-matchday-readiness.js";
@@ -685,6 +686,7 @@ const elements = {
   weeklyTrainingRecommendation: document.querySelector("#weeklyTrainingRecommendation"),
   weeklyTrainingOptions: document.querySelector("#weeklyTrainingOptions"),
   strengthsList: document.querySelector("#strengthsList"),
+  sourcedLineupImpact: document.querySelector("#sourcedLineupImpact"),
   issuesList: document.querySelector("#issuesList"),
   widthScore: document.querySelector("#widthScore"),
   depthScore: document.querySelector("#depthScore"),
@@ -9693,6 +9695,41 @@ function renderAdminRoom() {
   }
 }
 
+
+// The active XI and tactic recompute on every lineup/role change. Render the
+// same six sourced dimensions beside the pitch where the manager makes choices.
+function renderSourcedLineupImpact(teamFit) {
+  const target = elements.sourcedLineupImpact;
+  if (!target) return;
+  target.replaceChildren();
+  const rows = buildSourcedLineupInsights(teamFit);
+  if (!rows.length) {
+    const empty = document.createElement("li");
+    empty.className = "lineup-sourced-empty";
+    empty.textContent = "Sett en spiller på banen for å se dokumenterte taktiske bidrag.";
+    target.append(empty);
+    return;
+  }
+  rows.forEach((entry) => {
+    const li = document.createElement("li");
+    li.className = "lineup-sourced-row";
+    const head = document.createElement("span");
+    head.className = "lineup-sourced-label";
+    head.textContent = entry.label;
+    const value = document.createElement("strong");
+    value.className = "lineup-sourced-value";
+    value.textContent = entry.hasEvidence ? `+${entry.bonus}` : "–";
+    value.setAttribute("aria-label", entry.hasEvidence
+      ? `Dokumentert tillegg ${entry.bonus}`
+      : "Ingen kildebelagt bonus");
+    const detail = document.createElement("small");
+    detail.className = "lineup-sourced-detail";
+    detail.textContent = entry.detail;
+    li.append(head, value, detail);
+    target.append(li);
+  });
+}
+
 function renderTeamSummary(teamFit) {
   // Scorepanelet skrives fra teamFit (getTeamFit). Etter steg 7b er teamFit
   // selv TS-beregnet når motoren er lastet, så hele Laganalyse-panelet (score,
@@ -9707,6 +9744,7 @@ function renderTeamSummary(teamFit) {
     const next = String(value);
     if (element.textContent !== next) element.textContent = next;
   };
+  renderSourcedLineupImpact(teamFit);
   setMetricText(elements.teamStatus, getTeamStatus(teamFit));
   setMetricText(elements.completeCount, `${teamFit.completeCount}/${teamFit.totalSlots}`);
   setMetricText(elements.roleFitAverage, teamFit.metrics.roleFitAverage);
