@@ -38,7 +38,9 @@ Samler formasjonsdom, taktiske faktorer og rollerelasjoner. Den forklarer manage
 
 ### Managerens grep
 
-Viser beste og svakeste registrerte kampbeslutning. Ingen nye vurderinger konstrueres i UI-laget.
+Viser beste og svakeste registrerte kampbeslutning, og nå **alle lagrede managergrep i faktisk rekkefølge** med kampsituasjon, valgt handling og kampmotorens lagrede reaksjon. Dersom motoren har en dokumentert kobling til treningsøvelsen eller motstanderanalysen, vises denne i samme steg. Positivt, negativt og nøytralt leses fra motorens eksisterende tone; presentasjonen beregner ingen ny vurdering eller effekt.
+
+For eldre saves uten lagret `feedback` vises en nøktern forklaring om at motorreaksjonen ikke finnes, ikke en oppdiktet konsekvens. Et eventuelt manglende beslutningsforløp skjuler listen uten å fjerne beste/svakeste grep fra eldre rapporter. På mobil vises beslutningslisten i én kolonne uten horisontal scrolling.
 
 ### Spillerbidrag
 
