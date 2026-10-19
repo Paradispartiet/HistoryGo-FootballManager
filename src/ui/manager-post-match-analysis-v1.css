@@ -417,3 +417,31 @@
     width: 100%;
   }
 }
+
+/* Actual match-plan and substitution choices, with the persisted engine verdict. */
+.matchday-post-match-adjustments {
+  display: grid;
+  gap: 0.7rem;
+  min-width: 0;
+}
+.matchday-post-match-adjustment-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: 0.6rem;
+}
+.matchday-post-match-adjustment {
+  display: grid;
+  align-content: start;
+  gap: 0.3rem;
+  min-width: 0;
+  border: 1px solid rgba(255,255,255,0.17);
+  border-left: 3px solid rgba(255,255,255,0.4);
+  border-radius: 0.55rem;
+  padding: 0.75rem 0.85rem;
+  overflow-wrap: anywhere;
+}
+.matchday-post-match-adjustment[data-tone="positive"] { border-left-color: #70e199; }
+.matchday-post-match-adjustment[data-tone="negative"] { border-left-color: #ff9292; }
+.matchday-post-match-adjustment span { font-size: 0.79rem; color: rgba(255,255,255,0.74); }
+.matchday-post-match-adjustment strong { font-size: 0.95rem; }
+.matchday-post-match-adjustment p { margin: 0; font-size: 0.85rem; line-height: 1.45; }
