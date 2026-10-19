@@ -13,6 +13,41 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Strømsgodset 2026-10-19: klubbens uttrykkelige spillertypebeskrivelse.
+  {
+    "playerId": "kai_arild_lund",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "finishing"
+    ],
+    "claim": "Strømsgodsets artikkel «Mål nummer 1600 på Marienlyst!» omtaler Kai Arild Lund som «vår notoriske goalgetter fra tidlig 80-tall». Den individualiserte spillertypebeskrivelsen underbygger målteft/avslutninger (finishing). De 50 registrerte hjemmemålene brukes som historisk kontekst, ikke som numerisk rating eller belegg for andre ferdigheter.",
+    "source": "https://www.godset.no/nyheter/mal-nummer-1600-pa-marienlyst",
+    "sourceKind": "club"
+  },
+
+  // Strømsgodset 2026-10-19: individuelt beskrevet spillerstil fra andre karriereperioder.
+  {
+    "playerId": "martin_wiig",
+    "clubId": "sarpsborg08",
+    "strengths": [
+      "runs_behind",
+      "finishing"
+    ],
+    "claim": "FFKsupporters 2010-gjennomgang av Sarpsborg 08 beskriver Martin Wiig som «den kloke bakromsspissen og avslutteren». Det dokumenterer eksplisitt bakromsløp og avslutninger fra hans Sarpsborg-periode, ikke automatisk hurtighet eller en tallrating. Påstanden gjelder spillerens kildebelagte Sarpsborg-tilknytning og legges bare på den eksisterende flerklubbprofilen; den utledede Godset-tilknytningen blir stående uavklart.",
+    "source": "https://ffksupporter.net/nyheter/1904-4-plass-sarpsborg-08/",
+    "sourceKind": "football_editorial"
+  },
+  {
+    "playerId": "vegard_hansen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "determination"
+    ],
+    "claim": "I Dagsavisens portrett fra 2015 siterer Vegard Hansen om tiden som Strømsgodset-spiller: «Jeg var kaptein i Strømsgodset og hadde noen ålreite sesonger på begynnelsen av 90-tallet» og «Men jeg ville mer enn de andre». Han sier også «Men mentalt er jeg sterk». Dette underbygger determination som personlig vinnervilje, ikke fysisk styrke, duellspill eller pasningsevne.",
+    "source": "https://www.dagsavisen.no/nyheter/fotballhue/8501073",
+    "sourceKind": "press"
+  },
+
   // Strømsgodset 2026-10-18: fire individuelle presse- og spilleromtaler, også fra senere/tidligere klubber.
   {
     "playerId": "andre_hanssen",
