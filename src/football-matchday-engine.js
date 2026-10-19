@@ -1,5 +1,5 @@
 import { createLineupSnapshot, attributeGoal, createMatchPlayerStats } from "./football-player-stats.js";
-import { applySubstitution, createBenchSnapshot, playedPlayersFor } from "./football-substitutions.js";
+import { applySubstitution, createBenchSnapshot, playedPlayersFor, sourcedMetricBonusesForAssignment } from "./football-substitutions.js";
 import { evaluateTrainingDecisionSupport } from "./football-training-week.js";
 import { buildMatchExplanation } from "./football-match-explanation-engine.js";
 import { evaluateHistoricalOpponentMatchup } from "./football-historical-opponent-profiles.js";
@@ -1760,9 +1760,16 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
       }
     : null;
   const offPitchSnapshot = offPitchContext && typeof offPitchContext === "object" ? { ...offPitchContext } : null;
+  // Keep role- and tactic-specific source evidence per starter so replacements
+  // can alter only FUTURE match periods, without recomputing the whole team.
+  const sourcedBySlot = new Map(asArray(teamFit?.assignments)
+    .filter((assignment) => assignment?.player?.id && assignment?.slot?.slotId)
+    .map((assignment) => [assignment.slot.slotId,
+      sourcedMetricBonusesForAssignment(assignment, tactic)]));
 
   return {
     version: 2,
+    sourcedSubstitutionVersion: 1,
     id: `matchday-session-${Date.now()}`,
     createdAt: new Date().toISOString(),
     phase: "pre_match",
@@ -1803,7 +1810,10 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     ),
     // Elleveren slik den står ved avspark. Uten den tilhørte målene ingen, og
     // sesongen kunne ikke fortelle hvem som faktisk leverte.
-    lineupSnapshot: createLineupSnapshot(teamFit, { freshnessByPlayerId: conditionByPlayerId || {} }),
+    lineupSnapshot: createLineupSnapshot(teamFit, { freshnessByPlayerId: conditionByPlayerId || {} })
+      .map((entry) => ({ ...entry,
+        sourcedMetricBonuses: sourcedBySlot.get(entry.slotId) || {}
+      })),
     // Benken, med hvor godt hver spiller ville passet på hver av de elleve
     // plassene. Regnet én gang her, slik at et innbytte kan vurderes uten at
     // sesjonen må bære roller og taktikk videre.
