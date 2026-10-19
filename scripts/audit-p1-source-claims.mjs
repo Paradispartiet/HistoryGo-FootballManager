@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { calculateRoleFit, calculatePlayerMatchFit } from "../src/football-fit-engine.js";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -73,14 +74,13 @@ for (const record of P1_NEW_DOCUMENTED) {
   ok(typeof record.claim === "string" && record.claim.trim().length > 20,
     `${record.playerId}: documented claim must be concrete`);
   ok(/^https:\/\//.test(record.source || ""), `${record.playerId}: documented claim needs an https source`);
-  // Only AaFK was re-reviewed for durability in this pass. Requiring explicit
-  // evidence type prevents a future isolated match event from entering its
-  // lasting strengths silently; other clubs retain their existing contract.
-  if (record.placeId === "color_line_stadion") {
+  // Re-review of AaFK and Sandefjord: a match event cannot masquerade as
+  // a persistent player skill. Both reviewed clubs require playing-style context.
+  if (["color_line_stadion", "jotun_arena", "kfum_arena"].includes(record.placeId)) {
     ok(["direct_appraisal", "editorial_appraisal", "historical_appraisal", "period_appraisal", "season_statistics"].includes(record.evidenceKind),
-      `${record.playerId}: AaFK durable claim needs non-event evidenceKind`);
+      `${record.playerId}: reviewed club durable claim needs non-event evidenceKind`);
     ok(typeof record.playingStyle === "string" && record.playingStyle.trim().length >= 35,
-      `${record.playerId}: AaFK durable claim needs sourced playing-style context`);
+      `${record.playerId}: reviewed club durable claim needs sourced playing-style context`);
   }
   for (const url of asArray(record.supportingSources)) {
     ok(/^https:\/\//.test(url), `${record.playerId}: invalid supporting source URL`);
@@ -98,8 +98,9 @@ for (const record of P1_NEW_EVENT_ONLY) {
   const player = playerById.get(record.playerId);
   ok(Boolean(player), `${record.playerId}: event-only player missing from catalogue`);
   const heritage = getP1HeritageForPlayer(player);
-  ok(heritage?.generation === "new" && heritage.placeId === "color_line_stadion",
-    `${record.playerId}: event-only record must have exclusive Aalesund ownership`);
+  ok(heritage?.generation === "new" && ["color_line_stadion", "jotun_arena"].includes(heritage.placeId)
+      && heritage.placeId === record.placeId,
+    `${record.playerId}: event-only record must have exclusive reviewed-club ownership`);
   ok(record.evidenceKind === "single_match_event",
     `${record.playerId}: event-only evidence kind must be explicit`);
   ok(typeof record.claim === "string" && record.claim.trim().length > 20,
@@ -159,9 +160,82 @@ ok(Object.values(statusCounts).reduce((sum, count) => sum + count, 0) === 701,
 ok(statusCounts.DOKUMENTERT === P1_NEW_DOCUMENTED.length, "DOKUMENTERT count drift");
 ok(statusCounts.HENDELSE === P1_NEW_EVENT_ONLY.length, "HENDELSE count drift");
 const aalesundDurable = P1_NEW_DOCUMENTED.filter((r) => r.placeId === "color_line_stadion").length;
-ok(aalesundDurable + P1_NEW_EVENT_ONLY.length >= 46,
+const aalesundEvents = P1_NEW_EVENT_ONLY.filter((r) => r.placeId === "color_line_stadion").length;
+ok(aalesundDurable + aalesundEvents >= 46,
   "AaFK quality review must retain all 46 previously sourced player identities");
 ok(statusCounts.DELVIS === P1_NEW_PARTIAL.length, "DELVIS count drift");
+
+// KFUM's official all-time player descriptions are direct historical evidence.
+// Distinct position/role skillsets must survive the P1 overlay, and a same-role
+// player swap must change the EXISTING fit engine rather than a display label.
+const kfumProfiles = P1_NEW_DOCUMENTED.filter((r) => r.placeId === "kfum_arena");
+ok(kfumProfiles.length === 30, "KFUM: original four plus 26 historic profiles");
+const byKfumId = new Map(kfumProfiles.map((r) => [r.playerId, r]));
+ok(byKfumId.size === 30, "KFUM: no duplicate historical profiles");
+for (const [playerId, skill] of [
+  ["robin_rasch", "vision"], ["jorgen_hammer", "interceptions"],
+  ["cato_valoy", "runs_behind"], ["kenneth_rakvaag", "reflexes"],
+  ["stale_andersen", "passing_range"], ["stian_dewahl", "distribution"]
+]) {
+  ok(asArray(byKfumId.get(playerId)?.strengths).includes(skill),
+    "KFUM: individual documented skill " + playerId + "/" + skill);
+}
+const midfieldRole = readJson("data/football_roles.json").roles.find((r) => r.id === "deep_playmaker");
+const neutralMidfielder = (id) => ({
+  id, name: id, classHeight: 85,
+  naturalPositions: ["CM"], usablePositions: [], poorFits: [],
+  preferredRoles: [], needs: [], likesTactics: [], dislikesTactics: [],
+  archetypes: [], warningWhenMisused: "",
+  strengths: [...byKfumId.get(id).strengths]
+});
+const kfumTactic = { id: "possession", tags: ["possession"] };
+const raschAsPlaymaker = calculatePlayerMatchFit(
+  neutralMidfielder("robin_rasch"), { position: "CM" }, midfieldRole, kfumTactic);
+const andersenAsPlaymaker = calculatePlayerMatchFit(
+  neutralMidfielder("stale_andersen"), { position: "CM" }, midfieldRole, kfumTactic);
+ok(andersenAsPlaymaker.roleFit > raschAsPlaymaker.roleFit,
+  "KFUM: source-backed passing range must change role fit on a same-position player swap");
+ok(andersenAsPlaymaker.matchScore > raschAsPlaymaker.matchScore,
+  "KFUM: sourced player differences must also change existing individual match fit");
+
+
+// Sandefjord source-revision: all 40 previously documented identities remain
+// traceable (19 durable, 19 single-match historical events, 2 unresolved
+// secondary-source biographies). This is source QA, never automatic skill inference.
+const reviewedSandefjord = [
+  ...P1_NEW_DOCUMENTED.filter((r) => r.placeId === "jotun_arena"),
+  ...P1_NEW_EVENT_ONLY.filter((r) => r.placeId === "jotun_arena"),
+  ...P1_NEW_PARTIAL.filter((r) => r.placeId === "jotun_arena")
+];
+ok(reviewedSandefjord.length === 40, "Sandefjord: all 40 previously sourced player identities must remain traceable");
+ok(new Set(reviewedSandefjord.map((r) => r.playerId)).size === 40,
+  "Sandefjord: same identity appears in more than one evidence class");
+ok(P1_NEW_DOCUMENTED.filter((r) => r.placeId === "jotun_arena").length === 19,
+  "Sandefjord: 19 genuine durable profiles must remain after evidence review");
+ok(P1_NEW_EVENT_ONLY.filter((r) => r.placeId === "jotun_arena").length === 19,
+  "Sandefjord: 19 historical event records must be retained without skill boosts");
+ok(P1_NEW_PARTIAL.filter((r) => r.placeId === "jotun_arena").length === 2,
+  "Sandefjord: 2 secondary biographical sources require verification");
+
+// Evidence must change a real tactical calculation, not just a profile label.
+// Neutralize preferred roles/tactics only in the comparison fixture so that
+// the added, source-backed skills are the sole independent variable.
+const filip = P1_NEW_DOCUMENTED.find((r) => r.playerId === "filip_ottosson");
+const deepPlaymaker = readJson("data/football_roles.json").roles.find((r) => r.id === "deep_playmaker");
+ok(Boolean(filip && deepPlaymaker), "Sandefjord: Filip and deep-playmaker role must resolve");
+const isolatedPlayer = {
+  preferredRoles: [], needs: [], likesTactics: [], dislikesTactics: [],
+  strengths: ["simple_passing", "vision", "duels"]
+};
+const previousRoleFit = calculateRoleFit(isolatedPlayer, deepPlaymaker);
+const improvedRoleFit = calculateRoleFit({ ...isolatedPlayer, strengths: [...filip.strengths] }, deepPlaymaker);
+ok(improvedRoleFit > previousRoleFit,
+  "Sandefjord: stronger sourced passing profile must improve deep-playmaker role fit");
+const storevik = getP1NewSourceRecord({ id: "jacob_storevik", sourcePlaceIds: ["jotun_arena"] });
+ok(storevik?.status === "HENDELSE" && storevik.strengths.length === 0
+    && storevik.legacyTokens.includes("reflexes"),
+  "Sandefjord: one match save must remain an event without sourced reflexes");
+
 
 const overlaid = applyP1NewSourceClaims(players);
 const overlaidById = new Map(overlaid.map((player) => [player.id, player]));
