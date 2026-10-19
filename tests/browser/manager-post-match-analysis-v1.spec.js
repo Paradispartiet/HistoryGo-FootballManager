@@ -23,6 +23,17 @@ function reportFixture() {
       ]
     },
     substitutions: [{ minute: 66, playerOutName: "Kari Kant", playerInName: "Sara Hurtig" }],
+    decisions: [
+      {
+        eventTitle: "Etter pause", optionLabel: "Press høyere",
+        tone: "positive", feedback: "Grepet satt: laget tok kontroll på situasjonen.",
+        analysisObservation: { explanation: "Grep vurdert i lys av ukas motstanderanalyse." }
+      },
+      {
+        eventTitle: "Sluttminuttene", optionLabel: "Sats alt offensivt",
+        tone: "negative", feedback: "Grepet slo feil: motstanderen utnyttet situasjonen."
+      }
+    ],
     clubConsequences: {
       effects: { playerMorale: 3, boardTrust: 2, mediaPressure: -1 },
       familiarity: 3
@@ -108,6 +119,9 @@ test("etterkampen viser resultat, forklaring, managergrep, spillerbidrag og kons
   await expect(page.locator("#postMatchAnalysisTitle")).toContainText("presset");
   await expect(page.locator(".matchday-post-match-card")).toHaveCount(3);
   await expect(page.locator(".matchday-post-match-decision")).toHaveCount(2);
+  await expect(page.locator(".matchday-post-match-decision-step")).toHaveCount(2);
+  await expect(page.locator(".matchday-post-match-decision-step").first()).toContainText("Press høyere");
+  await expect(page.locator(".matchday-post-match-decision-step").last()).toContainText("Grepet slo feil");
   await expect(page.locator(".matchday-post-match-panel")).toHaveCount(2);
   await expect(page.locator(".matchday-post-match-event")).toHaveCount(2);
   await expect(page.locator(".matchday-post-match-effect")).toHaveCount(3);
@@ -126,6 +140,7 @@ test("etterkampen har ingen mobil overflow", async ({ page }) => {
   await renderFixture(page, 390, 1000);
   await expectNoHorizontalOverflow(page);
   await expect(page.locator(".matchday-post-match-primary")).toBeVisible();
+  await expect(page.locator(".matchday-post-match-decision-step")).toHaveCount(2);
 });
 
 test("etterkampen har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) => {

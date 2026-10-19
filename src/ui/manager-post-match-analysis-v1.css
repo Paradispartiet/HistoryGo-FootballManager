@@ -186,6 +186,68 @@
   border-left: 3px solid rgba(255, 126, 126, 0.8);
 }
 
+.matchday-post-match-decision-history {
+  display: grid;
+  gap: 0.55rem;
+  min-width: 0;
+  margin-top: 0.65rem;
+}
+
+.matchday-post-match-decision-history h4,
+.matchday-post-match-decision-history p {
+  margin: 0;
+}
+
+.matchday-post-match-decision-history h4 {
+  font-size: 1rem;
+}
+
+.matchday-post-match-decision-summary,
+.matchday-post-match-decision-caveat {
+  color: rgba(255, 255, 255, 0.73);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.matchday-post-match-decision-sequence {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  counter-reset: manager-decisions;
+}
+
+.matchday-post-match-decision-step {
+  counter-increment: manager-decisions;
+  display: grid;
+  min-width: 0;
+  gap: 0.3rem;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-left: 3px solid rgba(255, 255, 255, 0.38);
+  border-radius: 0.6rem;
+  background: rgba(255, 255, 255, 0.03);
+  overflow-wrap: anywhere;
+}
+
+.matchday-post-match-decision-step[data-tone="positive"] { border-left-color: #70e199; }
+.matchday-post-match-decision-step[data-tone="negative"] { border-left-color: #ff9292; }
+.matchday-post-match-decision-step > span {
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 0.79rem;
+}
+.matchday-post-match-decision-step > span::before {
+  content: counter(manager-decisions) ". ";
+  font-weight: 800;
+}
+.matchday-post-match-decision-step > strong { font-size: 0.98rem; }
+.matchday-post-match-decision-step > p { font-size: 0.88rem; line-height: 1.4; }
+.matchday-post-match-decision-step > small {
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.4;
+}
+
 .matchday-post-match-decision small,
 .matchday-post-match-event small,
 .matchday-post-match-contributor small {
