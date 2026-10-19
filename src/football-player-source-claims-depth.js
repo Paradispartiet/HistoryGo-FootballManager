@@ -13,6 +13,40 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Strømsgodset 2026-10-19: individuelt dokumenterte egenskaper fra klubbarkiv og spilleruttalelser.
+  {
+    "playerId": "bismark_adjei_boateng",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "strength",
+      "stamina",
+      "vision"
+    ],
+    "claim": "Colorado Rapids' sportsdirektør Pádraig Smith beskrev Bismark «Nana» Adjei-Boateng etter Godset-perioden som «a powerful player with the drive and energy to be effective box to box» og med «great technique and vision». Dette belegger fysisk styrke, kapasitet til boks-til-boks-løp og spilleforståelse, men ingen rating. Kilden navngir Bismark og Nana som samme person; den separate legacy-ID-en nana_boateng beholdes uendret i påvente av sikker save-migrering.",
+    "source": "https://www.coloradorapids.com/news/rapids-acquire-ghanaian-midfielder-bismark-nana-adjei-boateng-manchester-city",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "halvor_storskogen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "finishing"
+    ],
+    "claim": "GodsetUnionens historiske portrett av Odd Johnsen omtaler samspillet med «en annen måltyv» og identifiserer denne eksplisitt i påfølgende sitat: «Samspillet med Halvor Storskogen var det beste som har skjedd SIF siden Steinar Pettersen og Thorodd Presberg herjet på 70-tallet». Omtalen av Storskogen som måltyv gir individuelt belegg for avslutninger/målteft, uten å tallfeste nivå fra målstatistikk.",
+    "source": "https://www.godsetunionen.com/odd-johnsen/",
+    "sourceKind": "football_editorial"
+  },
+  {
+    "playerId": "frode_johannessen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "strength"
+    ],
+    "claim": "Strømsgodsets egen historiske gjennomgang «De 10 store kampene» omtaler Frode Johannessen som «stopperkjempen Frode Johannessen» ved omtalen av opprykkslaget i 1987. Dette er en eksplisitt beskrivelse av kraftfull fysisk forsvarstilstedeværelse, ført avgrenset som fysisk styrke; den gir ikke belegg for konkrete taklinger, tempo eller pasningsferdigheter.",
+    "source": "https://www.godset.no/nyheter/de-10-store-kampene",
+    "sourceKind": "club"
+  },
+
   // Strømsgodset 2026-10-19: klubbens uttrykkelige spillertypebeskrivelse.
   {
     "playerId": "kai_arild_lund",
