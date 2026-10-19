@@ -13,6 +13,29 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Strømsgodset 2026-10-19: individuelt beskrevet spillerstil fra andre karriereperioder.
+  {
+    "playerId": "martin_wiig",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "runs_behind",
+      "finishing"
+    ],
+    "claim": "FFKsupporters 2010-gjennomgang av Sarpsborg 08 beskriver Martin Wiig som «den kloke bakromsspissen og avslutteren». Det dokumenterer eksplisitt bakromsløp og avslutninger fra hans Sarpsborg-periode, ikke automatisk hurtighet eller en tallrating. Påstanden overføres til den eksisterende flerklubbspilleren uten å endre klubbtilknytning eller posisjon.",
+    "source": "https://ffksupporter.net/nyheter/1904-4-plass-sarpsborg-08/",
+    "sourceKind": "football_editorial"
+  },
+  {
+    "playerId": "vegard_hansen",
+    "clubId": "stromsgodset",
+    "strengths": [
+      "determination"
+    ],
+    "claim": "I Dagsavisens portrett fra 2015 ser Vegard Hansen tilbake på sine sesonger som Strømsgodset-kaptein tidlig på 1990-tallet og sier eksplisitt at han ville mer enn de andre og at han var mentalt sterk. Dette underbygger vinnervilje som en personlig spilleregenskap; det gir ikke belegg for fysisk styrke, duellspill eller pasningsferdigheter.",
+    "source": "https://www.dagsavisen.no/nyheter/fotballhue/8501073",
+    "sourceKind": "press"
+  },
+
   // Strømsgodset 2026-10-18: fire individuelle presse- og spilleromtaler, også fra senere/tidligere klubber.
   {
     "playerId": "andre_hanssen",
