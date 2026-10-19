@@ -79,6 +79,33 @@ Alle 16 Eliteserie-klubbene i 2026-snapshotet har nå dokumenterte klubbspesifik
 
 Coverage-auditen måler derfor **dokumenterte klubbsett**, ikke hvor mange klubber som fyller alle seks kapasitetsslots. 1+3+1+1 beholdes som maksimal aktiv rollekapasitet og som generisk fallbackform.
 
+## Strømsgodset v1 — spillerdata og identitet
+
+Strømsgodsets kildearbeid er avsluttet som **v1**, ikke som en 100 %-kvote.
+Ved PR #427 var **132 av 143 katalogoppføringer** dekket med dokumenterte
+styrker; de 11 udekkede oppføringene skal ikke få oppdiktede ferdigheter.
+
+Én av de 11 var en duplikat av samme person: katalogens `nana_boateng`
+og `bismark_adjei_boateng` representerer begge Bismark «Nana»
+Adjei-Boateng. Spillet bruker nå bare den sistnevnte canonicale spiller-ID-en
+og én opplåsing fra Marienlyst, altså **142 unike spillbare
+Strømsgodset-profiler, hvorav 132 med kildebelagte styrker og 10 som står i
+kildekøen**. Den eldre rå katalogoppføringen beholdes foreløpig av
+datatekniske årsaker, men filtreres eksplisitt ut ved runtime-lasting.
+Ikke bruk den rå katalogtelleren som unik-personteller før posten fysisk
+er fjernet fra `data/football_players.json`.
+
+Tidligere saves migreres idempotent før hydreringsløpet og beholder
+troppsutvalg, ellever, individuelle økter, rollefortrolighet, relasjoner,
+skade-/belastningsdata og sesongstatistikk. Migreringen påvirker bare
+Football Managers egne lagringsnøkler, ikke History Go-progresjonen.
+Permanent kontrakt: `src/football-player-identity.js` og
+`sim:player-identity-migration`.
+
+Videre arbeid flyttes fra systematiske spiller-source-depth-runder til
+reelle kvalitets- og funksjonshull i klubbsimuleringen. Nye kildefunn kan
+legges til selektivt uten å blokkere managerspillet.
+
 ## Reelt åpent arbeid
 
 Åpent arbeid skal være konkret og kilde- eller regelavklart. Per denne statusen er følgende typer arbeid gyldige uten å dikte produktregler:
