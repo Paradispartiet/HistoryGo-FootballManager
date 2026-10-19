@@ -225,8 +225,10 @@ export function recommendTrainingFocus({ opponent, teamFit, formationMatchup, la
     };
   }
 
-  const opponentId = opponent?.id || null;
-  const opponentMatches = TRAINING_FOCUSES.filter((focus) => focus.bestAgainstOpponentStyles.includes(opponentId));
+  // Ligaklubber have individual IDs, but also a canonical style family.
+  // Training advice must recognize the football that club actually plays.
+  const opponentStyleId = opponent?.baseStyleId || opponent?.id || null;
+  const opponentMatches = TRAINING_FOCUSES.filter((focus) => focus.bestAgainstOpponentStyles.includes(opponentStyleId));
   if (opponentMatches.length > 0) {
     return {
       focusIds: opponentMatches.slice(0, 2).map((focus) => focus.id),
@@ -337,7 +339,7 @@ export function createTrainingMatchdaySnapshot({ selection, clubWeek, coachConte
     effectHint: focus.effectHint,
     affectedMetrics: [...focus.affectedMetrics],
     staffSupport: { ...staffSupport },
-    opponentFit: focus.bestAgainstOpponentStyles.includes(opponent?.id),
+    opponentFit: focus.bestAgainstOpponentStyles.includes(opponent?.baseStyleId || opponent?.id),
     contextRelevant,
     contextReason: addressesMatchup ? "matchup" : addressesLastWeakness ? "forrige_kamp" : null,
     coherenceBonus: coherence,
