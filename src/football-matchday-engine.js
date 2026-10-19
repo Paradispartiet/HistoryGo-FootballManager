@@ -1322,6 +1322,67 @@ const OPPONENT_EVENTS = {
   }
 };
 
+// Alternative, style-based situations for return fixtures away from home.
+// These still use the established decision checks and IMPACTS; they do not
+// pretend that a real club used this tactic in a particular historical match.
+const OPPONENT_AWAY_EVENTS = {
+  high_press_opponent: {
+    id: "opp_press_second_balls",
+    title: "Andreballene etter høyt press",
+    text: "Motstanderen stenger oppspillene. En lang ball frigjør presset, men midtbanen må vinne andreballen.",
+    pressure: "high",
+    options: [
+      opt("play_out", "Spill gjennom første pressledd", [m("buildUpScore", 64), m("roleFitAverage", 58)], IMPACTS.aggressive, 2),
+      opt("attack_second_ball", "Slå over presset og samle laget rundt andreballen", [m("balanceScore", 58), m("depthScore", 56)], IMPACTS.balanced, 1),
+      opt("secure_shape", "Hold flere spillere bak ballen", [m("restDefenseScore", 55)], IMPACTS.defensive, 0)
+    ]
+  },
+  low_block_opponent: {
+    id: "opp_low_block_recycling",
+    title: "Angrepet går på tvers av blokken",
+    text: "Motstanderen samler seg foran eget felt. Du har ballen, men få åpne pasningslinjer.",
+    pressure: "medium",
+    options: [
+      opt("switch_play", "Vend spillet raskt mot motsatt kant", [m("widthScore", 60), m("buildUpScore", 57)], IMPACTS.balanced, 1),
+      opt("attack_pockets", "La en spiller søke rommet mellom leddene", [m("roleFitAverage", 60)], IMPACTS.aggressive, 1),
+      opt("stay_patient", "La laget beholde kontroll og tålmodighet", [m("balanceScore", 56)], IMPACTS.holdPlan, 0)
+    ]
+  },
+  direct_counter_opponent: {
+    id: "opp_counter_second_wave",
+    title: "Ny kontringsbølge etter klarering",
+    text: "Laget får først ryddet unna, men motstanderen plukker opp andreballen og vender raskt opp.",
+    pressure: "high",
+    options: [
+      opt("close_middle", "Sikre området foran stopperne", [m("restDefenseScore", 58), m("balanceScore", 54)], IMPACTS.defensive, 0),
+      opt("press_receiver", "Jakt ballføreren før kontringen får fart", [m("pressScore", 63)], IMPACTS.aggressive, 2),
+      opt("hold_lines", "Hold avstandene mellom lagdelene", [m("balanceScore", 58)], IMPACTS.holdPlan, 0)
+    ]
+  },
+  possession_opponent: {
+    id: "opp_possession_switch",
+    title: "Motstanderen vender spillet bort fra presset",
+    text: "Ballbesitterne lokker laget mot én side og skifter raskt til den andre.",
+    pressure: "medium",
+    options: [
+      opt("shift_together", "Flytt hele laget samlet mot ballen", [m("balanceScore", 60)], IMPACTS.defensive, 0),
+      opt("trap_receiver", "Press mottakeren umiddelbart etter vendingen", [m("pressScore", 62), m("widthScore", 56)], IMPACTS.aggressive, 1),
+      opt("protect_center", "Gi bort kanten, men beskytt midten", [m("restDefenseScore", 56)], IMPACTS.balanced, 0)
+    ]
+  },
+  physical_set_piece_opponent: {
+    id: "opp_set_piece_second_ball",
+    title: "Andreballen etter dødballen",
+    text: "Første duell blir avklart, men motstanderen stiller opp for å skyte eller legge inn på nytt.",
+    pressure: "high",
+    options: [
+      opt("clear_zone", "Press laget raskt ut etter klareringen", [m("pressScore", 60), m("balanceScore", 54)], IMPACTS.balanced, 1),
+      opt("shield_box", "Bli kompakt og beskytt boksen", [m("restDefenseScore", 58)], IMPACTS.defensive, 0),
+      opt("counter_fast", "Søk overgangen mens motstanderen står høyt", [m("depthScore", 62)], IMPACTS.aggressive, 2)
+    ]
+  }
+};
+
 // Analyseplanen gir ingen skjult kampbonus. Den gjør i stedet managerens valgte
 // observasjonsfokus reelt ved å prioritere en EKSISTERENDE kampsituasjon som
 // treffer det fokuset. Det er fortsatt valget i situasjonen som avgjør xG,
@@ -1375,7 +1436,13 @@ export function generateMatchdayEvents({ formation, tacticalProfile, opponent, o
   const pool = FAMILY_EVENTS[family] || FAMILY_EVENTS.modern;
   const tp = tacticalProfile || {};
 
-  const variationKey = opponent?.id || opponent?.baseStyleId || "opponent";
+  // Return fixtures should not be an identical decision script. Match context
+  // changes selection, but not the underlying tactical checks or outcomes.
+  const variationKey = [
+    opponent?.id || opponent?.baseStyleId || "opponent",
+    opponent?.matchId || opponent?.fixtureId || opponent?.round || "",
+    opponent?.homeAway || ""
+  ].filter(Boolean).join(":");
   const rankedFamily = pool
     .map((event) => ({ event, score: scoreEventRelevance(event, tp, variationKey) }))
     .sort((a, b) => b.score - a.score)
@@ -1388,16 +1455,27 @@ export function generateMatchdayEvents({ formation, tacticalProfile, opponent, o
   const preparedEvent = opponentAnalysisPlan
     ? rankedFamily.find((event) => eventMatchesOpponentAnalysis(event, opponentAnalysisPlan)) || null
     : null;
-  const companionEvent = rankedFamily.find((event) => event.id !== preparedEvent?.id) || null;
-  const familyPicked = preparedEvent
-    ? [preparedEvent, companionEvent]
-        .filter(Boolean)
-        .sort((a, b) => rankedFamily.indexOf(a) - rankedFamily.indexOf(b))
-    : rankedFamily.slice(0, 2);
+  // Preserve the most relevant situation. Let the other situation vary among
+  // the three strongest remaining candidates for distinct fixtures; with no
+  // fixture context, keep the original top-two selection for old callers.
+  const firstEvent = preparedEvent || rankedFamily[0] || null;
+  const alternatives = rankedFamily.filter((event) => event.id !== firstEvent?.id);
+  const hasFixtureContext = Boolean(
+    opponent?.matchId || opponent?.fixtureId || opponent?.round || opponent?.homeAway
+  );
+  const companionIndex = hasFixtureContext && alternatives.length > 1
+    ? Math.floor(stableVariationScore(`${variationKey}:companion`) * Math.min(3, alternatives.length))
+    : 0;
+  const companionEvent = alternatives[companionIndex] || alternatives[0] || null;
+  const familyPicked = [firstEvent, companionEvent]
+    .filter(Boolean)
+    .sort((a, b) => rankedFamily.indexOf(a) - rankedFamily.indexOf(b));
 
   // Historiske stil-motstandere har egne id-er; de peker på en generisk
   // stil-familie via baseStyleId for å gjenbruke hendelsesbiblioteket.
-  const opponentEvent = OPPONENT_EVENTS[opponent?.id] || OPPONENT_EVENTS[opponent?.baseStyleId] || null;
+  const opponentStyle = opponent?.baseStyleId || opponent?.id;
+  const opponentEvent = (opponent?.homeAway === "away" && OPPONENT_AWAY_EVENTS[opponentStyle])
+    || OPPONENT_EVENTS[opponent?.id] || OPPONENT_EVENTS[opponentStyle] || null;
 
   const picked = [familyPicked[0], opponentEvent, familyPicked[1]].filter(Boolean).slice(0, 3);
 
