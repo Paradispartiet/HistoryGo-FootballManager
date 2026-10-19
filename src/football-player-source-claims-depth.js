@@ -16,12 +16,12 @@ const documented = [
   // Strømsgodset 2026-10-19: individuelt beskrevet spillerstil fra andre karriereperioder.
   {
     "playerId": "martin_wiig",
-    "clubId": "stromsgodset",
+    "clubId": "sarpsborg08",
     "strengths": [
       "runs_behind",
       "finishing"
     ],
-    "claim": "FFKsupporters 2010-gjennomgang av Sarpsborg 08 beskriver Martin Wiig som «den kloke bakromsspissen og avslutteren». Det dokumenterer eksplisitt bakromsløp og avslutninger fra hans Sarpsborg-periode, ikke automatisk hurtighet eller en tallrating. Påstanden overføres til den eksisterende flerklubbspilleren uten å endre klubbtilknytning eller posisjon.",
+    "claim": "FFKsupporters 2010-gjennomgang av Sarpsborg 08 beskriver Martin Wiig som «den kloke bakromsspissen og avslutteren». Det dokumenterer eksplisitt bakromsløp og avslutninger fra hans Sarpsborg-periode, ikke automatisk hurtighet eller en tallrating. Påstanden gjelder spillerens kildebelagte Sarpsborg-tilknytning og legges bare på den eksisterende flerklubbprofilen; den utledede Godset-tilknytningen blir stående uavklart.",
     "source": "https://ffksupporter.net/nyheter/1904-4-plass-sarpsborg-08/",
     "sourceKind": "football_editorial"
   },
