@@ -129,7 +129,27 @@ function buildConsequences(lastMatch) {
 
 function buildDecisionReview(report, lastMatch) {
   const decisions = list(report?.decisions).length ? list(report?.decisions) : list(lastMatch?.decisions);
+  // Read the persisted engine verdicts in the order the manager made the choices.
+  // Do not infer a match outcome or invent feedback for old saves.
+  const timeline = decisions
+    .filter((decision) => decision && (decision.optionLabel || decision.label))
+    .map((decision) => ({
+      event: text(decision.eventTitle, "Kampsituasjon"),
+      choice: text(decision.optionLabel || decision.label, "Managergrep"),
+      tone: ["positive", "negative", "neutral"].includes(decision.tone) ? decision.tone : "neutral",
+      feedback: text(decision.feedback, ""),
+      learningContext: text(
+        decision.trainingObservation?.explanation || decision.analysisObservation?.explanation,
+        ""
+      )
+    }));
+  const positiveCount = timeline.filter((decision) => decision.tone === "positive").length;
+  const negativeCount = timeline.filter((decision) => decision.tone === "negative").length;
   return {
+    timeline,
+    summary: timeline.length
+      ? `${timeline.length} registrerte grep · ${positiveCount} traff · ${negativeCount} slo feil`
+      : "",
     best: report?.bestDecision
       ? {
         label: text(report.bestDecision.label, "Beste grep"),
@@ -365,6 +385,33 @@ export function renderPostMatchAnalysis(model, onOpenTarget) {
     decisionGrid.append(node("p", "matchday-post-match-empty", "Ingen kampgrep ble registrert i denne kampen."));
   }
   decisions.append(decisionGrid);
+  if (model.decisions.timeline.length) {
+    const sequence = node("div", "matchday-post-match-decision-history");
+    sequence.append(
+      node("h4", "", "Valgene dine, i kamprekkefølge"),
+      node("p", "matchday-post-match-decision-summary", model.decisions.summary)
+    );
+    const steps = node("ol", "matchday-post-match-decision-sequence");
+    model.decisions.timeline.forEach((decision) => {
+      const step = node("li", "matchday-post-match-decision-step");
+      step.dataset.tone = decision.tone;
+      step.append(
+        node("span", "", decision.event),
+        node("strong", "", decision.choice),
+        node("p", "", decision.feedback || "Eldre kampdata har ingen lagret motorreaksjon for dette grepet.")
+      );
+      if (decision.learningContext) {
+        step.append(node("small", "", decision.learningContext));
+      }
+      steps.append(step);
+    });
+    sequence.append(
+      steps,
+      node("p", "matchday-post-match-decision-caveat",
+        "Dette er kampmotorens registrerte reaksjoner på valgene, ikke en påstand om at ett grep alene avgjorde resultatet.")
+    );
+    decisions.append(sequence);
+  }
   section.append(decisions);
 
   const lower = node("div", "matchday-post-match-lower");
