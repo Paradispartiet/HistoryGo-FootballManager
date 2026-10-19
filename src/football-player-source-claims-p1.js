@@ -146,6 +146,8 @@ const documented = [
   {
     playerId: "william_kurtovic",
     placeId: "jotun_arena",
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Trenerens vurdering fremhever spesielt spillets forståelse. Pasningsteknikk tilskrives ikke uten en mer presis beskrivelse.",
     strengths: ["game_reading"],
     claim: "Sandefjord head coach Martí Cifuentes explicitly described Kurtovic as having good game understanding; generic 'technically good' wording is not converted into an invented technique token.",
     source: "https://www.sandefjordfotball.no/nyheter/ny-toarskontrakt-for-kurtovic"
@@ -294,22 +296,19 @@ const documented = [
   {
     playerId: "sander_moen_foss",
     placeId: "jotun_arena",
+    evidenceKind: "editorial_appraisal",
+    playingStyle: "Klubbens spillerprofil beskriver hurtighet som et vedvarende kjennetegn hos forsvareren, uten å fastslå øvrige ferdigheter.",
     strengths: ["pace"],
     claim: "Sandefjord Fotball beskriver Sander Moen Foss som hurtig: «En forsvarsspiller som er sterk i hodet, kan bruke begge bein og er hurtig.» Kun eksplisitt hurtighet føres som styrke.",
     source: "https://www.sandefjordfotball.no/nyheter/moen-foss-forlenger-skal-ta-mer-ansvar"
   },
   // --- Sandefjord, 09.10.2026: official match report ---------------------
-  {
-    playerId: "jacob_storevik",
-    placeId: "jotun_arena",
-    strengths: ["reflexes"],
-    claim: "Sandefjord Fotball beskriver i kamprapporten mot Odd at Jacob Storevik «viste ... stor reaksjonsevne» ved en redning fra kort hold. Kun reaksjonsevne dokumenteres.",
-    source: "https://www.sandefjordfotball.no/nyheter/stor-stemning-men-mallost-i-derbyfesten"
-  },
   // --- Sandefjord 05.02.2022: source-verifiable individual skill -----------
   {
     playerId: "mohamed_ofkir",
     placeId: "jotun_arena",
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Trenerens spilleromtale trekker frem uforutsigbar ballbehandling, ikke et enkeltstående dribletrekk.",
     strengths: ["flair"],
     claim: "Trener Hans Erik Ødegaard beskriver Ofkir: «Han virket livlig – og er uforutsigbar med ballen i beina.» Kun uforutsigbarheten er tatt som evidens for flair.",
     source: "https://www.sandefjordfotball.no/nyheter/odegaard-det-aller-beste-er-at-sesongen-er-i-gang"
@@ -318,6 +317,8 @@ const documented = [
   {
     playerId: "jakob_maslo_dunsby",
     placeId: "jotun_arena",
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Spilleren fremhever egne én-mot-én-offensive egenskaper og presspillet, som ulike taktiske bidrag.",
     strengths: ["one_vs_one", "pressing"],
     claim: "Dunsby om eget spill: «Jeg har kanskje min største styrke i en-mot-en offensivt. Også mener jeg at presspillet også fungerer bra for meg.»",
     source: "https://www.sandefjordfotball.no/nyheter/jakob-dunsby-blir-sf-spiller-ut-sesongen-2023"
@@ -325,6 +326,8 @@ const documented = [
   {
     playerId: "orjan_royrane",
     placeId: "jotun_arena",
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Spilleragentens omtale fremhever løpshurtighet. Et generelt teknikkadjektiv blir ikke flere spesifikke ferdigheter.",
     strengths: ["pace"],
     claim: "Spilleragent Thomas Raknes i BT: «En hurtig og meget god teknisk spiller»; bare hurtigheten er ført.",
     source: "https://www.bt.no/sport/i/1nBXjB/politimann-og-fotballagent"
@@ -332,79 +335,48 @@ const documented = [
   {
     playerId: "vetle_walle_egeli",
     placeId: "jotun_arena",
+    evidenceKind: "editorial_appraisal",
+    playingStyle: "Klubbens presentasjon beskriver trygg pasningsbruk; verken langpasninger eller tempoledelse er eksplisitt fastslått.",
     strengths: ["simple_passing"],
     claim: "Sandefjord Fotball om Egeli: «en unggutt med god pasningsfot og trygg med ballen». Bare den eksplisitte pasningsferdigheten føres.",
     source: "https://www.sandefjordfotball.no/nyheter/syv-debutanter-mot-odd"
-  },
-  {
-    playerId: "enric_valles",
-    placeId: "jotun_arena",
-    strengths: ["dribbling", "work_rate"],
-    claim: "Enric Vallès oppga ifølge gjengivelsen av Birmingham Citys spillerintervju at driblinger og arbeidsinnsats («dribbling and his work ethic») var hans fremste styrker.",
-    source: "https://en.wikipedia.org/wiki/Enric_Vall%C3%A8s"
-  },
-  {
-    playerId: "andre_sodlund",
-    placeId: "jotun_arena",
-    strengths: ["dribbling"],
-    claim: "NTBs kampreferat beskriver at Sødlund «fintet seg gjennom Sogndal-forsvaret» før en scoring. Kun den observerte driblingsteknikken føres.",
-    source: "https://www.dagbladet.no/sport/hjemmeseier-etter-overtidsdrama-i-sogndal/67656716"
   },
   // --- Sandefjord 10.10.2026: verified remaining base-squad claims ----------
   {
     playerId: "hjalmar_johansen",
     placeId: "jotun_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Historisk spilleromtale beskriver en naturlig leder i spillergruppen, uavhengig av scoringstall og posisjon.",
     strengths: ["leadership"],
     claim: "FFK-historikken beskriver Johansen: «Han var en naturlig leder for resten av spillergruppa». Dette belegger leadership, ikke en uverifisert angrepsferdighet.",
     source: "https://ffksupporter.net/spillere/hjalmar_johansen/"
-  },
-  {
-    playerId: "thomas_eftedal",
-    placeId: "jotun_arena",
-    strengths: ["stamina"],
-    claim: "Sekundær gjengivelse av spillestilen i biografien: «This was helped by good stamina». Originalavisens formulering er ikke kontrollert direkte.",
-    source: "https://en.wikipedia.org/wiki/Thomas_Eftedal"
   },
   // --- Sandefjord 10.10.2026: contemporary press and club history -----------
   {
     playerId: "cheikhou_dieng",
     placeId: "jotun_arena",
+    evidenceKind: "editorial_appraisal",
+    playingStyle: "VGs sesongvurdering beskriver en hurtig kant som gjerne utfordrer med ballen, med to tydelige ferdigheter.",
     strengths: ["pace", "dribbling"],
     claim: "VG-lupen 2015 beskriver Sandefjords kantspiller: «Che har bra fart og dribler gjerne». VGs analyse av laget bekrefter særskilt hurtigheten. Kun fart og observert driblestil er ført.",
     source: "https://www.vg.no/spesial/2015/vglupen/viewteam/?plassering=8"
-  },
-  {
-    playerId: "frode_fredriksen",
-    placeId: "jotun_arena",
-    strengths: ["set_pieces"],
-    claim: "Starts egen sesonghistorikk fra 1999 beskriver hvordan Fredriksens skrå frispark fra høyre gikk direkte i mål mot Byåsen. Kun den dokumenterte dødballutførelsen føres.",
-    source: "https://www.ikstart.no/start-historien/sesongoversikter/sesongen-1999/sesongen-1999-var"
   },
   // --- Sandefjord: four sourced historical/modern club profiles, 10.10.2026 ---
   {
     playerId: "filip_ottosson",
     placeId: "jotun_arena",
-    strengths: ["simple_passing", "vision", "duels"],
-    claim: "Sandefjord-trener Hans Erik Ødegaard beskriver Filip Ottossons presise korte/lange pasninger, gode overblikk og spilleforståelse, og trøkk i nærduellene. Kun disse eksplisitte kvalitetene føres.",
-    source: "https://www.sandefjordfotball.no/nyheter/filip-ottosson-har-signert-for-sf"
-  },
-  {
-    playerId: "andreas_tegstrom",
-    placeId: "jotun_arena",
-    strengths: ["dribbling"],
-    claim: "Dagbladets samtidige referat fra Sandefjord–Viking 24.09.2006 beskriver at Tegström driblet seg over halve banen før han scoret; han bekreftet selv at han også slo en tunnel. Kun dribling føres.",
-    source: "https://www.dagbladet.no/sport/mitt-fineste-mal-noensinne/66255977"
-  },
-  {
-    playerId: "stefan_ingi_sigurdarson",
-    placeId: "jotun_arena",
-    strengths: ["heading"],
-    claim: "Sandefjord Fotballs referat fra Kristiansund 17.08.2025 beskriver at Sigurdarson headet inn et innlegg fra Patoulidis ved bakerste stolpe. Kun denne dokumenterte hodeferdigheten føres.",
-    source: "https://www.sandefjordfotball.no/nyheter/det-endte-med-arets-forste-uavgjort-i-kristiansund"
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Trener og klubbomtale beskriver presise pasninger over ulike distanser, overblikk, spilleforståelse og bevisst valg av angrepstempo.",
+    strengths: ["simple_passing", "passing_range", "vision", "game_reading", "tempo_control", "duels"],
+    claim: "Sandefjord-trener Hans Erik Ødegaard beskriver Filip Ottossons presise korte/lange pasninger, gode overblikk og spilleforståelse, og trøkk i nærduellene. Kun disse eksplisitte kvalitetene føres. Sandefjords klubbomtale fra mars 2024 beskriver også hans gjentakende avveininger mellom lange og korte pasninger ut fra situasjonen; det støtter tempo_control. De tre ekstra ferdighetene er basert på vedvarende trener- og klubbomtale, ikke på én målgivende pasning.",
+    source: "https://www.sandefjordfotball.no/nyheter/filip-ottosson-har-signert-for-sf",
+    supportingSources: ["https://www.sandefjordfotball.no/nyheter/bunnsolid-generalprove-i-skien"]
   },
   {
     playerId: "danilo_al_saed",
     placeId: "jotun_arena",
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Klubbens presentasjon og treneruttalelse beskriver hurtighet, én-mot-én-spill og press som tydelige kjennetegn.",
     strengths: ["pace", "one_vs_one", "pressing"],
     claim: "Sandefjord Fotballs presentasjon 23.12.2022 beskriver Al-Saed som hurtig. Trener Hans Erik Ødegaard fremhever at han er god én mot én, utfordrer motstandere og er god i presspillet. Ingen øvrige egenskaper utledes.",
     source: "https://www.sandefjordfotball.no/nyheter/danilo-andres-al-saed-klar-for-sandefjord-fotball"
@@ -413,6 +385,8 @@ const documented = [
   {
     playerId: "rufo",
     placeId: "jotun_arena",
+    evidenceKind: "editorial_appraisal",
+    playingStyle: "Eurosports vurdering beskriver Rufo som et kreativt samlingspunkt som ser løsninger og setter medspillere opp.",
     strengths: ["vision"],
     claim: "Eurosports 2020-tabelltips omtaler Rufo som Sandefjords kreative midtpunkt og sier at han er «flink til å gjøre andre gode» og ofte skaper uventede offensive løsninger. Bare offensivt overblikk/vision føres.",
     source: "https://www.eurosport.no/fotball/eliteserien/2020/her-er-eurosports-tabelltips-molde-ned-fra-tronen-og-odd-i-nedrykksstrid_sto7776226/story.shtml"
@@ -421,6 +395,8 @@ const documented = [
   {
     playerId: "victor_demba_bindia",
     placeId: "jotun_arena",
+    evidenceKind: "editorial_appraisal",
+    playingStyle: "Fotballekspertens forhåndsvurdering sammenligner eksplisitt Bindias hurtighet med andre aktuelle spillere.",
     strengths: ["pace"],
     claim: "Lars Tjærnås beskriver Bindias fart i Aftenposten 17.03.2015: «han har større fart enn de andre aktuelle der» i stopperrollen. Antall kamper og løpemengde brukes ikke som ekstra styrker.",
     source: "https://www.aftenposten.no/sport/fotball/i/JonOGR/sorry-sandefjord-tjaernaas-tipper-dere-paa-jumboplass"
@@ -428,20 +404,17 @@ const documented = [
   {
     playerId: "eirik_lamoy",
     placeId: "jotun_arena",
+    evidenceKind: "editorial_appraisal",
+    playingStyle: "Fotballekspertens forhåndsvurdering omtaler uttrykkelig Lamøys hurtighet på kanten i lagets kontekst.",
     strengths: ["pace"],
     claim: "Lars Tjærnås vurderer Sandefjords venstrekant Eirik Lamøy som «nesten like hurtige» som Cheikhou Dieng i Aftenposten 17.03.2015. Bare hurtighet er dokumentert.",
     source: "https://www.aftenposten.no/sport/fotball/i/JonOGR/sorry-sandefjord-tjaernaas-tipper-dere-paa-jumboplass"
   },
   {
-    playerId: "erik_mjelde",
-    placeId: "jotun_arena",
-    strengths: ["set_pieces"],
-    claim: "Samtidig kampreferat fra Sandefjord–Tromsø 05.07.2015: «Erik Mjelde et frispark fra 18 meter rett i mål». Denne direkte dødballscoringen bærer kun set_pieces.",
-    source: "https://www.bt.no/sport/i/dOwdXO/innbytteren-reddet-tromsoe-paa-overtid"
-  },
-  {
     playerId: "zinedin_smajlovic",
     placeId: "jotun_arena",
+    evidenceKind: "editorial_appraisal",
+    playingStyle: "Rabonapods klubbguide beskriver duellkraft, hurtighet og én-mot-én-arbeid som særtrekk ved midtstopperen.",
     strengths: ["duels", "pace", "one_vs_one"],
     claim: "Rabona klubbguide 06.03.2026 beskriver midtstopper Zinedin Smajlović som «kompromissløs i duellspillet, hurtig, sterk én mot én». Bare dueller, fart og én-mot-én-spill føres.",
     source: "https://rabonapod.no/2026/03/06/klubbguiden-2026-nr-9/"
@@ -450,129 +423,48 @@ const documented = [
   {
     playerId: "birger_madsen",
     placeId: "jotun_arena",
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Trenerens spilleromtale beskriver hurtighet, duellkraft og ansvarsevne hos midtstopperen som varige kvaliteter.",
     strengths: ["pace", "duels", "leadership"],
     claim: "Ved overgangen fra Sandefjord til Vålerenga i 2009 beskrev trener Martin Andresen Birger Madsen som en rask midtstopper, duellsterk og en naturlig ledertype, og viste til kapteinsrollen i Sandefjord. Kun de tre eksplisitte egenskapene føres.",
     source: "https://www.dagbladet.no/sport/rask-og-ikke-sa-gammel/65270220"
   },
   {
-    playerId: "carlos_grossmuller",
-    placeId: "jotun_arena",
-    strengths: ["vision"],
-    claim: "VG Lives samtidige kampkommentar fra Sandefjord–Aalesund 01.10.2017 fremhever Carlos Grossmüllers «overblikk og en pasningsfot som går utenpå de fleste andre utpå her». Kun eksplisitt overblikk (vision) føres, ingen antatt pasningsrekkevidde.",
-    source: "https://vglive.vg.no/fotball/sandefjord-aalesund/6581/rapport"
-  },
-  {
-    playerId: "kari_arkivuo",
-    placeId: "jotun_arena",
-    strengths: ["dribbling", "crossing"],
-    claim: "Nettavisens kampreferat fra Aalesund–Sandefjord 2007 skildrer Arkivuos kontring ned venstrekanten: han passerte/lurte to navngitte forsvarere og leverte et innlegg som Adriano Muñoz scoret på. Kun dribling og innlegg (crossing) føres.",
-    source: "https://www.nettavisen.no/sport/min-beste-opplevelse/s/12-95-1253762"
-  },
-  {
     playerId: "samuel_isaksen",
     placeId: "jotun_arena",
+    evidenceKind: "editorial_appraisal",
+    playingStyle: "Fotballekspertens lagvurdering omtaler løpshurtighet som en konkret individuell kvalitet, ikke en kampsekvens.",
     strengths: ["pace"],
     claim: "Lars Tjærnås' samtidige forhåndsvurdering av Sandefjord før Eliteserien 2009 nevner Samuel Isaksen blant lagets «spillere med stor fart». Kun eksplisitt dokumentert hurtighet føres.",
     source: "https://www.aftenposten.no/sport/fotball/i/zGMwBb/slik-spiller-eliteserielagene"
   },
-  {
-    playerId: "sander_risan_mork",
-    placeId: "jotun_arena",
-    strengths: ["finishing"],
-    claim: "Brann Fotballs kampreferat 12.04.2026 sier at Sander Risan Mørk «plasserte et godt skudd i hjørnet» som avgjorde 0–1-kampen. Kun den dokumenterte avslutningen (finishing) føres.",
-    source: "https://www.brann.no/nyheter/tap-pa-stadion"
-  },
   // --- Sandefjord 10.10.2026: five further historical source claims ---------
-  {
-    playerId: "pau_morer",
-    placeId: "jotun_arena",
-    strengths: ["dribbling"],
-    claim: "Sandefjord Fotballs eget kampreferat fra Molde 2017 beskriver at Pau Morer «driblet seg forbi en rekke Molde-spillere på lekkert vis inne i feltet». Kun eksplisitt dribling føres, ikke duellstyrke fra én ballvinning.",
-    source: "https://www.sandefjordfotball.no/nyheter/et-fyrverkeri-av-en-fotballkamp"
-  },
   {
     playerId: "tijan_jaiteh",
     placeId: "jotun_arena",
+    evidenceKind: "editorial_appraisal",
+    playingStyle: "Samtidig fagkommentar beskriver den defensive spillestilen med duellstyrke og fart.",
     strengths: ["duels", "pace"],
     claim: "Samtidig fagkommentar om Sandnes Ulf i Dagsavisen 2014 omtaler Tijan Jaiteh som en spiller som «er duellsterk og har bra tempo». Kun eksplisitt duellspill og fart føres.",
     source: "https://www.dagsavisen.no/nyheter/kommentarhva-er-galt-med-sandnes-ulf/8378838"
   },
   {
-    playerId: "tom_helge_jacobsen",
-    placeId: "jotun_arena",
-    strengths: ["heading"],
-    claim: "Dagbladets samtidige divisjonsreferat fra Sandefjord–Haugesund 2001 beskriver en «glimrende heading» fra Tom Helge Jacobsen etter innlegg av Jon Midttun Lie. Bare dokumentert hodespill føres.",
-    source: "https://www.dagbladet.no/sport/1-divisjonsbors---26-runde/65752444"
-  },
-  {
     playerId: "jon_midttun_lie",
     placeId: "jotun_arena",
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Trenerens omtale identifiserer spilleren som en av lagets gode servere ved dødballer.",
     strengths: ["set_pieces"],
     claim: "Starts assistenttrener Bård Wiggen fremhevet i Aftenposten 2005 Jon Midttun Lie som en av lagets «gode servere» på dødball, og klubben bekrefter hans overgang fra Sandefjord til Start. Kun dødballutførelse føres.",
     source: "https://www.aftenposten.no/sport/fotball/i/Vb4KmV/vil-bli-doedballspesialister"
   },
   {
-    playerId: "alexander_gabrielsen",
-    placeId: "jotun_arena",
-    strengths: ["heading"],
-    claim: "Samtidig Aftenbladet-referat fra Viking–Brann 26.03.2006 beskriver Alexander Gabrielsens målheading etter hjørnespark, som Brann-keeper Håkon Opdal ikke kunne avverge. Spilleren er identitetskontrollert mot NFFs karriereregister med senere Sandefjord-opphold. Kun hodespill føres.",
-    source: "https://www.aftenbladet.no/sport/i/K3B4AG/opdal-min-feil"
-  },
-  {
-    playerId: "martin_jensen",
-    placeId: "jotun_arena",
-    strengths: ["set_pieces"],
-    claim: "Aftenpostens samtidige Sandefjord–Brann-referat 16.03.2009 beskriver et godt frispark slått av Martin Jensen, videre stusset av Espen Nystuen, i angrepet som endte med Erik Mjeldes 1–0-mål. Bare den konkret dokumenterte frisparkleveransen føres som set_pieces; ingen andre pasningsegenskaper utledes.",
-    source: "https://www.aftenposten.no/sport/fotball/i/lAMa4y/brann-ble-ydmyket"
-  },
-  {
-    playerId: "panajotis_dimitriadis",
-    placeId: "jotun_arena",
-    strengths: ["heading"],
-    claim: "Bergens Tidendes samtidige kampreferat 28.10.2012 om Sandefjord–Bryne 2–0 beskriver hvordan Panajotis Dimitriadis møtte hjørnesparket først med hodet og styrte det i lengste hjørne til 2–0. Kun dokumentert heading føres; resultat og målstatistikk gir ingen øvrige styrker.",
-    source: "https://www.bt.no/sport/i/kJ3amL/kniven-paa-strupen-for-bryne-etter-nytt-tap"
-  },
-  {
     playerId: "ebrima_sohna",
     placeId: "jotun_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Retrospektiv fotballomtale beskriver arbeidsinnsats, taklinger og bryting av pasninger som spillerens typiske innsats.",
     strengths: ["work_rate", "tackling", "interceptions"],
     claim: "Foroyaa 07.05.2020 beskriver Ebrima Sohna individuelt med «workaholic approach, tackles and interceptions» og som spesialist på duellpreget fotball. Arbeidsinnsats, taklinger og brudd føres som work_rate, tackling og interceptions; pasningsspill, teknikk og generell fysikk utledes ikke.",
     source: "https://foroyaa.net/14-years-after-conquering-africa-bare-truth-of-what-became-of-the-2005-baby-scorpions/"
-  },
-  {
-    playerId: "peter_skov_jensen",
-    placeId: "jotun_arena",
-    strengths: ["shot_stopping"],
-    claim: "Aftenpostens samtidige referat fra Rosenborg–Sandefjord 23.09.2007 beskriver at Peter Skov-Jensen bokset unna et frispark fra Marek Sapara og fistet et skudd fra Mikael Dorsin over mål. Kun de konkrete redningene føres som shot_stopping; ingen generell rangering eller reaksjonsevne utledes.",
-    source: "https://www.aftenposten.no/sport/fotball/i/50j0kO/komfortabelt"
-  },
-  {
-    playerId: "marc_vales",
-    placeId: "jotun_arena",
-    strengths: ["heading"],
-    claim: "Molde FK beskriver i sitt kampreferat fra Molde–Sandefjord 0–1 i 2020 at Marc Vales headet inn Sandefjords mål etter en corner fra Vidar Ari Jónsson i det sjette minuttet. Kun heading føres; ingen andre tekniske egenskaper utledes.",
-    source: "https://www.moldefk.no/om-klubben/var-historie/2020-2023/2020/eliteserien-2020/ni-mann-med-2-pa-borsen"
-  },
-  {
-    playerId: "daniel_seland_karlsbakk",
-    placeId: "jotun_arena",
-    strengths: ["heading"],
-    claim: "Norges Fotballforbunds kampreferat fra G19-kampen mot Serbia 07.06.2022 sier at Daniel Seland Karlsbakk headet inn Norges 2–3-redusering i det 82. minutt. Kun dokumentert heading føres; handlingen fant sted på landslaget, men gjelder samme spiller.",
-    source: "https://www.fotball.no/landslag/norge-gutter-19/2022/g19---vi-er-veldig-skuffa-over-at-vi-ikke-klarte-det/"
-  },
-  {
-    playerId: "jan_fredrik_bjorntvedt",
-    placeId: "jotun_arena",
-    strengths: ["heading"],
-    claim: "VG 07.07.2002 dokumenterer vinnermålet i Sandefjord–Tromsø 3–2: «to minutter på overtid headet Jan Fredrik Bjørntvedt 3-2 etter et innøvd frispark». Bare det eksplisitt dokumenterte hodespillet føres; ingen øvrige egenskaper utledes fra målet.",
-    source: "https://www.vg.no/sport/i/L00QR4/foerste-serietap-for-tromsoe"
-  },
-  {
-    playerId: "christer_reppesgard_hansen",
-    placeId: "jotun_arena",
-    strengths: ["passing_range"],
-    claim: "Dagsavisens samtidige Sandnes Ulf–Strømmen-referat 28.10.2020 beskriver en presis spillvending fra Reppesgård Hansen til kantspiller Jonsson: «Reppersgård Hansen vender spillet strålende til Jonsson». Dette bærer bare passing_range (vending av spillet); ingen generell oversikt, fart eller andre pasningsstyrker utledes fra enkelthendelsen.",
-    source: "https://www.dagsavisen.no/sport/sandnes-ulf-kan-skyte-seg-tilbake-pa-kvalikplass/7113489"
   },
   {
     playerId: "tor_hogne_aaroy",
@@ -692,6 +584,160 @@ export const P1_NEW_DOCUMENTED = Object.freeze(documented.map((entry) => Object.
 // individual strengths. They are retained for history/provenance but MUST NOT
 // lift attributes. legacyTokens record only the old (withdrawn) strength tags.
 const eventOnly = [
+  // Sandefjord: 19 konkrete kampsekvenser beholdes uten attributtoner.
+  {
+    playerId: "jacob_storevik",
+    placeId: "jotun_arena",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["reflexes"],
+    claim: "Historisk kampsekvens, ikke belegg for varig spilleregenskap. Sandefjord Fotball beskriver i kamprapporten mot Odd at Jacob Storevik «viste ... stor reaksjonsevne» ved en redning fra kort hold. reaksjonsevne dokumenteres.",
+    source: "https://www.sandefjordfotball.no/nyheter/stor-stemning-men-mallost-i-derbyfesten"
+  },
+  {
+    playerId: "andre_sodlund",
+    placeId: "jotun_arena",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["dribbling"],
+    claim: "Historisk kampsekvens, ikke belegg for varig spilleregenskap. NTBs kampreferat beskriver at Sødlund «fintet seg gjennom Sogndal-forsvaret» før en scoring. Den observerte driblingsteknikken føres.",
+    source: "https://www.dagbladet.no/sport/hjemmeseier-etter-overtidsdrama-i-sogndal/67656716"
+  },
+  {
+    playerId: "frode_fredriksen",
+    placeId: "jotun_arena",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["set_pieces"],
+    claim: "Historisk kampsekvens, ikke belegg for varig spilleregenskap. Starts egen sesonghistorikk fra 1999 beskriver hvordan Fredriksens skrå frispark fra høyre gikk direkte i mål mot Byåsen. den dokumenterte dødballutførelsen føres.",
+    source: "https://www.ikstart.no/start-historien/sesongoversikter/sesongen-1999/sesongen-1999-var"
+  },
+  {
+    playerId: "andreas_tegstrom",
+    placeId: "jotun_arena",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["dribbling"],
+    claim: "Historisk kampsekvens, ikke belegg for varig spilleregenskap. Dagbladets samtidige referat fra Sandefjord–Viking 24.09.2006 beskriver at Tegström driblet seg over halve banen før han scoret; han bekreftet selv at han også slo en tunnel. dribling føres.",
+    source: "https://www.dagbladet.no/sport/mitt-fineste-mal-noensinne/66255977"
+  },
+  {
+    playerId: "stefan_ingi_sigurdarson",
+    placeId: "jotun_arena",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["heading"],
+    claim: "Historisk kampsekvens, ikke belegg for varig spilleregenskap. Sandefjord Fotballs referat fra Kristiansund 17.08.2025 beskriver at Sigurdarson headet inn et innlegg fra Patoulidis ved bakerste stolpe. denne dokumenterte hodeferdigheten føres.",
+    source: "https://www.sandefjordfotball.no/nyheter/det-endte-med-arets-forste-uavgjort-i-kristiansund"
+  },
+  {
+    playerId: "erik_mjelde",
+    placeId: "jotun_arena",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["set_pieces"],
+    claim: "Historisk kampsekvens, ikke belegg for varig spilleregenskap. Samtidig kampreferat fra Sandefjord–Tromsø 05.07.2015: «Erik Mjelde et frispark fra 18 meter rett i mål». Denne direkte dødballscoringen bærer kun set_pieces.",
+    source: "https://www.bt.no/sport/i/dOwdXO/innbytteren-reddet-tromsoe-paa-overtid"
+  },
+  {
+    playerId: "carlos_grossmuller",
+    placeId: "jotun_arena",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["vision"],
+    claim: "Historisk kampsekvens, ikke belegg for varig spilleregenskap. VG Lives samtidige kampkommentar fra Sandefjord–Aalesund 01.10.2017 fremhever Carlos Grossmüllers «overblikk og en pasningsfot som går utenpå de fleste andre utpå her». eksplisitt overblikk (vision) føres, ingen antatt pasningsrekkevidde.",
+    source: "https://vglive.vg.no/fotball/sandefjord-aalesund/6581/rapport"
+  },
+  {
+    playerId: "kari_arkivuo",
+    placeId: "jotun_arena",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["dribbling","crossing"],
+    claim: "Historisk kampsekvens, ikke belegg for varig spilleregenskap. Nettavisens kampreferat fra Aalesund–Sandefjord 2007 skildrer Arkivuos kontring ned venstrekanten: han passerte/lurte to navngitte forsvarere og leverte et innlegg som Adriano Muñoz scoret på. dribling og innlegg (crossing) føres.",
+    source: "https://www.nettavisen.no/sport/min-beste-opplevelse/s/12-95-1253762"
+  },
+  {
+    playerId: "sander_risan_mork",
+    placeId: "jotun_arena",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["finishing"],
+    claim: "Historisk kampsekvens, ikke belegg for varig spilleregenskap. Brann Fotballs kampreferat 12.04.2026 sier at Sander Risan Mørk «plasserte et godt skudd i hjørnet» som avgjorde 0–1-kampen. den dokumenterte avslutningen (finishing) føres.",
+    source: "https://www.brann.no/nyheter/tap-pa-stadion"
+  },
+  {
+    playerId: "pau_morer",
+    placeId: "jotun_arena",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["dribbling"],
+    claim: "Historisk kampsekvens, ikke belegg for varig spilleregenskap. Sandefjord Fotballs eget kampreferat fra Molde 2017 beskriver at Pau Morer «driblet seg forbi en rekke Molde-spillere på lekkert vis inne i feltet». eksplisitt dribling føres, ikke duellstyrke fra én ballvinning.",
+    source: "https://www.sandefjordfotball.no/nyheter/et-fyrverkeri-av-en-fotballkamp"
+  },
+  {
+    playerId: "tom_helge_jacobsen",
+    placeId: "jotun_arena",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["heading"],
+    claim: "Historisk kampsekvens, ikke belegg for varig spilleregenskap. Dagbladets samtidige divisjonsreferat fra Sandefjord–Haugesund 2001 beskriver en «glimrende heading» fra Tom Helge Jacobsen etter innlegg av Jon Midttun Lie. Bare dokumentert hodespill føres.",
+    source: "https://www.dagbladet.no/sport/1-divisjonsbors---26-runde/65752444"
+  },
+  {
+    playerId: "alexander_gabrielsen",
+    placeId: "jotun_arena",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["heading"],
+    claim: "Historisk kampsekvens, ikke belegg for varig spilleregenskap. Samtidig Aftenbladet-referat fra Viking–Brann 26.03.2006 beskriver Alexander Gabrielsens målheading etter hjørnespark, som Brann-keeper Håkon Opdal ikke kunne avverge. Spilleren er identitetskontrollert mot NFFs karriereregister med senere Sandefjord-opphold. hodespill føres.",
+    source: "https://www.aftenbladet.no/sport/i/K3B4AG/opdal-min-feil"
+  },
+  {
+    playerId: "martin_jensen",
+    placeId: "jotun_arena",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["set_pieces"],
+    claim: "Historisk kampsekvens, ikke belegg for varig spilleregenskap. Aftenpostens samtidige Sandefjord–Brann-referat 16.03.2009 beskriver et godt frispark slått av Martin Jensen, videre stusset av Espen Nystuen, i angrepet som endte med Erik Mjeldes 1–0-mål. Bare den konkret dokumenterte frisparkleveransen føres som set_pieces; ingen andre pasningsegenskaper utledes.",
+    source: "https://www.aftenposten.no/sport/fotball/i/lAMa4y/brann-ble-ydmyket"
+  },
+  {
+    playerId: "panajotis_dimitriadis",
+    placeId: "jotun_arena",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["heading"],
+    claim: "Historisk kampsekvens, ikke belegg for varig spilleregenskap. Bergens Tidendes samtidige kampreferat 28.10.2012 om Sandefjord–Bryne 2–0 beskriver hvordan Panajotis Dimitriadis møtte hjørnesparket først med hodet og styrte det i lengste hjørne til 2–0. dokumentert heading føres; resultat og målstatistikk gir ingen øvrige styrker.",
+    source: "https://www.bt.no/sport/i/kJ3amL/kniven-paa-strupen-for-bryne-etter-nytt-tap"
+  },
+  {
+    playerId: "peter_skov_jensen",
+    placeId: "jotun_arena",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["shot_stopping"],
+    claim: "Historisk kampsekvens, ikke belegg for varig spilleregenskap. Aftenpostens samtidige referat fra Rosenborg–Sandefjord 23.09.2007 beskriver at Peter Skov-Jensen bokset unna et frispark fra Marek Sapara og fistet et skudd fra Mikael Dorsin over mål. de konkrete redningene føres som shot_stopping; ingen generell rangering eller reaksjonsevne utledes.",
+    source: "https://www.aftenposten.no/sport/fotball/i/50j0kO/komfortabelt"
+  },
+  {
+    playerId: "marc_vales",
+    placeId: "jotun_arena",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["heading"],
+    claim: "Historisk kampsekvens, ikke belegg for varig spilleregenskap. Molde FK beskriver i sitt kampreferat fra Molde–Sandefjord 0–1 i 2020 at Marc Vales headet inn Sandefjords mål etter en corner fra Vidar Ari Jónsson i det sjette minuttet. heading føres; ingen andre tekniske egenskaper utledes.",
+    source: "https://www.moldefk.no/om-klubben/var-historie/2020-2023/2020/eliteserien-2020/ni-mann-med-2-pa-borsen"
+  },
+  {
+    playerId: "daniel_seland_karlsbakk",
+    placeId: "jotun_arena",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["heading"],
+    claim: "Historisk kampsekvens, ikke belegg for varig spilleregenskap. Norges Fotballforbunds kampreferat fra G19-kampen mot Serbia 07.06.2022 sier at Daniel Seland Karlsbakk headet inn Norges 2–3-redusering i det 82. minutt. dokumentert heading føres; handlingen fant sted på landslaget, men gjelder samme spiller.",
+    source: "https://www.fotball.no/landslag/norge-gutter-19/2022/g19---vi-er-veldig-skuffa-over-at-vi-ikke-klarte-det/"
+  },
+  {
+    playerId: "jan_fredrik_bjorntvedt",
+    placeId: "jotun_arena",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["heading"],
+    claim: "Historisk kampsekvens, ikke belegg for varig spilleregenskap. VG 07.07.2002 dokumenterer vinnermålet i Sandefjord–Tromsø 3–2: «to minutter på overtid headet Jan Fredrik Bjørntvedt 3-2 etter et innøvd frispark». Bare det eksplisitt dokumenterte hodespillet føres; ingen øvrige egenskaper utledes fra målet.",
+    source: "https://www.vg.no/sport/i/L00QR4/foerste-serietap-for-tromsoe"
+  },
+  {
+    playerId: "christer_reppesgard_hansen",
+    placeId: "jotun_arena",
+    evidenceKind: "single_match_event",
+    legacyTokens: ["passing_range"],
+    claim: "Historisk kampsekvens, ikke belegg for varig spilleregenskap. Dagsavisens samtidige Sandnes Ulf–Strømmen-referat 28.10.2020 beskriver en presis spillvending fra Reppesgård Hansen til kantspiller Jonsson: «Reppersgård Hansen vender spillet strålende til Jonsson». Dette bærer bare passing_range (vending av spillet); ingen generell oversikt, fart eller andre pasningsstyrker utledes fra enkelthendelsen.",
+    source: "https://www.dagsavisen.no/sport/sandnes-ulf-kan-skyte-seg-tilbake-pa-kvalikplass/7113489"
+  },
+
   {
     playerId: "jorgen_hatlehol",
     placeId: "color_line_stadion",
@@ -943,7 +989,23 @@ export const P1_NEW_EVENT_ONLY = Object.freeze(eventOnly.map((entry) => Object.f
 // career/role but carries no reusable skill claim. The source-safe v2 pool files
 // alone do not upgrade a profile from THIN-SOURCE; the earlier five pass files
 // retain their own already-audited DELVIS identities.
-export const P1_NEW_PARTIAL = Object.freeze([]);
+// Sandefjord: to biografiske sekundærkilder trenger originalverifisering.
+export const P1_NEW_PARTIAL = Object.freeze([
+  {
+    playerId: "enric_valles",
+    placeId: "jotun_arena",
+    strengths: [],
+    claim: "Sekundær biografisk gjengivelse av en mulig ferdighet. Originalt spillerintervju er ikke kontrollert direkte, og gir derfor ikke kvalifisert varig styrke.",
+    source: "https://en.wikipedia.org/wiki/Enric_Vall%C3%A8s"
+  },
+  {
+    playerId: "thomas_eftedal",
+    placeId: "jotun_arena",
+    strengths: [],
+    claim: "Sekundær biografisk gjengivelse av en mulig ferdighet. Originalt spillerintervju er ikke kontrollert direkte, og gir derfor ikke kvalifisert varig styrke.",
+    source: "https://en.wikipedia.org/wiki/Thomas_Eftedal"
+  },
+].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
   {
