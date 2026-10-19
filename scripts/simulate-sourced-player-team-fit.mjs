@@ -4,7 +4,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import { calculateTeamFit } from "../src/football-team-fit-engine.js";
-import { buildSourcedLineupInsights } from "../src/football-sourced-lineup-insights.js";
+import { buildSourcedLineupInsights, previewSourcedPlayerSwap } from "../src/football-sourced-lineup-insights.js";
 import { calculateTeamFit as calculateLiveTypescriptTeamFit } from "../dist/index.js";
 import { calculateMatchStrength, simulateMatchday, createMatchdaySession, advanceMatchClock, applyMatchdaySubstitution, finalizeMatchdaySession, OPPONENT_PROFILES } from "../src/football-matchday-engine.js";
 
@@ -294,6 +294,50 @@ assert.ok(unknownOverview.every((row) => row.detail.includes("Ingen direkte doku
   "unknown player evidence must be described as unknown, not a player weakness");
 assert.deepEqual(buildSourcedLineupInsights(null), [],
   "empty team fit must not produce invented contribution figures");
+
+
+// Compare an available CB BEFORE selecting them, holding the existing role
+// and every other slot fixed. The preview must match an actual team fit.
+const cbRole = roles.find((role) => role.id === "ball_playing_centre_back");
+const fastCandidate = sourced("hurtig_stopper", ["pace", "game_reading"]);
+const swapPreview = previewSourcedPlayerSwap({
+  teamFit: passer, slot: cbSlot, role: cbRole, player: fastCandidate, tactic
+});
+assert.deepEqual(
+  swapPreview.changes,
+  ["buildUpScore", "restDefenseScore"].map((key) => {
+    const labels = { buildUpScore: "Oppbygging", restDefenseScore: "Restforsvar" };
+    return {
+      key, label: labels[key],
+      delta: fast.sourcedSkillTendencies[key].bonus - passer.sourcedSkillTendencies[key].bonus
+    };
+  }),
+  "selection preview must equal the real engine delta of the resulting eleven"
+);
+assert.ok(swapPreview.description.includes("+") && swapPreview.description.includes("-"),
+  "manager must see both benefit and trade-off for the candidate");
+const samePlayerPreview = previewSourcedPlayerSwap({
+  teamFit: passer, slot: cbSlot, role: cbRole,
+  player: sourced("pasningssterk_stopper", ["passing_range", "composure"]), tactic
+});
+assert.equal(samePlayerPreview.changes.length, 0,
+  "reselecting the existing player must not invent a new tactical gain");
+const unknownCandidate = previewSourcedPlayerSwap({
+  teamFit: passer, slot: cbSlot, role: cbRole,
+  player: sourced("ukjent_inn", ["pace"], "utledet"), tactic
+});
+assert.equal(unknownCandidate.hasEvidence, false,
+  "modeled player strengths must not turn into sourced evidence");
+assert.ok(unknownCandidate.description.includes("-"),
+  "removing a sourced passer can lose bonus even if incoming evidence is unknown");
+const vacantFit = { ...passer, assignments: passer.assignments.filter((entry) =>
+  entry.slot.slotId !== cbSlot.slotId), sourcedSkillTendencies: {} };
+assert.ok(previewSourcedPlayerSwap({
+  teamFit: vacantFit, slot: cbSlot, role: cbRole, player: fastCandidate, tactic
+}).description.includes("+"),
+  "a player can add sourced benefits to a vacant slot");
+assert.equal(previewSourcedPlayerSwap({ teamFit: passer, slot: cbSlot }), null,
+  "without a player and role do not invent a tactical preview");
 
 console.log(JSON.stringify({
   ok: true, completeCount: 11,

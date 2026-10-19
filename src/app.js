@@ -177,7 +177,7 @@ import {
   buildTrainingFocusOffPitchEvent
 } from "./football-training-week.js";
 import { createSuggestedSetups } from "./football-suggested-setups.js";
-import { buildSourcedLineupInsights } from "./football-sourced-lineup-insights.js";
+import { buildSourcedLineupInsights, previewSourcedPlayerSwap } from "./football-sourced-lineup-insights.js";
 import { computeNextActions, NEXT_ACTION_TYPES } from "./football-next-action.js";
 import { selectDefaultFormation, selectDefaultMatchPlan } from "./football-default-formation.js";
 import { evaluateMatchdayReadiness } from "./football-matchday-readiness.js";
@@ -8389,7 +8389,7 @@ function setSelectedSlotRole(nextRoleId) {
   renderApp();
 }
 
-function renderDirectLineupEditor() {
+function renderDirectLineupEditor(teamFit) {
   const playerHost = elements.lineupPlayerChoices;
   const roleHost = elements.lineupRoleChoices;
   const slot = getSelectedSlot();
@@ -8412,7 +8412,27 @@ function renderDirectLineupEditor() {
       ...(Array.isArray(player.naturalPositions) ? player.naturalPositions : []),
       ...(Array.isArray(player.usablePositions) ? player.usablePositions : [])
     ])].join(" / ") || "–";
-    button.innerHTML = `<strong>${player.name || player.id}</strong><span>${positions}</span>`;
+    // Use the SAME selected role (or the same fallback role) that the click
+    // handler will use. Compare only direct source-backed tactical additions.
+    const nextRoleId = state.roles.find((role) =>
+      role.id === slotState.roleId && role.validPositions.includes(slot.position))
+      ? slotState.roleId
+      : getDefaultRoleForPlayer(player, slot);
+    const nextRole = state.roles.find((role) => role.id === nextRoleId);
+    const preview = !button.disabled && nextRole
+      ? previewSourcedPlayerSwap({ teamFit, slot, role: nextRole, player, tactic: getTactic() })
+      : null;
+    const playerName = document.createElement("strong");
+    playerName.textContent = player.name || player.id;
+    const playerPositions = document.createElement("span");
+    playerPositions.textContent = positions;
+    button.append(playerName, playerPositions);
+    if (preview) {
+      const sourceNote = document.createElement("small");
+      sourceNote.className = "lineup-player-sourced-preview";
+      sourceNote.textContent = preview.description;
+      button.append(sourceNote);
+    }
     button.addEventListener("click", () => setSelectedSlotPlayer(player.id));
     playerHost.append(button);
   });
@@ -16439,7 +16459,7 @@ function renderApp() {
   renderControls();
   renderTeamSummary(teamFit);
   renderLineup(teamFit);
-  renderDirectLineupEditor();
+  renderDirectLineupEditor(teamFit);
   renderSquadSetupGate(teamFit);
   renderRosterReadiness();
   renderTacticalSystemPanel();
