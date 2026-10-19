@@ -815,6 +815,115 @@ const documented = [
     claim: "KFUMs kåring av klubbens 50 beste spillere beskriver: En keeper med fint balltilslag og en tydelig samlende lederrolle.",
     source: "https://www.kaaffa.no/nyheter/tidenes-50-beste-kfum-spillere"
   },
+  // Eliteserien: Start, Tromsø og Fredrikstad · 19.10.2026.
+  {
+    playerId: "torfinn_ingebrigtsen",
+    placeId: "romssa_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Hurtig og driblesterk angriper med målteft og stor evne til å utfordre forsvarslinjen.",
+    strengths: ["pace","dribbling","finishing"],
+    claim: "TILs spillerbiografi beskriver Ingebrigtsens fart, karakteristiske driblinger og vedvarende rolle som måltyv i klubbhistorien.",
+    source: "https://statistikk.til.no/spiller/torfinn-ingebrigtsen"
+  },
+  {
+    playerId: "bjarte_flem",
+    placeId: "romssa_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Keeper med særskilt historisk dokumentert evne til å stoppe straffespark.",
+    strengths: ["shot_stopping"],
+    claim: "TILs spillerbiografi omtaler strafferedningsevnen som et fast særtrekk ved Flem gjennom keeperkarrieren. Påstanden gjelder skuddredning, ikke beregnede reflekser.",
+    source: "https://statistikk.til.no/spiller/bjarte-flem"
+  },
+  {
+    playerId: "lars_espejord",
+    placeId: "romssa_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Komplett, duellsterk og pasningssikker sentral midtbanespiller med godt spillblikk.",
+    strengths: ["simple_passing","game_reading","tackling","jumping","duels"],
+    claim: "TILs spillerbiografi beskriver Espejord som pasningssikker, fotballklok, taklingssterk og spenstig, og som vinner av dueller både på bakken og i høyden.",
+    source: "https://statistikk.til.no/spiller/lars-espejord"
+  },
+  {
+    playerId: "nils_solstad",
+    placeId: "romssa_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Uredd og solid lagspiller med kompromissløs taklingsevne fra backplass.",
+    strengths: ["tackling","bravery","teamwork"],
+    claim: "TILs spillerbiografi beskriver hundre prosents innsats i taklinger, fryktløshet overfor store motstandere og at han var en solid lagspiller. Ett cupfinaleskudd er ikke nok til å tilskrive langskudd.",
+    source: "https://statistikk.til.no/spiller/nils-solstad"
+  },
+  {
+    playerId: "roar_christensen",
+    placeId: "romssa_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Løpssterk, klok midtbanespiller med kjent langskuddstrussel.",
+    strengths: ["work_rate","game_reading","long_shots","teamwork"],
+    claim: "TILs biografi fremhever Christensen som en arbeidshest med god spilleforståelse, som lagspiller og med gjentatte kraftfulle mål fra lang avstand.",
+    source: "https://statistikk.til.no/spiller/roar-christensen"
+  },
+  {
+    playerId: "raio_piiroja",
+    placeId: "fredrikstad_stadion",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Luftsterk duellstopper som også er farlig i offensive dødballer.",
+    strengths: ["heading","duels"],
+    claim: "FFK-arkivets biografi omtaler Piirojas luftdominans gjentatte ganger gjennom en mangeårig stopperkarriere, med 2006-finalen som et illustrerende eksempel, ikke som eneste belegg.",
+    source: "https://ffksupporter.net/spillere/raio_piiroja/"
+  },
+  {
+    playerId: "markus_ringberg",
+    placeId: "fredrikstad_stadion",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Produktiv avslutter som tok ansvar og ledet laget gjennom vanskelig sesongfase.",
+    strengths: ["finishing","leadership"],
+    claim: "FFKs biografi dokumenterer målteft og gjentatte toppscorerprestasjoner på flere nivåer samt en eksplisitt lederrolle da klubben strevde høsten 2004.",
+    source: "https://ffksupporter.net/spillere/markus_ringberg/"
+  },
+  {
+    playerId: "hans_erik_ramberg",
+    placeId: "fredrikstad_stadion",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Hardtarbeidende midtbanespiller med stor løpskapasitet og defensive bidrag.",
+    strengths: ["stamina","work_rate"],
+    claim: "FFKs historiske biografi fremhever Rambergs løpsstyrke som et varig trekk, og redaksjonell 2010-analyse beskriver førsteforsvarsarbeidet hans.",
+    source: "https://ffksupporter.net/spillere/hans_erik_ramberg/"
+  },
+  {
+    playerId: "brian_west",
+    placeId: "fredrikstad_stadion",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Særlig hurtig kantspiller som gir en direkte kontrings- og bakromsdimensjon.",
+    strengths: ["pace"],
+    claim: "FFKs redaksjonelle sesongforhåndsvurdering i 2004 karakteriserer West som ekstremt rask og beskriver hvordan hurtigheten kunne utfordre venstrebackene.",
+    source: "https://ffksupporter.net/nyheter/290-tabelltips-13-plass-fredrikstad/"
+  },
+  {
+    playerId: "celso_borges",
+    placeId: "fredrikstad_stadion",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Luftsterk offensiv midtbanespiller med kraftfulle avslutninger fra distanse.",
+    strengths: ["heading","long_shots"],
+    claim: "FFKsupporters forhåndsanalyse i 2010 beskriver Borges som hodesterk og med et tungt skudd. Det brukes til de avgrensede ferdighetene hodespill og kraftfulle skudd.",
+    source: "https://ffksupporter.net/nyheter/1911-1-plass-fredrikstad-fk/"
+  },
+  {
+    playerId: "marius_johnsen",
+    placeId: "sor_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Back med særskilt dokumentert luftstyrke og hodespill.",
+    strengths: ["heading"],
+    claim: "Aftenpostens 2005-analyse omtaler hodespillet til Starts Marius Johnsen som en spisskompetanse i europeisk toppklasse. Kraftig venstrefot brukes ikke til å anta langskuddpresisjon.",
+    source: "https://www.aftenposten.no/article/ap-dOJppj"
+  },
+  {
+    playerId: "frank_strandli",
+    placeId: "sor_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Kraftig, spenstig oppspillsspiss som vinner mye i lufta.",
+    strengths: ["heading","jumping","duels"],
+    claim: "Dagbladets spillerkåring beskriver Strandli som spenstig og sterk i lufta; samtidige kampvurderinger dokumenterer høy vunnet duellandel og det samme kjennetegnet.",
+    source: "https://www.dagbladet.no/sport/norges-50-beste-fotballspillere/65451136"
+  },
 
 ];
 
