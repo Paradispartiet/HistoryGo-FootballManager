@@ -73,14 +73,13 @@ for (const record of P1_NEW_DOCUMENTED) {
   ok(typeof record.claim === "string" && record.claim.trim().length > 20,
     `${record.playerId}: documented claim must be concrete`);
   ok(/^https:\/\//.test(record.source || ""), `${record.playerId}: documented claim needs an https source`);
-  // Only AaFK was re-reviewed for durability in this pass. Requiring explicit
-  // evidence type prevents a future isolated match event from entering its
-  // lasting strengths silently; other clubs retain their existing contract.
-  if (record.placeId === "color_line_stadion") {
+  // Re-review of AaFK and Sandefjord: a match event cannot masquerade as
+  // a persistent player skill. Both reviewed clubs require playing-style context.
+  if (["color_line_stadion", "jotun_arena"].includes(record.placeId)) {
     ok(["direct_appraisal", "editorial_appraisal", "historical_appraisal", "period_appraisal", "season_statistics"].includes(record.evidenceKind),
-      `${record.playerId}: AaFK durable claim needs non-event evidenceKind`);
+      `${record.playerId}: reviewed club durable claim needs non-event evidenceKind`);
     ok(typeof record.playingStyle === "string" && record.playingStyle.trim().length >= 35,
-      `${record.playerId}: AaFK durable claim needs sourced playing-style context`);
+      `${record.playerId}: reviewed club durable claim needs sourced playing-style context`);
   }
   for (const url of asArray(record.supportingSources)) {
     ok(/^https:\/\//.test(url), `${record.playerId}: invalid supporting source URL`);
@@ -98,8 +97,9 @@ for (const record of P1_NEW_EVENT_ONLY) {
   const player = playerById.get(record.playerId);
   ok(Boolean(player), `${record.playerId}: event-only player missing from catalogue`);
   const heritage = getP1HeritageForPlayer(player);
-  ok(heritage?.generation === "new" && heritage.placeId === "color_line_stadion",
-    `${record.playerId}: event-only record must have exclusive Aalesund ownership`);
+  ok(heritage?.generation === "new" && ["color_line_stadion", "jotun_arena"].includes(heritage.placeId)
+      && heritage.placeId === record.placeId,
+    `${record.playerId}: event-only record must have exclusive reviewed-club ownership`);
   ok(record.evidenceKind === "single_match_event",
     `${record.playerId}: event-only evidence kind must be explicit`);
   ok(typeof record.claim === "string" && record.claim.trim().length > 20,
@@ -159,9 +159,29 @@ ok(Object.values(statusCounts).reduce((sum, count) => sum + count, 0) === 701,
 ok(statusCounts.DOKUMENTERT === P1_NEW_DOCUMENTED.length, "DOKUMENTERT count drift");
 ok(statusCounts.HENDELSE === P1_NEW_EVENT_ONLY.length, "HENDELSE count drift");
 const aalesundDurable = P1_NEW_DOCUMENTED.filter((r) => r.placeId === "color_line_stadion").length;
-ok(aalesundDurable + P1_NEW_EVENT_ONLY.length >= 46,
+const aalesundEvents = P1_NEW_EVENT_ONLY.filter((r) => r.placeId === "color_line_stadion").length;
+ok(aalesundDurable + aalesundEvents >= 46,
   "AaFK quality review must retain all 46 previously sourced player identities");
 ok(statusCounts.DELVIS === P1_NEW_PARTIAL.length, "DELVIS count drift");
+
+// Sandefjord source-revision: all 40 previously documented identities remain
+// traceable (19 durable, 19 single-match historical events, 2 unresolved
+// secondary-source biographies). This is source QA, never automatic skill inference.
+const reviewedSandefjord = [
+  ...P1_NEW_DOCUMENTED.filter((r) => r.placeId === "jotun_arena"),
+  ...P1_NEW_EVENT_ONLY.filter((r) => r.placeId === "jotun_arena"),
+  ...P1_NEW_PARTIAL.filter((r) => r.placeId === "jotun_arena")
+];
+ok(reviewedSandefjord.length === 40, "Sandefjord: all 40 previously sourced player identities must remain traceable");
+ok(new Set(reviewedSandefjord.map((r) => r.playerId)).size === 40,
+  "Sandefjord: same identity appears in more than one evidence class");
+ok(P1_NEW_DOCUMENTED.filter((r) => r.placeId === "jotun_arena").length === 19,
+  "Sandefjord: 19 genuine durable profiles must remain after evidence review");
+ok(P1_NEW_EVENT_ONLY.filter((r) => r.placeId === "jotun_arena").length === 19,
+  "Sandefjord: 19 historical event records must be retained without skill boosts");
+ok(P1_NEW_PARTIAL.filter((r) => r.placeId === "jotun_arena").length === 2,
+  "Sandefjord: 2 secondary biographical sources require verification");
+
 
 const overlaid = applyP1NewSourceClaims(players);
 const overlaidById = new Map(overlaid.map((player) => [player.id, player]));
