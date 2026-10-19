@@ -8,6 +8,24 @@ export const PLAYER_ID_ALIASES = Object.freeze({
   [LEGACY_BOATENG_ID]: CANONICAL_BOATENG_ID
 });
 
+// The raw historic catalogue can retain a legacy record during migration;
+// only its canonical identity may enter gameplay, pools and lineup selection.
+export function normalizePlayablePlayerCatalog(players) {
+  if (!Array.isArray(players)) return [];
+  const canonicalExists = players.some((player) => player?.id === CANONICAL_BOATENG_ID);
+  const selected = new Set();
+  return players.filter((player) => {
+    if (!player || typeof player.id !== "string") return false;
+    if (canonicalExists && player.id === LEGACY_BOATENG_ID) return false;
+    const id = canonicalPlayerId(player.id);
+    if (selected.has(id)) return false;
+    selected.add(id);
+    return true;
+  }).map((player) => player.id === LEGACY_BOATENG_ID
+    ? { ...player, id: CANONICAL_BOATENG_ID, name: "Bismark Adjei-Boateng" }
+    : player);
+}
+
 export function canonicalPlayerId(value) {
   return typeof value === "string" ? (PLAYER_ID_ALIASES[value] || value) : value;
 }
