@@ -10305,3 +10305,14 @@ button:disabled {
   font-size: 0.75rem;
 }
 .lineup-sourced-empty { color: var(--muted); font-size: 0.82rem; }
+
+/* Documented team-fit delta on each available player choice. */
+.lineup-player-sourced-preview {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.lineup-player-card:disabled .lineup-player-sourced-preview { display: none; }
