@@ -240,6 +240,21 @@ historisk formasjonsfit og være synlige i kampmotorens
 ferdigheter er nøytrale og at hurtighet ikke gir bakromsbonus
 under lavere forsvarslinje.
 
+Et siste kontrollledd er lagt til i samme regresjonstest: kampmotorens
+eksisterende `simulateMatchday` må bruke lagdimensjonene i forventede mål
+(`expectedGoals.for` og `expectedGoals.against`). Med identisk ellever
+unntatt én stopper og lik fastsatt `teamScore`/historisk faktor skal en
+kildebelagt pasningsstopper gi bedre forventet sjanseskaping, mens en
+kildebelagt hurtig midtstopper under høy linje skal redusere forventede
+baklengssjanser. Ingen tilfeldig terningkaststyrt sluttstilling brukes som
+testkriterium.
+
+Den spillbare kampdag-sesjonen lagrer også en lett kopi av kildebelagte
+bidrag **ved avspark**. Sluttrapportens eksisterende `analysis` kan
+dermed navngi spillere som ga laget støtte til for eksempel oppbygging
+eller restforsvar. Dette tilskrives kampplanens startgrunnlag; ved
+innbytter påstår den ikke at spilleren bestemte resten av kampen.
+
 Dette beviser at selve **kampens taktiske input** endres når det
 byttes spiller. Det er ikke et bevis på at en enkelt spiller alltid
 skal endre kampresultat, xG eller vinnersannsynlighet dramatisk:
