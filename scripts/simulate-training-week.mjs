@@ -61,6 +61,21 @@ check("relevant stab gir minst middels støtte", calculateTrainingStaffSupport({
 
 console.log("\nMotstanderforberedelse:");
 const highPress = OPPONENT_PROFILES.find((opponent) => opponent.id === "high_press_opponent");
+// A league opponent has a club ID; its actual playing style is baseStyleId.
+const clubOpponent = { ...highPress, id: "brann", name: "Brann", baseStyleId: highPress.id };
+const clubTrainingAdvice = recommendTrainingFocus({ opponent: clubOpponent, teamFit });
+check("ligaklubben anbefaler trening mot egen spillestil",
+  clubTrainingAdvice.focusIds.includes("build_up") && clubTrainingAdvice.reason.includes("Brann"));
+const clubTrainingFocus = createTrainingMatchdaySnapshot({
+  selection: { focusId: "build_up", week: 3 }, clubWeek: 3, coachContext, opponent: clubOpponent
+});
+check("oppbyggingstrening gjenkjenner høyt press hos navngitt klubb",
+  clubTrainingFocus?.opponentFit === true);
+const otherStyleFocus = createTrainingMatchdaySnapshot({
+  selection: { focusId: "width", week: 3 }, clubWeek: 3, coachContext, opponent: clubOpponent
+});
+check("generisk feil treningsfokus merkes ikke som motstandertilpasset",
+  otherStyleFocus?.opponentFit === false);
 const recommendation = recommendTrainingFocus({ opponent: highPress, teamFit });
 check("kjent high-press-motstander anbefaler oppbygging/dybdeløp", recommendation.focusIds.includes("build_up") && recommendation.focusIds.includes("depth_runs"));
 check("uten mini-season gis generelt team-fit-råd", recommendTrainingFocus({ opponent: null, teamFit }).focusIds.length === 1);
