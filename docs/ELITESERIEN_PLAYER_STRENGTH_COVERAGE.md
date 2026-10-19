@@ -160,7 +160,7 @@ historical_appraisal`, individuell `playingStyle` og avgrenset(e)
 | Klubb | Antall nye | Fotballfaglige kontraster |
 | --- | ---: | --- |
 | Tromsø | 5 | Espejords pasning/dueller, Christensens løpskraft/skudd, Ingebrigtsens dribling/fart, Solstads taklinger og Flems strafferedninger |
-| Fredrikstad | 5 | Piirojas luftdueller, Ringbergs målteft/ledelse, Rambergs arbeidskapasitet, Wests hurtighet og Borges' luftspill/skuddkraft |
+| Fredrikstad | 5 | Piirojas luftdueller, Ringbergs målteft/ledelse, Rambergs arbeidskapasitet, Wests hurtighet og Borges' kildebelagte luftspill |
 | Start | 2 | Johnsens hodespill fra back og Strandlis spenstige luftdueller som spiss |
 
 Kildegrunnlaget er kontrollert på spiller- og periode-nivå:
@@ -193,3 +193,5 @@ som en endringsrelevant kontroll.
 Dette er dokumentasjon av **individuell rolle-/kampfit**, ikke enda et
 bevis på at samme egenskapsforskjeller flytter alle lagmetrikkene eller
 hele kampsimuleringen. Det er et videre, separat kvalitetsmål.
+
+Kildeavgrensning: FFK-omtalen beskriver Borges som hodesterk og med tungt skudd, men den gir ikke tilstrekkelig belegg for `long_shots` som presise avslutninger fra distanse. Derfor er bare `heading` ført som varig attributt; skuddkraften står i kildebeskrivelsen uten en oppdiktet ferdighet.
