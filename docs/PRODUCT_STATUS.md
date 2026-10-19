@@ -92,6 +92,11 @@ og én opplåsing fra Marienlyst, altså **142 unike spillbare
 Strømsgodset-profiler, hvorav 132 med kildebelagte styrker og 10 som står i
 kildekøen**. Den eldre rå katalogoppføringen beholdes foreløpig av
 datatekniske årsaker, men filtreres eksplisitt ut ved runtime-lasting.
+Begge de eldre råprofilene oppgir feil nasjonalitet («Norge»). Runtimeprofilen
+bruker **Ghana**, bekreftet som statsborgerskap av Colorado Rapids:
+https://www.coloradorapids.com/players/nana-boateng/ . Den store råkatalogen
+må få samme korrigering når den kan oppdateres sikkert.
+
 Ikke bruk den rå katalogtelleren som unik-personteller før posten fysisk
 er fjernet fra `data/football_players.json`.
 
