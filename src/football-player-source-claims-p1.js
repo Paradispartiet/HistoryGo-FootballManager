@@ -8,10 +8,10 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 9, expectedPartial: 2, expectedThin: 36, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 13, expectedPartial: 2, expectedThin: 32, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 3, expectedPartial: 3, expectedThin: 18, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 10, expectedPartial: 3, expectedThin: 11, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
 
   { key: "fredrikstad", placeId: "fredrikstad_stadion", expectedExclusive: 70, generation: "new" },
   { key: "skeid", placeId: "nordre_asen", expectedExclusive: 70, generation: "new" },
@@ -1443,6 +1443,139 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // 2026-10-20: Lillestrøm (7) og Brann (4), individuelle, epokeavgrensede vurderinger.
+  {
+    "playerId": "frode_kippe",
+    "placeId": "araasen_stadion",
+    "strengths": [
+      "pace",
+      "duels"
+    ],
+    "evidenceKind": "direct_appraisal",
+    "playingStyle": "Hurtig og duellsterk midtstopper, slik LSK-trener Tom Nordlie beskrev ham i 2007.",
+    "claim": "Lillestrøm-trener Tom Nordlie beskrev 10. september 2007 Frode Kippe som «veldig hurtig og duellsterk». Dette gir direkte, samtidig trenerbelegg for pace og duels, ikke heading eller pasningsferdigheter utledet av posisjonen.",
+    "source": "https://www.aftenposten.no/sport/fotball/i/jdOy3q/ber-kippe-vurdere-landslags-nei"
+  },
+  {
+    "playerId": "mathis_bolly",
+    "placeId": "araasen_stadion",
+    "strengths": [
+      "pace"
+    ],
+    "evidenceKind": "direct_appraisal",
+    "playingStyle": "Ekstremt hurtig angrepsspiller; farten fremheves av LSKs sportssjef.",
+    "claim": "Lillestrøms sportssjef Simon Mesfin omtalte ved returen i september 2023 Bollys «ekstreme hurtighet» og hans tidligere LSK-periode. Det belegger pace, men gir ikke grunnlag for avslutnings- eller dribleferdigheter fra treningshøydepunkter.",
+    "source": "https://www.lsk.no/nyheter/mathis-bolly-har-glitret-pa-trening-signerte-lsk-avtale-ut-sesongen"
+  },
+  {
+    "playerId": "robert_koren",
+    "placeId": "araasen_stadion",
+    "strengths": [
+      "flair"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Kreativ og uforutsigbar midtbanespiller i Lillestrøm-perioden.",
+    "claim": "Aftenpostens overgangsvurdering fra februar 2004 beskriver Robert Koren ved starten av LSK-oppholdet som «en kreativ og spennende midtbanemann». Dette støtter kreativ utfoldelse (flair); kilden dokumenterer ikke presist hvilken pasningstype eller avslutningsferdighet han var best på.",
+    "source": "https://www.aftenposten.no/norge/i/RGM2x/lsk-er-overgangsvinneren"
+  },
+  {
+    "playerId": "michael_mifsud",
+    "placeId": "araasen_stadion",
+    "strengths": [
+      "pace"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Hurtig spiss med fart som særlig kjennetegn, dokumentert også etter LSK-perioden.",
+    "claim": "Coventry City-historikken omtaler tidligere LSK-spiss Michael Mifsud som en spiller som imponerte med fart og hadde hastigheten som sitt fremste våpen etter overgangen i januar 2007. Dette belegger pace hos samme spiller, men omtalen gjelder Coventry-perioden og overføres ikke til konstruerte LSK-spesifikke ratings.",
+    "source": "https://skybluearchive.com/player/michael-mifsud/"
+  },
+  {
+    "playerId": "uwe_rosler",
+    "placeId": "araasen_stadion",
+    "strengths": [
+      "heading",
+      "finishing"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Kraftfull spisstype med dokumentert luftstyrke og gode avslutninger fra Manchester City-perioden.",
+    "claim": "Manchester Citys historiske spillerportrett beskriver Uwe Rösler som en typisk nummer ni som var «great in the air» og «a great finisher». Dette gir individuelt belegg for heading og finishing, men den omtalte perioden er 1990-tallet i City, før Lillestrøm-oppholdet.",
+    "source": "https://www.mancity.com/features/uwerosler/"
+  },
+  {
+    "playerId": "hei_ar_helguson",
+    "placeId": "araasen_stadion",
+    "strengths": [
+      "heading"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Luftsterk spiss; hodespillet dokumentert i senere Premier League-periode.",
+    "claim": "The Guardian 20. august 2006 gjengir at Manchester United vurderte Heiðar Helguson og Brian McBride som Fulhams konkrete lufttrussel. Dette er et spillerrettet belegg for hodespill hos Helguson, men gjelder Fulham-perioden og ikke direkte en enkelt LSK-kamp.",
+    "source": "https://www.theguardian.com/football/2006/aug/20/newsstory.sport7"
+  },
+  {
+    "playerId": "anthony_ujah",
+    "placeId": "araasen_stadion",
+    "strengths": [
+      "pace",
+      "strength",
+      "heading",
+      "work_rate"
+    ],
+    "evidenceKind": "direct_appraisal",
+    "playingStyle": "Rask, kraftfull og hodeduellsterk spiss med høy arbeidsinnsats.",
+    "claim": "Werder Bremens sportsledelse beskrev ved signeringen 5. mai 2015 Ujah som «schneller», med «viel Wucht», «sehr fleißig» og «sehr kopfballstark». Direkte speidervurdering dokumenterer pace, strength, work_rate og heading. Siden kilden er fire år etter LSK-overgangen i 2011, gis ingen epokespesifikke tall.",
+    "source": "https://www.werder.de/news/maenner/2014-2015/ujah-pm"
+  },
+  {
+    "playerId": "robbie_winters",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "work_rate",
+      "final_pass"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Hardtarbeidende, bevegelig angrepsspiller som ofte spilte frem lagkamerater.",
+    "claim": "Bergens Tidendes historiske gjennomgang fra januar 2016 beskriver Winters som intelligent og «hardtarbeidende», sjelden stillestående og en angriper som ofte satte opp lagkameratene. Dette støtter work_rate og final_pass, men målstatistikken benyttes ikke som bevis for finishing.",
+    "source": "https://www.bt.no/nyheter/brif/i/9qoR5/her-er-listen-over-branns-stoerste-maalsniker"
+  },
+  {
+    "playerId": "paul_scharner",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "heading",
+      "composure"
+    ],
+    "evidenceKind": "direct_appraisal",
+    "playingStyle": "Luftsterk og balltrygg midtstopper i Brann, vurdert direkte av Mons Ivar Mjelde.",
+    "claim": "Brann-trener Mons Ivar Mjelde om Scharners stopperprestasjon 26. august 2005: «konge i luften» og «trygg med ballen». Dette underbygger heading og ro med ball (composure), men ikke automatisk pasningsrekkevidde eller hurtighet.",
+    "source": "https://www.aftenbladet.no/sport/i/Rx3JQ8/har-funnet-midt-stopperen"
+  },
+  {
+    "playerId": "rodolph_austin",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "strength",
+      "jumping",
+      "pace",
+      "simple_passing"
+    ],
+    "evidenceKind": "direct_appraisal",
+    "playingStyle": "Fysisk sterk, spenstig og hurtig midtbanespiller med få feilpasninger.",
+    "claim": "Brann-trener Mons Ivar Mjelde vurderte i september 2008 Rodolph Austin som «sterk, spenstig og hurtig» og fremhevet at han slo få feilpasninger. Samtidig trenervurdering begrunner strength, jumping, pace og simple_passing. Ingen taklings- eller aggresjonstoken utledes fra senere røde kort.",
+    "source": "https://www.bt.no/sport/i/JoJMyR/jeg-er-en-kriger"
+  },
+  {
+    "playerId": "claus_lundekvam",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "composure"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Rolig ballspillende forsvarsspiller, beskrevet retrospektivt fra Southampton-karrieren.",
+    "claim": "Fotballskribenten i Materazzias historiske portrett fra januar 2011 omtaler Lundekvam som en spillende midtstopper med «en herlig ro i spillet sitt» i Southampton. Dette begrunner composure, men ikke spesifikke pasningsferdigheter, og beskrivelsen gjelder karrieren etter Brann-perioden.",
+    "source": "https://materazzia.blogspot.com/2011/01/"
+  },
+
   // Further source-verified 2026 batch: four Glimt and two Viking individual styles.
   {
     "playerId": "hakon_evjen",
