@@ -29,6 +29,66 @@ export const P1_HERITAGES = Object.freeze([
 ]);
 
 const documented = [
+  // Odd 2026-10-20: historisk dokumenterte spillertyper og rolleforskjeller.
+  {
+    "playerId": "jone_samuelsen",
+    "placeId": "skagerak_arena",
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Løpssterk, utholdende midtbanespiller som preget begge retninger over tid.",
+    "strengths": [
+      "stamina"
+    ],
+    "claim": "Dagbladet beskriver Samuelsen med «høy løpskapasitet. En terrier» i retrospektivet om hans Odd-karriere, og Odds digitale museum bruker betegnelsen «evighetsmaskin» om midtbanespilleren. Det gir grunnlag for utholdenhet, men ikke automatiske teknikk- eller taklingstoken.",
+    "source": "https://www.dagbladet.no/sport/landslagsspilleren-som-forsvant-hva-skjedde-med-jone-samuelsen/67560130"
+  },
+  {
+    "playerId": "steffen_hagen",
+    "placeId": "skagerak_arena",
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Erfaren, klok midtstopper med høy utholdenhet og aktiv risikohåndtering.",
+    "strengths": [
+      "game_reading",
+      "stamina"
+    ],
+    "claim": "Vardens spilleranalyse fra september 2025 beskriver Hagens «Imponerende motor, og smartness som fortsatt er gull verdt», og viser til rutine som hindrer behov for spurtdueller. Det belegger utholdenhet og spillforståelse, ikke pace eller feilfri pasningsføring.",
+    "source": "https://statistikk.odd.no/kamper/9a7223f7-a662-42d4-b2ad-2b7c4fbabedd/91b90db7-7410-4ded-8ce5-b98031788447"
+  },
+  {
+    "playerId": "fredrik_oldrup_jensen",
+    "placeId": "skagerak_arena",
+    "evidenceKind": "direct_appraisal",
+    "playingStyle": "Pasningssikker dyp midtbanespiller som styrer rytmen og tåler fysiske dueller.",
+    "strengths": [
+      "simple_passing",
+      "duels",
+      "tempo_control"
+    ],
+    "claim": "Vikings forhåndsvurdering av Odd i april 2019 omtaler Oldrup Jensen i en dyp midtbanerolle og sier uttrykkelig at han «har vært pasningssikker, duellsterk og god til å styre spillet». De tre ferdighetene legges inn direkte, uten numeriske anslag.",
+    "source": "https://www.vikingfotball.no/nyheter/for-kampen-odd-viking"
+  },
+  {
+    "playerId": "fredrik_semb_berge",
+    "placeId": "skagerak_arena",
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Duellsterk midtstopper som spiller med ro og trygghet.",
+    "strengths": [
+      "duels",
+      "composure"
+    ],
+    "claim": "Den individuelle forhåndspresentasjonen til U21-EM i 2013 beskriver Semb Berge som «en duellsterk midtstopper som spiller med en imponerende trygghet». Dueller og ro beholdes; ingen fart, pasningsrekkevidde eller tallverdi konstrueres.",
+    "source": "https://materazzia.blogspot.com/2013/06/u21-em-en-presentasjon-av-norges-tropp.html"
+  },
+  {
+    "playerId": "torgeir_borven",
+    "placeId": "skagerak_arena",
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Boksorientert spiss som søker avslutningsrom rundt bakre stolpe.",
+    "strengths": [
+      "box_finishing"
+    ],
+    "claim": "Odds egen sesongomtale fra mars 2019 bruker den gjenkjennelige spisskarakteristikken «målsniken Børven» og beskriver at han som «en god gammeldags spiss» søker bakre stolpe. Dette er et snevert kildebelegg for boksavslutninger, ikke generelt driblingsnivå, langskudd eller rating basert på antall mål.",
+    "source": "https://www.odd.no/nyheter/jubileumsfest-i-serieapningen"
+  },
   // Odd 2026-10-19: individuell innleggsferdighet, ikke målstatistikk.
   {
     "playerId": "elbasan_rashani",
