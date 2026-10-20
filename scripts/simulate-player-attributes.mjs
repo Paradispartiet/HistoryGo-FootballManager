@@ -918,7 +918,7 @@ const KJENT_UDOKUMENTERT = {
   // en registrering av at arven ikke dokumenterer ferdigheter i det hele tatt.
   // Tallet skal SYNKE når individuelle kilder leses tilbake.
   nadderud_stadion: 0.99,    // Stabæk
-  araasen_stadion: 0.30,     // Lillestrøm: 7/24 uten styrker etter fem nye kildeprofiler; streng ratchet >29.17 %
+  araasen_stadion: 0.26,     // Lillestrøm: 6/24 uten styrker etter Solér-profil; streng ratchet >25 %
   nordmore_stadion: 1.01,    // Kristiansund
   kfum_arena: 0.93,          // KFUM Oslo
   jotun_arena: 0.80,         // Sandefjord: fem nye P1-profiler, 32/41 eksklusive uten styrker
@@ -1012,7 +1012,7 @@ const KJENT_UDOKUMENTERT = {
   // tabeller.
   intility_arena: 0.82,      // Vålerenga: målt 53 av 66
   aspmyra_stadion: 0.67,     // Bodø/Glimt: 31 av 47 uten styrker etter seksprofilbolken
-  brann_stadion: 0.54,       // Brann: 25 av 47 uten styrker etter ni nye kildeprofiler
+  brann_stadion: 0.52,       // Brann: 24 av 47 uten styrker etter Hanstveit-profil
   lyse_arena: 0.60           // Viking: 30 av 51 uten styrker etter seksprofilbolken
 };
 
