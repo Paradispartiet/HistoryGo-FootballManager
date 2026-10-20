@@ -9,8 +9,8 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 9, expectedPartial: 2, expectedThin: 36, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 5, expectedPartial: 3, expectedThin: 39, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 15, expectedPartial: 2, expectedThin: 34, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 8, expectedPartial: 3, expectedThin: 36, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 18, expectedPartial: 2, expectedThin: 31, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 3, expectedPartial: 3, expectedThin: 18, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
 
   { key: "fredrikstad", placeId: "fredrikstad_stadion", expectedExclusive: 70, generation: "new" },
@@ -1443,6 +1443,70 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // Bodø/Glimt and Viking, 2026-10-20: enduring source-based playing styles.
+  {
+    "playerId": "ulrik_saltnes",
+    "placeId": "aspmyra_stadion",
+    "strengths": [
+      "late_runs",
+      "box_presence"
+    ],
+    "claim": "Fotballanalytiker Tarjei Smågesjø beskriver Saltnes' gjentatte 2020-mønster som indreløper: «når Glimt fikk løftet angrepene sine langt inne på motstanders halvdel plasserte han seg som en spiss»; videre beskrives intelligente løp inn i boksen. Dette er periodedokumentasjon av sene offensive løp og tilstedeværelse i boksen, ikke en tallrating utledet fra målantall.",
+    "source": "https://smgesj.substack.com/p/en-intelligent-lper"
+  },
+  {
+    "playerId": "fredrik_andre_bjorkan",
+    "placeId": "aspmyra_stadion",
+    "strengths": [
+      "overlapping_runs",
+      "game_reading"
+    ],
+    "claim": "UEFAs taktiske observatører beskriver Bjørkans gjentatte smarte pasnings- og bevegelsesmønstre mot Ajax i 2024: «Bjørkan constantly broke through the press». UEFAs Tottenham-analyse i 2025 trekker spesifikt frem en «unselfish overlap» som gjør rom for Jens Petter Hauge. Samlet underbygger kampuavhengig taktisk observasjon overlappende løp og spillets forståelse, ikke automatisk drible- eller fartsrating.",
+    "source": "https://www.uefa.com/uefaconferenceleague/news/028a-1a3224f4367a-2a968054a13c-1000--swissquote-match-analysis-ajax-and-bodo-glimt-s-dramatic/",
+    "supportingSources": [
+      "https://www.uefa.com/uefachampionsleague/news/029e-1edad93db147-4fb49a772fee-1000--in-the-zone-how-bodo-glimt-gave-tottenham-a-scare/"
+    ]
+  },
+  {
+    "playerId": "albert_gronbaek",
+    "placeId": "aspmyra_stadion",
+    "strengths": [
+      "first_touch",
+      "finishing",
+      "late_runs"
+    ],
+    "claim": "NTBs gjennomgang av hele 2023-sesongen beskriver Grønbæks «flotte nærteknikk og presise skuddfot» og at han er «god til å time løpene sine inn i 16-meteren». Dette belegger ballmottak/nærteknikk, avslutningspresisjon og gjentatte sene boksløp, ikke en ferdighetsverdi basert på mål eller en enkelt hendelse.",
+    "source": "https://kommunikasjon.ntb.no/pressemelding/18031377/bodoglimt-spiller-albert-gronbaek-til-topps-pa-ntb-borsen?lang=no&publisherId=7"
+  },
+  {
+    "playerId": "sverre_andersen",
+    "placeId": "lyse_arena",
+    "strengths": [
+      "shot_stopping",
+      "command_of_area"
+    ],
+    "claim": "Store norske leksikons særskilte avsnitt «Spillestil» omtaler Sverre Andersen som «en stødig keeper, god både på streken og i feltet». Den historiske vurderingen underbygger redninger på strek og trygghet/feltarbeid, ikke en beregnet refleksverdi eller distribusjonsferdighet.",
+    "source": "https://snl.no/Sverre_Andersen"
+  },
+  {
+    "playerId": "bjarte_lunde_aarsheim",
+    "placeId": "lyse_arena",
+    "strengths": [
+      "duels",
+      "stamina"
+    ],
+    "claim": "Vikings historiske portrett av Lunde Aarsheims 2000-sesong beskriver den gjentatte arbeidsmåten: «Han trødde til i duellene. Løp, løp og løp.» Dette er eksplisitt individuelt belegg for duellkraft og løpskapasitet; balltryggheten som også nevnes brukes ikke til å konstruere et mer spesifikt teknikk-token.",
+    "source": "https://www.vikingfotball.no/nyheter/for-kampen-odd-viking"
+  },
+  {
+    "playerId": "sondre_bjorshol",
+    "placeId": "lyse_arena",
+    "strengths": [
+      "overlapping_runs"
+    ],
+    "claim": "Åsane-trener Mons Ivar Mjelde beskrev Bjørshols etablerte offensive backrolle i 2017: «Vi ønsker offensive backer som kommer med i angrep» og «sånne som Sondre får frem sine sterke sider». Dette dokumenterer offensivt løpsmønster fra en tidligere klubbperiode, ikke en uavhengig vurdering av Viking-periodens presisjon eller fart.",
+    "source": "https://www.asanefotball.no/nyheter/burde-ha-slatt-fredrikstad"
+  },
   // Viking og Bodø/Glimt 2026-10-20: individuelle, periodetydelige kilder.
   {
     "playerId": "svein_kvia",
