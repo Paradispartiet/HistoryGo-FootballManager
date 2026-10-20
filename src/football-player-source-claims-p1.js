@@ -9,8 +9,8 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 9, expectedPartial: 2, expectedThin: 36, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 12, expectedPartial: 3, expectedThin: 32, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 19, expectedPartial: 2, expectedThin: 30, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 3, expectedPartial: 3, expectedThin: 18, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
 
   { key: "fredrikstad", placeId: "fredrikstad_stadion", expectedExclusive: 70, generation: "new" },
@@ -1443,6 +1443,74 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // Further source-verified 2026 batch: four Glimt and two Viking individual styles.
+  {
+    "playerId": "hakon_evjen",
+    "placeId": "aspmyra_stadion",
+    "strengths": [
+      "flair",
+      "determination"
+    ],
+    "claim": "Bodø/Glimts retrospektiv fra januar 2024 omtaler Evjens 2019-uttrykk som «lekende teknikk», mens klubbens spillerutvikler i september 2019 fremhevet hans «drive og en passion som kanskje er høyere enn gjennomsnittet». Dette belegger kreativ, leken ballbehandling og sterk personlig drivkraft i Glimt-perioden, ikke konkrete pasnings-/avslutningsratings avledet fra scoringer.",
+    "source": "https://www.glimt.no/nyheter/hakon-er-hjemme-igjen--det-her-eller-ingenting",
+    "supportingSources": [
+      "https://www.glimt.no/nyheter/uten-cato-ville-jeg-ikke-vaert-her"
+    ]
+  },
+  {
+    "playerId": "nino_zugelj",
+    "placeId": "aspmyra_stadion",
+    "strengths": [
+      "pace",
+      "dribbling",
+      "simple_passing"
+    ],
+    "claim": "I Glimts presentasjon 1. august 2022 beskrives Žugelj som «en rask spiller» og han sier selv: «Jeg liker å drible, er en god pasningsspiller». Dette er en direkte, men selvrapportert, vurdering ved overgangstidspunktet; registrerer fart, dribling og pasningsspill uten å anta skuddpresisjon bare fordi spilleren liker å skyte.",
+    "source": "https://www.glimt.no/nyheter/nino-zugelj-klar-for-glimt"
+  },
+  {
+    "playerId": "kasper_junker",
+    "placeId": "aspmyra_stadion",
+    "strengths": [
+      "pace"
+    ],
+    "claim": "Glimt-trener Kjetil Knutsen beskriver forskjellen mellom Erik Botheim og Kasper Junker i en analyse av overgangssommeren 2021: «Han har ikke helt den farten Junker har» om Botheim. Det er en eksplisitt individuell trenerkomparasjon som belegger Junkers hurtighet, ikke evigvarende form eller finishing-rating basert på målstatistikk.",
+    "source": "https://www.eurosport.no/fotball/eliteserien/2020/det-store-glimt-sporsmalet-slik-skal-95-malpoeng-erstattes_sto8307901/story.shtml"
+  },
+  {
+    "playerId": "fredrik_sjovold",
+    "placeId": "aspmyra_stadion",
+    "strengths": [
+      "pace",
+      "late_runs"
+    ],
+    "claim": "Fotballskribent Martin Haddows gjennomgang av eliteserielagene i april 2026 omtaler Sjøvold som «a high-energy right-sided defender» som «seperates quickly from opponents with his pace and timing of runs», og beskriver sene løp i høyre korridor. En tidsavgrenset ekstern speidervurdering dokumenterer hurtighet og sene offensive løp, ikke generell styrke, defensiv duellkraft eller et tallnivå.",
+    "source": "https://medium.com/@martinhaddow87/-f13fdd781a04"
+  },
+  {
+    "playerId": "peter_ijeh",
+    "placeId": "lyse_arena",
+    "strengths": [
+      "strength",
+      "pace",
+      "finishing",
+      "first_touch"
+    ],
+    "claim": "Vikings påtroppende spiss Peter Ijeh ble sommeren 2006 vurdert av sin tidligere Malmö-trener Tom Prahl: «Han er veldig kraftfull og en utpreget målscorer. Han har bra teknikk, er sterk og rask». Sitatet underbygger fysikk, fart, målavslutning og teknikk som etablert spillertype, men kommer fra tiden før Viking-overgangen; førstetouch er en konservativ teknisk kategorisering og ingen numerisk ferdighetsverdi.",
+    "source": "https://www.dagsavisen.no/nyheter/ijeh-inn-kovacs-ut/7507435"
+  },
+  {
+    "playerId": "toni_kuivasto",
+    "placeId": "lyse_arena",
+    "strengths": [
+      "strength",
+      "pace",
+      "heading",
+      "simple_passing"
+    ],
+    "claim": "Viking-trener Benny Lennartsson vurderte Toni Kuivasto i februar 2001 som «fysisk sterk, rask og en brukbar pasningslegger når enkle løsninger blir valgt» og «en sterk hodespiller». Dette er en direkte, samtidig treneranalyse fra Viking-perioden med belegg for styrke, fart, heading og enkelt pasningsspill, ikke lederkvaliteter; treneren sier tvert imot at Kuivasto ikke er samme ledertype som forgjengeren Tihinen.",
+    "source": "https://www.aftenbladet.no/lokalt/i/a3KBd/viking-en-mellomlanding"
+  },
   // Glimt/Viking 2026-10-20: specific retrospective skills from official club, UEFA and press accounts.
   {
     "playerId": "marius_lode",
