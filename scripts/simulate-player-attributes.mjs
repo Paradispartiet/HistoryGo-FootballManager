@@ -1011,9 +1011,9 @@ const KJENT_UDOKUMENTERT = {
   // Bodø/Glimt er ikke mindre kartlagt enn Vålerenga, de er kartlagt med
   // tabeller.
   intility_arena: 0.82,      // Vålerenga: målt 53 av 66
-  aspmyra_stadion: 0.93,     // Bodø/Glimt: målt 43 av 47
+  aspmyra_stadion: 0.91,     // Bodø/Glimt: målt 42 av 47 etter Normann-passet
   brann_stadion: 0.82,       // Brann: 38 av 47 uten styrker etter Pesen-passet
-  lyse_arena: 0.74           // Viking: målt 37 av 51 etter én ekstra kildebelagt avslutter
+  lyse_arena: 0.72           // Viking: målt 36 av 51 etter Svein Kvia-passet
 };
 
 // ---------------------------------------------------------------------------
