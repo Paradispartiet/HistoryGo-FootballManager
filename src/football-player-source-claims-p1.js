@@ -10,7 +10,7 @@ export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 9, expectedPartial: 2, expectedThin: 36, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 4, expectedPartial: 3, expectedThin: 40, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 6, expectedPartial: 2, expectedThin: 43, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 13, expectedPartial: 2, expectedThin: 36, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 3, expectedPartial: 3, expectedThin: 18, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
 
   { key: "fredrikstad", placeId: "fredrikstad_stadion", expectedExclusive: 70, generation: "new" },
@@ -29,6 +29,18 @@ export const P1_HERITAGES = Object.freeze([
 ]);
 
 const documented = [
+  // Odd 2026-10-19: individuell innleggsferdighet, ikke målstatistikk.
+  {
+    "playerId": "elbasan_rashani",
+    "placeId": "skagerak_arena",
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Venstrekant med spesielt god innleggsfot, ifølge Vardens spillerfaglige 2014-vurdering.",
+    "strengths": [
+      "crossing"
+    ],
+    "claim": "I Bergens Tidendes talentsak gjengir Vardens Nils Tore Olsen at Elbasan Rashani er «målfarlig venstreving» som «har en god innleggsfot». Dette dokumenterer innlegg, men ingen konstruert 1–20-verdi eller ekstra ferdighet utledet fra målfarlighet.",
+    "source": "https://www.bt.no/sport/i/JoQAm7/se-opp-for-disse-talentene"
+  },
   {
     playerId: "per_kristoffersen",
     placeId: "fredrikstad_stadion",
@@ -1360,6 +1372,75 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // Viking 2026-10-19: kildebaserte, kontrasterende spillertyper.
+  {
+    "playerId": "erik_nevland",
+    "placeId": "lyse_arena",
+    "strengths": [
+      "work_rate",
+      "teamwork",
+      "off_ball_runs"
+    ],
+    "claim": "Viking gjengir Nevlands egen beskrivelse av «drittløpene» han tok for å skape rom for medspillerne, blant annet tunge løp mot første stolpe uten å få ballen. Beskrivelsen gjelder målrettet bevegelse uten ball og lagarbeid, ikke en utledet score ut fra målstatistikk.",
+    "source": "https://www.vikingfotball.no/nyheter/tidligere-storscorere-i-ny-podcast--det-a-bomme-pa-sjanser-er-viktig-for-a-utvikle-deg-som-malscorer"
+  },
+  {
+    "playerId": "trygve_johannessen",
+    "placeId": "lyse_arena",
+    "strengths": [
+      "box_finishing"
+    ],
+    "claim": "Bjarne Berntsen beskrev i Aftenbladet Johannessen og Nevland som «Helt ulike spisstyper» og sa om Trygve: «Han var konge innenfor 16-meteren». Dette er en varig sammenlignende spissvurdering som underbygger avslutninger i boksen, ikke automatisk langskudd fra omtalen av tungt skudd.",
+    "source": "https://www.aftenbladet.no/lokalt/i/1V4vJ/klubbens-siste-toppscorer-tror-paa-nevland"
+  },
+  {
+    "playerId": "bjarne_berntsen",
+    "placeId": "lyse_arena",
+    "strengths": [
+      "leadership"
+    ],
+    "claim": "Vikings historiske artikkel om 1970-tallslaget sier uttrykkelig «Bjarne Berntsen var allerede en lederskikkelse». Det gir belegg for ledende rolle i spillergruppen, uten å slutte fra senere verv som trener/sportsleder.",
+    "source": "https://www.vikingfotball.no/nyheter/da-viking-tok-gull-gull-og-gull"
+  },
+  {
+    "playerId": "erik_johannessen",
+    "placeId": "lyse_arena",
+    "strengths": [
+      "shot_stopping"
+    ],
+    "claim": "Viking omtaler 1970-tallslagets målvakt Erik Johannessen «med de stilige redningene» og lar en tidligere spiller kalle ham «en fantastisk keeper». Den kombinerte historiske vurderingen dokumenterer redningskvalitet, men ikke refleksrating eller ballfordeling.",
+    "source": "https://www.vikingfotball.no/nyheter/da-viking-tok-gull-gull-og-gull"
+  },
+  {
+    "playerId": "joe_bell",
+    "placeId": "lyse_arena",
+    "strengths": [
+      "simple_passing",
+      "vision",
+      "tempo_control"
+    ],
+    "claim": "Danske Campo gjengir TV 2s fagvurdering av Bells Viking-sesong 2024: «Bell er chefen centralt på banen. Han dirigerer, er pasningssikker» og beskriver ham som kreativ når Viking angriper. Dette dokumenterer pasningssikkerhet, overblikk og styring av spillet, ikke numeriske ferdighetsverdier.",
+    "source": "https://campo.dk/2024/12/28/medie-kaarer-norges-bedste-kasseret-broendby-duo-er-med/"
+  },
+  {
+    "playerId": "edvin_austbo",
+    "placeId": "lyse_arena",
+    "strengths": [
+      "dribbling",
+      "movement"
+    ],
+    "claim": "NFF Rogaland gjengir Vikings utviklingssjef Mats Ullerengs konkrete beskrivelse fra 2019: «Edvin kan skape ubalanse hos motstander med bevegelse, dribling og pasning». De to direkte navngitte ferdighetene føres som dribbling og movement. Kilden beskriver ungdomsperioden, ikke en ny vurdering av seniornivået.",
+    "source": "https://www.fotball.no/kretser/rogaland/landslagskolen/2019/bli-kjent-med-spillerne-som-skal-pa-talentleir/"
+  },
+  {
+    "playerId": "hannu_tihinen",
+    "placeId": "lyse_arena",
+    "strengths": [
+      "heading"
+    ],
+    "claim": "Aftenbladets Viking-referat fra juni 2001 sier om stopperduoen Tihinen/Kuivasto: «regjerer totalt i lufta» og beskriver at Tihinen gjentatte ganger header unna. West Ham-omtaler fra samme periode beskriver ham også som dominerende i luften. Bare hodespill/aerialevnen føres; enstaka taklinger brukes ikke som varig styrke.",
+    "source": "https://www.aftenbladet.no/lokalt/i/o9KL0/viking-til-topps-vant-3-0"
+  },
   {
     playerId: "kenneth_storvik",
     placeId: "lyse_arena",
