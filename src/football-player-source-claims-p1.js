@@ -10,7 +10,7 @@ export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 9, expectedPartial: 2, expectedThin: 36, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 4, expectedPartial: 3, expectedThin: 40, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 13, expectedPartial: 2, expectedThin: 36, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 14, expectedPartial: 2, expectedThin: 35, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 3, expectedPartial: 3, expectedThin: 18, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
 
   { key: "fredrikstad", placeId: "fredrikstad_stadion", expectedExclusive: 70, generation: "new" },
@@ -29,6 +29,42 @@ export const P1_HERITAGES = Object.freeze([
 ]);
 
 const documented = [
+  // Odd 2026-10-20: eksplisitte historiske og faglige spillerbeskrivelser.
+  {
+    "playerId": "fredrik_oldrup_jensen",
+    "placeId": "skagerak_arena",
+    "evidenceKind": "direct_appraisal",
+    "playingStyle": "Styrende defensiv midtbanespiller med god pasningsfot, overblikk og evne til å kontrollere rytmen i spillet.",
+    "strengths": [
+      "simple_passing",
+      "game_reading",
+      "tempo_control"
+    ],
+    "claim": "Vålerengas signeringsomtale 2020 sier at Oldrup Jensen selv foretrekker å «ha ball og styre spillet». Sportslig leder trekker uttrykkelig frem «gode spilleforståelse, gode pasningsfot og robuste fysikk» som begrunnelse for signeringen. Dette dokumenterer pasningssikkerhet, spillets forståelse og tempokontroll, men ikke en tallrating eller individuelle forsvarsferdigheter. Beskrivelsen er etter Odd-perioden, men gjelder den samme spilleren.",
+    "source": "https://www.vif-fotball.no/nyheter/fredrik-oldrup-jensen-klar-for-valerenga"
+  },
+  {
+    "playerId": "steffen_hagen",
+    "placeId": "skagerak_arena",
+    "evidenceKind": "direct_appraisal",
+    "playingStyle": "Samlende lagspiller med dokumentert ansvar for veiledning, standarder og mentalitet i Odd-troppen.",
+    "strengths": [
+      "leadership"
+    ],
+    "claim": "Odds klubbomtale 2025 beskriver Hagen som veileder i spillergruppen og gjengir trener Knut Rønningenes vurdering «han er en veileder som setter standarder både på og utenfor banen». Hagen selv forklarer hvordan han bidrar overfor yngre spillere. Dette er individuelt dokumentert lederskap, ikke lederegenskap utledet av kapteinsbind eller antall kamper.",
+    "source": "https://www.odd.no/nyheter/steffen-hagen-forlenger"
+  },
+  {
+    "playerId": "jone_samuelsen",
+    "placeId": "skagerak_arena",
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Utholdende og svært løpssterk midtbanespiller, beskrevet i klubbens historiske portrett som Odds evighetsmaskin.",
+    "strengths": [
+      "stamina"
+    ],
+    "claim": "Odds digitale museum beskriver Samuelsen fra spillerperioden i Odd som Odds «evighetsmaskin» på midtbanen. Metaforen brukes av klubbhistorikken om vedvarende løpskapasitet og begrunner bare stamina; Guinness-heading, priser og antall kamper gir ingen egne ferdighetstoken.",
+    "source": "https://statistikk.odd.no/st%C3%B8tteapparat/317360e9-85bd-42c1-b601-99948c09aed9"
+  },
   // Odd 2026-10-19: individuell innleggsferdighet, ikke målstatistikk.
   {
     "playerId": "elbasan_rashani",
@@ -1372,6 +1408,16 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // Viking 2026-10-20: kildebelagt avslutningsprofil, historisk karrieretid eksplisitt.
+  {
+    "playerId": "egil_ostenstad",
+    "placeId": "lyse_arena",
+    "strengths": [
+      "finishing"
+    ],
+    "claim": "VG-sportens historiske toppspillerliste beskriver Egil Østenstad som en spiller med «et suverent scoringsinstinkt». Formuleringen gjelder hans Southampton-periode etter Viking, og gir bare en karrierebelagt individuell målteft/finishing, ikke særskilt dokumentasjon av Viking-perioden, heading eller numerisk nivå.",
+    "source": "https://www.vg.no/spesial/2016/topp100-sport-historisk/"
+  },
   // Viking 2026-10-19: kildebaserte, kontrasterende spillertyper.
   {
     "playerId": "erik_nevland",
