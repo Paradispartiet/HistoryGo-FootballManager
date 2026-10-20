@@ -8,7 +8,7 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 23, expectedPartial: 2, expectedThin: 22, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 26, expectedPartial: 2, expectedThin: 19, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 21, expectedPartial: 3, expectedThin: 0, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
@@ -1443,6 +1443,44 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // 2026-10-20: three carefully delimited historical Brann skill profiles.
+  {
+    "playerId": "tore_nordtvedt",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "overlapping_runs",
+      "crossing",
+      "stamina",
+      "marking"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Offensiv og utholdende høyreback med gjentatte løp fremover, presise innlegg og tett oppfølging av motspiller på returløp.",
+    "claim": "Branns historiske spillerprofil beskriver Tore Nordtvedts Brann-periode 1963–1979: nærmest hver gang Brann vant ballen, løp han frem langs høyresiden og slo presise innlegg. Klubben fremhever også kondisjon, rask retur til forsvarsposisjon og at han fulgte motstandervingen tett og utrettelig. Dette støtter overlapping_runs, crossing, stamina og marking. Kamptall, antatte taklingsferdigheter og numeriske ratinger brukes ikke som belegg.",
+    "source": "https://historie.brann.no/spillere/tore-nordtvedt"
+  },
+  {
+    "playerId": "odd_oppedal",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "first_touch"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Elegant og ballteknisk midtbanespiller i Branns mesterlag; førstegangsballbehandling føres som snevert teknikk-token.",
+    "claim": "I Bergens Tidendes minneomtale 30. mai 2018 beskrev tidligere Brann-spiller Helge Karlsen Odd Oppedal som en elegant midtbanespiller, mens tidligere Brann-formann Harald Andersen fremhevet hans eminente teknikk og at han kompenserte for begrenset fart med ballteknikk. Den generelle teknikkvurderingen gir et avgrenset belegg for first_touch (nærmeste eksisterende teknikk-token), ikke spesifikk dribling, pasningsrekkevidde, fart eller tallrating.",
+    "source": "https://www.bt.no/sport/i/kJEmBa/brann-legende-odd-oppedal-er-doed"
+  },
+  {
+    "playerId": "atle_helleso",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "simple_passing"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Pasningssikker midtbanespiller etter en historisk og uttrykkelig anekdotisk Brann-omtale.",
+    "claim": "Bergens Tidende 20. juni 2018 omtaler Atle Hellesø med den retrospektive og uttrykkelig anekdotiske formuleringen «Noen sier han aldri slo en pasning feil». Dette er et historisk vitnesbyrd om pasningssikkerhet, ikke målbar feilprosent eller dokumentasjon for lange pasninger, spilleforståelse eller tempoledelse. Derfor tilføres bare simple_passing uten konstruert tallrating.",
+    "source": "https://www.bt.no/nyheter/lokalt/i/wEQ31d/en-gudbenaadet-spiller"
+  },
+
   // 2026-10-20: Three further source-backed exclusive Lillestrøm profiles; no positional inference.
   {
     "playerId": "frank_gronlund",
