@@ -1011,9 +1011,9 @@ const KJENT_UDOKUMENTERT = {
   // Bodø/Glimt er ikke mindre kartlagt enn Vålerenga, de er kartlagt med
   // tabeller.
   intility_arena: 0.82,      // Vålerenga: målt 53 av 66
-  aspmyra_stadion: 0.82,     // Bodø/Glimt: 38 av 47 uten styrker etter ny åttespillerbolk
+  aspmyra_stadion: 0.76,     // Bodø/Glimt: 35 av 47 uten styrker, inkludert ny fireprofilbolk
   brann_stadion: 0.82,       // Brann: 38 av 47 uten styrker etter Pesen-passet
-  lyse_arena: 0.66           // Viking: 33 av 51 uten styrker etter ny åttespillerbolk
+  lyse_arena: 0.64           // Viking: 32 av 51 uten styrker, inkludert ny fireprofilbolk
 };
 
 // ---------------------------------------------------------------------------
