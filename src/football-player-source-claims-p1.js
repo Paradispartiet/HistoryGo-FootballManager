@@ -9,8 +9,8 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 9, expectedPartial: 2, expectedThin: 36, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 9, expectedPartial: 3, expectedThin: 35, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 18, expectedPartial: 2, expectedThin: 31, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 12, expectedPartial: 3, expectedThin: 32, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 19, expectedPartial: 2, expectedThin: 30, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 3, expectedPartial: 3, expectedThin: 18, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
 
   { key: "fredrikstad", placeId: "fredrikstad_stadion", expectedExclusive: 70, generation: "new" },
@@ -1443,6 +1443,47 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // Glimt/Viking 2026-10-20: specific retrospective skills from official club, UEFA and press accounts.
+  {
+    "playerId": "marius_lode",
+    "placeId": "aspmyra_stadion",
+    "strengths": [
+      "simple_passing",
+      "passing_range",
+      "pace",
+      "leadership"
+    ],
+    "claim": "Ved signeringen for Sarpsborg 08 i juli 2026 oppsummerer Marius Lode sin egen etablerte spillertype som «rolig med ball i beina» og en som liker å «finne de små lukene ute på banen». Sportssjef Hampus Andersson beskriver Lode som «en solid ballspiller som kan tre gjennom ledd», «en trygg og god pasningsspiller som også har bra fart i beina» og med «gode lederegenskaper». Dette dokumenterer pasningssikkerhet, gjennombruddspasninger, fart og lederskap på karrierenivå; vurderingen er fra tiden etter Glimt og ikke en særskilt påstand om 2020-form eller numeriske ratings.",
+    "source": "https://www.sarpsborg08.no/nyheter/marius-lode-er-klar-for-sarpsborg-08"
+  },
+  {
+    "playerId": "alfons_sampsted",
+    "placeId": "aspmyra_stadion",
+    "strengths": [
+      "natural_fitness"
+    ],
+    "claim": "Bodø/Glimts klubbintervju 12. april 2022 beskriver Sampsteds restitusjon etter tøffe kamper: «Islendingen har for vane å ikke slite spesielt lenge med tunge bein etter en kamp». Spillerens egen uttalelse er «jeg er ikke mer sliten enn vanlig etter kamp» etter 90 tøffe minutter. Dette gir et snevert periodebelagt grunnlag for restitusjon/natural_fitness, men ikke hurtighet, innlegg eller ubegrunnet utholdenhetsrating.",
+    "source": "https://www.glimt.no/nyheter/alfons-gleder-seg--atmosfaeren-er-fantastisk"
+  },
+  {
+    "playerId": "kasper_hogh",
+    "placeId": "aspmyra_stadion",
+    "strengths": [
+      "hold_up_play",
+      "strength"
+    ],
+    "claim": "UEFAs gjennomgang av Bodø/Glimt før Champions League 2025/26 beskriver Høgh som «A classic No9 with strong hold-up play and a powerful physical presence». Det gir direkte spillerfaglig belegg for oppspillspunkt/ballholding og fysisk styrke i Glimt-perioden; scoringstallene i artikkelen brukes ikke som belegg for finishing eller tallrating.",
+    "source": "https://www.uefa.com/uefachampionsleague/news/029d-1ea2e7e3e5d8-c5227ee0ab3c-1000--meet-the-2025-26-champions-league-league-phase-teams/"
+  },
+  {
+    "playerId": "magnus_svensson",
+    "placeId": "lyse_arena",
+    "strengths": [
+      "stamina"
+    ],
+    "claim": "Aftenpostens historiske omtale av Magnus Svenssons Viking-år kaller ham «Duracell-kaninen» og «midtbaneterrieren», og beskriver en karakteristisk energisk midtbanestil fra 1998-sesongen. Dette gir kildebelegg for vedvarende løpskapasitet (stamina), men ikke dribleferdigheter eller en antatt numerisk presis defensiv rating.",
+    "source": "https://www.aftenposten.no/sport/fotball/i/1njMxW/turbo-svensson-mitt-beste-aar-var-i-viking"
+  },
   // Bodø/Glimt: recurring goalkeeper abilities described by a teammate in 2025.
   {
     "playerId": "nikita_haikin",
