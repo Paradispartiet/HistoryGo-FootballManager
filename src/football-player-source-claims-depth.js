@@ -26,7 +26,7 @@ const documented = [
     playerId: "bengt_saeternes",
     clubId: "odd",
     strengths: ["strength", "finishing"],
-    claim: "Odds digitale museum gjengir Telemarksavisens historiske beskrivelse av Sæternes som en fryktet motstander på grunn av målteft og voldsom fysikk. Dette belegger fysisk styrke og avslutningsevne, uten å utlede en tallrating fra målstatistikk.",
+    claim: "Odds digitale museum gjengir Telemarksavisens historiske beskrivelse av Sæternes: «en fryktet motstander – både på grunn av målteften og ikke minst en voldsom fysikk». Dette belegger fysisk styrke og avslutningsevne, uten å utlede en tallrating fra målstatistikk.",
     source: "https://statistikk.odd.no/spillere/c3e04934-c565-4f63-8f70-858a6c20a757",
     sourceKind: "press"
   },
@@ -51,7 +51,7 @@ const documented = [
     playerId: "magnus_wolff_eikrem",
     clubId: "molde",
     strengths: ["simple_passing"],
-    claim: "Simen Stamsø Møllers U21-EM-presentasjon fra juni 2013 omtaler Eikrem i Molde som en dirigent med gode pasninger og god teknikk. Dette gir individuelt belegg for simple_passing, men generell teknikk og skuddomtale brukes ikke til å finne på flere spesifikke tokens.",
+    claim: "Simen Stamsø Møllers U21-EM-presentasjon fra juni 2013 omtaler Eikrem i Molde: «en dirigent med god teknikk, gode pasninger og gode skudd». Dette gir individuelt belegg for simple_passing, men generell teknikk og skuddomtale brukes ikke til å finne på flere spesifikke tokens.",
     source: "https://materazzia.blogspot.com/2013/06/u21-em-en-presentasjon-av-norges-tropp.html",
     sourceKind: "football_editorial"
   },
