@@ -11,7 +11,7 @@ export const P1_HERITAGES = Object.freeze([
   { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 22, expectedPartial: 2, expectedThin: 23, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 12, expectedPartial: 3, expectedThin: 9, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 17, expectedPartial: 3, expectedThin: 4, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
 
   { key: "fredrikstad", placeId: "fredrikstad_stadion", expectedExclusive: 70, generation: "new" },
   { key: "skeid", placeId: "nordre_asen", expectedExclusive: 70, generation: "new" },
@@ -1443,6 +1443,71 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // 2026-10-20: Five source-verified Lillestrøm profiles; canonical exclusive identities only.
+  {
+    "playerId": "runar_kristinsson",
+    "placeId": "araasen_stadion",
+    "strengths": [
+      "vision",
+      "flair",
+      "duels"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Kreativ og spilleklok ballfordeler med konkret omtalt duellstyrke i Lillestrøm-perioden.",
+    "claim": "Kanari-Fansens Lillestrøm-profil beskriver Kristinsson i LSK-årene som en briljant ballfordeler med enorm spilleforståelse og senere en svært god duellspiller, og omtaler ham som kreativ. Disse vurderingene støtter vision, flair og duels, uten numeriske ratinger eller pasningspresisjon utledet av målstatistikk.",
+    "source": "https://www.kanari-fansen.no/wiki/index.php/Runar_Kristinsson",
+    "supportingSources": [
+      "https://www.lokalfotballen.blog/2017/11/18/mitt-favorittlag-anders-eriksen-like-gode-pa-banen-som-pa-banketten/"
+    ]
+  },
+  {
+    "playerId": "kjetil_osvold",
+    "placeId": "araasen_stadion",
+    "strengths": [
+      "first_touch"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Teknisk finslepen midtbanespiller; individuell teknikk fremheves i retrospektiv omtale av LSK-karrieren.",
+    "claim": "Nettavisens spillerintervju fra mars 2007 beskriver Osvold som viden kjent for finslepen teknikk og omtaler hans Lillestrøm-år. Den generelle teknikkbeskrivelsen representeres konservativt av motorens first_touch-kategori, ikke som dokumentasjon for spesifikke driblinger, skudd eller pasningsrekkevidde. En enkelt tunnel mot Maradona brukes ikke som varig ferdighetsbevis.",
+    "source": "https://www.nettavisen.no/sport/hva-gjor-du-na-kjetil-osvold/s/12-95-911542"
+  },
+  {
+    "playerId": "bard_bjerkeland",
+    "placeId": "araasen_stadion",
+    "strengths": [
+      "duels"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Kompromissløs og fysisk tøff midtstopper i Lillestrøm, med duellspill som særpreg.",
+    "claim": "Lillestrøms historiske intervju publisert desember 2017 omtaler Bjerkeland som en kompromissløs og tøff stopper og gjengir VGs samtidskarakteristikk av ham som kompromissløs. Dette støtter duels som spillestil. En enkelt omtalt takling mot Mini er ikke alene grunnlag for et permanent tackling-token; generell eleganse mappes heller ikke til oppdiktede ferdigheter.",
+    "source": "https://www.lsk.no/nyheter/bard-bjerkeland-jeg-fikk-kjeft-av-kjerrringa-til-mini"
+  },
+  {
+    "playerId": "nosa_igiebor",
+    "placeId": "araasen_stadion",
+    "strengths": [
+      "flair"
+    ],
+    "evidenceKind": "editorial_appraisal",
+    "playingStyle": "Dristig og kreativ midtbanespiller som tok risiko med pasningene sine i Lillestrøm-perioden.",
+    "claim": "En fotballfaglig Aftenbladet-kommentar fra 7. juni 2010 skiller eksplisitt mellom Eziyodawes driblinger og Igiebors dristige pasninger, og fremhever Igiebors kreative innflytelse. Dette underbygger kreativ risikovilje (flair), men ikke bestemte nivåer på pasningspresisjon, dribling eller hurtighet, som omtales kollektivt for to spillere.",
+    "source": "https://www.aftenbladet.no/sport/i/oRdyRW/droemmen-om-en-bragd"
+  },
+  {
+    "playerId": "rune_richardsen",
+    "placeId": "araasen_stadion",
+    "strengths": [
+      "vision",
+      "stamina",
+      "duels"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Spilleklok, løpssterk og duellsterk midtbanespiller beskrevet av en tidligere medspiller i en senere klubbperiode.",
+    "claim": "Tidligere medspiller Per Kristian Melby omtaler Richardsens spilleforståelse, løpskraft og duellstyrke i en publisert ellever i 2023. Vurderingen gjelder AFSK-sammenheng og er ikke en samtidig analyse av Lillestrøm-perioden; vision, stamina og duels knyttes derfor til samme spiller uten å konstruere epokespesifikke tall eller bruke rolle/mål som ferdighetsbevis.",
+    "source": "https://www.lokalfotballen.blog/2023/10/24/mitt-favorittlag-per-kristian-melby-aktive-bade-pa-banen-og-lordagskvelden/"
+  },
+
+
   // 2026-10-20: Ny kildebolk etter PR #448: 2 Lillestrøm og 9 Brann.
   {
     "playerId": "torgeir_bjarmann",
