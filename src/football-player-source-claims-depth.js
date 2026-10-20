@@ -3018,6 +3018,59 @@ const documented = [
     "source": "https://www.bt.no/sport/i/JoQAm7/se-opp-for-disse-talentene",
     "sourceKind": "press"
   },
+  // Odd 2026-10-20: flerklubbprofiler med egne spillerbeskrivelser.
+  {
+    "playerId": "tommy_svindal_larsen",
+    "clubId": "odd",
+    "strengths": [
+      "first_touch"
+    ],
+    "claim": "Odds digitale museum gjengir VGs historiske vurdering av Svindal Larsen med ordene «Ballen satt limt. Kunne dominere en kamp fra start til mål». Ballkontroll/first_touch registreres; kampdominans gir ikke egen ubegrunnet totalferdighet.",
+    "source": "https://statistikk.odd.no/spillere/69773a56-bb59-4c49-a29f-a125541e2b41",
+    "sourceKind": "football_editorial"
+  },
+  {
+    "playerId": "bengt_saeternes",
+    "clubId": "odd",
+    "strengths": [
+      "strength",
+      "finishing"
+    ],
+    "claim": "Odds digitale museum gjengir Telemarksavisens retrospektiv om Sæternes: han var «en fryktet motstander – både på grunn av målteften og ikke minst en voldsom fysikk». Fysisk styrke og avslutningsevne har dermed eksplisitt individuelt belegg, uavhengig av karrierens målstatistikk.",
+    "source": "https://statistikk.odd.no/spillere/c3e04934-c565-4f63-8f70-858a6c20a757",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "olivier_occean",
+    "clubId": "odd",
+    "strengths": [
+      "duels",
+      "hold_up_play"
+    ],
+    "claim": "Dagbladets spillerfaglige 2016-vurdering kaller Occean «duellsterk og et strålende oppspillpunkt». Dette skiller hold-up-spill og duellkraft fra ren boksskåring; artikkelen peker tvert imot på manglende målproduksjon på vurderingstidspunktet.",
+    "source": "https://www.dagbladet.no/sport/sondre-rossbach-20-er-blitt-dag-eilev-fagermos-norgesrekord-investering/60292690",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "erik_holtan",
+    "clubId": "odd",
+    "strengths": [
+      "shot_stopping"
+    ],
+    "claim": "Odd-trener Arne Sandstø beskriver i Dagbladets cupfinaleomtale 2000 Holtan som en undervurdert keeper som «avverger flere muligheter», og kampreferatet omtaler «en serie praktredninger». Dagsavisen omtaler også flere kvalifiserte redninger i 2006. Bare redningsevne dokumenteres; hyppig utrusing settes ikke automatisk til command_of_area.",
+    "source": "https://www.dagbladet.no/sport/holtan-reddet-odd/65656703",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "odin_bjortuft",
+    "clubId": "odd",
+    "strengths": [
+      "duels"
+    ],
+    "claim": "Vardens kampvurderinger fra 2022 fremhever Bjørtuft i gjentatte kamper: «Knalltøff i duellspillet» mot Lillestrøm og «God i duellspillet» mot Vålerenga. To separate navngitte vurderinger gir avgrenset belegg for dueller, ikke fart, posisjonering eller pasningsstyring.",
+    "source": "https://statistikk.odd.no/kamper/9a7223f7-a662-42d4-b2ad-2b7c4fbabedd/678aeb4a-9420-472b-a07b-efe1cf627098",
+    "sourceKind": "press"
+  },
 ];
 
 export const SOURCE_DEPTH_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
