@@ -13,53 +13,16 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
-  // Bodø/Glimt, 2026-10-20: multi-club players described by their coach.
+  // Viking: individual goalkeeper organisation sourced from contemporary 2009 appraisal.
   {
-    "playerId": "brede_moe",
-    "clubId": "bodo_glimt",
+    "playerId": "thomas_myhre",
+    "clubId": "viking",
     "strengths": [
-      "pace"
+      "leadership"
     ],
-    "claim": "I Bodø/Glimts avskjedsomtale 2026 sier trener Kjetil Knutsen om Moes varige stopperkvaliteter: «Fysikken hans, spesielt hurtigheten er hans store X-faktor». Dette dokumenterer pace fra Glimt-karrieren, ikke generelle defensive ferdigheter eller tallrating.",
-    "source": "https://www.glimt.no/nyheter/brede-moe-setter-punktum--vil-prege-meg-som-person-resten-av-livet",
-    "sourceKind": "club"
-  },
-  {
-    "playerId": "sondre_sorli",
-    "clubId": "bodo_glimt",
-    "strengths": [
-      "work_rate",
-      "pace",
-      "one_vs_one"
-    ],
-    "claim": "Kjetil Knutsen beskrev Sørli ved overgangen til Bodø/Glimt i 2021 som «en toveisspiller, som betyr at han jobber godt begge veier» og «Han er rask og er bra både defensivt og offensivt 1 mot 1». Trenerens vurdering gir direkte belegg for arbeidsinnsats, fart og én-mot-én-spill fra Kristiansund-perioden; ingen tallrating eller etterfølgende Glimt-prestasjon er antatt.",
-    "source": "https://www.glimt.no/nyheter/sondre-sorli-er-pa-plass",
-    "sourceKind": "club"
-  },
-  // Odd: four retained independent player assessments from superseded PR #441.
-  {
-    playerId: "tommy_svindal_larsen",
-    clubId: "odd",
-    strengths: ["first_touch"],
-    claim: "Odds digitale museum gjengir VGs historiske vurdering av Svindal Larsen: «Ballen satt limt. Kunne dominere en kamp fra start til mål». Den konkrete beskrivelsen av ballkontroll gir grunnlag for first_touch. Kampdominans brukes ikke som en totalferdighet.",
-    source: "https://statistikk.odd.no/spillere/69773a56-bb59-4c49-a29f-a125541e2b41",
-    sourceKind: "football_editorial"
-  },
-  {
-    playerId: "bengt_saeternes",
-    clubId: "odd",
-    strengths: ["strength", "finishing"],
-    claim: "Odds digitale museum gjengir Telemarksavisens historiske beskrivelse av Sæternes: «en fryktet motstander – både på grunn av målteften og ikke minst en voldsom fysikk». Dette belegger fysisk styrke og avslutningsevne, uten å utlede en tallrating fra målstatistikk.",
-    source: "https://statistikk.odd.no/spillere/c3e04934-c565-4f63-8f70-858a6c20a757",
-    sourceKind: "press"
-  },
-  {
-    playerId: "odin_bjortuft",
-    clubId: "odd",
-    strengths: ["duels"],
-    claim: "Vardens individuelle kampvurderinger fra 2022 beskriver Bjørtuft som «Knalltøff i duellspillet» mot Lillestrøm og «God i duellspillet» mot Vålerenga. To separate vurderinger støtter et avgrenset, tilbakevendende duellpreg, ikke automatisk fart eller posisjonering.",
-    source: "https://statistikk.odd.no/kamper/9a7223f7-a662-42d4-b2ad-2b7c4fbabedd/678aeb4a-9420-472b-a07b-efe1cf627098",
-    sourceKind: "press"
+    "claim": "Aftenpostens sammenligning av eliteseriekeeperne i mars 2009 omtaler Myhres Viking-periode og konkluderer: «Sannsynligvis den keeperen i eliteserien som er best til å dirigere forsvaret». Dette er eksplisitt individuell organisering og lederskap på banen, ikke en refleks- eller feltarbeidsrating fra meritter.",
+    "source": "https://www.aftenposten.no/sport/fotball/i/K36v1X/her-er-den-beste-keeperen",
+    "sourceKind": "press"
   },
   // Strømsgodset 2026-10-19: lagkamerat beskriver konkret lederrolle.
   {
