@@ -29,6 +29,16 @@ export const P1_HERITAGES = Object.freeze([
 ]);
 
 const documented = [
+  // Odd: source-verified U21-era defensive profile retained from superseded PR #441.
+  {
+    playerId: "fredrik_semb_berge",
+    placeId: "skagerak_arena",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Duellsterk midtstopper som omtales som rolig og trygg i forsvarsspillet.",
+    strengths: ["duels", "composure"],
+    claim: "Fotballskribent Simen Stamsø Møllers samtidige U21-EM-presentasjon i juni 2013 beskriver Odd-spiller Semb Berge som «en duellsterk midtstopper som spiller med en imponerende trygghet». Det dokumenterer duellstyrke og ro (composure), men ikke udokumentert fart eller ballfordeling.",
+    source: "https://materazzia.blogspot.com/2013/06/u21-em-en-presentasjon-av-norges-tropp.html"
+  },
   // Odd 2026-10-20: samtidige individuelle scoutingbeskrivelser fra 2009.
   {
     "playerId": "torgeir_borven",
