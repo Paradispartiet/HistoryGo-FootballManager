@@ -3018,6 +3018,28 @@ const documented = [
     "source": "https://www.bt.no/sport/i/JoQAm7/se-opp-for-disse-talentene",
     "sourceKind": "press"
   },
+  // Odd 2026-10-20: direkte treneruttalelser og historisk keeperomtale.
+  {
+    "playerId": "olivier_occean",
+    "clubId": "odd",
+    "strengths": [
+      "heading",
+      "pace"
+    ],
+    "claim": "Ved signering til Odd beskrev trener Arne Sandstø Occean som «meget sterk på hodet» og «rask og god med ball». Dette er direkte, samtidig trenerbelegg for hodespill og fart i Odd-perioden; generell «god med ball» blir ikke brukt til å finne på konkret pasnings- eller dribleferdighet.",
+    "source": "https://www.aftenposten.no/sport/i/70PJXv/occean-klar-for-odd",
+    "sourceKind": "press"
+  },
+  {
+    "playerId": "erik_holtan",
+    "clubId": "odd",
+    "strengths": [
+      "shot_stopping"
+    ],
+    "claim": "I Dagbladets cupfinaleomtale forteller Odd-trener Arne Sandstø at Holtan gjennom året hadde «forhindret desto fler» sjanser med sin aktive keeperstil og at han «avverger flere muligheter mot slutten». Avisen beskriver en serie praktredninger. Samlet trener- og kampvurdering støtter skuddredninger, ikke en automatisk reflexes-rating eller udokumentert distribusjon.",
+    "source": "https://www.dagbladet.no/sport/holtan-reddet-odd/65656703",
+    "sourceKind": "press"
+  },
 ];
 
 export const SOURCE_DEPTH_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
