@@ -9,8 +9,8 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 9, expectedPartial: 2, expectedThin: 36, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 4, expectedPartial: 3, expectedThin: 40, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 14, expectedPartial: 2, expectedThin: 35, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 5, expectedPartial: 3, expectedThin: 39, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 15, expectedPartial: 2, expectedThin: 34, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 3, expectedPartial: 3, expectedThin: 18, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
 
   { key: "fredrikstad", placeId: "fredrikstad_stadion", expectedExclusive: 70, generation: "new" },
@@ -29,6 +29,31 @@ export const P1_HERITAGES = Object.freeze([
 ]);
 
 const documented = [
+  // Odd 2026-10-20: samtidige individuelle scoutingbeskrivelser fra 2009.
+  {
+    "playerId": "torgeir_borven",
+    "placeId": "skagerak_arena",
+    "evidenceKind": "direct_appraisal",
+    "playingStyle": "Ung Odd-spiss med presis avslutningsteknikk og øye for offensive muligheter, beskrevet av agenten som fulgte ham i 2008–2009.",
+    "strengths": [
+      "finishing",
+      "vision"
+    ],
+    "claim": "Agent Vegar Raknes' individuelle spillerfaglige vurdering gjengitt av Aftenposten i 2009 sier om 18 år gamle Torgeir Børven: «godt blikk og god avslutningsteknikk» og «en typisk målscorer». Dette gir samtidige, periodetydelige belegg for vision og finishing. Vurderingen brukes ikke som udokumentert moden karriererating.",
+    "source": "https://www.aftenposten.no/sport/fotball/i/jd32Qn/politimann-og-fotballagent"
+  },
+  {
+    "playerId": "magnus_lekven",
+    "placeId": "skagerak_arena",
+    "evidenceKind": "direct_appraisal",
+    "playingStyle": "Teknisk Odd-midtbanespiller med presis førsteberøring og dokumentert oversikt over offensive pasningsmuligheter.",
+    "strengths": [
+      "first_touch",
+      "vision"
+    ],
+    "claim": "I Vegar Raknes' individuelle scoutingvurdering av Magnus Lekven fra 2009 heter det «strålende ballberøringer, eminent blikk for spillet». Dette underbygger first_touch og vision hos Lekven i Odd-perioden. Ingen kamptall, markedsvurdering eller senere karriere utledes til andre tokens.",
+    "source": "https://www.aftenposten.no/sport/fotball/i/jd32Qn/politimann-og-fotballagent"
+  },
   // Odd 2026-10-20: eksplisitte historiske og faglige spillerbeskrivelser.
   {
     "playerId": "fredrik_oldrup_jensen",
@@ -1408,6 +1433,27 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // Viking og Bodø/Glimt 2026-10-20: individuelle, periodetydelige kilder.
+  {
+    "playerId": "svein_kvia",
+    "placeId": "lyse_arena",
+    "strengths": [
+      "simple_passing",
+      "game_reading"
+    ],
+    "claim": "NTBs minneomtale av Svein Kvia, publisert hos Aftenposten 2005, trekker fram som hans varige kjennetegn «gode pasninger, fin teknikk og evnen til å lese spillet». Direkte ferdighetsbelegg for simple_passing og game_reading; uttrykket «fin teknikk» er for generelt til å rettferdiggjøre et ekstra first_touch-token uten mer presis kilde.",
+    "source": "https://www.aftenposten.no/sport/fotball/i/AdGLnq/svein-kvia-er-doed"
+  },
+  {
+    "playerId": "mathias_normann",
+    "placeId": "aspmyra_stadion",
+    "strengths": [
+      "vision",
+      "chance_creation"
+    ],
+    "claim": "Avisa Nordlands Freddy Toresen beskriver 17-årige Mathias Normann før 2014-sesongen i en spillerfaglig talentsak: «enormt blikk for spillet» og «voldsomt kreativ». Det begrunner vision og chance_creation i hans tidlige Glimt-profil, ikke senere prestasjonsrating eller defensiv arbeidskapasitet.",
+    "source": "https://www.aftenbladet.no/sport/i/aw255E/se-opp-for-disse-talentene"
+  },
   // Viking 2026-10-20: kildebelagt avslutningsprofil, historisk karrieretid eksplisitt.
   {
     "playerId": "egil_ostenstad",
