@@ -8,7 +8,7 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 25, expectedPartial: 2, expectedThin: 20, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 26, expectedPartial: 2, expectedThin: 19, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 21, expectedPartial: 3, expectedThin: 0, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
@@ -1443,6 +1443,18 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // 2026-10-20: contemporary Brann season appraisal (2010), same source-first pass.
+  {
+    "playerId": "zsolt_korcsmar",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "duels"
+    ],
+    "evidenceKind": "direct_appraisal",
+    "playingStyle": "Duellsterk midtstopper i Branns 2010-sesong, beskrevet av samtidige sportsjournalister.",
+    "claim": "Aftenpostens sesongvise spillerkarakterbok fra 2010 vurderer Zsolt Korcsmár etter ni Brann-kamper, omtaler ham som bestemann i Brann-forsvaret etter låneovergangen og sier eksplisitt at han var «sterk i duellspillet». Dette gir begrenset, periodeavgrenset individuelt belegg for duels. Artikkelen nevner samtidig utfordringer med tempo; den brukes ikke til å tildele fart, markering, heading, stabilitet eller tallrating.",
+    "source": "https://www.aftenposten.no/sport/fotball/i/70q5b9/branns-karakterbok"
+  },
   // 2026-10-20: two carefully delimited historical Brann skill profiles.
   {
     "playerId": "tore_nordtvedt",
