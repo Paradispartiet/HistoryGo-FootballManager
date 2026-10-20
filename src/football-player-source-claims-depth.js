@@ -13,6 +13,29 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Bodø/Glimt, 2026-10-20: multi-club players described by their coach.
+  {
+    "playerId": "brede_moe",
+    "clubId": "bodo_glimt",
+    "strengths": [
+      "pace"
+    ],
+    "claim": "I Bodø/Glimts avskjedsomtale 2026 sier trener Kjetil Knutsen om Moes varige stopperkvaliteter: «Fysikken hans, spesielt hurtigheten er hans store X-faktor». Dette dokumenterer pace fra Glimt-karrieren, ikke generelle defensive ferdigheter eller tallrating.",
+    "source": "https://www.glimt.no/nyheter/brede-moe-setter-punktum--vil-prege-meg-som-person-resten-av-livet",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "sondre_sorli",
+    "clubId": "bodo_glimt",
+    "strengths": [
+      "work_rate",
+      "pace",
+      "one_vs_one"
+    ],
+    "claim": "Kjetil Knutsen beskrev Sørli ved overgangen til Bodø/Glimt i 2021 som «en toveisspiller, som betyr at han jobber godt begge veier» og «Han er rask og er bra både defensivt og offensivt 1 mot 1». Trenerens vurdering gir direkte belegg for arbeidsinnsats, fart og én-mot-én-spill fra Kristiansund-perioden; ingen tallrating eller etterfølgende Glimt-prestasjon er antatt.",
+    "source": "https://www.glimt.no/nyheter/sondre-sorli-er-pa-plass",
+    "sourceKind": "club"
+  },
   // Odd: four retained independent player assessments from superseded PR #441.
   {
     playerId: "tommy_svindal_larsen",
