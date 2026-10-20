@@ -11,7 +11,7 @@ export const P1_HERITAGES = Object.freeze([
   { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 23, expectedPartial: 2, expectedThin: 22, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 18, expectedPartial: 3, expectedThin: 3, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 21, expectedPartial: 3, expectedThin: 0, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
 
   { key: "fredrikstad", placeId: "fredrikstad_stadion", expectedExclusive: 70, generation: "new" },
   { key: "skeid", placeId: "nordre_asen", expectedExclusive: 70, generation: "new" },
@@ -1443,6 +1443,42 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // 2026-10-20: Three further source-backed exclusive Lillestrøm profiles; no positional inference.
+  {
+    "playerId": "frank_gronlund",
+    "placeId": "araasen_stadion",
+    "strengths": [
+      "strength"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Fysisk kraftspiller i Lillestrøm-perioden; klubbens retrospektive intervju fremhever den kraftfulle spillertypen.",
+    "claim": "Lillestrøms God Fugl-intervju publisert 29. november 2017 omtaler Frank Grønlund, som spilte for LSK i 1970–1983, som en storvokst kraftspiller. Dette gir begrenset, individuelt belegg for strength. Beskrivelsen gir ikke grunnlag for taklinger, hodespill, pasningskvalitet, duellstatistikk eller tallrating.",
+    "source": "https://www.lsk.no/nyheter/frank-gronlund-giganten-som-fikk-kong-olav-til-a-le"
+  },
+  {
+    "playerId": "joar_vaadal",
+    "placeId": "araasen_stadion",
+    "strengths": [
+      "heading",
+      "strength"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Hodesterk, fysisk robust targetspiss, særskilt beskrevet i retrospektiv spilleromtale.",
+    "claim": "Bergens Tidendes retrospektive utvalg publisert 8. september 2015 beskriver Joar Vaadal i Lillestrøm som en «hodesterk muskelbunt» og «typisk targetspiss». Den eksplisitte beskrivelsen støtter heading og strength; rollen alene brukes ikke til å tildele hold_up_play, scoringstall brukes ikke som belegg for finishing, og ingen numeriske verdier utledes.",
+    "source": "https://www.bt.no/sport/i/dOwArB/paa-dette-droemmelaget-faar-landslagssjef-hoegmo-plass-som-spiller"
+  },
+  {
+    "playerId": "arne_amundsen",
+    "placeId": "araasen_stadion",
+    "strengths": [
+      "game_reading"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Taktisk klok og stødig keeper i Lillestrøm, med særlig gode vurderinger av spillet.",
+    "claim": "I Aftenbladets omtale 8. september 2014 gjengis Tom Lunds tidligere vurdering av LSK-keeper Arne Amundsen som stødig, effektiv og «desidert best taktisk» blant keepere Lund hadde spilt med. Dette gir individuelt belegg for game_reading. Omtalen dokumenterer ikke særskilt reaksjonshurtighet, grepsteknikk, skuddredninger eller distribusjon.",
+    "source": "https://www.aftenbladet.no/sport/i/m6GJp4/norsk-keeperlegende-doede-braatt"
+  },
+
   // 2026-10-20: two directly sourced canonical exclusive heritage profiles.
   {
     "playerId": "erik_soler",
