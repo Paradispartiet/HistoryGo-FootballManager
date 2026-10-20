@@ -918,7 +918,7 @@ const KJENT_UDOKUMENTERT = {
   // en registrering av at arven ikke dokumenterer ferdigheter i det hele tatt.
   // Tallet skal SYNKE når individuelle kilder leses tilbake.
   nadderud_stadion: 0.99,    // Stabæk
-  araasen_stadion: 0.51,     // Lillestrøm: 12/24 uten styrker; streng ratchet krever tak over 50 %
+  araasen_stadion: 0.30,     // Lillestrøm: 7/24 uten styrker etter fem nye kildeprofiler; streng ratchet >29.17 %
   nordmore_stadion: 1.01,    // Kristiansund
   kfum_arena: 0.93,          // KFUM Oslo
   jotun_arena: 0.80,         // Sandefjord: fem nye P1-profiler, 32/41 eksklusive uten styrker
