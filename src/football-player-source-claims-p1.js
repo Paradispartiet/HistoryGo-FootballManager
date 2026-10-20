@@ -11,7 +11,7 @@ export const P1_HERITAGES = Object.freeze([
   { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 23, expectedPartial: 2, expectedThin: 22, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 18, expectedPartial: 3, expectedThin: 3, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 19, expectedPartial: 3, expectedThin: 2, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
 
   { key: "fredrikstad", placeId: "fredrikstad_stadion", expectedExclusive: 70, generation: "new" },
   { key: "skeid", placeId: "nordre_asen", expectedExclusive: 70, generation: "new" },
@@ -1443,6 +1443,20 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // 2026-10-20: Joar Vaadal – distinctive documented qualities, not inferred from scoring history.
+  {
+    "playerId": "joar_vaadal",
+    "placeId": "araasen_stadion",
+    "strengths": [
+      "heading",
+      "strength"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Hodesterk og fysisk kraftig targetspiss i Lillestrøm, slik en historisk supporterbasert spillervurdering beskriver ham.",
+    "claim": "I Bergens Tidendes supporterblogg 8. september 2015 beskriver Bjørn Druglimo Lillestrøm-spissen Joar Vaadal som «hodesterk muskelbunt» og en typisk targetspiss. Retrospektiv karakteristikk gir individuelt belegg for heading og strength, men ikke for fart, avslutningspresisjon eller statistikkavledede ratinger. Kilden er en subjektiv supporterhistorikk, ikke en samtidig scoutingrapport.",
+    "source": "https://www.bt.no/sport/i/dOwArB/paa-dette-droemmelaget-faar-landslagssjef-hoegmo-plass-som-spiller"
+  },
+
   // 2026-10-20: two directly sourced canonical exclusive heritage profiles.
   {
     "playerId": "erik_soler",
