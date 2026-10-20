@@ -9,7 +9,7 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 9, expectedPartial: 2, expectedThin: 36, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 8, expectedPartial: 3, expectedThin: 36, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 9, expectedPartial: 3, expectedThin: 35, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 18, expectedPartial: 2, expectedThin: 31, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 3, expectedPartial: 3, expectedThin: 18, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
 
@@ -1443,6 +1443,17 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // Bodø/Glimt: recurring goalkeeper abilities described by a teammate in 2025.
+  {
+    "playerId": "nikita_haikin",
+    "placeId": "aspmyra_stadion",
+    "strengths": [
+      "shot_stopping",
+      "distribution"
+    ],
+    "claim": "I Nettavisens evaluering av Haikins Glimt-prestasjoner i 2025 sier lagkamerat Daniel Bassi: «Han er helt vanvittig på strek, og ekstremt god med beina i tillegg». Lagkameratens gjentatte erfaring fra Glimt-perioden dokumenterer strekredninger og ballferdigheter i oppbyggingen, ikke en numerisk keeperrating.",
+    "source": "https://www.nettavisen.no/sport/nikita-haikin-vil-bli-norsk-statsborger-jobber-med-advokater/s/5-95-2625111"
+  },
   // Bodø/Glimt and Viking, 2026-10-20: enduring source-based playing styles.
   {
     "playerId": "ulrik_saltnes",
