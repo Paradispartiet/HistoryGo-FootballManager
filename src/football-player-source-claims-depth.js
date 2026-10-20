@@ -13,30 +13,16 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
-  // Odd: four retained independent player assessments from superseded PR #441.
+  // Viking: individual goalkeeper organisation sourced from contemporary 2009 appraisal.
   {
-    playerId: "tommy_svindal_larsen",
-    clubId: "odd",
-    strengths: ["first_touch"],
-    claim: "Odds digitale museum gjengir VGs historiske vurdering av Svindal Larsen: «Ballen satt limt. Kunne dominere en kamp fra start til mål». Den konkrete beskrivelsen av ballkontroll gir grunnlag for first_touch. Kampdominans brukes ikke som en totalferdighet.",
-    source: "https://statistikk.odd.no/spillere/69773a56-bb59-4c49-a29f-a125541e2b41",
-    sourceKind: "football_editorial"
-  },
-  {
-    playerId: "bengt_saeternes",
-    clubId: "odd",
-    strengths: ["strength", "finishing"],
-    claim: "Odds digitale museum gjengir Telemarksavisens historiske beskrivelse av Sæternes: «en fryktet motstander – både på grunn av målteften og ikke minst en voldsom fysikk». Dette belegger fysisk styrke og avslutningsevne, uten å utlede en tallrating fra målstatistikk.",
-    source: "https://statistikk.odd.no/spillere/c3e04934-c565-4f63-8f70-858a6c20a757",
-    sourceKind: "press"
-  },
-  {
-    playerId: "odin_bjortuft",
-    clubId: "odd",
-    strengths: ["duels"],
-    claim: "Vardens individuelle kampvurderinger fra 2022 beskriver Bjørtuft som «Knalltøff i duellspillet» mot Lillestrøm og «God i duellspillet» mot Vålerenga. To separate vurderinger støtter et avgrenset, tilbakevendende duellpreg, ikke automatisk fart eller posisjonering.",
-    source: "https://statistikk.odd.no/kamper/9a7223f7-a662-42d4-b2ad-2b7c4fbabedd/678aeb4a-9420-472b-a07b-efe1cf627098",
-    sourceKind: "press"
+    "playerId": "thomas_myhre",
+    "clubId": "viking",
+    "strengths": [
+      "leadership"
+    ],
+    "claim": "Aftenpostens sammenligning av eliteseriekeeperne i mars 2009 omtaler Myhres Viking-periode og konkluderer: «Sannsynligvis den keeperen i eliteserien som er best til å dirigere forsvaret». Dette er eksplisitt individuell organisering og lederskap på banen, ikke en refleks- eller feltarbeidsrating fra meritter.",
+    "source": "https://www.aftenposten.no/sport/fotball/i/K36v1X/her-er-den-beste-keeperen",
+    "sourceKind": "press"
   },
   // Strømsgodset 2026-10-19: lagkamerat beskriver konkret lederrolle.
   {
