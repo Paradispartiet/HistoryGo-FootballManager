@@ -13,6 +13,48 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Odd: four retained independent player assessments from superseded PR #441.
+  {
+    playerId: "tommy_svindal_larsen",
+    clubId: "odd",
+    strengths: ["first_touch"],
+    claim: "Odds digitale museum gjengir VGs historiske vurdering av Svindal Larsen: «Ballen satt limt. Kunne dominere en kamp fra start til mål». Den konkrete beskrivelsen av ballkontroll gir grunnlag for first_touch. Kampdominans brukes ikke som en totalferdighet.",
+    source: "https://statistikk.odd.no/spillere/69773a56-bb59-4c49-a29f-a125541e2b41",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "bengt_saeternes",
+    clubId: "odd",
+    strengths: ["strength", "finishing"],
+    claim: "Odds digitale museum gjengir Telemarksavisens historiske beskrivelse av Sæternes som en fryktet motstander på grunn av målteft og voldsom fysikk. Dette belegger fysisk styrke og avslutningsevne, uten å utlede en tallrating fra målstatistikk.",
+    source: "https://statistikk.odd.no/spillere/c3e04934-c565-4f63-8f70-858a6c20a757",
+    sourceKind: "press"
+  },
+  {
+    playerId: "odin_bjortuft",
+    clubId: "odd",
+    strengths: ["duels"],
+    claim: "Vardens individuelle kampvurderinger fra 2022 beskriver Bjørtuft som «Knalltøff i duellspillet» mot Lillestrøm og «God i duellspillet» mot Vålerenga. To separate vurderinger støtter et avgrenset, tilbakevendende duellpreg, ikke automatisk fart eller posisjonering.",
+    source: "https://statistikk.odd.no/kamper/9a7223f7-a662-42d4-b2ad-2b7c4fbabedd/678aeb4a-9420-472b-a07b-efe1cf627098",
+    sourceKind: "press"
+  },
+  // Additional historical U21-era assessments; no new identities or numerical ratings.
+  {
+    playerId: "stefan_strandberg",
+    clubId: "rosenborg",
+    strengths: ["duels"],
+    claim: "Simen Stamsø Møllers samtidige U21-EM-presentasjon i juni 2013 omtaler Strandberg som Rosenborg-stopper og sier at han er «kjent for å legge lite imellom i duellene». Dette underbygger fysisk duellspill i Rosenborg-perioden, uten en utledet taklingsrating.",
+    source: "https://materazzia.blogspot.com/2013/06/u21-em-en-presentasjon-av-norges-tropp.html",
+    sourceKind: "football_editorial"
+  },
+  {
+    playerId: "magnus_wolff_eikrem",
+    clubId: "molde",
+    strengths: ["simple_passing"],
+    claim: "Simen Stamsø Møllers U21-EM-presentasjon fra juni 2013 omtaler Eikrem i Molde som en dirigent med gode pasninger og god teknikk. Dette gir individuelt belegg for simple_passing, men generell teknikk og skuddomtale brukes ikke til å finne på flere spesifikke tokens.",
+    source: "https://materazzia.blogspot.com/2013/06/u21-em-en-presentasjon-av-norges-tropp.html",
+    sourceKind: "football_editorial"
+  },
   // Strømsgodset 2026-10-19: lagkamerat beskriver konkret lederrolle.
   {
     "playerId": "ulf_camitz",
