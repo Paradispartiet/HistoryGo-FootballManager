@@ -3040,6 +3040,18 @@ const documented = [
     "source": "https://www.dagbladet.no/sport/holtan-reddet-odd/65656703",
     "sourceKind": "press"
   },
+  // Viking 2026-10-20: dokumentert høyt press og arbeidsinnsats i 2015.
+  {
+    "playerId": "veton_berisha",
+    "clubId": "viking",
+    "strengths": [
+      "pressing",
+      "work_rate"
+    ],
+    "claim": "Aftenpostens fotballkommentar fra 2015 omtaler Veton Berisha som «ekstremt pigg» og «enda mer aggressiv og løpsvillig», og fremhever at han «gikk foran på i press og arbeidsinnsats» i Viking-perioden. Dette gir direkte individuelt belegg for pressing og work_rate; målstatistikken brukes ikke til å tildele finishing.",
+    "source": "https://www.aftenposten.no/sport/meninger/i/e8zajO/viking-spillerne-fortjener-mye-skryt",
+    "sourceKind": "press"
+  },
 ];
 
 export const SOURCE_DEPTH_DOCUMENTED = Object.freeze(documented.map((entry) => Object.freeze({
