@@ -8,10 +8,10 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 22, expectedPartial: 2, expectedThin: 23, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 23, expectedPartial: 2, expectedThin: 22, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 17, expectedPartial: 3, expectedThin: 4, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 18, expectedPartial: 3, expectedThin: 3, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
 
   { key: "fredrikstad", placeId: "fredrikstad_stadion", expectedExclusive: 70, generation: "new" },
   { key: "skeid", placeId: "nordre_asen", expectedExclusive: 70, generation: "new" },
@@ -1443,6 +1443,33 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // 2026-10-20: two directly sourced canonical exclusive heritage profiles.
+  {
+    "playerId": "erik_soler",
+    "placeId": "araasen_stadion",
+    "strengths": [
+      "tackling",
+      "teamwork"
+    ],
+    "evidenceKind": "direct_appraisal",
+    "playingStyle": "Taklingssterk ballvinner som spilte enkelt for Tom Lund og beskrev seg selv som en støttespiller for laget.",
+    "claim": "I Lillestrøms God Fugl-intervju publisert 16. oktober 2018 forteller Erik Solér selv om sine første LSK-år at han taklet, vant ballen og spilte den videre til Tom Lund som en tjenestegutt for ham. Dette gir direkte, epokespesifikt belegg for tackling og teamwork. Det etablerer ikke særskilt pasningspresisjon, løpskraft eller numeriske ferdighetsverdier.",
+    "source": "https://www.lsk.no/nyheter/god-fugl-soler-ble-forsokt-hentet-med-donald-blad-som-betaling"
+  },
+  {
+    "playerId": "erlend_hanstveit",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "strength",
+      "pace"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Fysisk sterk og hurtig forsvarsspiller med offensive initiativ, slik Branns egen spillerhistorie beskriver ham.",
+    "claim": "SK Branns historiske spillerprofil beskriver Erlend Hanstveit som høy og sterk med god fart og initiativ framover i banen. strength og pace er direkte beskrivende, varige kvaliteter i Brann-perioden. Offensive initiativ bevares som tekst, uten å utlede spesifikke overlappsløp, dribling eller pasningsegenskaper.",
+    "source": "https://historie.brann.no/spillere/erlend-hanstveit"
+  },
+
+
   // 2026-10-20: Five source-verified Lillestrøm profiles; canonical exclusive identities only.
   {
     "playerId": "runar_kristinsson",
