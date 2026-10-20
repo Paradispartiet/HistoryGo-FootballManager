@@ -8,10 +8,10 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 13, expectedPartial: 2, expectedThin: 32, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 22, expectedPartial: 2, expectedThin: 23, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 10, expectedPartial: 3, expectedThin: 11, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 12, expectedPartial: 3, expectedThin: 9, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
 
   { key: "fredrikstad", placeId: "fredrikstad_stadion", expectedExclusive: 70, generation: "new" },
   { key: "skeid", placeId: "nordre_asen", expectedExclusive: 70, generation: "new" },
@@ -1443,6 +1443,146 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // 2026-10-20: Ny kildebolk etter PR #448: 2 Lillestrøm og 9 Brann.
+  {
+    "playerId": "torgeir_bjarmann",
+    "placeId": "araasen_stadion",
+    "strengths": [
+      "duels",
+      "game_reading",
+      "teamwork"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Duellsterk Lillestrøm-kaptein med taktiske og tekniske kvaliteter som løftet lagkamerater.",
+    "claim": "Dagbladets vurdering fra 2001 beskriver Bjarmann som tøff i dueller med en særlig kombinasjon av taktiske, tekniske og sosiale ferdigheter, og peker på at medspillere ble bedre rundt ham. duels, game_reading og teamwork er avgrensede ferdighetsbegreper; kapteinsbindet alene brukes ikke som bevis.",
+    "source": "https://www.dagbladet.no/sport/en-komplett-kaptein/65763943"
+  },
+  {
+    "playerId": "espen_sogard",
+    "placeId": "araasen_stadion",
+    "strengths": [
+      "work_rate",
+      "stamina",
+      "duels"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Hardtarbeidende, løpssterk midtbanespiller med særpreg i duellspillet.",
+    "claim": "Individuelle Dagbladet-vurderinger fra 2002 og 2003 beskriver Søgård som hardtarbeidende og løpssterk og fremhever duellstyrken. work_rate, stamina og duels er avgrensede beskrivelser, ikke posisjonsgjetninger.",
+    "source": "https://www.dagbladet.no/sport/norges-50-beste-fotballspillere/65797347"
+  },
+  {
+    "playerId": "helge_karlsen",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "pace",
+      "positioning",
+      "tackling"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Hurtig forsvarer med god plasseringsevne og presise taklinger.",
+    "claim": "Branns historiske profil beskriver fart, plasseringsevne og presise taklinger fra hans Brann-år. Dette begrunner bare pace, positioning og tackling.",
+    "source": "https://historie.brann.no/spillere/helge-karlsen/"
+  },
+  {
+    "playerId": "birkir_mar_saevarsson",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "pace",
+      "ball_carrying"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Hurtig back som utviklet ballkontrollen gjennom Brann-perioden.",
+    "claim": "Branns historiske profil kaller Sævarsson hurtig og beskriver bedret ballkontroll rundt 2011. pace og ball_carrying er konservative kvalitetsbegreper, uten å hevde spesifikk dribleferdighet.",
+    "source": "https://historie.brann.no/spillere/birkir-mar-saevarsson/"
+  },
+  {
+    "playerId": "olafur_orn_bjarnason",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "strength",
+      "heading"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Fysisk tøff forsvarer med dokumentert god luftstyrke.",
+    "claim": "Branns historiske profil omtaler Bjarnason som fysisk tøff og god i luften. strength og heading er direkte avledet fra denne individbeskrivelsen, ikke fra posisjon.",
+    "source": "https://historie.brann.no/spillere/olafur-oern-bjarnason/"
+  },
+  {
+    "playerId": "geirmund_brendesaeter",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "duels",
+      "pace"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Tøff, fysisk back med stor fart.",
+    "claim": "Branns historiske profil fremhever Brendesæters hardhet og fart. duels og pace er konservative ferdighetskategorier, uten ubegrunnede taklings-/pasningsclaims.",
+    "source": "https://historie.brann.no/spillere/geirmund-brendesaeter"
+  },
+  {
+    "playerId": "charlie_miller",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "first_touch",
+      "vision",
+      "simple_passing"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Teknisk sterk midtbanespiller med spilleblikk og gode pasninger.",
+    "claim": "En samtidig omtale fra juli 2004 trekker frem Millers teknikk, spilleblikk og pasningskvalitet. first_touch er en forsiktig kategorisering av teknikk, simple_passing en konservativ pasningskategori. Kilden gjelder en tidlig vurdering, ikke et tallnivå.",
+    "source": "https://www.aftenbladet.no/sport/i/zLRQ7v/branns-nye-midtbanesjef"
+  },
+  {
+    "playerId": "cato_guntveit",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "vision",
+      "off_ball_runs",
+      "leadership"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Spilleklok Brann-spiller med gode løp uten ball og dokumentert lederskap.",
+    "claim": "Branns historiske profil beskriver Guntveits svært gode spilleforståelse og våkne løp som strekker motstanderforsvaret. Klubben omtaler ham også som en god leder i 2004. Ferdighetene følger disse direkte utsagnene.",
+    "source": "https://historie.brann.no/spillere/cato-guntveit/"
+  },
+  {
+    "playerId": "egil_austbo",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "work_rate",
+      "leadership"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Hardtarbeidende midtbanespiller med dokumenterte lederegenskaper.",
+    "claim": "Branns historiske spillerprofil fremhever Austbøs arbeidsinnsats og lederegenskaper. Ingen kvaliteter er utledet fra posisjon eller kampstatistikk.",
+    "source": "https://historie.brann.no/spillere/egil-austboe/"
+  },
+  {
+    "playerId": "petter_furuseth_olsen",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "acceleration",
+      "runs_behind"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Kvikk, gjennombruddsvillig spiller med kraftfullt skudd med begge bein.",
+    "claim": "Dagbladets individuelle vurdering i 2002 beskriver Furuseth Olsen som kvikk, gjennombruddsvillig og skuddsterk med begge bein. acceleration og runs_behind er forsiktige kategorier. Skuddstyrke og tobeinthet omtales i teksten, men skaper ingen oppdiktet long_shots- eller finishing-egenskap.",
+    "source": "https://www.dagbladet.no/sport/norges-50-beste-fotballspillere/65797347"
+  },
+  {
+    "playerId": "armann_bjornsson",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "pace",
+      "strength",
+      "heading"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Rask, sterk angrepsspiller som var god i luftdueller.",
+    "claim": "Branns historiske profil beskriver Björnsson som rask, sterk og god i luften gjennom Brann-oppholdene. pace, strength og heading føres uten å utlede ferdigheter fra målstatistikk.",
+    "source": "https://historie.brann.no/spillere/armann-bjoernsson"
+  },
+
   // 2026-10-20: Lillestrøm (7) og Brann (4), individuelle, epokeavgrensede vurderinger.
   {
     "playerId": "frode_kippe",
@@ -1482,12 +1622,17 @@ const existingSupplements = [
     "playerId": "michael_mifsud",
     "placeId": "araasen_stadion",
     "strengths": [
-      "pace"
+      "pace",
+      "strength",
+      "finishing"
     ],
     "evidenceKind": "historical_appraisal",
-    "playingStyle": "Hurtig spiss med fart som særlig kjennetegn, dokumentert også etter LSK-perioden.",
-    "claim": "Coventry City-historikken omtaler tidligere LSK-spiss Michael Mifsud som en spiller som imponerte med fart og hadde hastigheten som sitt fremste våpen etter overgangen i januar 2007. Dette belegger pace hos samme spiller, men omtalen gjelder Coventry-perioden og overføres ikke til konstruerte LSK-spesifikke ratings.",
-    "source": "https://skybluearchive.com/player/michael-mifsud/"
+    "playingStyle": "Lynrask og fysisk sterk Lillestrøm-spiss som også ble beskrevet som god foran mål; farten er dokumentert i Coventry-perioden.",
+    "claim": "Dagbladet beskrev i 2014 Mifsud under LSK-perioden 2005–2007 som lynrask, fysisk sterk og god foran mål, hvilket støtter pace, strength og finishing. Den eldre Coventry-kilden bekrefter fart i en annen periode og gir ikke grunnlag for LSK-ratinger.",
+    "source": "https://skybluearchive.com/player/michael-mifsud/",
+    "supportingSources": [
+      "https://www.dagbladet.no/sport/dette-hurtigtoget-er-forrens-storste-bekymring-for-motet-med-malta/60966175"
+    ]
   },
   {
     "playerId": "uwe_rosler",
@@ -1568,12 +1713,16 @@ const existingSupplements = [
     "playerId": "claus_lundekvam",
     "placeId": "brann_stadion",
     "strengths": [
-      "composure"
+      "composure",
+      "first_touch"
     ],
     "evidenceKind": "historical_appraisal",
-    "playingStyle": "Rolig ballspillende forsvarsspiller, beskrevet retrospektivt fra Southampton-karrieren.",
-    "claim": "Fotballskribenten i Materazzias historiske portrett fra januar 2011 omtaler Lundekvam som en spillende midtstopper med «en herlig ro i spillet sitt» i Southampton. Dette begrunner composure, men ikke spesifikke pasningsferdigheter, og beskrivelsen gjelder karrieren etter Brann-perioden.",
-    "source": "https://materazzia.blogspot.com/2011/01/"
+    "playingStyle": "Balltrygg midtstopper med ro dokumentert fra Southampton og slepen teknikk fra Brann-perioden.",
+    "claim": "Branns historiske profil omtaler slepen teknikk som Lundekvams særpreg i Brann-perioden 1993–1996, forsiktig representert ved first_touch. En separat historisk vurdering fra Southampton-karrieren fremhever roen med ballen, composure. Ulike perioder blandes ikke til en numerisk rating.",
+    "source": "https://materazzia.blogspot.com/2011/01/",
+    "supportingSources": [
+      "https://historie.brann.no/spillere/claus-lundekvam"
+    ]
   },
 
   // Further source-verified 2026 batch: four Glimt and two Viking individual styles.
