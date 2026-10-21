@@ -37,7 +37,8 @@ export function behaviourForOpponentAdjustment(adjustmentId, opponent) {
   const coordinated = measured(structure) && measured(compactness)
     && structure >= 75 && compactness >= 64;
   const sparse = measured(structure) && structure < 60;
-  const resistance = opponent?.pressResistance;
+  const resistance = measured(opponent?.pressResistance)
+    ? opponent.pressResistance : opponent?.styleTraits?.pressResistance;
   const possession = opponent?.styleTraits?.possessionControl ?? opponent?.possessionControl;
   const transition = opponent?.styleTraits?.transitionThreat ?? opponent?.transitionThreat;
   const pairSignal = (a, b, highA, highB, lowA, lowB, highLabel, lowLabel) =>
@@ -67,8 +68,8 @@ export function behaviourForOpponentAdjustment(adjustmentId, opponent) {
   return {
     ...model, ...signals,
     passingLaneCover: coordinated ? "central" : "unknown",
-    restDefense: measured(structure) && structure >= 75
-      ? "secured" : "unknown"
+    restDefense: measured(structure) && measured(compactness)
+      && structure >= 75 && compactness >= 64 ? "secured" : "unknown"
   };
 }
 
