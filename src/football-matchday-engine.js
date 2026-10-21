@@ -3,6 +3,7 @@ import { applySubstitution, aggregateSourcedMetricBonuses, createBenchSnapshot, 
 import { evaluateTrainingDecisionSupport } from "./football-training-week.js";
 import { buildMatchExplanation } from "./football-match-explanation-engine.js";
 import { evaluateHistoricalOpponentMatchup } from "./football-historical-opponent-profiles.js";
+import { annotatePeriodTacticalChances } from "./football-tactical-match-moments.js";
 import {
   applyOpponentAdjustment,
   createPlanChange,
@@ -2138,10 +2139,10 @@ export function advanceMatchClock(session) {
   // Nå ser manageren de samme tallene som fotball: hvem som kom til, når, og
   // hva som skjedde.
   const range = segmentRange(played, totalSegments);
-  const chances = [
+  const chances = annotatePeriodTacticalChances(session, [
     ...buildChances(segmentXgFor, { ...range, side: "for" }),
     ...buildChances(segmentXgAgainst, { ...range, side: "against" })
-  ].sort((a, b) => a.minute - b.minute || (a.side === "for" ? -1 : 1));
+  ].sort((a, b) => a.minute - b.minute || (a.side === "for" ? -1 : 1)));
 
   const goalsFor = chances.filter((c) => c.side === "for" && c.scored).length;
   const goalsAgainst = chances.filter((c) => c.side === "against" && c.scored).length;
@@ -2172,6 +2173,8 @@ export function advanceMatchClock(session) {
       type: chance.scored ? "goal" : "chance",
       quality: chance.quality,
       detail: chance.detail,
+      // Tied to THIS actual simulated chance; never a second scoring event.
+      ...(chance.tacticalMoment ? { tacticalMoment: chance.tacticalMoment } : {}),
       scorer: credit?.scorer?.name || null,
       assist: credit?.assist?.name || null,
       scoreAfter: { ...running }

@@ -9,6 +9,7 @@
 import assert from "node:assert/strict";
 import { TACTICAL_SEQUENCES, evaluateTacticalSequences } from "../src/football-tactical-sequences.js";
 import { LIVE_EXCHANGE_RULES, behaviourForOpponentAdjustment } from "../src/football-live-tactical-exchange.js";
+import { deriveTacticalChanceMoment, annotatePeriodTacticalChances } from "../src/football-tactical-match-moments.js";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -1778,6 +1779,118 @@ check("minuttloggen følger med i sluttrapporten", () => {
   assert.equal(report.minuteLog.length, session.minuteLog.length);
   const reportGoals = report.minuteLog.filter((e) => e.type === "goal").length;
   assert.equal(reportGoals, report.score.for + report.score.against);
+});
+
+check("taktiske kampmomenter: 18 planer med gjenvinning, brutt press og kontring", () => {
+  for (const pattern of TACTICAL_SEQUENCES) {
+    const steps = pattern.moves.map((action) => ({ action, result: "available" }));
+    const ready = {
+      id: pattern.tacticId, title: pattern.title, phase: pattern.phase,
+      ready: true, status: "advantage",
+      liveExchange: { status: "advantage", cause: "Mulig ledig rom", steps }
+    };
+    const controlled = {
+      ...ready, status: "countered",
+      liveExchange: {
+        status: "countered", cause: "Motsatt lag dekker neste ledd",
+        steps: steps.map((step, index) => ({
+          ...step, result: index >= 2 ? "blocked" : "available"
+        })),
+        failureConsequence: "Nytt angrep imot"
+      }
+    };
+    const session = (entry) => ({
+      selectedTacticId: pattern.tacticId,
+      activePlanSnapshot: { id: pattern.tacticId },
+      planMatchup: { sequences: [entry] }
+    });
+    const positive = deriveTacticalChanceMoment(session(ready), { side: "for" });
+    const negative = deriveTacticalChanceMoment(session(controlled), { side: "against" });
+    assert.ok(positive, pattern.tacticId + " missing recovery/breakthrough story");
+    assert.ok(negative, pattern.tacticId + " missing turnover/press break story");
+    assert.equal(positive.steps.length, 4);
+    assert.equal(negative.steps.filter((step) => step.outcome === "blocked").length, 2);
+    assert.equal(negative.keyAction, pattern.moves[2]);
+    assert.equal(positive.xgDelta, 0);
+    assert.equal(negative.xgDelta, 0);
+    assert.equal(positive.observed, false);
+    assert.equal(negative.observed, false);
+    assert.equal(deriveTacticalChanceMoment(session(ready), { side: "against" }), null);
+    assert.equal(deriveTacticalChanceMoment(session(controlled), { side: "for" }), null);
+    assert.equal(deriveTacticalChanceMoment(session({ ...ready, ready: false }), { side: "for" }), null);
+    assert.equal(deriveTacticalChanceMoment(session({ ...ready, liveExchange: null }), { side: "for" }), null);
+    const candidates = [
+      { side: "against", quality: 0.1, scored: false },
+      { side: "for", quality: 0.2, scored: true },
+      { side: "for", quality: 0.3, scored: false }
+    ];
+    const snapshot = JSON.stringify(candidates);
+    const attached = annotatePeriodTacticalChances(session(ready), candidates);
+    assert.equal(attached.filter((chance) => chance.tacticalMoment).length, 1);
+    assert.deepEqual(attached.map((chance) => chance.quality), candidates.map((chance) => chance.quality));
+    assert.deepEqual(attached.map((chance) => chance.scored), candidates.map((chance) => chance.scored));
+    assert.equal(JSON.stringify(candidates), snapshot, "chance array remains immutable");
+    assert.deepEqual(annotatePeriodTacticalChances(session(ready), candidates), attached);
+  }
+});
+
+check("kampsjansen får taktisk øyeblikk uten nytt kast, xG, mål eller ny sjanse", () => {
+  const baseline = buildSession("patient_build_up");
+  const pattern = TACTICAL_SEQUENCES.find((item) => item.tacticId === "patient_build_up");
+  const originalTraits = baseline.opponent.styleTraits || {};
+  const traits = {
+    ...originalTraits,
+    [pattern.opponentCondition.trait]: Math.max(90, pattern.opponentCondition.min)
+  };
+  const opponent = { ...baseline.opponent, styleTraits: traits, tacticalBehaviour: {
+    pressCoordination: "individual", passingLaneCover: "none", blockSpacing: "stretched"
+  } };
+  const profile = {
+    balanceScore: 92, buildUpScore: 92, depthScore: 92,
+    pressScore: 92, widthScore: 92, restDefenseScore: 92
+  };
+  const entry = evaluateTacticalSequences(pattern.tacticId, opponent, profile)[0];
+  assert.equal(entry?.status, "advantage");
+  assert.equal(entry.phase, "in_possession");
+  const session = {
+    ...baseline, opponent, planMatchup: {
+      ...baseline.planMatchup, sequences: [entry]
+    }, teamFitSnapshot: {
+      ...baseline.teamFitSnapshot, tacticalProfile: profile
+    }
+  };
+  const legacy = {
+    ...session, planMatchup: {
+      ...session.planMatchup, sequences: [{ ...entry, liveExchange: null }]
+    }
+  };
+  const originalRandom = Math.random;
+  const run = (input) => {
+    let calls = 0;
+    Math.random = () => { calls++; return 0.18; };
+    try { return { session: advanceMatchClock(input), calls }; }
+    finally { Math.random = originalRandom; }
+  };
+  const before = JSON.stringify(session);
+  const a = run(session);
+  const b = run(legacy);
+  assert.equal(a.calls, b.calls, "narrative annotation never consumes a random roll");
+  assert.deepEqual(a.session.score, b.session.score);
+  assert.deepEqual(a.session.goalCredits, b.session.goalCredits);
+  assert.deepEqual(a.session.timeline, b.session.timeline);
+  assert.equal(a.session.minuteLog.length, b.session.minuteLog.length);
+  const annotations = a.session.minuteLog.filter((item) => item.tacticalMoment);
+  assert.equal(annotations.length, 1, "one observed chance, not a new chance");
+  assert.ok(["goal", "chance"].includes(annotations[0].type));
+  assert.equal(annotations[0].side, "for");
+  assert.equal(annotations[0].tacticalMoment.kind, "breakthrough");
+  assert.equal(annotations[0].tacticalMoment.xgDelta, 0);
+  assert.deepEqual(a.session.minuteLog.map((event) => event.quality),
+    b.session.minuteLog.map((event) => event.quality));
+  assert.equal(JSON.stringify(session), before, "original session must not mutate");
+  const report = finalizeMatchdaySession(a.session);
+  assert.equal(report.minuteLog.filter((item) => item.tacticalMoment).length, 1,
+    "tactical explanation must persist into the fulltime report");
 });
 
 console.log(`\nAlle ${checks.length} kampplansjekker besto (${plans.length} planer).`);

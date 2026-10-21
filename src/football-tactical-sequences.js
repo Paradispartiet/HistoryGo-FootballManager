@@ -701,7 +701,7 @@ export function evaluateTacticalSequences(tacticId, opponent, tacticalProfile) {
       const liveExchange = ready ? evaluateLiveTacticalExchange(pattern, opponent) : null;
       const counterEvidenceKnown = counterKnown || Boolean(liveExchange);
       const countered = liveExchange ? liveExchange.status === "countered" : traitCountered;
-      return { id: pattern.tacticId, title: pattern.title,
+      return { id: pattern.tacticId, title: pattern.title, phase: pattern.phase,
         moves: pattern.moves.slice(), counter: pattern.counter,
         response: pattern.response, missing, ready, countered, liveExchange,
         status: unknownTeam ? "unknown_team"

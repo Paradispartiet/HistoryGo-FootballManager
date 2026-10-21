@@ -11243,6 +11243,27 @@ function appendMatchMinuteLog(parent, session) {
     }
 
     item.append(minute, body);
+    // Tactical traces are attached to an already played chance. They never
+    // create additional attempts/goals, and remain explicitly simulated.
+    if (entry.tacticalMoment && (entry.type === "goal" || entry.type === "chance")) {
+      const moment = entry.tacticalMoment;
+      const trace = document.createElement("details");
+      trace.className = "matchday-tactical-moment";
+      const head = document.createElement("summary");
+      head.textContent = `Spill og motspill: ${moment.label} (modellert)`;
+      const explanation = document.createElement("p");
+      explanation.textContent = `${moment.description} ${moment.cause}`.trim();
+      const actions = document.createElement("ol");
+      (Array.isArray(moment.steps) ? moment.steps : []).forEach((step) => {
+        const move = document.createElement("li");
+        move.textContent = `${step.action}${step.outcome === "blocked" ? " – stanset" : ""}`;
+        actions.append(move);
+      });
+      const caution = document.createElement("small");
+      caution.textContent = "Koblet til denne eksisterende sjansen, uten ekstra mål eller xG. Ikke faktisk spillertracking.";
+      trace.append(head, explanation, actions, caution);
+      item.append(trace);
+    }
     list.append(item);
   });
   wrap.append(list);
