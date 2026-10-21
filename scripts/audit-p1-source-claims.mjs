@@ -106,6 +106,26 @@ ok(Array.isArray(hagbo.strengths) && hagbo.strengths.length === 0,
 ok(applyP1NewSourceClaims([hagbo])[0].naturalPositions.join() === "CB",
   "Hagbø's effective game role must remain stopper even outside P1");
 
+// Sandefjord 2003–2006: contemporaneous defensive roles, no inferred skills.
+for (const record of [
+  { id: "hjalmar_johansen", position: "CB" },
+  { id: "thomas_eftedal", position: "RB" }
+]) {
+  const player = playerById.get(record.id);
+  ok(Boolean(player), record.id + ": canonical player missing");
+  ok(asArray(player.sourcePlaceIds).includes("jotun_arena"),
+    record.id + ": Sandefjord association must be canonical");
+  ok(JSON.stringify(player.naturalPositions) === JSON.stringify([record.position]),
+    record.id + ": documented primary position incorrect");
+  ok(JSON.stringify(player.usablePositions) === "[]",
+    record.id + ": no unsupported secondary positions");
+  ok(["poorFits", "archetypeIds", "archetypes", "needs", "preferredRoles",
+      "likesTactics", "dislikesTactics"].every(field => JSON.stringify(player[field]) === "[]"),
+    record.id + ": stale striker/midfield archetypes and tactic assumptions must be removed");
+  ok(applyP1NewSourceClaims([player])[0].naturalPositions.join() === record.position,
+    record.id + ": gameplay position must match canonical source");
+}
+
 const explicitRecords = [...P1_NEW_DOCUMENTED, ...P1_NEW_EVENT_ONLY, ...P1_NEW_PARTIAL, ...P1_EXISTING_SUPPLEMENTS];
 ok(new Set(explicitRecords.map((record) => record.playerId)).size === explicitRecords.length,
   "explicit P1 records must not duplicate player IDs");
