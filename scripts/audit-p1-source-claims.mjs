@@ -62,8 +62,8 @@ for (const player of newExclusive) {
 }
 
 // The role correction is independent of the strengths coverage ratchet.
-const expectedBrannRoles = { leif_amundsen: "LW", hans_brandtun: "RB" };
-ok(P1_EXISTING_ROLE_CORRECTIONS.length === 2, "expected exactly two Brann role fixes");
+const expectedBrannRoles = { leif_amundsen: "LW", hans_brandtun: "RB", jan_erik_osland: "ST" };
+ok(P1_EXISTING_ROLE_CORRECTIONS.length === 3, "expected exactly three Brann role fixes");
 for (const record of P1_EXISTING_ROLE_CORRECTIONS) {
   const raw = playerById.get(record.playerId);
   ok(Boolean(raw), `${record.playerId}: correction player must exist`);
