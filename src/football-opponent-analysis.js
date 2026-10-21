@@ -77,6 +77,10 @@ export function buildOpponentTacticalOpportunities({ opponent, tactic, teamFit }
   const matchup = evaluatePlanVsOpponent(tactic, opponent, { tacticalProfile: teamFit?.metrics });
   const incomplete = Number(teamFit?.completeCount) < Number(teamFit?.totalSlots);
   return asArray(matchup?.opportunities).map((opportunity) => {
+    const combinations = asArray(matchup?.combinations)
+      .filter((combination) => combination.opportunityId === opportunity.id);
+    const countered = opportunity.readiness === "ready"
+      && combinations.some((combination) => combination.counter.status === "active");
     const supportingRoles = asArray(teamFit?.assignments)
       .filter((entry) => entry?.isComplete
         && TACTICAL_ROLE_GROUPS[opportunity.metric]?.includes(entry.role?.id))
@@ -87,7 +91,8 @@ export function buildOpponentTacticalOpportunities({ opponent, tactic, teamFit }
     const contribution = teamFit?.sourcedSkillTendencies?.[opportunity.metric];
     return {
       ...opportunity,
-      readiness: incomplete ? "incomplete" : opportunity.readiness,
+      readiness: incomplete ? "incomplete" : countered ? "countered" : opportunity.readiness,
+      combinations,
       supportingRoles,
       documentedPlayers: [...new Set(asArray(contribution?.players).filter(Boolean))],
       hasDocumentedSkill: Number(contribution?.bonus) > 0
