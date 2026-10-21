@@ -44261,36 +44261,20 @@
       ],
       "classHeight": 82,
       "naturalPositions": [
-        "GK"
+        "CB"
       ],
       "usablePositions": [],
       "poorFits": [
-        "ST",
-        "AM",
-        "LW",
-        "RW"
+        "GK"
       ],
-      "archetypeIds": [
-        "classic_keeper"
-      ],
-      "archetypes": [
-        "shot_stopper"
-      ],
+      "archetypeIds": [],
+      "archetypes": [],
       "strengths": [],
-      "needs": [
-        "clear_defensive_line",
-        "protected_box"
-      ],
-      "preferredRoles": [
-        "classic_keeper"
-      ],
-      "likesTactics": [
-        "structured_build_up"
-      ],
-      "dislikesTactics": [
-        "high_line"
-      ],
-      "warningWhenMisused": "Hagbø trenger en tydelig forsvarslinje foran seg.",
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Hagbø er historisk dokumentert som stopper i Molde, ikke keeper. Spill ham i forsvar; ingen individuelle ferdighetsstyrker er kildebelagt.",
       "classSource": "belagt",
       "clubStatus": {
         "aker_stadion": "club_profile"
@@ -59804,39 +59788,18 @@
       ],
       "classHeight": 79,
       "naturalPositions": [
-        "CM"
+        "RB"
       ],
-      "usablePositions": [
-        "DM",
-        "AM"
-      ],
-      "poorFits": [
-        "GK",
-        "CB",
-        "LW"
-      ],
-      "archetypeIds": [
-        "box_to_box"
-      ],
-      "archetypes": [
-        "tempo_setter"
-      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
       "strengths": [],
-      "needs": [
-        "midfield_partner",
-        "passing_options"
-      ],
-      "preferredRoles": [
-        "box_to_box",
-        "deep_playmaker"
-      ],
-      "likesTactics": [
-        "possession"
-      ],
-      "dislikesTactics": [
-        "long_ball_only"
-      ],
-      "warningWhenMisused": "Eftedal forsvinner hvis midtbanen blir isolert.",
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Eftedal ble brukt som høyreback i Sandefjord, ikke som sentral midtbanespiller.",
       "classSource": "belagt",
       "clubStatus": {
         "jotun_arena": "club_profile"
@@ -60053,39 +60016,18 @@
       ],
       "classHeight": 79,
       "naturalPositions": [
-        "ST"
+        "CB"
       ],
-      "usablePositions": [
-        "AM"
-      ],
-      "poorFits": [
-        "CB",
-        "GK",
-        "DM"
-      ],
-      "archetypeIds": [
-        "poacher"
-      ],
-      "archetypes": [
-        "box_presence"
-      ],
+      "usablePositions": [],
+      "poorFits": [],
+      "archetypeIds": [],
+      "archetypes": [],
       "strengths": [],
-      "needs": [
-        "box_service",
-        "runners_inside"
-      ],
-      "preferredRoles": [
-        "poacher",
-        "complete_forward"
-      ],
-      "likesTactics": [
-        "crossing",
-        "fast_transitions"
-      ],
-      "dislikesTactics": [
-        "isolated_midfield"
-      ],
-      "warningWhenMisused": "Johansen blir usynlig uten tilførsel inn i boksen.",
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Johansen var Sandefjord-midtstopper, ikke spiss. Midtstopperrollen er dokumentert i treneruttalelse fra 2006.",
       "classSource": "belagt",
       "clubStatus": {
         "jotun_arena": "squad_profile"
