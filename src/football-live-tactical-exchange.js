@@ -1,26 +1,58 @@
 // Explicit, deterministic tactical behaviours AFTER a simulated opponent adjustment.
 // These describe game-model hypotheses, never documented historical tracking data.
 // Without a known in-match behaviour, the 18-plan model remains unchanged.
+// An opponent adjustment is an intention, NOT evidence that every defender
+// moves in unison. Only infer cover when the historical/style snapshot has
+// actual structure AND spacing proxies. All thresholds are game hypotheses.
 export const LIVE_OPPONENT_BEHAVIOURS = Object.freeze({
   push_up: Object.freeze({
     pressDirection: "outside_in",
-    pressCoordination: "collective",
-    passingLaneCover: "central",
+    pressCoordination: "unknown",
+    passingLaneCover: "unknown",
     blockSpacing: "stretched",
-    restDefense: "exposed"
+    restDefense: "unknown"
   }),
   sit_back: Object.freeze({
     pressDirection: "passive",
     pressCoordination: "passive",
-    passingLaneCover: "central",
+    passingLaneCover: "unknown",
     blockSpacing: "compact",
-    restDefense: "secured"
+    restDefense: "unknown"
   })
 });
 
-export function behaviourForOpponentAdjustment(adjustmentId) {
+const measured = (value) => typeof value === "number" && Number.isFinite(value);
+
+// These are deliberately conditional scouting proxies, NOT a tracking model.
+// A raised defensive line is compatible with good or bad collective press.
+// An opponent with missing quality/shape evidence never gets free perfect cover.
+export function behaviourForOpponentAdjustment(adjustmentId, opponent) {
   const model = LIVE_OPPONENT_BEHAVIOURS[adjustmentId];
-  return model ? { ...model } : null;
+  if (!model) return null;
+  const structure = measured(opponent?.defensiveStructure)
+    ? opponent.defensiveStructure
+    : opponent?.styleTraits?.defensiveStructure;
+  const compactness = opponent?.styleTraits?.defensiveCompactness;
+  const highLine = opponent?.styleTraits?.highLine;
+  const coordinated = measured(structure) && measured(compactness)
+    && structure >= 75 && compactness >= 64;
+  const sparse = measured(structure) && structure < 60;
+
+  if (adjustmentId === "push_up") {
+    return {
+      ...model,
+      pressCoordination: coordinated ? "collective" : sparse ? "individual" : "unknown",
+      passingLaneCover: coordinated ? "central" : sparse ? "none" : "unknown",
+      restDefense: measured(highLine) && highLine >= 72 && sparse
+        ? "exposed" : "unknown"
+    };
+  }
+  return {
+    ...model,
+    passingLaneCover: coordinated ? "central" : "unknown",
+    restDefense: measured(structure) && structure >= 75
+      ? "secured" : "unknown"
+  };
 }
 
 // First vertical slice of tactical movement/decision resolution. The steps
