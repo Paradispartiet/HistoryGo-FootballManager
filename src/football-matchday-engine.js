@@ -1880,7 +1880,7 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
 
 // Bytt kampplan midt i kampen. Returnerer en NY sesjon (motoren muterer ikke),
 // eller den samme sesjonen når byttet ikke gir mening (ferdig kamp, samme plan).
-export function applyMatchPlanChange(session, nextPlan, { opponent, currentTeamFit, nextTeamFit, currentPlanData } = {}) {
+export function applyMatchPlanChange(session, nextPlan, { opponent, currentTeamFit, nextTeamFit, currentPlanData, players, roles } = {}) {
   if (!session || typeof session !== "object") return session;
   if (session.phase === "resolved") return session;
 
@@ -1916,6 +1916,64 @@ export function applyMatchPlanChange(session, nextPlan, { opponent, currentTeamF
     });
     nextTacticalProfile = shifted;
   }
+
+  // After a tactical switch the substitution baseline MUST describe the new
+  // tactical profile, not kick-off's original plan. Otherwise any later
+  // substitution restores the old pressing/width/rest-defence values.
+  // When real roster records are available, rebuild source-confirmed player
+  // contributions and bench fit for the NEW plan. No guessed attributes.
+  let updatedLineup = session.lineupSnapshot;
+  let updatedBench = session.benchSnapshot;
+  let updatedBaseline = session.sourcedSubstitutionBaseline;
+  if (nextTacticalProfile !== previousProfile
+      && session.sourcedSubstitutionVersion === 2
+      && session.sourcedSubstitutionBaseline) {
+    const allPlayers = Array.isArray(players) ? players : [];
+    const allRoles = Array.isArray(roles) ? roles : [];
+    const playerById = new Map(allPlayers.filter((p) => p?.id).map((p) => [p.id, p]));
+    const roleById = new Map(allRoles.filter((r) => r?.id).map((r) => [r.id, r]));
+    const currentEntries = asArray(session.lineupSnapshot);
+    const canRecompute = currentEntries.length > 0 && allPlayers.length > 0 && allRoles.length > 0
+      && currentEntries.every((entry) => playerById.has(entry.playerId)
+        && roleById.has(entry.roleId) && entry.slotId && entry.position);
+    if (canRecompute) {
+      const assignments = currentEntries.map((entry) => ({
+        player: playerById.get(entry.playerId),
+        role: roleById.get(entry.roleId),
+        slot: { slotId: entry.slotId, position: entry.position }
+      }));
+      const previousBonuses = aggregateSourcedMetricBonuses(currentEntries);
+      updatedLineup = currentEntries.map((entry, i) => ({
+        ...entry,
+        sourcedMetricBonuses: sourcedMetricBonusesForAssignment(assignments[i], nextPlan)
+      }));
+      const activeBonuses = aggregateSourcedMetricBonuses(updatedLineup);
+      const newBenchPlayers = asArray(session.benchSnapshot)
+        .map((entry) => playerById.get(entry.playerId)).filter(Boolean);
+      if (newBenchPlayers.length === asArray(session.benchSnapshot).length) {
+        updatedBench = createBenchSnapshot({
+          benchPlayers: newBenchPlayers, teamFit: { assignments }, tactic: nextPlan, roles: allRoles
+        });
+      }
+      // The full-XI teamFit delta already contains its sourced contribution.
+      // Replace just that part with contributions from players who are
+      // ACTUALLY on the pitch (which may include earlier substitutes).
+      const adjusted = { ...nextTacticalProfile };
+      for (const key of Object.keys(activeBonuses)) {
+        const oldXI = currentTeamFit?.sourcedSkillTendencies?.[key]?.bonus;
+        const newXI = nextTeamFit?.sourcedSkillTendencies?.[key]?.bonus;
+        if (Number.isFinite(oldXI) && Number.isFinite(newXI)) {
+          const correction = (activeBonuses[key] - previousBonuses[key]) - (newXI - oldXI);
+          adjusted[key] = clamp(adjusted[key] + correction);
+        }
+      }
+      nextTacticalProfile = adjusted;
+    }
+    updatedBaseline = {
+      tacticalProfile: { ...nextTacticalProfile },
+      bonuses: aggregateSourcedMetricBonuses(updatedLineup)
+    };
+  }
   const change = createPlanChange({
     fromPlan: currentPlan,
     toPlan: nextPlan,
@@ -1929,6 +1987,11 @@ export function applyMatchPlanChange(session, nextPlan, { opponent, currentTeamF
   const next = { ...session };
   next.planChanges = [...asArray(session.planChanges), { ...change, atPhase: session.phase }];
   next.selectedTacticId = nextPlan?.id || next.selectedTacticId;
+  if (updatedBaseline !== session.sourcedSubstitutionBaseline) {
+    next.lineupSnapshot = updatedLineup;
+    next.benchSnapshot = updatedBench;
+    next.sourcedSubstitutionBaseline = updatedBaseline;
+  }
   if (nextTacticalProfile !== previousProfile) {
     next.teamFitSnapshot = {
       ...session.teamFitSnapshot,
