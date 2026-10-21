@@ -442,3 +442,17 @@ vil ha støtte nær seg, en løper vil ha rom bak.
 | `npm run sim:match-plan` | 50 sjekker: minutt-for-minutt-logg, kampklokke og løpende stilling, familier, avstand, omstillingskostnad, kampbilde, matchup fra avspark, motstanderens justeringer, redningsbelønning, effekt på resultatet |
 | `npm run audit:tactics` | dataskjema, at hver plan forklarer seg, at ingen plan passer alt, at taggene treffer spillerdataen |
 | `npm run audit:flow` (steg 16) | motoren er ren, byttet er wiret i kampflyten og summeres i resultatet |
+
+## I analyseavdelingen: vis hele spillkjeden
+
+Det operative kampforberedelsesrommet viser nå for **valgt taktikk** de fire
+sammenhengende handlingene, hvilke av de eksisterende lagmetrikker som faktisk
+støtter dem, mulige motgrep fra motstanderen og managerens neste svar. Dette
+hentes fra **samme** `evaluatePlanVsOpponent` og
+`evaluateTacticalSequences` som styrer kampens xG, ikke fra et parallelt
+poengsystem. Spillerbidrag vises bare som «kildebelagt» når det eksisterende
+provenienssystemet allerede har dokumentert dem. Manglende informasjon om
+motstander eller egne ferdigheter er et usikkerhetssignal, ikke bevis på
+svakhet. Et taktisk mønster som får motspill, gir ingen ekstra kjedebonus.
+Alle 18 mønstrene er testet mot støttende ellever, manglende rolledimensjon,
+kontrert mønster og ufullstendig speiding.

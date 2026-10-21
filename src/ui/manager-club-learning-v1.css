@@ -541,3 +541,21 @@
 .opponent-analysis-combination-counter { font-weight: 750; }
 .opponent-analysis-tactical-item[data-readiness="countered"] .opponent-analysis-tactical-verdict,
 .opponent-analysis-tactical-item[data-readiness="countered"] .opponent-analysis-combination-counter { color: #ffd18b; }
+
+/* Tactical four-move sequence: readable game learning, no extra numeric rating. */
+.opponent-analysis-sequence { min-width:0; display:grid; gap:.5rem; padding:.85rem; border:1px solid rgba(255,255,255,.18); border-radius:.6rem; }
+.opponent-analysis-sequence h4, .opponent-analysis-sequence h5 { margin:0; font-size:.73rem; }
+.opponent-analysis-sequence-title { font-size:.77rem; }
+.opponent-analysis-sequence-verdict, .opponent-analysis-sequence-method,
+.opponent-analysis-sequence-counter, .opponent-analysis-sequence-response,
+.opponent-analysis-sequence-risk { margin:0; font-size:.69rem; line-height:1.5; overflow-wrap:anywhere; }
+.opponent-analysis-sequence-method { color:rgba(255,255,255,.68); }
+.opponent-analysis-sequence-moves { display:grid; gap:.35rem; padding-left:1.35rem; margin:.1rem 0; font-size:.71rem; }
+.opponent-analysis-sequence-requirements { display:grid; gap:.45rem; list-style:none; padding:0; margin:0; }
+.opponent-analysis-sequence-factor { min-width:0; display:grid; gap:.1rem; font-size:.67rem; }
+.opponent-analysis-sequence-factor small { color:rgba(255,255,255,.7); overflow-wrap:anywhere; }
+.opponent-analysis-sequence-factor[data-factor-status="ready"] strong { color:#9cdeb4; }
+.opponent-analysis-sequence-factor[data-factor-status="gap"] strong { color:#ffd18b; }
+.opponent-analysis-sequence[data-sequence-status="countered"] .opponent-analysis-sequence-verdict,
+.opponent-analysis-sequence[data-sequence-status="unsupported"] .opponent-analysis-sequence-verdict { color:#ffd18b; }
+.opponent-analysis-sequence-response { font-weight:650; }

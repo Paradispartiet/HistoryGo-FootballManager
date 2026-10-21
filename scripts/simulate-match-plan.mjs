@@ -36,7 +36,7 @@ import {
   getMatchdayGameState
 } from "../src/football-matchday-engine.js";
 import { getHistoricalOpponentProfile, getHistoricalOpponentProfileIds } from "../src/football-historical-opponent-profiles.js";
-import { buildOpponentTacticalOpportunities, createOpponentAnalysisWorkspace } from "../src/football-opponent-analysis.js";
+import { buildOpponentTacticalOpportunities, buildOpponentTacticalSequences, createOpponentAnalysisWorkspace } from "../src/football-opponent-analysis.js";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const data = JSON.parse(readFileSync(join(root, "data/football_tactics.json"), "utf8"));
@@ -205,6 +205,64 @@ check("18 taktikker: grenseverdier, ufullstendige profiler og falsifiserende end
       chain.tacticId+": no invented exploit for unsourced generic opponent");
     assert.deepEqual(evaluateTacticalSequences(chain.tacticId, opponent, null), [],
       chain.tacticId+": no exploit without a real tactical snapshot");
+  }
+});
+
+check("alle 18 taktiske spillkjeder forklares i analyseavdelingen uten oppdiktede fordeler", () => {
+  assert.equal(TACTICAL_SEQUENCES.length, plans.length);
+  for (const pattern of TACTICAL_SEQUENCES) {
+    const tactic = byId.get(pattern.tacticId);
+    const teamMetrics = Object.fromEntries(Object.entries(pattern.requires)
+      .map(([key, value]) => [key, value + 5]));
+    const teamFit = {
+      completeCount: 11, totalSlots: 11, metrics: teamMetrics,
+      sourcedSkillTendencies: {}, assignments: []
+    };
+    const counterMetric = pattern.counterCondition.trait;
+    const styleTraits = {
+      [pattern.opponentCondition.trait]: pattern.opponentCondition.min,
+      [counterMetric]: pattern.counterCondition.min - 1
+    };
+    const opponent = {
+      id: "fixture_" + pattern.tacticId, styleTraits,
+      [counterMetric]: pattern.counterCondition.min - 1
+    };
+    const make = (enemy, squad = teamFit) =>
+      buildOpponentTacticalSequences({ opponent: enemy, tactic, teamFit: squad })[0];
+    const ready = make(opponent);
+    assert.equal(ready.title, pattern.title);
+    assert.deepEqual(ready.moves, pattern.moves);
+    assert.equal(ready.moves.length, 4);
+    assert.equal(ready.status, "advantage");
+    assert.equal(ready.edgeDelta, 1);
+    assert.equal(ready.checks.length, Object.keys(pattern.requires).length);
+    assert.ok(ready.checks.every((x) => x.status === "ready"));
+    assert.equal(ready.response, pattern.response);
+    assert.equal(ready.counter, pattern.counter);
+    const countered = make({ ...opponent,
+      styleTraits: { ...styleTraits, [counterMetric]: pattern.counterCondition.min },
+      [counterMetric]: pattern.counterCondition.min });
+    assert.equal(countered.status, "countered");
+    assert.equal(countered.edgeDelta, 0);
+    const weakMetric = Object.keys(pattern.requires)[0];
+    const unsupported = make(opponent, { ...teamFit,
+      metrics: { ...teamMetrics, [weakMetric]: pattern.requires[weakMetric] - 1 }
+    });
+    assert.equal(unsupported.status, "unsupported");
+    assert.ok(unsupported.checks.some((check) => check.status === "gap"));
+    const unknown = make({ ...opponent, styleTraits: { [pattern.opponentCondition.trait]: pattern.opponentCondition.min },
+      [counterMetric]: undefined });
+    assert.equal(unknown.status, "unknown_counter");
+    assert.equal(unknown.edgeDelta, 0);
+    const unscouted = make({ id: "unscouted" });
+    assert.equal(unscouted.status, "unknown_opponent");
+    const incomplete = make(opponent, { ...teamFit, completeCount: 9 });
+    assert.equal(incomplete.status, "incomplete");
+    const created = createOpponentAnalysisWorkspace({
+      fixture: { fixtureId: "fixture_" + pattern.tacticId, opponent },
+      tactic, formation: { name: "4-3-3" }, teamFit
+    });
+    assert.equal(created.tacticalSequences?.[0]?.status, "advantage");
   }
 });
 
