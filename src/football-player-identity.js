@@ -25,8 +25,9 @@ export function normalizePlayablePlayerCatalog(players) {
     const canonical = player.id === LEGACY_BOATENG_ID
       ? { ...player, id: CANONICAL_BOATENG_ID, name: "Bismark Adjei-Boateng" }
       : player;
-    // Colorado Rapids' own player profile records citizenship as Ghana.
-    // The historic catalogue incorrectly says Norge for both old entries.
+    // Keep older manager saves and pre-sync catalogs compatible.
+    // Colorado Rapids verifies citizenship as Ghana; the canonical raw file
+    // is also audited for Ghana by simulate-player-identity-migration.mjs.
     return canonical.id === CANONICAL_BOATENG_ID
       ? { ...canonical, nationality: "Ghana" }
       : canonical;

@@ -10,6 +10,15 @@ import {
 } from "../src/football-player-identity.js";
 
 const catalogue = JSON.parse(readFileSync(new URL("../data/football_players.json", import.meta.url))).players;
+// Protect the source-backed nationality in BOTH historic raw IDs, not just runtime.
+for (const id of [legacy, canonical]) {
+  const entries = catalogue.filter(player => player.id === id);
+  assert.equal(entries.length, 1, id + " should have exactly one raw identity record");
+  assert.equal(entries[0].nationality, "Ghana",
+    id + ": Colorado Rapids citizenship must be reflected in canonical player data");
+  assert.ok(entries[0].sourcePlaceIds.includes("marienlyst_stadion"),
+    id + ": only the existing Strømsgodset heritage is allowed");
+}
 const playable = normalizePlayablePlayerCatalog(catalogue);
 assert.equal(playable.filter((player) => player.id === canonical).length, 1);
 assert.equal(playable.some((player) => player.id === legacy), false);

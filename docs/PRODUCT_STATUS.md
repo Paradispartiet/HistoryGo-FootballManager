@@ -92,10 +92,13 @@ og én opplåsing fra Marienlyst, altså **142 unike spillbare
 Strømsgodset-profiler, hvorav 132 med kildebelagte styrker og 10 som står i
 kildekøen**. Den eldre rå katalogoppføringen beholdes foreløpig av
 datatekniske årsaker, men filtreres eksplisitt ut ved runtime-lasting.
-Begge de eldre råprofilene oppgir feil nasjonalitet («Norge»). Runtimeprofilen
-bruker **Ghana**, bekreftet som statsborgerskap av Colorado Rapids:
-https://www.coloradorapids.com/players/nana-boateng/ . Den store råkatalogen
-må få samme korrigering når den kan oppdateres sikkert.
+Begge de historiske råprofilene er korrigert til **Ghana** i canonical
+`data/football_players.json`, med Colorado Rapids' statsborgerskapsoppføring
+som kilde: https://www.coloradorapids.com/players/nana-boateng/ . Runtime-normaliseringen
+beholder Ghana som kompatibilitet for eldre spillerdata, mens
+`sim:player-identity-migration` kontrollerer begge rå-ID-ene direkte.
+Duplikat-ID-en beholdes bare som lagrings-/migreringshistorikk og filtreres
+fortsatt bort fra den spillbare poolen.
 
 Ikke bruk den rå katalogtelleren som unik-personteller før posten fysisk
 er fjernet fra `data/football_players.json`.
