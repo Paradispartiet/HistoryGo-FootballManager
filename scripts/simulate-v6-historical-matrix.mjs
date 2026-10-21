@@ -80,13 +80,26 @@ try {
         row.unsupported += 1;
         continue;
       }
-      if (plan === "chase_the_equaliser" || plan === "all_out_attack") {
-        for (const score of [{ for: 0, against: 0 }, { for: 1, against: 0 },
-          { for: 2, against: 2 }, null]) {
-          const invalid = session(plan, opponent, { score });
-          assert.equal(phaseFor(invalid), null,
-            plan + " cannot gain v6 pressure without trailing on the scoreboard");
-        }
+      const wrongStates = plan === "chase_the_equaliser" || plan === "all_out_attack"
+        ? [{ for: 0, against: 0 }, { for: 1, against: 0 },
+          { for: 2, against: 2 }, null]
+        : plan === "see_out_the_game"
+          ? [{ for: 0, against: 0 }, { for: 0, against: 1 }, null] : [];
+      for (const score of wrongStates) {
+        const invalid = session(plan, opponent, { score });
+        assert.equal(phaseFor(invalid), null,
+          plan + " must not gain a reactive chain in the wrong score state");
+        const playedInvalid = advanceMatchClock(invalid);
+        const neutralMatchup = advanceMatchClock({
+          ...invalid, planMatchup: { edge: 0 }
+        });
+        assert.equal(playedInvalid.timeline[0].tacticalPhase, undefined,
+          "no other v6 chain should activate for an ineligible reactive plan");
+        assert.equal(playedInvalid.timeline[0].tacticalXg, undefined,
+          "legacy matchup credit must not reward the rejected reactive plan");
+        assert.deepEqual(playedInvalid.timeline[0].expectedGoals,
+          neutralMatchup.timeline[0].expectedGoals,
+          "wrong scoreboard state cannot add xG through the legacy route");
       }
       eligiblePairs += 1;
       row.eligible += 1;
