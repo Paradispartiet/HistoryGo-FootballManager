@@ -11,6 +11,7 @@ import {
   readGameState
 } from "./football-match-plan.js";
 import { buildTacticalKnowledgeFeedback } from "./football-tactical-knowledge.js";
+import { summarizeTacticalPossessions } from "./football-matchday-tactical-possession.js";
 
 // HG Football Manager — Matchday Engine (v1)
 //
@@ -2744,6 +2745,9 @@ export function finalizeMatchdaySession(session) {
     keyFactors: keyFactors.slice(0, 4),
     analysis: analysis.slice(0, 6),
     decisions: decisions.map((decision) => ({ ...decision })),
+    // Already-derived chains for simulated possession/transition decisions.
+    // Never enter the xG or goal calculation twice.
+    tacticalPossessionSummary: summarizeTacticalPossessions(decisions),
     // Planbyttene står for seg i rapporten: manageren skal kunne lese hva
     // omstillingen faktisk kostet og ga.
     planChanges: planChanges.map((change) => ({ ...change })),
