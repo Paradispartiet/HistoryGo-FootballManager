@@ -8,7 +8,7 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 26, expectedPartial: 2, expectedThin: 19, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 29, expectedPartial: 2, expectedThin: 16, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 21, expectedPartial: 3, expectedThin: 0, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
@@ -1443,6 +1443,46 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // 2026-10-21: three historically supported Brann player styles; no aggregate ratings.
+  {
+    "playerId": "bjarni_sigurdsson",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "shot_stopping",
+      "command_of_area"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Sterk på streken og trygg i feltarbeidet, ifølge en historisk vurdering av Brann-perioden.",
+    "claim": "Aftenpostens historiske førsteellever over islendinger i norsk fotball (1. september 2011) beskriver Bjarni Sigurðsson som Brann-keeper med gode ferdigheter på streken og trygghet i feltet, og med få tabber. Dette gir individuell, Brann-periodebasert dekning for shot_stopping og command_of_area. Det gis ikke reflexes eller distribution fra landskamper eller prisomtale.",
+    "source": "https://www.aftenposten.no/sport/fotball/i/MRPX15/norges-favorittgjester"
+  },
+  {
+    "playerId": "roger_helland",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "work_rate",
+      "teamwork"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Arbeidsvillig og lagorientert forsvarsspiller, særskilt omtalt i supporterintervju med spilleren.",
+    "claim": "I supporterbladet Den 12. mann 3/2008, s. 34–35, beskriver Daniel Nygård Roger Hellands Brann-år 1993–1999 som kjennetegnet av innsats og arbeidsvilje samt lojalitet mot lagkameratene. Dette gir periodetydelig belegg for work_rate og teamwork, ikke duellstyrke, heading eller numeriske ferdighetsverdier. Branns eget spillerarkiv understøtter hans lagorienterte rolle.",
+    "source": "https://www.fanzine.no/filer/pdf/d12m0308.pdf",
+    "supportingSources": [
+      "https://historie.brann.no/spillere/roger-helland/"
+    ]
+  },
+  {
+    "playerId": "bjorn_tronstad",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "finishing"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Målfarlig Brann-angriper gjennom flere sesonger på 1970-tallet, dokumentert i klubbhistorien.",
+    "claim": "Branns historiske spillerportrett sier uttrykkelig at Bjørn Tronstad fra 1974 utviklet seg til en fast og «målfarlig angriper» over påfølgende sesonger. Det dokumenterer målteft/finishing som varig individuelt særpreg. Oppgitte mål per kamp, enkeltscoringer og Bill Elliotts generelle ros blir ikke brukt til å utlede ekstra tokens eller tallrating.",
+    "source": "https://historie.brann.no/spillere/bjoern-tronstad/"
+  },
+
   // 2026-10-20: contemporary Brann season appraisal (2010), same source-first pass.
   {
     "playerId": "zsolt_korcsmar",
