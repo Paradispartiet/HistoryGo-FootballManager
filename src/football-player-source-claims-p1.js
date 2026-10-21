@@ -8,7 +8,7 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 30, expectedPartial: 2, expectedThin: 15, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 32, expectedPartial: 2, expectedThin: 13, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 21, expectedPartial: 3, expectedThin: 0, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
@@ -1443,6 +1443,30 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // 2026-10-21: deliberately narrow historical profiles, distinct source eras.
+  {
+    "playerId": "odd_oppedal",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "leadership"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Samlende og respektert leder på Branns midtbane i seriegullårene; ferdighetsbeskrivelsen skilles fra generelt teknikk-skryt.",
+    "claim": "Bergens Tidendes minneartikkel 30. mai 2018 siterer tidligere Brann-spiller Helge Karlsen, som beskriver Odd Oppedal som kaptein på klubbens stjernelag, og tidligere Brann-formann Harald Andersen, som husker ham som et «samlingspunkt på banen». Til sammen gir disse uavhengige historiske vurderingene belegg for leadership i Brann-perioden rundt 1961/62 og 1963. Den omtalte eminente teknikken gir ikke automatisk first_touch, dribbling eller passing_range; fravær av fart brukes ikke som numerisk minusverdi.",
+    "source": "https://www.bt.no/sport/i/kJEmBa/brann-legende-odd-oppedal-er-doed"
+  },
+  {
+    "playerId": "jan_halvor_halvorsen",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "duels"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Fysisk robust og effektiv i direkte forsvarsdueller, beskrevet konkret fra senere AGF-periode.",
+    "claim": "AGF Legendernes historiske spillerportrett beskriver Jan Halvor Halvorsen som en solid norsk forsvarsklippe og forteller at de to tekniske B 1903-angriperne Michael og Martin Johansen hadde svært vanskelig for å komme forbi ham i den danske cupfinalen 1992. Dette gir et begrenset, eksplisitt epokemerket belegg for duels hos spilleren i AGF-perioden 1992–94, etter Brann-oppholdet. Kilden viser hans tidligere to sesonger i Brann, men den tilskrives ikke Brann-perioden og støtter ikke automatisk tackling, pace eller heading.",
+    "source": "https://agflegenderne.dk/jan-halvor-halvorsen/"
+  },
+
   // 2026-10-21: teammate-based source appraisal (Brann 2004) for Roy Wassberg.
   {
     "playerId": "roy_wassberg",
