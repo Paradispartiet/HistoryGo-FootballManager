@@ -531,3 +531,19 @@ Ingen plan byttes automatisk. Selve kampbyttet koster fortsatt omstilling.
 Hvis modulen ikke får ny beregning, merker den eksplisitt rådet som foreløpig.
 Den permanente `sim:match-plan`-testen kontrollerer at et nytt alternativ ikke
 feilaktig anbefales når én av dets egne lagdimensjoner faller under kravet.
+
+
+### Vurdering av alle 18 kampplaner under kampen
+
+Taktikkvelgerens rangering bruker **ikke** lenger lagprofilen fra den aktive
+kampplanen til å bedømme alle 17 alternativer. Når manageren åpner velgeren,
+regner appen den samme valgte elleveren og formasjonen gjennom teamFit for
+hver konkret plan og bruker motorens felles
+`projectMatchPlanTacticalProfile`: endringen i seks dimensjoner legges på
+det aktive kampsnapshotet. Dermed overlever allerede registrert trening og
+innbyttebidrag, mens den nye planens press, bredde og dybdedekning blir
+korrekt. Den samme rene hjelpefunksjonen brukes ved det faktiske planbyttet.
+Forhåndsvisningen er et vurderingsgrunnlag, **ikke en seiergaranti**:
+omstillingskostnad, senere hendelser og motstanderens endrede oppførsel kan
+fortsatt endre kampbildet. Alternativene beregnes først når man åpner
+taktikkvelgeren, for ikke å gi ekstra mobilkostnad på hver kampoppdatering.

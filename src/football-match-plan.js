@@ -509,13 +509,15 @@ export function createPlanChange({ fromPlan, toPlan, session, opponent, eventsRe
 
 // Sorter planene slik manageren skal lese dem: de som passer bildet først,
 // deretter de som er nærmest dagens plan (minst omstilling).
-export function rankPlansForSituation(plans, { currentPlan, gameState = "level", opponent, tacticalProfile } = {}) {
+export function rankPlansForSituation(plans, { currentPlan, gameState = "level", opponent, tacticalProfile, tacticalProfilesByPlan } = {}) {
   return asArray(plans)
     .map((plan) => normalizeMatchPlan(plan))
     .filter(Boolean)
     .map((plan) => {
       const stateFit = evaluatePlanForGameState(plan, gameState);
-      const matchup = evaluatePlanVsOpponent(plan, opponent, { tacticalProfile });
+      const candidateProfile = Object.prototype.hasOwnProperty.call(tacticalProfilesByPlan || {}, plan.id)
+        ? tacticalProfilesByPlan[plan.id] : tacticalProfile;
+      const matchup = evaluatePlanVsOpponent(plan, opponent, { tacticalProfile: candidateProfile });
       const distance = currentPlan ? planDistance(currentPlan, plan) : 0;
       return {
         plan,
