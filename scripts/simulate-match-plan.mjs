@@ -1668,7 +1668,9 @@ check("«du ligger under» betyr at du faktisk ligger under", () => {
     ...base, timeline: [{ minute: 18 }], score: { for: 1, against: 1 },
     decisions: [{ effects: { momentumDelta: -3 } }]
   };
-  assert.equal(readGameState(levelButSinking).state, "behind");
+  assert.equal(readGameState(levelButSinking).state, "level",
+    "a 1-1 score may feel difficult but is not a goal deficit");
+  assert.equal(readGameState(levelButSinking).label, "Jevnt – de har taket");
 });
 
 check("etiketten lyver aldri mot resultattavla", () => {
@@ -1678,9 +1680,10 @@ check("etiketten lyver aldri mot resultattavla", () => {
   const levelButOnTop = readGameState({
     timeline: t, score: { for: 1, against: 1 }, decisions: [{ effects: { momentumDelta: 3 } }]
   });
-  assert.equal(levelButOnTop.state, "leading");
+  assert.equal(levelButOnTop.state, "level");
   assert.ok(levelButOnTop.label.startsWith("Jevnt"), `fikk «${levelButOnTop.label}» ved 1-1`);
   assert.ok(!levelButOnTop.label.includes("Du leder"));
+  assert.equal(levelButOnTop.label, "Jevnt – du har taket");
 
   const actuallyLeading = readGameState({ timeline: t, score: { for: 2, against: 1 }, decisions: [] });
   assert.equal(actuallyLeading.label, "Du leder");
@@ -1696,6 +1699,18 @@ check("planvalget følger den ekte stillingen", () => {
   assert.equal(state, "behind");
   assert.equal(evaluatePlanForGameState(byId.get("chase_the_equaliser"), state).fits, true);
   assert.equal(evaluatePlanForGameState(byId.get("see_out_the_game"), state).fits, false);
+  for (const score of [{ for: 1, against: 1 }, { for: 2, against: 1 }]) {
+    const tiedOrLeading = { ...behind, score,
+      decisions: [{ effects: { momentumDelta: -4 } }] };
+    const actualState = readGameState(tiedOrLeading).state;
+    assert.notEqual(actualState, "behind", "negative momentum is not a deficit");
+    assert.equal(evaluatePlanForGameState(byId.get("chase_the_equaliser"), actualState).fits, false);
+    assert.ok(scorePlanNow(byId.get("chase_the_equaliser"), {
+      gameState: actualState, opponent: behind.opponent
+    }) < scorePlanNow(byId.get("chase_the_equaliser"), {
+      gameState: "behind", opponent: behind.opponent
+    }), "chasing a non-existent deficit cannot receive the score-state reward");
+  }
 });
 
 check("motstanderen svarer på den ekte stillingen", () => {
