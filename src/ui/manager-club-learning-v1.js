@@ -504,6 +504,28 @@ function appendOpponentAnalysisWorkshop(body) {
         scene.append(node("p", "opponent-analysis-response-plan",
           "Mulig alternativ å undersøke: " + chain.responsePlanName +
           ". Ikke automatisk bedre – vurder valgt ellever, formasjon og omstillingskostnad."));
+        const preview = chain.responsePreview;
+        if (preview) {
+          const assessment = node("section", "opponent-analysis-response-preview");
+          assessment.dataset.responseStatus = preview.status;
+          assessment.append(
+            node("strong", "", "Forhåndssjekk av motsvaret"),
+            node("p", "", preview.explanation)
+          );
+          const required = node("ul", "opponent-analysis-response-requirements");
+          preview.requirements.forEach((check) => {
+            const item = node("li", "");
+            item.dataset.requirementStatus = check.status;
+            item.textContent = check.label + ": " +
+              (check.value === null ? "ukjent" : check.value + " / krav " + check.minimum);
+            required.append(item);
+          });
+          assessment.append(required);
+          if (preview.risk) assessment.append(node("small", "", "Risiko ved alternativet: " + preview.risk));
+          assessment.append(node("small", "",
+            "Foreløpig vurdering av dagens lag. Kampplanbytte krever ny beregning av roller, samspill og omstillingskostnad."));
+          scene.append(assessment);
+        }
         const explore = node("button", "opponent-analysis-response-action",
           "Vurder " + chain.responsePlanName + " i Lag · Oppstilling");
         explore.type = "button";
