@@ -1799,7 +1799,8 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
           pressing: tactic.pressing || "",
           tempo: tactic.tempo || "",
           width: tactic.width || "",
-          buildUp: tactic.buildUp || ""
+          buildUp: tactic.buildUp || "",
+          defensiveLine: tactic.defensiveLine || ""
         }
       : null,
     formationSnapshot: strength.formationProfile,
@@ -1858,7 +1859,7 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     // Planen du VELGER skal telle mot denne motstanderen fra avspark, ikke bare
     // hvis du tilfeldigvis bytter underveis. Uten dette var kampplanvalget
     // gratis så lenge du lot det stå.
-    planMatchup: evaluatePlanVsOpponent(tactic, matchOpponent),
+    planMatchup: evaluatePlanVsOpponent(tactic, matchOpponent, { tacticalProfile }),
     // Motstanderens egne justeringer gjennom kampen.
     opponentAdjustments: [],
     // Målene laget scorer, med scorer og målgivende. Fylles av kampklokka.
@@ -1899,7 +1900,9 @@ export function applyMatchPlanChange(session, nextPlan, { opponent } = {}) {
   const next = { ...session };
   next.planChanges = [...asArray(session.planChanges), { ...change, atPhase: session.phase }];
   next.selectedTacticId = nextPlan?.id || next.selectedTacticId;
-  next.planMatchup = evaluatePlanVsOpponent(nextPlan, next.opponent);
+  next.planMatchup = evaluatePlanVsOpponent(nextPlan, next.opponent, {
+    tacticalProfile: next.teamFitSnapshot?.tacticalProfile
+  });
   next.minuteLog = logMatchMoment(next, {
     type: "plan",
     side: "for",
@@ -2161,7 +2164,9 @@ export function applyOpponentAdaptation(session) {
     ...session,
     opponent,
     // Planen din måles nå mot det de faktisk gjør, ikke mot det de gjorde.
-    planMatchup: evaluatePlanVsOpponent(activePlan, opponent),
+    planMatchup: evaluatePlanVsOpponent(activePlan, opponent, {
+      tacticalProfile: session.teamFitSnapshot?.tacticalProfile
+    }),
     opponentAdjustments: [
       ...asArray(session.opponentAdjustments),
       { id: adjustment.id, label: adjustment.label, note: adjustment.note, atPhase: session.phase }
@@ -2352,9 +2357,22 @@ export function applyMatchdaySubstitution(session, { outPlayerId, inPlayerId, mi
   const at = Number.isFinite(Number(minute)) ? num(minute) : currentMatchMinute(session);
   const next = applySubstitution(session, { outPlayerId, inPlayerId, minute: at, gameState });
   if (next === session) return session;
-  const done = asArray(next.substitutions);
+  // Innbytterens dokumenterte rolle-/ferdighetsbidrag kan endre hvilken
+  // motstandersvakhet laget faktisk kan utnytte fra og med NESTE periode.
+  // Ikke skriv om tidligere perioder eller eldre lagrede kamper.
+  const rechecked = next.sourcedSubstitutionVersion && next.planMatchup
+    ? {
+        ...next,
+        planMatchup: evaluatePlanVsOpponent(
+          next.activePlanSnapshot || next.tacticSnapshot,
+          next.opponent,
+          { tacticalProfile: next.teamFitSnapshot?.tacticalProfile }
+        )
+      }
+    : next;
+  const done = asArray(rechecked.substitutions);
   const latest = done[done.length - 1];
-  return logMatchMoment(next, {
+  return logMatchMoment(rechecked, {
     minute: at,
     type: "substitution",
     side: "for",
