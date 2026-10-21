@@ -252,6 +252,7 @@ export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {})
   const transitionThreat = num(traits.transitionThreat, 50);
 
   const notes = [];
+  const opportunities = [];
   let edge = 0;
 
   const planPress = axisValue(normalized, "pressing");
@@ -259,10 +260,22 @@ export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {})
   const planTempo = axisValue(normalized, "tempo");
   const planWidth = axisValue(normalized, "width");
 
+  // The same engine that determines xG keeps the evidence for its advantage.
+  // Missing metrics are unknown, not evidence that the player is weak.
+  const recordOpportunity = (id, label, metric) => {
+    const value = tacticalProfile?.[metric];
+    const metricValue = Number.isFinite(value) ? value : null;
+    opportunities.push({
+      id, label, metric, metricValue, threshold: 60,
+      readiness: metricValue === null ? "unknown" : metricValue >= 60 ? "ready" : "gap"
+    });
+  };
+
   // Utsatte motstandere er ikke nok: egne roller må gjennomføre planen.
   // Profilmetrikkene bygges allerede av dokumenterte spillerferdigheter,
   // relasjoner og formasjon. Ingen nye eller gjettede individuelle egenskaper.
   if (planPress >= 70 && shortBuildUp >= 60) {
+    recordOpportunity("press_build_up", "Høyt press mot kort oppbygging", "pressScore");
     if (hasTacticalSupport(tacticalProfile, "pressScore", 60)) {
       edge += 1;
       notes.push("Presset treffer oppbyggingen deres.");
@@ -275,6 +288,7 @@ export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {})
     notes.push("Den høye linja gir dem akkurat rommet de vil ha.");
   }
   if (planTempo >= 55 && highLine >= 65) {
+    recordOpportunity("runs_behind", "Dybdeløp mot høy forsvarslinje", "depthScore");
     if (hasTacticalSupport(tacticalProfile, "depthScore", 60)) {
       edge += 1;
       notes.push("Dybderollene treffer bakrommet bak den høye linja deres.");
@@ -283,6 +297,7 @@ export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {})
     }
   }
   if (planWidth >= 70 && compactness >= 65) {
+    recordOpportunity("stretch_compact", "Bredde mot kompakt forsvar", "widthScore");
     if (hasTacticalSupport(tacticalProfile, "widthScore", 60)) {
       edge += 1;
       notes.push("Kant- og backrollene strekker den kompakte blokka deres.");
@@ -296,7 +311,7 @@ export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {})
   }
 
   const verdict = edge > 0 ? "gunstig" : edge < 0 ? "risikabel" : "nøytral";
-  return { edge, verdict, notes };
+  return { edge, verdict, notes, opportunities };
 }
 
 // ----------------------------------------------------------------------------
