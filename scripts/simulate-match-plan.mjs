@@ -9,6 +9,7 @@
 import assert from "node:assert/strict";
 import { TACTICAL_SEQUENCES, evaluateTacticalSequences } from "../src/football-tactical-sequences.js";
 import { LIVE_EXCHANGE_RULES, behaviourForOpponentAdjustment } from "../src/football-live-tactical-exchange.js";
+import { resolveTacticalPossession, summarizeTacticalPossessions } from "../src/football-matchday-tactical-possession.js";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -148,6 +149,83 @@ check("levende motspill: tredjemann, kollektiv dekning og restforsvar", () => {
 });
 
 // ---------------------------------------------------------------------------
+check("faktiske managergrep lager én strukturert balltap-/gjenvinningskjede uten ny xG", () => {
+  const option = { optionId: "protect_rest", tone: "positive",
+    effects: { xgDeltaFor: 0.04, xgDeltaAgainst: -0.18 } };
+  const event = { id: "opp_counter_threat", sequence: 2 };
+  const before = JSON.stringify({ event, option });
+  const stopped = resolveTacticalPossession({ event, decision: option });
+  assert.equal(stopped.kind, "defend_counter");
+  assert.equal(stopped.steps.length, 4);
+  assert.equal(stopped.outcome, "successful");
+  assert.equal(stopped.side, "for");
+  assert.equal(stopped.existingXgEffect.against, -0.18);
+  assert.equal(stopped.scoring, "existing_decision_only");
+  assert.equal(JSON.stringify({ event, option }), before, "pure result, no modified input");
+  assert.deepEqual(resolveTacticalPossession({ event, decision: option }), stopped);
+  const failed = resolveTacticalPossession({
+    event, decision: { ...option, optionId: "keep_attacking", tone: "negative",
+      effects: { xgDeltaFor: -0.09, xgDeltaAgainst: 0.21 } }
+  });
+  assert.equal(failed.outcome, "broken");
+  assert.equal(failed.side, "against");
+  assert.equal(failed.chancePressure, "increased");
+  assert.equal(failed.steps[2].result, "countered");
+  assert.notEqual(failed.summary, stopped.summary);
+  const exitPress = resolveTacticalPossession({
+    event: { id: "opp_high_press", sequence: 1 },
+    decision: { optionId: "calm_buildup", tone: "positive",
+      effects: { xgDeltaFor: 0.1, xgDeltaAgainst: -0.03 } }
+  });
+  assert.equal(exitPress.kind, "escape_press");
+  assert.ok(exitPress.steps[2].action.includes("forbi første pressledd"));
+  const regain = resolveTacticalPossession({
+    event: { id: "press_winback_high" },
+    decision: { ...option, optionId: "press_higher" }
+  });
+  assert.equal(regain.kind, "press_for");
+  assert.ok(regain.summary.includes("vinner ballen"));
+  const secondBall = resolveTacticalPossession({
+    event: { id: "pyramid_second_ball" },
+    decision: { ...option }
+  });
+  assert.equal(secondBall.kind, "second_ball");
+  assert.ok(secondBall.steps[2].action.includes("andreballen"));
+  assert.equal(resolveTacticalPossession({
+    event, decision: { ...option, tone: "neutral" }
+  }), null, "neutral outcome cannot imply a turnover");
+  assert.equal(resolveTacticalPossession({
+    event: { id: "wm_inside_forward_pockets" }, decision: option
+  }), null, "other events do not fabricate possessions");
+  assert.equal(resolveTacticalPossession({
+    event, decision: { ...option, effects: { xgDeltaFor: 0.1 } }
+  }), null, "incomplete impact evidence cannot generate an event");
+  assert.equal(resolveTacticalPossession({ event, decision: null }), null);
+  assert.equal(summarizeTacticalPossessions([
+    { tacticalPossession: stopped }, { tacticalPossession: failed },
+    { tacticalPossession: null }, { tacticalPossession: regain }
+  ]).total, 3);
+  assert.equal(summarizeTacticalPossessions([{ tacticalPossession: stopped }]).successful, 1);
+  assert.deepEqual(summarizeTacticalPossessions([]), {
+    total: 0, successful: 0, broken: 0, kinds: [], xgAlreadyCounted: true
+  });
+
+  const match = buildSession("central_possession_4231");
+  const report = finalizeMatchdaySession({
+    ...match, decisions: [{ optionId: option.optionId, eventId: event.id,
+      tone: option.tone, effects: option.effects, tacticalPossession: stopped }]
+  });
+  assert.equal(report.tacticalPossessionSummary.total, 1);
+  assert.equal(report.tacticalPossessionSummary.successful, 1);
+  assert.equal(report.decisions[0].tacticalPossession.summary, stopped.summary);
+  const controlReport = finalizeMatchdaySession({
+    ...match, decisions: [{ optionId: option.optionId, eventId: event.id,
+      tone: option.tone, effects: option.effects }]
+  });
+  assert.deepEqual(report.expectedGoals, controlReport.expectedGoals,
+    "structured transition is accounted for by the original decision ONLY");
+});
+
 check("18/18 kampplaner: nytt motspill bryter én sammenhengende handlingskjede", () => {
   const extendedIds = Object.keys(LIVE_EXCHANGE_RULES);
   assert.equal(extendedIds.length, 14, "all remaining tactical plans require an authored counter");
