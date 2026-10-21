@@ -13,6 +13,7 @@
     "audit:hg-formation-knowledge": "node scripts/audit-hg-formation-knowledge.mjs",
     "audit:historical-opponents": "node scripts/audit-historical-opponents.mjs",
     "sim:matchday": "node scripts/simulate-matchday-v02.mjs",
+    "sim:high-press-v6": "node scripts/simulate-high-press-v6.mjs",
     "sim:mini-season": "node scripts/simulate-mini-season.mjs",
     "sim:league-season": "node scripts/simulate-real-league-season.mjs",
     "sim:mode-isolation": "node scripts/simulate-mode-isolation.mjs",
