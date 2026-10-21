@@ -456,3 +456,17 @@ motstander eller egne ferdigheter er et usikkerhetssignal, ikke bevis på
 svakhet. Et taktisk mønster som får motspill, gir ingen ekstra kjedebonus.
 Alle 18 mønstrene er testet mot støttende ellever, manglende rolledimensjon,
 kontrert mønster og ufullstendig speiding.
+
+
+## Operativt nytt svar etter motspillet
+
+Hvert av de 18 mønstrene har et kontrollert `responsePlanId` som peker på en
+annen, eksisterende kampplan. Når et motgrep faktisk er modellert som aktivt,
+viser analyseavdelingen et **mulig alternativ** og lar manageren gå direkte
+til Lag · Oppstilling for å vurdere det. **Alternativet gir ingen bonus før
+manageren faktisk endrer oppsettet**, og heller ikke da er utfallet garantert.
+
+Hvert lagledd viser de aktuelle, identifiserte **spillerrollene** som kan støtte
+lagdimensjonen. Disse holdes atskilt fra individuelt **kildebelagte ferdigheter**.
+En spiller i en relevant rolle er ikke automatisk dokumentert god til den;
+ukjent kildegrunnlag må fortsatt behandles som ukjent.

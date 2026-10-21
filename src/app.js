@@ -6546,6 +6546,7 @@ function getOpponentAnalysisContext() {
     formation: getFormation(),
     tactic: getTactic(),
     teamFit: getTeamFit(),
+    tactics: state.tactics || [],
     trainingLabel: getWeeklyTrainingChoiceLabel()
   };
 }
@@ -6561,6 +6562,7 @@ function saveOpponentAnalysisPlanFromClubRoom(plan) {
     fixture,
     formation: context.formation,
     tactic: context.tactic,
+    tactics: context.tactics,
     trainingLabel: context.trainingLabel
   });
   const canonical = createOpponentAnalysisPlan({
