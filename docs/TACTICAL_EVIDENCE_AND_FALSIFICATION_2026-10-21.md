@@ -121,6 +121,13 @@ Automatisk matrise (`npm run sim:v6-historical-matrix`) leser **kanoniske kamppl
 
 For hver plan–motstander-kombinasjon sjekker testen (1) om en av de fire eksisterende v6-familiene kan aktiveres ut fra dokumenterte stilparametere, (2) hvilke forskjellige rolleledd som må finnes, (3) om dårligere rollefit i samme formasjon senker eller bevarer den modellerte suksesssannsynligheten, (4) om helt ukjent rollefit nekter bonus, og (5) at `advanceMatchClock` velger samme situasjon, ikke stapler statisk kampplanbonus på v6, og fører akkurat én periodedelta mot sjanseregnskapet uten ekstra skudd.
 
+Reaktive sluttpressplaner (`chase_the_equaliser`, `all_out_attack`) må i
+tillegg ha faktisk underlege på tavla før v6-kjeden aktiveres. 0–0, 1–1,
+ledelse og manglende resultat gir ingen sluttpressbonus. I den syntetiske
+matrisen er disse to planenes kamper satt til underlege, mens de øvrige
+planene fortsatt testes med sine relevante stillinger. Også planvurderingen
+skiller nå tavlestilling fra momentum ved uavgjort.
+
 Regresjonen krever at alle 18 planene har minst én faktisk *kvalifisert* historisk stilmotstander i det eksisterende registeret. Kombinasjoner som ikke kvalifiserer rapporteres eksplisitt som **ikke aktivert**; det er ikke en feil at en taktikk mangler situasjonsbonus mot en stil den ikke er laget for. Rapporten teller kvalifiserte kombinasjoner og rollefit-sensitive tilfeller, slik at generiske/universelle taktikkbonuser avdekkes før en ny publisering.
 
 Matrisegrønt er en **softwaregaranti for intern konsistens i den valgte modellen**, ikke bevis på at de historiske lagene faktisk ville spilt identisk eller at tallene er kalibrerte. Neste fotballfaglige fase krever uavhengige data eller eksplisitt panelvurdering av sammenlignbare kampsituasjoner.
