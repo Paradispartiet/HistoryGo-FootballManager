@@ -43,7 +43,9 @@ function session(plan, opponent, options = {}) {
     teamFitSnapshot: { tacticalProfile: teamFit, historicalScore: 76 },
     strengthSnapshot: { finalStrength: 75, modifiers: { missing: 0 } },
     // A leading game state is required for 'see_out_the_game'.
-    score: { for: 1, against: 0 }, planMatchup: { edge: 1.5 },
+    score: ["chase_the_equaliser", "all_out_attack"].includes(plan)
+      ? { for: 0, against: 1 } : { for: 1, against: 0 },
+    planMatchup: { edge: 1.5 },
     events: [], timeline: [], minuteLog: [], decisions: [],
     substitutions: [], planChanges: [],
     ...options
@@ -77,6 +79,14 @@ try {
       if (!phase) {
         row.unsupported += 1;
         continue;
+      }
+      if (plan === "chase_the_equaliser" || plan === "all_out_attack") {
+        for (const score of [{ for: 0, against: 0 }, { for: 1, against: 0 },
+          { for: 2, against: 2 }, null]) {
+          const invalid = session(plan, opponent, { score });
+          assert.equal(phaseFor(invalid), null,
+            plan + " cannot gain v6 pressure without trailing on the scoreboard");
+        }
       }
       eligiblePairs += 1;
       row.eligible += 1;
