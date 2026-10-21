@@ -1,3 +1,5 @@
+import { evaluateLiveTacticalExchange } from "./football-live-tactical-exchange.js";
+
 // Four connected tactical actions, an opponent counter and a possible reply.
 // Principles are grounded in FIFA and England Football coaching resources;
 // numeric thresholds are explicitly game-design hypotheses, not empirical estimates.
@@ -693,14 +695,19 @@ export function evaluateTacticalSequences(tacticId, opponent, tacticalProfile) {
       // Do not award a tactical advantage until both the vulnerability and
       // the relevant opponent response are actually represented in the profile.
       const counterKnown = finite(strengths[pattern.counterCondition.trait]);
-      const countered = ready && counterKnown && matches(strengths, pattern.counterCondition);
+      const traitCountered = ready && counterKnown && matches(strengths, pattern.counterCondition);
+      // In-match collective lane coverage or rest-defence is more specific
+      // evidence than a static opposition trait. No shape => legacy result.
+      const liveExchange = ready ? evaluateLiveTacticalExchange(pattern, opponent) : null;
+      const counterEvidenceKnown = counterKnown || Boolean(liveExchange);
+      const countered = liveExchange ? liveExchange.status === "countered" : traitCountered;
       return { id: pattern.tacticId, title: pattern.title,
         moves: pattern.moves.slice(), counter: pattern.counter,
-        response: pattern.response, missing, ready, countered,
+        response: pattern.response, missing, ready, countered, liveExchange,
         status: unknownTeam ? "unknown_team"
           : !ready ? "unsupported"
-          : !counterKnown ? "unknown_counter"
+          : !counterEvidenceKnown ? "unknown_counter"
           : countered ? "countered" : "advantage",
-        edgeDelta: ready && counterKnown && !countered ? 1 : 0 };
+        edgeDelta: ready && counterEvidenceKnown && !countered ? 1 : 0 };
     });
 }
