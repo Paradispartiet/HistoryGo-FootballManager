@@ -8,6 +8,7 @@ import { resolveHighPressBuildUp, annotateHighPressBuildUpChances, highPressPhas
 import { resolveTurnoverTransition } from "./football-matchday-turnover-v6.js";
 import { resolveCompactBlockAttack, annotateCompactBlockChances } from "./football-matchday-compact-block-v6.js";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances } from "./football-matchday-own-press-v6.js";
+import { resolveGameControlPhase, annotateGameControlChances } from "./football-matchday-control-v6.js";
 import {
   applyOpponentAdjustment,
   createPlanChange,
@@ -1799,6 +1800,8 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     causalCompactBlockVersion: 1,
     // Only new matches opt in to pre-chance pressing/escape sequences.
     causalPressingVersion: 1,
+    // Four remaining plans opt in only on new match sessions.
+    causalGameControlVersion: 1,
     sourcedSubstitutionVersion: 2,
     sourcedSubstitutionBaseline,
     id: `matchday-session-${Date.now()}`,
@@ -2164,6 +2167,13 @@ export function advanceMatchClock(session) {
         protectionRoll: () => highPressPhaseRoll(session, played + ":press-protection")
       })
     : null;
+  // Four previously unsupported plans are resolved using their OWN linked
+  // defensive-control/release chain; earlier v6 phases take priority.
+  const controlPhase = !buildUpPhase && !compactPhase && !pressingPhase
+    ? resolveGameControlPhase(session, {
+        rng: () => highPressPhaseRoll(session, played + ":game-control")
+      })
+    : null;
   const transition = resolveTurnoverTransition(session, buildUpPhase, {
     firstPassRoll: () => highPressPhaseRoll(session, played + ":forward-pass"),
     coverRoll: () => highPressPhaseRoll(session, played + ":rest-defence")
@@ -2172,7 +2182,7 @@ export function advanceMatchClock(session) {
   // loss; it is never added on top. A completed build-up has no transition.
   const phase = transition ? {
     ...buildUpPhase, transition, xgDeltaAgainst: transition.xgDeltaAgainst
-  } : buildUpPhase || compactPhase || pressingPhase;
+  } : buildUpPhase || compactPhase || pressingPhase || controlPhase;
   const rate = currentExpectedGoalRate(session);
   const share = 1 / totalSegments;
   const staticEdge = num(session.planMatchup?.edge);
@@ -2223,9 +2233,11 @@ export function advanceMatchClock(session) {
     ? annotateCompactBlockChances(generatedChances, tacticalPhase)
     : tacticalPhase?.situation === "our_press_vs_opponent_build_up"
       ? annotateOwnPressChances(generatedChances, tacticalPhase)
-      : tacticalPhase
-        ? annotateHighPressBuildUpChances(generatedChances, tacticalPhase)
-        : annotatePeriodTacticalChances(session, generatedChances);
+      : tacticalPhase?.situation === "game_control_and_release"
+        ? annotateGameControlChances(generatedChances, tacticalPhase)
+        : tacticalPhase
+          ? annotateHighPressBuildUpChances(generatedChances, tacticalPhase)
+          : annotatePeriodTacticalChances(session, generatedChances);
 
   const goalsFor = chances.filter((c) => c.side === "for" && c.scored).length;
   const goalsAgainst = chances.filter((c) => c.side === "against" && c.scored).length;
