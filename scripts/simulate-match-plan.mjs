@@ -35,6 +35,7 @@ import {
   getMatchdayGameState
 } from "../src/football-matchday-engine.js";
 import { getHistoricalOpponentProfile } from "../src/football-historical-opponent-profiles.js";
+import { buildOpponentTacticalOpportunities, createOpponentAnalysisWorkspace } from "../src/football-opponent-analysis.js";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const data = JSON.parse(readFileSync(join(root, "data/football_tactics.json"), "utf8"));
@@ -252,6 +253,60 @@ check("den samme matchup-forskjellen når kampmotorens xG", () => {
     "source-supported exploit must flow into actual chance generation rather than UI copy");
   assert.ok(strongXg.against < unsupportedXg.against,
     "counterpress exploitation must also reduce opponent chances");
+});
+
+check("analyseavdelingen kobler motstandersvakhet til faktiske roller og kildebelegg", () => {
+  const opponent = getHistoricalOpponentProfile("barcelona_2008_12_positional_play");
+  const tactic = byId.get("counter_press_recovery");
+  const ready = {
+    completeCount: 11, totalSlots: 11,
+    metrics: { pressScore: 74, depthScore: 68, widthScore: 62 },
+    sourcedSkillTendencies: {
+      pressScore: { bonus: 4, players: ["Kildebelagt press-spiller"] }
+    },
+    assignments: [{
+      isComplete: true,
+      player: { id: "press_1", name: "Kildebelagt press-spiller" },
+      role: { id: "pressing_forward", name: "Pressende spiss" }
+    }]
+  };
+  const supported = buildOpponentTacticalOpportunities({ opponent, tactic, teamFit: ready });
+  const press = supported.find((entry) => entry.id === "press_build_up");
+  assert.ok(press, "Barcelona style must expose short-build-up press");
+  assert.equal(press.readiness, "ready");
+  assert.equal(press.metricValue, 74);
+  assert.deepEqual(press.documentedPlayers, ["Kildebelagt press-spiller"]);
+  assert.deepEqual(press.supportingRoles.map(entry => entry.role), ["Pressende spiss"]);
+
+  const noCoverage = buildOpponentTacticalOpportunities({
+    opponent, tactic,
+    teamFit: {
+      ...ready,
+      metrics: { ...ready.metrics, pressScore: 30 },
+      sourcedSkillTendencies: {},
+      assignments: []
+    }
+  }).find((entry) => entry.id === "press_build_up");
+  assert.equal(noCoverage.readiness, "gap");
+  assert.deepEqual(noCoverage.documentedPlayers, []);
+  assert.deepEqual(noCoverage.supportingRoles, []);
+
+  assert.deepEqual(buildOpponentTacticalOpportunities({
+    opponent: { id: "generic", name: "Ukjent" }, tactic, teamFit: ready
+  }), [], "generic club must not receive invented opponent vulnerabilities");
+
+  const incomplete = buildOpponentTacticalOpportunities({
+    opponent, tactic, teamFit: { ...ready, completeCount: 8 }
+  }).find((entry) => entry.id === "press_build_up");
+  assert.equal(incomplete.readiness, "incomplete");
+
+  const workshop = createOpponentAnalysisWorkspace({
+    fixture: { fixtureId: "round_1", opponent },
+    formation: { name: "4-3-3" }, tactic, teamFit: ready
+  });
+  assert.equal(workshop.tacticalOpportunities[0].id, "press_build_up");
+  assert.equal(workshop.tacticalOpportunities[0].readiness, "ready");
+  assert.equal(workshop.ownPlan.formation, "4-3-3");
 });
 
 check("planlista sorteres etter hva som passer situasjonen", () => {
