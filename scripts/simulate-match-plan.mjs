@@ -32,6 +32,7 @@ import {
   applyMatchPlanChange,
   applyOpponentAdaptation,
   createMatchdaySession,
+  projectMatchPlanTacticalProfile,
   finalizeMatchdaySession,
   getMatchdayGameState
 } from "../src/football-matchday-engine.js";
@@ -53,6 +54,77 @@ function check(label, run) {
 console.log("Kampplan v1 — strategi og bytte underveis\n");
 
 // ---------------------------------------------------------------------------
+check("kampens 18 planvalg bruker planens EGEN rollefit og samme profil som faktisk bytte", () => {
+  const opponent = getHistoricalOpponentProfile("barcelona_2008_12_positional_play");
+  const currentPlan = byId.get("patient_build_up");
+  const highPressPlan = byId.get("counter_press_recovery");
+  const sessionProfile = {
+    pressScore: 40, widthScore: 64, depthScore: 68, balanceScore: 68,
+    buildUpScore: 72, restDefenseScore: 65, relationshipScore: 73
+  };
+  const oldFit = { metrics: {
+    pressScore: 45, widthScore: 64, depthScore: 68, balanceScore: 68,
+    buildUpScore: 72, restDefenseScore: 65
+  } };
+  const newFit = { metrics: { ...oldFit.metrics, pressScore: 78, buildUpScore: 62 } };
+  const projected = projectMatchPlanTacticalProfile(sessionProfile, oldFit, newFit);
+  assert.equal(projected.pressScore, 73, "current match condition offset must survive");
+  assert.equal(projected.buildUpScore, 62);
+  assert.equal(sessionProfile.pressScore, 40, "projection must not mutate original session");
+  assert.equal(oldFit.metrics.pressScore, 45, "team fit must remain read-only");
+  assert.equal(projectMatchPlanTacticalProfile(sessionProfile, null, newFit), sessionProfile,
+    "legacy/unknown team-fit must not create an invented rating");
+  const allPreviews = Object.fromEntries(plans.map((plan) =>
+    [plan.id, plan.id === highPressPlan.id ? projected : sessionProfile]));
+  const ranked = rankPlansForSituation(plans, {
+    currentPlan, gameState: "level", opponent, tacticalProfile: sessionProfile,
+    tacticalProfilesByPlan: allPreviews
+  });
+  assert.equal(ranked.length, 18);
+  const highEntry = ranked.find(({plan}) => plan.id === highPressPlan.id);
+  const actuallySupported = evaluatePlanVsOpponent(highPressPlan, opponent,
+    { tacticalProfile: projected });
+  const oldIncorrect = evaluatePlanVsOpponent(highPressPlan, opponent,
+    { tacticalProfile: sessionProfile });
+  assert.equal(highEntry.matchupEdge, actuallySupported.edge);
+  // In-match preview must match the ACTUAL pure engine switch, including
+  // any sourced substitution corrections the engine applies to the active XI.
+  const liveSession = createMatchdaySession({
+    teamFit: {
+      teamScore: 72, completeCount: 11, totalSlots: 11,
+      metrics: { ...sessionProfile }, assignments: []
+    },
+    formation: { id: "modern_433", name: "4-3-3", slots: [] },
+    tactic: currentPlan, opponent
+  });
+  const oldSessionJson = JSON.stringify(liveSession);
+  const preview = applyMatchPlanChange(liveSession, highPressPlan, {
+    currentTeamFit: oldFit, nextTeamFit: newFit, currentPlanData: currentPlan,
+    players: [], roles: []
+  });
+  assert.equal(JSON.stringify(liveSession), oldSessionJson,
+    "preview must NEVER mutate or consume the live session");
+  const dryRank = rankPlansForSituation(plans, {
+    currentPlan, gameState: "level", opponent,
+    tacticalProfile: liveSession.teamFitSnapshot.tacticalProfile,
+    tacticalProfilesByPlan: { [highPressPlan.id]: preview.teamFitSnapshot.tacticalProfile }
+  });
+  assert.equal(dryRank.find(({ plan }) => plan.id === highPressPlan.id).matchupEdge,
+    preview.planMatchup.edge,
+    "same proposed plan must have same tactical edge in list and real match engine");
+
+  assert.equal(highEntry.sequenceStatus, actuallySupported.sequences?.[0]?.status || null);
+  assert.ok(highEntry.matchupEdge > oldIncorrect.edge,
+    "an old tactic's low press must not hide a new tactic's genuine press fit");
+
+  const inverse = projectMatchPlanTacticalProfile(projected, newFit, oldFit);
+  assert.deepEqual(inverse, sessionProfile,
+    "switching back must not accumulate phantom benefits");
+  const atLimit = projectMatchPlanTacticalProfile(
+    { ...sessionProfile, pressScore: 97 }, oldFit, newFit);
+  assert.equal(atLimit.pressScore, 100, "team signals must stay within 0..100");
+});
+
 check("alle 18 taktikker har betinget fire-trekks spill, motspill og svar", () => {
   assert.equal(TACTICAL_SEQUENCES.length, plans.length);
   for (const chain of TACTICAL_SEQUENCES) {

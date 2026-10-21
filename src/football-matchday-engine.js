@@ -1878,6 +1878,28 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
   };
 }
 
+// One shared tactical-profile projection for a REAL midmatch change and its
+// read-only manager preview. Delta carries forward training and substitutions
+// already present in session snapshot, without overwriting played periods.
+// Unknown input => unchanged snapshot; never invent individual skills.
+export function projectMatchPlanTacticalProfile(tacticalProfile, currentTeamFit, nextTeamFit) {
+  if (!tacticalProfile || !currentTeamFit?.metrics || !nextTeamFit?.metrics) {
+    return tacticalProfile;
+  }
+  const shifted = { ...tacticalProfile };
+  const keys = ["balanceScore", "widthScore", "depthScore",
+    "buildUpScore", "pressScore", "restDefenseScore"];
+  keys.forEach((key) => {
+    const before = currentTeamFit.metrics[key];
+    const after = nextTeamFit.metrics[key];
+    if (Number.isFinite(before) && Number.isFinite(after) &&
+        Number.isFinite(tacticalProfile[key])) {
+      shifted[key] = clamp(tacticalProfile[key] + after - before);
+    }
+  });
+  return shifted;
+}
+
 // Bytt kampplan midt i kampen. Returnerer en NY sesjon (motoren muterer ikke),
 // eller den samme sesjonen når byttet ikke gir mening (ferdig kamp, samme plan).
 export function applyMatchPlanChange(session, nextPlan, { opponent, currentTeamFit, nextTeamFit, currentPlanData, players, roles } = {}) {
@@ -1901,21 +1923,9 @@ export function applyMatchPlanChange(session, nextPlan, { opponent, currentTeamF
   // only upcoming periods. Without both inputs (old saves/test callers),
   // preserve the original snapshot instead of inventing a team rating.
   const previousProfile = session.teamFitSnapshot?.tacticalProfile;
-  let nextTacticalProfile = previousProfile;
-  if (previousProfile && currentTeamFit?.metrics && nextTeamFit?.metrics) {
-    const shifted = { ...previousProfile };
-    const keys = ["balanceScore", "widthScore", "depthScore",
-      "buildUpScore", "pressScore", "restDefenseScore"];
-    keys.forEach((key) => {
-      const before = currentTeamFit.metrics[key];
-      const after = nextTeamFit.metrics[key];
-      if (Number.isFinite(before) && Number.isFinite(after) &&
-          Number.isFinite(previousProfile[key])) {
-        shifted[key] = clamp(previousProfile[key] + after - before);
-      }
-    });
-    nextTacticalProfile = shifted;
-  }
+  let nextTacticalProfile = projectMatchPlanTacticalProfile(
+    previousProfile, currentTeamFit, nextTeamFit
+  );
 
   // After a tactical switch the substitution baseline MUST describe the new
   // tactical profile, not kick-off's original plan. Otherwise any later

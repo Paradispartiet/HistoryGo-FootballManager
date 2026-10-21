@@ -11262,7 +11262,6 @@ function appendMatchPlanSwitcher(card, session) {
   const wrap = document.createElement("details");
   wrap.className = "match-plan-switcher";
   wrap.open = Boolean(state.matchPlanSwitcherOpen);
-  wrap.addEventListener("toggle", () => { state.matchPlanSwitcherOpen = wrap.open; });
 
   const summary = document.createElement("summary");
   const standing = gameState.scoreKnown
@@ -11333,14 +11332,41 @@ function appendMatchPlanSwitcher(card, session) {
 
   const list = document.createElement("div");
   list.className = "match-plan-options";
-  const ranked = rankPlansForSituation(plans, {
-    currentPlan,
-    gameState: gameState.state,
-    opponent: session.opponent,
-    tacticalProfile: session.teamFitSnapshot?.tacticalProfile
-  });
+  // Only compute 18 real alternative fits when the manager OPENS the
+  // selector. Preview each option via the SAME PURE matchday switch function,
+  // including real substitutions and sourced contributions from PR #479.
+  // The previously active plan's role profile must NEVER decide another plan.
+  const populatePlanOptions = () => {
+    list.replaceChildren();
+    const currentTeamFit = currentPlan ? getTeamFit(currentPlan) : null;
+    const tacticalProfilesByPlan = {};
+    if (currentTeamFit?.metrics && session.teamFitSnapshot?.tacticalProfile) {
+      plans.forEach((candidate) => {
+        if (candidate.id === currentId) {
+          tacticalProfilesByPlan[candidate.id] = session.teamFitSnapshot.tacticalProfile;
+          return;
+        }
+        const nextTeamFit = getTeamFit(candidate);
+        if (!nextTeamFit?.metrics) return;
+        // Dry run: creates a new session; never saves, changes selection,
+        // logs real decisions or rewrites previously played periods.
+        const preview = applyMatchPlanChange(session, candidate, {
+          opponent: session.opponent, currentTeamFit, nextTeamFit,
+          currentPlanData: currentPlan, players: state.players, roles: state.roles
+        });
+        tacticalProfilesByPlan[candidate.id] =
+          preview.teamFitSnapshot?.tacticalProfile || session.teamFitSnapshot.tacticalProfile;
+      });
+    }
+    const ranked = rankPlansForSituation(plans, {
+      currentPlan,
+      gameState: gameState.state,
+      opponent: session.opponent,
+      tacticalProfile: session.teamFitSnapshot?.tacticalProfile,
+      tacticalProfilesByPlan
+    });
 
-  ranked.forEach((entry) => {
+    ranked.forEach((entry) => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = `match-plan-option${entry.isCurrent ? " is-current" : ""}${entry.fitsGameState ? " is-fitting" : ""}`;
@@ -11371,7 +11397,13 @@ function appendMatchPlanSwitcher(card, session) {
       button.addEventListener("click", () => switchMatchPlanDuringMatch(entry.plan.id));
     }
     list.append(button);
+    });
+  };
+  wrap.addEventListener("toggle", () => {
+    state.matchPlanSwitcherOpen = wrap.open;
+    if (wrap.open) populatePlanOptions();
   });
+  if (wrap.open) populatePlanOptions();
   wrap.append(list);
   card.append(wrap);
 }
