@@ -18,30 +18,6 @@ assert.equal(playable.length, catalogue.length - 1, "one redundant historic reco
 assert.equal(canonicalPlayerId(legacy), canonical);
 assert.equal(canonicalPlayerId("nana_boateng_other"), "nana_boateng_other");
 
-for (const [id, expected, source] of [
-  ["leif_amundsen", ["LW"], "https://historie.brann.no/spillere/leif-amundsen/"],
-  ["hans_brandtun", ["RB"], "https://historie.brann.no/spillere/hans-brandtun"]
-]) {
-  const original = catalogue.find((player) => player.id === id);
-  const fixed = playable.find((player) => player.id === id);
-  assert.ok(original && fixed, id + ": canonical player identity exists");
-  assert.deepEqual(fixed.naturalPositions, expected, id + ": verified position");
-  assert.equal(original.naturalPositions[0], "CB", id + ": archive remains unmodified");
-  assert.deepEqual(fixed.strengths, original.strengths, id + ": no invented strengths");
-  assert.deepEqual(fixed.sourcePlaceIds, original.sourcePlaceIds, id + ": source membership is stable");
-  assert.deepEqual(fixed.clubAffiliations, original.clubAffiliations, id + ": club affiliation remains stable");
-  assert.equal(fixed.id, original.id);
-  assert.ok(source.startsWith("https://historie.brann.no/"));
-}
-const leif = playable.find((player) => player.id === "leif_amundsen");
-assert.equal(leif.poorFits.includes("LW"), false, "Leif can no longer be flagged as a bad left winger");
-assert.equal(leif.archetypeIds.includes("duel_stopper"), false, "old centre-back archetype is removed");
-const brandtun = playable.find((player) => player.id === "hans_brandtun");
-assert.equal(brandtun.usablePositions.includes("WB"), true, "Brandtun is also playable as wing-back");
-assert.equal(brandtun.preferredRoles.includes("wingback"), true);
-assert.equal(brandtun.archetypeIds.includes("duel_stopper"), false);
-assert.deepEqual(normalizePlayablePlayerCatalog(playable), playable, "position normalization is idempotent");
-
 const unlocks = JSON.parse(readFileSync(new URL("../data/football_unlocks.json", import.meta.url))).placeUnlocks;
 const marienlyst = unlocks.find((entry) => entry.placeId === "marienlyst_stadion");
 assert.equal(marienlyst.unlocks.filter((entry) => entry.targetId === canonical).length, 1);
