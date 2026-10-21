@@ -11305,11 +11305,45 @@ function appendMatchPlanSwitcher(card, session) {
       : live.status === "advantage"
         ? "Rollene og formasjonen støtter kjeden mot denne motstanderen."
         : live.status === "countered"
-          ? "Motstanderen har en dokumentert struktur som kan nøytralisere kjeden."
+          ? "Motstanderens kartlagte eller modellerte motgrep kan bryte spillkjeden."
           : live.status === "unknown_counter"
             ? "Kjeden har rolledekning, men vi har ikke kartlagt motstanderens mulige motgrep."
             : "Dagens rolle- og formasjonsdekning er utilstrekkelig for denne kjeden.";
     story.append(storyTitle, status, actions, counter, response);
+    // Use the existing authoritative live-match matchup. A simulated
+    // countermove is not historical tracking and these are possible actions,
+    // not fabricated completed passes or duels.
+    const exchange = live?.liveExchange;
+    if (exchange) {
+      const explanation = document.createElement("section");
+      explanation.className = "match-plan-live-exchange";
+      explanation.dataset.exchangeStatus = exchange.status;
+      const title = document.createElement("h5");
+      title.textContent = "Motstanderens modellerte justering";
+      const cause = document.createElement("p");
+      cause.textContent = exchange.cause;
+      const steps = document.createElement("ol");
+      steps.className = "match-plan-live-exchange-steps";
+      exchange.steps.forEach((step) => {
+        const item = document.createElement("li");
+        item.dataset.stepStatus = step.result;
+        item.textContent = step.action + (step.result === "blocked"
+          ? " – avskåret av motspillet" : " – mulig");
+        steps.append(item);
+      });
+      explanation.append(title, cause, steps);
+      if (exchange.failureConsequence) {
+        const risk = document.createElement("p");
+        risk.textContent = "Hvis forsøket mislykkes: " + exchange.failureConsequence;
+        explanation.append(risk);
+      }
+      const cue = document.createElement("p");
+      cue.textContent = "Se etter: " + exchange.managerObservation;
+      const caution = document.createElement("small");
+      caution.textContent = "Dette er en simulert spillkjede, ikke observerte hendelser eller garantert xG.";
+      explanation.append(cue, caution);
+      story.append(explanation);
+    }
     wrap.append(story);
   }
 
