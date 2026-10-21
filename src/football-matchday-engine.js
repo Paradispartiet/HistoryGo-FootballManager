@@ -2113,6 +2113,28 @@ function buildChances(xg, { from, to, side }) {
   return chances;
 }
 
+// A scoreboard-dependent plan must not earn the legacy static matchup xG
+// if its v6 causal route is ineligible. This applies to new v6 sessions only;
+// older saves retain their original accounting.
+function ineligibleReactivePlan(session) {
+  const planId = session.activePlanSnapshot?.id ||
+    session.tacticSnapshot?.id || session.selectedTacticId;
+  const score = session.score;
+  const known = Number.isFinite(score?.for) && Number.isFinite(score?.against);
+  if (session.causalCompactBlockVersion === 1 &&
+      (planId === "chase_the_equaliser" || planId === "all_out_attack")) {
+    return !known || score.for >= score.against;
+  }
+  if (session.causalGameControlVersion === 1 && planId === "see_out_the_game") {
+    return !known || score.for <= score.against;
+  }
+  return false;
+}
+
+function periodPlanMatchupEdge(session) {
+  return ineligibleReactivePlan(session) ? 0 : num(session.planMatchup?.edge);
+}
+
 // xG-raten akkurat nå: basis pluss alt som er bestemt så langt i kampen.
 function currentExpectedGoalRate(session) {
   const tp = session.teamFitSnapshot?.tacticalProfile || {};
@@ -2125,7 +2147,7 @@ function currentExpectedGoalRate(session) {
     teamStrength: num(session.strengthSnapshot?.finalStrength),
     isIncomplete: missing > 0,
     missing,
-    planEdge: num(session.planMatchup?.edge)
+    planEdge: periodPlanMatchupEdge(session)
   });
   // Only decisions already made can affect the NEXT period. Substitutions
   // belong here as much as plan changes and tactical calls: without them,
@@ -2185,7 +2207,7 @@ export function advanceMatchClock(session) {
   } : buildUpPhase || compactPhase || pressingPhase || controlPhase;
   const rate = currentExpectedGoalRate(session);
   const share = 1 / totalSegments;
-  const staticEdge = num(session.planMatchup?.edge);
+  const staticEdge = periodPlanMatchupEdge(session);
   const neutralRateFor = phase ? rate.for - staticEdge * 0.09 : rate.for;
   const neutralRateAgainst = phase ? rate.against + staticEdge * 0.06 : rate.against;
   const baselineForPhase = clampRange(round2(neutralRateFor * share), 0, 3);
@@ -2204,10 +2226,11 @@ export function advanceMatchClock(session) {
   // component removed; apply the SAME rounding and caps for an honest
   // per-period attribution. This is the WHOLE plan matchup, not just the
   // newer sequence heuristic. Preserve each historical period on switching.
-  const matchupEdge = num(session.planMatchup?.edge);
+  const matchupEdge = staticEdge;
   const baselineFor = clampRange(round2((rate.for - matchupEdge * 0.09) * share), 0, 3);
   const baselineAgainst = clampRange(round2((rate.against + matchupEdge * 0.06) * share), 0, 3);
-  const tacticalXg = !phase && session.planMatchup && Number.isFinite(session.planMatchup.edge)
+  const tacticalXg = !phase && !ineligibleReactivePlan(session) &&
+    session.planMatchup && Number.isFinite(session.planMatchup.edge)
     ? {
         planId: session.activePlanSnapshot?.id || session.selectedTacticId || null,
         planName: session.activePlanSnapshot?.name || "",
