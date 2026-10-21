@@ -76,3 +76,18 @@ Stabæk er låst på **41/41**. To delte profiler skal uttrykkelig stå utenfor:
 - Stabæk-regresjonene for Nusa, Kaasa og Basma-identitetene.
 
 Auditen kjøres i CI før motorsimuleringene. `sim:player-attributes` kjører deretter på det samme effektive source-claim-laget som spillet bruker.
+
+
+## Kildebelagte posisjonsrettelser, 21.10.2026
+
+Disse korrigerer **canonical posisjon og feilaktige, posisjonsavledede rollemaler**, ikke individuelle ferdighetsstyrker. `strengths`, klasse, spiller-ID og klubber endres ikke. Det er ingen automatisk rett til pasnings-, duell- eller avslutningstokens fra en stillingsbetegnelse.
+
+| Klubb | Spiller | Bekreftet rolle | Individuell kilde |
+| --- | --- | --- | --- |
+| Molde | Tor Gunnar Hagbø | `GK → CB` | [Moldes 1983-arkiv](https://www.moldefk.no/om-klubben/var-historie/1980-1989/1983) beskriver «solid stopperspill»; [NFFs 1984-lagoppstilling](https://www.fotball.no/fotballdata/kamp/?fiksId=3463294) viser ham som utespiller |
+| Sandefjord | Hjalmar Johansen | `ST → CB` | [Sandefjord-trener Thodesen i 2006](https://www.bt.no/sport/i/500xdE/sandefjord-vurderer-gabrielsen-og-bjoerdal) beskriver ham som midtstopper; [Dagbladets samtidige lagoversikt 2003](https://www.dagbladet.no/sport/dagbladet-tipper-1-divisjon/65880176) fører ham under forsvar |
+| Sandefjord | Thomas Eftedal | `CM → RB` | [Dagbladets lagoversikt 2003](https://www.dagbladet.no/sport/dagbladet-tipper-1-divisjon/65880176) klassifiserer ham som forsvarer; [NFFs kampoppstilling](https://www.fotball.no/fotballdata/kamp/?fiksId=3481393) bekrefter perioden og draktnummer 2; historisk spillerbiografi identifiserer høyreback |
+
+Trym Bergman endres ikke; forsvarsrollen var allerede mulig i den kanoniske katalogen, og kildene underbygger ikke at en generisk karrierebetegnelse som «midtbanespiller» automatisk skal overstyre Sandefjord-rollen.
+
+Eksisterende `scripts/audit-p1-source-claims.mjs` beskytter de tre spillernes dokumenterte hovedposisjoner og hindrer at de gamle rollemalene gjenoppstår. Dette gjelder også når kildeklassen ikke er eksklusiv P1. Ingen engangs-synkroniseringsscript eller engangs-workflow beholdes i produksjonsrepoet.
