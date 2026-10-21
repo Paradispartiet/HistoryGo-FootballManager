@@ -44261,36 +44261,20 @@
       ],
       "classHeight": 82,
       "naturalPositions": [
-        "GK"
+        "CB"
       ],
       "usablePositions": [],
       "poorFits": [
-        "ST",
-        "AM",
-        "LW",
-        "RW"
+        "GK"
       ],
-      "archetypeIds": [
-        "classic_keeper"
-      ],
-      "archetypes": [
-        "shot_stopper"
-      ],
+      "archetypeIds": [],
+      "archetypes": [],
       "strengths": [],
-      "needs": [
-        "clear_defensive_line",
-        "protected_box"
-      ],
-      "preferredRoles": [
-        "classic_keeper"
-      ],
-      "likesTactics": [
-        "structured_build_up"
-      ],
-      "dislikesTactics": [
-        "high_line"
-      ],
-      "warningWhenMisused": "Hagbø trenger en tydelig forsvarslinje foran seg.",
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Hagbø er historisk dokumentert som stopper i Molde, ikke keeper. Spill ham i forsvar; ingen individuelle ferdighetsstyrker er kildebelagt.",
       "classSource": "belagt",
       "clubStatus": {
         "aker_stadion": "club_profile"
