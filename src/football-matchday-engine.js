@@ -1799,7 +1799,8 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
           pressing: tactic.pressing || "",
           tempo: tactic.tempo || "",
           width: tactic.width || "",
-          buildUp: tactic.buildUp || ""
+          buildUp: tactic.buildUp || "",
+          defensiveLine: tactic.defensiveLine || ""
         }
       : null,
     formationSnapshot: strength.formationProfile,
