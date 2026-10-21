@@ -8,6 +8,7 @@
 
 import assert from "node:assert/strict";
 import { TACTICAL_SEQUENCES, evaluateTacticalSequences } from "../src/football-tactical-sequences.js";
+import { LIVE_EXCHANGE_RULES, behaviourForOpponentAdjustment } from "../src/football-live-tactical-exchange.js";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -147,6 +148,95 @@ check("levende motspill: tredjemann, kollektiv dekning og restforsvar", () => {
 });
 
 // ---------------------------------------------------------------------------
+check("18/18 kampplaner: nytt motspill bryter én sammenhengende handlingskjede", () => {
+  const extendedIds = Object.keys(LIVE_EXCHANGE_RULES);
+  assert.equal(extendedIds.length, 14, "all remaining tactical plans require an authored counter");
+  const knownIds = new Set(TACTICAL_SEQUENCES.map((pattern) => pattern.tacticId));
+  assert.equal(knownIds.size, 18);
+  for (const tacticId of extendedIds) assert.ok(knownIds.has(tacticId), tacticId);
+
+  for (const pattern of TACTICAL_SEQUENCES) {
+    const rule = LIVE_EXCHANGE_RULES[pattern.tacticId];
+    if (!rule) continue; // the first four patterns have dedicated checks
+    const base = {
+      styleTraits: {
+        [pattern.opponentCondition.trait]: pattern.opponentCondition.min,
+        [pattern.counterCondition.trait]: pattern.counterCondition.min - 1
+      },
+      [pattern.counterCondition.trait]: pattern.counterCondition.min - 1
+    };
+    const roster = {
+      pressScore: 93, depthScore: 93, widthScore: 93,
+      buildUpScore: 93, restDefenseScore: 93, balanceScore: 93
+    };
+    const win = evaluateTacticalSequences(pattern.tacticId, {
+      ...base, tacticalBehaviour: { [rule.signal]: rule.freeValue }
+    }, roster)[0];
+    const lose = evaluateTacticalSequences(pattern.tacticId, {
+      ...base, tacticalBehaviour: { [rule.signal]: rule.counterValue }
+    }, roster)[0];
+    assert.equal(win?.status, "advantage", pattern.tacticId);
+    assert.equal(win?.edgeDelta, 1, pattern.tacticId + " no extra bonus");
+    assert.equal(lose?.status, "countered", pattern.tacticId);
+    assert.equal(lose?.edgeDelta, 0);
+    assert.equal(win.liveExchange.steps.length, 4);
+    assert.equal(lose.liveExchange.steps.length, 4);
+    assert.equal(lose.liveExchange.steps[rule.breakAt].result, "blocked");
+    assert.equal(lose.liveExchange.steps[rule.breakAt - 1].result, "available");
+    assert.ok(lose.liveExchange.failureConsequence.length > 20);
+    assert.ok(lose.liveExchange.managerObservation.length > 20);
+    const integrated = evaluatePlanVsOpponent(byId.get(pattern.tacticId),
+      { ...base, tacticalBehaviour: { [rule.signal]: rule.counterValue } },
+      { tacticalProfile: roster });
+    assert.equal(integrated.sequences[0].edgeDelta, 0, pattern.tacticId);
+    assert.ok(integrated.notes.some((note) => note.includes("Dynamisk motspill")));
+    const unknown = evaluateTacticalSequences(pattern.tacticId, {
+      ...base, tacticalBehaviour: { [rule.signal]: "unknown" }
+    }, roster)[0];
+    const legacy = evaluateTacticalSequences(pattern.tacticId, base, roster)[0];
+    assert.equal(unknown.status, legacy.status,
+      "unknown movement must retain established v2 verdict, not invent facts");
+    assert.equal(unknown.edgeDelta, legacy.edgeDelta);
+    const unsuitedMetric = Object.keys(pattern.requires)[0];
+    const unsuited = evaluateTacticalSequences(pattern.tacticId, {
+      ...base, tacticalBehaviour: { [rule.signal]: rule.freeValue }
+    }, { ...roster, [unsuitedMetric]: 15 })[0];
+    assert.equal(unsuited.status, "unsupported",
+      "a counter-model must never invent a player's ability");
+  }
+
+  const poor = {
+    defensiveStructure: 53, pressResistance: 45,
+    styleTraits: { defensiveCompactness: 50, highLine: 83,
+      possessionControl: 42, transitionThreat: 48 }
+  };
+  const excellent = {
+    defensiveStructure: 88, pressResistance: 86,
+    styleTraits: { defensiveCompactness: 90, highLine: 76,
+      possessionControl: 84, transitionThreat: 85 }
+  };
+  const scant = {
+    styleTraits: { pressIntensity: 95, highLine: 91 }
+  };
+  for (const action of ["push_up", "sit_back"]) {
+    const weak = behaviourForOpponentAdjustment(action, poor);
+    const strong = behaviourForOpponentAdjustment(action, excellent);
+    const unknown = behaviourForOpponentAdjustment(action, scant);
+    assert.equal(weak.pressEscape, "isolated");
+    assert.equal(strong.pressEscape, "supported");
+    assert.equal(weak.secondBall, "loose");
+    assert.equal(strong.secondBall, "covered");
+    assert.equal(weak.counterOutlet, "isolated");
+    assert.equal(strong.counterOutlet, "available");
+    assert.equal(unknown.pressEscape, "unknown");
+    assert.equal(unknown.wideShift, "unknown");
+    assert.equal(unknown.counterOutlet, "unknown");
+    assert.equal(unknown.secondBall, "unknown");
+    assert.deepEqual(behaviourForOpponentAdjustment(action, excellent), strong,
+      "opponent reaction must be pure and reproducible");
+  }
+});
+
 check("kampens 18 planvalg bruker planens EGEN rollefit og samme profil som faktisk bytte", () => {
   const opponent = getHistoricalOpponentProfile("barcelona_2008_12_positional_play");
   const currentPlan = byId.get("patient_build_up");
