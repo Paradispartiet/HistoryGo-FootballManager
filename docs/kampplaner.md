@@ -539,10 +539,13 @@ Taktikkvelgerens rangering bruker **ikke** lenger lagprofilen fra den aktive
 kampplanen til å bedømme alle 17 alternativer. Når manageren åpner velgeren,
 regner appen den samme valgte elleveren og formasjonen gjennom teamFit for
 hver konkret plan og bruker motorens felles
-`projectMatchPlanTacticalProfile`: endringen i seks dimensjoner legges på
-det aktive kampsnapshotet. Dermed overlever allerede registrert trening og
-innbyttebidrag, mens den nye planens press, bredde og dybdedekning blir
-korrekt. Den samme rene hjelpefunksjonen brukes ved det faktiske planbyttet.
+en **sideeffektfri prøvekørsel av selve `applyMatchPlanChange`**:
+endringen i seks dimensjoner legges på det aktive kampsnapshotet, og
+innbytterens faktisk dokumenterte bidrag (etter #479) regnes med. Dermed
+overlever tidligere trening og innbyttebidrag, mens den nye planens press,
+bredde, dybde og kildebelagte støtte blir korrekt. Den samme rene
+hjelpefunksjonen `projectMatchPlanTacticalProfile` benyttes av motoren
+i faktisk planbytte og i prøvekjøringen.
 Forhåndsvisningen er et vurderingsgrunnlag, **ikke en seiergaranti**:
 omstillingskostnad, senere hendelser og motstanderens endrede oppførsel kan
 fortsatt endre kampbildet. Alternativene beregnes først når man åpner

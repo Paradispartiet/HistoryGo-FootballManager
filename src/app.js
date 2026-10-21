@@ -33,7 +33,6 @@ import {
   advanceMatchClock,
   logMatchMoment,
   applyMatchPlanChange,
-  projectMatchPlanTacticalProfile,
   applyMatchdaySubstitution,
   applyOpponentAdaptation,
   OPPONENT_PROFILES,
@@ -11333,22 +11332,30 @@ function appendMatchPlanSwitcher(card, session) {
 
   const list = document.createElement("div");
   list.className = "match-plan-options";
-  // Only compute 18 alternative fits when the manager OPENS the selector.
-  // Use exactly the same six-metric delta as the actual switch, retaining
-  // in-match training/substitution effects. The former list scored every
-  // alternative with the PREVIOUS plan's team profile.
+  // Only compute 18 real alternative fits when the manager OPENS the
+  // selector. Preview each option via the SAME PURE matchday switch function,
+  // including real substitutions and sourced contributions from PR #479.
+  // The previously active plan's role profile must NEVER decide another plan.
   const populatePlanOptions = () => {
     list.replaceChildren();
     const currentTeamFit = currentPlan ? getTeamFit(currentPlan) : null;
     const tacticalProfilesByPlan = {};
     if (currentTeamFit?.metrics && session.teamFitSnapshot?.tacticalProfile) {
       plans.forEach((candidate) => {
-        const nextTeamFit = getTeamFit(candidate);
-        if (nextTeamFit?.metrics) {
-          tacticalProfilesByPlan[candidate.id] = projectMatchPlanTacticalProfile(
-            session.teamFitSnapshot.tacticalProfile, currentTeamFit, nextTeamFit
-          );
+        if (candidate.id === currentId) {
+          tacticalProfilesByPlan[candidate.id] = session.teamFitSnapshot.tacticalProfile;
+          return;
         }
+        const nextTeamFit = getTeamFit(candidate);
+        if (!nextTeamFit?.metrics) return;
+        // Dry run: creates a new session; never saves, changes selection,
+        // logs real decisions or rewrites previously played periods.
+        const preview = applyMatchPlanChange(session, candidate, {
+          opponent: session.opponent, currentTeamFit, nextTeamFit,
+          currentPlanData: currentPlan, players: state.players, roles: state.roles
+        });
+        tacticalProfilesByPlan[candidate.id] =
+          preview.teamFitSnapshot?.tacticalProfile || session.teamFitSnapshot.tacticalProfile;
       });
     }
     const ranked = rankPlansForSituation(plans, {

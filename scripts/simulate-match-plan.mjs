@@ -87,6 +87,32 @@ check("kampens 18 planvalg bruker planens EGEN rollefit og samme profil som fakt
   const oldIncorrect = evaluatePlanVsOpponent(highPressPlan, opponent,
     { tacticalProfile: sessionProfile });
   assert.equal(highEntry.matchupEdge, actuallySupported.edge);
+  // In-match preview must match the ACTUAL pure engine switch, including
+  // any sourced substitution corrections the engine applies to the active XI.
+  const liveSession = createMatchdaySession({
+    teamFit: {
+      teamScore: 72, completeCount: 11, totalSlots: 11,
+      metrics: { ...sessionProfile }, assignments: []
+    },
+    formation: { id: "modern_433", name: "4-3-3", slots: [] },
+    tactic: currentPlan, opponent
+  });
+  const oldSessionJson = JSON.stringify(liveSession);
+  const preview = applyMatchPlanChange(liveSession, highPressPlan, {
+    currentTeamFit: oldFit, nextTeamFit: newFit, currentPlanData: currentPlan,
+    players: [], roles: []
+  });
+  assert.equal(JSON.stringify(liveSession), oldSessionJson,
+    "preview must NEVER mutate or consume the live session");
+  const dryRank = rankPlansForSituation(plans, {
+    currentPlan, gameState: "level", opponent,
+    tacticalProfile: liveSession.teamFitSnapshot.tacticalProfile,
+    tacticalProfilesByPlan: { [highPressPlan.id]: preview.teamFitSnapshot.tacticalProfile }
+  });
+  assert.equal(dryRank.find(({ plan }) => plan.id === highPressPlan.id).matchupEdge,
+    preview.planMatchup.edge,
+    "same proposed plan must have same tactical edge in list and real match engine");
+
   assert.equal(highEntry.sequenceStatus, actuallySupported.sequences?.[0]?.status || null);
   assert.ok(highEntry.matchupEdge > oldIncorrect.edge,
     "an old tactic's low press must not hide a new tactic's genuine press fit");
