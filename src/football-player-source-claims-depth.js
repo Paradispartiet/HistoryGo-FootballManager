@@ -13,6 +13,15 @@
 export const SOURCE_DEPTH_CLAIMS_VERSION = "historygo-football-manager.source-depth-claims.v1";
 
 const documented = [
+  // Molde 2016: contemporary teammate evaluation; no ratings from historical reputation.
+  {
+    playerId: "eidur_gudjohnsen",
+    clubId: "molde",
+    strengths: ["hold_up_play", "positioning", "final_pass"],
+    claim: "I intervju 5. mars 2016 om Molde-perioden beskriver spisskollega Fredrik Gulbrandsen Gudjohnsen som «flink til å holde på ballen, finne posisjoner og spille gjennom andre». Det dokumenterer ballskjerming/hold_up_play, evnen til å finne gode posisjoner og gjennomspill/final_pass. Kilden omtaler også lavere tempo og kondisjon, så verken pace, stamina, finishing eller numeriske kvalitetsverdier tilføres.",
+    source: "https://www.bt.no/sport/i/2G8AxB/spisskollegaen-gudjohnsen-er-en-glimrende-signering",
+    sourceKind: "press"
+  },
   // Viking: individual goalkeeper organisation sourced from contemporary 2009 appraisal.
   {
     "playerId": "thomas_myhre",
