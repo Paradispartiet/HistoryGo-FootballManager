@@ -20,6 +20,7 @@ import {
   substitutionsRemaining
 } from "../src/football-substitutions.js";
 import { createLineupSnapshot, applyMatchPlayerStats, createMatchPlayerStats } from "../src/football-player-stats.js";
+import { applyMatchPlanChange } from "../src/football-matchday-engine.js";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
