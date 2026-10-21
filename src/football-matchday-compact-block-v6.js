@@ -96,6 +96,13 @@ export function resolveCompactBlockAttack(session, { rng = Math.random } = {}) {
   if (!session || session.causalCompactBlockVersion !== 1) return null;
   const id = session.activePlanSnapshot?.id ||
     session.tacticSnapshot?.id || session.selectedTacticId;
+  // Reactive pressure is only a score-driven v6 advantage while trailing.
+  // Momentum is not a substitute for being a goal behind; missing scores
+  // also cannot establish that the team is chasing an equaliser.
+  if (id === "chase_the_equaliser" || id === "all_out_attack") {
+    if (!finite(session.score?.for) || !finite(session.score?.against) ||
+        session.score.for >= session.score.against) return null;
+  }
   const routeEntry = Object.entries(ROUTES).find(([, value]) => value.plans.includes(id));
   const block = knownCompactBlock(session.opponent);
   if (!routeEntry || !block) return null;
