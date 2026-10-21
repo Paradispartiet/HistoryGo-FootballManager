@@ -76,8 +76,10 @@ for (const record of P1_EXISTING_ROLE_CORRECTIONS) {
   const effective = applyP1NewSourceClaims([raw])[0];
   ok(effective.naturalPositions[0] === expectedBrannRoles[record.playerId],
     `${record.playerId}: P1 overlay failed to correct natural position`);
-  ok(effective.strengths.length === raw.strengths.length,
-    `${record.playerId}: role fix must not invent strengths`);
+  const sourced = P1_EXISTING_SUPPLEMENTS.find((item) => item.playerId === record.playerId);
+  const expectedStrengths = sourced?.strengths ?? raw.strengths;
+  ok(JSON.stringify(effective.strengths) === JSON.stringify(expectedStrengths),
+    `${record.playerId}: role fix must preserve exactly the independently sourced strengths`);
 }
 
 const explicitRecords = [...P1_NEW_DOCUMENTED, ...P1_NEW_EVENT_ONLY, ...P1_NEW_PARTIAL, ...P1_EXISTING_SUPPLEMENTS];
