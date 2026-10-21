@@ -135,9 +135,9 @@ export function readGameState(session) {
       : totals.momentum >= 2 ? "leading" : totals.momentum <= -2 ? "behind" : "level";
     // Står det likt, er det SPILLET som går din vei — ikke tavla. «Du leder»
     // ved 1-1 var en direkte løgn mot resultattavla ved siden av.
-    label = state === "leading"
+    label = totals.momentum >= 2
       ? "Jevnt – du har taket"
-      : state === "behind"
+      : totals.momentum <= -2
         ? "Jevnt – de har taket"
         : GAME_STATE_LABELS.level;
   }
