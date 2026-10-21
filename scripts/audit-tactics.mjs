@@ -8,6 +8,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { TACTICAL_SEQUENCES } from "../src/football-tactical-sequences.js";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const results = [];
@@ -116,6 +117,30 @@ for (const plan of plans) {
   const toothless = plans.filter((plan) => !(plan.tags || []).some((tag) => known.has(tag)));
   check("hver plan har minst én tag som gir utslag", toothless.length === 0,
     toothless.map((p) => p.id).join(", "));
+}
+
+
+const PLAN_METRICS = new Set(["balanceScore","widthScore","depthScore","buildUpScore","pressScore","restDefenseScore"]);
+const OPPONENT_METRICS = new Set(["pressIntensity","pressResistance","defensiveStructure","defensiveCompactness","tacticalComplexity","transitionThreat","highLine","shortBuildUp","possessionControl"]);
+check("alle 18 kampplaner har én firestegs spill–motspill-kjede",
+  TACTICAL_SEQUENCES.length === plans.length &&
+  new Set(TACTICAL_SEQUENCES.map((chain) => chain.tacticId)).size === plans.length);
+for (const chain of TACTICAL_SEQUENCES) {
+  check(`${chain.tacticId}: kjent taktikk`, seen.has(chain.tacticId));
+  check(`${chain.tacticId}: fire ulike meningsfulle trekk`,
+    chain.moves.length === 4 && new Set(chain.moves).size === 4 &&
+    chain.moves.every((move) => typeof move === "string" && move.length >= 12));
+  check(`${chain.tacticId}: motgrep og svar`,
+    typeof chain.counter === "string" && chain.counter.length >= 16 &&
+    typeof chain.response === "string" && chain.response.length >= 16);
+  check(`${chain.tacticId}: reelle lagdimensjoner`,
+    Object.keys(chain.requires).length >= 2 &&
+    Object.entries(chain.requires).every(([name, threshold]) =>
+      PLAN_METRICS.has(name) && Number.isInteger(threshold) && threshold >= 50 && threshold <= 95));
+  check(`${chain.tacticId}: reelle motstanderdimensjoner`,
+    [chain.opponentCondition, chain.counterCondition].every((check) =>
+      OPPONENT_METRICS.has(check?.trait) &&
+      Number.isInteger(check.min) && check.min >= 50 && check.min <= 95));
 }
 
 // ---- Rapport ---------------------------------------------------------------
