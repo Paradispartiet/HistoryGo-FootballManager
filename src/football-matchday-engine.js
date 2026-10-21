@@ -4,7 +4,7 @@ import { evaluateTrainingDecisionSupport } from "./football-training-week.js";
 import { buildMatchExplanation } from "./football-match-explanation-engine.js";
 import { evaluateHistoricalOpponentMatchup } from "./football-historical-opponent-profiles.js";
 import { annotatePeriodTacticalChances } from "./football-tactical-match-moments.js";
-import { resolveHighPressBuildUp, annotateHighPressBuildUpChances } from "./football-matchday-high-press-v6.js";
+import { resolveHighPressBuildUp, annotateHighPressBuildUpChances, highPressPhaseRoll } from "./football-matchday-high-press-v6.js";
 import {
   applyOpponentAdjustment,
   createPlanChange,
@@ -2140,7 +2140,7 @@ export function advanceMatchClock(session) {
   // While v6 owns this situation, remove the old static plan-edge projection
   // for this period; otherwise the same tactical advantage is paid twice.
   // Sessions without sufficient role/opponent evidence retain the v5 path.
-  const phase = resolveHighPressBuildUp(session);
+  const phase = resolveHighPressBuildUp(session, { rng: () => highPressPhaseRoll(session, played) });
   const rate = currentExpectedGoalRate(session);
   const share = 1 / totalSegments;
   const staticEdge = num(session.planMatchup?.edge);
