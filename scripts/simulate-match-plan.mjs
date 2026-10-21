@@ -7,6 +7,7 @@
 // byttet ender opp i kampresultatet. Exit 1 ved brudd.
 
 import assert from "node:assert/strict";
+import { TACTICAL_SEQUENCES, evaluateTacticalSequences } from "../src/football-tactical-sequences.js";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -52,6 +53,57 @@ function check(label, run) {
 console.log("Kampplan v1 — strategi og bytte underveis\n");
 
 // ---------------------------------------------------------------------------
+check("alle 18 taktikker har betinget fire-trekks spill, motspill og svar", () => {
+  assert.equal(TACTICAL_SEQUENCES.length, plans.length);
+  for (const chain of TACTICAL_SEQUENCES) {
+    const plan = byId.get(chain.tacticId);
+    assert.ok(plan, `ukjent plan ${chain.tacticId}`);
+    assert.equal(chain.moves.length, 4, `fire trekk i ${chain.tacticId}`);
+    const opponent = { styleTraits: {
+      [chain.opponentCondition.trait]: chain.opponentCondition.min,
+      [chain.counterCondition.trait]: chain.counterCondition.min - 1
+    } };
+    // Defensive structure and press resistance may be top-level.
+    opponent[chain.counterCondition.trait] = chain.counterCondition.min - 1;
+    const ready = Object.fromEntries(Object.keys(chain.requires).map((key) => [key, 90]));
+    const supporting = evaluateTacticalSequences(chain.tacticId, opponent, ready)[0];
+    assert.equal(supporting?.status, "advantage", `${chain.tacticId}: viable interaction`);
+    assert.equal(supporting.edgeDelta, 1, "four moves must grant just one bounded advantage");
+    const missingKey = Object.keys(chain.requires)[0];
+    const missing = evaluateTacticalSequences(chain.tacticId, opponent,
+      { ...ready, [missingKey]: 25 })[0];
+    assert.equal(missing?.status, "unsupported", `${chain.tacticId}: role deficiency`);
+    assert.equal(missing.edgeDelta, 0);
+    const counteredOpponent = { ...opponent, styleTraits: { ...opponent.styleTraits,
+      [chain.counterCondition.trait]: chain.counterCondition.min },
+      [chain.counterCondition.trait]: chain.counterCondition.min };
+    const countered = evaluateTacticalSequences(chain.tacticId, counteredOpponent, ready)[0];
+    assert.equal(countered?.status, "countered", `${chain.tacticId}: genuine opposition reply`);
+    assert.equal(countered.edgeDelta, 0, `${chain.tacticId}: counter must neutralize pattern`);
+    const integrated = evaluatePlanVsOpponent(plan, opponent, { tacticalProfile: ready });
+    assert.equal(integrated.sequences?.[0]?.edgeDelta, 1);
+    const integratedCounter = evaluatePlanVsOpponent(plan, counteredOpponent, { tacticalProfile: ready });
+    assert.equal(integratedCounter.sequences?.[0]?.edgeDelta, 0);
+    assert.ok(typeof countered.response === "string" && countered.response.length > 16);
+  }
+});
+
+check("rangering bruker reell taktisk rolledekning", () => {
+  const p = byId.get("positional_overloads");
+  const opponent = { styleTraits: { defensiveCompactness: 68, tacticalComplexity: 50 } };
+  const fits = rankPlansForSituation([p], {
+    opponent, gameState: "level",
+    tacticalProfile: { buildUpScore: 75, widthScore: 74 }
+  })[0];
+  const lacks = rankPlansForSituation([p], {
+    opponent, gameState: "level",
+    tacticalProfile: { buildUpScore: 30, widthScore: 25 }
+  })[0];
+  assert.equal(fits.sequenceStatus, "advantage");
+  assert.equal(lacks.sequenceStatus, "unsupported");
+  assert.ok(fits.matchupEdge > lacks.matchupEdge);
+});
+
 check("katalogen er utvidet og organisert i familier", () => {
   assert.equal(data.schema, "historygo-football-manager.tactics.v2");
   assert.ok(plans.length >= 15, `bare ${plans.length} kampplaner`);

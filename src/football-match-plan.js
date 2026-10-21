@@ -1,3 +1,5 @@
+import { evaluateTacticalSequences } from "./football-tactical-sequences.js";
+
 // HG Football Manager — Match Plan v1
 //
 // Kampplanen er STRATEGI, ikke en rangering. Ingen plan er best i seg selv: den
@@ -399,8 +401,19 @@ export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {})
     });
   }
 
+  // In addition to the three generic evidence combinations, all 18 plans
+  // have one authored four-action scenario, a countermove and a reply.
+  // These are possibilities, not a literal four-pass event simulator.
+  const sequences = evaluateTacticalSequences(normalized.id, opponent, tacticalProfile);
+  const sequenceEdge = Math.min(1, sequences.reduce((sum, sequence) => sum + sequence.edgeDelta, 0));
+  edge += sequenceEdge;
+  sequences.forEach((sequence) => {
+    if (sequence.status === "advantage") notes.push(`Spillkjede: ${sequence.title}. Laget har dekning for bevegelsene.`);
+    else if (sequence.status === "countered") notes.push(`Motspill: ${sequence.counter}. Ditt mulige svar: ${sequence.response}.`);
+    else notes.push(`Spillkjeden ${sequence.title} trenger bedre faktisk rolle- og formasjonsdekning.`);
+  });
   const verdict = edge > 0 ? "gunstig" : edge < 0 ? "risikabel" : "nøytral";
-  return { edge, verdict, notes, opportunities, combinations };
+  return { edge, verdict, notes, opportunities, combinations, sequences };
 }
 
 // ----------------------------------------------------------------------------
@@ -487,19 +500,21 @@ export function createPlanChange({ fromPlan, toPlan, session, opponent, eventsRe
 
 // Sorter planene slik manageren skal lese dem: de som passer bildet først,
 // deretter de som er nærmest dagens plan (minst omstilling).
-export function rankPlansForSituation(plans, { currentPlan, gameState = "level", opponent } = {}) {
+export function rankPlansForSituation(plans, { currentPlan, gameState = "level", opponent, tacticalProfile } = {}) {
   return asArray(plans)
     .map((plan) => normalizeMatchPlan(plan))
     .filter(Boolean)
     .map((plan) => {
       const stateFit = evaluatePlanForGameState(plan, gameState);
-      const matchup = evaluatePlanVsOpponent(plan, opponent);
+      const matchup = evaluatePlanVsOpponent(plan, opponent, { tacticalProfile });
       const distance = currentPlan ? planDistance(currentPlan, plan) : 0;
       return {
         plan,
         fitsGameState: Boolean(stateFit?.fits),
         matchupEdge: num(matchup?.edge),
         matchupVerdict: matchup?.verdict || "nøytral",
+        sequenceStatus: matchup?.sequences?.[0]?.status || null,
+        sequenceTitle: matchup?.sequences?.[0]?.title || null,
         distance,
         isCurrent: Boolean(currentPlan && normalizeMatchPlan(currentPlan)?.id === plan.id),
         note: stateFit?.note || ""
