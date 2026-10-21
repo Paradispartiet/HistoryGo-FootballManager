@@ -231,6 +231,9 @@ export function buildOpponentTacticalSequences({ opponent, tactic, teamFit, resp
       .map(id => TACTICAL_PRINCIPLE_SOURCES[id])
       .filter(Boolean),
     counter: catalogPattern.counter, response: catalogPattern.response,
+    // Current simulated opponent movement, if one occurred during the match.
+    // No claim that historical opponents exhibited this exact movement.
+    liveExchange: result?.liveExchange || null,
     trigger: {
       trait: catalogPattern.opponentCondition.trait,
       value: triggerKnown ? triggerValue : null,

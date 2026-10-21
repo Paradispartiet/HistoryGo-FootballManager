@@ -497,6 +497,29 @@ function appendOpponentAnalysisWorkshop(body) {
       const actions = node("ol", "opponent-analysis-sequence-moves");
       chain.moves.forEach((move) => actions.append(node("li", "", move)));
       scene.append(actions);
+      if (chain.liveExchange) {
+        const exchange = chain.liveExchange;
+        const resolution = node("section", "opponent-analysis-live-exchange");
+        resolution.dataset.exchangeStatus = exchange.status;
+        resolution.append(
+          node("h5", "", "Motstanderens siste taktiske tilpasning"),
+          node("p", "", exchange.cause),
+          node("small", "", "Deterministisk kampsimulering – ikke historiske posisjonsdata.")
+        );
+        const actionsNow = node("ol", "opponent-analysis-live-exchange-steps");
+        exchange.steps.forEach((step) => {
+          const item = node("li", "", step.action +
+            (step.result === "blocked" ? " – avskåret" : " – mulig"));
+          item.dataset.stepStatus = step.result;
+          actionsNow.append(item);
+        });
+        resolution.append(actionsNow);
+        if (exchange.failureConsequence) {
+          resolution.append(node("p", "", "Ved mislykket forsøk: " + exchange.failureConsequence));
+        }
+        resolution.append(node("p", "", "Observer: " + exchange.managerObservation));
+        scene.append(resolution);
+      }
       const factors = node("ul", "opponent-analysis-sequence-requirements");
       chain.checks.forEach((factor) => {
         const li = node("li", "opponent-analysis-sequence-factor");

@@ -1,4 +1,5 @@
 import { evaluateTacticalSequences } from "./football-tactical-sequences.js";
+import { behaviourForOpponentAdjustment } from "./football-live-tactical-exchange.js";
 
 // HG Football Manager — Match Plan v1
 //
@@ -416,6 +417,10 @@ export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {})
     else if (sequence.status === "countered") notes.push(`Motspill: ${sequence.counter}. Ditt mulige svar: ${sequence.response}.`);
     else if (sequence.status === "unknown_counter") notes.push(`Spillkjeden ${sequence.title} har rolledekning, men motstanderens mulige motgrep er ikke undersøkt.`);
     else notes.push(`Spillkjeden ${sequence.title} trenger bedre faktisk rolle- og formasjonsdekning.`);
+    if (sequence.liveExchange) {
+      notes.push(`Dynamisk motspill: ${sequence.liveExchange.cause}`);
+      if (sequence.liveExchange.failureConsequence) notes.push(sequence.liveExchange.failureConsequence);
+    }
   });
   const verdict = edge > 0 ? "gunstig" : edge < 0 ? "risikabel" : "nøytral";
   return { edge, verdict, notes, opportunities, combinations, sequences };
@@ -586,6 +591,10 @@ export function applyOpponentAdjustment(opponent, adjustment) {
   return {
     ...opponent,
     styleTraits: shifted,
+    // Dynamic behaviour is tied to an EXPLICIT in-match reaction, not a
+    // guessed historical opponent observation. A different reaction replaces
+    // the previous lane/spacing/cover model.
+    tacticalBehaviour: behaviourForOpponentAdjustment(adjustment.id, { ...opponent, styleTraits: shifted }) || opponent.tacticalBehaviour || null,
     adjustmentId: adjustment.id,
     adjustmentLabel: adjustment.label
   };
