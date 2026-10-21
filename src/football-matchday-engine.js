@@ -6,6 +6,7 @@ import { evaluateHistoricalOpponentMatchup } from "./football-historical-opponen
 import { annotatePeriodTacticalChances } from "./football-tactical-match-moments.js";
 import { resolveHighPressBuildUp, annotateHighPressBuildUpChances, highPressPhaseRoll } from "./football-matchday-high-press-v6.js";
 import { resolveTurnoverTransition } from "./football-matchday-turnover-v6.js";
+import { resolveCompactBlockAttack, annotateCompactBlockChances } from "./football-matchday-compact-block-v6.js";
 import {
   applyOpponentAdjustment,
   createPlanChange,
@@ -1793,6 +1794,8 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     // Explicit opt-in for NEW matches. Existing in-progress saves keep their
     // original v6 build-up model until their match is completed.
     causalTransitionsVersion: 1,
+    // Activate causal compact-block actions only for newly started matches.
+    causalCompactBlockVersion: 1,
     sourcedSubstitutionVersion: 2,
     sourcedSubstitutionBaseline,
     id: `matchday-session-${Date.now()}`,
@@ -2145,6 +2148,11 @@ export function advanceMatchClock(session) {
   // for this period; otherwise the same tactical advantage is paid twice.
   // Sessions without sufficient role/opponent evidence retain the v5 path.
   const buildUpPhase = resolveHighPressBuildUp(session, { rng: () => highPressPhaseRoll(session, played) });
+  // Mutually exclusive phase per period: opponent press vs compact low block.
+  // Existing saves never acquire the new low-block model on restore.
+  const compactPhase = !buildUpPhase
+    ? resolveCompactBlockAttack(session, { rng: () => highPressPhaseRoll(session, played + ":compact-block") })
+    : null;
   const transition = resolveTurnoverTransition(session, buildUpPhase, {
     firstPassRoll: () => highPressPhaseRoll(session, played + ":forward-pass"),
     coverRoll: () => highPressPhaseRoll(session, played + ":rest-defence")
@@ -2153,7 +2161,7 @@ export function advanceMatchClock(session) {
   // loss; it is never added on top. A completed build-up has no transition.
   const phase = transition ? {
     ...buildUpPhase, transition, xgDeltaAgainst: transition.xgDeltaAgainst
-  } : buildUpPhase;
+  } : buildUpPhase || compactPhase;
   const rate = currentExpectedGoalRate(session);
   const share = 1 / totalSegments;
   const staticEdge = num(session.planMatchup?.edge);
@@ -2200,9 +2208,11 @@ export function advanceMatchClock(session) {
     ...buildChances(segmentXgFor, { ...range, side: "for" }),
     ...buildChances(segmentXgAgainst, { ...range, side: "against" })
   ].sort((a, b) => a.minute - b.minute || (a.side === "for" ? -1 : 1));
-  const chances = tacticalPhase
-    ? annotateHighPressBuildUpChances(generatedChances, tacticalPhase)
-    : annotatePeriodTacticalChances(session, generatedChances);
+  const chances = tacticalPhase?.situation === "compact_block_vs_attack"
+    ? annotateCompactBlockChances(generatedChances, tacticalPhase)
+    : tacticalPhase
+      ? annotateHighPressBuildUpChances(generatedChances, tacticalPhase)
+      : annotatePeriodTacticalChances(session, generatedChances);
 
   const goalsFor = chances.filter((c) => c.side === "for" && c.scored).length;
   const goalsAgainst = chances.filter((c) => c.side === "against" && c.scored).length;
