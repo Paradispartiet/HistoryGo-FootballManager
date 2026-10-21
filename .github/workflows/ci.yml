@@ -142,6 +142,7 @@ jobs:
           npm run sim:matchday
           npm run sim:high-press-v6
           npm run sim:turnovers-v6
+          npm run sim:compact-block-v6
           npm run sim:mini-season
           npm run sim:tournament
           npm run sim:match-plan
