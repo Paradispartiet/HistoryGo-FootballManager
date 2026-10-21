@@ -143,3 +143,37 @@ gjenvinning, første overgangspasning og avslutning; posisjons-/avstandsdata;
 og kalibrering av prosent-/xG-effekter mot uavhengige kampobservasjoner.
 Denne leveransen gir modellert beslutningssekvens, ikke fysisk
 tracking av elleve spillere.
+
+
+### v4 – kampmomenter knyttet til faktiske simulerte sjanser
+
+Den eksisterende kampklokken og xG-modellen skaper allerede sjanser,
+avslutninger og mål i perioder. v4 kobler **høyst én** dynamisk
+taktisk spill–motspill-kjede til en **allerede simulert** sjanse i hver
+periode, når motstanderens kjent/modellerte justering faktisk gir et
+`liveExchange`-resultat med en kompatibel planfase.
+
+- Velkjørt oppbygging kan forklare et gjennombrudd; vellykket press og
+  motpress kan forklare gjenvinning; en velfundert overgang kan forklare
+  en kontringssjanse.
+- Når motspillet avskjærer kjeden, kan en **eksisterende sjanse imot**
+  illustrere balltap, press brutt eller stoppet kontring.
+- Én hendelse har én tidsplassering og én xG-kvalitet. Ingen nye
+  sjanser, scoringer, tilfeldige kast eller numeriske xG-justeringer
+  opprettes ved merkingen.
+- Minuttloggen viser en utfoldbar, presist forklart firetrinns
+  *modellert* hendelseskjede. Merket vedvarer til sluttrapporten og
+  følger sesjonen gjennom vanlig lagring.
+
+En koblet sjanse er en **forklaringshypotese** om sannsynlig kampforløp,
+ikke bekreftet sporing av en historisk spillers posisjon, takling,
+balltap eller pasning. Manglende motstanderdata eller lagdekning
+gir ingen taktisk annotasjon. En motstandertilpasning og de
+eksisterende rollekravene må være representert i aktiv `planMatchup`.
+
+Dette er en mellomleveranse: den eksisterende xG- og sjansemotoren
+har allerede vurdert taktikken. Neste nivå er hendelsesbasert
+posisjonsmodell som faktisk bestemmer pressledd, klareringer,
+ballgjenvinninger og sluttprodukt **før** sjansene blir beregnet,
+med systematisk kalibrering mot kampdata. Man må da unngå å
+legge effektene oppå eksisterende taktisk `edge` en gang til.
