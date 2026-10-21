@@ -8,7 +8,7 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 35, expectedPartial: 2, expectedThin: 10, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 36, expectedPartial: 2, expectedThin: 9, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 21, expectedPartial: 3, expectedThin: 0, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
@@ -1443,6 +1443,19 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // Brann 2026-10-21: period-verified captaincy in 1985 and 1988; leadership only.
+  {
+    "playerId": "arne_moller",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "leadership"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Branns lagkaptein og samlende midtbanespiller gjennom sesonger på 1980-tallet.",
+    "claim": "Aftenpostens samtidige rapport fra Branns nedrykk i 1985 siterer Arne Møller eksplisitt som Branns kaptein og gjengir hans uttalelser om lagets ambisjoner. Aftenpostens senere historiske tilbakeblikk på cupåret 1988 omtaler ham også eksplisitt som Brann-kaptein. Gjentatt kapteinsansvar over flere sesonger gir smalt belegg for leadership på lagets midtbane; det dokumenterer ikke automatisk passing_range, vision eller game_reading.",
+    "source": "https://www.aftenposten.no/norge/i/0EqkG/hvem-tror-du-brann-tapte-for-forrige-gang-de-rykket-ned-fra-toppserien"
+  },
+
   // 2026-10-21: three source-bounded Brann-era historical profiles.
   {
     "playerId": "jan_knudsen",
