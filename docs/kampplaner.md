@@ -365,6 +365,7 @@ Kontramønster: `transitionThreat` minst 75.
 
 ### Faglige referanser
 
+- [England Football Learning – What is pressing in football](https://learn.englandfootball.com/articles-and-resources/coaching/resources/2022/what-is-pressing-in-football) – pressutløsere, felles bevegelse og motspill
 - [FourFourTwo – The high press: football tactics explained](https://www.fourfourtwo.com/features/the-high-press-football-tactics-explained) – press som kollektivt grep og bakromsrisiko
 - [Total Football Analysis – Training effective defensive transitions](https://totalfootballanalysis.com/article/tactical-theory-training-effective-defensive-transitions-tactical-analysis-tactics) – restforsvar, avstander og overganger
 - [Domisports – Third-man combinations & overloads](https://domisports.com/training/guide/fussball-pro-1-third-man-overloads) – overtall, tredjemann og sideskifte
