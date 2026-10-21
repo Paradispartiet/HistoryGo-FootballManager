@@ -470,3 +470,23 @@ Hvert lagledd viser de aktuelle, identifiserte **spillerrollene** som kan støtt
 lagdimensjonen. Disse holdes atskilt fra individuelt **kildebelagte ferdigheter**.
 En spiller i en relevant rolle er ikke automatisk dokumentert god til den;
 ukjent kildegrunnlag må fortsatt behandles som ukjent.
+
+
+## Kvalitetskontroll av de foreslåtte mottrekkene
+
+En `responsePlanId` er en **mulig ny kampplan**, ikke en garanti. Analyseavdelingen
+viser nå også en forhåndssjekk for **alle 18** foreslåtte svar:
+
+- de lagdimensjonene alternativets egen firetrekkskjede faktisk krever;
+- om dagens ellever foreløpig dekker disse kravene eller mangler bestemte lagledd;
+- om samme motstander også blokkerer det alternative mønsteret, eller om relevant
+  motstanderforutsetning/motgrep ennå er ukjent;
+- den alternative kampplanens egen risiko.
+
+Forhåndssjekken bruker eksisterende `evaluateTacticalSequences`, ingen ny
+individuell rating og ingen ekstra xG-bonus. Den viser **dagens** lagmetrikker
+med dagens taktikk; et faktisk taktikkbytte krever ny teamFit-beregning,
+rolle-/formasjonsvurdering og omstillingskostnad. Et foreslått alternativ som
+ikke kan gjennomføres, skal fremstå som **manglende dekning**, ikke som automatisk
+bedre. `sim:match-plan` kontrollerer alle 18 alternativene mot komplett,
+mangelfullt og ufullstendig lag, utilstrekkelig speiding og manglende katalognavn.

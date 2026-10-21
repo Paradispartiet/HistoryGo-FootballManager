@@ -288,6 +288,72 @@ check("alle 18 taktiske spillkjeder forklares i analyseavdelingen uten oppdikted
   }
 });
 
+check("alle 18 foreslåtte motgrep har etterprøvbar foreløpig lagkontroll", () => {
+  assert.equal(TACTICAL_SEQUENCES.length, plans.length);
+  for (const pattern of TACTICAL_SEQUENCES) {
+    const tactic = byId.get(pattern.tacticId);
+    const alternative = byId.get(pattern.responsePlanId);
+    const responsePattern = TACTICAL_SEQUENCES.find((item) =>
+      item.tacticId === alternative.id);
+    assert.ok(responsePattern, pattern.tacticId + ": missing alternative pattern");
+
+    const required = Object.fromEntries(Object.entries(responsePattern.requires)
+      .map(([metric, minimum]) => [metric, minimum + 5]));
+    const allKnown = {
+      [pattern.opponentCondition.trait]: pattern.opponentCondition.min,
+      [pattern.counterCondition.trait]: pattern.counterCondition.min,
+      [responsePattern.opponentCondition.trait]: responsePattern.opponentCondition.min,
+      [responsePattern.counterCondition.trait]: responsePattern.counterCondition.min - 1
+    };
+    // If the same trait drives both plan triggers, the last written value may
+    // change the original trigger; assessment remains cautious in that case.
+    const enemy = {
+      id: "test_" + pattern.tacticId,
+      styleTraits: allKnown,
+      [pattern.counterCondition.trait]: pattern.counterCondition.min,
+      [responsePattern.counterCondition.trait]: responsePattern.counterCondition.min - 1
+    };
+    const team = {
+      completeCount: 11, totalSlots: 11,
+      metrics: required, assignments: [], sourcedSkillTendencies: {}
+    };
+    const get = (enemyValue, teamValue, catalog = plans) =>
+      buildOpponentTacticalSequences({
+        opponent: enemyValue, tactic, teamFit: teamValue, tactics: catalog
+      })[0];
+    const preview = get(enemy, team).responsePreview;
+    assert.ok(preview, pattern.tacticId + ": no response assessment");
+    assert.equal(preview.requirements.length,
+      Object.keys(responsePattern.requires).length);
+    assert.ok(preview.requirements.every((entry) => entry.status === "ready"));
+    assert.ok(preview.explanation.length > 10);
+    assert.equal(preview.risk, alternative.risks[0]);
+    assert.ok(["advantage", "countered", "not_exposed", "unknown_counter"].includes(preview.status),
+      pattern.tacticId + ": must state whether alternative has a real opening");
+
+    const metric = Object.keys(responsePattern.requires)[0];
+    const weakTeam = {
+      ...team, metrics: { ...required, [metric]: responsePattern.requires[metric] - 1 }
+    };
+    const weakness = get(enemy, weakTeam).responsePreview;
+    assert.equal(weakness.requirements.find(x => x.metric === metric).status, "gap");
+    if (preview.status === "advantage" || preview.status === "countered") {
+      assert.equal(weakness.status, "unsupported",
+        pattern.tacticId + ": cannot recommend an unplayable alternative");
+    }
+    const unknownEnemy = get({ id: "no_scouting" }, team).responsePreview;
+    assert.equal(unknownEnemy.status, "unknown_opponent");
+    const incomplete = get(enemy, { ...team, completeCount: 8 }).responsePreview;
+    assert.equal(incomplete.status, "incomplete");
+    const missingCatalog = get(enemy, team, []).responsePreview;
+    assert.equal(missingCatalog.status, "unavailable");
+    // Producing advice alone changes neither xG nor saved state.
+    const snapshot = JSON.stringify({ enemy, team, tactic });
+    get(enemy, team);
+    assert.equal(JSON.stringify({ enemy, team, tactic }), snapshot);
+  }
+});
+
 check("rangering bruker reell taktisk rolledekning", () => {
   const p = byId.get("positional_overloads");
   const opponent = { styleTraits: { defensiveCompactness: 68, tacticalComplexity: 50 } };

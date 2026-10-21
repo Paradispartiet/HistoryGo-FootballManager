@@ -1,5 +1,5 @@
 import { evaluatePlanVsOpponent } from "./football-match-plan.js";
-import { TACTICAL_SEQUENCES } from "./football-tactical-sequences.js";
+import { TACTICAL_SEQUENCES, evaluateTacticalSequences } from "./football-tactical-sequences.js";
 
 // Motstanderforberedelse v1
 //
@@ -165,10 +165,52 @@ export function buildOpponentTacticalSequences({ opponent, tactic, teamFit, tact
   // no counter-counter bonus is created by naming this option.
   const nextPlan = asArray(tactics).find((plan) =>
     plan?.id === catalogPattern.responsePlanId) || null;
+  const nextPattern = TACTICAL_SEQUENCES.find((pattern) =>
+    pattern.tacticId === nextPlan?.id) || null;
+  // A source-backed suggestion is not a guarantee. Evaluate the proposed
+  // counter-response against the SAME known opponent and today's actual XI.
+  // Metrics are a PREVIEW from the current tactic; changing plan requires
+  // recalculating teamFit, training familiarity and transition cost.
+  const responseChecks = Object.entries(nextPattern?.requires || {}).map(([metric, minimum]) => {
+    const raw = teamFit?.metrics?.[metric];
+    const value = typeof raw === "number" && Number.isFinite(raw) ? raw : null;
+    return { metric, label: SEQUENCE_METRIC_LABELS[metric] || metric,
+      minimum, value, status: value === null ? "unknown" : value >= minimum ? "ready" : "gap" };
+  });
+  const responseEvaluation = nextPlan && opponent?.styleTraits && teamFit?.metrics
+    ? evaluateTacticalSequences(nextPlan.id, opponent, teamFit.metrics)[0] || null
+    : null;
+  const responseStatus = !nextPlan || !nextPattern ? "unavailable"
+    : incomplete ? "incomplete"
+    : !opponent?.styleTraits ? "unknown_opponent"
+    : !teamFit?.metrics ? "unknown_team"
+    : responseEvaluation?.status || "not_exposed";
+  const responsePreview = {
+    status: responseStatus,
+    requirements: responseChecks,
+    metCount: responseChecks.filter((check) => check.status === "ready").length,
+    requiredCount: responseChecks.length,
+    risk: asArray(nextPlan?.risks)[0] || "",
+    responsePattern: nextPattern?.title || "",
+    // Any advantage is provisional: current team metrics depend on current
+    // assigned tactic and may change after the manager switches.
+    explanation: {
+      advantage: "Mulig dekning med dagens ellever. Ny kampplan må beregnes på nytt etter byttet.",
+      unsupported: "Dagens ellever mangler minst ett nødvendig lagledd for alternativet.",
+      countered: "Motstanderen har også et motgrep mot det foreslåtte alternativet.",
+      unknown_counter: "Rollene kan støtte alternativet, men motstanderens motgrep er ikke kartlagt.",
+      not_exposed: "Den kjente motstanderprofilen viser ikke svakheten dette alternativet søker.",
+      incomplete: "Elleveren er ikke komplett. Ingen taktisk anbefaling kan konkluderes.",
+      unknown_team: "Lagets taktiske dekning er ukjent. Vurder roller og formasjon først.",
+      unknown_opponent: "Motstanderens taktiske trekk er utilstrekkelig kartlagt.",
+      unavailable: "Det foreslåtte alternativet finnes ikke i aktiv kampplankatalog."
+    }[responseStatus]
+  };
   return [{
     id: catalogPattern.tacticId, title: catalogPattern.title,
     responsePlanId: catalogPattern.responsePlanId,
     responsePlanName: nextPlan?.name || null,
+    responsePreview,
     moves: catalogPattern.moves.slice(),
     counter: catalogPattern.counter, response: catalogPattern.response,
     trigger: {
