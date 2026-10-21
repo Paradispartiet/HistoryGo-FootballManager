@@ -117,5 +117,130 @@ export function evaluateLiveTacticalExchange(pattern, opponent) {
     };
   }
 
+
+  // Remaining fourteen authored plans, resolved against distinct mechanisms.
+  // 'Observed' here means a stated simulated shape, never a historic tracking
+  // observation. Each chain has one dependency that can stop later actions.
+  const rule = LIVE_EXCHANGE_RULES[pattern.tacticId];
+  if (rule) {
+    const observed = shape[rule.signal];
+    if (observed !== rule.counterValue && observed !== rule.freeValue) return null;
+    const blocked = observed === rule.counterValue;
+    return {
+      status: blocked ? "countered" : "advantage",
+      cause: blocked ? rule.counterExplanation : rule.freeExplanation,
+      steps: pattern.moves.map((action, index) => ({
+        action, result: blocked && index >= rule.breakAt ? "blocked" : "available"
+      })),
+      failureConsequence: blocked ? rule.failure : null,
+      managerObservation: rule.observe,
+      evidence: { ...shape }
+    };
+  }
+
   return null;
 }
+
+// Each rule encodes ONE relevant opponent counter and the ensuing limitation.
+// Triggers and skill prerequisites still live in TACTICAL_SEQUENCES; this does
+// not claim that every favourable signal produces a real goal or recovery.
+export const LIVE_EXCHANGE_RULES = Object.freeze({
+  positional_overloads: {
+    signal: "wideShift", counterValue: "covered", freeValue: "open", breakAt: 2,
+    counterExplanation: "Samordnet sideforskyvning lukker mottakeren på motsatt side før vendingen.",
+    freeExplanation: "Motstanderens svake sidesikring gir en mulig fri kant etter vending.",
+    failure: "Et forutsigbart sideskifte kan brytes og gi overgang imot.",
+    observe: "Følg både ballside-overtallet, vendingens tid og mottakeren på svak side."
+  },
+  high_press_343: {
+    signal: "pressEscape", counterValue: "supported", freeValue: "isolated", breakAt: 2,
+    counterExplanation: "Motstanderen har et støttet pasningsledd som spiller gjennom pressfellen.",
+    freeExplanation: "Mottakeren mangler støtten som kreves for å bryte et koordinert press.",
+    failure: "Presset blir overspilt og kan åpne rom bak den fremste vingbacken.",
+    observe: "Se om fremste presser støttes av dekning, midtbane og en sikret bakre linje."
+  },
+  counter_press_recovery: {
+    signal: "pressEscape", counterValue: "supported", freeValue: "isolated", breakAt: 2,
+    counterExplanation: "Rettvendt støtte og neste pasning spiller forbi gjenvinningspresset.",
+    freeExplanation: "Motstanderen mangler utspillsstøtte i første overgang.",
+    failure: "Mislykket gjenvinning kan åpne større kontringsrom enn det opprinnelige angrepet.",
+    observe: "Se etter nærmeste ballpresser, stengte utpasninger og sikring bak dem."
+  },
+  midfield_press_trap: {
+    signal: "pressEscape", counterValue: "supported", freeValue: "isolated", breakAt: 2,
+    counterExplanation: "En støttet mottaker vender ut av midtbanefellen med neste pasning.",
+    freeExplanation: "Uten tilgjengelig støtte kan en styrt sentral pasning fanges.",
+    failure: "Fellen åpnes når mottaker kan vende før neste forsvarer har flyttet.",
+    observe: "Kontroller pressutløser, støttevinkel og om bakre lagdel skyver samtidig."
+  },
+  deep_block_long_release: {
+    signal: "secondBall", counterValue: "covered", freeValue: "loose", breakAt: 2,
+    counterExplanation: "Motstanderens sikringsledd kontrollerer nedfallsrommet etter langballen.",
+    freeExplanation: "Det finnes et åpent nedfallsrom for laget som spiller direkte.",
+    failure: "En klarering uten andreballstøtte gir et nytt angrep imot.",
+    observe: "Se hvem som konkurrerer om første ball og hvem som står klar for nedfallet."
+  },
+  direct_second_balls: {
+    signal: "secondBall", counterValue: "covered", freeValue: "loose", breakAt: 2,
+    counterExplanation: "Deres midtbane dekker nedfallsrommet og stopper andreballskjeden.",
+    freeExplanation: "Åpent nedfallsrom lar støttespilleren sette neste pasning.",
+    failure: "Tap av både første og andre ball kan gi vedvarende motstandertrykk.",
+    observe: "Vurder duellstøtte, avstand fra mottaker og motstanderens balanse bak ballen."
+  },
+  target_man_focus: {
+    signal: "targetDuel", counterValue: "double", freeValue: "single", breakAt: 1,
+    counterExplanation: "Mottaksspissen blir fanget av samtidig duellpress og sikring.",
+    freeExplanation: "En isolert forsvarer kan gi rom til avlegg og tredje løp.",
+    failure: "Uten rent avlegg blir midtbanen stående bak ballen under et mulig brudd.",
+    observe: "Se om spissen får vendt eller lagt av, og om tredje løper faktisk har fart."
+  },
+  wide_fast_433: {
+    signal: "wideShift", counterValue: "covered", freeValue: "open", breakAt: 2,
+    counterExplanation: "Kollektiv sidesikring stopper kantens førstevending før boksløpene.",
+    freeExplanation: "En utilstrekkelig forskyvning gir kantspilleren isolasjon og tid.",
+    failure: "En innestengt kantspiller kan miste ballen ved sidelinja.",
+    observe: "Følg forsvarende back, nærmeste sikringsspiller og støtte bak kanten."
+  },
+  crossing_box_presence: {
+    signal: "boxCover", counterValue: "protected", freeValue: "unprotected", breakAt: 2,
+    counterExplanation: "Førsteduell og romsikring i boksen bryter innleggets mottakskjede.",
+    freeExplanation: "Mangelfull bokssikring kan gi rom for ulike angriperløp.",
+    failure: "Mange innlegg uten timing eller sikring kan gi farlige klareringsoverganger.",
+    observe: "Se om fremste stolpe, straffemerket og returommet har støtte i riktig øyeblikk."
+  },
+  overlap_channels: {
+    signal: "counterOutlet", counterValue: "available", freeValue: "isolated", breakAt: 3,
+    counterExplanation: "En fri kontringsmottaker kan angripe rommet bak den høye backen.",
+    freeExplanation: "Motstanderen mangler en tilgjengelig første kontringsutløser.",
+    failure: "To høye backer uten balansert sekser gir gjennombrudd imot ved balltap.",
+    observe: "Se hvem som sikrer den fraflyttede kanalen idet overlappen starter."
+  },
+  see_out_the_game: {
+    signal: "centralPocket", counterValue: "available", freeValue: "blocked", breakAt: 2,
+    counterExplanation: "En rettvendt mottaker mellom lagdelene kan dra ut stopper.",
+    freeExplanation: "Motstanderen mangler et tilgjengelig mellomrom å vende opp i.",
+    failure: "En passiv dyp blokk kan bli låst under langvarig trykk.",
+    observe: "Følg avstanden mellom midtbane og forsvar når ballen skifter side."
+  },
+  chase_the_equaliser: {
+    signal: "counterOutlet", counterValue: "available", freeValue: "isolated", breakAt: 3,
+    counterExplanation: "Motstanderen har første kontringsmottaker bak det høye sluttpresset.",
+    freeExplanation: "Motstanderen mangler en umiddelbar utløser for kontring.",
+    failure: "Et mislykket press åpner bakrom bak begge oppflyttede backer.",
+    observe: "Kontroller gjenvinningsavstander og bakre sikring før laget sender flere inn."
+  },
+  slow_it_down: {
+    signal: "passingLaneCover", counterValue: "central", freeValue: "none", breakAt: 2,
+    counterExplanation: "Koordinert dekning av returpasningen bryter den rolige oppbyggingen.",
+    freeExplanation: "Uten sentral dekning kan en trygg støttepasning løse presset.",
+    failure: "Lavt tempo uten pasningsvinkler gir risiko for balltap nær eget mål.",
+    observe: "Se om begge støttelinjene og keeperen fortsatt har frie vinkler."
+  },
+  all_out_attack: {
+    signal: "counterOutlet", counterValue: "available", freeValue: "isolated", breakAt: 3,
+    counterExplanation: "En fri mottaker bak fremste pressledd kan utløse en stor sjanse imot.",
+    freeExplanation: "Det første kontringsleddet til motstanderen er isolert.",
+    failure: "Når siste sikringsledd brytes, kan en eneste langpasning sette angriper fri.",
+    observe: "Se om laget har en bakre sikrer og hvem som dekker rommet ved balltap."
+  }
+});
