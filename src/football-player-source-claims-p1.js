@@ -8,7 +8,7 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 38, expectedPartial: 2, expectedThin: 7, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 39, expectedPartial: 2, expectedThin: 6, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 21, expectedPartial: 3, expectedThin: 0, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
@@ -1443,6 +1443,17 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // Brann 2026-10-21: teammate's career retrospective, distinct from match statistics.
+  {
+    "playerId": "frode_larsen",
+    "placeId": "brann_stadion",
+    "strengths": ["dribbling", "chance_creation"],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Dribleorientert høyrekant med markert repertoar én mot én og evne til å tilrettelegge sjanser for medspillere i Brann-årene.",
+    "claim": "I Bergens Tidendes minneartikkel fra 21. juni 2017 beskriver tidligere lagkamerat Bjørn Dahl Frode Larsen som en driblesterk høyreflankspiller med usedvanlig driblerepertoar, og som en svært god tilrettelegger. Dette gir individuelt belegg for dribbling og chance_creation på tvers av Brann-karrieren, men dokumenterer ikke spesifikt pace, finishing, crossing eller defensiv duellstyrke. Kilden er en retrospektiv lagkameratvurdering, ikke måledata.",
+    "source": "https://www.bt.no/sport/i/kJRvPL/brann-legenden-frode-larsen-er-doed",
+    "supportingSources": ["https://www.brann.no/nyheter/skal-hedre-avdode-frode-larsen"]
+  },
   // Brann 2026-10-21: narrow source-based goalkeeping and wingback characterizations.
   {
     "playerId": "sigurd_wathne",
