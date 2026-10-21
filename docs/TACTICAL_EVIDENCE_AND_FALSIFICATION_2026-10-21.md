@@ -126,7 +126,13 @@ tillegg ha faktisk underlege på tavla før v6-kjeden aktiveres. 0–0, 1–1,
 ledelse og manglende resultat gir ingen sluttpressbonus. I den syntetiske
 matrisen er disse to planenes kamper satt til underlege, mens de øvrige
 planene fortsatt testes med sine relevante stillinger. Også planvurderingen
-skiller nå tavlestilling fra momentum ved uavgjort.
+skiller nå tavlestilling fra momentum ved uavgjort. For de tre
+stillingsavhengige v6-planene blir den eldre statiske matchup-xG-en
+**også** satt til nøytral når stillingen ikke kvalifiserer (eller
+stillingen er ukjent). Dette hindrer en skjult bonus via v5-fallback.
+Tidligere kamp-lagringer beholder regnskapet sitt. Matrisen kontrollerer
+at avvist kampstilling gir identisk periode-xG med eksplisitt nøytral
+matchup-edge, og verken v6-hendelse eller statisk taktikkbonus.
 
 Regresjonen krever at alle 18 planene har minst én faktisk *kvalifisert* historisk stilmotstander i det eksisterende registeret. Kombinasjoner som ikke kvalifiserer rapporteres eksplisitt som **ikke aktivert**; det er ikke en feil at en taktikk mangler situasjonsbonus mot en stil den ikke er laget for. Rapporten teller kvalifiserte kombinasjoner og rollefit-sensitive tilfeller, slik at generiske/universelle taktikkbonuser avdekkes før en ny publisering.
 
