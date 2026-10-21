@@ -2519,6 +2519,14 @@ const EXISTING_ROLE_CORRECTION_BY_ID = new Map(
 );
 export const P1_ROLE_FIELDS = Object.freeze(["naturalPositions","usablePositions","poorFits","archetypeIds","archetypes","needs","preferredRoles","likesTactics","dislikesTactics","warningWhenMisused"]);
 
+export function applyP1RoleCorrectionsToPlayer(player) {
+  const correction = player && EXISTING_ROLE_CORRECTION_BY_ID.get(player.id);
+  if (!correction || getP1HeritageForPlayer(player)?.placeId !== correction.placeId) return player;
+  return { ...player, ...Object.fromEntries(P1_ROLE_FIELDS.map((field) => [
+    field, Array.isArray(correction[field]) ? [...correction[field]] : correction[field]
+  ])) };
+}
+
 export function applyP1SourceClaimsToPlayer(player) {
   const heritage = getP1HeritageForPlayer(player);
   if (!heritage) return player;
@@ -2526,10 +2534,7 @@ export function applyP1SourceClaimsToPlayer(player) {
     const record = getP1NewSourceRecord(player);
     return { ...player, strengths: [...record.strengths] };
   }
-  const correction = EXISTING_ROLE_CORRECTION_BY_ID.get(player.id);
-  const alignedPlayer = correction && correction.placeId === heritage.placeId
-    ? { ...player, ...Object.fromEntries(P1_ROLE_FIELDS.map((field) => [field, correction[field]])) }
-    : player;
+  const alignedPlayer = applyP1RoleCorrectionsToPlayer(player);
   const supplement = EXISTING_SUPPLEMENT_BY_ID.get(player.id);
   if (supplement && supplement.placeId === heritage.placeId) {
     return { ...alignedPlayer, strengths: [...supplement.strengths] };
