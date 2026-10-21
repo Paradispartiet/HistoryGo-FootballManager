@@ -145,6 +145,36 @@ Denne leveransen gir modellert beslutningssekvens, ikke fysisk
 tracking av elleve spillere.
 
 
+### Kampdag: hendelsesbaserte overgangskjeder (første integrasjon)
+
+De modellerte spill–motspill-forholdene kan nå knyttes til en faktisk
+**avgjort managerhendelse** i den eksisterende kampdagen. For et
+avgrenset, eksplisitt sett press-, andreball- og overgangssituasjoner
+lagres fire stadier: utløser, støtte eller sikringssvikt, hvem som får
+kontroll i neste ledd, og konsekvensen for neste angrep.
+
+Viktig skille mellom nivåene:
+
+1. `resolveMatchdayDecision` avgjør valgets effekt mot faktisk lagfit og
+   de eksisterende taktiske ferdighetene.
+2. `resolveTacticalPossession` utleder en **simulert hendelseskjede**
+   fra den allerede avgjorte beslutningen. Nøytrale eller irrelevante
+   valg produserer ingen oppdiktet gjenvinning.
+3. Kjeden blir del av beslutningshistorikken og kampens minuttlogg.
+   Den kan leses i kamp og i full kamprapport etterpå.
+4. `existingXgEffect` peker på beslutningens **allerede beregnede**
+   xG-modifikator. Kjeden gjør **ingen separat xG- eller målberegning**.
+   Sesongutfall og resultat kan derfor ikke forsterkes ved dobbeltelling.
+
+Dette er den første sporbare koblingen mellom managerens valg,
+taktisk hendelse og økonomien i sjanseskaping. **Det er ikke trackingdata
+av faktiske dueller, koordinater eller avslutninger**, og modellen
+skal ikke hevde at den dokumenterer én bestemt historisk spillsekvens.
+Neste steg er eget avgrenset hendelsesutfall med sannsynlighetsmodell
+for sjanser og balltap, kalibrert mot kampdata – ikke en ny, fri xG-bonus
+lagt på dagens resultat.
+
+
 ### v4 – kampmomenter knyttet til faktiske simulerte sjanser
 
 Den eksisterende kampklokken og xG-modellen skaper allerede sjanser,

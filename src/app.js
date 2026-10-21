@@ -4572,7 +4572,9 @@ function chooseMatchdayDecision(optionId) {
   });
   session = state.matchday.session;
 
+  const tacticalPossession = resolution.tacticalPossession;
   session.decisions.push({
+    tacticalPossession,
     eventId: event.id,
     eventTitle: event.title,
     optionId: option.id,
@@ -4605,6 +4607,16 @@ function chooseMatchdayDecision(optionId) {
         }
       : null
   });
+
+  // Narrative only: the decision's xG was already counted by the engine.
+  if (tacticalPossession) {
+    state.matchday.session = logMatchMoment(session, {
+      type: "tactical-possession",
+      side: tacticalPossession.side,
+      detail: tacticalPossession.summary
+    });
+    session = state.matchday.session;
+  }
 
   if (eventIndex + 1 < session.events.length) {
     session.phase = `event_${eventIndex + 2}`;
@@ -10463,6 +10475,39 @@ function appendTrainingObservationPrompt(parent, hypothesis, event) {
 
 // Tatt managergrep med tone-farget konsekvens, brukt både underveis og i
 // sluttrapporten.
+// Four-step possession/transition chain from the scored manager choice.
+// This display is not a second match simulation and does not add xG.
+function appendTacticalPossessionLog(parent, decisions, heading, { latestOnly = false } = {}) {
+  const chains = Array.isArray(decisions)
+    ? decisions.map((decision) => decision?.tacticalPossession).filter(Boolean)
+    : [];
+  if (!chains.length) return;
+  appendMatchdaySubheading(parent, heading);
+  const selected = latestOnly ? chains.slice(-1) : chains;
+  selected.forEach((chain) => {
+    const details = document.createElement("details");
+    details.className = "matchday-tactical-possession";
+    const summary = document.createElement("summary");
+    summary.textContent = chain.outcome === "successful"
+      ? "Simulert overgang: grepet lykkes" : "Simulert overgang: motspillet lykkes";
+    const list = document.createElement("ol");
+    chain.steps.forEach((step) => {
+      const item = document.createElement("li");
+      item.textContent = step.action;
+      list.append(item);
+    });
+    const explanation = document.createElement("p");
+    explanation.className = "muted-text";
+    const signed = (value) => value > 0 ? "+" + value.toFixed(2) : value.toFixed(2);
+    const xg = chain.existingXgEffect;
+    explanation.textContent = "Eksisterende effekt fra managergrepet: " +
+      "xG " + signed(xg.for) + " for / " + signed(xg.against) + " mot. " +
+      "Dette legges ikke til en gang til. Ingen enkeltpasning eller avslutning er fysisk sporet.";
+    details.append(summary, list, explanation);
+    parent.append(details);
+  });
+}
+
 function appendMatchdayDecisionLog(parent, decisions, heading) {
   if (!Array.isArray(decisions) || decisions.length === 0) {
     return;
@@ -10796,6 +10841,7 @@ function renderMatchdaySessionEvent(container, session, eventIndex) {
 
   // Tidligere grep med kort konsekvens.
   appendMatchdayDecisionLog(card, session.decisions, "Grep så langt");
+  appendTacticalPossessionLog(card, session.decisions, "Siste simulerte spillsekvens", { latestOnly: true });
 
   const event = session.events[eventIndex];
 
@@ -11825,6 +11871,7 @@ function renderMatchdayReport(container, lastMatch) {
 
   // Managergrep med konsekvens (v0.2).
   appendMatchdayDecisionLog(body, report.decisions, "Managergrep i kampen");
+  appendTacticalPossessionLog(body, lastMatch?.decisions, "Gjenvinning, balltap og kontringer");
   appendMatchPlanChangeLog(body, lastMatch);
   appendSubstitutionLog(body, lastMatch);
   appendOpponentAdjustmentLog(body, lastMatch);
