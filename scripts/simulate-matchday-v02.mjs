@@ -29,6 +29,7 @@ import {
   getFormationFamily,
   generateMatchdayEvents,
   createMatchdaySession,
+  advanceMatchClock,
   resolveMatchdayDecision,
   finalizeMatchdaySession,
   getSessionEventIndex
@@ -206,6 +207,49 @@ familyExpectations.forEach(([id]) => {
   check(`${id}: familiehendelser har sesongdybde utover gamle tre`, familyEventIds.size >= 4);
 });
 
+// Returkamper: dokumentert kampkontekst velger nye situasjoner uten ny motor,
+// og den konkrete motstanderstilen får en egen bortekampsituasjon.
+const returnFormation = getFormationById("classic_442");
+const returnMetrics = {
+  balanceScore: 50, widthScore: 50, depthScore: 50, buildUpScore: 50,
+  pressScore: 50, restDefenseScore: 50, roleFitAverage: 50, relationshipScore: 50
+};
+const returnOpponent = { ...OPPONENT_PROFILES[0], id: "club_example", baseStyleId: "high_press_opponent" };
+const fixtureSequences = new Set();
+for (let round = 1; round <= 30; round += 1) {
+  const fixture = { ...returnOpponent, round, homeAway: round <= 15 ? "home" : "away" };
+  const events = generateMatchdayEvents({
+    formation: returnFormation, tacticalProfile: returnMetrics, opponent: fixture
+  });
+  fixtureSequences.add(events.map((event) => event.id).join("|"));
+  const repeat = generateMatchdayEvents({
+    formation: returnFormation, tacticalProfile: returnMetrics, opponent: fixture
+  });
+  check(`runde ${round}: hendelser er stabile ved identisk terminlistekontekst`,
+    JSON.stringify(events) === JSON.stringify(repeat));
+  check(`runde ${round}: tre konkrete valgsituasjoner`,
+    events.length === 3 && events.every((event) => event.options.length >= 2));
+  check(`runde ${round}: klubbens pressprofil beholdes`,
+    events[1].id === (round <= 15 ? "opp_high_press" : "opp_press_second_balls"));
+}
+check("30 runder mot samme stil kan gi minst tre ulike beslutningsrekker", fixtureSequences.size >= 3,
+  String(fixtureSequences.size));
+const oldStyleEvents = generateMatchdayEvents({
+  formation: returnFormation, tacticalProfile: returnMetrics, opponent: OPPONENT_PROFILES[0]
+});
+check("eldre kall uten kampkontekst bruker original situasjon", oldStyleEvents[1]?.id === "opp_high_press");
+
+// Ekte ligaflyt må sende terminlistens identifikator videre til kampmotoren.
+// Uten denne koblingen ville den syntetiske rundevariasjonen ikke nå brukeren.
+const appSource = readFileSync(join(ROOT, "src/app.js"), "utf8");
+const opponentAdapter = appSource.split("function getMiniSeasonNextOpponent()")[1]?.split("function registerMatchInMiniSeason(")[0] || "";
+check("ligakampen sender faktisk runde til beslutningsmotoren",
+  opponentAdapter.includes("round: opponent.round,"));
+check("ligakampen sender faktisk terminliste-ID til beslutningsmotoren",
+  opponentAdapter.includes("matchId: opponent.matchId || null,"));
+check("kvalifiseringskampen beholder sin egen terminliste-ID",
+  opponentAdapter.includes("matchId: playoffOpponent.matchId || null,"));
+
 // Analyseplan: fokus skal endre HVA kampen løfter fram, aldri option-impact.
 console.log("\nMotstanderanalyse → kampsituasjon:");
 const neutralProfile = {
@@ -346,6 +390,57 @@ check("History Go-hint finnes", typeof result.historyGoHint === "string" && resu
 const report = createMatchReport(result);
 check("createMatchReport tar med v0.2-feltene", report.decisions.length === 3 && Boolean(report.formationVerdict) && Boolean(report.opponentStyle));
 check("treningshypotesen følger urørt til resultat og rapport", result.trainingExerciseHypothesis?.setup === session.trainingExerciseHypothesis.setup && report.trainingExerciseHypothesis === result.trainingExerciseHypothesis);
+
+// --- 3a) Live match: substitutions must affect the actual next period -----
+console.log("\nLive bytter og xG som stemmer med kampforløpet:");
+const liveBaseline = createMatchdaySession({
+  teamFit: strongFit, formation: wmFormation, tactic,
+  activeClassifications: [], coachContext: strongCoach, opponent: pickOpponentProfile(1)
+});
+const firstPeriod = advanceMatchClock(liveBaseline);
+const goodSubEffect = {
+  xgDeltaFor: 1.2, xgDeltaAgainst: -0.4,
+  momentumDelta: 1, riskDelta: 0, tacticalClarityDelta: 0
+};
+const badSubEffect = {
+  xgDeltaFor: -0.8, xgDeltaAgainst: 0.8,
+  momentumDelta: -1, riskDelta: 2, tacticalClarityDelta: -1
+};
+const withGoodSub = {
+  ...firstPeriod, substitutions: [{ inPlayerId: "reserve_a", effects: goodSubEffect }]
+};
+const withBadSub = {
+  ...firstPeriod, substitutions: [{ inPlayerId: "reserve_a", effects: badSubEffect }]
+};
+const goodNextPeriod = advanceMatchClock(withGoodSub);
+const badNextPeriod = advanceMatchClock(withBadSub);
+const normalNextPeriod = advanceMatchClock(firstPeriod);
+const nextIndex = firstPeriod.timeline.length;
+check("positivt innbytte øker xG i neste spilte periode",
+  goodNextPeriod.timeline[nextIndex].expectedGoals.for > normalNextPeriod.timeline[nextIndex].expectedGoals.for);
+check("negativt innbytte senker xG i neste spilte periode",
+  badNextPeriod.timeline[nextIndex].expectedGoals.for < normalNextPeriod.timeline[nextIndex].expectedGoals.for);
+check("risikabelt innbytte øker xG imot i neste spilte periode",
+  badNextPeriod.timeline[nextIndex].expectedGoals.against > normalNextPeriod.timeline[nextIndex].expectedGoals.against);
+check("innbytte før neste periode endrer ikke xG allerede spilt",
+  goodNextPeriod.timeline[0].expectedGoals.for === firstPeriod.timeline[0].expectedGoals.for);
+
+let completeLive = goodNextPeriod;
+while (completeLive.timeline.length < completeLive.events.length + 1) {
+  completeLive = advanceMatchClock(completeLive);
+}
+const completeResult = finalizeMatchdaySession(completeLive);
+const summedPeriodXg = completeLive.timeline.reduce((a, period) => ({
+  for: a.for + period.expectedGoals.for,
+  against: a.against + period.expectedGoals.against
+}), { for: 0, against: 0 });
+check("sluttrapportens xG er summen av de faktiske kampperiodene",
+  Math.abs(completeResult.expectedGoals.for - Math.round(summedPeriodXg.for * 100) / 100) < 0.001
+  && Math.abs(completeResult.expectedGoals.against - Math.round(summedPeriodXg.against * 100) / 100) < 0.001);
+check("sluttrapporten inkluderer innbytteeffekt nøyaktig én gang",
+  Math.abs(completeResult.decisionTotals.xgDeltaFor - goodSubEffect.xgDeltaFor) < 0.001);
+check("direkte sluttberegning uten kampklokke er fortsatt støttet",
+  Number.isFinite(result.expectedGoals.for) && result.expectedGoals.for > 0);
 
 // --- 3b) Match Explanation v1.5 ---------------------------------------------
 console.log("\nKampforklaring (Match Explanation v1.5):");

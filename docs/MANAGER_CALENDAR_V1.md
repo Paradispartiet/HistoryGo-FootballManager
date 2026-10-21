@@ -102,7 +102,7 @@ Kalenderen gjenbruker eksisterende data og UI-signaler:
 
 - `teamMerits.clubWeekState` for uke og fase;
 - eksisterende ligasesong for neste motstander, hjemme/borte og runde;
-- eksisterende treningsvalg for om ukas treningsarbeid er satt;
+- eksisterende treningsvalg separat for program og fokus (kalenderen skjuler ikke et manglende fokus bare fordi program er valgt, eller omvendt);
 - eksisterende kampstate for siste resultat;
 - eksisterende kampklar-status for ellever og benk;
 - eksisterende innbokstråder og konkrete klubbmailer for meldingshendelsene.

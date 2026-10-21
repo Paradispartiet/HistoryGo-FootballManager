@@ -56,6 +56,30 @@ check("kampen plasseres på lørdag", week.days[5].events[0].title === "Kamp mot
 check("runde og hjemme/borte vises", /Hjemmekamp · runde 4/.test(week.days[5].events[0].detail), week.days[5].events[0].detail);
 check("kalenderen har ingen progresjonsfunksjon", week.days.flatMap((day) => day.events).every((entry) => !Object.hasOwn(entry, "advance") && !Object.hasOwn(entry, "nextPhase")));
 
+const onlyProgram = createManagerWeekCalendar({
+  clubWeekState: { week: 4, phase: "training" },
+  trainingStatus: { programSelected: true, focusSelected: false }
+});
+check("valgt program uten fokus gir riktig arbeidsoppgave",
+  onlyProgram.days[2].events.some((item) => item.id === "team-training"
+    && item.actionLabel === "Velg fokus" && item.detail.includes("Treningsfokus mangler")));
+const onlyFocus = createManagerWeekCalendar({
+  clubWeekState: { week: 4, phase: "training" },
+  trainingStatus: { programSelected: false, focusSelected: true }
+});
+check("valgt fokus uten program skjuler ikke manglende program",
+  onlyFocus.days[2].events.some((item) => item.id === "team-training"
+    && item.actionLabel === "Velg program" && item.detail.includes("Treningsprogram mangler")));
+const readyTraining = createManagerWeekCalendar({
+  clubWeekState: { week: 4, phase: "training" },
+  trainingStatus: { programSelected: true, focusSelected: true }
+});
+check("begge treningsvalg viser ferdig treningsramme",
+  readyTraining.days[2].events.some((item) => item.id === "team-training"
+    && !item.attention && item.actionLabel === "Åpne trening"));
+check("kampkalenderen bruker spillertekst, ikke motorinternt fagspråk",
+  !week.days[5].events[0].detail.includes("Kampmotoren"));
+
 const review = createManagerWeekCalendar({
   clubWeekState: { week: 4, phase: "review" },
   lastMatch: { score: { for: 2, against: 1 } }

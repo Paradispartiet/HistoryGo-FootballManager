@@ -1,3 +1,4 @@
+import { migrateSavedPlayerIdentityStorage, normalizePlayablePlayerCatalog } from "./football-player-identity.js";
 import { FOOTBALL_POSITIONS } from "./football-fit-engine.js";
 import {
   buildSelectedSquadPlayerIds,
@@ -176,6 +177,7 @@ import {
   buildTrainingFocusOffPitchEvent
 } from "./football-training-week.js";
 import { createSuggestedSetups } from "./football-suggested-setups.js";
+import { buildSourcedLineupInsights, previewSourcedPlayerSwap } from "./football-sourced-lineup-insights.js";
 import { computeNextActions, NEXT_ACTION_TYPES } from "./football-next-action.js";
 import { selectDefaultFormation, selectDefaultMatchPlan } from "./football-default-formation.js";
 import { evaluateMatchdayReadiness } from "./football-matchday-readiness.js";
@@ -684,6 +686,7 @@ const elements = {
   weeklyTrainingRecommendation: document.querySelector("#weeklyTrainingRecommendation"),
   weeklyTrainingOptions: document.querySelector("#weeklyTrainingOptions"),
   strengthsList: document.querySelector("#strengthsList"),
+  sourcedLineupImpact: document.querySelector("#sourcedLineupImpact"),
   issuesList: document.querySelector("#issuesList"),
   widthScore: document.querySelector("#widthScore"),
   depthScore: document.querySelector("#depthScore"),
@@ -6471,6 +6474,8 @@ function leagueOpponentProfile(opponent) {
     displayName: opponent.name,
     strength: opponent.strength,
     homeAway: opponent.homeAway,
+    round: opponent.round,
+    matchId: opponent.matchId || opponent.fixtureId || null,
     ground: opponent.ground,
     tacticalIdentity: opponent.tacticalIdentity,
     archetypeName: clubProfile?.styleName || base.archetypeName || null,
@@ -6616,6 +6621,8 @@ function getMiniSeasonNextOpponent() {
         displayName: playoffOpponent.name,
         strength: playoffOpponent.strength,
         homeAway: playoffOpponent.homeAway,
+        round: playoffOpponent.round || null,
+        matchId: playoffOpponent.matchId || null,
         ground: playoffOpponent.ground,
         archetypeName: playoffProfile?.styleName || playoffBase.archetypeName || null,
         isClubProfile: Boolean(playoffProfile),
@@ -6645,6 +6652,8 @@ function getMiniSeasonNextOpponent() {
       // Klubbens egen styrke gjelder — profilen leverer stilen, ikke nivået.
       strength: opponent.strength,
       homeAway: opponent.homeAway,
+      round: opponent.round,
+      matchId: opponent.matchId || null,
       ground: opponent.ground,
       tacticalIdentity: opponent.tacticalIdentity,
       // Kampbriefen leser `archetypeName`; for en klubb er det spillestilen
@@ -8380,7 +8389,7 @@ function setSelectedSlotRole(nextRoleId) {
   renderApp();
 }
 
-function renderDirectLineupEditor() {
+function renderDirectLineupEditor(teamFit) {
   const playerHost = elements.lineupPlayerChoices;
   const roleHost = elements.lineupRoleChoices;
   const slot = getSelectedSlot();
@@ -8403,7 +8412,27 @@ function renderDirectLineupEditor() {
       ...(Array.isArray(player.naturalPositions) ? player.naturalPositions : []),
       ...(Array.isArray(player.usablePositions) ? player.usablePositions : [])
     ])].join(" / ") || "–";
-    button.innerHTML = `<strong>${player.name || player.id}</strong><span>${positions}</span>`;
+    // Use the SAME selected role (or the same fallback role) that the click
+    // handler will use. Compare only direct source-backed tactical additions.
+    const nextRoleId = state.roles.find((role) =>
+      role.id === slotState.roleId && role.validPositions.includes(slot.position))
+      ? slotState.roleId
+      : getDefaultRoleForPlayer(player, slot);
+    const nextRole = state.roles.find((role) => role.id === nextRoleId);
+    const preview = !button.disabled && nextRole
+      ? previewSourcedPlayerSwap({ teamFit, slot, role: nextRole, player, tactic: getTactic() })
+      : null;
+    const playerName = document.createElement("strong");
+    playerName.textContent = player.name || player.id;
+    const playerPositions = document.createElement("span");
+    playerPositions.textContent = positions;
+    button.append(playerName, playerPositions);
+    if (preview) {
+      const sourceNote = document.createElement("small");
+      sourceNote.className = "lineup-player-sourced-preview";
+      sourceNote.textContent = preview.description;
+      button.append(sourceNote);
+    }
     button.addEventListener("click", () => setSelectedSlotPlayer(player.id));
     playerHost.append(button);
   });
@@ -9686,6 +9715,41 @@ function renderAdminRoom() {
   }
 }
 
+
+// The active XI and tactic recompute on every lineup/role change. Render the
+// same six sourced dimensions beside the pitch where the manager makes choices.
+function renderSourcedLineupImpact(teamFit) {
+  const target = elements.sourcedLineupImpact;
+  if (!target) return;
+  target.replaceChildren();
+  const rows = buildSourcedLineupInsights(teamFit);
+  if (!rows.length) {
+    const empty = document.createElement("li");
+    empty.className = "lineup-sourced-empty";
+    empty.textContent = "Sett en spiller på banen for å se dokumenterte taktiske bidrag.";
+    target.append(empty);
+    return;
+  }
+  rows.forEach((entry) => {
+    const li = document.createElement("li");
+    li.className = "lineup-sourced-row";
+    const head = document.createElement("span");
+    head.className = "lineup-sourced-label";
+    head.textContent = entry.label;
+    const value = document.createElement("strong");
+    value.className = "lineup-sourced-value";
+    value.textContent = entry.hasEvidence ? `+${entry.bonus}` : "–";
+    value.setAttribute("aria-label", entry.hasEvidence
+      ? `Dokumentert tillegg ${entry.bonus}`
+      : "Ingen kildebelagt bonus");
+    const detail = document.createElement("small");
+    detail.className = "lineup-sourced-detail";
+    detail.textContent = entry.detail;
+    li.append(head, value, detail);
+    target.append(li);
+  });
+}
+
 function renderTeamSummary(teamFit) {
   // Scorepanelet skrives fra teamFit (getTeamFit). Etter steg 7b er teamFit
   // selv TS-beregnet når motoren er lastet, så hele Laganalyse-panelet (score,
@@ -9700,6 +9764,7 @@ function renderTeamSummary(teamFit) {
     const next = String(value);
     if (element.textContent !== next) element.textContent = next;
   };
+  renderSourcedLineupImpact(teamFit);
   setMetricText(elements.teamStatus, getTeamStatus(teamFit));
   setMetricText(elements.completeCount, `${teamFit.completeCount}/${teamFit.totalSlots}`);
   setMetricText(elements.roleFitAverage, teamFit.metrics.roleFitAverage);
@@ -11289,6 +11354,14 @@ function appendMatchSubstitutions(card, session) {
       const why = document.createElement("span");
       why.textContent = entry.reasons?.[0] || "";
       item.append(head, why);
+      const sourceEffect = entry.reasons?.find((reason) =>
+        reason.startsWith("Kildebelagte styrker")) || "";
+      if (sourceEffect) {
+        const evidence = document.createElement("span");
+        evidence.className = "match-subs-evidence";
+        evidence.textContent = sourceEffect;
+        item.append(evidence);
+      }
       log.append(item);
     });
     wrap.append(log);
@@ -11368,6 +11441,16 @@ function appendMatchSubstitutions(card, session) {
       const arrow = entry.fitDelta > 0 ? `+${entry.fitDelta}` : `${entry.fitDelta}`;
       meta.textContent = `passform ${entry.matchScoreAfter} (${arrow}) · ${entry.reasons[0] || ""}`;
       button.append(name, meta);
+      // Show sourced tactical differences BEFORE a player commits to the
+      // substitution. The existing ranking still prioritizes slot fit.
+      const sourceEffect = entry.reasons.find((reason) =>
+        reason.startsWith("Kildebelagte styrker")) || "";
+      if (sourceEffect) {
+        const evidence = document.createElement("small");
+        evidence.className = "match-subs-evidence";
+        evidence.textContent = sourceEffect;
+        button.append(evidence);
+      }
       button.addEventListener("click", () => makeSubstitution(state.matchSubOutId, entry.inPlayerId));
       inList.append(button);
     });
@@ -16376,7 +16459,7 @@ function renderApp() {
   renderControls();
   renderTeamSummary(teamFit);
   renderLineup(teamFit);
-  renderDirectLineupEditor();
+  renderDirectLineupEditor(teamFit);
   renderSquadSetupGate(teamFit);
   renderRosterReadiness();
   renderTacticalSystemPanel();
@@ -17476,7 +17559,7 @@ async function loadStartupData() {
     loadJson(DATA_PATHS.scenarios).catch(() => null)
   ]);
 
-  state.players = playersData.players || [];
+  state.players = normalizePlayablePlayerCatalog(playersData.players || []);
   state.scenarios = normalizeScenarios(scenariosData);
   state.tournamentDefinitions = Array.isArray(tournamentsData?.tournaments) ? tournamentsData.tournaments : [];
   state.tournamentNations = Array.isArray(tournamentsData?.nations) ? tournamentsData.nations : [];
@@ -17775,6 +17858,8 @@ async function init() {
   const managerEngineReady = preloadManagerEngine();
 
   try {
+    // Repair historical IDs before any league save or mode session is hydrated.
+    migrateSavedPlayerIdentityStorage(localStorage);
     await loadStartupData();
     await hydratePersistedUiState();
     runStartupValidation();

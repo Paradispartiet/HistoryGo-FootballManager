@@ -16,7 +16,7 @@ const checks = [
   ["etterkamp ligger på søndag", calendar.includes('dayIndex: 7') && calendar.includes('phase: "review"')],
   ["arbeidsdagen har kronologiske hendelser", calendar.includes('event("training-meeting", "09:30"') && calendar.includes('event("team-training", "11:00"')],
   ["klubbmail er en kalenderhendelse", calendar.includes('kind: "message"') && calendar.includes('actionLabel: message.isRead ? "Les igjen" : "Les mail"')],
-  ["manglende trening vises i hendelsen", calendar.includes("Treningsprogram mangler") && calendar.includes('actionLabel: trainingSelected ? "Åpne trening" : "Velg program"')],
+  ["manglende trening vises i hendelsen", calendar.includes("Treningsprogram mangler") && calendar.includes('const trainingAction = !hasProgram ? "Velg program" : !hasFocus ? "Velg fokus" : "Åpne trening"')],
   ["kalenderen inneholder ingen progresjonsfunksjon", !/advanceClubWeek|advanceWeek|nextPhase/.test(calendar)],
   ["UI-et har ingen fortsett- eller neste-fasefunksjon", !/Neste fase|Fortsett uka|advanceClubWeek/.test(ui)],
   ["Kalender ligger under Kontor", ui.includes('section.dataset.tabParent = "dashboard"') && ui.includes('button.dataset.subnavParent = "dashboard"')],

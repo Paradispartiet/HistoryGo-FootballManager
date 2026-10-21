@@ -114,10 +114,13 @@ function lastMatch() {
   return readJson(MATCHDAY_KEY, {})?.lastMatch || null;
 }
 
-function trainingSelected() {
+function trainingSelections() {
   const program = readJson(TRAINING_PROGRAM_KEY, null);
   const focus = readJson(TRAINING_FOCUS_KEY, null);
-  return Boolean(program?.programId || focus?.focusId);
+  return {
+    programSelected: Boolean(program?.programId),
+    focusSelected: Boolean(focus?.focusId)
+  };
 }
 
 function lineupReady() {
@@ -160,10 +163,15 @@ function buildCalendar() {
     opponent: communicationContext.opponent || leagueOpponent(),
     lastMatch: communicationContext.lastMatch || lastMatch()
   });
+  const training = trainingSelections();
+  const trainingDayPassed = phaseIndex(clubWeek.phase) > phaseIndex("training");
   return createManagerWeekCalendar({
     clubWeekState: clubWeek,
     opponent: leagueOpponent(),
-    trainingSelected: trainingSelected() || phaseIndex(clubWeek.phase) > phaseIndex("training"),
+    trainingSelected: training.programSelected || training.focusSelected || trainingDayPassed,
+    trainingStatus: trainingDayPassed
+      ? { programSelected: true, focusSelected: true }
+      : training,
     lineupReady: lineupReady(),
     lastMatch: lastMatch(),
     communications: communicationTimeline.messages

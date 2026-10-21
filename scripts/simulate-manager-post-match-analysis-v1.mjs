@@ -38,7 +38,22 @@ function resultFixture(outcome = "win", { injury = false } = {}) {
       ]
     },
     substitutions: [
-      { minute: 66, playerOutName: "Kari Kant", playerInName: "Sara Hurtig" }
+      { minute: 66, playerOutName: "Kari Kant", playerInName: "Sara Hurtig", tone: "positive", reasons: ["Sara gir oss friske bein på kanten."] }
+    ],
+    planChanges: [
+      { fromPlanName: "Høyt press", toPlanName: "Lavere blokk", tone: "negative", feedback: "Omstillingen åpnet rom mellom lagdelene." }
+    ],
+    decisions: [
+      {
+        eventTitle: "Etter pause", optionLabel: "Press høyere",
+        tone: "positive", feedback: "Grepet satt: laget tok kontroll på situasjonen.",
+        trainingObservation: { explanation: "Kampmotoren registrerte pressfokus som relevant." }
+      },
+      {
+        eventTitle: "Sluttminuttene", optionLabel: "Sats alt offensivt",
+        tone: "negative", feedback: "Grepet slo feil: motstanderen utnyttet situasjonen."
+      },
+      { eventTitle: "Oppbyggingen", optionLabel: "Hold strukturen", tone: "neutral", feedback: "Grepet endret lite." }
     ],
     clubConsequences: {
       effects: outcome === "win"
@@ -99,9 +114,20 @@ check("avgjørende faktorer bevares", winModel.decisiveFactors.length === 2);
 check("taktiske og relasjonelle faktorer samles", winModel.tacticalFactors.length === 2);
 check("beste managergrep vises", winModel.decisions.best?.label.includes("Høyere press"));
 check("svakeste managergrep vises", winModel.decisions.worst?.label.includes("restforsvaret"));
+check("alle kampgrep vises i lagret rekkefølge", winModel.decisions.timeline.length === 3
+  && winModel.decisions.timeline[0].choice === "Press høyere"
+  && winModel.decisions.timeline[2].choice === "Hold strukturen");
+check("kampmotorens eksakte reaksjon vises", winModel.decisions.timeline[1].feedback.startsWith("Grepet slo feil"));
+check("faktisk treningstilknytning forklares", winModel.decisions.timeline[0].learningContext.includes("pressfokus"));
+check("positive, negative og nøytrale grep telles uten ny vurdering",
+  winModel.decisions.summary === "3 registrerte grep · 1 traff · 1 slo feil");
 check("målscorer vises", winModel.goals[0]?.label.includes("Ada Angriper"));
 check("målgivende vises", winModel.goals[0]?.detail.includes("Mina Midtbane"));
 check("spillerbidrag aggregeres uten overall", winModel.contributors[0]?.detail === "2 mål");
+check("etterkamp viser faktisk innbytte og vurdering",
+  winModel.substitutions[0]?.label.includes("Sara Hurtig") && winModel.substitutions[0]?.detail.includes("friske bein"));
+check("etterkamp viser faktisk omstilling og kostnaden",
+  winModel.planChanges[0]?.label.includes("Lavere blokk") && winModel.planChanges[0]?.detail.includes("rom mellom lagdelene"));
 check("klubbkonsekvenser vises", winModel.consequences.effects.length === 3);
 check("formasjonstilvenning vises", winModel.consequences.familiarityLabel.includes("+3"));
 check("lagret treningsrapport føres til presentasjonsmodellen", winModel.trainingEvidence?.focusId === "pressing");
@@ -125,6 +151,16 @@ const hypothesisModel = createPostMatchAnalysisModel({
 });
 check("konkret hypotese eksponeres uten ny beregning", hypothesisModel.trainingHypothesis?.setup.includes("Stort område"));
 check("restforsvarsproblem må bæres videre eksplisitt", hypothesisModel.next.primaryTarget === "carry_training_problem_next_week" && hypothesisModel.next.primaryLabel.includes("overgangsproblemet"));
+
+const oldSave = resultFixture("win");
+oldSave.lastMatch.decisions = [{ eventTitle: "Eldre kamp", optionLabel: "Behold planen" }];
+const oldModel = createPostMatchAnalysisModel(oldSave);
+check("gamle lagringer uten motorreaksjon tåles", oldModel.decisions.timeline[0]?.feedback === ""
+  && oldModel.decisions.timeline[0]?.tone === "neutral");
+const emptySave = resultFixture("win");
+delete emptySave.lastMatch.decisions;
+check("gamle kamper uten beslutningsrekke viser fortsatt beste/svakeste",
+  createPostMatchAnalysisModel(emptySave).decisions.timeline.length === 0);
 
 const drawModel = createPostMatchAnalysisModel(resultFixture("draw"));
 check("uavgjort gir nøytral tone", drawModel.outcomeTone === "neutral", drawModel.outcomeTone);

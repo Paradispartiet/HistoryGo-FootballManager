@@ -1,0 +1,152 @@
+{
+  "schema": "historygo-football-manager.stromsgodset-affiliation-evidence.v1",
+  "asOf": "2026-10-18",
+  "clubId": "stromsgodset",
+  "method": "Individually identified first-team evidence only: official Strømsgodset club history and match reports, NFF cup-winning squads, NFF career registers, and FBref season appearances. An affiliation is not evidence of individual skill; positions, goals and squad memberships never create strength claims.",
+  "entries": [
+    {
+      "playerId": "egil_olsen",
+      "sourceUrl": "https://www.godset.no/nyheter/50-ar-siden-seriegullet",
+      "evidence": "1970-team named in official Strømsgodset article"
+    },
+    {
+      "playerId": "johnny_vidar_pedersen",
+      "sourceUrl": "https://www.godset.no/nyheter/50-ar-siden-seriegullet",
+      "evidence": "1970-team named as back and midfielder"
+    },
+    {
+      "playerId": "havard_beckstrom",
+      "sourceUrl": "https://www.godset.no/nyheter/50-ar-siden-seriegullet",
+      "evidence": "1970 era player, official club history"
+    },
+    {
+      "playerId": "jan_kristiansen",
+      "sourceUrl": "https://www.godset.no/nyheter/50-ar-siden-seriegullet",
+      "evidence": "1970-team regular centre back"
+    },
+    {
+      "playerId": "sverre_rorvik",
+      "sourceUrl": "https://www.godset.no/nyheter/50-ar-siden-seriegullet",
+      "evidence": "1970-team member and Nantes match"
+    },
+    {
+      "playerId": "frode_johannessen",
+      "sourceUrl": "https://www.fotball.no/tema/om-nff/statistikk-og-historikk/norgesmestere-menn-/",
+      "evidence": "1991 NFF cup-winning squad"
+    },
+    {
+      "playerId": "jan_wendelborg",
+      "sourceUrl": "https://www.fotball.no/tema/om-nff/statistikk-og-historikk/norgesmestere-menn-/",
+      "evidence": "1991 NFF cup-winning squad"
+    },
+    {
+      "playerId": "trond_nordeide",
+      "sourceUrl": "https://www.fotball.no/tema/om-nff/statistikk-og-historikk/norgesmestere-menn-/",
+      "evidence": "1991 NFF cup-winning squad"
+    },
+    {
+      "playerId": "geir_andersen",
+      "sourceUrl": "https://www.fotball.no/tema/om-nff/statistikk-og-historikk/norgesmestere-menn-/",
+      "evidence": "1991 NFF cup-winning squad"
+    },
+    {
+      "playerId": "glenn_knutsen",
+      "sourceUrl": "https://www.fotball.no/tema/om-nff/statistikk-og-historikk/norgesmestere-menn-/",
+      "evidence": "1991 NFF cup-winning squad"
+    },
+    {
+      "playerId": "kenneth_nysaether",
+      "sourceUrl": "https://www.fotball.no/tema/om-nff/statistikk-og-historikk/norgesmestere-menn-/",
+      "evidence": "1991 NFF cup-winning squad"
+    },
+    {
+      "playerId": "robert_pedersen",
+      "sourceUrl": "https://www.fotball.no/tema/om-nff/statistikk-og-historikk/norgesmestere-menn-/",
+      "evidence": "1991 NFF cup-winning squad"
+    },
+    {
+      "playerId": "john_williams",
+      "sourceUrl": "https://www.fotball.no/fotballdata/kamp/?fiksId=3464222",
+      "evidence": "1991 listed as substitute against Fyllingen"
+    },
+    {
+      "playerId": "glenn_arne_hansen",
+      "sourceUrl": "https://www.fotball.no/fotballdata/person/profil/?fiksId=1942079",
+      "evidence": "NFF seasons with Strømsgodset, 1996–2001"
+    },
+    {
+      "playerId": "thomas_andre_odegaard",
+      "sourceUrl": "https://www.fotball.no/fotballdata/person/profil/?fiksId=3727153",
+      "evidence": "NFF seasons with Strømsgodset 1994–2006"
+    },
+    {
+      "playerId": "paal_christian_alsaker",
+      "sourceUrl": "https://www.fotball.no/fotballdata/person/profil/?fiksId=3802913",
+      "evidence": "NFF seasons with Strømsgodset 2000–2003"
+    },
+    {
+      "playerId": "finn_aksel_olsen",
+      "sourceUrl": "https://www.fotball.no/tema/om-nff/statistikk-og-historikk/norgesmestere-menn-/",
+      "evidence": "Named member of NFF 1973 Strømsgodset cup-winning squad (Finn Aksel Olsen)."
+    },
+    {
+      "playerId": "svein_dahl_andersen",
+      "sourceUrl": "https://www.fotball.no/tema/om-nff/statistikk-og-historikk/norgesmestere-menn-/",
+      "evidence": "Named member of NFF 1973 Strømsgodset cup-winning squad."
+    },
+    {
+      "playerId": "bjorn_erik_billy_halvorsen",
+      "sourceUrl": "https://www.fotball.no/tema/om-nff/statistikk-og-historikk/norgesmestere-menn-/",
+      "evidence": "Named as Bjørn Erik Halvorsen in NFF 1973 Strømsgodset cup-winning squad."
+    },
+    {
+      "playerId": "runar_larsen",
+      "sourceUrl": "https://www.fotball.no/tema/om-nff/statistikk-og-historikk/norgesmestere-menn-/",
+      "evidence": "Named member of NFF 1973 Strømsgodset cup-winning squad."
+    },
+    {
+      "playerId": "ivar_eriksen",
+      "sourceUrl": "https://www.godset.no/nyheter/marcus-historisk",
+      "evidence": "Official club all-time top scorers (84 goals), confirming historical Strømsgodset first-team appearance."
+    },
+    {
+      "playerId": "mattias_andersson",
+      "sourceUrl": "https://www.godset.no/nyheter/de-10-store-kampene",
+      "evidence": "Official club account of 2006 Strømsgodset–Aalesund match: Mattias Andersson scored twice."
+    },
+    {
+      "playerId": "steffen_nystrom",
+      "sourceUrl": "https://www.godset.no/nyheter/troppen-mot-konnerud",
+      "evidence": "Official club review of 2009 Konnerud cup match names Steffen Nystrøm among Strømsgodset goalscorers."
+    },
+    {
+      "playerId": "enock_kwakwa",
+      "sourceUrl": "https://fbref.com/en/players/d860358e/Enock-Kwakwa",
+      "evidence": "FBref lists one first-team Tippeligaen appearance for Strømsgodset in 2013."
+    },
+    {
+      "playerId": "prosper_mendy",
+      "sourceUrl": "https://www.godset.no/nyheter/prosper-blomstrer-i-sif-drakta",
+      "evidence": "Official Godset interview explicitly confirms Prosper Mendy's matches, goal against Odd and assist versus Mjøndalen."
+    },
+    {
+      "playerId": "krister_aunan",
+      "sourceUrl": "https://www.fotball.no/tema/om-nff/statistikk-og-historikk/norgesmestere-menn-/",
+      "evidence": "Named in NFF 2010 Strømsgodset cup-winning squad."
+    }
+  ],
+  "positionCorrection": {
+    "playerId": "ole_johnny_friise",
+    "from": "CM",
+    "to": "GK",
+    "sourceUrl": "https://www.godset.no/nyheter/50-ar-siden-seriegullet",
+    "evidence": "The official club history explicitly identifies Friise as goalkeeper. His canonical ID and non-role fields remain unchanged."
+  },
+  "deferredIdentityReview": {
+    "playerIds": [
+      "nana_boateng",
+      "bismark_adjei_boateng"
+    ],
+    "reason": "Potential alias/duplicate with differing academy vs played_for record semantics; keep canonical IDs and save references unchanged until a designed migration."
+  }
+}

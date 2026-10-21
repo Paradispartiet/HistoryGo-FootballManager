@@ -20,6 +20,7 @@
 // Motoren er ren: ingen DOM, ingen lagring, ingen `Date.now`.
 
 import { calculatePlayerMatchFit } from "./football-fit-engine.js";
+import { sourcedTeamSkillTendencies } from "./football-team-fit-engine.js";
 
 // Fire på benken, tre bytter. Du kan ikke bruke alle — valget skal koste noe.
 export const MAX_SUBSTITUTIONS = 3;
@@ -43,6 +44,64 @@ function round2(value) {
 
 function asArray(value) {
   return Array.isArray(value) ? value : [];
+}
+
+
+// Same sourced skill rules as the pre-match team-fit engine. Snapshot raw
+// role-specific contributions, not a new player rating or fictional ability.
+// The existing +6 team cap is reapplied after every substitution.
+const SOURCED_METRIC_LABELS = Object.freeze({
+  balanceScore: "balansen",
+  widthScore: "bredden",
+  depthScore: "dybden",
+  buildUpScore: "oppbyggingen",
+  pressScore: "presset",
+  restDefenseScore: "restforsvaret"
+});
+const SOURCED_METRICS = Object.keys(SOURCED_METRIC_LABELS);
+
+export function sourcedMetricBonusesForAssignment(assignment, tactic) {
+  if (!assignment?.player || !assignment?.slot || !assignment?.role) return {};
+  const sourced = sourcedTeamSkillTendencies([assignment], tactic);
+  return Object.fromEntries(SOURCED_METRICS.map((metric) => [
+    metric, clamp(num(sourced[metric]?.bonus), 0, 4)
+  ]));
+}
+
+export function aggregateSourcedMetricBonuses(lineup) {
+  return Object.fromEntries(SOURCED_METRICS.map((metric) => [
+    metric,
+    Math.min(6, asArray(lineup).reduce((sum, entry) =>
+      sum + clamp(num(entry?.sourcedMetricBonuses?.[metric]), 0, 4), 0))
+  ]));
+}
+
+function sourcedChangesForSwap(session, outgoingId, incomingBonuses) {
+  const lineup = asArray(session.lineupSnapshot);
+  const before = aggregateSourcedMetricBonuses(lineup);
+  const afterLineup = lineup.map((entry) =>
+    entry.playerId === outgoingId ? { ...entry, sourcedMetricBonuses: incomingBonuses } : entry);
+  const after = aggregateSourcedMetricBonuses(afterLineup);
+
+  // For v2 sessions, derive each live value from the ORIGINAL kick-off
+  // tactical profile and the CURRENT set of players, not the previous
+  // rounded/clamped value. Repeated substitutions then cannot accumulate
+  // 100-point clipping errors or depend on their order.
+  const kickoff = session?.sourcedSubstitutionBaseline;
+  const currentProfile = session?.teamFitSnapshot?.tacticalProfile;
+  if (session?.sourcedSubstitutionVersion === 2
+      && kickoff?.tacticalProfile && kickoff?.bonuses && currentProfile) {
+    return Object.fromEntries(SOURCED_METRICS.map((metric) => {
+      const target = clamp(num(kickoff.tacticalProfile[metric])
+        + after[metric] - num(kickoff.bonuses[metric]), 0, 100);
+      return [metric, target - clamp(num(currentProfile[metric]), 0, 100)];
+    }));
+  }
+
+  // v1 sessions created before this adjustment keep their existing rules.
+  return Object.fromEntries(SOURCED_METRICS.map((metric) => [
+    metric, after[metric] - before[metric]
+  ]));
 }
 
 // Posisjonsgrupper brukes til å lese om byttet svarer på kampbildet: jager du
@@ -75,7 +134,10 @@ export function createBenchSnapshot({ benchPlayers, teamFit, tactic, roles = [] 
           matchScore: num(fit?.matchScore, 50),
           positionFit: num(fit?.positionFit),
           roleFit: num(fit?.roleFit),
-          misusePenalty: num(fit?.misusePenalty)
+          misusePenalty: num(fit?.misusePenalty),
+          sourcedMetricBonuses: sourcedMetricBonusesForAssignment({
+            player, slot: assignment.slot, role: assignment.role
+          }, tactic)
         };
       });
 
@@ -161,6 +223,12 @@ export function evaluateSubstitution({ session, outPlayerId, inPlayerId, minute 
   const tiredness = tirednessOf(out, minute);
   const situation = situationFitFor(str(out.position), gameState);
   const misuse = num(fit.misusePenalty);
+  // Old saved sessions are deliberately left on their original tactical model.
+  const sourcedMetricBonusesAfter = fit.sourcedMetricBonuses || {};
+  const sourcedMetricChanges = Number(session?.sourcedSubstitutionVersion) >= 1
+    && session?.teamFitSnapshot?.tacticalProfile
+    ? sourcedChangesForSwap(session, outPlayerId, sourcedMetricBonusesAfter)
+    : Object.fromEntries(SOURCED_METRICS.map((metric) => [metric, 0]));
 
   const cost = switchCost(session, minute);
 
@@ -193,6 +261,12 @@ export function evaluateSubstitution({ session, outPlayerId, inPlayerId, minute 
   else if (situation < 0) reasons.push(gameState === "behind" ? "Defensivt bytte mens du jager utligningen." : "Offensivt bytte mens du leder — det åpner bakover.");
   if (misuse >= 12) reasons.push(`Feilbruk: ${incoming.name} er ikke en ${str(out.roleName) || "slik rolle"} — det er ditt valg, ikke hans begrensning.`);
   if (minute >= 75) reasons.push("Sent bytte: laget får kort tid på å finne hverandre igjen.");
+  const tacticalChanges = Object.entries(sourcedMetricChanges)
+    .filter(([, change]) => change !== 0)
+    .map(([metric, change]) => `${SOURCED_METRIC_LABELS[metric]} (${change > 0 ? "+" : ""}${change})`);
+  if (tacticalChanges.length > 0) {
+    reasons.push(`Kildebelagte styrker endrer ${tacticalChanges.join(", ")} i resten av kampen.`);
+  }
 
   const tone = effects.momentumDelta > 0.2 ? "positive" : effects.momentumDelta < -0.2 ? "negative" : "neutral";
 
@@ -212,6 +286,8 @@ export function evaluateSubstitution({ session, outPlayerId, inPlayerId, minute 
     situation: round2(situation),
     misusePenalty: misuse,
     improvement,
+    sourcedMetricBonusesAfter,
+    sourcedMetricChanges,
     effects,
     tone,
     reasons,
@@ -252,6 +328,7 @@ export function applySubstitution(session, { outPlayerId, inPlayerId, minute = 0
           playerId: evaluation.inPlayerId,
           name: evaluation.inName,
           matchScore: evaluation.matchScoreAfter,
+          sourcedMetricBonuses: { ...evaluation.sourcedMetricBonusesAfter },
           // Den som kommer inn har spilt fra dette minuttet — ikke fra avspark.
           onFrom: num(minute),
           cameOnAsSub: true
@@ -269,15 +346,29 @@ export function applySubstitution(session, { outPlayerId, inPlayerId, minute = 0
     roleName: evaluation.roleName,
     fitDelta: evaluation.fitDelta,
     improvement: evaluation.improvement,
+    sourcedMetricChanges: { ...evaluation.sourcedMetricChanges },
     tone: evaluation.tone,
     summary: evaluation.summary,
     reasons: evaluation.reasons,
     effects: evaluation.effects
   };
 
+  const tacticalProfile = session.teamFitSnapshot?.tacticalProfile;
+  const adjustedProfile = Number(session.sourcedSubstitutionVersion) >= 1 && tacticalProfile
+    ? {
+        ...tacticalProfile,
+        ...Object.fromEntries(SOURCED_METRICS.map((metric) => [
+          metric, clamp(num(tacticalProfile[metric]) + num(evaluation.sourcedMetricChanges[metric]), 0, 100)
+        ]))
+      }
+    : tacticalProfile;
+
   return {
     ...session,
     lineupSnapshot,
+    teamFitSnapshot: adjustedProfile
+      ? { ...session.teamFitSnapshot, tacticalProfile: adjustedProfile }
+      : session.teamFitSnapshot,
     // Den som gikk av beholdes med minuttene sine, slik at statistikken vet at
     // han faktisk spilte.
     playedPlayers: mergePlayed(session, evaluation, minute),

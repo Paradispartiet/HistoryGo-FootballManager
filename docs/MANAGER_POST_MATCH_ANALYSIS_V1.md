@@ -38,7 +38,9 @@ Samler formasjonsdom, taktiske faktorer og rollerelasjoner. Den forklarer manage
 
 ### Managerens grep
 
-Viser beste og svakeste registrerte kampbeslutning. Ingen nye vurderinger konstrueres i UI-laget.
+Viser beste og svakeste registrerte kampbeslutning, og nå **alle lagrede managergrep i faktisk rekkefølge** med kampsituasjon, valgt handling og kampmotorens lagrede reaksjon. Dersom motoren har en dokumentert kobling til treningsøvelsen eller motstanderanalysen, vises denne i samme steg. Positivt, negativt og nøytralt leses fra motorens eksisterende tone; presentasjonen beregner ingen ny vurdering eller effekt.
+
+For eldre saves uten lagret `feedback` vises en nøktern forklaring om at motorreaksjonen ikke finnes, ikke en oppdiktet konsekvens. Et eventuelt manglende beslutningsforløp skjuler listen uten å fjerne beste/svakeste grep fra eldre rapporter. På mobil vises beslutningslisten i én kolonne uten horisontal scrolling.
 
 ### Spillerbidrag
 
@@ -62,3 +64,8 @@ Scenen viser skade- og belastningssignaler når de finnes i kampens eksisterende
 - `sim:manager-post-match-analysis-v1`
 - Playwright: struktur, navigasjon, mobil overflow, WCAG 2 A/AA og 768 px visuell baseline
 - simulering av seier, uavgjort, tap og kamp med eksisterende skadesignal
+
+
+## Reelle innbytter og planbytter (19. oktober 2026)
+
+Etterkampen viser nå en kompakt oversikt over **registrerte kampplanendringer og innbytter**, inkludert navn på byttene og motorens lagrede feedback/begrunnelser. Effektene regnes ikke på nytt av UI-et. Når eldre lagringer mangler vurderinger, vises en nøktern melding fremfor en oppdiktet dom. Innbyttene påvirker også den løpende sjanseberegningen fra byttet gjøres, og sluttrapporten summerer xG fra de faktiske kampperiodene.

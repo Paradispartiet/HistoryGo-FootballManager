@@ -10262,3 +10262,57 @@ button:disabled {
     grid-template-columns: 1fr;
   }
 }
+
+/* Source-backed, player-specific contribution overview next to the live XI. */
+.lineup-sourced-impact {
+  padding: 14px 12px;
+  border-top: 1px solid var(--hg-border-soft);
+}
+.lineup-sourced-impact-head {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+.lineup-sourced-impact-head h3 { margin: 0; }
+.lineup-sourced-impact-head .muted-text {
+  margin: 0;
+  font-size: 0.77rem;
+}
+#sourcedLineupImpact {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 215px), 1fr));
+  list-style: none;
+  gap: 7px;
+  padding: 0;
+  margin: 0;
+}
+.lineup-sourced-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 4px 10px;
+  border: 1px solid var(--hg-border-soft);
+  border-radius: 9px;
+  padding: 9px 10px;
+  min-width: 0;
+}
+.lineup-sourced-label { font-size: 0.84rem; font-weight: 600; }
+.lineup-sourced-value { font-variant-numeric: tabular-nums; }
+.lineup-sourced-detail {
+  grid-column: 1 / -1;
+  overflow-wrap: anywhere;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+.lineup-sourced-empty { color: var(--muted); font-size: 0.82rem; }
+
+/* Documented team-fit delta on each available player choice. */
+.lineup-player-sourced-preview {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.lineup-player-card:disabled .lineup-player-sourced-preview { display: none; }

@@ -918,7 +918,7 @@ const KJENT_UDOKUMENTERT = {
   // en registrering av at arven ikke dokumenterer ferdigheter i det hele tatt.
   // Tallet skal SYNKE når individuelle kilder leses tilbake.
   nadderud_stadion: 0.99,    // Stabæk
-  araasen_stadion: 0.89,     // Lillestrøm
+  araasen_stadion: 0.10,     // Lillestrøm: 2/24 uten styrker etter Ole Dyrstad (8,33 %; tak 10 %)
   nordmore_stadion: 1.01,    // Kristiansund
   kfum_arena: 0.93,          // KFUM Oslo
   jotun_arena: 0.80,         // Sandefjord: fem nye P1-profiler, 32/41 eksklusive uten styrker
@@ -994,10 +994,10 @@ const KJENT_UDOKUMENTERT = {
   // mest dokumentasjon av alle og lavest dekning av de fire, fordi mesteparten
   // handler om meritter og kampmengde. Haugesund har halvparten så mye tekst og
   // dobbelt så mange spillerbeskrivelser.
-  lerkendal_stadion: 0.30,   // Rosenborg: 24/83 eksklusive uten dokumenterte styrker (28.92 %); målt etter samlet klubbpass 2026-10-13
-  aker_stadion: 0.72,        // Molde: målt 41 av 54
-  marienlyst_stadion: 0.76,  // Strømsgodset: målt 63 av 84
-  haugesund_stadion: 0.59,   // Haugesund/Haugar/Djerv: målt 50 av 87
+  lerkendal_stadion: 0.14,   // Rosenborg: 10/83 eksklusive uten dokumenterte styrker (12,05 %); tak 14 % etter kildepass 2026-10-17
+  aker_stadion: 0.13,        // Molde: 6/54 eksklusive uten styrker (11,11 %); tak 13 % etter kildepass 2026-10-18
+  marienlyst_stadion: 0.15,  // Strømsgodset: 11/84 eksklusive uten styrker (13,10 %); tak 15 % etter kildepass 2026-10-19
+  haugesund_stadion: 0.38,   // Haugesund/Haugar/Djerv: 32/87 eksklusive uten styrker (36,78 %); tak 38 % etter kildepass 2026-10-17
   // Andre pulje kildepass, og den viser hva aksen koster i den lave enden.
   // Vålerenga lander på linje med Rosenborg fordi klubbens eget nyhetsarkiv
   // siterer trenere ved navn (Deila om Fellah og Ejuke, Fagermo om Håkans).
@@ -1010,10 +1010,10 @@ const KJENT_UDOKUMENTERT = {
   // 6 % er en forskjell i kildesjanger, ikke i klubbstørrelse: Viking og
   // Bodø/Glimt er ikke mindre kartlagt enn Vålerenga, de er kartlagt med
   // tabeller.
-  intility_arena: 0.82,      // Vålerenga: målt 53 av 66
-  aspmyra_stadion: 0.93,     // Bodø/Glimt: målt 43 av 47
-  brann_stadion: 0.82,       // Brann: 38 av 47 uten styrker etter Pesen-passet
-  lyse_arena: 0.90           // Viking: målt 47 av 51
+  intility_arena: 0.77,      // Vålerenga: 50/66 uten styrker etter Muri/Ogude/Riihilahti (75,76 %; tak 77 %)
+  aspmyra_stadion: 0.67,     // Bodø/Glimt: 31 av 47 uten styrker etter seksprofilbolken
+  brann_stadion: 0.16,       // Brann: 7/47 uten styrker etter Alexander Nagelsett Olsen (14,89 %, tak 16 %)
+  lyse_arena: 0.60           // Viking: 30 av 51 uten styrker etter seksprofilbolken
 };
 
 // ---------------------------------------------------------------------------

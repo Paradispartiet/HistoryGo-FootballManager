@@ -129,7 +129,27 @@ function buildConsequences(lastMatch) {
 
 function buildDecisionReview(report, lastMatch) {
   const decisions = list(report?.decisions).length ? list(report?.decisions) : list(lastMatch?.decisions);
+  // Read the persisted engine verdicts in the order the manager made the choices.
+  // Do not infer a match outcome or invent feedback for old saves.
+  const timeline = decisions
+    .filter((decision) => decision && (decision.optionLabel || decision.label))
+    .map((decision) => ({
+      event: text(decision.eventTitle, "Kampsituasjon"),
+      choice: text(decision.optionLabel || decision.label, "Managergrep"),
+      tone: ["positive", "negative", "neutral"].includes(decision.tone) ? decision.tone : "neutral",
+      feedback: text(decision.feedback, ""),
+      learningContext: text(
+        decision.trainingObservation?.explanation || decision.analysisObservation?.explanation,
+        ""
+      )
+    }));
+  const positiveCount = timeline.filter((decision) => decision.tone === "positive").length;
+  const negativeCount = timeline.filter((decision) => decision.tone === "negative").length;
   return {
+    timeline,
+    summary: timeline.length
+      ? `${timeline.length} registrerte grep · ${positiveCount} traff · ${negativeCount} slo feil`
+      : "",
     best: report?.bestDecision
       ? {
         label: text(report.bestDecision.label, "Beste grep"),
@@ -249,8 +269,18 @@ export function createPostMatchAnalysisModel({ lastMatch = null, report = null }
     goals,
     contributors,
     substitutions: list(lastMatch.substitutions).slice(0, 5).map((entry) => ({
+      kind: "Innbytte",
       label: `${text(entry?.playerOutName || entry?.outName, "Spiller ut")} → ${text(entry?.playerInName || entry?.inName, "Spiller inn")}`,
-      detail: number(entry?.minute) > 0 ? `${number(entry.minute)}. minutt` : text(entry?.reason, "Bytte")
+      minute: number(entry?.minute) > 0 ? `${number(entry.minute)}. minutt` : "",
+      tone: ["positive", "neutral", "negative"].includes(entry?.tone) ? entry.tone : "neutral",
+      detail: text(list(entry?.reasons).join(" "), text(entry?.reason, "Innbytte registrert uten vurdering."))
+    })),
+    planChanges: list(lastMatch.planChanges).slice(0, 5).map((change) => ({
+      kind: "Kampplan",
+      label: `${text(change?.fromPlanName, "Startplan")} → ${text(change?.toPlanName, "Ny plan")}`,
+      minute: "",
+      tone: ["positive", "neutral", "negative"].includes(change?.tone) ? change.tone : "neutral",
+      detail: text(change?.feedback, "Kampplanendring registrert uten vurdering.")
     })),
     consequences,
     trainingEvidence,
@@ -365,7 +395,56 @@ export function renderPostMatchAnalysis(model, onOpenTarget) {
     decisionGrid.append(node("p", "matchday-post-match-empty", "Ingen kampgrep ble registrert i denne kampen."));
   }
   decisions.append(decisionGrid);
+  if (model.decisions.timeline.length) {
+    const sequence = node("div", "matchday-post-match-decision-history");
+    sequence.append(
+      node("h4", "", "Valgene dine, i kamprekkefølge"),
+      node("p", "matchday-post-match-decision-summary", model.decisions.summary)
+    );
+    const steps = node("ol", "matchday-post-match-decision-sequence");
+    model.decisions.timeline.forEach((decision) => {
+      const step = node("li", "matchday-post-match-decision-step");
+      step.dataset.tone = decision.tone;
+      step.append(
+        node("span", "", decision.event),
+        node("strong", "", decision.choice),
+        node("p", "", decision.feedback || "Eldre kampdata har ingen lagret motorreaksjon for dette grepet.")
+      );
+      if (decision.learningContext) {
+        step.append(node("small", "", decision.learningContext));
+      }
+      steps.append(step);
+    });
+    sequence.append(
+      steps,
+      node("p", "matchday-post-match-decision-caveat",
+        "Dette er kampmotorens registrerte reaksjoner på valgene, ikke en påstand om at ett grep alene avgjorde resultatet.")
+    );
+    decisions.append(sequence);
+  }
   section.append(decisions);
+
+  // The match engine already records the consequences of plan switches and
+  // substitutions. They must be readable after the game, not only as tiny
+  // entries in the live match log. Do not invent verdicts for old saves.
+  const adjustments = [...model.planChanges, ...model.substitutions];
+  if (adjustments.length) {
+    const panel = node("section", "matchday-post-match-adjustments");
+    panel.append(node("div", "matchday-post-match-section-head", "Kampplan og innbytter"));
+    const adjustmentList = node("div", "matchday-post-match-adjustment-list");
+    adjustments.forEach((change) => {
+      const item = node("article", "matchday-post-match-adjustment");
+      item.dataset.tone = change.tone;
+      item.append(
+        node("span", "", [change.kind, change.minute].filter(Boolean).join(" · ")),
+        node("strong", "", change.label),
+        node("p", "", change.detail)
+      );
+      adjustmentList.append(item);
+    });
+    panel.append(adjustmentList);
+    section.append(panel);
+  }
 
   const lower = node("div", "matchday-post-match-lower");
   const players = node("section", "matchday-post-match-panel");
