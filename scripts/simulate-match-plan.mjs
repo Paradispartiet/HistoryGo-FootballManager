@@ -1829,7 +1829,10 @@ check("flere hendelser rundt samme pause klumper seg ikke på ett minutt", () =>
   // sto alle tre på 45' og rekkefølgen ble uleselig.
   let session = buildSession("central_possession_4231");
   session = advanceMatchClock(session);
-  session = { ...session, decisions: [{ effects: { momentumDelta: 3 } }] };
+  // An actual lead, not merely positive momentum at 1-1, justifies the
+  // opponent's "push up" reaction in this deliberately constructed scenario.
+  session = { ...session, score: { for: 2, against: 1 },
+    decisions: [{ effects: { momentumDelta: 3 } }] };
   session = applyOpponentAdaptation(session);
   session = applyMatchPlanChange(session, byId.get("all_out_attack"));
   session = logMatchMoment(session, { type: "decision", side: "for", detail: "Ditt grep: Press høyere" });
