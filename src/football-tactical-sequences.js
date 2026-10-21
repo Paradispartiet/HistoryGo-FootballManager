@@ -461,11 +461,17 @@ export function evaluateTacticalSequences(tacticId, opponent, tacticalProfile) {
         .map(([metric, minimum]) => ({ metric, minimum,
           actual: finite(tacticalProfile[metric]) ? tacticalProfile[metric] : null }));
       const ready = missing.length === 0;
-      const countered = ready && matches(strengths, pattern.counterCondition);
+      // An unknown opponent countermeasure is NOT proof that it is absent.
+      // Do not award a tactical advantage until both the vulnerability and
+      // the relevant opponent response are actually represented in the profile.
+      const counterKnown = finite(strengths[pattern.counterCondition.trait]);
+      const countered = ready && counterKnown && matches(strengths, pattern.counterCondition);
       return { id: pattern.tacticId, title: pattern.title,
         moves: pattern.moves.slice(), counter: pattern.counter,
         response: pattern.response, missing, ready, countered,
-        status: !ready ? "unsupported" : countered ? "countered" : "advantage",
-        edgeDelta: ready && !countered ? 1 : 0 };
+        status: !ready ? "unsupported"
+          : !counterKnown ? "unknown_counter"
+          : countered ? "countered" : "advantage",
+        edgeDelta: ready && counterKnown && !countered ? 1 : 0 };
     });
 }

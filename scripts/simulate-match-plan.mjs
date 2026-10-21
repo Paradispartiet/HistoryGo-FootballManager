@@ -35,7 +35,7 @@ import {
   finalizeMatchdaySession,
   getMatchdayGameState
 } from "../src/football-matchday-engine.js";
-import { getHistoricalOpponentProfile } from "../src/football-historical-opponent-profiles.js";
+import { getHistoricalOpponentProfile, getHistoricalOpponentProfileIds } from "../src/football-historical-opponent-profiles.js";
 import { buildOpponentTacticalOpportunities, createOpponentAnalysisWorkspace } from "../src/football-opponent-analysis.js";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -80,11 +80,131 @@ check("alle 18 taktikker har betinget fire-trekks spill, motspill og svar", () =
     const countered = evaluateTacticalSequences(chain.tacticId, counteredOpponent, ready)[0];
     assert.equal(countered?.status, "countered", `${chain.tacticId}: genuine opposition reply`);
     assert.equal(countered.edgeDelta, 0, `${chain.tacticId}: counter must neutralize pattern`);
+    const unscouted = {
+      styleTraits: { [chain.opponentCondition.trait]: chain.opponentCondition.min }
+    };
+    const unverified = evaluateTacticalSequences(chain.tacticId, unscouted, ready)[0];
+    assert.equal(unverified?.status, "unknown_counter",
+      `${chain.tacticId}: unscouted opponent counter cannot be treated as harmless`);
+    assert.equal(unverified.edgeDelta, 0,
+      `${chain.tacticId}: no bonus without a known opponent response`);
+    const unscoutedIntegrated = evaluatePlanVsOpponent(plan, unscouted, { tacticalProfile: ready });
+    assert.ok(unscoutedIntegrated.notes.some((note) => note.includes("motgrep er ikke undersøkt")),
+      `${chain.tacticId}: unknown scouting must not be described as poor player quality`);
+    assert.equal(unscoutedIntegrated.sequences[0]?.status, "unknown_counter");
     const integrated = evaluatePlanVsOpponent(plan, opponent, { tacticalProfile: ready });
     assert.equal(integrated.sequences?.[0]?.edgeDelta, 1);
     const integratedCounter = evaluatePlanVsOpponent(plan, counteredOpponent, { tacticalProfile: ready });
     assert.equal(integratedCounter.sequences?.[0]?.edgeDelta, 0);
     assert.ok(typeof countered.response === "string" && countered.response.length > 16);
+  }
+});
+
+
+// Reproducibility and falsification, not a claim of external empirical validity.
+// This covers EVERY authored plan × EVERY published historic learning opponent.
+// The opponent trait scales and tactical thresholds are curator/engine values,
+// NOT observed event-tracking estimates or empirically calibrated coefficients.
+check("18 × alle historiske motstandere: full faktor- og motgrepsmatrise", () => {
+  const opponentIds = getHistoricalOpponentProfileIds();
+  assert.ok(opponentIds.length >= 10, "historical archetype test set unexpectedly shrank");
+  const fullSupport = {
+    pressScore: 95, balanceScore: 95, restDefenseScore: 95,
+    buildUpScore: 95, depthScore: 95, widthScore: 95
+  };
+  const summary = [];
+  for (const sequence of TACTICAL_SEQUENCES) {
+    const statusCounts = {
+      not_exposed: 0, unknown_counter: 0, countered: 0, advantage: 0
+    };
+    for (const opponentId of opponentIds) {
+      const opponent = getHistoricalOpponentProfile(opponentId);
+      assert.ok(opponent, opponentId);
+      const before = JSON.stringify(opponent);
+      const metricsBefore = JSON.stringify(fullSupport);
+      const activation = evaluateTacticalSequences(sequence.tacticId, opponent, fullSupport);
+      const current = activation[0] || null;
+      if (!current) {
+        statusCounts.not_exposed += 1;
+      } else {
+        assert.ok(["advantage", "countered", "unknown_counter"].includes(current.status),
+          sequence.tacticId + " / " + opponentId + ": unexpected full-support status " + current.status);
+        statusCounts[current.status] += 1;
+        const expected = current.status === "advantage" ? 1 : 0;
+        assert.equal(current.edgeDelta, expected);
+        const integrated = evaluatePlanVsOpponent(byId.get(sequence.tacticId), opponent,
+          { tacticalProfile: fullSupport });
+        assert.equal(integrated.sequences.length, 1,
+          "match engine must call the same one authoritative tactical sequence");
+        assert.equal(integrated.sequences[0].edgeDelta, expected);
+        assert.deepEqual(activation,
+          evaluateTacticalSequences(sequence.tacticId, opponent, fullSupport),
+          "same tactical input must always produce identical output");
+      }
+      assert.equal(JSON.stringify(opponent), before, "evaluation mutated historical opponent");
+      assert.equal(JSON.stringify(fullSupport), metricsBefore, "evaluation mutated lineup metrics");
+    }
+    assert.equal(Object.values(statusCounts).reduce((a,b) => a+b, 0), opponentIds.length);
+    summary.push({ name: sequence.tacticId, ...statusCounts });
+  }
+  assert.equal(summary.length, plans.length);
+  assert.ok(summary.some(s => s.advantage > 0), "no tactical plan works against any modeled opponent");
+  assert.ok(summary.some(s => s.countered > 0), "no modeled historical opponent can block a sequence");
+  console.log("  18-plan validation matrix (historical STYLE ARCHETYPES, not observed matches):");
+  summary.forEach(s => console.log(
+    "  " + s.name.padEnd(29) +
+    " exposed-but-countered=" + s.countered +
+    " advantage=" + s.advantage +
+    " unknown-counter=" + s.unknown_counter +
+    " no-trigger=" + s.not_exposed
+  ));
+});
+
+check("18 taktikker: grenseverdier, ufullstendige profiler og falsifiserende endringer", () => {
+  const fullSupport = {
+    pressScore: 95, balanceScore: 95, restDefenseScore: 95,
+    buildUpScore: 95, depthScore: 95, widthScore: 95
+  };
+  for (const chain of TACTICAL_SEQUENCES) {
+    const t = chain.opponentCondition.trait, k = chain.counterCondition.trait;
+    assert.notEqual(t, k, "a vulnerability cannot also be its own countermeasure");
+    const opponent = {
+      id: "synthetic_"+chain.tacticId,
+      styleTraits: { [t]: chain.opponentCondition.min, [k]: chain.counterCondition.min-1 },
+      [k]: chain.counterCondition.min-1
+    };
+    const run = (enemy, metrics) =>
+      evaluateTacticalSequences(chain.tacticId, enemy, metrics)[0] || null;
+    assert.equal(run(opponent, fullSupport)?.status, "advantage");
+    assert.equal(run(opponent, fullSupport)?.edgeDelta, 1);
+    const dormant = {...opponent, styleTraits: {
+      ...opponent.styleTraits, [t]: chain.opponentCondition.min-1
+    }};
+    assert.equal(run(dormant, fullSupport), null,
+      chain.tacticId+": opportunity absent below trigger threshold");
+    for (const [metric, minimum] of Object.entries(chain.requires)) {
+      const failed = run(opponent, {...fullSupport, [metric]: minimum-1});
+      assert.equal(failed?.status, "unsupported",
+        chain.tacticId+": a single missing tactical role should break the chain ("+metric+")");
+      assert.equal(failed?.edgeDelta, 0);
+      assert.equal(run(opponent, {...fullSupport, [metric]: minimum})?.edgeDelta, 1,
+        chain.tacticId+": threshold boundary should be inclusive");
+      assert.equal(run(opponent, {...fullSupport, [metric]: Number.NaN})?.edgeDelta, 0);
+    }
+    const activeCounter = {...opponent, [k]: chain.counterCondition.min, styleTraits: {
+      ...opponent.styleTraits, [k]: chain.counterCondition.min
+    }};
+    assert.equal(run(activeCounter, fullSupport)?.status, "countered");
+    assert.equal(run(activeCounter, fullSupport)?.edgeDelta, 0);
+    const unscouted = {...opponent, styleTraits:{[t]:chain.opponentCondition.min}};
+    delete unscouted[k];
+    assert.equal(run(unscouted, fullSupport)?.status, "unknown_counter");
+    assert.equal(run(unscouted, fullSupport)?.edgeDelta, 0,
+      chain.tacticId+": not observing a counter is NOT evidence that no counter exists");
+    assert.deepEqual(evaluateTacticalSequences(chain.tacticId, null, fullSupport), [],
+      chain.tacticId+": no invented exploit for unsourced generic opponent");
+    assert.deepEqual(evaluateTacticalSequences(chain.tacticId, opponent, null), [],
+      chain.tacticId+": no exploit without a real tactical snapshot");
   }
 });
 
@@ -351,6 +471,16 @@ check("fire samvirkende trekk kan nøytraliseres av ett motgrep", () => {
     { tacticalProfile: { pressScore: 74 } }).combinations[0];
   assert.equal(unknown.status, "unknown");
   assert.equal(unknown.readyCount, 1);
+  const noScouting = evaluatePlanVsOpponent(pressPlan,
+    { styleTraits: { shortBuildUp: 80 } }, { tacticalProfile: ready });
+  const noScoutingCombo = noScouting.combinations.find((x) => x.id === "coordinated_press_chain");
+  assert.equal(noScoutingCombo.status, "unknown_counter");
+  assert.ok(noScouting.notes.some((note) => note.includes("ikke undersøkt")));
+  const scouted = evaluatePlanVsOpponent(pressPlan,
+    { styleTraits: { shortBuildUp: 80, pressIntensity: 30 }, pressResistance: 30 },
+    { tacticalProfile: ready });
+  assert.ok(scouted.edge > noScouting.edge, "undocumented opponent counter cannot yield synergy");
+
 
   // The same composition and single counter alter match chances, not merely text.
   const session = (opponent) => createMatchdaySession({

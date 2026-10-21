@@ -11296,7 +11296,9 @@ function appendMatchPlanSwitcher(card, session) {
         ? "Rollene og formasjonen støtter kjeden mot denne motstanderen."
         : live.status === "countered"
           ? "Motstanderen har en dokumentert struktur som kan nøytralisere kjeden."
-          : "Dagens rolle- og formasjonsdekning er utilstrekkelig for denne kjeden.";
+          : live.status === "unknown_counter"
+            ? "Kjeden har rolledekning, men vi har ikke kartlagt motstanderens mulige motgrep."
+            : "Dagens rolle- og formasjonsdekning er utilstrekkelig for denne kjeden.";
     story.append(storyTitle, status, actions, counter, response);
     wrap.append(story);
   }
@@ -11349,6 +11351,7 @@ function appendMatchPlanSwitcher(card, session) {
     if (entry.matchupVerdict !== "nøytral") bits.push(`${entry.matchupVerdict} mot dem`);
     if (entry.sequenceStatus === "advantage") bits.push("4-trekkskjede mulig");
     else if (entry.sequenceStatus === "countered") bits.push("deres motgrep dekker kjeden");
+    else if (entry.sequenceStatus === "unknown_counter") bits.push("motgrepet er ikke kartlagt");
     else if (entry.sequenceStatus === "unsupported") bits.push("mangler rolledekning");
     meta.textContent = bits.join(" · ");
 

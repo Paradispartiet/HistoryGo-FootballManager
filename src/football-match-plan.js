@@ -377,9 +377,12 @@ export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {})
     const counterActive = responseKnown && responseValue >= pattern.counter.minimum;
     // No speculative benefit from unknown or unsourced player abilities.
     // Bonus is deliberately capped below the existing primary advantage.
-    if (allReady && !counterActive) {
+    if (allReady && responseKnown && !counterActive) {
       edge += 0.5;
       notes.push(pattern.label + ": alle ledd har dekning og virker sammen.");
+    }
+    if (allReady && !responseKnown) {
+      notes.push(pattern.label + ": laget har dekning, men motstanderens motgrep er ikke undersøkt.");
     }
     // A single counter blocks the baseline advantage as well as the
     // multi-factor synergy, but never creates a fake player weakness.
@@ -388,6 +391,7 @@ export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {})
       notes.push(pattern.counter.label + ". Motstanderens ene grep bryter den samlede fordelen.");
     }
     const status = unknown ? "unknown"
+      : allReady && !responseKnown ? "unknown_counter"
       : counterActive ? "countered"
       : allReady ? "ready"
       : "partial";
@@ -410,6 +414,7 @@ export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {})
   sequences.forEach((sequence) => {
     if (sequence.status === "advantage") notes.push(`Spillkjede: ${sequence.title}. Laget har dekning for bevegelsene.`);
     else if (sequence.status === "countered") notes.push(`Motspill: ${sequence.counter}. Ditt mulige svar: ${sequence.response}.`);
+    else if (sequence.status === "unknown_counter") notes.push(`Spillkjeden ${sequence.title} har rolledekning, men motstanderens mulige motgrep er ikke undersøkt.`);
     else notes.push(`Spillkjeden ${sequence.title} trenger bedre faktisk rolle- og formasjonsdekning.`);
   });
   const verdict = edge > 0 ? "gunstig" : edge < 0 ? "risikabel" : "nøytral";
