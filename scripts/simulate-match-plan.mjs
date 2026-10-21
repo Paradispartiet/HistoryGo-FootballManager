@@ -53,6 +53,83 @@ function check(label, run) {
 
 console.log("Kampplan v1 — strategi og bytte underveis\n");
 
+// A live response is explicit state, not an inferred property of a historical
+// club. These assertions separate first pressure from collective coverage.
+check("levende motspill: tredjemann, kollektiv dekning og restforsvar", () => {
+  const fixture = {
+    id: "synthetic_training_opponent",
+    strength: 70, defensiveStructure: 55, pressResistance: 45,
+    styleTraits: {
+      pressIntensity: 76, defensiveCompactness: 88, highLine: 95,
+      possessionControl: 75, transitionThreat: 55, shortBuildUp: 70
+    }
+  };
+  const lineup = {
+    buildUpScore: 90, balanceScore: 90, depthScore: 90,
+    widthScore: 90, restDefenseScore: 90, pressScore: 90
+  };
+  const before = JSON.stringify(fixture);
+  const isolated = { ...fixture, tacticalBehaviour: {
+    pressDirection: "outside_in", pressCoordination: "individual",
+    passingLaneCover: "none", blockSpacing: "stretched", restDefense: "exposed"
+  } };
+  const individual = evaluateTacticalSequences("patient_build_up", isolated, lineup)[0];
+  assert.equal(individual.status, "advantage",
+    "hard first pressure without collective lane cover must leave a third player free");
+  assert.equal(individual.edgeDelta, 1);
+  assert.equal(individual.liveExchange.steps.length, 4);
+  const collective = applyOpponentAdjustment(fixture, {
+    id: "push_up", traitShift: { pressIntensity: 18, highLine: 0, defensiveCompactness: -12 }
+  });
+  assert.equal(collective.tacticalBehaviour.passingLaneCover, "central");
+  assert.equal(collective.tacticalBehaviour.pressCoordination, "collective");
+  const blocked = evaluateTacticalSequences("patient_build_up", collective, lineup)[0];
+  assert.equal(blocked.status, "countered");
+  assert.equal(blocked.edgeDelta, 0);
+  assert.equal(blocked.liveExchange.steps[2].result, "blocked");
+  assert.ok(blocked.liveExchange.failureConsequence.includes("balltap"));
+  assert.deepEqual(evaluateTacticalSequences("patient_build_up", collective, lineup),
+    evaluateTacticalSequences("patient_build_up", collective, lineup),
+    "same behaviour and lineup must produce the same decision");
+  const missingSupport = evaluateTacticalSequences("patient_build_up", collective,
+    { ...lineup, buildUpScore: 10 })[0];
+  assert.equal(missingSupport.status, "unsupported",
+    "a tactical change cannot generate missing passing skills");
+
+  // Compactness by itself is not equivalent to simultaneous lane coverage.
+  const central = evaluateTacticalSequences("central_possession_4231", isolated, lineup)[0];
+  assert.equal(central.status, "advantage");
+  const centralClosed = evaluateTacticalSequences("central_possession_4231", collective, lineup)[0];
+  assert.equal(centralClosed.status, "countered");
+  assert.equal(centralClosed.edgeDelta, 0);
+
+  const raised = evaluateTacticalSequences("direct_counter_442", collective, lineup)[0];
+  assert.equal(raised.status, "advantage",
+    "exposed rest defence permits a forward release when the XI supports it");
+  const deep = applyOpponentAdjustment(fixture, {
+    id: "sit_back", traitShift: { highLine: -15, pressIntensity: -16 }
+  });
+  const shielded = evaluateTacticalSequences("direct_counter_442", deep, lineup)[0];
+  assert.equal(shielded.status, "countered",
+    "a covered rest defence must break the direct release");
+  assert.equal(shielded.liveExchange.steps[1].result, "blocked");
+
+  // Live opponent reaction reaches the very same match engine matchup.
+  const actualMatch = evaluatePlanVsOpponent(byId.get("patient_build_up"),
+    collective, { tacticalProfile: lineup });
+  assert.equal(actualMatch.sequences[0].status, blocked.status);
+  assert.ok(actualMatch.notes.some((text) => text.includes("Dynamisk motspill")));
+  const workspace = buildOpponentTacticalSequences({
+    opponent: collective, tactic: byId.get("patient_build_up"),
+    teamFit: { completeCount: 11, totalSlots: 11, metrics: lineup },
+    tactics: plans
+  })[0];
+  assert.equal(workspace.liveExchange.status, "countered");
+  assert.equal(workspace.responsePlanId, "direct_second_balls");
+  assert.equal(JSON.stringify(fixture), before,
+    "live tactical analysis may never mutate a historical opponent profile");
+});
+
 // ---------------------------------------------------------------------------
 check("kampens 18 planvalg bruker planens EGEN rollefit og samme profil som faktisk bytte", () => {
   const opponent = getHistoricalOpponentProfile("barcelona_2008_12_positional_play");
