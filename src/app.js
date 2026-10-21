@@ -6544,6 +6544,7 @@ function getOpponentAnalysisContext() {
     currentPlanReady: Boolean(currentFixture && isOpponentAnalysisPlanForFixture(savedPlan, currentFixture.fixtureId)),
     formation: getFormation(),
     tactic: getTactic(),
+    teamFit: getTeamFit(),
     trainingLabel: getWeeklyTrainingChoiceLabel()
   };
 }
