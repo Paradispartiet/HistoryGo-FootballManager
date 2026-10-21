@@ -513,3 +513,17 @@
 
   .opponent-analysis-profile { grid-template-columns: 1fr; }
 }
+
+
+/* The opponent exploit readout is a presentation of existing match metrics. */
+.opponent-analysis-tactical-opportunities { display: grid; gap: .6rem; padding: .7rem 0; }
+.opponent-analysis-tactical-opportunities h4 { margin: 0; font-size: .78rem; }
+.opponent-analysis-tactical-method,
+.opponent-analysis-tactical-empty { margin: 0; font-size: .7rem; line-height: 1.48; color: rgba(255,255,255,.73); }
+.opponent-analysis-tactical-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .52rem; }
+.opponent-analysis-tactical-item { min-width: 0; display: grid; gap: .3rem; padding: .8rem; border: 1px solid rgba(255,255,255,.13); border-radius: .6rem; }
+.opponent-analysis-tactical-item strong { font-size: .74rem; }
+.opponent-analysis-tactical-item small { font-size: .67rem; color: rgba(255,255,255,.74); overflow-wrap: anywhere; }
+.opponent-analysis-tactical-verdict { font-size: .68rem; font-weight: 750; }
+.opponent-analysis-tactical-item[data-readiness="ready"] .opponent-analysis-tactical-verdict { color: #9cdeb4; }
+.opponent-analysis-tactical-item[data-readiness="gap"] .opponent-analysis-tactical-verdict { color: #ffd18b; }
