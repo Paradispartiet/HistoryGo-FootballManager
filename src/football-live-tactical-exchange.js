@@ -37,10 +37,27 @@ export function behaviourForOpponentAdjustment(adjustmentId, opponent) {
   const coordinated = measured(structure) && measured(compactness)
     && structure >= 75 && compactness >= 64;
   const sparse = measured(structure) && structure < 60;
-
+  const resistance = opponent?.pressResistance;
+  const possession = opponent?.styleTraits?.possessionControl ?? opponent?.possessionControl;
+  const transition = opponent?.styleTraits?.transitionThreat ?? opponent?.transitionThreat;
+  const pairSignal = (a, b, highA, highB, lowA, lowB, highLabel, lowLabel) =>
+    !measured(a) || !measured(b) ? "unknown"
+      : a >= highA && b >= highB ? highLabel
+      : a <= lowA && b <= lowB ? lowLabel : "unknown";
+  const signals = {
+    // Mechanism-specific proxy pairs avoid conflating one high rating
+    // with a real press trap, aerial duel, overload or outlet.
+    wideShift: pairSignal(structure, compactness, 80, 68, 55, 55, "covered", "open"),
+    pressEscape: pairSignal(resistance, possession, 78, 68, 52, 52, "supported", "isolated"),
+    secondBall: pairSignal(structure, compactness, 80, 70, 55, 55, "covered", "loose"),
+    targetDuel: pairSignal(structure, compactness, 82, 75, 54, 55, "double", "single"),
+    boxCover: pairSignal(structure, compactness, 80, 75, 54, 55, "protected", "unprotected"),
+    counterOutlet: pairSignal(transition, resistance, 78, 65, 50, 55, "available", "isolated"),
+    centralPocket: pairSignal(possession, resistance, 77, 70, 50, 55, "available", "blocked")
+  };
   if (adjustmentId === "push_up") {
     return {
-      ...model,
+      ...model, ...signals,
       pressCoordination: coordinated ? "collective" : sparse ? "individual" : "unknown",
       passingLaneCover: coordinated ? "central" : sparse ? "none" : "unknown",
       restDefense: measured(highLine) && highLine >= 72 && sparse
@@ -48,7 +65,7 @@ export function behaviourForOpponentAdjustment(adjustmentId, opponent) {
     };
   }
   return {
-    ...model,
+    ...model, ...signals,
     passingLaneCover: coordinated ? "central" : "unknown",
     restDefense: measured(structure) && structure >= 75
       ? "secured" : "unknown"
