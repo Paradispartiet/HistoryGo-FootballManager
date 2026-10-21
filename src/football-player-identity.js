@@ -8,40 +8,6 @@ export const PLAYER_ID_ALIASES = Object.freeze({
   [LEGACY_BOATENG_ID]: CANONICAL_BOATENG_ID
 });
 
-// Source-verified corrections applied at catalogue hydration, before squad,
-// role-fit and attribute construction. The large historical raw archive remains
-// unchanged; no new skills or numerical ratings are inferred from positions.
-const BRANN_POSITION_CORRECTIONS = Object.freeze({
-  leif_amundsen: Object.freeze({
-    // Brann: left winger ('ytre venstre') for his entire playing career.
-    // https://historie.brann.no/spillere/leif-amundsen/
-    naturalPositions: ["LW"],
-    usablePositions: [],
-    poorFits: ["CB", "DM", "GK"],
-    archetypeIds: [],
-    archetypes: ["club_professional"],
-    needs: ["wide_space", "runners_inside"],
-    preferredRoles: [],
-    likesTactics: ["wide_attack"],
-    dislikesTactics: ["narrow_shape"],
-    warningWhenMisused: "Amundsen var ytre venstre gjennom hele Brann-karrieren, ikke midtstopper."
-  }),
-  hans_brandtun: Object.freeze({
-    // Brann: right back / wing-back, with offensive and defensive qualities.
-    // https://historie.brann.no/spillere/hans-brandtun
-    naturalPositions: ["RB"],
-    usablePositions: ["WB"],
-    poorFits: ["CB", "ST", "GK"],
-    archetypeIds: [],
-    archetypes: ["wide_support"],
-    needs: ["wide_lane", "cover_from_midfield"],
-    preferredRoles: ["wingback", "support_fullback"],
-    likesTactics: ["wide_attack", "rest_defense"],
-    dislikesTactics: ["narrow_shape", "no_cover"],
-    warningWhenMisused: "Brandtun var høyreback/vingback, ikke midtstopper."
-  })
-});
-
 // The raw historic catalogue can retain a legacy record during migration;
 // only its canonical identity may enter gameplay, pools and lineup selection.
 export function normalizePlayablePlayerCatalog(players) {
@@ -61,11 +27,9 @@ export function normalizePlayablePlayerCatalog(players) {
       : player;
     // Colorado Rapids' own player profile records citizenship as Ghana.
     // The historic catalogue incorrectly says Norge for both old entries.
-    const normalized = canonical.id === CANONICAL_BOATENG_ID
+    return canonical.id === CANONICAL_BOATENG_ID
       ? { ...canonical, nationality: "Ghana" }
       : canonical;
-    const correction = BRANN_POSITION_CORRECTIONS[normalized.id];
-    return correction ? { ...normalized, ...correction } : normalized;
   });
 }
 
