@@ -1,3 +1,5 @@
+import { evaluatePlanVsOpponent } from "./football-match-plan.js";
+
 // Motstanderforberedelse v1
 //
 // Et rent lærings- og planleggingslag over eksisterende terminliste,
@@ -61,6 +63,42 @@ const COUNTERMEASURES = Object.freeze({
 });
 
 const asArray = (value) => (Array.isArray(value) ? value : []);
+
+// Keep scouting explanations tied to existing role and skill rules.
+const TACTICAL_ROLE_GROUPS = Object.freeze({
+  pressScore: ["pressing_forward", "pressing_midfielder", "box_to_box"],
+  depthScore: ["channel_runner", "advanced_forward", "pressing_forward"],
+  widthScore: ["wide_dribbler", "inverted_winger", "wingback", "overlapping_fullback"]
+});
+
+export function buildOpponentTacticalOpportunities({ opponent, tactic, teamFit } = {}) {
+  // A generic club without documented style traits offers no verifiable exploit.
+  if (!opponent?.styleTraits || !tactic) return [];
+  const matchup = evaluatePlanVsOpponent(tactic, opponent, { tacticalProfile: teamFit?.metrics });
+  const incomplete = Number(teamFit?.completeCount) < Number(teamFit?.totalSlots);
+  return asArray(matchup?.opportunities).map((opportunity) => {
+    const combinations = asArray(matchup?.combinations)
+      .filter((combination) => combination.opportunityId === opportunity.id);
+    const countered = opportunity.readiness === "ready"
+      && combinations.some((combination) => combination.counter.status === "active");
+    const supportingRoles = asArray(teamFit?.assignments)
+      .filter((entry) => entry?.isComplete
+        && TACTICAL_ROLE_GROUPS[opportunity.metric]?.includes(entry.role?.id))
+      .map((entry) => ({
+        player: entry.player?.name || entry.player?.id || "",
+        role: entry.role?.name || entry.role?.id || ""
+      })).filter((entry) => entry.player && entry.role);
+    const contribution = teamFit?.sourcedSkillTendencies?.[opportunity.metric];
+    return {
+      ...opportunity,
+      readiness: incomplete ? "incomplete" : countered ? "countered" : opportunity.readiness,
+      combinations,
+      supportingRoles,
+      documentedPlayers: [...new Set(asArray(contribution?.players).filter(Boolean))],
+      hasDocumentedSkill: Number(contribution?.bonus) > 0
+    };
+  });
+}
 
 function text(value, fallback = "") {
   const normalized = String(value ?? "").trim();
@@ -126,7 +164,7 @@ function signalsForFocus(opponent, matchup, focusId) {
   ]).slice(0, 5);
 }
 
-export function createOpponentAnalysisWorkspace({ fixture = null, formation = null, tactic = null, trainingLabel = "Ikke valgt" } = {}) {
+export function createOpponentAnalysisWorkspace({ fixture = null, formation = null, tactic = null, teamFit = null, trainingLabel = "Ikke valgt" } = {}) {
   const opponent = fixture?.opponent || null;
   if (!fixture?.fixtureId || !opponent?.id) {
     return {
@@ -171,6 +209,7 @@ export function createOpponentAnalysisWorkspace({ fixture = null, formation = nu
       training: text(trainingLabel, "Ikke valgt")
     },
     matchup,
+    tacticalOpportunities: buildOpponentTacticalOpportunities({ opponent, tactic, teamFit }),
     focuses
   };
 }

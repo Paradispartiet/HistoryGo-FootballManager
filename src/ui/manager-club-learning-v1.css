@@ -513,3 +513,31 @@
 
   .opponent-analysis-profile { grid-template-columns: 1fr; }
 }
+
+
+/* The opponent exploit readout is a presentation of existing match metrics. */
+.opponent-analysis-tactical-opportunities { display: grid; gap: .6rem; padding: .7rem 0; }
+.opponent-analysis-tactical-opportunities h4 { margin: 0; font-size: .78rem; }
+.opponent-analysis-tactical-method,
+.opponent-analysis-tactical-empty { margin: 0; font-size: .7rem; line-height: 1.48; color: rgba(255,255,255,.73); }
+.opponent-analysis-tactical-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .52rem; }
+.opponent-analysis-tactical-item { min-width: 0; display: grid; gap: .3rem; padding: .8rem; border: 1px solid rgba(255,255,255,.13); border-radius: .6rem; }
+.opponent-analysis-tactical-item strong { font-size: .74rem; }
+.opponent-analysis-tactical-item small { font-size: .67rem; color: rgba(255,255,255,.74); overflow-wrap: anywhere; }
+.opponent-analysis-tactical-verdict { font-size: .68rem; font-weight: 750; }
+.opponent-analysis-tactical-item[data-readiness="ready"] .opponent-analysis-tactical-verdict { color: #9cdeb4; }
+.opponent-analysis-tactical-item[data-readiness="gap"] .opponent-analysis-tactical-verdict { color: #ffd18b; }
+
+/* A variable-size cooperation pattern with one (or later several) counteractions. */
+.opponent-analysis-combination { display: grid; gap: .4rem; padding-top: .65rem; border-top: 1px solid rgba(255,255,255,.12); }
+.opponent-analysis-combination > strong { font-size: .71rem; }
+.opponent-analysis-combination-factors { display: grid; gap: .3rem; margin: 0; padding-left: 1.2rem; }
+.opponent-analysis-combination-factor { min-width: 0; font-size: .67rem; }
+.opponent-analysis-combination-factor small { display: block; color: rgba(255,255,255,.65); }
+.opponent-analysis-combination-factor[data-factor-status="ready"] { color: #9cdeb4; }
+.opponent-analysis-combination-factor[data-factor-status="gap"] { color: #ffd18b; }
+.opponent-analysis-combination-counter,
+.opponent-analysis-combination-answer { margin: 0; font-size: .68rem; line-height: 1.48; overflow-wrap: anywhere; }
+.opponent-analysis-combination-counter { font-weight: 750; }
+.opponent-analysis-tactical-item[data-readiness="countered"] .opponent-analysis-tactical-verdict,
+.opponent-analysis-tactical-item[data-readiness="countered"] .opponent-analysis-combination-counter { color: #ffd18b; }

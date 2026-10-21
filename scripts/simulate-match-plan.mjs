@@ -35,6 +35,7 @@ import {
   getMatchdayGameState
 } from "../src/football-matchday-engine.js";
 import { getHistoricalOpponentProfile } from "../src/football-historical-opponent-profiles.js";
+import { buildOpponentTacticalOpportunities, createOpponentAnalysisWorkspace } from "../src/football-opponent-analysis.js";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const data = JSON.parse(readFileSync(join(root, "data/football_tactics.json"), "utf8"));
@@ -210,7 +211,12 @@ check("motstandersvakheter krever faktisk rolle-, egenskaps- og formasjonsdeknin
     "high defensive line must only yield bonus if runner roles provide actual depth");
   assert.ok(depthMissing.notes.some(note => note.includes("dybdetrussel")));
 
-  const compact = getHistoricalOpponentProfile("inter_1960s_catenaccio");
+  // Isolate wing overload before the opponent's separate high-quality
+  // defensive counter: otherwise 'width beats compactness' is a false rule.
+  const compact = {
+    ...getHistoricalOpponentProfile("inter_1960s_catenaccio"),
+    defensiveStructure: 74
+  };
   const wide = { ...byId.get("all_out_attack"), width: "wide" };
   const stretched = evaluatePlanVsOpponent(wide, compact,
     { tacticalProfile: { depthScore: 75, widthScore: 74, pressScore: 75 } });
@@ -252,6 +258,129 @@ check("den samme matchup-forskjellen når kampmotorens xG", () => {
     "source-supported exploit must flow into actual chance generation rather than UI copy");
   assert.ok(strongXg.against < unsupportedXg.against,
     "counterpress exploitation must also reduce opponent chances");
+});
+
+check("fire samvirkende trekk kan nøytraliseres av ett motgrep", () => {
+  const originalOpponent = getHistoricalOpponentProfile("barcelona_2008_12_positional_play");
+  const pressPlan = byId.get("counter_press_recovery");
+  const ready = {
+    pressScore: 74, balanceScore: 75, restDefenseScore: 70,
+    depthScore: 69, widthScore: 66, buildUpScore: 67
+  };
+  const coordinated = evaluatePlanVsOpponent(pressPlan, originalOpponent,
+    { tacticalProfile: ready });
+  const chain = coordinated.combinations.find((entry) => entry.id === "coordinated_press_chain");
+  assert.equal(chain.factors.length, 4, "press combination requires four separate tactical links");
+  assert.ok(chain.factors.every((factor) => factor.status === "ready"));
+  assert.equal(chain.status, "ready");
+  assert.equal(chain.counter.status, "inactive");
+
+  // One missing midfield balancing component removes the extra synergy,
+  // but the separate first-line press can still work.
+  const oneMissing = evaluatePlanVsOpponent(pressPlan, originalOpponent,
+    { tacticalProfile: { ...ready, balanceScore: 39 } });
+  assert.ok(coordinated.edge > oneMissing.edge,
+    "four cooperating role units must beat the same press with one broken link");
+  assert.equal(oneMissing.combinations[0].status, "partial");
+  assert.equal(oneMissing.combinations[0].readyCount, 3);
+
+  // One opponent trait is allowed to defeat the complete four-part mechanism.
+  const oneCounter = { ...originalOpponent, pressResistance: 92 };
+  const countered = evaluatePlanVsOpponent(pressPlan, oneCounter,
+    { tacticalProfile: ready });
+  assert.ok(countered.edge < oneMissing.edge,
+    "single press-resistant escape must defeat even the complete four-part pressing chain");
+  assert.equal(countered.combinations[0].status, "countered");
+  assert.equal(countered.combinations[0].counter.status, "active");
+  assert.ok(countered.notes.some((note) => note.includes("bryter den samlede fordelen")));
+
+  // Missing source/context is UNKNOWN, not a made-up missing talent claim.
+  const unknown = evaluatePlanVsOpponent(pressPlan, originalOpponent,
+    { tacticalProfile: { pressScore: 74 } }).combinations[0];
+  assert.equal(unknown.status, "unknown");
+  assert.equal(unknown.readyCount, 1);
+
+  // The same composition and single counter alter match chances, not merely text.
+  const session = (opponent) => createMatchdaySession({
+    teamFit: {
+      teamScore: 72, completeCount: 11, totalSlots: 11,
+      metrics: { ...ready, relationshipScore: 70 }, assignments: []
+    },
+    formation: { id: "modern_433", name: "Modern 4-3-3", slots: [] },
+    tactic: pressPlan, opponent
+  });
+  const live = session(originalOpponent);
+  const blocked = session(oneCounter);
+  assert.ok(live.planMatchup.edge > blocked.planMatchup.edge);
+  const liveExpected = finalizeMatchdaySession(live).expectedGoals;
+  const blockedExpected = finalizeMatchdaySession(blocked).expectedGoals;
+  assert.ok(liveExpected.for > blockedExpected.for,
+    "four-part attack that survives the counter must generate more expected goals");
+  assert.ok(liveExpected.against < blockedExpected.against,
+    "blocked pressing chain must also expose more opposition chances");
+  const analysis = buildOpponentTacticalOpportunities({
+    opponent: oneCounter, tactic: pressPlan,
+    teamFit: {
+      completeCount: 11, totalSlots: 11, metrics: ready,
+      assignments: [], sourcedSkillTendencies: {}
+    }
+  });
+  assert.equal(analysis.find((entry) => entry.id === "press_build_up").readiness, "countered");
+  assert.equal(analysis.find((entry) => entry.id === "press_build_up").combinations[0].factors.length, 4);
+});
+
+check("analyseavdelingen kobler motstandersvakhet til faktiske roller og kildebelegg", () => {
+  const opponent = getHistoricalOpponentProfile("barcelona_2008_12_positional_play");
+  const tactic = byId.get("counter_press_recovery");
+  const ready = {
+    completeCount: 11, totalSlots: 11,
+    metrics: { pressScore: 74, depthScore: 68, widthScore: 62 },
+    sourcedSkillTendencies: {
+      pressScore: { bonus: 4, players: ["Kildebelagt press-spiller"] }
+    },
+    assignments: [{
+      isComplete: true,
+      player: { id: "press_1", name: "Kildebelagt press-spiller" },
+      role: { id: "pressing_forward", name: "Pressende spiss" }
+    }]
+  };
+  const supported = buildOpponentTacticalOpportunities({ opponent, tactic, teamFit: ready });
+  const press = supported.find((entry) => entry.id === "press_build_up");
+  assert.ok(press, "Barcelona style must expose short-build-up press");
+  assert.equal(press.readiness, "ready");
+  assert.equal(press.metricValue, 74);
+  assert.deepEqual(press.documentedPlayers, ["Kildebelagt press-spiller"]);
+  assert.deepEqual(press.supportingRoles.map(entry => entry.role), ["Pressende spiss"]);
+
+  const noCoverage = buildOpponentTacticalOpportunities({
+    opponent, tactic,
+    teamFit: {
+      ...ready,
+      metrics: { ...ready.metrics, pressScore: 30 },
+      sourcedSkillTendencies: {},
+      assignments: []
+    }
+  }).find((entry) => entry.id === "press_build_up");
+  assert.equal(noCoverage.readiness, "gap");
+  assert.deepEqual(noCoverage.documentedPlayers, []);
+  assert.deepEqual(noCoverage.supportingRoles, []);
+
+  assert.deepEqual(buildOpponentTacticalOpportunities({
+    opponent: { id: "generic", name: "Ukjent" }, tactic, teamFit: ready
+  }), [], "generic club must not receive invented opponent vulnerabilities");
+
+  const incomplete = buildOpponentTacticalOpportunities({
+    opponent, tactic, teamFit: { ...ready, completeCount: 8 }
+  }).find((entry) => entry.id === "press_build_up");
+  assert.equal(incomplete.readiness, "incomplete");
+
+  const workshop = createOpponentAnalysisWorkspace({
+    fixture: { fixtureId: "round_1", opponent },
+    formation: { name: "4-3-3" }, tactic, teamFit: ready
+  });
+  assert.equal(workshop.tacticalOpportunities[0].id, "press_build_up");
+  assert.equal(workshop.tacticalOpportunities[0].readiness, "ready");
+  assert.equal(workshop.ownPlan.formation, "4-3-3");
 });
 
 check("planlista sorteres etter hva som passer situasjonen", () => {

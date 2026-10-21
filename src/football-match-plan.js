@@ -252,6 +252,7 @@ export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {})
   const transitionThreat = num(traits.transitionThreat, 50);
 
   const notes = [];
+  const opportunities = [];
   let edge = 0;
 
   const planPress = axisValue(normalized, "pressing");
@@ -259,10 +260,22 @@ export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {})
   const planTempo = axisValue(normalized, "tempo");
   const planWidth = axisValue(normalized, "width");
 
+  // The same engine that determines xG keeps the evidence for its advantage.
+  // Missing metrics are unknown, not evidence that the player is weak.
+  const recordOpportunity = (id, label, metric) => {
+    const value = tacticalProfile?.[metric];
+    const metricValue = Number.isFinite(value) ? value : null;
+    opportunities.push({
+      id, label, metric, metricValue, threshold: 60,
+      readiness: metricValue === null ? "unknown" : metricValue >= 60 ? "ready" : "gap"
+    });
+  };
+
   // Utsatte motstandere er ikke nok: egne roller må gjennomføre planen.
   // Profilmetrikkene bygges allerede av dokumenterte spillerferdigheter,
   // relasjoner og formasjon. Ingen nye eller gjettede individuelle egenskaper.
   if (planPress >= 70 && shortBuildUp >= 60) {
+    recordOpportunity("press_build_up", "Høyt press mot kort oppbygging", "pressScore");
     if (hasTacticalSupport(tacticalProfile, "pressScore", 60)) {
       edge += 1;
       notes.push("Presset treffer oppbyggingen deres.");
@@ -275,6 +288,7 @@ export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {})
     notes.push("Den høye linja gir dem akkurat rommet de vil ha.");
   }
   if (planTempo >= 55 && highLine >= 65) {
+    recordOpportunity("runs_behind", "Dybdeløp mot høy forsvarslinje", "depthScore");
     if (hasTacticalSupport(tacticalProfile, "depthScore", 60)) {
       edge += 1;
       notes.push("Dybderollene treffer bakrommet bak den høye linja deres.");
@@ -283,6 +297,7 @@ export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {})
     }
   }
   if (planWidth >= 70 && compactness >= 65) {
+    recordOpportunity("stretch_compact", "Bredde mot kompakt forsvar", "widthScore");
     if (hasTacticalSupport(tacticalProfile, "widthScore", 60)) {
       edge += 1;
       notes.push("Kant- og backrollene strekker den kompakte blokka deres.");
@@ -295,8 +310,97 @@ export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {})
     notes.push("Den rolige oppbyggingen blir presset ned i eget område.");
   }
 
+  // Sammensatte taktiske mønstre: ikke tre isolerte motsetningspar.
+  // En samhandling kan kreve 2, 3 eller 4 samtidige LAG-egenskaper,
+  // og ett dokumentert motgrep kan nøytralisere den samlede fordelen.
+  // Samme lagmetrikker kommer fra faktisk rolle-, formasjons- og spillerfit.
+  const patterns = [
+    {
+      id: "coordinated_press_chain",
+      opportunityId: "press_build_up",
+      label: "Fireleddet pressfelle",
+      factors: [
+        { metric: "pressScore", minimum: 65, label: "Førstepress fra angrepet" },
+        { metric: "balanceScore", minimum: 60, label: "Midtbane som stenger neste pasning" },
+        { metric: "restDefenseScore", minimum: 60, label: "Sikring bak presset" },
+        { metric: "depthScore", minimum: 58, label: "Dybdeledd som binder motstanderen" }
+      ],
+      counter: { metric: "pressResistance", minimum: 85,
+        label: "Pressresistens: én fri tredjemann spiller forbi hele pressfellen" },
+      answer: "Bryt presset med sikret oppbygging eller velg et mindre aggressivt pressmønster."
+    },
+    {
+      id: "deep_run_support_chain",
+      opportunityId: "runs_behind",
+      label: "Dybdeløp med pasningsstøtte",
+      factors: [
+        { metric: "depthScore", minimum: 65, label: "Løp bak forsvarslinjen" },
+        { metric: "buildUpScore", minimum: 60, label: "Pasningsledd som finner løpet" },
+        { metric: "balanceScore", minimum: 58, label: "Andreball og sentral sikring" }
+      ],
+      counter: { metric: "pressIntensity", minimum: 85,
+        label: "Aggressivt motpress på pasningsleggeren bryter hele løpskombinasjonen" },
+      answer: "Flytt pasningsstarten eller skap rommet med sideskift før dybdeløpet."
+    },
+    {
+      id: "wide_overload_chain",
+      opportunityId: "stretch_compact",
+      label: "Breddeovertall med sikring",
+      factors: [
+        { metric: "widthScore", minimum: 65, label: "Kant og back gir bredde" },
+        { metric: "buildUpScore", minimum: 60, label: "Pasningsstøtte som vender spillet" },
+        { metric: "balanceScore", minimum: 58, label: "Sentralt ledd som sikrer ved balltap" }
+      ],
+      counter: { metric: "defensiveStructure", minimum: 82,
+        label: "Solid sidesikring fjerner rommet selv om bredden er riktig" },
+      answer: "Angrip motsatt halvrom når blokken har flyttet seg mot ballside."
+    }
+  ];
+  const combinations = [];
+  for (const pattern of patterns) {
+    const primary = opportunities.find((item) => item.id === pattern.opportunityId);
+    if (!primary) continue;
+    const factors = pattern.factors.map(({ metric, minimum, label }) => {
+      const raw = tacticalProfile?.[metric];
+      const value = Number.isFinite(raw) ? raw : null;
+      return { metric, label, value, minimum,
+        status: value === null ? "unknown" : value >= minimum ? "ready" : "gap" };
+    });
+    const allReady = factors.every((factor) => factor.status === "ready");
+    const unknown = factors.some((factor) => factor.status === "unknown");
+    const responseValue = pattern.counter.metric === "pressResistance"
+      ? opponent?.pressResistance
+      : traits[pattern.counter.metric] ?? opponent?.[pattern.counter.metric];
+    const responseKnown = Number.isFinite(responseValue);
+    const counterActive = responseKnown && responseValue >= pattern.counter.minimum;
+    // No speculative benefit from unknown or unsourced player abilities.
+    // Bonus is deliberately capped below the existing primary advantage.
+    if (allReady && !counterActive) {
+      edge += 0.5;
+      notes.push(pattern.label + ": alle ledd har dekning og virker sammen.");
+    }
+    // A single counter blocks the baseline advantage as well as the
+    // multi-factor synergy, but never creates a fake player weakness.
+    if (counterActive && primary.readiness === "ready") {
+      edge -= 1;
+      notes.push(pattern.counter.label + ". Motstanderens ene grep bryter den samlede fordelen.");
+    }
+    const status = unknown ? "unknown"
+      : counterActive ? "countered"
+      : allReady ? "ready"
+      : "partial";
+    combinations.push({
+      id: pattern.id, label: pattern.label, opportunityId: pattern.opportunityId,
+      factors, status, readyCount: factors.filter((factor) => factor.status === "ready").length,
+      counter: { label: pattern.counter.label, metric: pattern.counter.metric,
+        value: responseKnown ? responseValue : null, minimum: pattern.counter.minimum,
+        status: responseKnown ? counterActive ? "active" : "inactive" : "unknown" },
+      answer: pattern.answer
+    });
+  }
+
   const verdict = edge > 0 ? "gunstig" : edge < 0 ? "risikabel" : "nøytral";
-  return { edge, verdict, notes };
+  return { edge, verdict, notes, opportunities, combinations };
 }
 
 // ----------------------------------------------------------------------------
