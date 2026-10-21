@@ -141,6 +141,8 @@ export function createLineupSnapshot(teamFit, { freshnessByPlayerId = {} } = {})
       startFreshness: num(freshnessByPlayerId[str(assignment.player.id)], 100),
       // matchScore er lagets egen «passer han her»-måling. Den er grunnen til at
       // riktig brukt spiller leverer mer enn feilbrukt klasse.
+      // Unknown/missing match fit is never promoted to evidence by v6.
+      matchFitKnown: Number.isFinite(assignment.fit?.matchScore),
       matchScore: num(assignment.fit?.matchScore, 60)
     }));
 }
