@@ -95,3 +95,22 @@ Terminalt utfall er **`regain`**, **`contained`** eller **`escaped`**. Bare term
 Fasen er eksklusiv mot de to foregående v6-angrepsfasene i én periode og aktiveres bare for nyopprettede kamper med `causalPressingVersion: 1`. Ingen mål eller sjanser kan tilskrives et ikke-generert skudd. Forsvarlig test: `npm run sim:own-press-v6` verifiserer tre planer, kollektiv rollekjede, motstanders evne til pressgjennombrudd, eksplisitt motspill, tre utfall, restforsvar, gammelt save, deterministisk gjenspilling og samsvar mellom kampresultat og xG-regnskap.
 
 Dette er fortsatt intern spillmodellverifikasjon. Full kalibrering og virkelighetsnær påstandsverifisering krever uavhengige, annoterte kamp-/trackingdata slik dokumentet spesifiserer.
+
+## Kampmotor v6 – fire siste hovedplaner og 18/18 planveier
+
+Etter tidligere leveranser har 14 av de 18 kanoniske kampplanene minst én v6-handlingskjede. Denne utviklingsdelen gir de fire gjenstående planene egne kausale kampfaser:
+
+| Plan | Trigger hos motstander | Fire avhengige handlinger | Dokumenterbart motgrep | Terminallogikk |
+| --- | --- | --- | --- | --- |
+| `low_block_transition_541` | ballkontroll `possessionControl ≥ 67` | kompakt stopperledd → sentral midtbanedekning → gjenvinning og første spisspasning → vingback som kontringsstøtte | kollektivt restforsvar som fjerner ledig avlastning | kontringsvindu eller fortsatt motstandertrykk |
+| `deep_block_long_release` | motstanderens linje `highLine ≥ 64` | første boksduell → sikring av andreball → langt oppspill til spiss → avlegg til midtbane | kollektiv andreballdekning | fremoverspill eller returpress |
+| `see_out_the_game` | vi leder *og* motstanderens `pressIntensity ≥ 70` | tett stopperledd → sentral retursikring → backdekning → avlastning foran | kollektivt, koordinert press | redusert fare eller tap av kontroll |
+| `slow_it_down` | motstanderens `pressIntensity ≥ 68` | keeper trekker press → stopperstøtte → sekser som trygg retur → nytt støttepunkt med ballkontroll | eksplisitt sentral pasningsdekning | redusert fare eller pressgjennombrudd imot |
+
+Alle ledd krever *forskjellige*, navngitte spillere fra den faktiske elleveren, med kjent rollepassform, samt nødvendige teammetrikker og relevant motstanderdata. Ukjent press, forsvarslinje, rollefit eller overgangstrussel utløser ikke en antatt svakhet. `see_out_the_game` har et ekstra krav: stillingen må vise ledelse. Ved uavgjort eller underlege kamper gir denne planen ikke en urimelig tids-/ledelsesbonus.
+
+Et kontrollert kampbilde kan **hindre** xG imot uten å generere en egen sjanse (og skal ikke krediteres et eksisterende tilfeldig skudd i minuttloggen). En støttet direkte utløsning kan skape et moderat sjansevindu; en mislykket kjede kan utsette laget for et samlet kontrings-/returtrykk. Dette er **ett** perioderesultat og **ett** samlet tillegg, ikke en bonus for hvert trekk. Mulige mål og avslutninger kommer fortsatt bare fra eksisterende xG- og sjansegenerator etter den taktiske avgjørelsen.
+
+Den nye `causalGameControlVersion: 1` aktiveres kun ved oppstart av nye kamper. Tidligere lagringer videreføres med opprinnelig kampregnskap. `npm run sim:game-control-v6` tester alle fire planer, ledelseskravet, ukjent data, viktige roller, eksplisitte motgrep, god/dårlig dekning, deterministisk gjenspilling, xG-delta etter avrunding og fravær av fiktive sjanser.
+
+**Dekning versus dokumentasjon:** Når denne PR-en er godkjent er alle 18 kanoniske kampplaner dekket av minst én modellert v6-kjede *under riktige spillforutsetninger*. Det er ikke det samme som at alle mulige formasjoner, motstandere, spillerroller, hendelsessekvenser og historiske kamper er empirisk kalibrert. De eksisterende terskelverdiene og konstruerte xG-vektningene er fremdeles transparente og falsifiserbare **spilldesignhypoteser**.
