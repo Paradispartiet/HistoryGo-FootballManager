@@ -2409,6 +2409,92 @@ export function getP1NewSourceRecord(player) {
   };
 }
 
+
+/**
+ * Source-backed, runtime-only position corrections for canonical P1 heritage.
+ * The large frozen raw player catalog is not rewritten in this production pass.
+ * No position description is converted into an undocumented strength token.
+ */
+export const P1_EXISTING_ROLE_CORRECTIONS = Object.freeze([
+  {
+    "playerId": "leif_amundsen",
+    "placeId": "brann_stadion",
+    "naturalPositions": [
+      "LW"
+    ],
+    "usablePositions": [],
+    "poorFits": [
+      "CB",
+      "DM",
+      "GK"
+    ],
+    "archetypeIds": [],
+    "archetypes": [
+      "wide_support"
+    ],
+    "needs": [
+      "wide_space",
+      "support_from_midfield"
+    ],
+    "preferredRoles": [
+      "outside_forward"
+    ],
+    "likesTactics": [
+      "wide_attack"
+    ],
+    "dislikesTactics": [
+      "narrow_shape"
+    ],
+    "warningWhenMisused": "Amundsen var ytre venstre i Brann gjennom hele karrieren; bruk ham som klassisk venstreving, ikke midtstopper.",
+    "claim": "Branns offisielle spillerprofil sier uttrykkelig at Leif Amundsen spilte ving gjennom hele karrieren, som ytre venstre med draktnummer 11. Den kanoniske katalogens CB/DM og duel_stopper-profil er derfor uriktig. Ingen spesifikke ferdighetstoken dokumenteres av kilden.",
+    "source": "https://historie.brann.no/spillere/leif-amundsen/"
+  },
+  {
+    "playerId": "hans_brandtun",
+    "placeId": "brann_stadion",
+    "naturalPositions": [
+      "RB"
+    ],
+    "usablePositions": [
+      "WB"
+    ],
+    "poorFits": [
+      "CB",
+      "ST",
+      "GK"
+    ],
+    "archetypeIds": [],
+    "archetypes": [
+      "wide_support",
+      "defensive_balance"
+    ],
+    "needs": [
+      "wide_lane",
+      "cover_from_midfield"
+    ],
+    "preferredRoles": [
+      "wing_back",
+      "traditional_full_back"
+    ],
+    "likesTactics": [
+      "wide_attack",
+      "defensive_balance"
+    ],
+    "dislikesTactics": [
+      "narrow_shape",
+      "no_cover"
+    ],
+    "warningWhenMisused": "Brandtun var høyreback og vingback i Brann med offensive og defensive oppgaver, ikke en ren midtstopper.",
+    "claim": "Branns offisielle spillerprofil klassifiserer Hans Brandtun som høyreback og beskriver ham som vingback med både offensive og defensive kvaliteter. Den kanoniske katalogens CB/DM/duel_stopper-profil er derfor uriktig. Kilden navngir ingen spesifikke ferdighetstoken som dribbling eller tackling.",
+    "source": "https://historie.brann.no/spillere/hans-brandtun"
+  }
+].map((entry) => Object.freeze({ ...entry })));
+
+const EXISTING_ROLE_CORRECTION_BY_ID = new Map(
+  P1_EXISTING_ROLE_CORRECTIONS.map((entry) => [entry.playerId, entry])
+);
+export const P1_ROLE_FIELDS = Object.freeze(["naturalPositions","usablePositions","poorFits","archetypeIds","archetypes","needs","preferredRoles","likesTactics","dislikesTactics","warningWhenMisused"]);
+
 export function applyP1SourceClaimsToPlayer(player) {
   const heritage = getP1HeritageForPlayer(player);
   if (!heritage) return player;
@@ -2416,11 +2502,15 @@ export function applyP1SourceClaimsToPlayer(player) {
     const record = getP1NewSourceRecord(player);
     return { ...player, strengths: [...record.strengths] };
   }
+  const correction = EXISTING_ROLE_CORRECTION_BY_ID.get(player.id);
+  const alignedPlayer = correction && correction.placeId === heritage.placeId
+    ? { ...player, ...Object.fromEntries(P1_ROLE_FIELDS.map((field) => [field, correction[field]])) }
+    : player;
   const supplement = EXISTING_SUPPLEMENT_BY_ID.get(player.id);
   if (supplement && supplement.placeId === heritage.placeId) {
-    return { ...player, strengths: [...supplement.strengths] };
+    return { ...alignedPlayer, strengths: [...supplement.strengths] };
   }
-  return player;
+  return alignedPlayer;
 }
 
 export function applyP1SourceClaims(players) {
