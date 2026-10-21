@@ -18,7 +18,6 @@ import { createOfficeSceneModel, renderOfficeCommand } from "./ui/manager-office
 import { createManagerTrainingSceneModel, renderManagerTrainingCommand } from "./ui/manager-training-presentation.js";
 import { getTacticalKnowledgeForTactic } from "./football-tactical-knowledge.js";
 import { TACTICAL_SEQUENCES } from "./football-tactical-sequences.js";
-import { resolveTacticalPossession } from "./football-matchday-tactical-possession.js";
 import { calculateTeamFit } from "./football-team-fit-engine.js";
 import {
   normalizePlayerPartnerships,
@@ -4573,9 +4572,7 @@ function chooseMatchdayDecision(optionId) {
   });
   session = state.matchday.session;
 
-  const tacticalPossession = resolveTacticalPossession({
-    event, decision: { optionId: option.id, tone: resolution.tone, effects: resolution.effects }
-  });
+  const tacticalPossession = resolution.tacticalPossession;
   session.decisions.push({
     tacticalPossession,
     eventId: event.id,
