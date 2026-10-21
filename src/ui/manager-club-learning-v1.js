@@ -428,6 +428,7 @@ function appendOpponentAnalysisWorkshop(body) {
       formation: context.formation,
       tactic: context.tactic,
       teamFit: context.teamFit,
+      responseTeamFit: context.responseTeamFit,
       tactics: context.tactics,
       trainingLabel: context.trainingLabel
     });
@@ -523,7 +524,9 @@ function appendOpponentAnalysisWorkshop(body) {
           assessment.append(required);
           if (preview.risk) assessment.append(node("small", "", "Risiko ved alternativet: " + preview.risk));
           assessment.append(node("small", "",
-            "Foreløpig vurdering av dagens lag. Kampplanbytte krever ny beregning av roller, samspill og omstillingskostnad."));
+            preview.basis === "proposed_plan"
+              ? "Rolle- og formasjonsdekningen er beregnet for den foreslåtte kampplanen. Et kampbytte har fortsatt omstillingskostnad."
+              : "Foreløpig vurdering med den nåværende kampplanen. Før bytte må både lagfit og omstillingskostnad beregnes på nytt."));
           scene.append(assessment);
         }
         const explore = node("button", "opponent-analysis-response-action",

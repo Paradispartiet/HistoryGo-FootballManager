@@ -518,3 +518,16 @@ start- og endringssnapshots. Tidligere lagrede sesjoner fikk mangelfulle
 feil i enhver kampsituasjon, noe som ga en ubegrunnet `+0,9` i planforbedring.
 Appen slår opp den kanoniske gamle kampplanen når den finnes, slik at også
 eldre sesjoner vurderes med riktig kontekst ved første taktikkbytte.
+
+
+### Motsvar mot faktiske alternative rolleberegninger
+
+For å unngå at manageren får et falskt råd om et nytt mottrekk, gjør
+analyseavdelingen en **egen, read-only teamFit-beregning** av nøyaktig samme
+ellever og formasjon med den **foreslåtte kampplanen**. Dermed vurderes nye
+rollestøtter, samspill og dokumenterte spillerstyrker på den planen som faktisk
+foreslås, ikke de gamle metrikkene fra den taktikken manageren allerede spiller.
+Ingen plan byttes automatisk. Selve kampbyttet koster fortsatt omstilling.
+Hvis modulen ikke får ny beregning, merker den eksplisitt rådet som foreløpig.
+Den permanente `sim:match-plan`-testen kontrollerer at et nytt alternativ ikke
+feilaktig anbefales når én av dets egne lagdimensjoner faller under kravet.
