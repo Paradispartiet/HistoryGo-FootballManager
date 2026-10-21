@@ -527,3 +527,17 @@
 .opponent-analysis-tactical-verdict { font-size: .68rem; font-weight: 750; }
 .opponent-analysis-tactical-item[data-readiness="ready"] .opponent-analysis-tactical-verdict { color: #9cdeb4; }
 .opponent-analysis-tactical-item[data-readiness="gap"] .opponent-analysis-tactical-verdict { color: #ffd18b; }
+
+/* A variable-size cooperation pattern with one (or later several) counteractions. */
+.opponent-analysis-combination { display: grid; gap: .4rem; padding-top: .65rem; border-top: 1px solid rgba(255,255,255,.12); }
+.opponent-analysis-combination > strong { font-size: .71rem; }
+.opponent-analysis-combination-factors { display: grid; gap: .3rem; margin: 0; padding-left: 1.2rem; }
+.opponent-analysis-combination-factor { min-width: 0; font-size: .67rem; }
+.opponent-analysis-combination-factor small { display: block; color: rgba(255,255,255,.65); }
+.opponent-analysis-combination-factor[data-factor-status="ready"] { color: #9cdeb4; }
+.opponent-analysis-combination-factor[data-factor-status="gap"] { color: #ffd18b; }
+.opponent-analysis-combination-counter,
+.opponent-analysis-combination-answer { margin: 0; font-size: .68rem; line-height: 1.48; overflow-wrap: anywhere; }
+.opponent-analysis-combination-counter { font-weight: 750; }
+.opponent-analysis-tactical-item[data-readiness="countered"] .opponent-analysis-tactical-verdict,
+.opponent-analysis-tactical-item[data-readiness="countered"] .opponent-analysis-combination-counter { color: #ffd18b; }
