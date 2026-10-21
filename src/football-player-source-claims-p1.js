@@ -11,7 +11,7 @@ export const P1_HERITAGES = Object.freeze([
   { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 40, expectedPartial: 2, expectedThin: 5, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 21, expectedPartial: 3, expectedThin: 0, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 22, expectedPartial: 2, expectedThin: 0, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
 
   { key: "fredrikstad", placeId: "fredrikstad_stadion", expectedExclusive: 70, generation: "new" },
   { key: "skeid", placeId: "nordre_asen", expectedExclusive: 70, generation: "new" },
@@ -1654,6 +1654,19 @@ const existingSupplements = [
     "playingStyle": "Pasningssikker midtbanespiller etter en historisk og uttrykkelig anekdotisk Brann-omtale.",
     "claim": "Bergens Tidende 20. juni 2018 omtaler Atle Hellesø med den retrospektive og uttrykkelig anekdotiske formuleringen «Noen sier han aldri slo en pasning feil». Dette er et historisk vitnesbyrd om pasningssikkerhet, ikke målbar feilprosent eller dokumentasjon for lange pasninger, spilleforståelse eller tempoledelse. Derfor tilføres bare simple_passing uten konstruert tallrating.",
     "source": "https://www.bt.no/nyheter/lokalt/i/wEQ31d/en-gudbenaadet-spiller"
+  },
+
+  // Lillestrøm 1989: direct testimony from fellow defender Bård Bjerkeland,
+  // not leadership inferred solely from Dyrstad's captaincy.
+  {
+    playerId: "ole_dyrstad",
+    placeId: "araasen_stadion",
+    strengths: ["leadership"],
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Ansvarstagende og samlende forsvarsspiller på Lillestrøms seriemesterlag i 1989.",
+    claim: "I Lillestrøms God fugl-intervju 1. desember 2017 omtaler tidligere medspiller Bård Bjerkeland at laget hadde ledere som tok tak og trekker særskilt frem Ole Dyrstad. Bjerkeland omtaler ham også som undervurdert og svært klok. Lagkameratens konkrete vurdering fra felles LSK-periode gir et begrenset belegg for leadership; kapteinsbindet bekrefter konteksten, men er ikke beviset alene. Utsagnet er ikke tilstrekkelig til å tildele game_reading, tackling, heading eller numeriske ratinger.",
+    source: "https://www.lsk.no/nyheter/bard-bjerkeland-jeg-fikk-kjeft-av-kjerrringa-til-mini",
+    supportingSources: ["https://www.lsk.no/nyheter/lehne-og-dyrstad-kommer-vorspiel-pa-lillestrom-torv-for-klassikeren-mot-rbk"]
   },
 
   // 2026-10-20: Three further source-backed exclusive Lillestrøm profiles; no positional inference.
