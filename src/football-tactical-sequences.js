@@ -479,6 +479,9 @@ export function evaluateTacticalSequences(tacticId, opponent, tacticalProfile) {
         .map(([metric, minimum]) => ({ metric, minimum,
           actual: finite(tacticalProfile[metric]) ? tacticalProfile[metric] : null }));
       const ready = missing.length === 0;
+      const unknownTeam = missing.some((item) => item.actual === null);
+      // A below-threshold confirmed metric is a tactical weakness; a missing
+      // metric is unscouted team context, not proof the player's role is weak.
       // An unknown opponent countermeasure is NOT proof that it is absent.
       // Do not award a tactical advantage until both the vulnerability and
       // the relevant opponent response are actually represented in the profile.
@@ -487,7 +490,8 @@ export function evaluateTacticalSequences(tacticId, opponent, tacticalProfile) {
       return { id: pattern.tacticId, title: pattern.title,
         moves: pattern.moves.slice(), counter: pattern.counter,
         response: pattern.response, missing, ready, countered,
-        status: !ready ? "unsupported"
+        status: unknownTeam ? "unknown_team"
+          : !ready ? "unsupported"
           : !counterKnown ? "unknown_counter"
           : countered ? "countered" : "advantage",
         edgeDelta: ready && counterKnown && !countered ? 1 : 0 };

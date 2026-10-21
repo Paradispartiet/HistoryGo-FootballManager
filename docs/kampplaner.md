@@ -550,3 +550,22 @@ Forhåndsvisningen er et vurderingsgrunnlag, **ikke en seiergaranti**:
 omstillingskostnad, senere hendelser og motstanderens endrede oppførsel kan
 fortsatt endre kampbildet. Alternativene beregnes først når man åpner
 taktikkvelgeren, for ikke å gi ekstra mobilkostnad på hver kampoppdatering.
+
+
+## 21. oktober 2026: kvalitetssikring av taktisk usikkerhet, 18 av 18 planer
+
+Taktisk speiding må skille **fravær av dokumentasjon** fra **dokumentert fravær av en svakhet**. De to forholdene gir ulike råd til manageren:
+
+| Kampanalyse | Kontrollkrav | Betydning |
+|---|---|---|
+| `advantage` | Motstanderens sårbarhet bekreftet, alle nødvendige lagledd dekker krav, motgrep undersøkt og ikke aktivt | Kjedebonus kan vurderes |
+| `countered` | Sårbarheten finnes, men motstanderens kjente motgrep virker | Kjedebonusen stoppes |
+| `unsupported` | Lagets **målte** rolle-/formasjonsdimensjon ligger under kravet | Eget taktisk hull, ikke nødvendigvis individuell svakhet |
+| `unknown_team` | En eller flere nødvendige lagverdier mangler | Ikke tilskriv spillere svakheter uten bevis; ingen bonus |
+| `unknown_opponent` | Relevant motstandersignal mangler, selv om andre stilsignaler finnes | Speid mer; ikke si at sårbarheten er fraværende |
+| `not_exposed` | Relevant stilsignal finnes, men er **under** modellens aktiveringsterskel | Sårbarheten er ikke observert i denne profilen |
+| `unknown_counter` | Relevant sårbarhet observert, men motgrepet ikke kartlagt | Ingen bonus før motspillet er undersøkt |
+
+Det eksisterende nettet med 18 firetrekkssekvenser og 12 publiserte historiske taktikkarketyper er fortsatt en **modell**, ikke en empirisk dokumentert fasit. I siste komplette 216-cellers matrise hadde alle 18 minst én mulig fordel, men fire sekvenser hadde **ingen aktiverte motgrep i disse 12 arketypene**: `counter_press_recovery`, `direct_counter_442`, `low_block_transition_541` og `deep_block_long_release`. Dette er et synlig dekningshull i det historiske eksempelutvalget, **ikke** bevis for at taktikkene mangler motspill. Syntetiske grenseverdier tester at motgrepene fungerer; det skal ikke konstrueres historiske motstanderfakta for å tvinge flere treff.
+
+`sim:match-plan` prøver alle 18 med en fullstendig motstanderprofil, en delvis kartlagt motstander, et lag med manglende måling, et lag med faktisk svak rolledekning og alternative kampplaner som mangler data. Avgjørelser og xG får ikke taktisk kjedebonus fra manglende informasjon.

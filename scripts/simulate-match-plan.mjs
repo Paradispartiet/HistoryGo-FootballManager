@@ -360,6 +360,86 @@ check("alle 18 taktiske spillkjeder forklares i analyseavdelingen uten oppdikted
   }
 });
 
+
+check("18 taktikker: skill ukjent motstander, ukjent lag, kjent svakhet og kjent motspill", () => {
+  for (const pattern of TACTICAL_SEQUENCES) {
+    const tactic = byId.get(pattern.tacticId);
+    const trigger = pattern.opponentCondition;
+    const counter = pattern.counterCondition;
+    const metrics = Object.fromEntries(Object.entries(pattern.requires)
+      .map(([metric, value]) => [metric, value + 5]));
+    const teamFit = {
+      completeCount: 11, totalSlots: 11, metrics,
+      assignments: [], sourcedSkillTendencies: {}
+    };
+    const opponent = { id: "verified_" + pattern.tacticId,
+      styleTraits: { [trigger.trait]: trigger.min, [counter.trait]: counter.min - 1 },
+      [counter.trait]: counter.min - 1 };
+    const read = (enemy, fit) => buildOpponentTacticalSequences({
+      opponent: enemy, tactic, teamFit: fit, tactics: plans
+    })[0];
+    assert.equal(read(opponent, teamFit).status, "advantage",
+      pattern.tacticId + ": full knowledge and correct roles");
+    const missingTrigger = {
+      ...opponent, styleTraits: { [counter.trait]: counter.min - 1 }
+    };
+    assert.equal(read(missingTrigger, teamFit).status, "unknown_opponent",
+      pattern.tacticId + ": unscouted vulnerability must NOT mean no vulnerability");
+    const knownSafe = { ...opponent, styleTraits: {
+      ...opponent.styleTraits, [trigger.trait]: trigger.min - 1
+    }};
+    assert.equal(read(knownSafe, teamFit).status, "not_exposed",
+      pattern.tacticId + ": observed safe opponent is a real negative");
+    assert.equal(read(opponent, null).status, "unknown_team",
+      pattern.tacticId + ": unknown lineup must NOT be diagnosed as weak");
+    const absent = Object.keys(pattern.requires)[0];
+    const partial = { ...teamFit, metrics: { ...metrics } };
+    delete partial.metrics[absent];
+    assert.equal(read(opponent, partial).status, "unknown_team",
+      pattern.tacticId + ": missing metric is not a failed individual skill");
+    assert.equal(evaluateTacticalSequences(tactic.id, opponent, partial.metrics)[0]?.status,
+      "unknown_team", pattern.tacticId + ": raw engine and analysis agree on missing team data");
+    assert.equal(evaluateTacticalSequences(tactic.id, opponent, partial.metrics)[0]?.edgeDelta, 0,
+      pattern.tacticId + ": uncertainty can never generate a bonus");
+    const actuallyWeak = { ...teamFit, metrics: { ...metrics,
+      [absent]: pattern.requires[absent] - 1 }};
+    assert.equal(read(opponent, actuallyWeak).status, "unsupported",
+      pattern.tacticId + ": measured weakness must differ from missing measurement");
+  }
+});
+
+check("18 taktikker: alternative motplaner krever kartlagt sårbarhet og kjent lagfit", () => {
+  for (const pattern of TACTICAL_SEQUENCES) {
+    const tactic = byId.get(pattern.tacticId);
+    const responsePattern = TACTICAL_SEQUENCES.find(entry => entry.tacticId === pattern.responsePlanId);
+    const counterValue = pattern.counterCondition.min;
+    const opponent = { id: "verified_" + pattern.tacticId, styleTraits: {
+      [pattern.opponentCondition.trait]: pattern.opponentCondition.min,
+      [pattern.counterCondition.trait]: counterValue,
+      [responsePattern.opponentCondition.trait]: responsePattern.opponentCondition.min
+    }};
+    const all = {pressScore:95,balanceScore:95,restDefenseScore:95,
+      buildUpScore:95,depthScore:95,widthScore:95};
+    const fit = { completeCount:11,totalSlots:11,metrics:all,
+      assignments:[],sourcedSkillTendencies:{} };
+    const check = (enemy, alternateFit) => buildOpponentTacticalSequences({
+      opponent: enemy, tactic, teamFit: fit, responseTeamFit: alternateFit,
+      tactics: plans
+    })[0].responsePreview.status;
+    const unknown = { ...opponent, styleTraits: { ...opponent.styleTraits } };
+    delete unknown.styleTraits[responsePattern.opponentCondition.trait];
+    if (responsePattern.opponentCondition.trait !== pattern.opponentCondition.trait
+        && responsePattern.opponentCondition.trait !== pattern.counterCondition.trait) {
+      assert.equal(check(unknown, fit), "unknown_opponent",
+        pattern.tacticId + ": the proposed response trigger must be independently scouted");
+    }
+    const partial = { ...fit, metrics: { ...all } };
+    delete partial.metrics[Object.keys(responsePattern.requires)[0]];
+    assert.equal(check(opponent, partial), "unknown_team",
+      pattern.tacticId + ": unknown alternative-plan fit is not a tactical weakness");
+  }
+});
+
 check("motsvar får egne lagmetrikker etter taktikkbytte, ikke den gamle planens dekning", () => {
   const pattern = TACTICAL_SEQUENCES.find((entry) => entry.tacticId === "high_press_343");
   const oldPlan = byId.get(pattern.tacticId);
