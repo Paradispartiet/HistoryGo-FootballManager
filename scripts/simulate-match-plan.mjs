@@ -255,6 +255,75 @@ check("den samme matchup-forskjellen når kampmotorens xG", () => {
     "counterpress exploitation must also reduce opponent chances");
 });
 
+check("fire samvirkende trekk kan nøytraliseres av ett motgrep", () => {
+  const originalOpponent = getHistoricalOpponentProfile("barcelona_2008_12_positional_play");
+  const pressPlan = byId.get("counter_press_recovery");
+  const ready = {
+    pressScore: 74, balanceScore: 75, restDefenseScore: 70,
+    depthScore: 69, widthScore: 66, buildUpScore: 67
+  };
+  const coordinated = evaluatePlanVsOpponent(pressPlan, originalOpponent,
+    { tacticalProfile: ready });
+  const chain = coordinated.combinations.find((entry) => entry.id === "coordinated_press_chain");
+  assert.equal(chain.factors.length, 4, "press combination requires four separate tactical links");
+  assert.ok(chain.factors.every((factor) => factor.status === "ready"));
+  assert.equal(chain.status, "ready");
+  assert.equal(chain.counter.status, "inactive");
+
+  // One missing midfield balancing component removes the extra synergy,
+  // but the separate first-line press can still work.
+  const oneMissing = evaluatePlanVsOpponent(pressPlan, originalOpponent,
+    { tacticalProfile: { ...ready, balanceScore: 39 } });
+  assert.ok(coordinated.edge > oneMissing.edge,
+    "four cooperating role units must beat the same press with one broken link");
+  assert.equal(oneMissing.combinations[0].status, "partial");
+  assert.equal(oneMissing.combinations[0].readyCount, 3);
+
+  // One opponent trait is allowed to defeat the complete four-part mechanism.
+  const oneCounter = { ...originalOpponent, pressResistance: 92 };
+  const countered = evaluatePlanVsOpponent(pressPlan, oneCounter,
+    { tacticalProfile: ready });
+  assert.ok(countered.edge < oneMissing.edge,
+    "single press-resistant escape must defeat even the complete four-part pressing chain");
+  assert.equal(countered.combinations[0].status, "countered");
+  assert.equal(countered.combinations[0].counter.status, "active");
+  assert.ok(countered.notes.some((note) => note.includes("bryter den samlede fordelen")));
+
+  // Missing source/context is UNKNOWN, not a made-up missing talent claim.
+  const unknown = evaluatePlanVsOpponent(pressPlan, originalOpponent,
+    { tacticalProfile: { pressScore: 74 } }).combinations[0];
+  assert.equal(unknown.status, "unknown");
+  assert.equal(unknown.readyCount, 1);
+
+  // The same composition and single counter alter match chances, not merely text.
+  const session = (opponent) => createMatchdaySession({
+    teamFit: {
+      teamScore: 72, completeCount: 11, totalSlots: 11,
+      metrics: { ...ready, relationshipScore: 70 }, assignments: []
+    },
+    formation: { id: "modern_433", name: "Modern 4-3-3", slots: [] },
+    tactic: pressPlan, opponent
+  });
+  const live = session(originalOpponent);
+  const blocked = session(oneCounter);
+  assert.ok(live.planMatchup.edge > blocked.planMatchup.edge);
+  const liveExpected = finalizeMatchdaySession(live).expectedGoals;
+  const blockedExpected = finalizeMatchdaySession(blocked).expectedGoals;
+  assert.ok(liveExpected.for > blockedExpected.for,
+    "four-part attack that survives the counter must generate more expected goals");
+  assert.ok(liveExpected.against < blockedExpected.against,
+    "blocked pressing chain must also expose more opposition chances");
+  const analysis = buildOpponentTacticalOpportunities({
+    opponent: oneCounter, tactic: pressPlan,
+    teamFit: {
+      completeCount: 11, totalSlots: 11, metrics: ready,
+      assignments: [], sourcedSkillTendencies: {}
+    }
+  });
+  assert.equal(analysis.find((entry) => entry.id === "press_build_up").readiness, "countered");
+  assert.equal(analysis.find((entry) => entry.id === "press_build_up").combinations[0].factors.length, 4);
+});
+
 check("analyseavdelingen kobler motstandersvakhet til faktiske roller og kildebelegg", () => {
   const opponent = getHistoricalOpponentProfile("barcelona_2008_12_positional_play");
   const tactic = byId.get("counter_press_recovery");
