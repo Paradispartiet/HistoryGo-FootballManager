@@ -63,10 +63,10 @@ Dette er kausale hypoteser knyttet til de fire konkrete bevegelsene i `src/footb
 
 ## Dynamisk motspill v3 – første beslutningssekvenser
 
-Ved **simulert** motstanderjustering `push_up` eller `sit_back` legges nå
+Ved **simulert** motstanderjustering `push_up` eller `sit_back` kan det nå legges
 `tacticalBehaviour` på den aktive kampmotstanderen med eksplisitt:
 pressretning, koordinering, dekning av pasningsvei, blokkavstander og
-restforsvar. Dette er **beslutningsheuristikker i spillet**, ikke observerte
+restforsvar. Om presset faktisk er kollektivt og hvilken dekning det har, avgjøres bare når eksisterende motstanderdata har tilstrekkelige struktur- og avstandsproxyer. Å heve blokken alene er **ikke** nok til å anta godt organisert press. Manglende data beholder «ukjent» fremfor å påstå et konkret mønster. Dette er **beslutningsheuristikker i spillet**, ikke observerte
 koordinater eller kildebelagte beskrivelser av historiske lag.
 
 Første avgrensede vertikale implementering gjelder fire angrepsplaner:
