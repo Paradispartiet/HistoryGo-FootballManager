@@ -8,7 +8,7 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 29, expectedPartial: 2, expectedThin: 16, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 30, expectedPartial: 2, expectedThin: 15, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 21, expectedPartial: 3, expectedThin: 0, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
@@ -1443,6 +1443,21 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // 2026-10-21: teammate-based source appraisal (Brann 2004) for Roy Wassberg.
+  {
+    "playerId": "roy_wassberg",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "game_reading",
+      "composure",
+      "leadership"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Rolig, spilleklok og samlende Brann-veteran. Lagkamerater fremhevet evnen til å lese spillet fremfor å måtte takle og hans ledende støtte til yngre spillere.",
+    "claim": "I supporterbladet Den 12. mann 3/2004, s. 31, vurderer yngre Brann-lagkamerater Erlend Storesund og Arve Walde Roy Wassbergs spill i Brann-perioden 1989–1993 og 1998–2004. De beskriver «en helt spesiell ro på banen», at han «sjelden [behøver] takle» fordi han er «så god til å lese spillet», og at han oppmuntret, ga råd og var en «typisk lederskikkelse». Dette er direkte personlig belegg for game_reading, composure og leadership. Omtalen brukes ikke til tackling, pace eller konstruerte tallratinger.",
+    "source": "https://www.fanzine.no/filer/pdf/d12m0304.pdf"
+  },
+
   // 2026-10-21: three historically supported Brann player styles; no aggregate ratings.
   {
     "playerId": "bjarni_sigurdsson",
