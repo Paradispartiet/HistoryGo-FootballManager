@@ -1,7 +1,9 @@
 import * as base from "./football-player-attributes-base.js";
 import {
   applyP1SourceClaims,
-  applyP1SourceClaimsToPlayer
+  applyP1SourceClaimsToPlayer,
+  P1_EXISTING_ROLE_CORRECTIONS,
+  P1_ROLE_FIELDS
 } from "./football-player-source-claims-p1.js";
 import {
   applyP2SourceClaims,
@@ -38,6 +40,11 @@ function synchronizeSourceClaims(players) {
     const currentStrengths = Array.isArray(players[index]?.strengths) ? players[index].strengths : [];
     if (JSON.stringify(currentStrengths) !== JSON.stringify(sourceStrengths)) {
       players[index].strengths = [...sourceStrengths];
+    }
+    // Correct two source-verified P1 roles in the in-memory runtime index.
+    // The raw catalog remains untouched; do not infer skills from the roles.
+    if (P1_EXISTING_ROLE_CORRECTIONS.some((record) => record.playerId === players[index]?.id)) {
+      for (const field of P1_ROLE_FIELDS) players[index][field] = effective[index][field];
     }
     // As for strengths, reuse the existing P1/P2/depth precedence instead of
     // building another source layer. The original catalogue stays untouched.

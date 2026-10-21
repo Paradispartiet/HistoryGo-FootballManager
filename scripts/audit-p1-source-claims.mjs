@@ -8,6 +8,7 @@ import {
   P1_NEW_EVENT_ONLY,
   P1_NEW_PARTIAL,
   P1_EXISTING_SUPPLEMENTS,
+  P1_EXISTING_ROLE_CORRECTIONS,
   getP1HeritageForPlayer,
   getP1NewSourceRecord,
   applyP1NewSourceClaims
@@ -58,6 +59,27 @@ for (const player of newExclusive) {
     `${player.id}: new P1 baseline must have empty strengths before source-claim overlay`);
   const heritage = getP1HeritageForPlayer(player);
   ok(heritage?.generation === "new", `${player.id}: failed new-P1 heritage resolution`);
+}
+
+// The role correction is independent of the strengths coverage ratchet.
+const expectedBrannRoles = { leif_amundsen: "LW", hans_brandtun: "RB", jan_erik_osland: "ST" };
+ok(P1_EXISTING_ROLE_CORRECTIONS.length === 3, "expected exactly three Brann role fixes");
+for (const record of P1_EXISTING_ROLE_CORRECTIONS) {
+  const raw = playerById.get(record.playerId);
+  ok(Boolean(raw), `${record.playerId}: correction player must exist`);
+  ok(getP1HeritageForPlayer(raw)?.placeId === record.placeId,
+    `${record.playerId}: correction must belong to Brann P1`);
+  ok(record.naturalPositions[0] === expectedBrannRoles[record.playerId],
+    `${record.playerId}: canonical role fix does not match documented Brann position`);
+  ok(/^https:\/\/historie\.brann\.no\/spillere\//.test(record.source),
+    `${record.playerId}: role fix must cite Brann's own player history`);
+  const effective = applyP1NewSourceClaims([raw])[0];
+  ok(effective.naturalPositions[0] === expectedBrannRoles[record.playerId],
+    `${record.playerId}: P1 overlay failed to correct natural position`);
+  const sourced = P1_EXISTING_SUPPLEMENTS.find((item) => item.playerId === record.playerId);
+  const expectedStrengths = sourced?.strengths ?? raw.strengths;
+  ok(JSON.stringify(effective.strengths) === JSON.stringify(expectedStrengths),
+    `${record.playerId}: role fix must preserve exactly the independently sourced strengths`);
 }
 
 const explicitRecords = [...P1_NEW_DOCUMENTED, ...P1_NEW_EVENT_ONLY, ...P1_NEW_PARTIAL, ...P1_EXISTING_SUPPLEMENTS];

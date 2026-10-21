@@ -8,7 +8,7 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 38, expectedPartial: 2, expectedThin: 7, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 39, expectedPartial: 2, expectedThin: 6, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 21, expectedPartial: 3, expectedThin: 0, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
@@ -1443,6 +1443,17 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // Brann 2026-10-21: teammate's career retrospective, distinct from match statistics.
+  {
+    "playerId": "frode_larsen",
+    "placeId": "brann_stadion",
+    "strengths": ["dribbling", "chance_creation"],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Dribleorientert høyrekant med markert repertoar én mot én og evne til å tilrettelegge sjanser for medspillere i Brann-årene.",
+    "claim": "I Bergens Tidendes minneartikkel fra 21. juni 2017 beskriver tidligere lagkamerat Bjørn Dahl Frode Larsen som en driblesterk høyreflankspiller med usedvanlig driblerepertoar, og som en svært god tilrettelegger. Dette gir individuelt belegg for dribbling og chance_creation på tvers av Brann-karrieren, men dokumenterer ikke spesifikt pace, finishing, crossing eller defensiv duellstyrke. Kilden er en retrospektiv lagkameratvurdering, ikke måledata.",
+    "source": "https://www.bt.no/sport/i/kJRvPL/brann-legenden-frode-larsen-er-doed",
+    "supportingSources": ["https://www.brann.no/nyheter/skal-hedre-avdode-frode-larsen"]
+  },
   // Brann 2026-10-21: narrow source-based goalkeeping and wingback characterizations.
   {
     "playerId": "sigurd_wathne",
@@ -2446,6 +2457,124 @@ export function getP1NewSourceRecord(player) {
   };
 }
 
+
+/**
+ * Source-backed, runtime-only position corrections for canonical P1 heritage.
+ * The large frozen raw player catalog is not rewritten in this production pass.
+ * No position description is converted into an undocumented strength token.
+ */
+export const P1_EXISTING_ROLE_CORRECTIONS = Object.freeze([
+  {
+    "playerId": "leif_amundsen",
+    "placeId": "brann_stadion",
+    "naturalPositions": [
+      "LW"
+    ],
+    "usablePositions": [],
+    "poorFits": [
+      "CB",
+      "DM",
+      "GK"
+    ],
+    "archetypeIds": [],
+    "archetypes": [
+      "wide_support"
+    ],
+    "needs": [
+      "wide_space",
+      "support_from_midfield"
+    ],
+    "preferredRoles": [
+      "outside_forward"
+    ],
+    "likesTactics": [
+      "wide_attack"
+    ],
+    "dislikesTactics": [
+      "narrow_shape"
+    ],
+    "warningWhenMisused": "Amundsen var ytre venstre i Brann gjennom hele karrieren; bruk ham som klassisk venstreving, ikke midtstopper.",
+    "claim": "Branns offisielle spillerprofil sier uttrykkelig at Leif Amundsen spilte ving gjennom hele karrieren, som ytre venstre med draktnummer 11. Den kanoniske katalogens CB/DM og duel_stopper-profil er derfor uriktig. Ingen spesifikke ferdighetstoken dokumenteres av kilden.",
+    "source": "https://historie.brann.no/spillere/leif-amundsen/"
+  },
+  {
+    "playerId": "hans_brandtun",
+    "placeId": "brann_stadion",
+    "naturalPositions": [
+      "RB"
+    ],
+    "usablePositions": [
+      "WB"
+    ],
+    "poorFits": [
+      "CB",
+      "ST",
+      "GK"
+    ],
+    "archetypeIds": [],
+    "archetypes": [
+      "wide_support",
+      "defensive_balance"
+    ],
+    "needs": [
+      "wide_lane",
+      "cover_from_midfield"
+    ],
+    "preferredRoles": [
+      "wing_back",
+      "traditional_full_back"
+    ],
+    "likesTactics": [
+      "wide_attack",
+      "defensive_balance"
+    ],
+    "dislikesTactics": [
+      "narrow_shape",
+      "no_cover"
+    ],
+    "warningWhenMisused": "Brandtun var høyreback og vingback i Brann med offensive og defensive oppgaver, ikke en ren midtstopper.",
+    "claim": "Branns offisielle spillerprofil klassifiserer Hans Brandtun som høyreback og beskriver ham som vingback med både offensive og defensive kvaliteter. Den kanoniske katalogens CB/DM/duel_stopper-profil er derfor uriktig. Kilden navngir ingen spesifikke ferdighetstoken som dribbling eller tackling.",
+    "source": "https://historie.brann.no/spillere/hans-brandtun"
+  },
+  {
+    "playerId": "jan_erik_osland",
+    "placeId": "brann_stadion",
+    "naturalPositions": [
+      "ST"
+    ],
+    "usablePositions": [],
+    "poorFits": [
+      "GK",
+      "CB",
+      "DM"
+    ],
+    "archetypeIds": [],
+    "archetypes": [
+      "club_professional"
+    ],
+    "needs": [],
+    "preferredRoles": [],
+    "likesTactics": [],
+    "dislikesTactics": [],
+    "warningWhenMisused": "Jan Erik Osland var angriper i Brann ifølge klubbens historikk, ikke sentral midtbanespiller.",
+    "claim": "Branns offisielle spillerprofil klassifiserer Jan Erik Osland som «Angriper», og klubbens historiske spillerstaller for 1967, 1970, 1972 og 1975 plasserer ham i angrepet. Katalogens CM/DM/AM-klassifisering og midtbanespillmaker-mal er dermed uriktig. Spillets ST er her teknisk generell angrepsfamilie; kilden skiller ikke mellom sentral spiss og kantangriper. Ingen spesifikke ferdighetsstyrker kan utledes av stillingen eller antall mål.",
+    "source": "https://historie.brann.no/spillere/jan-erik-osland/"
+  }
+].map((entry) => Object.freeze({ ...entry })));
+
+const EXISTING_ROLE_CORRECTION_BY_ID = new Map(
+  P1_EXISTING_ROLE_CORRECTIONS.map((entry) => [entry.playerId, entry])
+);
+export const P1_ROLE_FIELDS = Object.freeze(["naturalPositions","usablePositions","poorFits","archetypeIds","archetypes","needs","preferredRoles","likesTactics","dislikesTactics","warningWhenMisused"]);
+
+export function applyP1RoleCorrectionsToPlayer(player) {
+  const correction = player && EXISTING_ROLE_CORRECTION_BY_ID.get(player.id);
+  if (!correction || getP1HeritageForPlayer(player)?.placeId !== correction.placeId) return player;
+  return { ...player, ...Object.fromEntries(P1_ROLE_FIELDS.map((field) => [
+    field, Array.isArray(correction[field]) ? [...correction[field]] : correction[field]
+  ])) };
+}
+
 export function applyP1SourceClaimsToPlayer(player) {
   const heritage = getP1HeritageForPlayer(player);
   if (!heritage) return player;
@@ -2453,11 +2582,12 @@ export function applyP1SourceClaimsToPlayer(player) {
     const record = getP1NewSourceRecord(player);
     return { ...player, strengths: [...record.strengths] };
   }
+  const alignedPlayer = applyP1RoleCorrectionsToPlayer(player);
   const supplement = EXISTING_SUPPLEMENT_BY_ID.get(player.id);
   if (supplement && supplement.placeId === heritage.placeId) {
-    return { ...player, strengths: [...supplement.strengths] };
+    return { ...alignedPlayer, strengths: [...supplement.strengths] };
   }
-  return player;
+  return alignedPlayer;
 }
 
 export function applyP1SourceClaims(players) {
