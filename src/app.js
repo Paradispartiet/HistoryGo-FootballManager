@@ -11570,7 +11570,8 @@ function switchMatchPlanDuringMatch(planId) {
     session.tacticSnapshot?.id || session.selectedTacticId;
   const currentPlanData = state.tactics.find((item) => item.id === currentPlanId) || null;
   const next = applyMatchPlanChange(session, plan, {
-    opponent: session.opponent, currentTeamFit, nextTeamFit, currentPlanData
+    opponent: session.opponent, currentTeamFit, nextTeamFit, currentPlanData,
+    players: state.players, roles: state.roles
   });
   if (next === session) return;
   state.matchday.session = next;
