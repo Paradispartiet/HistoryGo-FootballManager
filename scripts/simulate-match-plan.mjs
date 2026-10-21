@@ -36,6 +36,7 @@ import {
   createMatchdaySession,
   projectMatchPlanTacticalProfile,
   finalizeMatchdaySession,
+  resolveMatchdayDecision,
   getMatchdayGameState
 } from "../src/football-matchday-engine.js";
 import { getHistoricalOpponentProfile, getHistoricalOpponentProfileIds } from "../src/football-historical-opponent-profiles.js";
@@ -150,6 +151,30 @@ check("levende motspill: tredjemann, kollektiv dekning og restforsvar", () => {
 
 // ---------------------------------------------------------------------------
 check("faktiske managergrep lager én strukturert balltap-/gjenvinningskjede uten ny xG", () => {
+  const gameDecision = resolveMatchdayDecision({
+    event: { id: "opp_counter_threat", pressure: "high" },
+    option: { id: "protect_rest", checks: [{ type: "metric", key: "restDefenseScore", min: 56 }],
+      impact: { xgFor: 0.04, xgAgainst: -0.18, momentum: 1, clarity: 1 }, risk: 0 },
+    tacticalProfile: { restDefenseScore: 78 }
+  });
+  assert.equal(gameDecision.tone, "positive");
+  assert.equal(gameDecision.tacticalPossession?.kind, "defend_counter",
+    "the real matchday resolver must attach the trace itself");
+  assert.equal(gameDecision.tacticalPossession.existingXgEffect.for, gameDecision.effects.xgDeltaFor);
+  assert.equal(gameDecision.tacticalPossession.existingXgEffect.against, gameDecision.effects.xgDeltaAgainst);
+  const failedGameDecision = resolveMatchdayDecision({
+    event: { id: "opp_counter_threat", pressure: "high" },
+    option: { id: "keep_attacking", checks: [{ type: "metric", key: "restDefenseScore", min: 56 }],
+      impact: { xgFor: 0.15, xgAgainst: -0.12, momentum: 1, clarity: 0 }, risk: 2 },
+    tacticalProfile: { restDefenseScore: 30 }
+  });
+  assert.equal(failedGameDecision.tacticalPossession?.outcome, "broken");
+  const neutralGameDecision = resolveMatchdayDecision({
+    event: { id: "opp_counter_threat", pressure: "medium" },
+    option: { id: "hold_plan", checks: [],
+      impact: { xgFor: 0.05, xgAgainst: -0.02, momentum: 0, clarity: 0 }, risk: 0 }
+  });
+  assert.equal(neutralGameDecision.tacticalPossession, null);
   const option = { optionId: "protect_rest", tone: "positive",
     effects: { xgDeltaFor: 0.04, xgDeltaAgainst: -0.18 } };
   const event = { id: "opp_counter_threat", sequence: 2 };
