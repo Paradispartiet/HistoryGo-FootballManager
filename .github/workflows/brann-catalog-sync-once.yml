@@ -1,0 +1,34 @@
+name: One-time Brann canonical catalog synchronization
+
+on:
+  push:
+    branches:
+      - fix/brann-canonical-role-sync
+    paths:
+      - .github/workflows/brann-catalog-sync-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Update canonical player catalog
+        run: node scripts/sync-brann-canonical-roles.mjs
+      - name: Commit only the corrected catalog
+        shell: bash
+        run: |
+          if ! git diff --quiet -- data/football_players.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -- data/football_players.json
+            git commit -m "fix(brann): align three canonical player roles with verified source claims"
+            git push origin HEAD:fix/brann-canonical-role-sync
+          fi
