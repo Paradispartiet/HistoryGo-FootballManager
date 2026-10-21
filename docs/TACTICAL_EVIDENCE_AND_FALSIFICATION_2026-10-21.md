@@ -114,3 +114,13 @@ Et kontrollert kampbilde kan **hindre** xG imot uten å generere en egen sjanse 
 Den nye `causalGameControlVersion: 1` aktiveres kun ved oppstart av nye kamper. Tidligere lagringer videreføres med opprinnelig kampregnskap. `npm run sim:game-control-v6` tester alle fire planer, ledelseskravet, ukjent data, viktige roller, eksplisitte motgrep, god/dårlig dekning, deterministisk gjenspilling, xG-delta etter avrunding og fravær av fiktive sjanser.
 
 **Dekning versus dokumentasjon:** Når denne PR-en er godkjent er alle 18 kanoniske kampplaner dekket av minst én modellert v6-kjede *under riktige spillforutsetninger*. Det er ikke det samme som at alle mulige formasjoner, motstandere, spillerroller, hendelsessekvenser og historiske kamper er empirisk kalibrert. De eksisterende terskelverdiene og konstruerte xG-vektningene er fremdeles transparente og falsifiserbare **spilldesignhypoteser**.
+
+## Samlet intern verifikasjon: 18 planer × historiske stilarchetyper
+
+Automatisk matrise (`npm run sim:v6-historical-matrix`) leser **kanoniske kampplan-ID-er direkte fra `TACTICAL_SEQUENCES`** og de eksisterende tolv historiske motstanderarketypene. Den oppretter ikke nye historiske spillerpåstander eller kamphendelser: hver oppstilling består av tydelig syntetiske **testspillere** med samme kjente rollepassform.
+
+For hver plan–motstander-kombinasjon sjekker testen (1) om en av de fire eksisterende v6-familiene kan aktiveres ut fra dokumenterte stilparametere, (2) hvilke forskjellige rolleledd som må finnes, (3) om dårligere rollefit i samme formasjon senker eller bevarer den modellerte suksesssannsynligheten, (4) om helt ukjent rollefit nekter bonus, og (5) at `advanceMatchClock` velger samme situasjon, ikke stapler statisk kampplanbonus på v6, og fører akkurat én periodedelta mot sjanseregnskapet uten ekstra skudd.
+
+Regresjonen krever at alle 18 planene har minst én faktisk *kvalifisert* historisk stilmotstander i det eksisterende registeret. Kombinasjoner som ikke kvalifiserer rapporteres eksplisitt som **ikke aktivert**; det er ikke en feil at en taktikk mangler situasjonsbonus mot en stil den ikke er laget for. Rapporten teller kvalifiserte kombinasjoner og rollefit-sensitive tilfeller, slik at generiske/universelle taktikkbonuser avdekkes før en ny publisering.
+
+Matrisegrønt er en **softwaregaranti for intern konsistens i den valgte modellen**, ikke bevis på at de historiske lagene faktisk ville spilt identisk eller at tallene er kalibrerte. Neste fotballfaglige fase krever uavhengige data eller eksplisitt panelvurdering av sammenlignbare kampsituasjoner.
