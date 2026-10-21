@@ -565,7 +565,8 @@ stage("16. Kampplan");
   // planvalget gratis så lenge du lot det stå.
   check(
     "valgt kampplan teller mot motstanderen fra avspark",
-    /planMatchup: evaluatePlanVsOpponent\(tactic, matchOpponent\)/.test(matchdayEngine)
+    /planMatchup: evaluatePlanVsOpponent\(tactic, matchOpponent, \{ tacticalProfile \}\)/.test(matchdayEngine)
+      && matchPlanEngine.includes("hasTacticalSupport(tacticalProfile")
       && /planEdge: num\(session\.planMatchup\?\.edge\)/.test(matchdayEngine)
       && matchdayEngine.includes("expectedGoalsFor += num(planEdge)")
   );
