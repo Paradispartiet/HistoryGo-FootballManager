@@ -8,7 +8,7 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 39, expectedPartial: 2, expectedThin: 6, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 40, expectedPartial: 2, expectedThin: 5, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 21, expectedPartial: 3, expectedThin: 0, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
@@ -1443,6 +1443,22 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // Brann 2026-10-21: secondhand historical playing-style account; one narrow token only.
+  {
+    "playerId": "alexander_nagelsett_olsen",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "dribbling"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Teknisk sterk senterhalf fra Branns mesterskapsperiode, omtalt historisk som driblekunstner.",
+    "claim": "Biografisk omtale av Alexander «Zanderen» Olsen beskriver ham som en eminent tekniker og driblekunstner. Omtalen bygger på Per Jorsetts retrospektive «En teknisk begavelse fra Bergen» (Dagbladet, 7. april 1997), Gunnar Hagen Hartvedts Brann-historikk (1985, s. 50–52) og Reidar Kvammens spillerhistorie (1949). Kildesammenstillingen underbygger kun dribbling som individuell historisk egenskap; den dokumenterer ikke pasningspresisjon, tempo, fysikk eller spesifikke taktiske valg. Omtalen er sekundær, og primærtekstene er ikke tilgjengelige i denne gjennomgangen.",
+    "source": "https://www.wikisida.no/index.php?title=Alexander_Olsen",
+    "supportingSources": [
+      "https://snl.no/Alexander_Nagelsett_Olsen"
+    ]
+  },
+
   // Brann 2026-10-21: teammate's career retrospective, distinct from match statistics.
   {
     "playerId": "frode_larsen",
