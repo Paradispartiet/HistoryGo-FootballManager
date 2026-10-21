@@ -8,7 +8,7 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 35, expectedPartial: 2, expectedThin: 10, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 38, expectedPartial: 2, expectedThin: 7, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 21, expectedPartial: 3, expectedThin: 0, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
@@ -1443,6 +1443,43 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // Brann 2026-10-21: narrow source-based goalkeeping and wingback characterizations.
+  {
+    "playerId": "sigurd_wathne",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "agility"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Tidlig Brann-målvakt beskrevet som «slangemenneske» i historisk sportsomtale, med særlig bevegelighet.",
+    "claim": "Aftenpostens retrospektive artikkel 29. desember 2018 bruker «slangemenneske» om Sigurd Wathne og viser til en omtale av landslagsmålvakten fra sportsjournalist Westergaard i 1919. Metaforen gir et avgrenset historisk holdepunkt for kroppslig bevegelighet (agility), men dokumenterer ikke automatisk reaction reflexes, shot_stopping, aerial reach eller ballfordeling. Dette er en historisk tolkning av samtidens karakteristikk, ikke en målt ferdighet.",
+    "source": "https://www.aftenposten.no/sport/fotball/i/jd3w20/branns-slangemenneske-ble-truffet-av-hitlers-bomber"
+  },
+  {
+    "playerId": "hans_brandtun",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "wide_support"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Høyreback og vingback med dokumentert spill både offensivt og defensivt på kanten i Brann-perioden.",
+    "claim": "Branns egen historiske spillerprofil oppgir Hans Brandtun som høyreback og beskriver ham eksplisitt som «Vingback med både offensive og defensive kvaliteter». Dette gir et presist belegg for den taktiske wide_support-profilen, altså bidrag på kant i begge spillfaser. Kilden angir verken fart, innleggspresisjon, taklingsstyrke eller spesifikke overlappende løp, og slike tokens legges derfor ikke til.",
+    "source": "https://historie.brann.no/spillere/hans-brandtun"
+  },
+
+  // Brann 2026-10-21: period-verified captaincy in 1985 and 1988; leadership only.
+  {
+    "playerId": "arne_moller",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "leadership"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Branns lagkaptein og ledende midtbanespiller, konkret dokumentert i 1985.",
+    "claim": "Aftenpostens samtidige 1985-reportasje betegner Arne Møller uttrykkelig som Branns kaptein og beskriver at han gikk i bresjen i nedrykkskampen mot Mjøndalen. Dette gir et avgrenset samtidig belegg for leadership i 1985-sesongen, men er ikke dokumentasjon på kapteinsrollen i andre sesonger eller på tekniske styrker som passing_range, vision og game_reading.",
+    "source": "https://www.aftenposten.no/norge/i/0EqkG/hvem-tror-du-brann-tapte-for-forrige-gang-de-rykket-ned-fra-toppserien"
+  },
+
   // 2026-10-21: three source-bounded Brann-era historical profiles.
   {
     "playerId": "jan_knudsen",
