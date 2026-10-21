@@ -1796,6 +1796,9 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
       ? {
           id: tactic.id || null,
           name: tactic.name || "",
+          family: tactic.family || "",
+          intent: tactic.intent || "",
+          gameStates: asArray(tactic.gameStates).slice(),
           pressing: tactic.pressing || "",
           tempo: tactic.tempo || "",
           width: tactic.width || "",
@@ -1877,31 +1880,63 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
 
 // Bytt kampplan midt i kampen. Returnerer en NY sesjon (motoren muterer ikke),
 // eller den samme sesjonen når byttet ikke gir mening (ferdig kamp, samme plan).
-export function applyMatchPlanChange(session, nextPlan, { opponent } = {}) {
+export function applyMatchPlanChange(session, nextPlan, { opponent, currentTeamFit, nextTeamFit, currentPlanData } = {}) {
   if (!session || typeof session !== "object") return session;
   if (session.phase === "resolved") return session;
 
-  const currentPlan = session.activePlanSnapshot || session.tacticSnapshot || null;
+  const storedPlan = session.activePlanSnapshot || session.tacticSnapshot || null;
+  // Resolve the complete canonical plan when available. Older saved matches
+  // stored only the tactical axes and NOT gameStates, which falsely made every
+  // old plan look unfit and gifted 0.9 "improvement" at the next switch.
+  const currentPlan = currentPlanData?.id === storedPlan?.id ? currentPlanData : storedPlan;
   const eventIndex = getSessionEventIndex(session);
   const totalEvents = asArray(session.events).length;
   const eventsRemaining = eventIndex === null
     ? totalEvents
     : Math.max(0, totalEvents - (eventIndex + 1));
 
+  // Recalculate the SIX live tactical dimensions for the same selected XI
+  // and roles under the new tactic. The delta preserves prior training
+  // improvements and substitutions in the active match snapshot and changes
+  // only upcoming periods. Without both inputs (old saves/test callers),
+  // preserve the original snapshot instead of inventing a team rating.
+  const previousProfile = session.teamFitSnapshot?.tacticalProfile;
+  let nextTacticalProfile = previousProfile;
+  if (previousProfile && currentTeamFit?.metrics && nextTeamFit?.metrics) {
+    const shifted = { ...previousProfile };
+    const keys = ["balanceScore", "widthScore", "depthScore",
+      "buildUpScore", "pressScore", "restDefenseScore"];
+    keys.forEach((key) => {
+      const before = currentTeamFit.metrics[key];
+      const after = nextTeamFit.metrics[key];
+      if (Number.isFinite(before) && Number.isFinite(after) &&
+          Number.isFinite(previousProfile[key])) {
+        shifted[key] = clamp(previousProfile[key] + after - before);
+      }
+    });
+    nextTacticalProfile = shifted;
+  }
   const change = createPlanChange({
     fromPlan: currentPlan,
     toPlan: nextPlan,
     session,
     opponent: opponent || session.opponent,
-    eventsRemaining
+    eventsRemaining,
+    nextTacticalProfile
   });
   if (!change) return session;
 
   const next = { ...session };
   next.planChanges = [...asArray(session.planChanges), { ...change, atPhase: session.phase }];
   next.selectedTacticId = nextPlan?.id || next.selectedTacticId;
+  if (nextTacticalProfile !== previousProfile) {
+    next.teamFitSnapshot = {
+      ...session.teamFitSnapshot,
+      tacticalProfile: nextTacticalProfile
+    };
+  }
   next.planMatchup = evaluatePlanVsOpponent(nextPlan, next.opponent, {
-    tacticalProfile: next.teamFitSnapshot?.tacticalProfile
+    tacticalProfile: nextTacticalProfile
   });
   next.minuteLog = logMatchMoment(next, {
     type: "plan",
@@ -1913,6 +1948,7 @@ export function applyMatchPlanChange(session, nextPlan, { opponent } = {}) {
     name: nextPlan?.name || "",
     family: nextPlan?.family || "",
     intent: nextPlan?.intent || "",
+    gameStates: asArray(nextPlan?.gameStates).slice(),
     pressing: nextPlan?.pressing || "",
     tempo: nextPlan?.tempo || "",
     width: nextPlan?.width || "",

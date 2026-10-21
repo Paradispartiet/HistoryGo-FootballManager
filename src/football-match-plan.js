@@ -425,7 +425,7 @@ export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {})
 // Selve byttet. Returnerer effektene i SAMME form som en managerbeslutning, så
 // finalizeMatchdaySession kan summere dem uten særtilfeller.
 // ----------------------------------------------------------------------------
-export function createPlanChange({ fromPlan, toPlan, session, opponent, eventsRemaining = 0 } = {}) {
+export function createPlanChange({ fromPlan, toPlan, session, opponent, eventsRemaining = 0, nextTacticalProfile } = {}) {
   const from = normalizeMatchPlan(fromPlan);
   const to = normalizeMatchPlan(toPlan);
   if (!to || !to.id) return null;
@@ -440,7 +440,8 @@ export function createPlanChange({ fromPlan, toPlan, session, opponent, eventsRe
   });
   const stateFit = evaluatePlanForGameState(to, gameState.state);
   const tacticalProfile = session?.teamFitSnapshot?.tacticalProfile;
-  const matchup = evaluatePlanVsOpponent(to, opponent || session?.opponent, { tacticalProfile });
+  const afterProfile = nextTacticalProfile || tacticalProfile;
+  const matchup = evaluatePlanVsOpponent(to, opponent || session?.opponent, { tacticalProfile: afterProfile });
 
   // Effektene: omstillingen koster klarhet og legger på risiko. Men det som
   // faktisk belønnes er FORBEDRINGEN — hvor mye bedre den nye planen passer
@@ -449,7 +450,10 @@ export function createPlanChange({ fromPlan, toPlan, session, opponent, eventsRe
   const edge = num(matchup?.edge);
   const context = { gameState: gameState.state, opponent: opponent || session?.opponent, tacticalProfile };
   const scoreBefore = from ? scorePlanNow(from, context) : 0;
-  const scoreAfter = scorePlanNow(to, context);
+  // A tactical switch changes the team's role-and-formation compatibility.
+  // Judge the old plan with its old XI profile and the new plan with its new
+  // tactical fit, not the identical (stale) profile for both.
+  const scoreAfter = scorePlanNow(to, { ...context, tacticalProfile: afterProfile });
   const improvement = round2((scoreAfter - scoreBefore) / 100);
 
   // En redning i en kamp som glipper er verdt mer enn en finjustering når alt
