@@ -157,8 +157,12 @@ export function buildOpponentTacticalSequences({ opponent, tactic, teamFit, resp
   const triggerValue = opponent?.styleTraits?.[catalogPattern.opponentCondition.trait]
     ?? opponent?.[catalogPattern.opponentCondition.trait];
   const triggerKnown = typeof triggerValue === "number" && Number.isFinite(triggerValue);
+  // A partially observed opponent is not the same as an opponent with no
+  // exploitable weakness. Similarly, an unknown team metric is not a
+  // demonstrated deficiency in the players or formation.
   const status = incomplete ? "incomplete"
-    : !matchup ? "unknown_opponent"
+    : !opponent?.styleTraits || !triggerKnown ? "unknown_opponent"
+    : !teamFit?.metrics || checks.some((check) => check.status === "unknown") ? "unknown_team"
     : !result ? "not_exposed"
     : result.status;
   // Candidate only. Selecting a new tactic remains a conscious manager action;
@@ -180,10 +184,12 @@ export function buildOpponentTacticalSequences({ opponent, tactic, teamFit, resp
   const responseEvaluation = nextPlan && opponent?.styleTraits && previewFit?.metrics
     ? evaluateTacticalSequences(nextPlan.id, opponent, previewFit.metrics)[0] || null
     : null;
+  const responseTriggerTrait = nextPattern?.opponentCondition?.trait;
+  const responseTrigger = opponent?.styleTraits?.[responseTriggerTrait] ?? opponent?.[responseTriggerTrait];
   const responseStatus = !nextPlan || !nextPattern ? "unavailable"
     : incomplete ? "incomplete"
-    : !opponent?.styleTraits ? "unknown_opponent"
-    : !previewFit?.metrics ? "unknown_team"
+    : !opponent?.styleTraits || !Number.isFinite(responseTrigger) ? "unknown_opponent"
+    : !previewFit?.metrics || responseChecks.some((check) => check.status === "unknown") ? "unknown_team"
     : responseEvaluation?.status || "not_exposed";
   const responsePreview = {
     status: responseStatus,
@@ -230,6 +236,7 @@ export function buildOpponentTacticalSequences({ opponent, tactic, teamFit, resp
       countered: "Motstanderen har et modellert motgrep som stopper denne spillkjeden.",
       unsupported: "Minst ett nødvendig ledd i egen rolle- eller formasjonsdekning mangler.",
       unknown_counter: "Mulig sårbarhet finnes, men motstanderens motgrep er ikke kartlagt.",
+      unknown_team: "Minst én nødvendig lagdimensjon er ikke målt. Ukjent er ikke en svakhet hos spilleren.",
       incomplete: "Elleveren er ikke komplett; vurderingen må kontrolleres igjen etter laguttak.",
       not_exposed: "Denne motstanderprofilen gir ikke grunnlag for å aktivere mønsteret.",
       unknown_opponent: "Motstanderen mangler tilstrekkelig taktisk profil for denne vurderingen."
