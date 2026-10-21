@@ -7,7 +7,7 @@
 export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-claims.v1";
 
 export const P1_HERITAGES = Object.freeze([
-  { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 16, expectedPartial: 5, expectedThin: 45, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 40, expectedPartial: 2, expectedThin: 5, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
@@ -1443,6 +1443,38 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // Vålerenga 2026-10-21: individually described playing strengths; one source
+  // describes a later club period and is therefore explicitly era-qualified.
+  {
+    playerId: "andre_muri",
+    placeId: "intility_arena",
+    strengths: ["heading", "positioning"],
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Luftsterk Vålerenga-stopper med god plasseringsevne ved innlegg, slik fotballekspert Lars Tjærnås vurderte ham i 2011.",
+    claim: "Lars Tjærnås' individuelle vurdering etter de første tre serierundene i april 2011 trekker frem André Muri som en særlig solid midtstopper som dominerer luftduellene og plasserer seg riktig ved innlegg. Dette gir et avgrenset grunnlag for heading og positioning i Vålerenga-perioden. Beskrivelsen av at han har forbedret ferdighetene med ball brukes ikke til å finne på pasningspresisjon, fart eller tallratinger.",
+    source: "https://www.aftenposten.no/sport/meninger/i/wPRdMG/tjaernaas-blogg-droemmelag-uten-prica"
+  },
+  {
+    playerId: "fegor_ogude",
+    placeId: "intility_arena",
+    strengths: ["strength", "duels"],
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Fysisk meget sterk og kompromissløs midtbanespiller, spesielt fremhevet for direkte nærkamper i Vålerenga i 2011.",
+    claim: "Fotballekspert Lars Tjærnås beskrev Fegor Ogude i en spillerfaglig Vålerenga-vurdering 11. april 2011 som meget fysisk sterk og blant ligaens beste i nærkampspillet. Strength og duels er direkte begrunnet i denne samtidige analysen. Vurderingen dokumenterer ikke generelt tackling-presisjon, utholdenhet, pasningskvalitet, mentale tall eller statistisk målt prestasjonsnivå.",
+    source: "https://www.aftenposten.no/sport/meninger/i/wPRdMG/tjaernaas-blogg-droemmelag-uten-prica",
+    supportingSources: ["https://www.nettavisen.no/13-fegor-ogude/s/12-95-2973623"]
+  },
+  {
+    playerId: "aki_riihilahti",
+    placeId: "intility_arena",
+    strengths: ["work_rate", "tackling"],
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Hardtarbeidende, taklingssterk defensiv midtbanespiller slik han senere ble beskrevet fra Crystal Palace-perioden.",
+    claim: "Reuters' retrospektive portrett publisert 13. mai 2017 beskriver Aki Riihilahtis innsats i Crystal Palace fra 2001 som løpssterk og markant taklingssterk. Dette dokumenterer work_rate og tackling for den samme spilleren, men gjelder uttrykkelig Crystal Palace-perioden etter Vålerenga-oppholdet i 1999–2000. Kilden gir ingen epokespesifikke Vålerenga-ratinger, pasningstoken eller grunnlag for å påstå at de senere kvalitetene er direkte observert i Oslo.",
+    source: "https://indianexpress.com/article/sports/football/crystal-palace-will-beat-hull-to-survive-says-former-player-aki-riihilahti-4654473/lite/",
+    supportingSources: ["https://www.cpfc.co.uk/news/features/palace-in-europe-former-selhurst-star-on-why-he-pushed-for-conference-league/"]
+  },
+
   // Alexander Nagelsett Olsen: published retrospective cites individual technical/dribbling skill.
   // This is secondary historical evidence, not a direct inspection of the printed books.
   {
