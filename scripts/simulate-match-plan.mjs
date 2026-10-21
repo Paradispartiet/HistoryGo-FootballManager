@@ -181,6 +181,79 @@ check("planen vurderes mot motstanderens historiske stil", () => {
   assert.ok(highLine.edge <= 0, "høy linje mot kontringslag skal ikke belønnes");
 });
 
+
+// Same tactical plan and same opponent, but a different ACTUAL team snapshot:
+// a tactical weakness cannot be exploited without matching player roles,
+// sourced strengths, relationships and formation-fit metrics.
+check("motstandersvakheter krever faktisk rolle-, egenskaps- og formasjonsdekning", () => {
+  const possession = getHistoricalOpponentProfile("barcelona_2008_12_positional_play");
+  const plan = byId.get("counter_press_recovery");
+  const pressStrength = evaluatePlanVsOpponent(plan, possession,
+    { tacticalProfile: { pressScore: 74, depthScore: 75, widthScore: 75 } });
+  const pressWeakness = evaluatePlanVsOpponent(plan, possession,
+    { tacticalProfile: { pressScore: 35, depthScore: 75, widthScore: 75 } });
+  assert.ok(pressStrength.edge > pressWeakness.edge,
+    "strong press in real tactical snapshot must exploit short buildup more");
+  assert.ok(pressWeakness.notes.some(note => note.includes("pressroller")),
+    "a failed exploit must identify missing tactical support, not blame player talent");
+  assert.equal(evaluatePlanVsOpponent(plan, possession).edge,
+    evaluatePlanVsOpponent(plan, possession, { tacticalProfile: {} }).edge,
+    "unknown role metrics must preserve legacy pre-match matchup semantics");
+
+  const highLine = getHistoricalOpponentProfile("milan_1988_90_sacchi");
+  const fast = byId.get("all_out_attack");
+  const depthReady = evaluatePlanVsOpponent(fast, highLine,
+    { tacticalProfile: { depthScore: 72, widthScore: 75, pressScore: 75 } });
+  const depthMissing = evaluatePlanVsOpponent(fast, highLine,
+    { tacticalProfile: { depthScore: 33, widthScore: 75, pressScore: 75 } });
+  assert.ok(depthReady.edge > depthMissing.edge,
+    "high defensive line must only yield bonus if runner roles provide actual depth");
+  assert.ok(depthMissing.notes.some(note => note.includes("dybdetrussel")));
+
+  const compact = getHistoricalOpponentProfile("inter_1960s_catenaccio");
+  const wide = { ...byId.get("all_out_attack"), width: "wide" };
+  const stretched = evaluatePlanVsOpponent(wide, compact,
+    { tacticalProfile: { depthScore: 75, widthScore: 74, pressScore: 75 } });
+  const narrow = evaluatePlanVsOpponent(wide, compact,
+    { tacticalProfile: { depthScore: 75, widthScore: 34, pressScore: 75 } });
+  assert.ok(stretched.edge > narrow.edge,
+    "formation and wide role supply must unlock compact-block exploit");
+  assert.ok(narrow.notes.some(note => note.includes("bredderoller")));
+});
+
+check("den samme matchup-forskjellen når kampmotorens xG", () => {
+  const rival = getHistoricalOpponentProfile("barcelona_2008_12_positional_play");
+  const start = (pressScore) => createMatchdaySession({
+    teamFit: {
+      teamScore: 72, completeCount: 11, totalSlots: 11,
+      metrics: {
+        balanceScore: 70, widthScore: 70, depthScore: 70,
+        buildUpScore: 70, pressScore, restDefenseScore: 70
+      },
+      assignments: []
+    },
+    formation: { id: "modern_433", name: "Modern 4-3-3", slots: [] },
+    tactic: byId.get("counter_press_recovery"),
+    opponent: rival
+  });
+  const strong = start(72);
+  const weak = start(32);
+  assert.ok(strong.planMatchup.edge > weak.planMatchup.edge,
+    "kickoff must evaluate actual role/formation-derived tactical profile");
+  // Compare only the plan-specific advantage; raw press metrics also affect xG.
+  const neutralMetrics = { ...weak.teamFitSnapshot.tacticalProfile,
+    pressScore: strong.teamFitSnapshot.tacticalProfile.pressScore };
+  const controlledWeak = {
+    ...weak, teamFitSnapshot: { ...weak.teamFitSnapshot, tacticalProfile: neutralMetrics }
+  };
+  const strongXg = finalizeMatchdaySession(strong).expectedGoals;
+  const unsupportedXg = finalizeMatchdaySession(controlledWeak).expectedGoals;
+  assert.ok(strongXg.for > unsupportedXg.for,
+    "source-supported exploit must flow into actual chance generation rather than UI copy");
+  assert.ok(strongXg.against < unsupportedXg.against,
+    "counterpress exploitation must also reduce opponent chances");
+});
+
 check("planlista sorteres etter hva som passer situasjonen", () => {
   const ranked = rankPlansForSituation(plans, {
     currentPlan: byId.get("central_possession_4231"),

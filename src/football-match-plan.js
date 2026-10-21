@@ -200,11 +200,11 @@ export function calculateSwitchCost({ fromPlan, toPlan, coachSnapshot, eventsRem
 // Hvor godt passer planen akkurat nå? Kampbildet og motstanderen i ett tall
 // (-100..100). Dette er grunnlaget for å belønne en FORBEDRING: spiller du
 // dårlig og bytter til noe som faktisk passer bedre, skal det lønne seg.
-export function scorePlanNow(plan, { gameState = "level", opponent } = {}) {
+export function scorePlanNow(plan, { gameState = "level", opponent, tacticalProfile } = {}) {
   const normalized = normalizeMatchPlan(plan);
   if (!normalized) return 0;
   const stateFit = evaluatePlanForGameState(normalized, gameState);
-  const matchup = evaluatePlanVsOpponent(normalized, opponent);
+  const matchup = evaluatePlanVsOpponent(normalized, opponent, { tacticalProfile });
   // Kampbildet veier tyngst: en plan for feil bilde er feil plan, uansett hvor
   // fin den ser ut mot motstanderens stil.
   return clamp(num(stateFit?.fits ? 45 : -45) + num(matchup?.edge) * 18, -100, 100);
@@ -233,7 +233,15 @@ export function evaluatePlanForGameState(plan, gameState) {
 // Planen mot motstanderens stil. Bruker de samme styleTraits som de historiske
 // motstanderprofilene allerede bærer — ingen ny motstanderdata.
 // ----------------------------------------------------------------------------
-export function evaluatePlanVsOpponent(plan, opponent) {
+// En kampplan får først uttelling når lagets FAKTISKE rolle-, ferdighets- og
+// formasjonsbidrag kan utføre den. Uten snapshot brukes den gamle, nøytrale
+// forhåndsvurderingen (legacy-saves og ren forhåndsvisning).
+function hasTacticalSupport(profile, key, minimum) {
+  if (!profile || !Number.isFinite(profile[key])) return true;
+  return profile[key] >= minimum;
+}
+
+export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {}) {
   const normalized = normalizeMatchPlan(plan);
   if (!normalized) return null;
   const traits = isObject(opponent?.styleTraits) ? opponent.styleTraits : {};
@@ -251,27 +259,37 @@ export function evaluatePlanVsOpponent(plan, opponent) {
   const planTempo = axisValue(normalized, "tempo");
   const planWidth = axisValue(normalized, "width");
 
-  // Press mot kort oppbygging er den klassiske gevinsten.
+  // Utsatte motstandere er ikke nok: egne roller må gjennomføre planen.
+  // Profilmetrikkene bygges allerede av dokumenterte spillerferdigheter,
+  // relasjoner og formasjon. Ingen nye eller gjettede individuelle egenskaper.
   if (planPress >= 70 && shortBuildUp >= 60) {
-    edge += 1;
-    notes.push("Presset treffer oppbyggingen deres.");
+    if (hasTacticalSupport(tacticalProfile, "pressScore", 60)) {
+      edge += 1;
+      notes.push("Presset treffer oppbyggingen deres.");
+    } else {
+      notes.push("Kort oppbygging kan presses, men dine pressroller og samspill gir ikke nok samlet press ennå.");
+    }
   }
-  // Høy egen linje mot et lag som lever på omstilling er dyrt.
   if (planLine >= 75 && transitionThreat >= 65) {
     edge -= 1;
     notes.push("Den høye linja gir dem akkurat rommet de vil ha.");
   }
-  // Fart i rommet mot en høy motstanderlinje.
   if (planTempo >= 55 && highLine >= 65) {
-    edge += 1;
-    notes.push("Farten treffer bakrommet bak den høye linja deres.");
+    if (hasTacticalSupport(tacticalProfile, "depthScore", 60)) {
+      edge += 1;
+      notes.push("Dybderollene treffer bakrommet bak den høye linja deres.");
+    } else {
+      notes.push("De gir bakrom, men dine angriperroller skaper ikke nok dybdetrussel til å utnytte det.");
+    }
   }
-  // Bredde mot en kompakt blokk trekker dem fra hverandre.
   if (planWidth >= 70 && compactness >= 65) {
-    edge += 1;
-    notes.push("Bredden strekker den kompakte blokka deres.");
+    if (hasTacticalSupport(tacticalProfile, "widthScore", 60)) {
+      edge += 1;
+      notes.push("Kant- og backrollene strekker den kompakte blokka deres.");
+    } else {
+      notes.push("Den kompakte blokka kan strekkes, men lagets faktiske bredderoller gir for lite bredde.");
+    }
   }
-  // Rolig oppbygging mot et aggressivt press inviterer trøbbel.
   if (planPress <= 30 && axisValue(normalized, "buildUp") <= 30 && pressIntensity >= 70) {
     edge -= 1;
     notes.push("Den rolige oppbyggingen blir presset ned i eget område.");
@@ -299,14 +317,15 @@ export function createPlanChange({ fromPlan, toPlan, session, opponent, eventsRe
     eventsRemaining
   });
   const stateFit = evaluatePlanForGameState(to, gameState.state);
-  const matchup = evaluatePlanVsOpponent(to, opponent || session?.opponent);
+  const tacticalProfile = session?.teamFitSnapshot?.tacticalProfile;
+  const matchup = evaluatePlanVsOpponent(to, opponent || session?.opponent, { tacticalProfile });
 
   // Effektene: omstillingen koster klarhet og legger på risiko. Men det som
   // faktisk belønnes er FORBEDRINGEN — hvor mye bedre den nye planen passer
   // bildet og motstanderen enn den du forlot. Å bytte fra noe som virker til
   // noe som ikke virker skal svi, selv om den nye planen «ser riktig ut».
   const edge = num(matchup?.edge);
-  const context = { gameState: gameState.state, opponent: opponent || session?.opponent };
+  const context = { gameState: gameState.state, opponent: opponent || session?.opponent, tacticalProfile };
   const scoreBefore = from ? scorePlanNow(from, context) : 0;
   const scoreAfter = scorePlanNow(to, context);
   const improvement = round2((scoreAfter - scoreBefore) / 100);
