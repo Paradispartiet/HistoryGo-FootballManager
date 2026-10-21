@@ -60,3 +60,42 @@ Dette er kausale hypoteser knyttet til de fire konkrete bevegelsene i `src/footb
 - Spillerens dokumenterte `strengths` kan ikke erstattes med en stereotypi fra spillerens rolle. Spesielt direkte spill og innlegg må ikke tilskrives heading, duellkraft eller innleggskvalitet uten kilder.
 - Fire trekk er undervisningssekvenser, **ikke** fire separate xG-bonuser. En enkelt motstandersikring kan bryte en hel kjede, men responsen må fortsatt vurderes mot faktisk ellever og omstillingskostnad.
 - Den eksisterende 18×12-matrisen av historiske arketyper er testdekning, ikke vitenskapelig kalibrering. Valider designterskler mot faktiske kampobservasjoner før de omtales som prediktive.
+
+## Dynamisk motspill v3 – første beslutningssekvenser
+
+Ved **simulert** motstanderjustering `push_up` eller `sit_back` legges nå
+`tacticalBehaviour` på den aktive kampmotstanderen med eksplisitt:
+pressretning, koordinering, dekning av pasningsvei, blokkavstander og
+restforsvar. Dette er **beslutningsheuristikker i spillet**, ikke observerte
+koordinater eller kildebelagte beskrivelser av historiske lag.
+
+Første avgrensede vertikale implementering gjelder fire angrepsplaner:
+
+- `patient_build_up`: kollektiv sentral dekning kan stanse pasningen til
+  fri sekser/tredjemann; høyt **individuelt** førstetrykk uten pasningsdekning
+  skal ikke i seg selv blokkere kjeden.
+- `central_possession_4231`: sentralt avlegg og tredje løp krever en
+  tilgjengelig pasningslinje; blokkering av sentral forbindelse bryter kjeden.
+- `direct_counter_442` og `low_block_transition_541`: motstanders
+  restforsvar må faktisk beskytte første vertikale pasning og bakrommet.
+  Høy forsvarslinje er ikke ensbetydende med at rommet er ubeskyttet.
+
+**Resultatregelen** er uendret: ett fullført mønster kan gi maksimalt én
+betinget `edgeDelta` (ikke fire bonuser), og ved stanset kjede blir
+`edgeDelta=0`. Eksisterende avhengigheter til valgte roller, formasjon
+og seks taktiske lagmetrikker beholdes; svak lagdekning kan ikke oppveies
+med et nytt motstandertrekk. En eksplisitt, aktuell pasningsdekning teller
+mer enn en generell stil-proxy ved evaluering av disse fire mønstrene.
+Gamle lagringer uten `tacticalBehaviour` beholder v2-evalueringen.
+
+Hvert modellert forsøk viser fire sammenhengende trinn, hvor forsøket
+kan bli avskåret, hvordan dette kan skape balltapsrisiko og hva manageren
+må observere. Modellen simulerer **ikke** individuelle spillernes faktiske
+XY-bevegelser; dette krever en egen romlig motor og validert bevegelsesmodell.
+
+Tallmessig kalibrering gjenstår: disse endringene bruker eksisterende
+kampplanscore og videreføres derfor til kampens kommende xG-perioder via
+`planMatchup.edge`, uten separate nye xG-påslag for hvert trinn.
+Et tapt kombinasjonsforsøk utløser ennå ikke en egen stokastisk
+balltapshendelse. Videre arbeid bør modellere hendelsesutfall og kalibrere
+konsekvensene med reproducerbare simuleringer og ekstern kampobservasjon.
