@@ -1796,6 +1796,9 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
       ? {
           id: tactic.id || null,
           name: tactic.name || "",
+          family: tactic.family || "",
+          intent: tactic.intent || "",
+          gameStates: asArray(tactic.gameStates).slice(),
           pressing: tactic.pressing || "",
           tempo: tactic.tempo || "",
           width: tactic.width || "",
@@ -1877,11 +1880,15 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
 
 // Bytt kampplan midt i kampen. Returnerer en NY sesjon (motoren muterer ikke),
 // eller den samme sesjonen når byttet ikke gir mening (ferdig kamp, samme plan).
-export function applyMatchPlanChange(session, nextPlan, { opponent, currentTeamFit, nextTeamFit } = {}) {
+export function applyMatchPlanChange(session, nextPlan, { opponent, currentTeamFit, nextTeamFit, currentPlanData } = {}) {
   if (!session || typeof session !== "object") return session;
   if (session.phase === "resolved") return session;
 
-  const currentPlan = session.activePlanSnapshot || session.tacticSnapshot || null;
+  const storedPlan = session.activePlanSnapshot || session.tacticSnapshot || null;
+  // Resolve the complete canonical plan when available. Older saved matches
+  // stored only the tactical axes and NOT gameStates, which falsely made every
+  // old plan look unfit and gifted 0.9 "improvement" at the next switch.
+  const currentPlan = currentPlanData?.id === storedPlan?.id ? currentPlanData : storedPlan;
   const eventIndex = getSessionEventIndex(session);
   const totalEvents = asArray(session.events).length;
   const eventsRemaining = eventIndex === null
@@ -1941,6 +1948,7 @@ export function applyMatchPlanChange(session, nextPlan, { opponent, currentTeamF
     name: nextPlan?.name || "",
     family: nextPlan?.family || "",
     intent: nextPlan?.intent || "",
+    gameStates: asArray(nextPlan?.gameStates).slice(),
     pressing: nextPlan?.pressing || "",
     tempo: nextPlan?.tempo || "",
     width: nextPlan?.width || "",

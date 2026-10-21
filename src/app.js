@@ -11532,8 +11532,11 @@ function switchMatchPlanDuringMatch(planId) {
   // width, depth, build-up, balance and rest-defence scores.
   const currentTeamFit = getTeamFit();
   const nextTeamFit = getTeamFit(plan);
+  const currentPlanId = session.activePlanSnapshot?.id ||
+    session.tacticSnapshot?.id || session.selectedTacticId;
+  const currentPlanData = state.tactics.find((item) => item.id === currentPlanId) || null;
   const next = applyMatchPlanChange(session, plan, {
-    opponent: session.opponent, currentTeamFit, nextTeamFit
+    opponent: session.opponent, currentTeamFit, nextTeamFit, currentPlanData
   });
   if (next === session) return;
   state.matchday.session = next;

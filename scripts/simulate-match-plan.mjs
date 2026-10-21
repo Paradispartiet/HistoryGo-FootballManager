@@ -783,6 +783,9 @@ check("bytte til samme plan gjør ingenting", () => {
 
 check("planbytte regner om seks taktiske lagdimensjoner før neste kampperiode", () => {
   const original = buildSession("patient_build_up");
+  assert.deepEqual(original.tacticSnapshot.gameStates,
+    byId.get("patient_build_up").gameStates,
+    "kickoff must persist the tactic's intended match states");
   const previous = structuredClone(original.teamFitSnapshot.tacticalProfile);
   const currentTeamFit = { metrics: {
     balanceScore: 68, widthScore: 68, depthScore: 62,
@@ -817,6 +820,22 @@ check("planbytte regner om seks taktiske lagdimensjoner før neste kampperiode",
   const improvement = Math.round((afterScore - beforeScore)) / 100;
   assert.equal(switched.planChanges[0].improvement, improvement,
     "switch improvement must use old plan+old role fit vs new plan+new role fit");
+
+  assert.deepEqual(switched.activePlanSnapshot.gameStates, nextPlan.gameStates,
+    "follow-up plan change must keep full game-state information");
+  // Historic saves may lack gameStates. The app supplies the current canonical
+  // plan so the first switch after restore cannot gain 0.9 fake improvement.
+  const oldSave = {
+    ...original,
+    tacticSnapshot: { ...original.tacticSnapshot, gameStates: undefined }
+  };
+  const resumed = applyMatchPlanChange(oldSave, nextPlan, {
+    currentTeamFit, nextTeamFit,
+    currentPlanData: byId.get("patient_build_up")
+  });
+  assert.equal(resumed.planChanges[0].improvement,
+    switched.planChanges[0].improvement,
+    "restored old sessions must not receive a free tactical improvement");
 
   // Existing stored matches or direct engine consumers without new inputs
   // keep the legacy snapshot rather than hallucinating missing role scores.
