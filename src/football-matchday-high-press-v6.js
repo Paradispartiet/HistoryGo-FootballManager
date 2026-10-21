@@ -82,6 +82,20 @@ function supportedPlayers(lineup, groups) {
   return picked;
 }
 
+// One stable roll per match and period: identical pre-period state must not
+// change its press outcome merely because the player reopens/replays the UI.
+// Comparisons of substitutions on the SAME match thus share the same scenario.
+// Standalone legacy fixtures without an id can still inject a deterministic rng.
+export function highPressPhaseRoll(session, periodIndex) {
+  if (!session?.id) return Math.random();
+  const key = String(session.id) + ":" + String(periodIndex);
+  let hash = 2166136261;
+  for (let index = 0; index < key.length; index += 1) {
+    hash = Math.imul(hash ^ key.charCodeAt(index), 16777619);
+  }
+  return (hash >>> 0) / 4294967296;
+}
+
 export function resolveHighPressBuildUp(session, { rng = Math.random } = {}) {
   if (!session || typeof session !== "object") return null;
   const route = selectedRoute(session);
