@@ -90,8 +90,8 @@ for (const record of P1_EXISTING_ROLE_CORRECTIONS) {
 // Molde: documented 1983 stopper play and NFF lineups disprove the old GK classification.
 const hagbo = playerById.get("tor_gunnar_hagbo");
 ok(Boolean(hagbo), "Tor Gunnar Hagbø must exist in canonical Molde catalog");
-ok(getP1HeritageForPlayer(hagbo)?.placeId === "aker_stadion",
-  "Hagbø must belong exclusively to Molde P1");
+ok(JSON.stringify(hagbo.sourcePlaceIds) === JSON.stringify(["aker_stadion"]),
+  "Hagbø must belong exclusively to Molde's canonical Aker player pool");
 ok(JSON.stringify(hagbo.naturalPositions) === JSON.stringify(["CB"]),
   "Hagbø must be classified as stopper, never goalkeeper");
 ok(JSON.stringify(hagbo.usablePositions) === "[]",
@@ -104,7 +104,7 @@ ok(["archetypeIds", "archetypes", "needs", "preferredRoles", "likesTactics", "di
 ok(Array.isArray(hagbo.strengths) && hagbo.strengths.length === 0,
   "Hagbø's new position cannot introduce unverified skills");
 ok(applyP1NewSourceClaims([hagbo])[0].naturalPositions.join() === "CB",
-  "Hagbø's effective game role must remain stopper");
+  "Hagbø's effective game role must remain stopper even outside P1");
 
 const explicitRecords = [...P1_NEW_DOCUMENTED, ...P1_NEW_EVENT_ONLY, ...P1_NEW_PARTIAL, ...P1_EXISTING_SUPPLEMENTS];
 ok(new Set(explicitRecords.map((record) => record.playerId)).size === explicitRecords.length,
