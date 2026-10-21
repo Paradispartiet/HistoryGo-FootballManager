@@ -1012,7 +1012,7 @@ const KJENT_UDOKUMENTERT = {
   // tabeller.
   intility_arena: 0.82,      // Vålerenga: målt 53 av 66
   aspmyra_stadion: 0.67,     // Bodø/Glimt: 31 av 47 uten styrker etter seksprofilbolken
-  brann_stadion: 0.26,       // Brann: 12/47 uten styrker etter tre dokumenterte profiler; 25,5 %, tak 26 %
+  brann_stadion: 0.21,       // Brann: 9/47 uten styrker etter tre dokumenterte profiler; 19,15 %, tak 21 %
   lyse_arena: 0.60           // Viking: 30 av 51 uten styrker etter seksprofilbolken
 };
 
