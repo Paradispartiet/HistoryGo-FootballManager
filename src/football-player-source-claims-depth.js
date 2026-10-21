@@ -1726,9 +1726,10 @@ const documented = [
   {
     playerId: "birger_tingstad",
     clubId: "rosenborg",
-    strengths: ["set_pieces"],
-    claim: "«Birger Tingstad sendte et av sine spesial-frispark helt oppe i hjørnet.»",
-    source: "https://www.rbk.no/nyheter/62-ar-siden-62",
+    strengths: ["set_pieces", "vision", "game_reading"],
+    claim: "Rosenborgs historiske omtale dokumenterer dødballstyrke: «Birger Tingstad sendte et av sine spesial-frispark helt oppe i hjørnet.» Klubbens spillerbiografi beskriver dessuten hans «utsøkte blikk og forståelse for spillet»; dette begrunner vision og game_reading, ikke andre tekniske attributter.",
+    source: "https://statistikk.rbk.no/spiller/253-birger-tingstad",
+    supportingSources: ["https://www.rbk.no/nyheter/62-ar-siden-62"],
     sourceKind: "club"
   },
   {
@@ -1783,9 +1784,10 @@ const documented = [
   {
     playerId: "torbjorn_lysaker_heggem",
     clubId: "rosenborg",
-    strengths: ["simple_passing"],
-    claim: "Carlos Corberán: «He is a player who is capable of taking responsibility for the ball, playing out from the back and managing the ball well with both feet.»",
+    strengths: ["simple_passing", "one_vs_one"],
+    claim: "Carlos Corberán beskriver ballbehandling og oppspill som «managing the ball well with both feet». Landslagstrener Ståle Solbakken omtaler Heggems forsvarsspill i 2024: «har klart seg veldig bra en mot en i Championship». Sistnevnte er et særskilt belegg fra West Bromwich-perioden etter Rosenborg, ikke en direkte vurdering av Rosenborg-spill eller en numerisk rating.",
     source: "https://www.wba.co.uk/news/albion-complete-torbjorn-heggem-transfer",
+    supportingSources: ["https://www.dagbladet.no/sport/odegaard-ikke-med/82014184"],
     sourceKind: "club"
   },
   {
