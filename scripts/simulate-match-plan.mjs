@@ -558,7 +558,7 @@ check("alle 18 foreslåtte motgrep har etterprøvbar foreløpig lagkontroll", ()
 
 check("rangering bruker reell taktisk rolledekning", () => {
   const p = byId.get("positional_overloads");
-  const opponent = { styleTraits: { defensiveCompactness: 68, tacticalComplexity: 50 } };
+  const opponent = { defensiveStructure: 50, styleTraits: { defensiveCompactness: 68 } };
   const fits = rankPlansForSituation([p], {
     opponent, gameState: "level",
     tacticalProfile: { buildUpScore: 75, widthScore: 74 }
