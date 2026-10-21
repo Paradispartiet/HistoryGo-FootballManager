@@ -11137,6 +11137,45 @@ function appendMatchFlow(parent, session) {
     ? `Basert på sjanser og mål som er avdekket til ${snapshot.minute}. minutt.`
     : "Kampbildet formes når sjanser og mål avdekkes.";
   panel.append(head, zones, hint);
+
+  // Never reveal a period's xG before the live clock reaches its end.
+  // Attribution is read ONLY from the already-played period snapshots;
+  // later plan switches cannot rewrite the earlier contribution.
+  const displayedMinute = session?.outcome || session?.phase === "resolved"
+    ? 90 : Number(session?.liveMinute) || 0;
+  const completed = (Array.isArray(session?.timeline) ? session.timeline : [])
+    .filter((period) => period?.tacticalXg && period?.range?.to <= displayedMinute);
+  if (completed.length) {
+    const total = (key) => completed.reduce((sum, period) =>
+      sum + (Number(period.tacticalXg[key]) || 0), 0);
+    const shown = (number) => {
+      const rounded = Math.round(number * 100) / 100;
+      const sign = rounded > 0 ? "+" : rounded < 0 ? "−" : "";
+      return sign + Math.abs(rounded).toLocaleString("nb-NO", {
+        minimumFractionDigits: 2, maximumFractionDigits: 2
+      });
+    };
+    const ledger = document.createElement("details");
+    ledger.className = "match-flow-tactical-xg";
+    const title = document.createElement("summary");
+    title.textContent = "Kampplanens målbare xG-bidrag";
+    const totals = document.createElement("p");
+    totals.textContent = `${shown(total("addedFor"))} xG for · ${shown(-total("preventedAgainst"))} xG imot`;
+    const breakdown = document.createElement("ol");
+    completed.forEach((period) => {
+      const attribution = period.tacticalXg;
+      const item = document.createElement("li");
+      item.textContent = `${period.range.from}–${period.range.to}': ` +
+        `${attribution.planName || attribution.planId || "Kampplan"} · ` +
+        `${shown(attribution.addedFor)} for / ${shown(-attribution.preventedAgainst)} imot`;
+      breakdown.append(item);
+    });
+    const note = document.createElement("small");
+    note.textContent = "Dette er xG-effekt som allerede inngår i kampmotoren, ikke en ekstra bonus. Omfatter hele kampplan-matchupen, ikke bare taktiske sekvenser.";
+    ledger.append(title, totals, breakdown, note);
+    panel.append(ledger);
+  }
+
   parent.append(panel);
 }
 
