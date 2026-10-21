@@ -918,7 +918,7 @@ const KJENT_UDOKUMENTERT = {
   // en registrering av at arven ikke dokumenterer ferdigheter i det hele tatt.
   // Tallet skal SYNKE når individuelle kilder leses tilbake.
   nadderud_stadion: 0.99,    // Stabæk
-  araasen_stadion: 0.89,     // Lillestrøm
+  araasen_stadion: 0.10,     // Lillestrøm: 2/24 uten styrker etter Ole Dyrstad (8,33 %; tak 10 %)
   nordmore_stadion: 1.01,    // Kristiansund
   kfum_arena: 0.93,          // KFUM Oslo
   jotun_arena: 0.80,         // Sandefjord: fem nye P1-profiler, 32/41 eksklusive uten styrker
@@ -1011,9 +1011,9 @@ const KJENT_UDOKUMENTERT = {
   // Bodø/Glimt er ikke mindre kartlagt enn Vålerenga, de er kartlagt med
   // tabeller.
   intility_arena: 0.82,      // Vålerenga: målt 53 av 66
-  aspmyra_stadion: 0.93,     // Bodø/Glimt: målt 43 av 47
-  brann_stadion: 0.82,       // Brann: 38 av 47 uten styrker etter Pesen-passet
-  lyse_arena: 0.76           // Viking: målt 38 av 51 etter syv nye P1-kildeprofiler
+  aspmyra_stadion: 0.67,     // Bodø/Glimt: 31 av 47 uten styrker etter seksprofilbolken
+  brann_stadion: 0.16,       // Brann: 7/47 uten styrker etter Alexander Nagelsett Olsen (14,89 %, tak 16 %)
+  lyse_arena: 0.60           // Viking: 30 av 51 uten styrker etter seksprofilbolken
 };
 
 // ---------------------------------------------------------------------------
