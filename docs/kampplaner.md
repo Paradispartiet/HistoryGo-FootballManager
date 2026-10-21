@@ -202,7 +202,7 @@ Kontramønster: `pressIntensity` minst 78.
 
 Aktivering: motstanderens `pressIntensity` minst 70;
 eget lag: `buildUpScore` minst 67, `balanceScore` minst 62.
-Kontramønster: `tacticalComplexity` minst 79.
+Kontramønster (taktisk proxy): `defensiveCompactness` minst 79.
 
 #### Posisjonsspill med overtall — Overtall og isolasjon
 
@@ -212,7 +212,7 @@ Kontramønster: `tacticalComplexity` minst 79.
 
 Aktivering: motstanderens `defensiveCompactness` minst 64;
 eget lag: `buildUpScore` minst 65, `widthScore` minst 63.
-Kontramønster: `tacticalComplexity` minst 80.
+Kontramønster (taktisk proxy): `defensiveStructure` minst 80.
 
 #### Høyt press — Koordinert pressfelle
 
@@ -242,7 +242,7 @@ Kontramønster: `pressResistance` minst 78.
 
 Aktivering: motstanderens `possessionControl` minst 65;
 eget lag: `pressScore` minst 59, `balanceScore` minst 62.
-Kontramønster: `tacticalComplexity` minst 78.
+Kontramønster (taktisk proxy): `pressResistance` minst 78.
 
 #### Direkte kontringer — Lokk høyt og angrip bak
 
@@ -302,7 +302,7 @@ Kontramønster: `defensiveStructure` minst 79.
 
 Aktivering: motstanderens `defensiveCompactness` minst 64;
 eget lag: `widthScore` minst 65, `depthScore` minst 61.
-Kontramønster: `tacticalComplexity` minst 80.
+Kontramønster (taktisk proxy): `defensiveStructure` minst 80.
 
 #### Innlegg og boksnærvær — Åpne bredde, fylle boks
 
@@ -332,7 +332,7 @@ Kontramønster: `transitionThreat` minst 78.
 
 Aktivering: motstanderens `pressIntensity` minst 70;
 eget lag: `restDefenseScore` minst 68, `balanceScore` minst 67.
-Kontramønster: `tacticalComplexity` minst 81.
+Kontramønster (taktisk proxy): `possessionControl` minst 81.
 
 #### Jag utligningen — Koordinert slutttrykk
 
@@ -352,7 +352,7 @@ Kontramønster: `transitionThreat` minst 79.
 
 Aktivering: motstanderens `pressIntensity` minst 68;
 eget lag: `buildUpScore` minst 67, `balanceScore` minst 64.
-Kontramønster: `tacticalComplexity` minst 80.
+Kontramønster (taktisk proxy): `defensiveCompactness` minst 80.
 
 #### Alt frem — Risiko med kontrollert retur
 
@@ -569,3 +569,8 @@ Taktisk speiding må skille **fravær av dokumentasjon** fra **dokumentert frav�
 Det eksisterende nettet med 18 firetrekkssekvenser og 12 publiserte historiske taktikkarketyper er fortsatt en **modell**, ikke en empirisk dokumentert fasit. I siste komplette 216-cellers matrise hadde alle 18 minst én mulig fordel, men fire sekvenser hadde **ingen aktiverte motgrep i disse 12 arketypene**: `counter_press_recovery`, `direct_counter_442`, `low_block_transition_541` og `deep_block_long_release`. Dette er et synlig dekningshull i det historiske eksempelutvalget, **ikke** bevis for at taktikkene mangler motspill. Syntetiske grenseverdier tester at motgrepene fungerer; det skal ikke konstrueres historiske motstanderfakta for å tvinge flere treff.
 
 `sim:match-plan` prøver alle 18 med en fullstendig motstanderprofil, en delvis kartlagt motstander, et lag med manglende måling, et lag med faktisk svak rolledekning og alternative kampplaner som mangler data. Avgjørelser og xG får ikke taktisk kjedebonus fra manglende informasjon.
+
+
+## Faglig revisjon 21. oktober 2026
+
+Alle 18 kampplaner har nå dokumentert årsakskjede, relevant motspill, eget bruddpunkt og observasjonspunkt for manageren. De seks generiske taktikk-kompleksitetsmotgrepene er erstattet med bedre avgrensede motstandermålinger. Se [Taktisk grunnlag v2](./TACTICAL_FOUNDATIONS_RESEARCH_2026-10-21.md) med 10 fagkilder, den komplette 18-planers matrisen og eksplisitte modellbegrensninger.

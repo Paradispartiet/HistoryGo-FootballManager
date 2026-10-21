@@ -558,7 +558,7 @@ check("alle 18 foreslåtte motgrep har etterprøvbar foreløpig lagkontroll", ()
 
 check("rangering bruker reell taktisk rolledekning", () => {
   const p = byId.get("positional_overloads");
-  const opponent = { styleTraits: { defensiveCompactness: 68, tacticalComplexity: 50 } };
+  const opponent = { defensiveStructure: 50, styleTraits: { defensiveCompactness: 68 } };
   const fits = rankPlansForSituation([p], {
     opponent, gameState: "level",
     tacticalProfile: { buildUpScore: 75, widthScore: 74 }
@@ -676,6 +676,36 @@ check("kampbildet leses av grepene, ikke av en resultattavle", () => {
   assert.equal(good.state, "leading");
   const bad = readGameState({ decisions: [{ effects: { momentumDelta: -3 } }] });
   assert.equal(bad.state, "behind");
+});
+
+check("18 planer har kildebelagt mekanisme, risiko og konkret motgrep", () => {
+  assert.equal(TACTICAL_SEQUENCES.length, 18);
+  const vague = TACTICAL_SEQUENCES.filter(entry =>
+    entry.counterCondition.trait === "tacticalComplexity");
+  assert.ok(TACTICAL_SEQUENCES.every(entry =>
+    entry.opponentCondition.trait !== entry.counterCondition.trait),
+    "a known opponent trigger must not simultaneously define its counter; retain unknown scouting status");
+  assert.deepEqual(vague, [], "a generic tactical-complexity score cannot establish a specific counter");
+  const sources = new Set();
+  for (const entry of TACTICAL_SEQUENCES) {
+    assert.ok(entry.mechanism.length >= 75);
+    assert.ok(entry.counterLogic.length >= 75);
+    assert.ok(entry.failureMode.length >= 75);
+    assert.ok(entry.observation.length >= 75);
+    entry.principleSourceIds.forEach(id => sources.add(id));
+    const originalPlan = byId.get(entry.tacticId);
+    assert.equal(originalPlan?.coachingFocus, entry.observation);
+  }
+  assert.ok(sources.size >= 7, "coverage must span different phases, not one generic coaching page");
+  const scouting = buildOpponentTacticalSequences({
+    opponent: getHistoricalOpponentProfile("barcelona_2008_12_positional_play"),
+    tactic: byId.get("central_possession_4231"),
+    teamFit: { completeCount: 11, totalSlots: 11,
+      metrics: { pressScore: 70, balanceScore: 70, buildUpScore: 70, depthScore: 70 },
+      sourcedSkillTendencies: {}, assignments: [] }, tactics: plans
+  });
+  assert.ok(scouting[0].principleSources.length >= 2,
+    "manager should be able to inspect the coaching references behind tactical advice");
 });
 
 check("en plan for et annet kampbilde blir sagt ifra om", () => {
@@ -1167,9 +1197,21 @@ check("planen din måles på nytt når motstanderen har justert seg", () => {
   assert.notEqual(adapted, leading, "bildet gir grunn til justering");
   assert.equal(adapted.opponentAdjustments.length, 1);
   assert.ok(adapted.opponentAdjustments[0].note.length > 20, "justeringen må forklares");
-  // Rolig oppbygging mot et lag som nå presser høyt er dyrere enn før.
-  assert.ok(adapted.planMatchup.edge <= leading.planMatchup.edge,
-    "planen skal ikke bli bedre av at de presser hardere mot den");
+  // Høyere press skaper både en fare og et rom bak presset. Kvaliteten i
+  // vår faktiske oppbygging og støtteroller, ikke en universell minusregel,
+  // avgjør om tredjemann kan spille forbi det nye presset.
+  const expected = evaluatePlanVsOpponent(
+    byId.get("patient_build_up"), adapted.opponent,
+    { tacticalProfile: adapted.teamFitSnapshot.tacticalProfile }
+  );
+  assert.deepEqual(adapted.planMatchup, expected,
+    "motstanderjusteringen må beregnes fra de nye stiltrekkene og dagens lagfit");
+  const exposed = { ...adapted.teamFitSnapshot.tacticalProfile, buildUpScore: 30 };
+  const noEscape = evaluatePlanVsOpponent(
+    byId.get("patient_build_up"), adapted.opponent, { tacticalProfile: exposed }
+  );
+  assert.ok(noEscape.edge <= adapted.planMatchup.edge,
+    "et lag som mangler oppbyggingsstøtte skal ikke hente samme gevinst fra høyere press");
   // Og den skjer bare én gang per type.
   assert.equal(applyOpponentAdaptation(adapted), adapted);
 });

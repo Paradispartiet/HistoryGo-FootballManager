@@ -1,0 +1,62 @@
+# Taktisk grunnlag v2 – kilder, mekanismer og spill/motspill
+
+Oppdatert 21. oktober 2026. Omfatter samtlige **18 kampplaner**.
+
+## Hva som er faglig kildebelagt – og hva som er spilldesign
+
+FIFA Training Centre og England Football Learning beskriver prinsipper for tredjemann, sideskifte, koordinert press, kompakt defensiv organisering, kollektiv gjenvinning, kontring og pressgjennombrudd. De fastsetter **ikke** numeriske terskler som 60, 78 eller 81. Tersklene i spillet er **eksplisitte designheuristikker**; ingen kilde beviser at én bestemt plan alltid slår en annen. Historiske motstanderprofiler er også en pedagogisk modell, ikke full optisk tracking.
+
+Motspill må forklare mekanismen. En høy verdi i `tacticalComplexity` sier ingenting om et lag faktisk stenger en sekser, dobler en kant eller bryter gjenvinningspress. Seks slike direkte motgrep er derfor erstattet med de mer relevante, eksisterende motstanderfeltene `pressIntensity`, `pressResistance`, `defensiveStructure` og `possessionControl`. Disse verdiene er fortsatt **proxyer** for et konkret mønster, ikke hendelser vi vet fant sted.
+
+### Grunnprinsipper og fagkilder
+
+- **fifaThird**: [FIFA – Third-player combinations](https://www.fifatrainingcentre.com/en/game/game-analysis/in-possession/third-player-combinations.php)
+- **fifaSwitch**: [FIFA – Switch of play](https://www.fifatrainingcentre.com/en/game/game-analysis/in-possession/switch-of-play.php)
+- **fifaPress**: [FIFA – High press](https://www.fifatrainingcentre.com/en/game/game-analysis/out-of-possession/high-press.php)
+- **fifaBlock**: [FIFA – Team organisation out of possession](https://www.fifatrainingcentre.com/en/game/game-analysis/out-of-possession/team-organisation--out-of-possession-.php)
+- **fifaCounter**: [FIFA – The counter-attack](https://www.fifatrainingcentre.com/en/game/game-analysis/transition-to-attacking/the-counter-attack.php)
+- **fifaEscape**: [FIFA – Passing the press](https://www.fifatrainingcentre.com/en/game/game-analysis/transition-to-attacking/passing-the-press.php)
+- **fifaLoss**: [FIFA – The reaction to losing the ball](https://www.fifatrainingcentre.com/en/game/game-analysis/transition-to-defending/the-reaction-to-losing-the-ball.php)
+- **faPrinciples**: [England Football – The principles of football](https://learn.englandfootball.com/articles-and-resources/coaching/resources/2022/What-are-the-principles-of-football)
+- **faBehind**: [The FA – Defending space in behind](https://www.thefa.com/bootroom/resources/coaching/how-to-defend-like-england-space-in-behind)
+- **faWide**: [The FA – Defending wide spaces](https://www.thefa.com/bootroom/resources/coaching/how-to-defend-like-england-space-in-wide-areas)
+
+## Fotballfaglig modell
+
+1. **Angrep**: penetrasjon, skape rom, bevegelse, støtte og kreativitet. Tredjemann og sideskifte trenger ledige pasningsvinkler og samtidige løp.
+2. **Forsvar**: forsinke, kompakthet, dekning/balanse, press og tilbakeholdenhet. Hver spiller som presser åpner et rom som noen må dekke.
+3. **Overgang til angrep**: vinne ball, første fremoverspill, samtidige løp, kvalitativ siste handling.
+4. **Overgang til forsvar**: første press eller umiddelbar gjenvinning, stenge neste pasning, sikre bak ball og falle tilbake dersom presset passeres.
+5. **Kontrafaktisk lesning**: et taktisk grep er bare godt hvis lagets faktiske roller og formasjon støtter det, motstanderens relevante stil er kartlagt og motgrepet ikke allerede nøytraliserer fordelen.
+
+## Samlet gjennomgang av alle 18 planer
+
+Dette er kausale hypoteser knyttet til de fire konkrete bevegelsene i `src/football-tactical-sequences.js`. Kodeverdiene forblir bevisst moderate (maks én samlet kjedefordel), slik at teksten ikke blir en garanti om mål eller seier.
+
+| Kampplan | Fase | Hvorfor trekkene kan virke sammen | Konkret motgrep | Hva kan bryte egen plan |
+|---|---|---|---|---|
+| Sentralt possession-spill | in_possession | Første pasning lokker presset. Avlegget og tredjemann skaper ledig mellomrom for neste løp. | Aggressivt press alene stenger ikke automatisk tier og sekser; det krever samtidige avstander og dekning. | Når tredjemanns pasning brytes og spissen blir isolert, mister kombinasjonen retningen. |
+| Tålmodig oppbygging | in_possession | Keeper og sekser gir ulike vinkler slik at laget kan passere et høyt press og komme ut på rettvendt spiller. | Motstanderen må presse koordinert og fjerne både første støtte og returen, ikke bare løpe fort. | Uten pressresistent mottaker blir rolige korte pasninger en invitasjon til balltap nær eget mål. |
+| Posisjonsspill med overtall | in_possession | Overtall på én side trekker forsvar, så vendes ballen til en fri kant og en tredje løper. | Defensiv organisering og kollektiv forskyvning kan fjerne mottakeren, men kan åpne motsatt halvrom. | Vending uten fri pasningslegger eller bred mottaker øker balltaps- og kontringsrisiko. |
+| Høyt press | out_of_possession | Spissen styrer første pasning, midtbanen stenger støtte, vingback presser og bakre ledd sikrer rom. | En pressresistent mottaker kan bryte leddet, særlig når et fremoverspill finner rom bak den høye vingbacken. | Løper bare førsteforsvarer, åpner midten og bakrommet selv om presset virker intenst. |
+| Gjenvinningspress | transition_defend | Før balltap organiseres sikringen. Ved balltap presser nærmeste, øvrige dekker første utpasning og vinner retur. | Et rettvendt pasningsledd under press og et samtidig utløp kan passere gjenvinningspresset. | Enspillerpress uten støtte kan bli overspilt og etterlate et større rom enn før balltap. |
+| Midtbanepress | out_of_possession | Første ledd inviterer sentral pasning, midtbanen skjermer mottaker og presset starter på et kontrollert signal. | En motstander som tåler press og kan vende gjennom tredje mann kan spille forbi fellen. | For sen kollektiv forskyvning lar den første mottakeren vende opp uten press. |
+| Direkte kontringer | transition_attack | Et kompakt lag vinner ballen, første pasning går forbi fremste motspiller og to løpere deler bakrommet. | En organisert bakerste sikring kan forsinke eller stanse den første vertikale pasningen. | Lav gjenvinningskvalitet eller forsinket løp lar motstanderen omstille før rommet angripes. |
+| Lav blokk og overganger | transition_attack | Den tette blokken hindrer sentrale gjennombrudd, ballvinner finner støtte og spiss/vingback starter koordinert motrom. | Motstanderens gode restforsvar kan stoppe første kontring uten å ofre eget posisjonsspill. | En isolert spiss og for lange avstander gjør at ballen kommer rett tilbake. |
+| Dyp blokk og lang utløsning | transition_attack | En tett boks gir duellrom, klareringer blir kontrollert andreball og et avlegg gir neste fremoverspill. | Motstanderen kan kontrollere nedfallsrommet med en organisert sikring og hente opp alle lange baller. | Direkte klarering uten mottak, duellstøtte og vinner av andreball gir vedvarende trykk imot. |
+| Direkte spill og andreballer | transition_attack | Lang ball passerer første pressledd, omkringliggende midtbane sikrer nedfallsrommet og neste pasning finner åpent rom. | Kompakt bakre lagdel med organisert midtbane kan vinne den første andreballen. | Uten dokumentert duellkvalitet og støtte kan direkte spill bli gjentatte tap av ball. |
+| Spill på målspissen | in_possession | Tidlig pasning finner festepunkt, avlegg til møtende spiller frigjør en tredje løper. | Dobling på mottaksspissen kan redusere tid til avlegg, men kan samtidig åpne rom for en rettvendt mottaker på den andre siden. | En spiss med riktig rolle, men uten dokumentert mottaks-/duellbelegg, skal ikke automatisk få høy kvalitetsbonus. |
+| Bredt og hurtig | in_possession | Ballfører trekker laget til en side, vending frigjør én-mot-én ute og samtidige boksløp gir flere valg. | Kollektiv sidesikring og riktig støtte fra egen back kan forsvare én-mot-én uten å blottlegge midten. | En isolert kantspiller uten støtte kan bli låst mot linja, og motstanderen kan bryte angrepet før boksen er bemannet. |
+| Innlegg og boksnærvær | in_possession | Bredde og overlapp skaper innleggsrom, ulike løp fyller boksen og et ledd sikrer returen. | Strukturert bokssikring og første-duell kan avskjære innlegget og vinne klareringen. | Mange innlegg er ikke lik mange gode sjanser hvis boksløp og duellevne mangler. |
+| Overlapp og kanaler | in_possession | Kant binder back, overlapp skaper overtall, tredjemann finner halvrom og sekser sikrer tap. | Sterke motstander-overganger kan utnytte området som en høy back forlater, spesielt dersom motsatt back også går i angrep. | To høye backer uten retursikring kan åpne begge sider samtidig, slik at én presis utpasning blir til et numerisk overtak imot. |
+| Lukk kampen | out_of_possession | Laget reduserer avstander, styrer spillet bredt og gjenvinner løse baller uten å bryte form. | En rettvendt fri mann mellom leddene kan trekke ut stopper og åpne neste rom. | Å senke blokken garanterer ikke færre sjanser; press uten utgang gir vedvarende angrepsbølger imot. |
+| Jag utligningen | transition_defend | Høyt lagpress reduserer motstanderens ro, sideskifte frigjør rom og flere spillere angriper neste boks. | En presis kontring bak begge høye backer kan snu sluttpresset til en stor sjanse imot. | Press som ikke omfatter sikringsleddet kan være mer risikabelt enn å beholde balansen. |
+| Ro ned tempoet | in_possession | To støttelinjer og keeper gir en trygg vei forbi et aggressivt press, så laget kan eie neste fase. | Koordinert press som dekker begge returer kan tvinge feilpasning i eget område. | Lavt tempo uten frie mottakere betyr ikke kontroll; det gir motstanderpresset tid. |
+| Alt frem | transition_defend | Fremre ledd presser samlet, bredde skaper flere pasningsvalg og én sekser forsøker å sikre returen. | En rettvendt mottaker som finner løpet bak høyt forsvar kan utnytte store overgangsrom. | Alle fremme uten støtte gir høyere risiko og garanterer ikke flere gode avslutninger. |
+
+## Åpne begrensninger
+
+- `defensiveStructure`, `pressResistance` og `possessionControl` er grove taktiske proxyer; de beskriver ikke nøyaktige spillerposisjoner i hver kampsekvens.
+- Spillerens dokumenterte `strengths` kan ikke erstattes med en stereotypi fra spillerens rolle. Spesielt direkte spill og innlegg må ikke tilskrives heading, duellkraft eller innleggskvalitet uten kilder.
+- Fire trekk er undervisningssekvenser, **ikke** fire separate xG-bonuser. En enkelt motstandersikring kan bryte en hel kjede, men responsen må fortsatt vurderes mot faktisk ellever og omstillingskostnad.
+- Den eksisterende 18×12-matrisen av historiske arketyper er testdekning, ikke vitenskapelig kalibrering. Valider designterskler mot faktiske kampobservasjoner før de omtales som prediktive.

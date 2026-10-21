@@ -468,6 +468,32 @@ function appendOpponentAnalysisWorkshop(body) {
         node("p", "opponent-analysis-sequence-method",
           "Taktisk modell, ikke en fasit: fire handlinger gir ikke fire bonuser. Vurderingen bruker valgte roller og eksisterende lagmetrikker.")
       );
+      scene.append(
+        node("h5", "", "Hvorfor denne spillemåten virker"),
+        node("p", "opponent-analysis-sequence-mechanism", chain.mechanism || ""),
+        node("h5", "", "Hvor motspillet bryter den"),
+        node("p", "opponent-analysis-sequence-counter-logic", chain.counterLogic || ""),
+        node("p", "opponent-analysis-sequence-failure", "Risiko: " + (chain.failureMode || "")),
+        node("p", "opponent-analysis-sequence-observation", "Se etter: " + (chain.observation || ""))
+      );
+      if (chain.principleSources?.length) {
+        const citations = node("section", "opponent-analysis-sequence-sources");
+        citations.append(node("h5", "", "Faglig grunnlag (FIFA / England Football)"));
+        const links = node("ul", "opponent-analysis-source-links");
+        chain.principleSources.forEach((source) => {
+          const item = node("li", "");
+          const link = document.createElement("a");
+          link.href = source.url;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.textContent = source.title;
+          item.append(link);
+          links.append(item);
+        });
+        citations.append(links, node("small", "",
+          "Kildene beskriver prinsippene; poenggrenser og kampresultater er spillmodellens egne vurderinger."));
+        scene.append(citations);
+      }
       const actions = node("ol", "opponent-analysis-sequence-moves");
       chain.moves.forEach((move) => actions.append(node("li", "", move)));
       scene.append(actions);

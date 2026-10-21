@@ -74,7 +74,12 @@
         "leading",
         "level"
       ],
-      "intensity": 55
+      "intensity": 55,
+      "principleSourceIds": [
+        "fifaThird",
+        "faPrinciples"
+      ],
+      "coachingFocus": "Se om pasningslegger, avlegger og tredje løper faktisk er tilgjengelige samtidig."
     },
     {
       "id": "patient_build_up",
@@ -83,9 +88,9 @@
       "family": "kontroll",
       "intent": "Bygg rolig bakfra, ta ingen sjanser, vent på at de åpner seg.",
       "strengths": [
-        "Svært lav balltapsrisiko",
+        "Kan redusere balltap med sikre støttevinkler",
         "Sparer krefter",
-        "Trygt restforsvar"
+        "Gir tid til å sikre bak ballen hvis lagdelene holder avstandene"
       ],
       "risks": [
         "Skaper lite av seg selv",
@@ -109,7 +114,12 @@
         "central_control",
         "rest_defense",
         "keeper_support"
-      ]
+      ],
+      "principleSourceIds": [
+        "fifaEscape",
+        "fifaThird"
+      ],
+      "coachingFocus": "Tell frie pasningsvinkler foran og bak førsteforsvarer ved pressutløseren; kontroller også hvem som dekker neste pasning."
     },
     {
       "id": "positional_overloads",
@@ -144,7 +154,12 @@
         "fluid_attack",
         "central_combinations",
         "close_support"
-      ]
+      ],
+      "principleSourceIds": [
+        "fifaSwitch",
+        "fifaThird"
+      ],
+      "coachingFocus": "Se om ballfører har tid til å vende, og om mottakeren får støtte i fart før forsvarsblokken rekker å skyve tilbake."
     },
     {
       "id": "high_press_343",
@@ -179,7 +194,12 @@
         "level",
         "behind"
       ],
-      "intensity": 90
+      "intensity": 90,
+      "principleSourceIds": [
+        "fifaPress",
+        "faBehind"
+      ],
+      "coachingFocus": "Se om backlinjen flytter når førstepresset setter inn, og hvem som sikrer bak motsatt vingback."
     },
     {
       "id": "counter_press_recovery",
@@ -213,7 +233,12 @@
         "high_tempo",
         "vertical_play",
         "high_line"
-      ]
+      ],
+      "principleSourceIds": [
+        "fifaLoss",
+        "fifaEscape"
+      ],
+      "coachingFocus": "Se første tre sekunder etter tap: press, pasningslinjer og bakre sikring. Mål om nærmeste støtte faktisk følger ballfører."
     },
     {
       "id": "midfield_press_trap",
@@ -247,7 +272,12 @@
         "organised_defence",
         "second_balls",
         "central_control"
-      ]
+      ],
+      "principleSourceIds": [
+        "fifaBlock",
+        "fifaPress"
+      ],
+      "coachingFocus": "Se om pressutløseren blir delt av sentrale spillere, og om motsatt side har sikring."
     },
     {
       "id": "direct_counter_442",
@@ -270,7 +300,7 @@
       "family": "kontring",
       "intent": "Vent i form, og gå rett i rommet når de har gitt fra seg ballen.",
       "strengths": [
-        "Farlig i overgang",
+        "Farlig når gjenvinning, første pasning og løp skjer sammen",
         "Krever lite ballinnehav"
       ],
       "risks": [
@@ -281,7 +311,12 @@
         "leading",
         "level"
       ],
-      "intensity": 65
+      "intensity": 65,
+      "principleSourceIds": [
+        "fifaCounter",
+        "faBehind"
+      ],
+      "coachingFocus": "Se avstand mellom ballvinner, første pasning og mottaker bak forsvarslinja."
     },
     {
       "id": "low_block_transition_541",
@@ -304,8 +339,8 @@
       "family": "kontring",
       "intent": "Stå dypt og kompakt, og bruk de få sjansene dere får.",
       "strengths": [
-        "Svært få sjanser imot",
-        "Trygt mot sterkere lag"
+        "Kan begrense sentrale gjennombrudd i en samlet blokk",
+        "Beskytter sentrale rom, men gir motstanderen initiativ"
       ],
       "risks": [
         "Nesten ingen egen kontroll",
@@ -314,7 +349,12 @@
       "gameStates": [
         "leading"
       ],
-      "intensity": 45
+      "intensity": 45,
+      "principleSourceIds": [
+        "fifaBlock",
+        "fifaCounter"
+      ],
+      "coachingFocus": "Se første pasning ut av blokken og om noen følger mottakeren inn i neste ledd."
     },
     {
       "id": "deep_block_long_release",
@@ -347,7 +387,12 @@
         "direct_counter",
         "space_behind",
         "protected_box"
-      ]
+      ],
+      "principleSourceIds": [
+        "fifaBlock",
+        "fifaCounter"
+      ],
+      "coachingFocus": "Se hvem som kan vinne nedfallsrommet; rollen alene dokumenterer ikke duellstyrke."
     },
     {
       "id": "direct_second_balls",
@@ -381,7 +426,12 @@
         "high_tempo",
         "space_behind",
         "fast_transitions"
-      ]
+      ],
+      "principleSourceIds": [
+        "fifaEscape",
+        "fifaCounter"
+      ],
+      "coachingFocus": "Mål hvor nær støtteleddet er ved første duell, ikke bare lengden på første pasning."
     },
     {
       "id": "target_man_focus",
@@ -415,7 +465,12 @@
         "close_support",
         "vertical_play",
         "crossing"
-      ]
+      ],
+      "principleSourceIds": [
+        "fifaThird",
+        "fifaEscape"
+      ],
+      "coachingFocus": "Se om mottaksspilleren har fri avleggsstøtte og en tredje løper som utnytter avlegget innen neste pasning."
     },
     {
       "id": "wide_fast_433",
@@ -449,7 +504,12 @@
         "level",
         "behind"
       ],
-      "intensity": 80
+      "intensity": 80,
+      "principleSourceIds": [
+        "fifaSwitch",
+        "faWide"
+      ],
+      "coachingFocus": "Se om pasningslegger har tid til sideskifte, og om mottakeren har både mulighet for én-mot-én og en trygg støttepasning."
     },
     {
       "id": "crossing_box_presence",
@@ -458,7 +518,7 @@
       "family": "bredde",
       "intent": "Kom til grunnlinja, og fyll boksen med folk.",
       "strengths": [
-        "Mange avslutninger",
+        "Kan skape avslutninger når innleggsrom og boksløp har kvalitet",
         "Farlig på andreball i boksen"
       ],
       "risks": [
@@ -482,7 +542,12 @@
         "high_width",
         "second_balls",
         "wide_attacks"
-      ]
+      ],
+      "principleSourceIds": [
+        "fifaSwitch",
+        "faWide"
+      ],
+      "coachingFocus": "Se kvaliteten på innleggsrommet, løpsbanene gjennom boksen og hvem som faktisk tar returen ved første klarering."
     },
     {
       "id": "overlap_channels",
@@ -516,7 +581,12 @@
         "high_width",
         "fluid_attack",
         "crossing"
-      ]
+      ],
+      "principleSourceIds": [
+        "fifaSwitch",
+        "faWide"
+      ],
+      "coachingFocus": "Se motsatt backs sikringsposisjon før overlappet starter, og om sekseren fortsatt skjermer første kontringspasning."
     },
     {
       "id": "see_out_the_game",
@@ -525,7 +595,7 @@
       "family": "kampsituasjon",
       "intent": "Ta tempoet ut av kampen og la dem spille foran blokka.",
       "strengths": [
-        "Svært få sjanser imot",
+        "Kan begrense sentrale gjennombrudd når blokken er samlet",
         "Roer ned et kaotisk bilde"
       ],
       "risks": [
@@ -549,7 +619,12 @@
         "organised_defence",
         "rest_defense",
         "protected_box"
-      ]
+      ],
+      "principleSourceIds": [
+        "fifaBlock",
+        "faPrinciples"
+      ],
+      "coachingFocus": "Se avstand mellom midtbane og forsvar samt tilgjengelig pasningsutgang etter klarering."
     },
     {
       "id": "chase_the_equaliser",
@@ -582,7 +657,12 @@
         "wide_attack",
         "vertical_play",
         "fast_transitions"
-      ]
+      ],
+      "principleSourceIds": [
+        "fifaPress",
+        "faBehind"
+      ],
+      "coachingFocus": "Se når laget forlater sikringsposisjon og hvilke fremoverspill motstanderen får."
     },
     {
       "id": "slow_it_down",
@@ -616,7 +696,12 @@
         "rest_defense",
         "structured_build_up",
         "keeper_support"
-      ]
+      ],
+      "principleSourceIds": [
+        "fifaEscape",
+        "faPrinciples"
+      ],
+      "coachingFocus": "Se om ballfører har mer enn én reell pasningsvei når presset setter inn, også når begge de nærmeste støttene presses."
     },
     {
       "id": "all_out_attack",
@@ -649,7 +734,12 @@
         "chaos",
         "high_tempo",
         "wide_attack"
-      ]
+      ],
+      "principleSourceIds": [
+        "fifaPress",
+        "fifaCounter"
+      ],
+      "coachingFocus": "Se hvem som er bak ballen når kant eller spiss mister den, og hvem som kan forsinke motstanderens første fremoverpasning."
     }
   ]
 }

@@ -1,6 +1,49 @@
 // Four connected tactical actions, an opponent counter and a possible reply.
-// Football coaching hypotheses, not claims that the exact actions occurred.
-// See docs/kampplaner.md for source references and limitations.
+// Principles are grounded in FIFA and England Football coaching resources;
+// numeric thresholds are explicitly game-design hypotheses, not empirical estimates.
+export const TACTICAL_PRINCIPLE_SOURCES = Object.freeze({
+  "fifaThird": {
+    "title": "FIFA – Third-player combinations",
+    "url": "https://www.fifatrainingcentre.com/en/game/game-analysis/in-possession/third-player-combinations.php"
+  },
+  "fifaSwitch": {
+    "title": "FIFA – Switch of play",
+    "url": "https://www.fifatrainingcentre.com/en/game/game-analysis/in-possession/switch-of-play.php"
+  },
+  "fifaPress": {
+    "title": "FIFA – High press",
+    "url": "https://www.fifatrainingcentre.com/en/game/game-analysis/out-of-possession/high-press.php"
+  },
+  "fifaBlock": {
+    "title": "FIFA – Team organisation out of possession",
+    "url": "https://www.fifatrainingcentre.com/en/game/game-analysis/out-of-possession/team-organisation--out-of-possession-.php"
+  },
+  "fifaCounter": {
+    "title": "FIFA – The counter-attack",
+    "url": "https://www.fifatrainingcentre.com/en/game/game-analysis/transition-to-attacking/the-counter-attack.php"
+  },
+  "fifaEscape": {
+    "title": "FIFA – Passing the press",
+    "url": "https://www.fifatrainingcentre.com/en/game/game-analysis/transition-to-attacking/passing-the-press.php"
+  },
+  "fifaLoss": {
+    "title": "FIFA – The reaction to losing the ball",
+    "url": "https://www.fifatrainingcentre.com/en/game/game-analysis/transition-to-defending/the-reaction-to-losing-the-ball.php"
+  },
+  "faPrinciples": {
+    "title": "England Football – The principles of football",
+    "url": "https://learn.englandfootball.com/articles-and-resources/coaching/resources/2022/What-are-the-principles-of-football"
+  },
+  "faBehind": {
+    "title": "The FA – Defending space in behind",
+    "url": "https://www.thefa.com/bootroom/resources/coaching/how-to-defend-like-england-space-in-behind"
+  },
+  "faWide": {
+    "title": "The FA – Defending wide spaces",
+    "url": "https://www.thefa.com/bootroom/resources/coaching/how-to-defend-like-england-space-in-wide-areas"
+  }
+});
+
 export const TACTICAL_SEQUENCES = Object.freeze([
   {
     "tacticId": "central_possession_4231",
@@ -25,7 +68,16 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     "counterCondition": {
       "trait": "pressIntensity",
       "min": 78
-    }
+    },
+    "phase": "in_possession",
+    "principleSourceIds": [
+      "fifaThird",
+      "faPrinciples"
+    ],
+    "mechanism": "Første pasning lokker presset. Avlegget og tredjemann skaper ledig mellomrom for neste løp.",
+    "counterLogic": "Aggressivt press alene stenger ikke automatisk tier og sekser; det krever samtidige avstander og dekning.",
+    "failureMode": "Når tredjemanns pasning brytes og spissen blir isolert, mister kombinasjonen retningen.",
+    "observation": "Se om pasningslegger, avlegger og tredje løper faktisk er tilgjengelige samtidig."
   },
   {
     "tacticId": "patient_build_up",
@@ -48,9 +100,18 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     "response": "Spill kontrollert lengre til bred støtte",
     "responsePlanId": "direct_second_balls",
     "counterCondition": {
-      "trait": "tacticalComplexity",
+      "trait": "defensiveCompactness",
       "min": 79
-    }
+    },
+    "phase": "in_possession",
+    "principleSourceIds": [
+      "fifaEscape",
+      "fifaThird"
+    ],
+    "mechanism": "Keeper og sekser gir ulike vinkler slik at laget kan passere et høyt press og komme ut på rettvendt spiller.",
+    "counterLogic": "Motstanderen må presse koordinert og fjerne både første støtte og returen, ikke bare løpe fort.",
+    "failureMode": "Uten pressresistent mottaker blir rolige korte pasninger en invitasjon til balltap nær eget mål.",
+    "observation": "Tell frie pasningsvinkler foran og bak førsteforsvarer ved pressutløseren; kontroller også hvem som dekker neste pasning."
   },
   {
     "tacticId": "positional_overloads",
@@ -73,9 +134,18 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     "response": "Angrip halvrommet der midtbanen forlot posisjon",
     "responsePlanId": "wide_fast_433",
     "counterCondition": {
-      "trait": "tacticalComplexity",
+      "trait": "defensiveStructure",
       "min": 80
-    }
+    },
+    "phase": "in_possession",
+    "principleSourceIds": [
+      "fifaSwitch",
+      "fifaThird"
+    ],
+    "mechanism": "Overtall på én side trekker forsvar, så vendes ballen til en fri kant og en tredje løper.",
+    "counterLogic": "Defensiv organisering og kollektiv forskyvning kan fjerne mottakeren, men kan åpne motsatt halvrom.",
+    "failureMode": "Vending uten fri pasningslegger eller bred mottaker øker balltaps- og kontringsrisiko.",
+    "observation": "Se om ballfører har tid til å vende, og om mottakeren får støtte i fart før forsvarsblokken rekker å skyve tilbake."
   },
   {
     "tacticId": "high_press_343",
@@ -101,7 +171,16 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     "counterCondition": {
       "trait": "pressResistance",
       "min": 79
-    }
+    },
+    "phase": "out_of_possession",
+    "principleSourceIds": [
+      "fifaPress",
+      "faBehind"
+    ],
+    "mechanism": "Spissen styrer første pasning, midtbanen stenger støtte, vingback presser og bakre ledd sikrer rom.",
+    "counterLogic": "En pressresistent mottaker kan bryte leddet, særlig når et fremoverspill finner rom bak den høye vingbacken.",
+    "failureMode": "Løper bare førsteforsvarer, åpner midten og bakrommet selv om presset virker intenst.",
+    "observation": "Se om backlinjen flytter når førstepresset setter inn, og hvem som sikrer bak motsatt vingback."
   },
   {
     "tacticId": "counter_press_recovery",
@@ -126,7 +205,16 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     "counterCondition": {
       "trait": "pressResistance",
       "min": 78
-    }
+    },
+    "phase": "transition_defend",
+    "principleSourceIds": [
+      "fifaLoss",
+      "fifaEscape"
+    ],
+    "mechanism": "Før balltap organiseres sikringen. Ved balltap presser nærmeste, øvrige dekker første utpasning og vinner retur.",
+    "counterLogic": "Et rettvendt pasningsledd under press og et samtidig utløp kan passere gjenvinningspresset.",
+    "failureMode": "Enspillerpress uten støtte kan bli overspilt og etterlate et større rom enn før balltap.",
+    "observation": "Se første tre sekunder etter tap: press, pasningslinjer og bakre sikring. Mål om nærmeste støtte faktisk følger ballfører."
   },
   {
     "tacticId": "midfield_press_trap",
@@ -149,9 +237,18 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     "response": "Skyv midtblokken samlet mot ny ballside",
     "responsePlanId": "low_block_transition_541",
     "counterCondition": {
-      "trait": "tacticalComplexity",
+      "trait": "pressResistance",
       "min": 78
-    }
+    },
+    "phase": "out_of_possession",
+    "principleSourceIds": [
+      "fifaBlock",
+      "fifaPress"
+    ],
+    "mechanism": "Første ledd inviterer sentral pasning, midtbanen skjermer mottaker og presset starter på et kontrollert signal.",
+    "counterLogic": "En motstander som tåler press og kan vende gjennom tredje mann kan spille forbi fellen.",
+    "failureMode": "For sen kollektiv forskyvning lar den første mottakeren vende opp uten press.",
+    "observation": "Se om pressutløseren blir delt av sentrale spillere, og om motsatt side har sikring."
   },
   {
     "tacticId": "direct_counter_442",
@@ -176,7 +273,16 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     "counterCondition": {
       "trait": "defensiveStructure",
       "min": 81
-    }
+    },
+    "phase": "transition_attack",
+    "principleSourceIds": [
+      "fifaCounter",
+      "faBehind"
+    ],
+    "mechanism": "Et kompakt lag vinner ballen, første pasning går forbi fremste motspiller og to løpere deler bakrommet.",
+    "counterLogic": "En organisert bakerste sikring kan forsinke eller stanse den første vertikale pasningen.",
+    "failureMode": "Lav gjenvinningskvalitet eller forsinket løp lar motstanderen omstille før rommet angripes.",
+    "observation": "Se avstand mellom ballvinner, første pasning og mottaker bak forsvarslinja."
   },
   {
     "tacticId": "low_block_transition_541",
@@ -201,7 +307,16 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     "counterCondition": {
       "trait": "defensiveStructure",
       "min": 80
-    }
+    },
+    "phase": "transition_attack",
+    "principleSourceIds": [
+      "fifaBlock",
+      "fifaCounter"
+    ],
+    "mechanism": "Den tette blokken hindrer sentrale gjennombrudd, ballvinner finner støtte og spiss/vingback starter koordinert motrom.",
+    "counterLogic": "Motstanderens gode restforsvar kan stoppe første kontring uten å ofre eget posisjonsspill.",
+    "failureMode": "En isolert spiss og for lange avstander gjør at ballen kommer rett tilbake.",
+    "observation": "Se første pasning ut av blokken og om noen følger mottakeren inn i neste ledd."
   },
   {
     "tacticId": "deep_block_long_release",
@@ -227,7 +342,16 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     "counterCondition": {
       "trait": "defensiveStructure",
       "min": 81
-    }
+    },
+    "phase": "transition_attack",
+    "principleSourceIds": [
+      "fifaBlock",
+      "fifaCounter"
+    ],
+    "mechanism": "En tett boks gir duellrom, klareringer blir kontrollert andreball og et avlegg gir neste fremoverspill.",
+    "counterLogic": "Motstanderen kan kontrollere nedfallsrommet med en organisert sikring og hente opp alle lange baller.",
+    "failureMode": "Direkte klarering uten mottak, duellstøtte og vinner av andreball gir vedvarende trykk imot.",
+    "observation": "Se hvem som kan vinne nedfallsrommet; rollen alene dokumenterer ikke duellstyrke."
   },
   {
     "tacticId": "direct_second_balls",
@@ -252,7 +376,16 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     "counterCondition": {
       "trait": "defensiveCompactness",
       "min": 78
-    }
+    },
+    "phase": "transition_attack",
+    "principleSourceIds": [
+      "fifaEscape",
+      "fifaCounter"
+    ],
+    "mechanism": "Lang ball passerer første pressledd, omkringliggende midtbane sikrer nedfallsrommet og neste pasning finner åpent rom.",
+    "counterLogic": "Kompakt bakre lagdel med organisert midtbane kan vinne den første andreballen.",
+    "failureMode": "Uten dokumentert duellkvalitet og støtte kan direkte spill bli gjentatte tap av ball.",
+    "observation": "Mål hvor nær støtteleddet er ved første duell, ikke bare lengden på første pasning."
   },
   {
     "tacticId": "target_man_focus",
@@ -277,7 +410,16 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     "counterCondition": {
       "trait": "defensiveStructure",
       "min": 79
-    }
+    },
+    "phase": "in_possession",
+    "principleSourceIds": [
+      "fifaThird",
+      "fifaEscape"
+    ],
+    "mechanism": "Tidlig pasning finner festepunkt, avlegg til møtende spiller frigjør en tredje løper.",
+    "counterLogic": "Dobling på mottaksspissen kan redusere tid til avlegg, men kan samtidig åpne rom for en rettvendt mottaker på den andre siden.",
+    "failureMode": "En spiss med riktig rolle, men uten dokumentert mottaks-/duellbelegg, skal ikke automatisk få høy kvalitetsbonus.",
+    "observation": "Se om mottaksspilleren har fri avleggsstøtte og en tredje løper som utnytter avlegget innen neste pasning."
   },
   {
     "tacticId": "wide_fast_433",
@@ -300,9 +442,18 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     "response": "Bruk underlapp eller bytt side igjen",
     "responsePlanId": "overlap_channels",
     "counterCondition": {
-      "trait": "tacticalComplexity",
+      "trait": "defensiveStructure",
       "min": 80
-    }
+    },
+    "phase": "in_possession",
+    "principleSourceIds": [
+      "fifaSwitch",
+      "faWide"
+    ],
+    "mechanism": "Ballfører trekker laget til en side, vending frigjør én-mot-én ute og samtidige boksløp gir flere valg.",
+    "counterLogic": "Kollektiv sidesikring og riktig støtte fra egen back kan forsvare én-mot-én uten å blottlegge midten.",
+    "failureMode": "En isolert kantspiller uten støtte kan bli låst mot linja, og motstanderen kan bryte angrepet før boksen er bemannet.",
+    "observation": "Se om pasningslegger har tid til sideskifte, og om mottakeren har både mulighet for én-mot-én og en trygg støttepasning."
   },
   {
     "tacticId": "crossing_box_presence",
@@ -328,7 +479,16 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     "counterCondition": {
       "trait": "defensiveStructure",
       "min": 80
-    }
+    },
+    "phase": "in_possession",
+    "principleSourceIds": [
+      "fifaSwitch",
+      "faWide"
+    ],
+    "mechanism": "Bredde og overlapp skaper innleggsrom, ulike løp fyller boksen og et ledd sikrer returen.",
+    "counterLogic": "Strukturert bokssikring og første-duell kan avskjære innlegget og vinne klareringen.",
+    "failureMode": "Mange innlegg er ikke lik mange gode sjanser hvis boksløp og duellevne mangler.",
+    "observation": "Se kvaliteten på innleggsrommet, løpsbanene gjennom boksen og hvem som faktisk tar returen ved første klarering."
   },
   {
     "tacticId": "overlap_channels",
@@ -353,7 +513,16 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     "counterCondition": {
       "trait": "transitionThreat",
       "min": 78
-    }
+    },
+    "phase": "in_possession",
+    "principleSourceIds": [
+      "fifaSwitch",
+      "faWide"
+    ],
+    "mechanism": "Kant binder back, overlapp skaper overtall, tredjemann finner halvrom og sekser sikrer tap.",
+    "counterLogic": "Sterke motstander-overganger kan utnytte området som en høy back forlater, spesielt dersom motsatt back også går i angrep.",
+    "failureMode": "To høye backer uten retursikring kan åpne begge sider samtidig, slik at én presis utpasning blir til et numerisk overtak imot.",
+    "observation": "Se motsatt backs sikringsposisjon før overlappet starter, og om sekseren fortsatt skjermer første kontringspasning."
   },
   {
     "tacticId": "see_out_the_game",
@@ -376,9 +545,18 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     "response": "Flytt sekser mot løper og behold kontringsutgang",
     "responsePlanId": "midfield_press_trap",
     "counterCondition": {
-      "trait": "tacticalComplexity",
+      "trait": "possessionControl",
       "min": 81
-    }
+    },
+    "phase": "out_of_possession",
+    "principleSourceIds": [
+      "fifaBlock",
+      "faPrinciples"
+    ],
+    "mechanism": "Laget reduserer avstander, styrer spillet bredt og gjenvinner løse baller uten å bryte form.",
+    "counterLogic": "En rettvendt fri mann mellom leddene kan trekke ut stopper og åpne neste rom.",
+    "failureMode": "Å senke blokken garanterer ikke færre sjanser; press uten utgang gir vedvarende angrepsbølger imot.",
+    "observation": "Se avstand mellom midtbane og forsvar samt tilgjengelig pasningsutgang etter klarering."
   },
   {
     "tacticId": "chase_the_equaliser",
@@ -404,7 +582,16 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     "counterCondition": {
       "trait": "transitionThreat",
       "min": 79
-    }
+    },
+    "phase": "transition_defend",
+    "principleSourceIds": [
+      "fifaPress",
+      "faBehind"
+    ],
+    "mechanism": "Høyt lagpress reduserer motstanderens ro, sideskifte frigjør rom og flere spillere angriper neste boks.",
+    "counterLogic": "En presis kontring bak begge høye backer kan snu sluttpresset til en stor sjanse imot.",
+    "failureMode": "Press som ikke omfatter sikringsleddet kan være mer risikabelt enn å beholde balansen.",
+    "observation": "Se når laget forlater sikringsposisjon og hvilke fremoverspill motstanderen får."
   },
   {
     "tacticId": "slow_it_down",
@@ -427,9 +614,18 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     "response": "Søk tredjemann lengre frem",
     "responsePlanId": "positional_overloads",
     "counterCondition": {
-      "trait": "tacticalComplexity",
+      "trait": "defensiveCompactness",
       "min": 80
-    }
+    },
+    "phase": "in_possession",
+    "principleSourceIds": [
+      "fifaEscape",
+      "faPrinciples"
+    ],
+    "mechanism": "To støttelinjer og keeper gir en trygg vei forbi et aggressivt press, så laget kan eie neste fase.",
+    "counterLogic": "Koordinert press som dekker begge returer kan tvinge feilpasning i eget område.",
+    "failureMode": "Lavt tempo uten frie mottakere betyr ikke kontroll; det gir motstanderpresset tid.",
+    "observation": "Se om ballfører har mer enn én reell pasningsvei når presset setter inn, også når begge de nærmeste støttene presses."
   },
   {
     "tacticId": "all_out_attack",
@@ -455,9 +651,20 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     "counterCondition": {
       "trait": "transitionThreat",
       "min": 75
-    }
+    },
+    "phase": "transition_defend",
+    "principleSourceIds": [
+      "fifaPress",
+      "fifaCounter"
+    ],
+    "mechanism": "Fremre ledd presser samlet, bredde skaper flere pasningsvalg og én sekser forsøker å sikre returen.",
+    "counterLogic": "En rettvendt mottaker som finner løpet bak høyt forsvar kan utnytte store overgangsrom.",
+    "failureMode": "Alle fremme uten støtte gir høyere risiko og garanterer ikke flere gode avslutninger.",
+    "observation": "Se hvem som er bak ballen når kant eller spiss mister den, og hvem som kan forsinke motstanderens første fremoverpasning."
   }
 ]);
+
+
 
 const finite = (x) => typeof x === "number" && Number.isFinite(x);
 const matches = (traits, condition) => finite(traits?.[condition.trait]) &&
