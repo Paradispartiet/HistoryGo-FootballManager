@@ -148,7 +148,8 @@ managerens mot-mottrekk. Modellen aktiverer bare kjeden når det er et
 reelt taktisk signal i motstanderprofilen; den gir høyst **+1 matchup-edge**
 når egne eksisterende lagmetrikker gir tilstrekkelig rolle- og formasjonsstøtte.
 Når motstanderprofilen viser et dekkende motgrep, nøytraliseres akkurat den
-kjedefordelen. Allerede modellerte trusler ved høy linje, svak restforsvars-
+kjedefordelen. **Ukjent motgrep gir heller ingen bonus:** manglende speiding er
+ikke bevis for at en mottaktikk ikke finnes. Allerede modellerte trusler ved høy linje, svak restforsvars-
 struktur og dårlig oppbygging under press fortsetter å koste.
 
 **Viktig begrensning:** Dette er taktiske *hypoteser*, ikke en hendelses-

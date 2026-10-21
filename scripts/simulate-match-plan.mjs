@@ -80,6 +80,14 @@ check("alle 18 taktikker har betinget fire-trekks spill, motspill og svar", () =
     const countered = evaluateTacticalSequences(chain.tacticId, counteredOpponent, ready)[0];
     assert.equal(countered?.status, "countered", `${chain.tacticId}: genuine opposition reply`);
     assert.equal(countered.edgeDelta, 0, `${chain.tacticId}: counter must neutralize pattern`);
+    const unscouted = {
+      styleTraits: { [chain.opponentCondition.trait]: chain.opponentCondition.min }
+    };
+    const unverified = evaluateTacticalSequences(chain.tacticId, unscouted, ready)[0];
+    assert.equal(unverified?.status, "unknown_counter",
+      `${chain.tacticId}: unscouted opponent counter cannot be treated as harmless`);
+    assert.equal(unverified.edgeDelta, 0,
+      `${chain.tacticId}: no bonus without a known opponent response`);
     const integrated = evaluatePlanVsOpponent(plan, opponent, { tacticalProfile: ready });
     assert.equal(integrated.sequences?.[0]?.edgeDelta, 1);
     const integratedCounter = evaluatePlanVsOpponent(plan, counteredOpponent, { tacticalProfile: ready });
