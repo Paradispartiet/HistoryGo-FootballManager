@@ -1010,7 +1010,7 @@ const KJENT_UDOKUMENTERT = {
   // 6 % er en forskjell i kildesjanger, ikke i klubbstørrelse: Viking og
   // Bodø/Glimt er ikke mindre kartlagt enn Vålerenga, de er kartlagt med
   // tabeller.
-  intility_arena: 0.82,      // Vålerenga: målt 53 av 66
+  intility_arena: 0.77,      // Vålerenga: 50/66 uten styrker etter Muri/Ogude/Riihilahti (75,76 %; tak 77 %)
   aspmyra_stadion: 0.67,     // Bodø/Glimt: 31 av 47 uten styrker etter seksprofilbolken
   brann_stadion: 0.16,       // Brann: 7/47 uten styrker etter Alexander Nagelsett Olsen (14,89 %, tak 16 %)
   lyse_arena: 0.60           // Viking: 30 av 51 uten styrker etter seksprofilbolken
