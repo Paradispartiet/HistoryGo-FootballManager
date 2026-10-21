@@ -10,6 +10,7 @@
 
 import {
   MAX_SUBSTITUTIONS,
+  aggregateSourcedMetricBonuses,
   applySubstitution,
   availableSubstitutions,
   createBenchSnapshot,
@@ -274,6 +275,79 @@ console.log("\n9. Rangering");
   check("alle fire benkespillere vurderes", ranked.length === 4);
   check("rangeringen er sortert på forbedring", ranked.every((entry, i) => i === 0 || ranked[i - 1].improvement >= entry.improvement));
   check("hvert alternativ forklarer seg", ranked.every((entry) => entry.reasons.length > 0 && entry.summary));
+}
+
+
+// Regression: tactic switch AFTER kickoff, followed by a substitution.
+// Prior bug: substitution recomputed from the original kickoff profile and
+// erased the manager's chosen press/depth/balance change for all remaining time.
+console.log("\n10. Planbytte og innbytte bruker samme taktiske grunnlag");
+{
+  const oldPlan = tactics.find((plan) => plan.id === "patient_build_up");
+  const newPlan = tactics.find((plan) => plan.id === "high_press_343");
+  const six = ["balanceScore", "widthScore", "depthScore",
+    "buildUpScore", "pressScore", "restDefenseScore"];
+  const profile = Object.fromEntries(six.map((key) => [key, 67]));
+  const newProfile = { ...profile, pressScore: 84, restDefenseScore: 49 };
+  const session = {
+    ...baseSession(),
+    tacticSnapshot: oldPlan,
+    sourcedSubstitutionVersion: 2,
+    teamFitSnapshot: { tacticalProfile: profile },
+    sourcedSubstitutionBaseline: {
+      tacticalProfile: { ...profile },
+      bonuses: Object.fromEntries(six.map((key) => [key, 0]))
+    }
+  };
+  const currentTeamFit = {
+    metrics: profile, sourcedSkillTendencies: Object.fromEntries(six.map((key) =>
+      [key, { bonus: 0 }]))
+  };
+  const nextTeamFit = {
+    metrics: newProfile, sourcedSkillTendencies: currentTeamFit.sourcedSkillTendencies
+  };
+  const before = JSON.stringify(session);
+  const switched = applyMatchPlanChange(session, newPlan, {
+    currentTeamFit, nextTeamFit, currentPlanData: oldPlan
+  });
+  check("planbyttet bevarer innbytteversjon 2 og ny pressprofil",
+    switched.sourcedSubstitutionVersion === 2
+      && switched.teamFitSnapshot.tacticalProfile.pressScore === 84);
+  check("innbyttebasen flyttes fra gammel til ny taktisk profil",
+    switched.sourcedSubstitutionBaseline.tacticalProfile.pressScore === 84);
+  const slot = switched.lineupSnapshot.find((entry) => entry.position === "ST");
+  const sub = applySubstitution(switched, {
+    outPlayerId: slot.playerId, inPlayerId: switched.benchSnapshot[0].playerId,
+    minute: 65, gameState: "behind"
+  });
+  check("innbytte etter planendring beholder press og restforsvar",
+    sub.teamFitSnapshot.tacticalProfile.pressScore === 84
+      && sub.teamFitSnapshot.tacticalProfile.restDefenseScore === 49,
+    JSON.stringify(sub.teamFitSnapshot.tacticalProfile));
+  check("gammel kampsesjon muteres ikke av planbytte", JSON.stringify(session) === before);
+
+  // A real documented skill on a CB changes sourced rest-defence support
+  // between a possession plan and the new HIGH-LINE plan. The source remains
+  // "belagt"; no invented skill rating or new player identity.
+  const starter = session.lineupSnapshot.find((entry) => entry.position === "CB");
+  const revisedPlayers = players.map((p) => p.id === starter.playerId
+    ? { ...p, strengths: ["pace"], attributes: {
+      ...p.attributes, provenance: { pace: "belagt" }
+    } } : p);
+  const sourceRebuilt = applyMatchPlanChange(session, newPlan, {
+    currentTeamFit, nextTeamFit, currentPlanData: oldPlan,
+    players: revisedPlayers, roles
+  });
+  const updated = sourceRebuilt.lineupSnapshot.find((entry) => entry.playerId === starter.playerId);
+  check("kildebelagt forsvarsegenskap regnes om for høy linje",
+    updated.sourcedMetricBonuses.restDefenseScore === 2,
+    JSON.stringify(updated.sourcedMetricBonuses));
+  check("basen lagrer bonuser fra faktisk ellever etter taktikkbytte",
+    sourceRebuilt.sourcedSubstitutionBaseline.bonuses.restDefenseScore ===
+      aggregateSourcedMetricBonuses(sourceRebuilt.lineupSnapshot).restDefenseScore);
+  check("aktuell bench vurderes under ny taktikk",
+    sourceRebuilt.benchSnapshot.every((entry) =>
+      entry.fitBySlot[starter.slotId]?.sourcedMetricBonuses));
 }
 
 console.log(`\n${passed}/${passed + failed} sjekker bestått.`);
