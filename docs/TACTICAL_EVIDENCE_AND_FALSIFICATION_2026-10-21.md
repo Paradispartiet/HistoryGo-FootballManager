@@ -79,3 +79,19 @@ Hver kjede krever at **forskjellige faktisk valgte spillere** dekker samtlige ro
 Angrepskjeden med høyt press har prioritet hvis motstanderens profil oppfyller begge scenarioer. Bare **én** v6-fase får påvirke xG i en gitt kampperiode. Eldre lagringer uten `causalCompactBlockVersion: 1` forblir uendret. Den opprinnelige statiske planmatchupen trekkes ut for perioder der v6 eier en situasjon: samme fordel skal ikke betales to ganger. Det opprettes ingen ekstra mål eller skudd utenom kampklokkens ordinære sjanser.
 
 `npm run sim:compact-block-v6` verifiserer alle åtte planer, faktisk rollekjede, svakere spillere med samme formasjon, eksplisitt kollektiv motdekning, avvist angrep og variasjon i restforsvar, ukjente data, deterministisk gjenspilling, at konkurrerende v6-situasjoner ikke dobbeltkjøres, og at periodevis xG stemmer med kampresultatet. Modellkonstantene (henholdsvis 0.09, 0.10 eller 0.12 ekstra xG for vellykket angrepskjede) er **kalibreringsfrie designparametere**. Ingen historisk spiller, kamp eller optisk sporingsdata er presentert som bekreftelse på dem.
+
+## Kampmotor v6 – kollektivt press og motstanderens utvei (ny arbeidsdel)
+
+Den samme kausale kampmotoren kan simulere **vårt forsvar mot motstanderens oppbygging** før skuddsjansene avgjøres. Tre planer har hver sin fireleddsmodell:
+
+- **`high_press_343`** mot dokumentert kort oppbygging: spiss styrer første pasning, kant/vingback presser, sentral midtbane skjermer retur og stopper sikrer bakrom.
+- **`midfield_press_trap`** mot dokumentert ballkontroll: invitere pasningen sentralt, skjerme mottaker, kollektiv utløser på neste pasning og bakre sikring.
+- **`counter_press_recovery`** mot kjent overgangstrussel: balltap som simulert utgangspunkt, umiddelbart førstetrykk, stenge første fremoverpasning og sikre andreball. Dette er en egen modellert angrepsfase, ikke en påstand om at en kampvideo bekrefter en bestemt balltapshendelse.
+
+Sannsynligheten for gjenvinning er knyttet til navngitte, faktisk valgte lagledd med kjent rollepassform, press-/balanse-/restforsvarsmetrikker, relevant motstanderprofil og dens **dokumenterte pressresistens**. Et eksplisitt kartlagt motgrep (`pressEscapeRoute`: `third_man`, `switch_play` eller `direct`) kan svekke pressfellen. Ukjent motgrep gir ingen ubegrunnet motstanderbonus. Hvis presset brytes, må restforsvaret forsøke å stoppe neste rom **før** et kontringsvindu kan bli til.
+
+Terminalt utfall er **`regain`**, **`contained`** eller **`escaped`**. Bare terminalutfallet justerer periodens xG, én gang: ved gjenvinning moderat økt offensiv mulighet (0.08–0.11), ved innehentet press gjennombrudd liten fare (0.02 imot), ved åpent bakrom større fare (0.06–0.12 imot) avhengig av dokumentert restforsvar. Gjenvinning reduserer også motstanderens perioderisiko marginalt (−0.01). Alle tall er **spilldesign**, ikke publiserte empiriske effektstørrelser.
+
+Fasen er eksklusiv mot de to foregående v6-angrepsfasene i én periode og aktiveres bare for nyopprettede kamper med `causalPressingVersion: 1`. Ingen mål eller sjanser kan tilskrives et ikke-generert skudd. Forsvarlig test: `npm run sim:own-press-v6` verifiserer tre planer, kollektiv rollekjede, motstanders evne til pressgjennombrudd, eksplisitt motspill, tre utfall, restforsvar, gammelt save, deterministisk gjenspilling og samsvar mellom kampresultat og xG-regnskap.
+
+Dette er fortsatt intern spillmodellverifikasjon. Full kalibrering og virkelighetsnær påstandsverifisering krever uavhengige, annoterte kamp-/trackingdata slik dokumentet spesifiserer.
