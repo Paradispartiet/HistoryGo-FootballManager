@@ -678,6 +678,24 @@ check("kampbildet leses av grepene, ikke av en resultattavle", () => {
   assert.equal(bad.state, "behind");
 });
 
+check("18 planer har kildebelagt mekanisme, risiko og konkret motgrep", () => {
+  assert.equal(TACTICAL_SEQUENCES.length, 18);
+  const vague = TACTICAL_SEQUENCES.filter(entry =>
+    entry.counterCondition.trait === "tacticalComplexity");
+  assert.deepEqual(vague, [], "a generic tactical-complexity score cannot establish a specific counter");
+  const sources = new Set();
+  for (const entry of TACTICAL_SEQUENCES) {
+    assert.ok(entry.mechanism.length >= 75);
+    assert.ok(entry.counterLogic.length >= 75);
+    assert.ok(entry.failureMode.length >= 75);
+    assert.ok(entry.observation.length >= 75);
+    entry.principleSourceIds.forEach(id => sources.add(id));
+    const originalPlan = byId.get(entry.tacticId);
+    assert.equal(originalPlan?.coachingFocus, entry.observation);
+  }
+  assert.ok(sources.size >= 7, "coverage must span different phases, not one generic coaching page");
+});
+
 check("en plan for et annet kampbilde blir sagt ifra om", () => {
   const seeOut = evaluatePlanForGameState(byId.get("see_out_the_game"), "behind");
   assert.equal(seeOut.fits, false);

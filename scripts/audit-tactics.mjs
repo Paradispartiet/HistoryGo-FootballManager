@@ -8,7 +8,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { TACTICAL_SEQUENCES } from "../src/football-tactical-sequences.js";
+import { TACTICAL_SEQUENCES, TACTICAL_PRINCIPLE_SOURCES } from "../src/football-tactical-sequences.js";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const results = [];
@@ -141,6 +141,25 @@ for (const chain of TACTICAL_SEQUENCES) {
     [chain.opponentCondition, chain.counterCondition].every((check) =>
       OPPONENT_METRICS.has(check?.trait) &&
       Number.isInteger(check.min) && check.min >= 50 && check.min <= 95));
+}
+
+// Football-coaching claims and game thresholds are separate: every plan must
+// cite actual coaching principles and identify mechanism, failure and cue.
+for (const sequence of TACTICAL_SEQUENCES) {
+  const plan = plans.find(p => p.id === sequence.tacticId);
+  check(sequence.tacticId + ": verified coaching references",
+    sequence.principleSourceIds?.length >= 2 &&
+    sequence.principleSourceIds.every(id => /^https:\/\//.test(TACTICAL_PRINCIPLE_SOURCES[id]?.url || "")));
+  check(sequence.tacticId + ": causal mechanism, counter, failure, observation",
+    ["mechanism","counterLogic","failureMode","observation"].every(key =>
+      typeof sequence[key] === "string" && sequence[key].length >= 75));
+  check(sequence.tacticId + ": tactical phase",
+    ["in_possession","out_of_possession","transition_attack","transition_defend"].includes(sequence.phase));
+  check(sequence.tacticId + ": no vague complexity as automatic counter",
+    sequence.counterCondition.trait !== "tacticalComplexity");
+  check(sequence.tacticId + ": manager coaching cue attached to tactic",
+    plan?.coachingFocus === sequence.observation &&
+    JSON.stringify(plan?.principleSourceIds) === JSON.stringify(sequence.principleSourceIds));
 }
 
 // Every plan's next answer points at a real alternative. It is a hypothesis,

@@ -221,6 +221,12 @@ export function buildOpponentTacticalSequences({ opponent, tactic, teamFit, resp
     responsePlanName: nextPlan?.name || null,
     responsePreview,
     moves: catalogPattern.moves.slice(),
+    mechanism: catalogPattern.mechanism,
+    counterLogic: catalogPattern.counterLogic,
+    failureMode: catalogPattern.failureMode,
+    observation: catalogPattern.observation,
+    phase: catalogPattern.phase,
+    principleSourceIds: catalogPattern.principleSourceIds.slice(),
     counter: catalogPattern.counter, response: catalogPattern.response,
     trigger: {
       trait: catalogPattern.opponentCondition.trait,
