@@ -71,6 +71,11 @@ for (const record of P1_EXISTING_ROLE_CORRECTIONS) {
     `${record.playerId}: correction must belong to Brann P1`);
   ok(record.naturalPositions[0] === expectedBrannRoles[record.playerId],
     `${record.playerId}: canonical role fix does not match documented Brann position`);
+  // Prevent future drift between canonical catalog and P1 source-backed role fields.
+  for (const field of ["naturalPositions", "usablePositions", "poorFits", "archetypeIds", "archetypes", "needs", "preferredRoles", "likesTactics", "dislikesTactics", "warningWhenMisused"]) {
+    ok(JSON.stringify(raw[field]) === JSON.stringify(record[field]),
+      `${record.playerId}: raw ${field} differs from its sourced P1 correction`);
+  }
   ok(/^https:\/\/historie\.brann\.no\/spillere\//.test(record.source),
     `${record.playerId}: role fix must cite Brann's own player history`);
   const effective = applyP1NewSourceClaims([raw])[0];
