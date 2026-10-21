@@ -8,7 +8,7 @@ export const P1_SOURCE_CLAIMS_VERSION = "historygo-football-manager.p1-source-cl
 
 export const P1_HERITAGES = Object.freeze([
   { key: "valerenga", placeId: "intility_arena", expectedExclusive: 66, generation: "existing", expectedDocumented: 13, expectedPartial: 5, expectedThin: 48, sourcePass: "Valerenga_66_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 32, expectedPartial: 2, expectedThin: 13, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 35, expectedPartial: 2, expectedThin: 10, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 21, expectedPartial: 3, expectedThin: 0, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
@@ -1443,6 +1443,41 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  // 2026-10-21: three source-bounded Brann-era historical profiles.
+  {
+    "playerId": "jan_knudsen",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "shot_stopping"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Brann-keeper som gjennom 1970-årene gjentatte ganger reddet laget med godt keeperspill.",
+    "claim": "I Aftenpostens retrospektive portrett av Jan Knudsen fra 22. desember 2018 beskriver Anders Pamer ham som Branns glimrende keeper fra 1970-tallet og omtaler at han reddet Brann mange ganger. Dette er en generalisert vurdering av keeperspillet over tid, ikke en enkelt redning i én kamp. Kun shot_stopping registreres; artikkelen dokumenterer ikke spesifikt reflexes, distribution eller command_of_area.",
+    "source": "https://www.aftenposten.no/sport/fotball/i/Vbxdv4/jan-knudsen-reddet-brann-mange-ganger-men-det-var-ingen-som-kunne-redde-ham"
+  },
+  {
+    "playerId": "neil_macleod",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "leadership"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Langvarig Brann-kaptein og lederskikkelse på midtbanen i slutten av 1970-årene og begynnelsen av 1980-årene.",
+    "claim": "Aftenpostens historiske vurdering av Brann-kapteiner fra 2015 rangerer Neil MacLeod som nummer syv blant klubbens fremtredende kapteiner. Branns egen 1982-beretning identifiserer ham samtidig som kaptein i cupfinalen. Kombinasjonen av en særskilt retrospektiv vurdering av hans kapteinsinnsats og dokumentert kapteinsrolle støtter leadership i Brann-perioden, ikke pasninger, finishing eller andre tekniske tokens.",
+    "source": "https://www.aftenposten.no/sport/meninger/i/AdGWX5/martin-paa-kaptein-toppen"
+  },
+  {
+    "playerId": "kjell_rune_pedersen",
+    "placeId": "brann_stadion",
+    "strengths": [
+      "leadership"
+    ],
+    "evidenceKind": "historical_appraisal",
+    "playingStyle": "Sentral midtbaneorganisator i Branns opprykks- og cupvinnersesong 1982.",
+    "claim": "Branns offisielle sesonghistorikk, som bygger på Atle Nielsens jubileumsbok fra 2008, omtaler den tilbakevendte Kjell Rune Pedersen uttrykkelig som «midtbanegeneral» i 1982. Den individualiserte lederrollen gir et smalt belegg for leadership i akkurat denne Brann-sesongen, men ikke for passing_range, game_reading eller tempo_control; kamptall og mål brukes ikke som kvalitetsbevis.",
+    "source": "https://historie.brann.no/sesonger/1982/"
+  },
+
   // 2026-10-21: deliberately narrow historical profiles, distinct source eras.
   {
     "playerId": "odd_oppedal",
