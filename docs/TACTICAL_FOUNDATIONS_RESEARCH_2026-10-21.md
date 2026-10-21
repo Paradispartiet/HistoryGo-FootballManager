@@ -99,3 +99,47 @@ kampplanscore og videreføres derfor til kampens kommende xG-perioder via
 Et tapt kombinasjonsforsøk utløser ennå ikke en egen stokastisk
 balltapshendelse. Videre arbeid bør modellere hendelsesutfall og kalibrere
 konsekvensene med reproducerbare simuleringer og ekstern kampobservasjon.
+
+
+### Full modellmatrise for alle 18 kampplaner
+
+De fire første v3-kjedene er nå supplert med 14 ulike,
+mekanismespesifikke vurderinger. Disse evalueres i den **samme**
+`evaluateTacticalSequences`-funksjonen og bruker de eksisterende
+kampplanenes fire steg, eget lagfit og ett begrenset kjederesultat.
+
+| Modellert motspill | Kampplaner | Avgjørende relasjon |
+|---|---|---|
+| Kollektiv sidesikring | `positional_overloads`, `wide_fast_433` | Vendingen må nå en fri mottaker før blokken er flyttet |
+| Utspillsstøtte mot press | `high_press_343`, `counter_press_recovery`, `midfield_press_trap` | Førstepress, støtte-/returpasning og sikring må ses sammen |
+| Andreballsikring | `deep_block_long_release`, `direct_second_balls` | Første duell og spillerne rundt nedfallsrommet danner én kjede |
+| Duell- og boksdekning | `target_man_focus`, `crossing_box_presence` | Avlegg eller innlegg må få en faktisk mottaker |
+| Kontringsutløp | `overlap_channels`, `chase_the_equaliser`, `all_out_attack` | Frigjort kontringsmottaker skaper risiko bak et oppflyttet lag |
+| Tilgang til mellomrom | `see_out_the_game` | Rettvendt mottaker mellom ledd kan åpne et nytt rom |
+| Returpasning under press | `slow_it_down` | Støttelinjer må være frie samtidig for å roe oppbyggingen |
+
+For å redusere oppdiktet sikkerhet brukes **to bekreftede numeriske
+innganger per mulig simulert motgrep**, for eksempel
+`defensiveStructure` + `defensiveCompactness` for sidesikring,
+eller `transitionThreat` + `pressResistance` for kontringsutløp.
+Verdiene er **simuleringsproxyer**, ikke visuell kamptracking eller
+dokumentasjon på at en navngitt historisk spiller utførte bevegelsen.
+Et enkelt høyt pressignal eller en ukjent verdi kan derfor **ikke**
+konkludere med et gjennomført motgrep. Når signalet ikke kan bestemmes,
+videreføres v2-vurderingen uten en oppdiktet dynamisk hendelse.
+
+I kampens planvelger kan manageren nå lese hvilket ledd som eventuelt
+stanses, risikoen ved å fortsette og hva som bør observeres. Visningen
+hevder ikke at de fire bevegelsene allerede har skjedd i kampen.
+
+Relevant ytterligere trenerfaglig bakgrunn:
+[England Football Learning – Pressing session: press, cover and balance](https://learn.englandfootball.com/sessions/resources/2025/Pressing-session-press-cover-and-balance)
+og [What is pressing in football](https://learn.englandfootball.com/articles-and-resources/coaching/resources/2022/what-is-pressing-in-football).
+Disse beskriver støtte, dekning og balanse bak førsteforsvarer;
+**ingen av dem dokumenterer spillets terskler eller xG-koeffisienter**.
+
+**Fremdeles gjenstående:** eksplisitte hendelsesutfall for balltap,
+gjenvinning, første overgangspasning og avslutning; posisjons-/avstandsdata;
+og kalibrering av prosent-/xG-effekter mot uavhengige kampobservasjoner.
+Denne leveransen gir modellert beslutningssekvens, ikke fysisk
+tracking av elleve spillere.
