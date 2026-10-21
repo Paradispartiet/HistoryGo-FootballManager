@@ -46,3 +46,19 @@ Dette er **programvareverifikasjon og intern modellkonsistens**, ikke ekstern pr
 Bruk lovlig innsamlede, tidsstemplede kamp- og tracking-/eventdata som uavhengig referanse. Merk angrepsoppbygging, pressutløsere, brudd, omstillinger, romgevinst, relasjoner og 10-sekunders videre konsekvens med en eksplisitt annotasjonsmanual. Bruk to blindede fotballfaglige kodere og rapporter enighetsmål før eventuell modelltilpasning. Del lag/kamper kronologisk i trening/validering/holdout; unngå at samme kamp finnes på begge sider. Hold `+1 planEdge`, minimumskrav og motspillsgrenser **frosset som baseline** før første holdout. Sammenlign mot en nullmodell uten sekvensbonus på log-loss/Brier og kalibreringskurver for skuddmål, der slike utfall kan observeres; mål også diskriminering av relevante spillhendelser og usikkerhet med konfidensintervaller. Rapportér planvis antall observasjoner og ikke-kalibrerbare planer som «ikke estimert», ikke som null effekt.
 
 **Per 21.10.2026 finnes ikke en slik ekstern datavalidering i repositoryet.** Dette dokumentet er et tydelig kontrollgrunnlag for den neste forskningsfasen, ikke en påstand om at den allerede er gjennomført.
+
+## Kampmotor v6 – etterprøvbar overgang ved brutt oppbygging
+
+**Implementert spillmodell, ikke empirisk validert overgangsmodell.** Når v6 først løser et mislykket oppbyggingsforsøk mot høyt press, kan en ny kamp øve på den **samme** følgende handlingskjeden, i stedet for å legge en løs kontringsbonus på laget:
+
+1. Motstanderen gjenvinner ballen i vår oppbygging.
+2. Første vertikale pasning prøver å passere vårt første gjenvinningspress og pasningsdekning.
+3. Hvis pasningen stanses, er ballen gjenvunnet: overgangen skaper **ingen egen sjanse imot**.
+4. Hvis pasningen lykkes, avgjør eksisterende restforsvar, balanse og faktisk rollepassform hos stopper/midtbane om kontringen blir forsinket.
+5. Hvis også dette leddet brytes, oppstår et kontringsvindu med en samlet moderat xG-risiko.
+
+Hvert scenario har **ett** terminalt utfall: `regained` (0.00 ekstra xG imot), `contained` (0.02) eller `counterattack` (0.14). Dette **erstatter** det foreløpige tapets xG-risiko på 0.04/0.08/0.12 fra oppbyggingsmodellen; disse skal aldri adderes. Motstanderens øvrige ordinære sjanser i samme kampperiode følger fremdeles basis-xG. Tallene er dokumenterte **modellkonstanter**, ikke estimerte faktiske overgangssannsynligheter.
+
+Overgangen krever faktiske, tilgjengelige lagmetrikker (press, balanse og restforsvar), dokumentert rollepassform for stopper og midtbanestøtte samt kjent motstander-`transitionThreat`. Ved manglende data oppstår ingen fiktiv ferdighet eller ny overgangsbonus: den tidligere v6-tapsmodellen beholdes. Bare nye matchsaves (`causalTransitionsVersion: 1`) får utvidelsen. Gjenspilling av samme kamp og periode får identiske taktiske situasjonsutfall, også etter innbytte, mens kvaliteten på lagets faktiske roller påvirker sannsynligheten for å lykkes. Mål og sjanser genereres fremdeles én gang, **etter** at overgangsutfallet er avgjort.
+
+`npm run sim:turnovers-v6` etterprøver de tre terminalutfallene, den kausale rekkefølgen, svakere og sterkere rolledekning, usikkerhetsfallback, samme kamp/periode ved gjenspilling, slutt-xG og fravær av doble sjanser. Hypotesene bør senere prøves mot annoterte kamphendelser med samme holdout-/kalibreringskrav som beskrevet ovenfor.

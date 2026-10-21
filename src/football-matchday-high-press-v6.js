@@ -174,22 +174,30 @@ export function resolveHighPressBuildUp(session, { rng = Math.random } = {}) {
 // second chance or a separate scoring event.
 export function annotateHighPressBuildUpChances(chances, phase) {
   if (!Array.isArray(chances) || !phase) return chances;
+  // A recovered or contained transition did NOT create a counterattack
+  // chance. Record it on the period only, never mislabel another shot.
+  const transition = phase.transition;
+  if (transition && transition.outcome !== "counterattack") return chances;
   const selected = chances.findIndex((chance) => chance.side === phase.side);
   if (selected < 0) return chances;
+  const counter = transition?.outcome === "counterattack";
+  const steps = counter ? [...phase.steps, ...transition.steps] : phase.steps;
+  const cause = counter ? transition.cause : phase.cause;
   return chances.map((chance, index) => index !== selected ? chance : {
     ...chance,
     tacticalMoment: {
-      kind: phase.status,
-      label: phase.status === "breakthrough" ? "Presset spilt av" : "Balltap under høyt press",
-      description: phase.cause,
+      kind: counter ? "counterattack" : phase.status,
+      label: counter ? "Kontring etter balltap"
+        : phase.status === "breakthrough" ? "Presset spilt av" : "Balltap under høyt press",
+      description: cause,
       planId: phase.planId,
       planTitle: "Høyt press mot oppbygging",
       status: phase.status === "breakthrough" ? "advantage" : "countered",
       side: phase.side,
-      keyAction: phase.steps.find((step) => step.result === "blocked")?.action ||
-        phase.steps[phase.steps.length - 1]?.action,
-      cause: phase.cause,
-      steps: phase.steps,
+      keyAction: counter ? transition.steps.at(-1).action
+        : steps.find((step) => step.result === "blocked")?.action ||
+          steps[steps.length - 1]?.action,
+      cause, steps,
       observed: false,
       basis: "simulated_before_chances_v6",
       xgDelta: phase.side === "for" ? phase.xgDeltaFor : phase.xgDeltaAgainst
