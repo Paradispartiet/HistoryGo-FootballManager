@@ -18,6 +18,7 @@ import { createOfficeSceneModel, renderOfficeCommand } from "./ui/manager-office
 import { createManagerTrainingSceneModel, renderManagerTrainingCommand } from "./ui/manager-training-presentation.js";
 import { getTacticalKnowledgeForTactic } from "./football-tactical-knowledge.js";
 import { TACTICAL_SEQUENCES } from "./football-tactical-sequences.js";
+import { resolveTacticalPossession } from "./football-matchday-tactical-possession.js";
 import { calculateTeamFit } from "./football-team-fit-engine.js";
 import {
   normalizePlayerPartnerships,
@@ -4572,7 +4573,11 @@ function chooseMatchdayDecision(optionId) {
   });
   session = state.matchday.session;
 
+  const tacticalPossession = resolveTacticalPossession({
+    event, decision: { optionId: option.id, tone: resolution.tone, effects: resolution.effects }
+  });
   session.decisions.push({
+    tacticalPossession,
     eventId: event.id,
     eventTitle: event.title,
     optionId: option.id,
@@ -4605,6 +4610,16 @@ function chooseMatchdayDecision(optionId) {
         }
       : null
   });
+
+  // Narrative only: the decision's xG was already counted by the engine.
+  if (tacticalPossession) {
+    state.matchday.session = logMatchMoment(session, {
+      type: "tactical-possession",
+      side: tacticalPossession.side,
+      detail: tacticalPossession.summary
+    });
+    session = state.matchday.session;
+  }
 
   if (eventIndex + 1 < session.events.length) {
     session.phase = `event_${eventIndex + 2}`;
