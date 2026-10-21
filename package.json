@@ -15,6 +15,7 @@
     "sim:matchday": "node scripts/simulate-matchday-v02.mjs",
     "sim:high-press-v6": "node scripts/simulate-high-press-v6.mjs",
     "sim:turnovers-v6": "node scripts/simulate-turnovers-v6.mjs",
+    "sim:compact-block-v6": "node scripts/simulate-compact-block-v6.mjs",
     "sim:mini-season": "node scripts/simulate-mini-season.mjs",
     "sim:league-season": "node scripts/simulate-real-league-season.mjs",
     "sim:mode-isolation": "node scripts/simulate-mode-isolation.mjs",
