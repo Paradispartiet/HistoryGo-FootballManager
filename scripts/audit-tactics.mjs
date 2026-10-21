@@ -157,6 +157,8 @@ for (const sequence of TACTICAL_SEQUENCES) {
     ["in_possession","out_of_possession","transition_attack","transition_defend"].includes(sequence.phase));
   check(sequence.tacticId + ": no vague complexity as automatic counter",
     sequence.counterCondition.trait !== "tacticalComplexity");
+  check(sequence.tacticId + ": observation and counter use independent traits",
+    sequence.counterCondition.trait !== sequence.opponentCondition.trait);
   check(sequence.tacticId + ": manager coaching cue attached to tactic",
     plan?.coachingFocus === sequence.observation &&
     JSON.stringify(plan?.principleSourceIds) === JSON.stringify(sequence.principleSourceIds));

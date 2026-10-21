@@ -682,6 +682,9 @@ check("18 planer har kildebelagt mekanisme, risiko og konkret motgrep", () => {
   assert.equal(TACTICAL_SEQUENCES.length, 18);
   const vague = TACTICAL_SEQUENCES.filter(entry =>
     entry.counterCondition.trait === "tacticalComplexity");
+  assert.ok(TACTICAL_SEQUENCES.every(entry =>
+    entry.opponentCondition.trait !== entry.counterCondition.trait),
+    "a known opponent trigger must not simultaneously define its counter; retain unknown scouting status");
   assert.deepEqual(vague, [], "a generic tactical-complexity score cannot establish a specific counter");
   const sources = new Set();
   for (const entry of TACTICAL_SEQUENCES) {

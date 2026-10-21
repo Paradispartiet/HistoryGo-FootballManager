@@ -202,7 +202,7 @@ Kontramønster: `pressIntensity` minst 78.
 
 Aktivering: motstanderens `pressIntensity` minst 70;
 eget lag: `buildUpScore` minst 67, `balanceScore` minst 62.
-Kontramønster (taktisk proxy): `pressIntensity` minst 79.
+Kontramønster (taktisk proxy): `defensiveCompactness` minst 79.
 
 #### Posisjonsspill med overtall — Overtall og isolasjon
 
@@ -352,7 +352,7 @@ Kontramønster: `transitionThreat` minst 79.
 
 Aktivering: motstanderens `pressIntensity` minst 68;
 eget lag: `buildUpScore` minst 67, `balanceScore` minst 64.
-Kontramønster (taktisk proxy): `pressIntensity` minst 80.
+Kontramønster (taktisk proxy): `defensiveCompactness` minst 80.
 
 #### Alt frem — Risiko med kontrollert retur
 

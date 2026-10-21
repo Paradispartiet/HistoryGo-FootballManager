@@ -100,7 +100,7 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     "response": "Spill kontrollert lengre til bred støtte",
     "responsePlanId": "direct_second_balls",
     "counterCondition": {
-      "trait": "pressIntensity",
+      "trait": "defensiveCompactness",
       "min": 79
     },
     "phase": "in_possession",
@@ -614,7 +614,7 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     "response": "Søk tredjemann lengre frem",
     "responsePlanId": "positional_overloads",
     "counterCondition": {
-      "trait": "pressIntensity",
+      "trait": "defensiveCompactness",
       "min": 80
     },
     "phase": "in_possession",
