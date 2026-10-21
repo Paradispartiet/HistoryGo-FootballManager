@@ -1197,9 +1197,21 @@ check("planen din måles på nytt når motstanderen har justert seg", () => {
   assert.notEqual(adapted, leading, "bildet gir grunn til justering");
   assert.equal(adapted.opponentAdjustments.length, 1);
   assert.ok(adapted.opponentAdjustments[0].note.length > 20, "justeringen må forklares");
-  // Rolig oppbygging mot et lag som nå presser høyt er dyrere enn før.
-  assert.ok(adapted.planMatchup.edge <= leading.planMatchup.edge,
-    "planen skal ikke bli bedre av at de presser hardere mot den");
+  // Høyere press skaper både en fare og et rom bak presset. Kvaliteten i
+  // vår faktiske oppbygging og støtteroller, ikke en universell minusregel,
+  // avgjør om tredjemann kan spille forbi det nye presset.
+  const expected = evaluatePlanVsOpponent(
+    byId.get("patient_build_up"), adapted.opponent,
+    { tacticalProfile: adapted.teamFitSnapshot.tacticalProfile }
+  );
+  assert.deepEqual(adapted.planMatchup, expected,
+    "motstanderjusteringen må beregnes fra de nye stiltrekkene og dagens lagfit");
+  const exposed = { ...adapted.teamFitSnapshot.tacticalProfile, buildUpScore: 30 };
+  const noEscape = evaluatePlanVsOpponent(
+    byId.get("patient_build_up"), adapted.opponent, { tacticalProfile: exposed }
+  );
+  assert.ok(noEscape.edge <= adapted.planMatchup.edge,
+    "et lag som mangler oppbyggingsstøtte skal ikke hente samme gevinst fra høyere press");
   // Og den skjer bare én gang per type.
   assert.equal(applyOpponentAdaptation(adapted), adapted);
 });
