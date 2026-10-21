@@ -288,6 +288,56 @@ check("alle 18 taktiske spillkjeder forklares i analyseavdelingen uten oppdikted
   }
 });
 
+check("motsvar får egne lagmetrikker etter taktikkbytte, ikke den gamle planens dekning", () => {
+  const pattern = TACTICAL_SEQUENCES.find((entry) => entry.tacticId === "high_press_343");
+  const oldPlan = byId.get(pattern.tacticId);
+  const newPlan = byId.get(pattern.responsePlanId);
+  const responsePattern = TACTICAL_SEQUENCES.find((entry) => entry.tacticId === newPlan.id);
+  const values = {
+    [pattern.opponentCondition.trait]: pattern.opponentCondition.min,
+    [pattern.counterCondition.trait]: pattern.counterCondition.min,
+    [responsePattern.opponentCondition.trait]: responsePattern.opponentCondition.min,
+    [responsePattern.counterCondition.trait]: responsePattern.counterCondition.min - 1
+  };
+  const opponent = { id: "opponent", styleTraits: { ...values }, ...values };
+  const ready = {
+    pressScore: 95, balanceScore: 95, restDefenseScore: 95,
+    buildUpScore: 95, depthScore: 95, widthScore: 95
+  };
+  const missingMetric = Object.keys(responsePattern.requires)[0];
+  const oldTeamFit = {
+    completeCount: 11, totalSlots: 11, metrics: { ...ready },
+    assignments: [], sourcedSkillTendencies: {}
+  };
+  const newTeamFit = {
+    ...oldTeamFit, metrics: { ...ready, [missingMetric]: 30 }
+  };
+  const inspect = (responseTeamFit) => buildOpponentTacticalSequences({
+    opponent, tactic: oldPlan, teamFit: oldTeamFit,
+    responseTeamFit, tactics: plans
+  })[0].responsePreview;
+  const oldPreview = inspect();
+  const proposedPreview = inspect(newTeamFit);
+  assert.equal(oldPreview.basis, "current_plan");
+  assert.equal(oldPreview.requirements.find((r) => r.metric === missingMetric).value, 95);
+  assert.equal(proposedPreview.basis, "proposed_plan");
+  assert.equal(proposedPreview.requirements.find((r) => r.metric === missingMetric).value, 30);
+  assert.equal(proposedPreview.status, "unsupported",
+    "response must not be marked viable if recomputed proposed tactic loses a required role metric");
+  assert.equal(oldPreview.status, "advantage");
+  assert.equal(oldTeamFit.metrics[missingMetric], 95, "must not mutate the original team fit");
+  assert.equal(newTeamFit.metrics[missingMetric], 30, "must not mutate proposed team fit");
+  const workshop = createOpponentAnalysisWorkspace({
+    fixture: { fixtureId: "match_1", opponent },
+    tactic: oldPlan, teamFit: oldTeamFit, responseTeamFit: newTeamFit,
+    tactics: plans
+  });
+  assert.equal(workshop.tacticalSequences[0].responsePreview.status, "unsupported");
+  const corrected = inspect({ ...newTeamFit, metrics: { ...ready } });
+  assert.equal(corrected.status, "advantage");
+  assert.equal(corrected.basis, "proposed_plan");
+});
+
 check("alle 18 foreslåtte motgrep har etterprøvbar foreløpig lagkontroll", () => {
   assert.equal(TACTICAL_SEQUENCES.length, plans.length);
   for (const pattern of TACTICAL_SEQUENCES) {

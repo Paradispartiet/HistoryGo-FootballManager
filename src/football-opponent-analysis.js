@@ -125,7 +125,7 @@ const SEQUENCE_METRIC_LABELS = Object.freeze({
   buildUpScore: "Oppbygging og pasningsstøtte"
 });
 
-export function buildOpponentTacticalSequences({ opponent, tactic, teamFit, tactics } = {}) {
+export function buildOpponentTacticalSequences({ opponent, tactic, teamFit, responseTeamFit = null, tactics } = {}) {
   const catalogPattern = TACTICAL_SEQUENCES.find((pattern) => pattern.tacticId === tactic?.id);
   if (!catalogPattern) return [];
   const matchup = opponent?.styleTraits
@@ -167,35 +167,38 @@ export function buildOpponentTacticalSequences({ opponent, tactic, teamFit, tact
     plan?.id === catalogPattern.responsePlanId) || null;
   const nextPattern = TACTICAL_SEQUENCES.find((pattern) =>
     pattern.tacticId === nextPlan?.id) || null;
-  // A source-backed suggestion is not a guarantee. Evaluate the proposed
-  // counter-response against the SAME known opponent and today's actual XI.
-  // Metrics are a PREVIEW from the current tactic; changing plan requires
-  // recalculating teamFit, training familiarity and transition cost.
+  // A source-backed suggestion is not a guarantee. Use the team's REAL
+  // role/formation fit recalculated for the proposed plan, when provided by
+  // the app. Legacy contexts without it remain explicitly provisional.
+  const previewFit = responseTeamFit || teamFit;
   const responseChecks = Object.entries(nextPattern?.requires || {}).map(([metric, minimum]) => {
-    const raw = teamFit?.metrics?.[metric];
+    const raw = previewFit?.metrics?.[metric];
     const value = typeof raw === "number" && Number.isFinite(raw) ? raw : null;
     return { metric, label: SEQUENCE_METRIC_LABELS[metric] || metric,
       minimum, value, status: value === null ? "unknown" : value >= minimum ? "ready" : "gap" };
   });
-  const responseEvaluation = nextPlan && opponent?.styleTraits && teamFit?.metrics
-    ? evaluateTacticalSequences(nextPlan.id, opponent, teamFit.metrics)[0] || null
+  const responseEvaluation = nextPlan && opponent?.styleTraits && previewFit?.metrics
+    ? evaluateTacticalSequences(nextPlan.id, opponent, previewFit.metrics)[0] || null
     : null;
   const responseStatus = !nextPlan || !nextPattern ? "unavailable"
     : incomplete ? "incomplete"
     : !opponent?.styleTraits ? "unknown_opponent"
-    : !teamFit?.metrics ? "unknown_team"
+    : !previewFit?.metrics ? "unknown_team"
     : responseEvaluation?.status || "not_exposed";
   const responsePreview = {
     status: responseStatus,
+    basis: responseTeamFit ? "proposed_plan" : "current_plan",
     requirements: responseChecks,
     metCount: responseChecks.filter((check) => check.status === "ready").length,
     requiredCount: responseChecks.length,
     risk: asArray(nextPlan?.risks)[0] || "",
     responsePattern: nextPattern?.title || "",
-    // Any advantage is provisional: current team metrics depend on current
-    // assigned tactic and may change after the manager switches.
+    // Recomputed preview still does not include an in-match switch cost,
+    // future player condition or late tactical adaptations.
     explanation: {
-      advantage: "Mulig dekning med dagens ellever. Ny kampplan må beregnes på nytt etter byttet.",
+      advantage: responseTeamFit
+        ? "Dagens ellever har dekning når rolle- og formasjonsbidrag beregnes med den foreslåtte planen. Omstillingskostnad kommer i tillegg."
+        : "Foreløpig dekning med dagens kampplan. Den foreslåtte taktikken må beregnes på nytt før valg.",
       unsupported: "Dagens ellever mangler minst ett nødvendig lagledd for alternativet.",
       countered: "Motstanderen har også et motgrep mot det foreslåtte alternativet.",
       unknown_counter: "Rollene kan støtte alternativet, men motstanderens motgrep er ikke kartlagt.",
@@ -298,7 +301,7 @@ function signalsForFocus(opponent, matchup, focusId) {
   ]).slice(0, 5);
 }
 
-export function createOpponentAnalysisWorkspace({ fixture = null, formation = null, tactic = null, teamFit = null, tactics = [], trainingLabel = "Ikke valgt" } = {}) {
+export function createOpponentAnalysisWorkspace({ fixture = null, formation = null, tactic = null, teamFit = null, responseTeamFit = null, tactics = [], trainingLabel = "Ikke valgt" } = {}) {
   const opponent = fixture?.opponent || null;
   if (!fixture?.fixtureId || !opponent?.id) {
     return {
@@ -344,7 +347,7 @@ export function createOpponentAnalysisWorkspace({ fixture = null, formation = nu
     },
     matchup,
     tacticalOpportunities: buildOpponentTacticalOpportunities({ opponent, tactic, teamFit }),
-    tacticalSequences: buildOpponentTacticalSequences({ opponent, tactic, teamFit, tactics }),
+    tacticalSequences: buildOpponentTacticalSequences({ opponent, tactic, teamFit, responseTeamFit, tactics }),
     focuses
   };
 }

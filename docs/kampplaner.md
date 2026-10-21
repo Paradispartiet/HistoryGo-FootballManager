@@ -490,3 +490,16 @@ rolle-/formasjonsvurdering og omstillingskostnad. Et foreslått alternativ som
 ikke kan gjennomføres, skal fremstå som **manglende dekning**, ikke som automatisk
 bedre. `sim:match-plan` kontrollerer alle 18 alternativene mot komplett,
 mangelfullt og ufullstendig lag, utilstrekkelig speiding og manglende katalognavn.
+
+
+### Motsvar mot faktiske alternative rolleberegninger
+
+For å unngå at manageren får et falskt råd om et nytt mottrekk, gjør
+analyseavdelingen en **egen, read-only teamFit-beregning** av nøyaktig samme
+ellever og formasjon med den **foreslåtte kampplanen**. Dermed vurderes nye
+rollestøtter, samspill og dokumenterte spillerstyrker på den planen som faktisk
+foreslås, ikke de gamle metrikkene fra den taktikken manageren allerede spiller.
+Ingen plan byttes automatisk. Selve kampbyttet koster fortsatt omstilling.
+Hvis modulen ikke får ny beregning, merker den eksplisitt rådet som foreløpig.
+Den permanente `sim:match-plan`-testen kontrollerer at et nytt alternativ ikke
+feilaktig anbefales når én av dets egne lagdimensjoner faller under kravet.

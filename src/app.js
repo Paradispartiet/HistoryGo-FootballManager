@@ -3963,9 +3963,8 @@ function getCoachContext() {
   });
 }
 
-function getTeamFit() {
+function getTeamFit(tactic = getTactic()) {
   const formation = getFormation();
-  const tactic = getTactic();
 
   if (!formation || !tactic) {
     return null;
@@ -6536,6 +6535,13 @@ function getOpponentAnalysisContext() {
   const fixtures = getOpponentAnalysisFixtures();
   const savedPlan = normalizeOpponentAnalysisPlan(state.opponentAnalysisPlan);
   const currentFixture = fixtures[0] || null;
+  const tactic = getTactic();
+  // The response needs its OWN role/tactic/formation fit, not the currently
+  // selected plan's metrics. This is a read-only preview, not a tactic switch.
+  const responseId = TACTICAL_SEQUENCES.find((entry) => entry.tacticId === tactic?.id)?.responsePlanId;
+  const responseTactic = currentFixture && responseId
+    ? (state.tactics || []).find((entry) => entry.id === responseId) : null;
+  const responseTeamFit = responseTactic ? getTeamFit(responseTactic) : null;
   return {
     mode: state.gameStartState?.selectedMode || state.modeEnvelope?.activeMode || null,
     week: Number(state.clubWeekState?.week) || 1,
@@ -6544,8 +6550,9 @@ function getOpponentAnalysisContext() {
     savedPlan,
     currentPlanReady: Boolean(currentFixture && isOpponentAnalysisPlanForFixture(savedPlan, currentFixture.fixtureId)),
     formation: getFormation(),
-    tactic: getTactic(),
+    tactic,
     teamFit: getTeamFit(),
+    responseTeamFit,
     tactics: state.tactics || [],
     trainingLabel: getWeeklyTrainingChoiceLabel()
   };
