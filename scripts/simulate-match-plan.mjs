@@ -78,7 +78,10 @@ check("levende motspill: tredjemann, kollektiv dekning og restforsvar", () => {
     "hard first pressure without collective lane cover must leave a third player free");
   assert.equal(individual.edgeDelta, 1);
   assert.equal(individual.liveExchange.steps.length, 4);
-  const collective = applyOpponentAdjustment(fixture, {
+  const collective = applyOpponentAdjustment({
+    ...fixture, defensiveStructure: 88,
+    styleTraits: { ...fixture.styleTraits, defensiveCompactness: 92 }
+  }, {
     id: "push_up", traitShift: { pressIntensity: 18, highLine: 0, defensiveCompactness: -12 }
   });
   assert.equal(collective.tacticalBehaviour.passingLaneCover, "central");
@@ -103,12 +106,25 @@ check("levende motspill: tredjemann, kollektiv dekning og restforsvar", () => {
   assert.equal(centralClosed.status, "countered");
   assert.equal(centralClosed.edgeDelta, 0);
 
-  const raised = evaluateTacticalSequences("direct_counter_442", collective, lineup)[0];
+  const raisedOpponent = applyOpponentAdjustment(fixture, {
+    id: "push_up", traitShift: { pressIntensity: 18, highLine: 0, defensiveCompactness: -12 }
+  });
+  const raised = evaluateTacticalSequences("direct_counter_442", raisedOpponent, lineup)[0];
+  assert.equal(raisedOpponent.tacticalBehaviour.restDefense, "exposed");
   assert.equal(raised.status, "advantage",
     "exposed rest defence permits a forward release when the XI supports it");
-  const deep = applyOpponentAdjustment(fixture, {
+  const deep = applyOpponentAdjustment({ ...fixture, defensiveStructure: 88 }, {
     id: "sit_back", traitShift: { highLine: -15, pressIntensity: -16 }
   });
+  assert.equal(deep.tacticalBehaviour.restDefense, "secured");
+  const insufficient = applyOpponentAdjustment({ ...fixture, defensiveStructure: 67 }, {
+    id: "push_up", traitShift: { pressIntensity: 18, highLine: 0 }
+  });
+  assert.equal(insufficient.tacticalBehaviour.pressCoordination, "unknown",
+    "pushing up is not proof of coordinated pressing");
+  assert.equal(insufficient.tacticalBehaviour.passingLaneCover, "unknown");
+  assert.equal(evaluateTacticalSequences("patient_build_up", insufficient, lineup)[0].liveExchange,
+    null, "unobserved cover must not become a fabricated movement outcome");
   const shielded = evaluateTacticalSequences("direct_counter_442", deep, lineup)[0];
   assert.equal(shielded.status, "countered",
     "a covered rest defence must break the direct release");
