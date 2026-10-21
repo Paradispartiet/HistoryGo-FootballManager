@@ -143,6 +143,15 @@ for (const chain of TACTICAL_SEQUENCES) {
       Number.isInteger(check.min) && check.min >= 50 && check.min <= 95));
 }
 
+// Every plan's next answer points at a real alternative. It is a hypothesis,
+// never a separate or guaranteed xG bonus.
+const tacticIds = new Set(plans.map((plan) => plan.id));
+for (const sequence of TACTICAL_SEQUENCES) {
+  check(sequence.tacticId + ": suggested next plan exists and differs",
+    tacticIds.has(sequence.responsePlanId) && sequence.responsePlanId !== sequence.tacticId,
+    String(sequence.responsePlanId));
+}
+
 // ---- Rapport ---------------------------------------------------------------
 const failed = results.filter((r) => !r.ok);
 console.log("Kampplanaudit: data/football_tactics.json\n");

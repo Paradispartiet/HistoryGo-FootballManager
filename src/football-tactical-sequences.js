@@ -21,6 +21,7 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     ],
     "counter": "Stenger sentral sekser og tier",
     "response": "Vend via motsatt back og angrip halvrom",
+    "responsePlanId": "overlap_channels",
     "counterCondition": {
       "trait": "pressIntensity",
       "min": 78
@@ -45,6 +46,7 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     ],
     "counter": "Låser keeper og sekser samtidig",
     "response": "Spill kontrollert lengre til bred støtte",
+    "responsePlanId": "direct_second_balls",
     "counterCondition": {
       "trait": "tacticalComplexity",
       "min": 79
@@ -69,6 +71,7 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     ],
     "counter": "Forskyver kompakt mot begge sider",
     "response": "Angrip halvrommet der midtbanen forlot posisjon",
+    "responsePlanId": "wide_fast_433",
     "counterCondition": {
       "trait": "tacticalComplexity",
       "min": 80
@@ -94,6 +97,7 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     ],
     "counter": "Spiller direkte bak vingback",
     "response": "Senk presshøyde og la sekser sikre",
+    "responsePlanId": "midfield_press_trap",
     "counterCondition": {
       "trait": "pressResistance",
       "min": 79
@@ -118,6 +122,7 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     ],
     "counter": "Vender seg forbi pressleddet",
     "response": "Avbryt presset og organiser blokk",
+    "responsePlanId": "midfield_press_trap",
     "counterCondition": {
       "trait": "pressResistance",
       "min": 78
@@ -142,6 +147,7 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     ],
     "counter": "Vender ut til motsatt back",
     "response": "Skyv midtblokken samlet mot ny ballside",
+    "responsePlanId": "low_block_transition_541",
     "counterCondition": {
       "trait": "tacticalComplexity",
       "min": 78
@@ -166,6 +172,7 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     ],
     "counter": "Lar bakerste stopper falle av",
     "response": "Bruk avlegg til innløpende midtbane",
+    "responsePlanId": "target_man_focus",
     "counterCondition": {
       "trait": "defensiveStructure",
       "min": 81
@@ -190,6 +197,7 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     ],
     "counter": "Sikrer bak ballen med flere spillere",
     "response": "Flytt laget frem som enhet før neste utløsning",
+    "responsePlanId": "positional_overloads",
     "counterCondition": {
       "trait": "defensiveStructure",
       "min": 80
@@ -215,6 +223,7 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     ],
     "counter": "Dekker nedfallsrommet godt",
     "response": "Spill via vingback før lengre ball",
+    "responsePlanId": "target_man_focus",
     "counterCondition": {
       "trait": "defensiveStructure",
       "min": 81
@@ -239,6 +248,7 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     ],
     "counter": "Pakker rommet rundt andreballen",
     "response": "Spill kort via tredjemann før langpasningen",
+    "responsePlanId": "patient_build_up",
     "counterCondition": {
       "trait": "defensiveCompactness",
       "min": 78
@@ -263,6 +273,7 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     ],
     "counter": "Dobler på mottaksspiss",
     "response": "Flytt første pasning ut i halvrom",
+    "responsePlanId": "overlap_channels",
     "counterCondition": {
       "trait": "defensiveStructure",
       "min": 79
@@ -287,6 +298,7 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     ],
     "counter": "Dobler opp mot kantspilleren",
     "response": "Bruk underlapp eller bytt side igjen",
+    "responsePlanId": "overlap_channels",
     "counterCondition": {
       "trait": "tacticalComplexity",
       "min": 80
@@ -312,6 +324,7 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     ],
     "counter": "Vinner første innlegg og rydder unna",
     "response": "Spill bakover til lavt innlegg",
+    "responsePlanId": "positional_overloads",
     "counterCondition": {
       "trait": "defensiveStructure",
       "min": 80
@@ -336,6 +349,7 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     ],
     "counter": "Kontrer bak høy vingback",
     "response": "Senk motsatt back og la sekser sikre",
+    "responsePlanId": "central_possession_4231",
     "counterCondition": {
       "trait": "transitionThreat",
       "min": 78
@@ -360,6 +374,7 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     ],
     "counter": "Sender en ekstra løper mellom leddene",
     "response": "Flytt sekser mot løper og behold kontringsutgang",
+    "responsePlanId": "midfield_press_trap",
     "counterCondition": {
       "trait": "tacticalComplexity",
       "min": 81
@@ -385,6 +400,7 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     ],
     "counter": "Kontrer mot to høye backer",
     "response": "Hold sekser igjen og send én back frem",
+    "responsePlanId": "positional_overloads",
     "counterCondition": {
       "trait": "transitionThreat",
       "min": 79
@@ -409,6 +425,7 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     ],
     "counter": "Mannmarker begge pasningsstøtter",
     "response": "Søk tredjemann lengre frem",
+    "responsePlanId": "positional_overloads",
     "counterCondition": {
       "trait": "tacticalComplexity",
       "min": 80
@@ -434,6 +451,7 @@ export const TACTICAL_SEQUENCES = Object.freeze([
     ],
     "counter": "Spiller lang kontring bak fremste ledd",
     "response": "Trekk sekser ned eller senk presset",
+    "responsePlanId": "chase_the_equaliser",
     "counterCondition": {
       "trait": "transitionThreat",
       "min": 75

@@ -239,6 +239,28 @@ check("alle 18 taktiske spillkjeder forklares i analyseavdelingen uten oppdikted
     assert.ok(ready.checks.every((x) => x.status === "ready"));
     assert.equal(ready.response, pattern.response);
     assert.equal(ready.counter, pattern.counter);
+    assert.ok(byId.has(pattern.responsePlanId) && pattern.responsePlanId !== pattern.tacticId,
+      "counter-response must name a real distinct selectable plan: " + pattern.tacticId);
+    const explanation = buildOpponentTacticalSequences({
+      opponent, tactic, teamFit: {
+        ...teamFit,
+        assignments: [{
+          isComplete: true,
+          player: { id: "role_A", name: "Rollespiller" },
+          role: { id: "balancing_six", name: "Balanserende sekser" }
+        }]
+      },
+      tactics: plans
+    })[0];
+    assert.equal(explanation.responsePlanId, pattern.responsePlanId);
+    assert.equal(explanation.responsePlanName, byId.get(pattern.responsePlanId).name);
+    const roleMetric = explanation.checks.find((entry) =>
+      ["balanceScore","restDefenseScore"].includes(entry.metric));
+    if (roleMetric) {
+      assert.ok(roleMetric.supportingRoles.some((entry) =>
+        entry.player === "Rollespiller" && entry.role === "Balanserende sekser"),
+        "active role and player must be surfaced separately from source-claimed skills");
+    }
     const countered = make({ ...opponent,
       styleTraits: { ...styleTraits, [counterMetric]: pattern.counterCondition.min },
       [counterMetric]: pattern.counterCondition.min });

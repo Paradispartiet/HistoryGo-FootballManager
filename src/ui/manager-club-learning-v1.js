@@ -428,6 +428,7 @@ function appendOpponentAnalysisWorkshop(body) {
       formation: context.formation,
       tactic: context.tactic,
       teamFit: context.teamFit,
+      tactics: context.tactics,
       trainingLabel: context.trainingLabel
     });
     const saved = context.savedPlan?.fixtureId === fixture.fixtureId ? context.savedPlan : null;
@@ -480,6 +481,11 @@ function appendOpponentAnalysisWorkshop(body) {
           node("strong", "", factor.label),
           node("small", "", scoreLabel),
           node("small", "",
+            factor.supportingRoles.length
+              ? "Valgte roller: " + factor.supportingRoles.slice(0, 3)
+                .map((entry) => entry.player + " – " + entry.role).join(" · ")
+              : "Ingen identifiserte nøkkelroller. Lagmetrikken omfatter også øvrig formasjon og samspill."),
+          node("small", "",
             factor.documentedPlayers.length
               ? "Kildebelagte bidrag: " + factor.documentedPlayers.slice(0, 3).join(", ")
               : "Ingen direkte kildebelagte spillerbidrag dokumentert her")
@@ -494,6 +500,17 @@ function appendOpponentAnalysisWorkshop(body) {
         node("h5", "", "Hva kan vi gjøre deretter?"),
         node("p", "opponent-analysis-sequence-response", chain.response)
       );
+      if (chain.status === "countered" && chain.responsePlanName) {
+        scene.append(node("p", "opponent-analysis-response-plan",
+          "Mulig alternativ å undersøke: " + chain.responsePlanName +
+          ". Ikke automatisk bedre – vurder valgt ellever, formasjon og omstillingskostnad."));
+        const explore = node("button", "opponent-analysis-response-action",
+          "Vurder " + chain.responsePlanName + " i Lag · Oppstilling");
+        explore.type = "button";
+        explore.dataset.responsePlanId = chain.responsePlanId;
+        explore.addEventListener("click", () => openOpponentAnalysisTarget("tactics"));
+        scene.append(explore);
+      }
       if (chain.risk) scene.append(node("p", "opponent-analysis-sequence-risk", "Risiko ved egen plan: " + chain.risk));
       dynamic.append(scene);
     }

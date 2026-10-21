@@ -105,6 +105,17 @@ export function buildOpponentTacticalOpportunities({ opponent, tactic, teamFit }
 // Scouting explains the SAME one tactical chain as the live xG calculation.
 // Every catalogued plan has four interacting moves and a possible opponent
 // countermove. Modelling a response is not proof that the opponent uses it.
+// Match real selected roles to existing formation/team metrics; these roles
+// are not claims about a player's unverified historical abilities.
+const SEQUENCE_METRIC_ROLES = Object.freeze({
+  pressScore: ["pressing_forward","pressing_midfielder","box_to_box"],
+  depthScore: ["channel_runner","advanced_forward","pressing_forward","wide_dribbler"],
+  widthScore: ["wide_dribbler","inverted_winger","wingback","overlapping_fullback"],
+  balanceScore: ["balancing_six","holding_midfielder","deep_playmaker","regista"],
+  restDefenseScore: ["balancing_six","holding_midfielder","support_fullback","duel_centre_back","stopper"],
+  buildUpScore: ["deep_playmaker","regista","holding_midfielder","ball_playing_centre_back","libero","sweeperkeeper"]
+});
+
 const SEQUENCE_METRIC_LABELS = Object.freeze({
   pressScore: "Press og timing",
   depthScore: "Dybdeløp og romtrussel",
@@ -114,7 +125,7 @@ const SEQUENCE_METRIC_LABELS = Object.freeze({
   buildUpScore: "Oppbygging og pasningsstøtte"
 });
 
-export function buildOpponentTacticalSequences({ opponent, tactic, teamFit } = {}) {
+export function buildOpponentTacticalSequences({ opponent, tactic, teamFit, tactics } = {}) {
   const catalogPattern = TACTICAL_SEQUENCES.find((pattern) => pattern.tacticId === tactic?.id);
   if (!catalogPattern) return [];
   const matchup = opponent?.styleTraits
@@ -128,10 +139,18 @@ export function buildOpponentTacticalSequences({ opponent, tactic, teamFit } = {
     const raw = teamFit?.metrics?.[metric];
     const value = typeof raw === "number" && Number.isFinite(raw) ? raw : null;
     const provenance = teamFit?.sourcedSkillTendencies?.[metric];
+    const supportingRoles = asArray(teamFit?.assignments)
+      .filter((assignment) => assignment?.isComplete &&
+        SEQUENCE_METRIC_ROLES[metric]?.includes(assignment.role?.id))
+      .map((assignment) => ({
+        player: assignment.player?.name || assignment.player?.id || "",
+        role: assignment.role?.name || assignment.role?.id || ""
+      })).filter((entry) => entry.player && entry.role);
     return {
       metric, label: SEQUENCE_METRIC_LABELS[metric] || metric,
       minimum, value,
       status: value === null ? "unknown" : value >= minimum ? "ready" : "gap",
+      supportingRoles,
       documentedPlayers: [...new Set(asArray(provenance?.players).filter((v) => typeof v === "string" && v.trim()))]
     };
   });
@@ -142,8 +161,14 @@ export function buildOpponentTacticalSequences({ opponent, tactic, teamFit } = {
     : !matchup ? "unknown_opponent"
     : !result ? "not_exposed"
     : result.status;
+  // Candidate only. Selecting a new tactic remains a conscious manager action;
+  // no counter-counter bonus is created by naming this option.
+  const nextPlan = asArray(tactics).find((plan) =>
+    plan?.id === catalogPattern.responsePlanId) || null;
   return [{
     id: catalogPattern.tacticId, title: catalogPattern.title,
+    responsePlanId: catalogPattern.responsePlanId,
+    responsePlanName: nextPlan?.name || null,
     moves: catalogPattern.moves.slice(),
     counter: catalogPattern.counter, response: catalogPattern.response,
     trigger: {
@@ -231,7 +256,7 @@ function signalsForFocus(opponent, matchup, focusId) {
   ]).slice(0, 5);
 }
 
-export function createOpponentAnalysisWorkspace({ fixture = null, formation = null, tactic = null, teamFit = null, trainingLabel = "Ikke valgt" } = {}) {
+export function createOpponentAnalysisWorkspace({ fixture = null, formation = null, tactic = null, teamFit = null, tactics = [], trainingLabel = "Ikke valgt" } = {}) {
   const opponent = fixture?.opponent || null;
   if (!fixture?.fixtureId || !opponent?.id) {
     return {
@@ -277,7 +302,7 @@ export function createOpponentAnalysisWorkspace({ fixture = null, formation = nu
     },
     matchup,
     tacticalOpportunities: buildOpponentTacticalOpportunities({ opponent, tactic, teamFit }),
-    tacticalSequences: buildOpponentTacticalSequences({ opponent, tactic, teamFit }),
+    tacticalSequences: buildOpponentTacticalSequences({ opponent, tactic, teamFit, tactics }),
     focuses
   };
 }
