@@ -119,7 +119,7 @@
         "fifaEscape",
         "fifaThird"
       ],
-      "coachingFocus": "Tell frie pasningsvinkler foran og bak førsteforsvarer ved pressutløseren."
+      "coachingFocus": "Tell frie pasningsvinkler foran og bak førsteforsvarer ved pressutløseren; kontroller også hvem som dekker neste pasning."
     },
     {
       "id": "positional_overloads",
@@ -159,7 +159,7 @@
         "fifaSwitch",
         "fifaThird"
       ],
-      "coachingFocus": "Se om ballfører har tid til å vende, og om mottakeren får støtte i fart."
+      "coachingFocus": "Se om ballfører har tid til å vende, og om mottakeren får støtte i fart før forsvarsblokken rekker å skyve tilbake."
     },
     {
       "id": "high_press_343",
@@ -238,7 +238,7 @@
         "fifaLoss",
         "fifaEscape"
       ],
-      "coachingFocus": "Se første tre sekunder etter tap: press, pasningslinjer og bakre sikring."
+      "coachingFocus": "Se første tre sekunder etter tap: press, pasningslinjer og bakre sikring. Mål om nærmeste støtte faktisk følger ballfører."
     },
     {
       "id": "midfield_press_trap",
@@ -470,7 +470,7 @@
         "fifaThird",
         "fifaEscape"
       ],
-      "coachingFocus": "Se om mottaksspilleren har fri avleggsstøtte og løper som utnytter den."
+      "coachingFocus": "Se om mottaksspilleren har fri avleggsstøtte og en tredje løper som utnytter avlegget innen neste pasning."
     },
     {
       "id": "wide_fast_433",
@@ -509,7 +509,7 @@
         "fifaSwitch",
         "faWide"
       ],
-      "coachingFocus": "Se om pasningslegger har tid, og om mottaker har to ulike viderevalg."
+      "coachingFocus": "Se om pasningslegger har tid til sideskifte, og om mottakeren har både mulighet for én-mot-én og en trygg støttepasning."
     },
     {
       "id": "crossing_box_presence",
@@ -547,7 +547,7 @@
         "fifaSwitch",
         "faWide"
       ],
-      "coachingFocus": "Se kvaliteten på innleggsrommet, løpsbanene og hvem som tar returen."
+      "coachingFocus": "Se kvaliteten på innleggsrommet, løpsbanene gjennom boksen og hvem som faktisk tar returen ved første klarering."
     },
     {
       "id": "overlap_channels",
@@ -586,7 +586,7 @@
         "fifaSwitch",
         "faWide"
       ],
-      "coachingFocus": "Se motsatt backs sikringsposisjon før overlappet starter."
+      "coachingFocus": "Se motsatt backs sikringsposisjon før overlappet starter, og om sekseren fortsatt skjermer første kontringspasning."
     },
     {
       "id": "see_out_the_game",
@@ -701,7 +701,7 @@
         "fifaEscape",
         "faPrinciples"
       ],
-      "coachingFocus": "Se om ballfører har mer enn én reell pasningsvei når presset setter inn."
+      "coachingFocus": "Se om ballfører har mer enn én reell pasningsvei når presset setter inn, også når begge de nærmeste støttene presses."
     },
     {
       "id": "all_out_attack",
@@ -739,7 +739,7 @@
         "fifaPress",
         "fifaCounter"
       ],
-      "coachingFocus": "Se hvem som er bak ballen når kant eller spiss mister den."
+      "coachingFocus": "Se hvem som er bak ballen når kant eller spiss mister den, og hvem som kan forsinke motstanderens første fremoverpasning."
     }
   ]
 }

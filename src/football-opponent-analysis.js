@@ -1,5 +1,5 @@
 import { evaluatePlanVsOpponent } from "./football-match-plan.js";
-import { TACTICAL_SEQUENCES, evaluateTacticalSequences } from "./football-tactical-sequences.js";
+import { TACTICAL_SEQUENCES, TACTICAL_PRINCIPLE_SOURCES, evaluateTacticalSequences } from "./football-tactical-sequences.js";
 
 // Motstanderforberedelse v1
 //
@@ -227,6 +227,9 @@ export function buildOpponentTacticalSequences({ opponent, tactic, teamFit, resp
     observation: catalogPattern.observation,
     phase: catalogPattern.phase,
     principleSourceIds: catalogPattern.principleSourceIds.slice(),
+    principleSources: catalogPattern.principleSourceIds
+      .map(id => TACTICAL_PRINCIPLE_SOURCES[id])
+      .filter(Boolean),
     counter: catalogPattern.counter, response: catalogPattern.response,
     trigger: {
       trait: catalogPattern.opponentCondition.trait,

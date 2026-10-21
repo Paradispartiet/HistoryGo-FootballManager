@@ -694,6 +694,15 @@ check("18 planer har kildebelagt mekanisme, risiko og konkret motgrep", () => {
     assert.equal(originalPlan?.coachingFocus, entry.observation);
   }
   assert.ok(sources.size >= 7, "coverage must span different phases, not one generic coaching page");
+  const scouting = buildOpponentTacticalSequences({
+    opponent: getHistoricalOpponentProfile("barcelona_2008_12_positional_play"),
+    tactic: byId.get("central_possession_4231"),
+    teamFit: { completeCount: 11, totalSlots: 11,
+      metrics: { pressScore: 70, balanceScore: 70, buildUpScore: 70, depthScore: 70 },
+      sourcedSkillTendencies: {}, assignments: [] }, tactics: plans
+  });
+  assert.ok(scouting[0].principleSources.length >= 2,
+    "manager should be able to inspect the coaching references behind tactical advice");
 });
 
 check("en plan for et annet kampbilde blir sagt ifra om", () => {
