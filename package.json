@@ -17,6 +17,7 @@
     "sim:turnovers-v6": "node scripts/simulate-turnovers-v6.mjs",
     "sim:compact-block-v6": "node scripts/simulate-compact-block-v6.mjs",
     "sim:own-press-v6": "node scripts/simulate-own-press-v6.mjs",
+    "sim:game-control-v6": "node scripts/simulate-game-control-v6.mjs",
     "sim:mini-season": "node scripts/simulate-mini-season.mjs",
     "sim:league-season": "node scripts/simulate-real-league-season.mjs",
     "sim:mode-isolation": "node scripts/simulate-mode-isolation.mjs",
