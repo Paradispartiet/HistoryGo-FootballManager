@@ -1,4 +1,5 @@
 import { resolveClubSquadAccess } from "../football-club-squad.js";
+import { applyP1RoleCorrectionsToPlayer } from "../football-player-source-claims-p1.js";
 import {
   buildStarterSquadPlayerIds,
   normalizePlayerPoolSquadState,
@@ -230,7 +231,7 @@ function scheduleRender() {
 async function boot() {
   ensureStyles();
   const [playersData, unlockData, clubsData] = await Promise.all([loadJson(DATA.players), loadJson(DATA.unlocks), loadJson(DATA.clubs)]);
-  runtime = { players: asArray(playersData?.players), unlockData, clubs: asArray(clubsData?.clubs) };
+  runtime = { players: asArray(playersData?.players).map(applyP1RoleCorrectionsToPlayer), unlockData, clubs: asArray(clubsData?.clubs) };
   ensureDrawer();
   ensureOpenButton();
   window.addEventListener("hgfm:team-merits-changed", scheduleRender);
