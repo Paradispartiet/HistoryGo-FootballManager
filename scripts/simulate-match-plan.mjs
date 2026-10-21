@@ -389,6 +389,9 @@ check("planen du VELGER teller mot motstanderen fra avspark", () => {
   });
 
   const pressing = build("counter_press_recovery");
+  assert.equal(pressing.tacticSnapshot.defensiveLine,
+    byId.get("counter_press_recovery").defensiveLine,
+    "defensive line must survive saved tactic snapshot and opponent adaptation");
   assert.ok(pressing.planMatchup, "sesjonen må bære planens matchup");
   assert.ok(pressing.planMatchup.edge > 0, "press mot kort oppbygging må være gunstig");
 
