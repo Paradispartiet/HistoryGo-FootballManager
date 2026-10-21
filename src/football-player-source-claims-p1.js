@@ -2487,6 +2487,30 @@ export const P1_EXISTING_ROLE_CORRECTIONS = Object.freeze([
     "warningWhenMisused": "Brandtun var høyreback og vingback i Brann med offensive og defensive oppgaver, ikke en ren midtstopper.",
     "claim": "Branns offisielle spillerprofil klassifiserer Hans Brandtun som høyreback og beskriver ham som vingback med både offensive og defensive kvaliteter. Den kanoniske katalogens CB/DM/duel_stopper-profil er derfor uriktig. Kilden navngir ingen spesifikke ferdighetstoken som dribbling eller tackling.",
     "source": "https://historie.brann.no/spillere/hans-brandtun"
+  },
+  {
+    "playerId": "jan_erik_osland",
+    "placeId": "brann_stadion",
+    "naturalPositions": [
+      "ST"
+    ],
+    "usablePositions": [],
+    "poorFits": [
+      "GK",
+      "CB",
+      "DM"
+    ],
+    "archetypeIds": [],
+    "archetypes": [
+      "club_professional"
+    ],
+    "needs": [],
+    "preferredRoles": [],
+    "likesTactics": [],
+    "dislikesTactics": [],
+    "warningWhenMisused": "Jan Erik Osland var angriper i Brann ifølge klubbens historikk, ikke sentral midtbanespiller.",
+    "claim": "Branns offisielle spillerprofil klassifiserer Jan Erik Osland som «Angriper», og klubbens historiske spillerstaller for 1967, 1970, 1972 og 1975 plasserer ham i angrepet. Katalogens CM/DM/AM-klassifisering og midtbanespillmaker-mal er dermed uriktig. Spillets ST er her teknisk generell angrepsfamilie; kilden skiller ikke mellom sentral spiss og kantangriper. Ingen spesifikke ferdighetsstyrker kan utledes av stillingen eller antall mål.",
+    "source": "https://historie.brann.no/spillere/jan-erik-osland/"
   }
 ].map((entry) => Object.freeze({ ...entry })));
 
