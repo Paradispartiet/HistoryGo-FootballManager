@@ -1,4 +1,5 @@
 import { evaluatePlanVsOpponent } from "./football-match-plan.js";
+import { TACTICAL_SEQUENCES } from "./football-tactical-sequences.js";
 
 // Motstanderforberedelse v1
 //
@@ -98,6 +99,72 @@ export function buildOpponentTacticalOpportunities({ opponent, tactic, teamFit }
       hasDocumentedSkill: Number(contribution?.bonus) > 0
     };
   });
+}
+
+
+// Scouting explains the SAME one tactical chain as the live xG calculation.
+// Every catalogued plan has four interacting moves and a possible opponent
+// countermove. Modelling a response is not proof that the opponent uses it.
+const SEQUENCE_METRIC_LABELS = Object.freeze({
+  pressScore: "Press og timing",
+  depthScore: "Dybdeløp og romtrussel",
+  widthScore: "Bredde fra kant og back",
+  balanceScore: "Sentral balanse",
+  restDefenseScore: "Restforsvar og sikring",
+  buildUpScore: "Oppbygging og pasningsstøtte"
+});
+
+export function buildOpponentTacticalSequences({ opponent, tactic, teamFit } = {}) {
+  const catalogPattern = TACTICAL_SEQUENCES.find((pattern) => pattern.tacticId === tactic?.id);
+  if (!catalogPattern) return [];
+  const matchup = opponent?.styleTraits
+    ? evaluatePlanVsOpponent(tactic, opponent, { tacticalProfile: teamFit?.metrics })
+    : null;
+  const result = asArray(matchup?.sequences).find((pattern) => pattern.id === catalogPattern.tacticId);
+  const rosterKnown = teamFit && Number.isFinite(Number(teamFit.completeCount))
+    && Number.isFinite(Number(teamFit.totalSlots));
+  const incomplete = rosterKnown && Number(teamFit.completeCount) < Number(teamFit.totalSlots);
+  const checks = Object.entries(catalogPattern.requires).map(([metric, minimum]) => {
+    const raw = teamFit?.metrics?.[metric];
+    const value = typeof raw === "number" && Number.isFinite(raw) ? raw : null;
+    const provenance = teamFit?.sourcedSkillTendencies?.[metric];
+    return {
+      metric, label: SEQUENCE_METRIC_LABELS[metric] || metric,
+      minimum, value,
+      status: value === null ? "unknown" : value >= minimum ? "ready" : "gap",
+      documentedPlayers: [...new Set(asArray(provenance?.players).filter((v) => typeof v === "string" && v.trim()))]
+    };
+  });
+  const triggerValue = opponent?.styleTraits?.[catalogPattern.opponentCondition.trait]
+    ?? opponent?.[catalogPattern.opponentCondition.trait];
+  const triggerKnown = typeof triggerValue === "number" && Number.isFinite(triggerValue);
+  const status = incomplete ? "incomplete"
+    : !matchup ? "unknown_opponent"
+    : !result ? "not_exposed"
+    : result.status;
+  return [{
+    id: catalogPattern.tacticId, title: catalogPattern.title,
+    moves: catalogPattern.moves.slice(),
+    counter: catalogPattern.counter, response: catalogPattern.response,
+    trigger: {
+      trait: catalogPattern.opponentCondition.trait,
+      value: triggerKnown ? triggerValue : null,
+      minimum: catalogPattern.opponentCondition.min
+    },
+    checks, status, edgeDelta: status === "advantage" ? 1 : 0,
+    risk: asArray(tactic?.risks)[0] || "",
+    // Every user-facing verdict refers to the evaluated current formation/XI.
+    // 'Not exposed' and 'unknown opponent' must not imply poor player skill.
+    explanation: {
+      advantage: "Motstanderen gir et relevant rom; alle nødvendige lagledd støtter mønsteret.",
+      countered: "Motstanderen har et modellert motgrep som stopper denne spillkjeden.",
+      unsupported: "Minst ett nødvendig ledd i egen rolle- eller formasjonsdekning mangler.",
+      unknown_counter: "Mulig sårbarhet finnes, men motstanderens motgrep er ikke kartlagt.",
+      incomplete: "Elleveren er ikke komplett; vurderingen må kontrolleres igjen etter laguttak.",
+      not_exposed: "Denne motstanderprofilen gir ikke grunnlag for å aktivere mønsteret.",
+      unknown_opponent: "Motstanderen mangler tilstrekkelig taktisk profil for denne vurderingen."
+    }[status]
+  }];
 }
 
 function text(value, fallback = "") {
@@ -210,6 +277,7 @@ export function createOpponentAnalysisWorkspace({ fixture = null, formation = nu
     },
     matchup,
     tacticalOpportunities: buildOpponentTacticalOpportunities({ opponent, tactic, teamFit }),
+    tacticalSequences: buildOpponentTacticalSequences({ opponent, tactic, teamFit }),
     focuses
   };
 }

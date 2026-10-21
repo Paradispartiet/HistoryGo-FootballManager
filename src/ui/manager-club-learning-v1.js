@@ -452,6 +452,52 @@ function appendOpponentAnalysisWorkshop(body) {
     brief.append(profile);
     dynamic.append(brief);
 
+    // Four connected actions → opponent counter → manager response. This is
+    // the already running tactical-sequence engine, never a separate UI rating.
+    const chain = workspace.tacticalSequences?.[0];
+    if (chain) {
+      const scene = node("section", "opponent-analysis-sequence");
+      scene.dataset.sequenceId = chain.id;
+      scene.dataset.sequenceStatus = chain.status;
+      scene.append(
+        node("h4", "", "Spill · motspill · nytt svar"),
+        node("strong", "opponent-analysis-sequence-title", chain.title),
+        node("p", "opponent-analysis-sequence-verdict", chain.explanation),
+        node("p", "opponent-analysis-sequence-method",
+          "Taktisk modell, ikke en fasit: fire handlinger gir ikke fire bonuser. Vurderingen bruker valgte roller og eksisterende lagmetrikker.")
+      );
+      const actions = node("ol", "opponent-analysis-sequence-moves");
+      chain.moves.forEach((move) => actions.append(node("li", "", move)));
+      scene.append(actions);
+      const factors = node("ul", "opponent-analysis-sequence-requirements");
+      chain.checks.forEach((factor) => {
+        const li = node("li", "opponent-analysis-sequence-factor");
+        li.dataset.factorStatus = factor.status;
+        const scoreLabel = factor.value === null
+          ? "ukjent laggrunnlag"
+          : factor.value + " / krav " + factor.minimum;
+        li.append(
+          node("strong", "", factor.label),
+          node("small", "", scoreLabel),
+          node("small", "",
+            factor.documentedPlayers.length
+              ? "Kildebelagte bidrag: " + factor.documentedPlayers.slice(0, 3).join(", ")
+              : "Ingen direkte kildebelagte spillerbidrag dokumentert her")
+        );
+        factors.append(li);
+      });
+      scene.append(
+        node("h5", "", "Hva må laget vårt ha?"),
+        factors,
+        node("h5", "", "Motstanderens mulige svar"),
+        node("p", "opponent-analysis-sequence-counter", chain.counter),
+        node("h5", "", "Hva kan vi gjøre deretter?"),
+        node("p", "opponent-analysis-sequence-response", chain.response)
+      );
+      if (chain.risk) scene.append(node("p", "opponent-analysis-sequence-risk", "Risiko ved egen plan: " + chain.risk));
+      dynamic.append(scene);
+    }
+
     // Show the actual xG-matching conditions beside the manager's scouting
     // choices. No extra tactic score, and unproven skills remain unknown.
     const opportunities = node("section", "opponent-analysis-tactical-opportunities");

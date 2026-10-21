@@ -82,6 +82,12 @@ test("analyseavdelingen gjør faktisk terminliste og motstanderprofil til en lag
   await expect(workshop).toContainText("Fotballrepublikken");
   await expect(workshop).toContainText("4-3-3 som presser høyt");
   await expect(workshop).toContainText("Nærmeste kamp · analyse mangler");
+  // The documented four-move chain must reach the actual manager workspace.
+  const chain = workshop.locator(".opponent-analysis-sequence");
+  await expect(chain).toBeVisible();
+  await expect(chain.locator(".opponent-analysis-sequence-moves li")).toHaveCount(4);
+  await expect(chain.locator(".opponent-analysis-sequence-counter")).not.toBeEmpty();
+  await expect(chain.locator(".opponent-analysis-sequence-response")).not.toBeEmpty();
 
   await choosePressPlan(page);
   const stored = await page.evaluate(() => {
