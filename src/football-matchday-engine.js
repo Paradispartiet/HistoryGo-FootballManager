@@ -5,6 +5,7 @@ import { buildMatchExplanation } from "./football-match-explanation-engine.js";
 import { evaluateHistoricalOpponentMatchup } from "./football-historical-opponent-profiles.js";
 import { annotatePeriodTacticalChances } from "./football-tactical-match-moments.js";
 import { resolveHighPressBuildUp, annotateHighPressBuildUpChances, highPressPhaseRoll } from "./football-matchday-high-press-v6.js";
+import { resolveTurnoverTransition } from "./football-matchday-turnover-v6.js";
 import {
   applyOpponentAdjustment,
   createPlanChange,
@@ -1789,6 +1790,9 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
 
   return {
     version: 2,
+    // Explicit opt-in for NEW matches. Existing in-progress saves keep their
+    // original v6 build-up model until their match is completed.
+    causalTransitionsVersion: 1,
     sourcedSubstitutionVersion: 2,
     sourcedSubstitutionBaseline,
     id: `matchday-session-${Date.now()}`,
@@ -2140,7 +2144,16 @@ export function advanceMatchClock(session) {
   // While v6 owns this situation, remove the old static plan-edge projection
   // for this period; otherwise the same tactical advantage is paid twice.
   // Sessions without sufficient role/opponent evidence retain the v5 path.
-  const phase = resolveHighPressBuildUp(session, { rng: () => highPressPhaseRoll(session, played) });
+  const buildUpPhase = resolveHighPressBuildUp(session, { rng: () => highPressPhaseRoll(session, played) });
+  const transition = resolveTurnoverTransition(session, buildUpPhase, {
+    firstPassRoll: () => highPressPhaseRoll(session, played + ":forward-pass"),
+    coverRoll: () => highPressPhaseRoll(session, played + ":rest-defence")
+  });
+  // The terminal outcome REPLACES the preliminary risk from the build-up
+  // loss; it is never added on top. A completed build-up has no transition.
+  const phase = transition ? {
+    ...buildUpPhase, transition, xgDeltaAgainst: transition.xgDeltaAgainst
+  } : buildUpPhase;
   const rate = currentExpectedGoalRate(session);
   const share = 1 / totalSegments;
   const staticEdge = num(session.planMatchup?.edge);
