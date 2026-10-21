@@ -1475,8 +1475,8 @@ const existingSupplements = [
       "leadership"
     ],
     "evidenceKind": "historical_appraisal",
-    "playingStyle": "Branns lagkaptein og samlende midtbanespiller gjennom sesonger på 1980-tallet.",
-    "claim": "Aftenpostens samtidige rapport fra Branns nedrykk i 1985 siterer Arne Møller eksplisitt som Branns kaptein og gjengir hans uttalelser om lagets ambisjoner. Aftenpostens senere historiske tilbakeblikk på cupåret 1988 omtaler ham også eksplisitt som Brann-kaptein. Gjentatt kapteinsansvar over flere sesonger gir smalt belegg for leadership på lagets midtbane; det dokumenterer ikke automatisk passing_range, vision eller game_reading.",
+    "playingStyle": "Branns lagkaptein og ledende midtbanespiller, konkret dokumentert i 1985.",
+    "claim": "Aftenpostens samtidige 1985-reportasje betegner Arne Møller uttrykkelig som Branns kaptein og beskriver at han gikk i bresjen i nedrykkskampen mot Mjøndalen. Dette gir et avgrenset samtidig belegg for leadership i 1985-sesongen, men er ikke dokumentasjon på kapteinsrollen i andre sesonger eller på tekniske styrker som passing_range, vision og game_reading.",
     "source": "https://www.aftenposten.no/norge/i/0EqkG/hvem-tror-du-brann-tapte-for-forrige-gang-de-rykket-ned-fra-toppserien"
   },
 
