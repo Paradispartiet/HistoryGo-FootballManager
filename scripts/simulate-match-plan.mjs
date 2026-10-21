@@ -88,6 +88,10 @@ check("alle 18 taktikker har betinget fire-trekks spill, motspill og svar", () =
       `${chain.tacticId}: unscouted opponent counter cannot be treated as harmless`);
     assert.equal(unverified.edgeDelta, 0,
       `${chain.tacticId}: no bonus without a known opponent response`);
+    const unscoutedIntegrated = evaluatePlanVsOpponent(plan, unscouted, { tacticalProfile: ready });
+    assert.ok(unscoutedIntegrated.notes.some((note) => note.includes("motgrep er ikke undersøkt")),
+      `${chain.tacticId}: unknown scouting must not be described as poor player quality`);
+    assert.equal(unscoutedIntegrated.sequences[0]?.status, "unknown_counter");
     const integrated = evaluatePlanVsOpponent(plan, opponent, { tacticalProfile: ready });
     assert.equal(integrated.sequences?.[0]?.edgeDelta, 1);
     const integratedCounter = evaluatePlanVsOpponent(plan, counteredOpponent, { tacticalProfile: ready });
@@ -359,6 +363,16 @@ check("fire samvirkende trekk kan nøytraliseres av ett motgrep", () => {
     { tacticalProfile: { pressScore: 74 } }).combinations[0];
   assert.equal(unknown.status, "unknown");
   assert.equal(unknown.readyCount, 1);
+  const noScouting = evaluatePlanVsOpponent(pressPlan,
+    { styleTraits: { shortBuildUp: 80 } }, { tacticalProfile: ready });
+  const noScoutingCombo = noScouting.combinations.find((x) => x.id === "coordinated_press_chain");
+  assert.equal(noScoutingCombo.status, "unknown_counter");
+  assert.ok(noScouting.notes.some((note) => note.includes("ikke undersøkt")));
+  const scouted = evaluatePlanVsOpponent(pressPlan,
+    { styleTraits: { shortBuildUp: 80, pressIntensity: 30 }, pressResistance: 30 },
+    { tacticalProfile: ready });
+  assert.ok(scouted.edge > noScouting.edge, "undocumented opponent counter cannot yield synergy");
+
 
   // The same composition and single counter alter match chances, not merely text.
   const session = (opponent) => createMatchdaySession({
