@@ -36180,38 +36180,33 @@
       ],
       "classHeight": 82,
       "naturalPositions": [
-        "CB"
+        "LW"
       ],
-      "usablePositions": [
-        "DM"
-      ],
+      "usablePositions": [],
       "poorFits": [
-        "LW",
-        "RW",
-        "ST"
+        "CB",
+        "DM",
+        "GK"
       ],
-      "archetypeIds": [
-        "duel_stopper"
-      ],
+      "archetypeIds": [],
       "archetypes": [
-        "duel_winner"
+        "wide_support"
       ],
       "strengths": [],
       "needs": [
-        "covering_partner",
-        "clear_defensive_line"
+        "wide_space",
+        "support_from_midfield"
       ],
       "preferredRoles": [
-        "duel_stopper",
-        "ball_playing_defender"
+        "outside_forward"
       ],
       "likesTactics": [
-        "compact_defense"
+        "wide_attack"
       ],
       "dislikesTactics": [
-        "high_line"
+        "narrow_shape"
       ],
-      "warningWhenMisused": "Amundsen blir utsatt i høy linje med mye rom bak.",
+      "warningWhenMisused": "Amundsen var ytre venstre i Brann gjennom hele karrieren; bruk ham som klassisk venstreving, ikke midtstopper.",
       "classSource": "belagt",
       "clubStatus": {
         "brann_stadion": "club_profile"
@@ -36478,39 +36473,24 @@
       ],
       "classHeight": 82,
       "naturalPositions": [
-        "CM"
+        "ST"
       ],
-      "usablePositions": [
-        "DM",
-        "AM"
-      ],
+      "usablePositions": [],
       "poorFits": [
         "GK",
         "CB",
-        "LW"
+        "DM"
       ],
-      "archetypeIds": [
-        "box_to_box"
-      ],
+      "archetypeIds": [],
       "archetypes": [
-        "tempo_setter"
+        "club_professional"
       ],
       "strengths": [],
-      "needs": [
-        "midfield_partner",
-        "passing_options"
-      ],
-      "preferredRoles": [
-        "box_to_box",
-        "deep_playmaker"
-      ],
-      "likesTactics": [
-        "possession"
-      ],
-      "dislikesTactics": [
-        "long_ball_only"
-      ],
-      "warningWhenMisused": "Osland forsvinner hvis midtbanen blir isolert.",
+      "needs": [],
+      "preferredRoles": [],
+      "likesTactics": [],
+      "dislikesTactics": [],
+      "warningWhenMisused": "Jan Erik Osland var angriper i Brann ifølge klubbens historikk, ikke sentral midtbanespiller.",
       "classSource": "belagt",
       "clubStatus": {
         "brann_stadion": "club_profile"
@@ -36856,38 +36836,39 @@
       ],
       "classHeight": 81,
       "naturalPositions": [
-        "CB"
+        "RB"
       ],
       "usablePositions": [
-        "DM"
+        "WB"
       ],
       "poorFits": [
-        "LW",
-        "RW",
-        "ST"
+        "CB",
+        "ST",
+        "GK"
       ],
-      "archetypeIds": [
-        "duel_stopper"
-      ],
+      "archetypeIds": [],
       "archetypes": [
-        "duel_winner"
+        "wide_support",
+        "defensive_balance"
       ],
       "strengths": [],
       "needs": [
-        "covering_partner",
-        "clear_defensive_line"
+        "wide_lane",
+        "cover_from_midfield"
       ],
       "preferredRoles": [
-        "duel_stopper",
-        "ball_playing_defender"
+        "wing_back",
+        "traditional_full_back"
       ],
       "likesTactics": [
-        "compact_defense"
+        "wide_attack",
+        "defensive_balance"
       ],
       "dislikesTactics": [
-        "high_line"
+        "narrow_shape",
+        "no_cover"
       ],
-      "warningWhenMisused": "Brandtun blir utsatt i høy linje med mye rom bak.",
+      "warningWhenMisused": "Brandtun var høyreback og vingback i Brann med offensive og defensive oppgaver, ikke en ren midtstopper.",
       "classSource": "belagt",
       "clubStatus": {
         "brann_stadion": "club_profile"
