@@ -211,7 +211,12 @@ check("motstandersvakheter krever faktisk rolle-, egenskaps- og formasjonsdeknin
     "high defensive line must only yield bonus if runner roles provide actual depth");
   assert.ok(depthMissing.notes.some(note => note.includes("dybdetrussel")));
 
-  const compact = getHistoricalOpponentProfile("inter_1960s_catenaccio");
+  // Isolate wing overload before the opponent's separate high-quality
+  // defensive counter: otherwise 'width beats compactness' is a false rule.
+  const compact = {
+    ...getHistoricalOpponentProfile("inter_1960s_catenaccio"),
+    defensiveStructure: 74
+  };
   const wide = { ...byId.get("all_out_attack"), width: "wide" };
   const stretched = evaluatePlanVsOpponent(wide, compact,
     { tacticalProfile: { depthScore: 75, widthScore: 74, pressScore: 75 } });
