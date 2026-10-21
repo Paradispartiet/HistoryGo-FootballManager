@@ -11,7 +11,7 @@ export const P1_HERITAGES = Object.freeze([
   { key: "brann", placeId: "brann_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 40, expectedPartial: 2, expectedThin: 5, sourcePass: "SK_Brann_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "bodo_glimt", placeId: "aspmyra_stadion", expectedExclusive: 47, generation: "existing", expectedDocumented: 16, expectedPartial: 3, expectedThin: 28, sourcePass: "Bodo_Glimt_47_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
   { key: "viking", placeId: "lyse_arena", expectedExclusive: 51, generation: "existing", expectedDocumented: 21, expectedPartial: 2, expectedThin: 28, sourcePass: "Viking_FK_51_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
-  { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 21, expectedPartial: 3, expectedThin: 0, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
+  { key: "lillestrom", placeId: "araasen_stadion", expectedExclusive: 24, generation: "existing", expectedDocumented: 22, expectedPartial: 2, expectedThin: 0, sourcePass: "Lillestrom_SK_24_eksklusive_spillerprofiler_dokumenterte_kvaliteter_HGFM_v1.md" },
 
   { key: "fredrikstad", placeId: "fredrikstad_stadion", expectedExclusive: 70, generation: "new" },
   { key: "skeid", placeId: "nordre_asen", expectedExclusive: 70, generation: "new" },
@@ -1443,6 +1443,16 @@ export const P1_NEW_PARTIAL = Object.freeze([
 ].map((entry) => Object.freeze({ ...entry, strengths: Object.freeze([...entry.strengths]) })));
 
 const existingSupplements = [
+  {
+    playerId: "ole_dyrstad",
+    placeId: "araasen_stadion",
+    strengths: ["leadership"],
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Ansvarstagende forsvarsspiller på Lillestrøms seriemesterlag 1989.",
+    claim: "Lillestrøms God Fugl-intervju 2017 gjengir lagkamerat Bård Bjerkelands direkte vurdering av Ole Dyrstad som en av spillerne som tok ledelse og ansvar. Klubbens historikk bekrefter kapteinsrollen i 1989. Ferdigheten leadership bygger på lagkameratens konkrete beskrivelse, ikke bare kapteinsbind; ingen andre ferdigheter eller tall er utledet.",
+    source: "https://www.lsk.no/nyheter/bard-bjerkeland-jeg-fikk-kjeft-av-kjerrringa-til-mini",
+    supportingSources: ["https://www.lsk.no/nyheter/4402-billetter-solgt-dyrstad-reiser-140-mil-for-a-se-lsk-rbk"]
+  },
   // Alexander Nagelsett Olsen: published retrospective cites individual technical/dribbling skill.
   // This is secondary historical evidence, not a direct inspection of the printed books.
   {
