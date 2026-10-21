@@ -594,7 +594,7 @@ export function applyOpponentAdjustment(opponent, adjustment) {
     // Dynamic behaviour is tied to an EXPLICIT in-match reaction, not a
     // guessed historical opponent observation. A different reaction replaces
     // the previous lane/spacing/cover model.
-    tacticalBehaviour: behaviourForOpponentAdjustment(adjustment.id) || opponent.tacticalBehaviour || null,
+    tacticalBehaviour: behaviourForOpponentAdjustment(adjustment.id, { ...opponent, styleTraits: shifted }) || opponent.tacticalBehaviour || null,
     adjustmentId: adjustment.id,
     adjustmentLabel: adjustment.label
   };
