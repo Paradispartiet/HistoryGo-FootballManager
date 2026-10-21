@@ -112,7 +112,7 @@ try {
   const period = advanced.timeline[0];
   assert.equal(period.tacticalPhase.status, "breakthrough");
   assert.equal(period.tacticalXg, undefined, "legacy plan-edge is not re-applied");
-  assert.equal(period.expectedGoals.for - period.baselineExpectedGoals.for,
+  assert.equal(Math.round((period.expectedGoals.for - period.baselineExpectedGoals.for) * 100) / 100,
     period.tacticalPhase.xgDeltaFor);
   assert.equal(Math.round((period.expectedGoals.against - period.baselineExpectedGoals.against) * 100) / 100,
     period.tacticalPhase.xgDeltaAgainst);
