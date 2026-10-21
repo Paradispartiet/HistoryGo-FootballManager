@@ -781,6 +781,82 @@ check("bytte til samme plan gjør ingenting", () => {
   assert.equal(same.planChanges.length, 0);
 });
 
+check("planbytte regner om seks taktiske lagdimensjoner før neste kampperiode", () => {
+  const original = buildSession("patient_build_up");
+  assert.deepEqual(original.tacticSnapshot.gameStates,
+    byId.get("patient_build_up").gameStates,
+    "kickoff must persist the tactic's intended match states");
+  const previous = structuredClone(original.teamFitSnapshot.tacticalProfile);
+  const currentTeamFit = { metrics: {
+    balanceScore: 68, widthScore: 68, depthScore: 62,
+    buildUpScore: 77, pressScore: 55, restDefenseScore: 72
+  } };
+  const nextTeamFit = { metrics: {
+    balanceScore: 60, widthScore: 80, depthScore: 76,
+    buildUpScore: 60, pressScore: 86, restDefenseScore: 58
+  } };
+  const nextPlan = byId.get("counter_press_recovery");
+  const switched = applyMatchPlanChange(original, nextPlan, {
+    currentTeamFit, nextTeamFit
+  });
+  const expected = { ...previous };
+  Object.keys(currentTeamFit.metrics).forEach((key) => {
+    expected[key] = Math.max(0, Math.min(100,
+      previous[key] + nextTeamFit.metrics[key] - currentTeamFit.metrics[key]));
+  });
+  assert.deepEqual(switched.teamFitSnapshot.tacticalProfile, expected);
+  assert.deepEqual(original.teamFitSnapshot.tacticalProfile, previous,
+    "tactic change must not mutate a previously played period or save");
+  assert.equal(switched.planMatchup.edge,
+    evaluatePlanVsOpponent(nextPlan, switched.opponent, {
+      tacticalProfile: expected
+    }).edge);
+  const beforeScore = scorePlanNow(byId.get("patient_build_up"), {
+    gameState: "level", opponent: original.opponent, tacticalProfile: previous
+  });
+  const afterScore = scorePlanNow(nextPlan, {
+    gameState: "level", opponent: original.opponent, tacticalProfile: expected
+  });
+  const improvement = Math.round((afterScore - beforeScore)) / 100;
+  assert.equal(switched.planChanges[0].improvement, improvement,
+    "switch improvement must use old plan+old role fit vs new plan+new role fit");
+
+  assert.deepEqual(switched.activePlanSnapshot.gameStates, nextPlan.gameStates,
+    "follow-up plan change must keep full game-state information");
+  // Historic saves may lack gameStates. The app supplies the current canonical
+  // plan so the first switch after restore cannot gain 0.9 fake improvement.
+  const oldSave = {
+    ...original,
+    tacticSnapshot: { ...original.tacticSnapshot, gameStates: undefined }
+  };
+  const resumed = applyMatchPlanChange(oldSave, nextPlan, {
+    currentTeamFit, nextTeamFit,
+    currentPlanData: byId.get("patient_build_up")
+  });
+  assert.equal(resumed.planChanges[0].improvement,
+    switched.planChanges[0].improvement,
+    "restored old sessions must not receive a free tactical improvement");
+
+  // Existing stored matches or direct engine consumers without new inputs
+  // keep the legacy snapshot rather than hallucinating missing role scores.
+  const legacy = applyMatchPlanChange(original, nextPlan);
+  assert.deepEqual(legacy.teamFitSnapshot.tacticalProfile, previous);
+
+  // A second tactical change is relative to the current on-field profile,
+  // so flipping back does not stack a bogus permanent tactical bonus.
+  const restored = applyMatchPlanChange(switched, byId.get("patient_build_up"), {
+    currentTeamFit: nextTeamFit, nextTeamFit: currentTeamFit
+  });
+  assert.deepEqual(restored.teamFitSnapshot.tacticalProfile, previous);
+
+  const played = advanceMatchClock(original);
+  const revised = applyMatchPlanChange(played, nextPlan, {
+    currentTeamFit, nextTeamFit
+  });
+  assert.deepEqual(revised.timeline, played.timeline,
+    "tactic switch may not rewrite historical match periods");
+});
+
 check("flere bytter i samme kamp stables", () => {
   let session = buildSession("central_possession_4231");
   session = applyMatchPlanChange(session, byId.get("high_press_343"));

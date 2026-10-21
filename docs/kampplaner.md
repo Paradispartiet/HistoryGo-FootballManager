@@ -490,3 +490,31 @@ rolle-/formasjonsvurdering og omstillingskostnad. Et foreslått alternativ som
 ikke kan gjennomføres, skal fremstå som **manglende dekning**, ikke som automatisk
 bedre. `sim:match-plan` kontrollerer alle 18 alternativene mot komplett,
 mangelfullt og ufullstendig lag, utilstrekkelig speiding og manglende katalognavn.
+
+
+## Midtkampbytte må endre faktisk taktisk lagprofil
+
+Når manageren bytter kampplan, holder det ikke å vurdere ny plan mot den gamle
+planens press-, bredde-, dybde- og oppbyggingsprofil. Spillet beregner nå
+`teamFit` for **den samme startelleveren og de samme rollene** både under
+nåværende og foreslått plan, og overfører endringen i seks lagdimensjoner til
+den aktive kampsesjonen: `balanceScore`, `widthScore`, `depthScore`,
+`buildUpScore`, `pressScore`, `restDefenseScore`. Beregningen bruker en
+**differanse**, slik at allerede registrert trening og innbytterbidrag i
+kampsnapshotet ikke viskes ut. Omstillingsgevinsten vurderer gammel plan med
+gammel taktisk dekning og ny plan med ny dekning.
+
+Tidligere spilte minutter og lagrede øyeblikksbilder omskrives ikke. Gamle
+sesjoner og direkte motorkall uten begge sammenlignbare lagoppslag beholder
+gammel profil; motoren dikter ikke opp nye spillerferdigheter. Taktikkens
+mønsterbonus gis ikke uten faktisk dekning. En kampplanendring bytter ikke
+automatisk roller, spillere eller formasjon; slike justeringer må gjøres av
+manageren. Ved innbytte bygger den eksisterende innbyttermotoren videre på
+aktivt kampsnapshot, ikke på et nytt sluttresultat fra avspark.
+
+Kampplanens `gameStates`, `family` og `intent` lagres nå også i kampens
+start- og endringssnapshots. Tidligere lagrede sesjoner fikk mangelfulle
+`gameStates` og kunne derfor bli behandlet som om den gamle taktikken var
+feil i enhver kampsituasjon, noe som ga en ubegrunnet `+0,9` i planforbedring.
+Appen slår opp den kanoniske gamle kampplanen når den finnes, slik at også
+eldre sesjoner vurderes med riktig kontekst ved første taktikkbytte.

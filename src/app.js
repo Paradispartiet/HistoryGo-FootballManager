@@ -3963,9 +3963,9 @@ function getCoachContext() {
   });
 }
 
-function getTeamFit() {
+function getTeamFit(tacticOverride = null) {
   const formation = getFormation();
-  const tactic = getTactic();
+  const tactic = tacticOverride || getTactic();
 
   if (!formation || !tactic) {
     return null;
@@ -11527,7 +11527,17 @@ function switchMatchPlanDuringMatch(planId) {
   if (!session || session.phase === "resolved") return;
   const plan = (Array.isArray(state.tactics) ? state.tactics : []).find((item) => item.id === planId);
   if (!plan) return;
-  const next = applyMatchPlanChange(session, plan, { opponent: session.opponent });
+  // Compare exactly the same XI and roles under the old and proposed tactic.
+  // This prevents the next match period from using the old plan's press,
+  // width, depth, build-up, balance and rest-defence scores.
+  const currentTeamFit = getTeamFit();
+  const nextTeamFit = getTeamFit(plan);
+  const currentPlanId = session.activePlanSnapshot?.id ||
+    session.tacticSnapshot?.id || session.selectedTacticId;
+  const currentPlanData = state.tactics.find((item) => item.id === currentPlanId) || null;
+  const next = applyMatchPlanChange(session, plan, {
+    opponent: session.opponent, currentTeamFit, nextTeamFit, currentPlanData
+  });
   if (next === session) return;
   state.matchday.session = next;
   // Kampplanen utenfor kampen følger med, slik at neste kamp starter der du
