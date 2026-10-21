@@ -472,6 +472,7 @@ function appendOpponentAnalysisWorkshop(body) {
         const verdict = {
           ready: "Planen har taktisk dekning",
           gap: "Planen mangler taktisk dekning",
+          countered: "Motstanderens motgrep bryter fordelen",
           incomplete: "Elleveren er ikke komplett",
           unknown: "Laggrunnlaget er ukjent"
         }[opportunity.readiness] || "Uavklart";
@@ -489,6 +490,37 @@ function appendOpponentAnalysisWorkshop(body) {
             ? "Kildebelagte spillerbidrag: " + opportunity.documentedPlayers.slice(0, 3).join(", ")
             : "Ingen individuelt kildebelagte bidrag til denne taktiske dimensjonen.")
         );
+        // Tactical combinations are not binary 'A beats B': four cooperating
+        // factors can be stopped by a single opponent countermeasure.
+        opportunity.combinations?.forEach((pattern) => {
+          const combination = node("section", "opponent-analysis-combination");
+          combination.append(node("strong", "", "Samspill: " + pattern.label));
+          const steps = node("ol", "opponent-analysis-combination-factors");
+          pattern.factors.forEach((factor) => {
+            const step = node("li", "opponent-analysis-combination-factor");
+            step.dataset.factorStatus = factor.status;
+            const description = factor.value === null
+              ? "ukjent lagverdi"
+              : factor.value + " / minimum " + factor.minimum;
+            step.append(
+              node("span", "", factor.label),
+              node("small", "", description)
+            );
+            steps.append(step);
+          });
+          const counterText = pattern.counter.status === "active"
+            ? "Motgrep AKTIVT: " + pattern.counter.label
+            : pattern.counter.status === "inactive"
+              ? "Mulig motgrep, ikke aktivt nå: " + pattern.counter.label
+              : "Motgrep uavklart: " + pattern.counter.label;
+          combination.append(
+            steps,
+            node("p", "opponent-analysis-combination-counter", counterText),
+            node("p", "opponent-analysis-combination-answer",
+              "Mulig neste svar: " + pattern.answer)
+          );
+          item.append(combination);
+        });
         list.append(item);
       });
       opportunities.append(list);
