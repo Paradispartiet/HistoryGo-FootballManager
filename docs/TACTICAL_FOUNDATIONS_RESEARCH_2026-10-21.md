@@ -177,3 +177,47 @@ posisjonsmodell som faktisk bestemmer pressledd, klareringer,
 ballgjenvinninger og sluttprodukt **før** sjansene blir beregnet,
 med systematisk kalibrering mot kampdata. Man må da unngå å
 legge effektene oppå eksisterende taktisk `edge` en gang til.
+
+
+### v5 – etterprøvbar taktisk xG per kampperiode
+
+Motoren lar allerede den samlede `evaluatePlanVsOpponent`-vurderingen
+bidra til sjanseraten med `edge × 0,09` xG for og
+`−edge × 0,06` xG imot for en hel kamp før
+periodevis fordeling, avrunding og begrensninger. Dette ble tidligere
+svært lite synlig for manageren.
+
+I v5 lagres derfor ved hver `advanceMatchClock` et
+**etterberegnet kontributt** som er lik forskjellen mellom periodens
+faktisk beregnede xG og et kontrafaktisk referansetall der **bare
+planens matchup-`edge` er null**, med samme kampstyrke,
+managergrep, per-periode-avrunding og xG-tak. Det er en
+attribusjon av eksisterende modelloutput, **ikke** et nytt
+taktisk tillegg.
+
+- `timeline[].tacticalXg.addedFor`: xG-forskjell i egen retning.
+- `timeline[].tacticalXg.preventedAgainst`: hvor mye xG imot
+  planen reduserte sammenlignet med null-`edge`; negativ verdi
+  betyr at planmatchupen økte sjansetrusselen imot.
+- Kilde/kampplan knyttes til **perioden da den faktisk ble brukt**;
+  et senere planbytte eller innbytte endrer ikke tidligere perioder.
+- I kampbildet oppsummeres kun perioder som manageren faktisk
+  har spilt av, med detalj per periode og samme historikk i
+  kamprapporten.
+
+Det er viktig å tolke feltet riktig: `edge` er **hele
+kampplan-matchupen**, med både generelle stiltreff, rollekrav og
+de taktiske sekvensene. Tallet må ikke presenteres som en
+isolert, eksperimentelt målt kausal effekt av tredjemann,
+press eller restforsvar. `tacticalXg` er en lokal,
+deterministisk modell-kontrafaktisk, ikke empirisk
+xG-kalibrering. Testene holder kampens eksisterende
+sjansegenerering og poengberegning uendret.
+
+Faglig begrunnelse: FIFA Training Centre skiller mellom
+kollektiv dekning, ballgjenvinning, første handling i en
+overgang og påfølgende støttebevegelser – jf.
+[Controlling the game without the ball](https://www.fifatrainingcentre.com/en/fwc2022/technical-and-tactical-analysis/controlling-the-game-without-the-ball--the-mid-block-and-compactness.php)
+og [Passing the press](https://www.fifatrainingcentre.com/en/game/game-analysis/transition-to-attacking/passing-the-press.php).
+Disse støtter analyseinndelingen, **ikke** spillets
+numeriske terskler eller `edge`-koeffisienter.

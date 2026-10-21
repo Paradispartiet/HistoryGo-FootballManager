@@ -1893,4 +1893,55 @@ check("kampsjansen får taktisk øyeblikk uten nytt kast, xG, mål eller ny sjan
     "tactical explanation must persist into the fulltime report");
 });
 
+check("kampplanens xG: ingen ny effekt, bare etterprøvbar periodeattribusjon", () => {
+  const original = buildSession("patient_build_up");
+  const fixed = (edge) => ({
+    ...original,
+    planMatchup: { ...original.planMatchup, edge }
+  });
+  const roll = Math.random;
+  const run = (session) => {
+    let calls = 0;
+    Math.random = () => { calls++; return 0.45; };
+    try { return { next: advanceMatchClock(session), calls }; }
+    finally { Math.random = roll; }
+  };
+  const noEdge = run(fixed(0));
+  const withEdge = run(fixed(2));
+  const old = noEdge.next.timeline[0];
+  const live = withEdge.next.timeline[0];
+  const round = (n) => Math.round((n + Number.EPSILON) * 100) / 100;
+
+  assert.equal(live.tacticalXg.edge, 2);
+  assert.equal(live.tacticalXg.basis, "existing_plan_matchup");
+  assert.equal(live.tacticalXg.planId, "patient_build_up");
+  assert.equal(live.tacticalXg.addedFor,
+    round(live.expectedGoals.for - old.expectedGoals.for));
+  assert.equal(live.tacticalXg.preventedAgainst,
+    round(old.expectedGoals.against - live.expectedGoals.against));
+  assert.ok(live.tacticalXg.addedFor > 0);
+  assert.ok(live.tacticalXg.preventedAgainst > 0);
+  assert.deepEqual(original.timeline, [], "reading an impact cannot mutate prior match");
+  assert.deepEqual(noEdge.next.score, { for: old.goalsFor, against: old.goalsAgainst });
+  assert.deepEqual(withEdge.next.score, { for: live.goalsFor, against: live.goalsAgainst });
+
+  const capped = run(fixed(500)).next.timeline[0];
+  assert.ok(capped.tacticalXg.addedFor <= 3,
+    "attribution is bounded by actual capped period xG, not raw edge");
+  assert.ok(capped.tacticalXg.preventedAgainst <= 3);
+  const unknown = run({ ...original, planMatchup: null }).next.timeline[0];
+  assert.equal(unknown.tacticalXg, undefined,
+    "no matchup data => do not invent a quantified contribution");
+
+  const alreadyPlayed = withEdge.next;
+  const other = applyMatchPlanChange(alreadyPlayed, byId.get("all_out_attack"));
+  assert.deepEqual(other.timeline[0].tacticalXg, live.tacticalXg,
+    "changing strategy cannot rewrite the previous period");
+  const continued = advanceMatchClock(other);
+  assert.deepEqual(continued.timeline[0].tacticalXg, live.tacticalXg);
+  const report = finalizeMatchdaySession(continued);
+  assert.deepEqual(report.timeline[0].tacticalXg, live.tacticalXg,
+    "a completed match preserves xG provenance for later review");
+});
+
 console.log(`\nAlle ${checks.length} kampplansjekker besto (${plans.length} planer).`);

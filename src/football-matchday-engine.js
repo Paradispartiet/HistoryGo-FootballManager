@@ -2134,6 +2134,27 @@ export function advanceMatchClock(session) {
   const segmentXgFor = clampRange(round2(rate.for * share), 0, 3);
   const segmentXgAgainst = clampRange(round2(rate.against * share), 0, 3);
 
+  // Disclose the REAL contribution already included in the rate, without
+  // adding it again. Compare with the SAME rate with only the matchup-edge
+  // component removed; apply the SAME rounding and caps for an honest
+  // per-period attribution. This is the WHOLE plan matchup, not just the
+  // newer sequence heuristic. Preserve each historical period on switching.
+  const matchupEdge = num(session.planMatchup?.edge);
+  const baselineFor = clampRange(round2((rate.for - matchupEdge * 0.09) * share), 0, 3);
+  const baselineAgainst = clampRange(round2((rate.against + matchupEdge * 0.06) * share), 0, 3);
+  const tacticalXg = session.planMatchup && Number.isFinite(session.planMatchup.edge)
+    ? {
+        planId: session.activePlanSnapshot?.id || session.selectedTacticId || null,
+        planName: session.activePlanSnapshot?.name || "",
+        edge: matchupEdge,
+        addedFor: round2(segmentXgFor - baselineFor),
+        preventedAgainst: round2(baselineAgainst - segmentXgAgainst),
+        // Honest provenance: edge also includes ordinary plan style factors.
+        sequenceStatus: session.planMatchup.sequences?.[0]?.status || null,
+        basis: "existing_plan_matchup"
+      }
+    : null;
+
   // Minutt for minutt: xG-en blir til enkeltsjanser, og MÅLENE FALLER UT AV
   // SJANSENE. Før ble målene rullet direkte fra xG, og «kampen» var fire tall.
   // Nå ser manageren de samme tallene som fotball: hvem som kom til, når, og
@@ -2209,6 +2230,7 @@ export function advanceMatchClock(session) {
         chances: chances.length,
         scoreAfter: { ...score },
         expectedGoals: { for: segmentXgFor, against: segmentXgAgainst },
+        ...(tacticalXg ? { tacticalXg } : {}),
         note
       }
     ]
