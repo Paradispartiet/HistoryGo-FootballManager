@@ -351,6 +351,40 @@ console.log("\n10. Planbytte og innbytte bruker samme taktiske grunnlag");
       entry.fitBySlot[starter.slotId]?.sourcedMetricBonuses));
 }
 
+// Prove that source-confirmed recognition follows the real player identity
+// through a substitution: old starter's anticipation must not leak to bench.
+{
+  const sourcedStarter = startXI.map((p, i) => i === 9
+    ? { ...p, strengths: ["anticipation"], attributes: {
+      provenance: { anticipation: "belagt" }
+    } } : p);
+  const sourcedBench = benchPlayers.map((p, i) => i === 0
+    ? { ...p, strengths: ["game_reading"], attributes: {
+      provenance: { game_reading: "belagt" }
+    } } : p);
+  const revisedFit = buildTeamFit(sourcedStarter);
+  const session = baseSession({
+    lineupSnapshot: createLineupSnapshot(revisedFit),
+    benchSnapshot: createBenchSnapshot({
+      benchPlayers: sourcedBench, teamFit: revisedFit, tactic, roles
+    })
+  });
+  const outgoing = session.lineupSnapshot[9], incoming = session.benchSnapshot[0];
+  check("start snapshot stores verified recognition skill",
+    outgoing.sourcedRecoverySkills.includes("anticipation"));
+  check("bench snapshot stores its own sourced skill",
+    incoming.sourcedRecoverySkills.includes("game_reading"));
+  const after = applySubstitution(session, {
+    outPlayerId: outgoing.playerId, inPlayerId: incoming.playerId, minute: 62
+  });
+  const arrival = after.lineupSnapshot.find(entry => entry.playerId === incoming.playerId);
+  check("substitute carries own evidence, not departed player's evidence",
+    arrival?.sourcedRecoverySkills?.includes("game_reading") &&
+    !arrival.sourcedRecoverySkills.includes("anticipation"));
+  check("the original XI remains unchanged",
+    session.lineupSnapshot[9].sourcedRecoverySkills.includes("anticipation"));
+}
+
 console.log(`\n${passed}/${passed + failed} sjekker bestått.`);
 if (failed > 0) {
   console.error(`\n✗ Innbytte feilet: ${failed} sjekk(er).`);
