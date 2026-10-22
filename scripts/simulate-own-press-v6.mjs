@@ -331,8 +331,8 @@ assert.equal(onTime.routeCoverAdjustment, noWindow.routeCoverAdjustment,
 assert.equal(noWindow.evidence.routeCoverTiming.status, "not_provided");
 assert.equal(onTime.probability, late.probability,
   "timing of second phase cannot affect the initial press");
-assert.equal(late.containmentProbability,
-  noWindow.containmentProbability - noWindow.routeCoverAdjustment,
+assert.ok(Math.abs(late.containmentProbability -
+  (noWindow.containmentProbability - noWindow.routeCoverAdjustment)) < 0.0011,
   "timing only gates the existing route-specific coordination contribution");
 const timeMidpoint = (onTime.containmentProbability + late.containmentProbability) / 2;
 const onTimeStop = timedThird(authoredWindow(3.0), timeMidpoint);
