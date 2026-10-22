@@ -218,7 +218,7 @@ const PRESS_EXIT_TIMED_ACTIONS = Object.freeze({
 // recognition + repositioning delays, anchored to an optional named cue.
 // No time is inferred from ratings,
 // nominal formations, historical players, or a generic 'fast' tactic tag.
-function recoveryFromAuthoredActions(route, playerIds, sequence) {
+function recoveryFromAuthoredActions(route, playerIds, sequence, lineup) {
   const expected = PRESS_EXIT_TIMED_ACTIONS[route];
   if (!expected || sequence?.route !== route ||
     !Array.isArray(sequence.actions) || sequence.actions.length !== expected.length ||
@@ -243,8 +243,25 @@ function recoveryFromAuthoredActions(route, playerIds, sequence) {
     // Recognition starts when the defender sees a named attacking cue.
     // No cue means the first action, preserving old scenario behaviour.
     const hasCue = Object.prototype.hasOwnProperty.call(response, "triggerActionId");
-    const cueIndex = hasCue
-      ? expected.indexOf(response.triggerActionId) : 0;
+    const hasSourcedCue = Object.prototype.hasOwnProperty.call(response, "sourcedCue");
+    if (hasCue && hasSourcedCue) return null;
+    let cueId = hasCue ? response.triggerActionId : expected[0];
+    if (hasSourcedCue) {
+      const cue = response.sourcedCue;
+      const validSkill = ["anticipation", "game_reading", "defensive_reading"]
+        .includes(cue?.skill);
+      if (!cue || typeof cue !== "object" || Array.isArray(cue) ||
+        !validSkill || !expected.includes(cue.earlyActionId) ||
+        !expected.includes(cue.defaultActionId) ||
+        expected.indexOf(cue.earlyActionId) > expected.indexOf(cue.defaultActionId))
+        return null;
+      const player = Array.isArray(lineup)
+        ? lineup.find(entry => entry?.playerId === id) : null;
+      const sourceConfirmed = Array.isArray(player?.sourcedRecoverySkills) &&
+        player.sourcedRecoverySkills.includes(cue.skill);
+      cueId = sourceConfirmed ? cue.earlyActionId : cue.defaultActionId;
+    }
+    const cueIndex = expected.indexOf(cueId);
     if (cueIndex < 0) return null;
     const elapsedBeforeCue = sequence.actions.slice(0, cueIndex)
       .reduce((sum, action) => sum + action.durationSeconds, 0);
@@ -260,7 +277,7 @@ function recoveryFromAuthoredActions(route, playerIds, sequence) {
 // Recovery timing is OPTIONAL scenario input, never inferred from fitness,
 // player fit or coordinates. A late specialist gates only an ALREADY earned
 // route-specific coordination term; there is no new xG, time bonus or penalty.
-function specialistRecoveryWindow(route, playerIds, timing) {
+function specialistRecoveryWindow(route, playerIds, timing, lineup) {
   const neutral = { status: "not_provided", basis: null,
     attackWindowSeconds: null, latestRecoverySeconds: null, marginSeconds: null };
   if (timing == null) return neutral;
@@ -268,7 +285,7 @@ function specialistRecoveryWindow(route, playerIds, timing) {
   if (!timing || typeof timing !== "object" || Array.isArray(timing)) return invalid;
   const isSequence = timing.basis === "authored_action_sequence";
   const derived = isSequence
-    ? recoveryFromAuthoredActions(route, playerIds, timing) : timing;
+    ? recoveryFromAuthoredActions(route, playerIds, timing, lineup) : timing;
   if (!derived || derived.basis !== "authored_scenario" ||
     derived.route !== route || !finite(derived.attackWindowSeconds) ||
     derived.attackWindowSeconds <= 0 || derived.attackWindowSeconds > 20 ||
@@ -318,7 +335,7 @@ function routeCoverEvidence(opponentRoute, escapeEvidence, lineup, profile, targ
   const weakestCoverFit = Math.min(...scores);
   // Missing authored timing never changes existing gameplay. Fully evidenced
   // late coordination forfeits ONLY the specialist term already earned.
-  const timing = specialistRecoveryWindow(opponentRoute, ids, timingInput);
+  const timing = specialistRecoveryWindow(opponentRoute, ids, timingInput, lineup);
   const specialistAdjustment = clamp((weakestCoverFit - 60) * 0.0015, 0, 0.03);
   return {
     adjustment: timing.status === "late" ? 0 : specialistAdjustment,
