@@ -405,12 +405,40 @@ assert.equal(sequenceTrial(authoredSequence(1.2), sequenceCutoff).status, "conta
 assert.equal(sequenceTrial(authoredSequence(0.2), sequenceCutoff).status, "escaped");
 assert.equal(sequenceTrial(authoredSequence(1.2), sequenceCutoff).xgDeltaAgainst, 0.02);
 assert.equal(sequenceTrial(authoredSequence(0.2), sequenceCutoff).xgDeltaAgainst, 0.06);
+// Same four actions, player strengths and RNG; only the observed action
+// that triggers defender recognition changes the recovery outcome.
+const onFirstCue = Object.fromEntries(centralIds.map(id => [id, {
+  ...sequenceResponse[id], triggerActionId: "receive"
+}]));
+const onLayoffCue = Object.fromEntries(centralIds.map(id => [id, {
+  ...sequenceResponse[id], triggerActionId: "layoff"
+}]));
+const firstCue = sequenceTrial(authoredSequence(1.2, onFirstCue));
+const delayedCue = sequenceTrial(authoredSequence(1.2, onLayoffCue));
+assert.equal(firstCue.evidence.routeCoverTiming.status, "in_time");
+assert.equal(delayedCue.evidence.routeCoverTiming.status, "late");
+assert.equal(delayedCue.evidence.routeCoverTiming.latestRecoverySeconds, 3.2);
+assert.equal(delayedCue.evidence.routeCoverTiming.marginSeconds, -0.1);
+assert.equal(delayedCue.probability, firstCue.probability);
+assert.equal(delayedCue.routeCoverAdjustment, 0);
+const mixedCue = {
+  ...onFirstCue, [centralIds[1]]: onLayoffCue[centralIds[1]]
+};
+assert.equal(sequenceTrial(authoredSequence(1.2, mixedCue))
+  .evidence.routeCoverTiming.status, "late",
+  "one required covering player recognising late loses the coordination term");
 for (const bad of [
   authoredSequence(0),
   authoredSequence(25),
   authoredSequence(0.2, {}),
   authoredSequence(0.2, { ...sequenceResponse,
     [centralIds[0]]: { recognitionDelaySeconds: -1, coverMoveSeconds: 2 } }),
+  authoredSequence(0.2, { ...sequenceResponse,
+    [centralIds[0]]: { ...sequenceResponse[centralIds[0]],
+      triggerActionId: "no_actual_action" } }),
+  authoredSequence(0.2, { ...sequenceResponse,
+    [centralIds[0]]: { ...sequenceResponse[centralIds[0]],
+      triggerActionId: null } }),
   authoredSequence(0.2, sequenceResponse, "switch_play"),
   { ...authoredSequence(0.2), actions: [{ id: "layoff", durationSeconds: 2 }] },
   { ...authoredSequence(0.2), basis: "tracking_observation" }
