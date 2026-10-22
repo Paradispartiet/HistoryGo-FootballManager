@@ -1867,8 +1867,10 @@ check("managergrep og motstanderens svar står i samme spor", () => {
   assert.ok(withMove[0].detail.includes("Press høyere"));
   assert.ok(withMove[0].minute >= 1 && withMove[0].minute <= 90);
 
-  // Motstanderens justering logges automatisk.
-  const leading = { ...session, decisions: [{ effects: { momentumDelta: 3 } }] };
+  // En faktisk ledelse etter avspark, ikke bare positivt momentum ved 0-0,
+  // utløser motstanderens justering og en egen hendelse i minuttloggen.
+  const leading = { ...session, score: { for: 2, against: 1 },
+    decisions: [{ effects: { momentumDelta: 3 } }] };
   const adapted = applyOpponentAdaptation(leading);
   const oppEntries = adapted.minuteLog.filter((e) => e.type === "opponent");
   assert.equal(oppEntries.length, 1);
