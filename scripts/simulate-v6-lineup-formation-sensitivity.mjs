@@ -405,6 +405,12 @@ const cfSwitch = cfTrial("documented_switch_play", withCfOpponent({
 }));
 assert.ok(cfThirdMan.forcedBreak.probability < cfBase.forcedBreak.probability);
 assert.ok(cfSwitch.forcedBreak.probability < cfBase.forcedBreak.probability);
+assert.equal(cfThirdMan.summary.sequences[0].status, "countered",
+  "an explicit third-man outlet must now counter the static chain as well");
+assert.equal(cfSwitch.summary.sequences[0].status, "countered",
+  "documented offensive switch-play must counter the static press chain");
+assert.equal(cfThirdMan.summary.edge, 0);
+assert.equal(cfSwitch.summary.edge, 0);
 assert.equal(cfThirdMan.forcedBreak.evidence.opponentEscapeRoute, "third_man");
 assert.equal(cfSwitch.forcedBreak.evidence.opponentEscapeRoute, "switch_play");
 // These authored offensive routes currently share one probability penalty;
@@ -418,11 +424,48 @@ const cfObservedEscape = cfTrial("live_press_escape_supported", withCfOpponent({
 }));
 assert.equal(cfObservedEscape.summary.sequences[0]?.liveExchange?.status, "countered");
 assert.equal(cfObservedEscape.summary.edge, 0);
-// Static observed pressEscape and v6 authored pressEscapeRoute are different
-// signals today. Record the distinction rather than quietly invent a link.
-assert.equal(cfObservedEscape.forcedBreak.probability,
+// Static and dynamic v6 phases now consume the SAME explicit escape evidence
+// without changing any probabilities, thresholds or historical source data.
+assert.ok(cfObservedEscape.forcedBreak.probability <
   cfBase.forcedBreak.probability,
-  "live coverage observation is not yet the v6 authored route signal");
+  "observed successful press escape must also challenge causal v6 pressing");
+assert.equal(cfObservedEscape.forcedBreak.probability,
+  cfThirdMan.forcedBreak.probability,
+  "observed and authored successful escapes share the existing v6 penalty");
+const cfObservedIsolation = cfTrial("observed_isolation_overrides_authored_route",
+  withCfOpponent({ tacticalBehaviour: {
+    pressEscape: "isolated", pressEscapeRoute: "third_man"
+  }}));
+assert.equal(cfObservedIsolation.summary.sequences[0]?.status, "advantage",
+  "explicit isolation is stronger evidence than a previously authored route");
+assert.equal(cfObservedIsolation.forcedBreak.probability,
+  cfBase.forcedBreak.probability,
+  "explicit lack of route support must not pay an escape penalty");
+
+// Same random draw on either side of the documented escape probability:
+// one available outlet changes the terminal consequence, not only the label.
+const cfSharedDraw = (cfBase.forcedBreak.probability +
+  cfThirdMan.forcedBreak.probability) / 2;
+const replayCf = rival => {
+  const session = kickoff(cfXI, rival);
+  session.id = "same-xi-same-seed-middle-draw";
+  session.score = { for: 1, against: 0 };
+  return resolveOwnPressAgainstOpponent(session, {
+    pressureRoll: () => cfSharedDraw, protectionRoll: () => 0.99
+  });
+};
+const cfRecovered = replayCf(withCfOpponent());
+const cfEscaped = replayCf(withCfOpponent({
+  tacticalBehaviour: { pressEscapeRoute: "third_man" }
+}));
+assert.equal(cfRecovered.status, "regain");
+assert.equal(cfEscaped.status, "escaped");
+assert.equal(cfRecovered.evidence.support.length, 4);
+assert.deepEqual(cfRecovered.evidence.support.map(p => p.playerId),
+  cfEscaped.evidence.support.map(p => p.playerId));
+assert.ok(cfRecovered.xgDeltaFor > cfEscaped.xgDeltaFor);
+assert.ok(cfEscaped.xgDeltaAgainst > cfRecovered.xgDeltaAgainst,
+  "a known exit must expose the same rest defence on a shared causal draw");
 
 const cfMissingResistance = cfTrial("unscouted_resistance", withCfOpponent({
   pressResistance: undefined
@@ -461,4 +504,4 @@ assert.ok(cfHighBacks.forcedBreak.containmentProbability <
 assert.ok(cfHighBacks.forcedBreak.xgDeltaAgainst >=
   cfBase.forcedBreak.xgDeltaAgainst,
   "weak rest defence cannot erase the chance conceded after press failure");
-console.log("OK: full-XI midfield pressure, trigger, resistance, two offensive exits, unknown scouting, role fit and rest-defence risk.");
+console.log("OK: full-XI midfield pressure, matched static/live escape evidence, shared-roll rest-defence trade-off, unknown scouting and role fit.");
