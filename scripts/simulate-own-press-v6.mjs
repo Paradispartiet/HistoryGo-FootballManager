@@ -299,6 +299,68 @@ assert.ok(weakerSpecialists.routeCoverAdjustment > 0);
 assert.equal(replyRun("third_man").counterplay.defensiveReply.evidence
   .supportingPlayerIds.length, 2);
 
+// Optional explicit response times do NOT create fictitious movement.
+// Only the complementing specialists in the SAME XI may earn the existing
+// route-cover term when every defender arrives before the outlet window.
+const centralIds = centralCover.counterplay.defensiveReply.evidence.supportingPlayerIds;
+const arrivalById = Object.fromEntries(centralIds.map(id => [id, 2.5]));
+const authoredWindow = (attackWindowSeconds, defenderArrivalSecondsByPlayerId = arrivalById,
+  route = "third_man", basis = "authored_scenario") => ({
+  basis, route, attackWindowSeconds, defenderArrivalSecondsByPlayerId
+});
+const timedThird = (timing, draw = 0.99, currentLineup = eleven) => resolve(
+  session("midfield_press_trap", {
+    lineupSnapshot: currentLineup,
+    opponent: { ...opponent, tacticalBehaviour: {
+      pressEscapeRoute: "third_man",
+      ...(timing === undefined ? {} : { pressEscapeTiming: timing })
+    }}
+  }), 0.99, draw);
+const onTime = timedThird(authoredWindow(3.0));
+const late = timedThird(authoredWindow(2.0));
+const noWindow = timedThird();
+assert.equal(onTime.evidence.routeCoverTiming.status, "in_time");
+assert.equal(onTime.evidence.routeCoverTiming.basis, "authored_scenario");
+assert.equal(onTime.evidence.routeCoverTiming.marginSeconds, 0.5);
+assert.equal(late.evidence.routeCoverTiming.status, "late");
+assert.equal(late.evidence.routeCoverTiming.marginSeconds, -0.5);
+assert.equal(late.routeCoverAdjustment, 0,
+  "late support cannot claim specialist coordination");
+assert.equal(onTime.routeCoverAdjustment, noWindow.routeCoverAdjustment,
+  "timely support retains existing role-fit bonus, never a new bonus");
+assert.equal(noWindow.evidence.routeCoverTiming.status, "not_provided");
+assert.equal(onTime.probability, late.probability,
+  "timing of second phase cannot affect the initial press");
+assert.ok(Math.abs(late.containmentProbability -
+  (noWindow.containmentProbability - noWindow.routeCoverAdjustment)) < 0.0011,
+  "timing only gates the existing route-specific coordination contribution");
+const timeMidpoint = (onTime.containmentProbability + late.containmentProbability) / 2;
+const onTimeStop = timedThird(authoredWindow(3.0), timeMidpoint);
+const lateEscape = timedThird(authoredWindow(2.0), timeMidpoint);
+assert.equal(onTimeStop.status, "contained");
+assert.equal(lateEscape.status, "escaped");
+assert.equal(onTimeStop.xgDeltaAgainst, 0.02);
+assert.equal(lateEscape.xgDeltaAgainst, 0.06);
+assert.equal(onTimeStop.counterplay.defensiveReply.coverTiming.status, "in_time");
+assert.equal(lateEscape.counterplay.defensiveReply.coverTiming.status, "late");
+for (const invalidTiming of [
+  authoredWindow(0), authoredWindow(99),
+  authoredWindow(2, Object.fromEntries([[centralIds[0], 1]])),
+  authoredWindow(2, { ...arrivalById, [centralIds[1]]: -1 }),
+  authoredWindow(2, arrivalById, "switch_play"),
+  authoredWindow(2, arrivalById, "third_man", "claimed_observation"),
+  { route: "third_man", basis: "authored_scenario",
+    attackWindowSeconds: 2, defenderArrivalSecondsByPlayerId: [] }
+]) {
+  const result = timedThird(invalidTiming);
+  assert.equal(result.evidence.routeCoverTiming.status, "invalid_or_incomplete");
+  assert.equal(result.routeCoverAdjustment, noWindow.routeCoverAdjustment,
+    "invalid / stale / unsupported timing must not make up fast or slow recovery");
+}
+assert.equal(timedThird(authoredWindow(2), 0.99,
+  swapRole("CM", "deep_playmaker")).routeCoverAdjustment, 0,
+  "timing cannot rescue a missing complementary specialist role");
+
 const resistant = resolve(session("high_press_343", {
   opponent: { ...opponent, pressResistance: 90 }
 }), 0.4, 0.4);

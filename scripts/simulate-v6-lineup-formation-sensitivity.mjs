@@ -835,3 +835,40 @@ const onSameDraw = side => resolveOwnPressAgainstOpponent(
 assert.equal(onSameDraw("right").status, "contained");
 assert.equal(onSameDraw("left").status, "escaped");
 console.log("OK: production XI proves directional switch protection with one advanced back.");
+
+
+// Real-XI regression for optional authored recovery timing. Exact player IDs
+// come from the full production lineup snapshot and the engine's matched
+// third-man defensive unit, not a fabricated positional estimate.
+const cfTrackingIds = cfThirdMan.forcedBreak.counterplay.defensiveReply.evidence
+  .supportingPlayerIds;
+const cfTiming = attackWindowSeconds => ({
+  basis: "authored_scenario",
+  route: "third_man",
+  attackWindowSeconds,
+  defenderArrivalSecondsByPlayerId: Object.fromEntries(
+    cfTrackingIds.map(id => [id, 2.5]))
+});
+const cfTimingTrial = (windowSeconds, protectionDraw = 0.99) =>
+  resolveOwnPressAgainstOpponent(kickoff(cfXI, withCfOpponent({
+    tacticalBehaviour: {
+      pressEscapeRoute: "third_man",
+      pressEscapeTiming: cfTiming(windowSeconds)
+    }
+  })), { pressureRoll: () => 0.99, protectionRoll: () => protectionDraw });
+const cfTimely = cfTimingTrial(3.0);
+const cfLate = cfTimingTrial(2.0);
+assert.equal(cfTimely.evidence.routeCoverTiming.status, "in_time");
+assert.equal(cfLate.evidence.routeCoverTiming.status, "late");
+assert.equal(cfLate.routeCoverAdjustment, 0);
+assert.ok(cfTimely.routeCoverAdjustment > 0);
+assert.equal(cfTimely.probability, cfLate.probability);
+assert.equal(cfTimely.evidence.routeCoverFitFloor,
+  cfLate.evidence.routeCoverFitFloor,
+  "recovery timing must not rewrite the real computed player role fit");
+assert.ok(cfTimely.containmentProbability > cfLate.containmentProbability);
+const cfWindowDraw = (cfTimely.containmentProbability +
+  cfLate.containmentProbability) / 2;
+assert.equal(cfTimingTrial(3.0, cfWindowDraw).status, "contained");
+assert.equal(cfTimingTrial(2.0, cfWindowDraw).status, "escaped");
+console.log("OK: real lineup demonstrates only documented specialist recovery timing can gate containment.");
