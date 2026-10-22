@@ -12,7 +12,7 @@ import { evaluatePlanVsOpponent, scorePlanNow } from "../src/football-match-plan
 import { HISTORICAL_OPPONENT_PROFILES } from "../src/football-historical-opponent-profiles.js";
 import { TACTICAL_SEQUENCES } from "../src/football-tactical-sequences.js";
 import { resolveOwnPressAgainstOpponent } from "../src/football-matchday-own-press-v6.js";
-import { derivePlayerAttributes } from "../src/football-player-attributes.js";
+import { derivePlayerAttributes, normalizeAttributeCatalogue } from "../src/football-player-attributes.js";
 import { applyP2SourceClaimsToPlayer, getP2SourceRecord } from "../src/football-player-source-claims-p2.js";
 
 const load = (name) => JSON.parse(readFileSync(new URL("../data/" + name, import.meta.url), "utf8"));
@@ -515,7 +515,7 @@ console.log("OK: full-XI midfield pressure, matched static/live escape evidence,
 // other 648 fixtures, the differing CM skills and their original source URLs
 // come from the existing P2 claim registry (SNL), never from invented ratings.
 const rawCanonicalPlayers = load("football_players.json").players;
-const attributeCatalogue = load("football_attributes.json");
+const attributeCatalogue = normalizeAttributeCatalogue(load("football_attributes.json"));
 const realMidfielderSetup = playerId => {
   const raw = rawCanonicalPlayers.find(p => p.id === playerId);
   assert.ok(raw && raw.naturalPositions.includes("CM"),
