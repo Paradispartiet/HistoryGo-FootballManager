@@ -423,6 +423,21 @@ assert.equal(cfThirdMan.forcedBreak.counterplay.defensiveReply.roleReadiness,
   "supported_by_roles", "canonical pressing CM and balancing six protect central release");
 assert.equal(cfSwitch.forcedBreak.counterplay.defensiveReply.roleReadiness,
   "supported_by_roles", "two support fullbacks provide candidate far-side protection");
+assert.ok(cfThirdMan.forcedBreak.routeCoverAdjustment >= 0 &&
+  cfThirdMan.forcedBreak.routeCoverAdjustment <= 0.03);
+assert.ok(cfSwitch.forcedBreak.routeCoverAdjustment >= 0 &&
+  cfSwitch.forcedBreak.routeCoverAdjustment <= 0.03);
+assert.equal(cfThirdMan.forcedBreak.routeCoverAdjustment,
+  cfThirdMan.forcedBreak.counterplay.defensiveReply.containmentAdjustment);
+assert.equal(cfSwitch.forcedBreak.routeCoverAdjustment,
+  cfSwitch.forcedBreak.counterplay.defensiveReply.containmentAdjustment);
+assert.ok(cfThirdMan.forcedBreak.containmentProbability >=
+  cfBase.forcedBreak.containmentProbability);
+assert.ok(cfSwitch.forcedBreak.containmentProbability >=
+  cfBase.forcedBreak.containmentProbability);
+assert.equal(cfThirdMan.forcedBreak.probability,
+  cfSwitch.forcedBreak.probability,
+  "different defensive counters act AFTER identical first-press probabilities");
 assert.deepEqual(cfSwitch.forcedBreak.counterplay.defensiveReply.evidence
   .farSideBackCandidates.left.length, 1);
 assert.deepEqual(cfSwitch.forcedBreak.counterplay.defensiveReply.evidence
@@ -537,6 +552,10 @@ assert.equal(cfHighSwitch.forcedBreak.counterplay.advancedFullbacks.length, 2);
 assert.equal(cfHighSwitch.forcedBreak.counterplay.defensiveReply.roleReadiness,
   "not_supported_by_checked_roles",
   "both overlapping fullbacks remove documented far-side support roles");
+assert.equal(cfHighSwitch.forcedBreak.routeCoverAdjustment, 0);
+assert.equal(cfHighSwitch.forcedBreak.containmentProbability,
+  cfHighBacks.forcedBreak.containmentProbability,
+  "without specialist cover, same calculated XI must have no hidden route bonus");
 assert.equal(cfHighSwitch.forcedBreak.counterplay.defensiveReply.evidence.restDefenseScore,
   cfHighBacksXI.fit.metrics.restDefenseScore,
   "defensive reply must cite the calculated XI rather than an invented skill score");
@@ -547,7 +566,31 @@ assert.ok(cfHighSwitch.forcedBreak.containmentProbability <
 assert.equal(cfHighSwitch.forcedBreak.xgDeltaAgainst,
   cfHighBacks.forcedBreak.xgDeltaAgainst,
   "same calculated rest defence determines xG risk; no free stacking from a route label");
-console.log("OK: full-XI midfield pressure, matched static/live escape evidence, shared-roll rest-defence trade-off, unknown scouting and role fit.");
+const changedMidRolesXI = buildFixture("4-3-3", cfTrap, {
+  st: "pressing_forward"
+});
+assert.deepEqual(changedMidRolesXI.players.map(p => p.id),
+  cfXI.players.map(p => p.id));
+const weakThirdCover = cfTrial("same_players_without_tracking_midfielder",
+  withCfOpponent({ tacticalBehaviour: { pressEscapeRoute: "third_man" } }),
+  changedMidRolesXI);
+const intactFlankCover = cfTrial("same_players_unrelated_cm_change_switch",
+  withCfOpponent({ tacticalBehaviour: { pressEscapeRoute: "switch_play" } }),
+  changedMidRolesXI);
+assert.equal(weakThirdCover.forcedBreak.counterplay.defensiveReply.roleReadiness,
+  "not_supported_by_checked_roles");
+assert.equal(weakThirdCover.forcedBreak.routeCoverAdjustment, 0,
+  "a holding six alone cannot claim the coordinated tracking-midfielder bonus");
+assert.equal(intactFlankCover.forcedBreak.counterplay.defensiveReply.roleReadiness,
+  "supported_by_roles",
+  "the unchanged fullbacks still offer route-specific far-side protection");
+assert.equal(cfObservedEscape.forcedBreak.routeCoverAdjustment, 0,
+  "generic escape awareness cannot invent specialist defensive coverage");
+assert.equal(cfObservedIsolation.forcedBreak.routeCoverAdjustment, 0,
+  "observed lack of outlet prevents stale offensive route bonuses");
+assert.equal(cfMissingResistance.forcedBreak, null,
+  "unknown opposition resistance still gates the entire causal phase");
+console.log("OK: full-XI midfield pressure, route-dependent downstream cover, matched evidence, rest-defence trade-off, unknown scouting and role fit.");
 
 
 // Two source-audited REAL footballers, compared in the SAME canonical CM
