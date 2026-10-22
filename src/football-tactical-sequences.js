@@ -1,4 +1,4 @@
-import { evaluateLiveTacticalExchange } from "./football-live-tactical-exchange.js";
+import { evaluateLiveTacticalExchange, resolvePressEscapeEvidence } from "./football-live-tactical-exchange.js";
 
 // Four connected tactical actions, an opponent counter and a possible reply.
 // Principles are grounded in FIFA and England Football coaching resources;
@@ -698,7 +698,18 @@ export function evaluateTacticalSequences(tacticId, opponent, tacticalProfile) {
       const traitCountered = ready && counterKnown && matches(strengths, pattern.counterCondition);
       // In-match collective lane coverage or rest-defence is more specific
       // evidence than a static opposition trait. No shape => legacy result.
-      const liveExchange = ready ? evaluateLiveTacticalExchange(pattern, opponent) : null;
+      // A known authored offensive exit and an explicit live observation
+      // represent the same press-bypass mechanism. Never infer an exit from
+      // defensive wideShift or from missing scouting. The more specific
+      // observed "isolated" signal overrides an authored route.
+      const pressExit = ["high_press_343", "midfield_press_trap", "counter_press_recovery"]
+        .includes(pattern.tacticId)
+        ? resolvePressEscapeEvidence(opponent?.tacticalBehaviour) : null;
+      const liveOpponent = pressExit ? {
+        ...opponent,
+        tacticalBehaviour: { ...opponent.tacticalBehaviour, pressEscape: pressExit }
+      } : opponent;
+      const liveExchange = ready ? evaluateLiveTacticalExchange(pattern, liveOpponent) : null;
       const counterEvidenceKnown = counterKnown || Boolean(liveExchange);
       const countered = liveExchange ? liveExchange.status === "countered" : traitCountered;
       return { id: pattern.tacticId, title: pattern.title, phase: pattern.phase,

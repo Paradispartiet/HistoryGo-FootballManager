@@ -73,6 +73,18 @@ export function behaviourForOpponentAdjustment(adjustmentId, opponent) {
   };
 }
 
+// Shared, explicit pressing-escape evidence. A specific observed isolation
+// overrides a more general authored outlet route. Neither missing scouting
+// nor an unknown route is proof that the press can be escaped.
+const AUTHORED_PRESS_ESCAPE_ROUTES = new Set(["third_man", "switch_play", "direct"]);
+export function resolvePressEscapeEvidence(shape) {
+  if (shape?.pressEscape === "supported" || shape?.pressEscape === "isolated") {
+    return shape.pressEscape;
+  }
+  return AUTHORED_PRESS_ESCAPE_ROUTES.has(shape?.pressEscapeRoute)
+    ? "supported" : null;
+}
+
 // First vertical slice of tactical movement/decision resolution. The steps
 // represent interacting positional decisions, NOT observed player coordinates.
 // Countering one dependency blocks the whole chain; four actions are never

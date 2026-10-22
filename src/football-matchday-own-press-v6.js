@@ -1,3 +1,5 @@
+import { resolvePressEscapeEvidence } from "./football-live-tactical-exchange.js";
+
 // Kampmotor v6: own collective pressing versus an opponent's build-up.
 // The outcome of ONE linked chain is priced before period chance generation.
 // FIFA/England Football support the principles, not these game probability values.
@@ -92,9 +94,11 @@ export function resolveOwnPressAgainstOpponent(session, {
   const avgFit = players.reduce((sum, p) => sum + p.matchScore, 0) / players.length;
   const weakestFit = Math.min(...players.map(p => p.matchScore));
   const counter = opponent?.tacticalBehaviour?.pressEscapeRoute;
-  // A specific, authored escape route matters only when opposition scouting
-  // actually indicates it. Unknown behaviour gives no counterclaim.
-  const documentedEscape = ["third_man", "switch_play", "direct"].includes(counter);
+  // Both a known authored outlet and simulated live pressEscape describe
+  // one documented route through the press. "isolated" is stronger direct
+  // evidence than an older route label; unknown data awards no free bypass.
+  const escapeEvidence = resolvePressEscapeEvidence(opponent?.tacticalBehaviour);
+  const documentedEscape = escapeEvidence === "supported";
   const pressProbability = clamp(
     0.53 + (avgFit - 65) * 0.004 +
       (Math.min(...metrics) - 65) * 0.003 +
@@ -147,6 +151,7 @@ export function resolveOwnPressAgainstOpponent(session, {
       opponentTrigger: config.opponentMetric, opponentValue: scenario,
       pressResistance: resistance, transitionThreat: threat,
       opponentEscapeRoute: counter || "unknown",
+      opponentEscapeEvidence: escapeEvidence || "unknown",
       support: players.map(p => ({
         playerId: p.playerId, position: p.position,
         roleId: p.roleId, matchScore: p.matchScore

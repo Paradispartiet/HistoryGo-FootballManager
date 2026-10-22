@@ -12,6 +12,8 @@ import { evaluatePlanVsOpponent, scorePlanNow } from "../src/football-match-plan
 import { HISTORICAL_OPPONENT_PROFILES } from "../src/football-historical-opponent-profiles.js";
 import { TACTICAL_SEQUENCES } from "../src/football-tactical-sequences.js";
 import { resolveOwnPressAgainstOpponent } from "../src/football-matchday-own-press-v6.js";
+import { derivePlayerAttributes, normalizeAttributeCatalogue } from "../src/football-player-attributes.js";
+import { applyP2SourceClaimsToPlayer, getP2SourceRecord } from "../src/football-player-source-claims-p2.js";
 
 const load = (name) => JSON.parse(readFileSync(new URL("../data/" + name, import.meta.url), "utf8"));
 const formations = load("football_formations.json").formations;
@@ -405,6 +407,12 @@ const cfSwitch = cfTrial("documented_switch_play", withCfOpponent({
 }));
 assert.ok(cfThirdMan.forcedBreak.probability < cfBase.forcedBreak.probability);
 assert.ok(cfSwitch.forcedBreak.probability < cfBase.forcedBreak.probability);
+assert.equal(cfThirdMan.summary.sequences[0].status, "countered",
+  "an explicit third-man outlet must now counter the static chain as well");
+assert.equal(cfSwitch.summary.sequences[0].status, "countered",
+  "documented offensive switch-play must counter the static press chain");
+assert.equal(cfThirdMan.summary.edge, 0);
+assert.equal(cfSwitch.summary.edge, 0);
 assert.equal(cfThirdMan.forcedBreak.evidence.opponentEscapeRoute, "third_man");
 assert.equal(cfSwitch.forcedBreak.evidence.opponentEscapeRoute, "switch_play");
 // These authored offensive routes currently share one probability penalty;
@@ -418,11 +426,48 @@ const cfObservedEscape = cfTrial("live_press_escape_supported", withCfOpponent({
 }));
 assert.equal(cfObservedEscape.summary.sequences[0]?.liveExchange?.status, "countered");
 assert.equal(cfObservedEscape.summary.edge, 0);
-// Static observed pressEscape and v6 authored pressEscapeRoute are different
-// signals today. Record the distinction rather than quietly invent a link.
-assert.equal(cfObservedEscape.forcedBreak.probability,
+// Static and dynamic v6 phases now consume the SAME explicit escape evidence
+// without changing any probabilities, thresholds or historical source data.
+assert.ok(cfObservedEscape.forcedBreak.probability <
   cfBase.forcedBreak.probability,
-  "live coverage observation is not yet the v6 authored route signal");
+  "observed successful press escape must also challenge causal v6 pressing");
+assert.equal(cfObservedEscape.forcedBreak.probability,
+  cfThirdMan.forcedBreak.probability,
+  "observed and authored successful escapes share the existing v6 penalty");
+const cfObservedIsolation = cfTrial("observed_isolation_overrides_authored_route",
+  withCfOpponent({ tacticalBehaviour: {
+    pressEscape: "isolated", pressEscapeRoute: "third_man"
+  }}));
+assert.equal(cfObservedIsolation.summary.sequences[0]?.status, "advantage",
+  "explicit isolation is stronger evidence than a previously authored route");
+assert.equal(cfObservedIsolation.forcedBreak.probability,
+  cfBase.forcedBreak.probability,
+  "explicit lack of route support must not pay an escape penalty");
+
+// Same random draw on either side of the documented escape probability:
+// one available outlet changes the terminal consequence, not only the label.
+const cfSharedDraw = (cfBase.forcedBreak.probability +
+  cfThirdMan.forcedBreak.probability) / 2;
+const replayCf = rival => {
+  const session = kickoff(cfXI, rival);
+  session.id = "same-xi-same-seed-middle-draw";
+  session.score = { for: 1, against: 0 };
+  return resolveOwnPressAgainstOpponent(session, {
+    pressureRoll: () => cfSharedDraw, protectionRoll: () => 0.99
+  });
+};
+const cfRecovered = replayCf(withCfOpponent());
+const cfEscaped = replayCf(withCfOpponent({
+  tacticalBehaviour: { pressEscapeRoute: "third_man" }
+}));
+assert.equal(cfRecovered.status, "regain");
+assert.equal(cfEscaped.status, "escaped");
+assert.equal(cfRecovered.evidence.support.length, 4);
+assert.deepEqual(cfRecovered.evidence.support.map(p => p.playerId),
+  cfEscaped.evidence.support.map(p => p.playerId));
+assert.ok(cfRecovered.xgDeltaFor > cfEscaped.xgDeltaFor);
+assert.ok(cfEscaped.xgDeltaAgainst > cfRecovered.xgDeltaAgainst,
+  "a known exit must expose the same rest defence on a shared causal draw");
 
 const cfMissingResistance = cfTrial("unscouted_resistance", withCfOpponent({
   pressResistance: undefined
@@ -440,6 +485,12 @@ const cfLowPress = cfTrial("same_players_without_press_roles",
   withCfOpponent(), cfLowPressXI);
 assert.ok(cfLowPress.info.ownPress < cfBase.info.ownPress);
 assert.equal(cfLowPress.summary.sequences[0]?.status, "unsupported");
+assert.ok(cfLowPress.forcedBreak && cfBase.forcedBreak &&
+  cfLowPress.forcedBreak.probability < cfBase.forcedBreak.probability,
+  "removing pressing roles must reduce causal v6 press success, not merely the static evaluation");
+assert.deepEqual(cfLowPress.forcedBreak.evidence.support.map(p => p.playerId),
+  cfBase.forcedBreak.evidence.support.map(p => p.playerId),
+  "causal role variation must retain the same four distinct pressing players");
 
 // Remove back protection via legal role choices, keeping the exact same
 // player identities and an unchanged opponent. A broken press has a second
@@ -461,4 +512,73 @@ assert.ok(cfHighBacks.forcedBreak.containmentProbability <
 assert.ok(cfHighBacks.forcedBreak.xgDeltaAgainst >=
   cfBase.forcedBreak.xgDeltaAgainst,
   "weak rest defence cannot erase the chance conceded after press failure");
-console.log("OK: full-XI midfield pressure, trigger, resistance, two offensive exits, unknown scouting, role fit and rest-defence risk.");
+console.log("OK: full-XI midfield pressure, matched static/live escape evidence, shared-roll rest-defence trade-off, unknown scouting and role fit.");
+
+
+// Two source-audited REAL footballers, compared in the SAME canonical CM
+// position, with the same other ten control players, roles and match context.
+// This is not a claim that the composite XI ever played together. Unlike the
+// other 648 fixtures, the differing CM skills and their original source URLs
+// come from the existing P2 claim registry (SNL), never from invented ratings.
+const rawCanonicalPlayers = load("football_players.json").players;
+const attributeCatalogue = normalizeAttributeCatalogue(load("football_attributes.json"));
+const realMidfielderSetup = playerId => {
+  const raw = rawCanonicalPlayers.find(p => p.id === playerId);
+  assert.ok(raw && raw.naturalPositions.includes("CM"),
+    "selected source-backed athlete must be a real canonical central midfielder");
+  const record = getP2SourceRecord(raw);
+  assert.ok(record?.source?.startsWith("https://snl.no/"),
+    "historical skill claim must retain its real source URL");
+  const sourced = applyP2SourceClaimsToPlayer(raw);
+  assert.deepEqual(sourced.strengths, record.strengths);
+  const attributes = derivePlayerAttributes(sourced, {
+    catalogue: attributeCatalogue, roles
+  });
+  assert.ok(attributes?.provenance, "canonical sourced attributes required");
+  const livePlayer = { ...sourced, attributes };
+  const control = buildFixture("4-3-3", cfTrap, {
+    st: "pressing_forward", lcm: "pressing_midfielder"
+  });
+  const oldId = control.lineup.lcm.playerId;
+  const players = control.players.filter(p => p.id !== oldId).concat(livePlayer);
+  const lineup = {
+    ...control.lineup,
+    lcm: { playerId: livePlayer.id, roleId: "pressing_midfielder" }
+  };
+  const fit = calculateTeamFit({
+    lineup, formation: control.formation, tactic: cfTrap, players, roles
+  });
+  assert.equal(fit.completeCount, 11);
+  assert.equal(fit.duplicatePlayers.length, 0);
+  assert.ok(fit.assignments.find(a => a.player?.id === playerId)
+    ?.fit?.matchScore > 0, "real player must have calculated role fit");
+  const strength = calculateMatchStrength({
+    teamFit: fit, formation: control.formation
+  });
+  return { ...control, lineup, players, fit, strength, source: record.source };
+};
+const riiseXI = realMidfielderSetup("bjorn_helge_riise");
+const legernesXI = realMidfielderSetup("arne_legernes");
+const riiseContribution = riiseXI.fit.sourcedSkillTendencies.pressScore;
+const legernesContribution = legernesXI.fit.sourcedSkillTendencies.pressScore;
+assert.ok(riiseContribution.players.includes("Bjørn Helge Riise"));
+assert.ok(legernesContribution.players.includes("Arne Legernes"));
+assert.ok(riiseContribution.bonus > legernesContribution.bonus,
+  "SNL-backed work_rate + stamina should provide more press-specific evidence than stamina alone");
+assert.ok(riiseXI.fit.baseMetrics.pressScore >
+  legernesXI.fit.baseMetrics.pressScore,
+  "actual documented pressing skills must change actual calculated team metric");
+const riiseRun = cfTrial("source_backed_bjorn_helge_riise",
+  withCfOpponent(), riiseXI);
+const legernesRun = cfTrial("source_backed_arne_legernes",
+  withCfOpponent(), legernesXI);
+console.log("Real-source midfield contrast: " + JSON.stringify({
+  riise: { source: riiseXI.source, sourcedPressBonus: riiseContribution.bonus,
+    pressScore: riiseRun.info.ownPress,
+    phase: riiseRun.info.matchdayPhase, xg: riiseRun.info.actualXg },
+  legernes: { source: legernesXI.source,
+    sourcedPressBonus: legernesContribution.bonus,
+    pressScore: legernesRun.info.ownPress,
+    phase: legernesRun.info.matchdayPhase, xg: legernesRun.info.actualXg }
+}));
+console.log("OK: two source-backed real CM profiles flow through player-fit, team-fit and the same v6 match phase.");
