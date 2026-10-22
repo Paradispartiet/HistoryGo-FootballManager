@@ -59,6 +59,66 @@ const counter = resolve(session("high_press_343", {
 }), 0.4, 0.4);
 assert.ok(counter.probability < base.probability, "known third-man escape defeats some pressing");
 assert.equal(counter.evidence.opponentEscapeRoute, "third_man");
+// Different known offensive exits must resolve to different *causal* sequences,
+// not one generic press-bypass explanation. No extra xG is awarded per step.
+const knownExit = route => session("midfield_press_trap", {
+  opponent: { ...opponent, tacticalBehaviour: { pressEscapeRoute: route } }
+});
+const three = resolve(knownExit("third_man"), 0.99, 0.99);
+const switchExit = resolve(knownExit("switch_play"), 0.99, 0.99);
+const directExit = resolve(knownExit("direct"), 0.99, 0.99);
+for (const [phase, pathway, channel] of [
+  [three, "third_man", "central_between_lines"],
+  [switchExit, "switch_play", "far_side_wide"],
+  [directExit, "direct", "depth_behind_press"]
+]) {
+  assert.equal(phase.status, "escaped");
+  assert.equal(phase.counterplay?.pathwayId, pathway);
+  assert.equal(phase.evidence.resolvedEscapePathway, pathway);
+  assert.equal(phase.counterplay?.exposedChannel, channel);
+  assert.equal(phase.counterplay?.actions.length, 4);
+  assert.ok(phase.counterplay.actions.every(action => action.result === "completed"));
+  assert.equal(phase.counterplay.basis, "simulated_tactical_hypothesis_v6");
+  assert.equal(phase.xgDeltaAgainst, 0.06, "one terminal concession, not four");
+}
+assert.notDeepEqual(three.counterplay.actions, switchExit.counterplay.actions);
+assert.notEqual(three.cause, switchExit.cause);
+assert.notEqual(switchExit.cause, directExit.cause);
+const thirdPrevented = resolve(knownExit("third_man"), 0, 0);
+assert.equal(thirdPrevented.counterplay.status, "prevented");
+assert.deepEqual(thirdPrevented.counterplay.actions.map(a => a.result),
+  ["interrupted", "not_reached", "not_reached", "not_reached"]);
+const switchContained = resolve(knownExit("switch_play"), 0.99, 0);
+assert.equal(switchContained.counterplay.status, "contained_by_rest_defence");
+assert.equal(switchContained.counterplay.actions[3].result, "contained");
+assert.equal(switchContained.side, null);
+const observedUnknownPath = resolve(session("midfield_press_trap", {
+  opponent: { ...opponent, tacticalBehaviour: { pressEscape: "supported" } }
+}), 0.99, 0.99);
+assert.ok(observedUnknownPath.probability < resolve(session("midfield_press_trap"), 0.99, 0.99).probability);
+assert.equal(observedUnknownPath.counterplay, null,
+  "generic supported outlet must not invent a named four-pass route");
+const isolationOverride = resolve(session("midfield_press_trap", {
+  opponent: { ...opponent, tacticalBehaviour: {
+    pressEscape: "isolated", pressEscapeRoute: "third_man"
+  } }
+}), 0.99, 0.99);
+assert.equal(isolationOverride.counterplay, null);
+assert.equal(isolationOverride.evidence.resolvedEscapePathway, "unknown");
+const highFullbacksSwitch = resolve(session("midfield_press_trap", {
+  opponent: knownExit("switch_play").opponent,
+  lineupSnapshot: lineup.map(player => ["LB", "RB"].includes(player.position)
+    ? { ...player, roleId: "overlapping_fullback" } : player)
+}), 0.99, 0.99);
+assert.equal(highFullbacksSwitch.counterplay.advancedFullbacks.length, 2);
+assert.equal(switchExit.counterplay.advancedFullbacks.length, 0);
+assert.equal(highFullbacksSwitch.containmentProbability,
+  switchExit.containmentProbability,
+  "advanced fullback evidence is not a second hidden defensive penalty");
+const annotatedSwitch = annotateOwnPressChances([
+  { side: "against", quality: 0.1 }
+], switchExit);
+assert.equal(annotatedSwitch[0].tacticalMoment.counterplay.pathwayId, "switch_play");
 const resistant = resolve(session("high_press_343", {
   opponent: { ...opponent, pressResistance: 90 }
 }), 0.4, 0.4);
