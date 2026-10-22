@@ -187,11 +187,41 @@ function defensiveReplyForPressExit(route, lineup, profile, outcome) {
       restDefenseScore: finite(profile?.restDefenseScore) ? profile.restDefenseScore : null
     },
     basis: "documented_lineup_roles_and_calculated_team_metrics",
+    // Press probability is unchanged; only downstream containment is conditional.
     probabilityAdjustment: 0
   };
 }
 
-function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup, profile) {
+// Stage two only: a documented offensive escape meets the *matching*
+// defensive reply. The small additional coverage term is a bounded GAME
+// HYPOTHESIS, not an empirically calibrated percentage. It is earned only by
+// known, correct complementary roles with a verified real match-fit score.
+// Unknown scouting/fit gets 0, never a fictitious weakness or free bonus.
+// Existing aggregate rest-defence/balance metrics remain the base probability;
+// this additional term measures route-specific COORDINATION, once per phase.
+function routeCoverEvidence(opponentRoute, escapeEvidence, lineup, profile) {
+  const neutral = { adjustment: 0, weakestCoverFit: null };
+  if (escapeEvidence !== "supported" ||
+    !Object.prototype.hasOwnProperty.call(PRESS_EXIT_DEFENCES, opponentRoute))
+    return neutral;
+  const reply = defensiveReplyForPressExit(opponentRoute, lineup, profile, "preflight");
+  if (reply?.roleReadiness !== "supported_by_roles") return neutral;
+  const ids = reply.evidence.supportingPlayerIds;
+  if (!ids.length) return neutral;
+  const scores = ids.map(id => lineup.find(player =>
+    player?.playerId === id && player.matchFitKnown === true &&
+    finite(player.matchScore))?.matchScore);
+  if (scores.length !== ids.length || !scores.every(finite)) return neutral;
+  const weakestCoverFit = Math.min(...scores);
+  // Maximum +0.03 containment for complete and well-fitted specialist cover.
+  // No modifier to the probability of winning the first press and no new xG.
+  return {
+    adjustment: clamp((weakestCoverFit - 60) * 0.0015, 0, 0.03),
+    weakestCoverFit
+  };
+}
+
+function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup, profile, cover) {
   // An explicit observation of isolation overrides an older authored route.
   // A generic 'supported' observation with no named route must not invent one.
   if (escapeEvidence !== "supported" ||
@@ -216,7 +246,11 @@ function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup,
     // This is descriptive role evidence. Rest-defence already affects the
     // containment probability; never count these advanced backs a second time.
     advancedFullbacks,
-    defensiveReply: defensiveReplyForPressExit(opponentRoute, lineup, profile, outcome),
+    defensiveReply: {
+      ...defensiveReplyForPressExit(opponentRoute, lineup, profile, outcome),
+      containmentAdjustment: round3(cover.adjustment),
+      weakestCoverFit: cover.weakestCoverFit
+    },
     containedCause: pathway.containedCause,
     escapedCause: pathway.escapedCause
   };
@@ -286,18 +320,21 @@ export function resolveOwnPressAgainstOpponent(session, {
   if (!finite(pressResult)) return null;
   const regained = clamp(pressResult, 0, 0.999999999) < pressProbability;
   // Rest defence is evaluated only if the opponent gets beyond the press.
+  const cover = routeCoverEvidence(counter, escapeEvidence,
+    session.lineupSnapshot, profile);
   const containment = clamp(
     0.48 + (restDefense - 65) * 0.005 +
       (balance - 65) * 0.002 +
       (avgFit - 65) * 0.001 -
-      (threat - 70) * 0.004, 0.12, 0.88
+      (threat - 70) * 0.004 +
+      cover.adjustment, 0.12, 0.88
   );
   const protection = regained ? null : Number(protectionRoll());
   if (!regained && !finite(protection)) return null;
   const contained = !regained && clamp(protection, 0, 0.999999999) < containment;
   const outcome = regained ? "regain" : contained ? "contained" : "escaped";
   const counterplay = counterplayForPressExit(counter, escapeEvidence,
-    outcome, session.lineupSnapshot, profile);
+    outcome, session.lineupSnapshot, profile, cover);
   const chanceSide = regained ? "for" : outcome === "escaped" ? "against" : null;
   const steps = config.steps.map((action, i) => ({
     action,
@@ -312,6 +349,7 @@ export function resolveOwnPressAgainstOpponent(session, {
     planId: id, route, status: outcome, side: chanceSide,
     probability: round3(pressProbability),
     containmentProbability: round3(containment),
+    routeCoverAdjustment: round3(cover.adjustment),
     xgDeltaFor: regained ? config.xgFor : 0,
     // The terminal outcome owns this single risk; no separate bonus for
     // stage two or for each player in the pressing unit.
@@ -332,6 +370,7 @@ export function resolveOwnPressAgainstOpponent(session, {
       opponentEscapeRoute: counter || "unknown",
       opponentEscapeEvidence: escapeEvidence || "unknown",
       resolvedEscapePathway: counterplay?.pathwayId || "unknown",
+      routeCoverFitFloor: cover.weakestCoverFit,
       support: players.map(p => ({
         playerId: p.playerId, position: p.position,
         roleId: p.roleId, matchScore: p.matchScore

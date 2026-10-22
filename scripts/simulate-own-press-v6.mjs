@@ -157,6 +157,12 @@ for (const phase of [centralCover, flankCover, depthCover]) {
   assert.equal(phase.counterplay.defensiveReply.actions.length, 4);
   assert.equal(phase.counterplay.defensiveReply.actions[3].result, "breached");
   assert.equal(phase.counterplay.defensiveReply.probabilityAdjustment, 0);
+  assert.ok(phase.routeCoverAdjustment > 0 && phase.routeCoverAdjustment <= 0.03,
+    "known role-fitting defensive coordination should influence containment");
+  assert.equal(phase.counterplay.defensiveReply.containmentAdjustment,
+    phase.routeCoverAdjustment);
+  assert.equal(phase.counterplay.defensiveReply.weakestCoverFit, 75);
+  assert.equal(phase.evidence.routeCoverFitFloor, 75);
   assert.equal(phase.xgDeltaAgainst, 0.06);
 }
 assert.notDeepEqual(centralCover.counterplay.defensiveReply.actions,
@@ -178,12 +184,49 @@ assert.equal(replyRun("third_man", swapRole("LB", "overlapping_fullback"))
 const withoutHoldingSix = replyRun("direct", swapRole("DM", "deep_playmaker"));
 assert.equal(withoutHoldingSix.counterplay.defensiveReply.roleReadiness,
   "not_supported_by_checked_roles");
-for (const altered of [withoutPressMid, withHighLeftBack, withoutHoldingSix]) {
-  assert.equal(altered.probability, centralCover.probability,
-    "non-calibrated coverage metadata must not alter press probability");
-  assert.equal(altered.containmentProbability, centralCover.containmentProbability,
-    "role-readiness metadata must not double-charge precomputed rest defence");
+// Only the RELEVANT defensive pairing changes stage-two containment.
+// The first pressing chance and terminal xG size stay untouched.
+for (const [altered, normal] of [
+  [withoutPressMid, centralCover],
+  [withHighLeftBack, flankCover],
+  [withoutHoldingSix, depthCover]
+]) {
+  assert.equal(altered.probability, normal.probability,
+    "route-specific defensive roles must not rewrite initial press outcome");
+  assert.equal(altered.routeCoverAdjustment, 0,
+    "a missing complementary role cannot claim specialist cover");
+  assert.ok(normal.routeCoverAdjustment > 0);
+  assert.ok(altered.containmentProbability < normal.containmentProbability,
+    "missing route-specific cover must matter to downstream containment");
+  assert.equal(altered.xgDeltaAgainst, normal.xgDeltaAgainst,
+    "one terminal xG event; route readiness must not pay xG again");
 }
+assert.equal(replyRun("switch_play", swapRole("CM", "deep_playmaker"))
+  .containmentProbability, flankCover.containmentProbability,
+  "removing a central runner should not weaken unchanged far-side cover");
+assert.equal(replyRun("third_man", swapRole("LB", "overlapping_fullback"))
+  .containmentProbability, centralCover.containmentProbability,
+  "moving a back high cannot erase verified central-cover pairing");
+assert.equal(replyRun("direct", swapRole("CM", "deep_playmaker"))
+  .containmentProbability, depthCover.containmentProbability,
+  "uninvolved CM role must not influence depth-control synergy");
+// Same pressure roll yields a broken press in both versions; on the exact same
+// protection draw a complementary role changes the terminal phase from
+// conceded chance to contained. That is causal gameplay, not a new label.
+const midpoint = (centralCover.containmentProbability +
+  withoutPressMid.containmentProbability) / 2;
+const protectionDraw = currentLineup => resolve(session("midfield_press_trap", {
+  opponent: knownExit("third_man").opponent, lineupSnapshot: currentLineup
+}), 0.99, midpoint);
+const defended = protectionDraw(eleven);
+const undeterred = protectionDraw(swapRole("CM", "deep_playmaker"));
+assert.equal(defended.status, "contained");
+assert.equal(undeterred.status, "escaped");
+assert.equal(defended.xgDeltaAgainst, 0.02);
+assert.equal(undeterred.xgDeltaAgainst, 0.06);
+assert.equal(defended.counterplay.defensiveReply.simulatedResult, "stopped_attack");
+assert.equal(undeterred.counterplay.defensiveReply.simulatedResult,
+  "could_not_stop_attack");
 const unknownCover = replyRun("switch_play", eleven.map(player =>
   ({ ...player, matchFitKnown: false })));
 assert.equal(unknownCover, null,
@@ -192,6 +235,16 @@ const unnamedRoles = replyRun("switch_play", eleven.map(player =>
   ({ ...player, roleId: "unverified_role" })));
 assert.equal(unnamedRoles.counterplay.defensiveReply.roleReadiness, "unknown",
   "unverified role vocabulary must not imply specific defensive weakness");
+assert.equal(unnamedRoles.routeCoverAdjustment, 0);
+assert.equal(observedUnknownPath.routeCoverAdjustment, 0,
+  "generic supported escape cannot invent specialist cover");
+assert.equal(isolationOverride.routeCoverAdjustment, 0,
+  "explicit observed isolation overrides old labelled offensive exit");
+const weakerSpecialists = replyRun("third_man", eleven.map(player =>
+  ["DM", "CM"].includes(player.position) ? { ...player, matchScore: 63 } : player));
+assert.ok(weakerSpecialists.routeCoverAdjustment < centralCover.routeCoverAdjustment,
+  "specialist cover must reflect actual role-match fit, not role labels alone");
+assert.ok(weakerSpecialists.routeCoverAdjustment > 0);
 assert.equal(replyRun("third_man").counterplay.defensiveReply.evidence
   .supportingPlayerIds.length, 2);
 
