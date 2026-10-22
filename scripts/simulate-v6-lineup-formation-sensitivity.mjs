@@ -419,6 +419,14 @@ assert.equal(cfThirdMan.forcedBreak.counterplay.pathwayId, "third_man");
 assert.equal(cfThirdMan.forcedBreak.counterplay.exposedChannel, "central_between_lines");
 assert.equal(cfSwitch.forcedBreak.counterplay.pathwayId, "switch_play");
 assert.equal(cfSwitch.forcedBreak.counterplay.exposedChannel, "far_side_wide");
+assert.equal(cfThirdMan.forcedBreak.counterplay.defensiveReply.roleReadiness,
+  "supported_by_roles", "canonical pressing CM and balancing six protect central release");
+assert.equal(cfSwitch.forcedBreak.counterplay.defensiveReply.roleReadiness,
+  "supported_by_roles", "two support fullbacks provide candidate far-side protection");
+assert.deepEqual(cfSwitch.forcedBreak.counterplay.defensiveReply.evidence
+  .farSideBackCandidates.left.length, 1);
+assert.deepEqual(cfSwitch.forcedBreak.counterplay.defensiveReply.evidence
+  .farSideBackCandidates.right.length, 1);
 assert.notDeepEqual(cfThirdMan.forcedBreak.counterplay.actions,
   cfSwitch.forcedBreak.counterplay.actions,
   "same XI and random draw must yield distinct third-man and far-side causal explanations");
@@ -526,6 +534,12 @@ const cfHighSwitch = cfTrial("same_players_higher_backs_switch_play",
   withCfOpponent({ tacticalBehaviour: { pressEscapeRoute: "switch_play" } }), cfHighBacksXI);
 assert.equal(cfHighSwitch.forcedBreak.counterplay.pathwayId, "switch_play");
 assert.equal(cfHighSwitch.forcedBreak.counterplay.advancedFullbacks.length, 2);
+assert.equal(cfHighSwitch.forcedBreak.counterplay.defensiveReply.roleReadiness,
+  "not_supported_by_checked_roles",
+  "both overlapping fullbacks remove documented far-side support roles");
+assert.equal(cfHighSwitch.forcedBreak.counterplay.defensiveReply.evidence.restDefenseScore,
+  cfHighBacksXI.fit.metrics.restDefenseScore,
+  "defensive reply must cite the calculated XI rather than an invented skill score");
 assert.equal(cfSwitch.forcedBreak.counterplay.advancedFullbacks.length, 0);
 assert.ok(cfHighSwitch.forcedBreak.containmentProbability <
   cfSwitch.forcedBreak.containmentProbability,
