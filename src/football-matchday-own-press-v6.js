@@ -47,6 +47,82 @@ const ROUTES = Object.freeze({
     xgFor: 0.08
   }
 });
+// Counterplay is a second, route-specific four-action chain. The named
+// mechanisms are tactical hypotheses, not observed passes or positional data.
+// Preserve the existing probabilistic model until route-specific effects are
+// separately falsified; this layer records *which* space is attacked and what
+// prevents or completes the outlet, without awarding a second xG event.
+// Third-player: first pass, lay-off, blind-side run, through pass (FIFA).
+// Switch: attract pressure, release, weak-side receiver, exploit far flank (FIFA).
+const PRESS_EXIT_PATHWAYS = Object.freeze({
+  third_man: Object.freeze({
+    label: "Tredjemann gjennom midtbanen",
+    exposedChannel: "central_between_lines",
+    actions: Object.freeze([
+      "Første pasning finner en mottaker under sentralt press",
+      "Mottakeren legger av til en støttepasning bak presslinjen",
+      "Tredjemann tar et timet løp utenfor markeringen",
+      "Neste pasning finner tredjemann i rommet bak midtbanen"
+    ]),
+    containedCause: "Motstanderens avlegg og tredjemannsløp bryter midtbanepresset, men sikringen fanger løperen.",
+    escapedCause: "Motstanderen bruker avlegg og tredjemannsløp til å angripe rommet bak midtbanepresset."
+  }),
+  switch_play: Object.freeze({
+    label: "Sideskift til motsatt kant",
+    exposedChannel: "far_side_wide",
+    actions: Object.freeze([
+      "Motstanderen samler ball og støtte på én side og trekker presset dit",
+      "En bakover- eller tverrpasning frigjør tid til å vende",
+      "Et raskt sideskift finner mottaker på motsatt side",
+      "Mottakeren angriper ytre korridor før sikringen rekker over"
+    ]),
+    containedCause: "Motstanderen vender spillet forbi ballsidepresset, men restforsvaret dekker den motsatte kanten.",
+    escapedCause: "Motstanderen vender raskt fra ballside til motsatt kant og angriper rommet bak sidesikringen."
+  }),
+  direct: Object.freeze({
+    label: "Direkte utspill bak presset",
+    exposedChannel: "depth_behind_press",
+    actions: Object.freeze([
+      "Ballfører leser pressleddet og søker direkte pasning",
+      "Laget spiller tidlig over eller gjennom første pressledd",
+      "Fremre mottaker tar imot bak pressutløseren",
+      "Støtteløpet angriper rommet før laget rekker å reorganisere"
+    ]),
+    containedCause: "Motstanderen går direkte forbi første pressledd, men restforsvaret kontrollerer mottakeren.",
+    escapedCause: "Motstanderen spiller direkte bak pressleddet og angriper rommet før sikringen er på plass."
+  })
+});
+
+function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup) {
+  // An explicit observation of isolation overrides an older authored route.
+  // A generic 'supported' observation with no named route must not invent one.
+  if (escapeEvidence !== "supported" ||
+    !Object.prototype.hasOwnProperty.call(PRESS_EXIT_PATHWAYS, opponentRoute)) return null;
+  const pathway = PRESS_EXIT_PATHWAYS[opponentRoute];
+  const advancedFullbacks = Array.isArray(lineup) && opponentRoute === "switch_play"
+    ? lineup.filter(player => ["LB", "RB"].includes(player.position) &&
+        player.roleId === "overlapping_fullback")
+      .map(player => player.playerId) : [];
+  return {
+    pathwayId: opponentRoute, label: pathway.label,
+    exposedChannel: pathway.exposedChannel,
+    basis: "simulated_tactical_hypothesis_v6",
+    status: outcome === "regain" ? "prevented" :
+      outcome === "contained" ? "contained_by_rest_defence" : "progressed",
+    actions: pathway.actions.map((action, index) => ({
+      action, result: outcome === "regain"
+        ? index === 0 ? "interrupted" : "not_reached"
+        : index === pathway.actions.length - 1 && outcome === "contained"
+          ? "contained" : "completed"
+    })),
+    // This is descriptive role evidence. Rest-defence already affects the
+    // containment probability; never count these advanced backs a second time.
+    advancedFullbacks,
+    containedCause: pathway.containedCause,
+    escapedCause: pathway.escapedCause
+  };
+}
+
 const finite = n => typeof n === "number" && Number.isFinite(n);
 const clamp = (n, low, high) => Math.max(low, Math.min(high, n));
 const round3 = n => Math.round(n * 1000) / 1000;
@@ -121,6 +197,8 @@ export function resolveOwnPressAgainstOpponent(session, {
   if (!regained && !finite(protection)) return null;
   const contained = !regained && clamp(protection, 0, 0.999999999) < containment;
   const outcome = regained ? "regain" : contained ? "contained" : "escaped";
+  const counterplay = counterplayForPressExit(counter, escapeEvidence,
+    outcome, session.lineupSnapshot);
   const chanceSide = regained ? "for" : outcome === "escaped" ? "against" : null;
   const steps = config.steps.map((action, i) => ({
     action,
@@ -142,16 +220,19 @@ export function resolveOwnPressAgainstOpponent(session, {
       restDefense >= 70 ? 0.06 : 0.12,
     cause: regained ? config.regain :
       contained
-        ? "Motstanderen spiller seg ut av første press, men restforsvaret stanser overgangen."
-        : documentedEscape
-          ? "Motstanderen bruker dokumentert utvei fra presset; bakre sikring blir utfordret."
-          : "Første pressledd brytes og restforsvaret rekker ikke å stenge neste rom.",
-    steps,
+        ? counterplay?.containedCause ||
+          "Motstanderen spiller seg ut av første press, men restforsvaret stanser overgangen."
+        : counterplay?.escapedCause ||
+          (documentedEscape
+            ? "Motstanderen bruker dokumentert utvei fra presset; bakre sikring blir utfordret."
+            : "Første pressledd brytes og restforsvaret rekker ikke å stenge neste rom."),
+    steps, counterplay,
     evidence: {
       opponentTrigger: config.opponentMetric, opponentValue: scenario,
       pressResistance: resistance, transitionThreat: threat,
       opponentEscapeRoute: counter || "unknown",
       opponentEscapeEvidence: escapeEvidence || "unknown",
+      resolvedEscapePathway: counterplay?.pathwayId || "unknown",
       support: players.map(p => ({
         playerId: p.playerId, position: p.position,
         roleId: p.roleId, matchScore: p.matchScore
@@ -177,7 +258,7 @@ export function annotateOwnPressChances(chances, phase) {
       status: won ? "advantage" : "countered", side: phase.side,
       keyAction: phase.steps.find(step => step.result === "failed")?.action ||
         phase.steps[phase.steps.length - 1]?.action,
-      cause: phase.cause, steps: phase.steps,
+      cause: phase.cause, steps: phase.steps, counterplay: phase.counterplay || null,
       observed: false, basis: "simulated_before_chances_v6",
       xgDelta: won ? phase.xgDeltaFor : phase.xgDeltaAgainst
     }
