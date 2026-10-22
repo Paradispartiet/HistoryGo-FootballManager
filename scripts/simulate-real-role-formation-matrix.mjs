@@ -33,7 +33,7 @@ const overrides = {
   press: { ST: "pressing_forward", DM: "pressing_midfielder", CM: "pressing_midfielder", AM: "pressing_midfielder" },
   depth: { ST: "channel_runner", LW: "wide_dribbler", RW: "wide_dribbler" },
   width: { LB: "overlapping_fullback", RB: "overlapping_fullback", WB: "overlapping_fullback",
-    DM: "regista", LW: "wide_dribbler", RW: "wide_dribbler" },
+    DM: "regista", CM: "deep_playmaker", LW: "wide_dribbler", RW: "wide_dribbler" },
   build_up: { GK: "sweeperkeeper", CB: "ball_playing_centre_back",
     DM: "deep_playmaker", CM: "deep_playmaker" }
 };
