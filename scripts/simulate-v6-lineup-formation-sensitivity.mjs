@@ -886,13 +886,20 @@ const cfSequence = (finalPassSeconds) => ({
   defenderResponsesByPlayerId: Object.fromEntries(cfTrackingIds.map(id =>
     [id, { recognitionDelaySeconds: 0.4, coverMoveSeconds: 2.1 }]))
 });
-const cfSequenceTrial = finalPassSeconds =>
-  resolveOwnPressAgainstOpponent(kickoff(cfXI, withCfOpponent({
+const cfSequenceTrial = (finalPassSeconds, triggeredOn = null) => {
+  const sequence = cfSequence(finalPassSeconds);
+  if (triggeredOn) sequence.defenderResponsesByPlayerId =
+    Object.fromEntries(cfTrackingIds.map(id => [id, {
+      recognitionDelaySeconds: 0.4, coverMoveSeconds: 2.1,
+      triggerActionId: triggeredOn
+    }]));
+  return resolveOwnPressAgainstOpponent(kickoff(cfXI, withCfOpponent({
     tacticalBehaviour: {
       pressEscapeRoute: "third_man",
-      pressEscapeActionSequence: cfSequence(finalPassSeconds)
+      pressEscapeActionSequence: sequence
     }
   })), { pressureRoll: () => 0.99, protectionRoll: () => 0.99 });
+};
 const cfSequenceOnTime = cfSequenceTrial(1.2);
 const cfSequenceTooLate = cfSequenceTrial(0.2);
 assert.equal(cfSequenceOnTime.evidence.routeCoverTiming.basis, "authored_action_sequence");
@@ -902,4 +909,11 @@ assert.equal(cfSequenceOnTime.probability, cfSequenceTooLate.probability);
 assert.equal(cfSequenceOnTime.evidence.routeCoverFitFloor,
   cfSequenceTooLate.evidence.routeCoverFitFloor);
 assert.ok(cfSequenceOnTime.containmentProbability > cfSequenceTooLate.containmentProbability);
-console.log("OK: production XI consumes a documented four-action recovery timeline.");
+const cfRecognitionEarly = cfSequenceTrial(1.2, "receive");
+const cfRecognitionLate = cfSequenceTrial(1.2, "layoff");
+assert.equal(cfRecognitionEarly.evidence.routeCoverTiming.status, "in_time");
+assert.equal(cfRecognitionLate.evidence.routeCoverTiming.status, "late");
+assert.equal(cfRecognitionEarly.probability, cfRecognitionLate.probability);
+assert.ok(cfRecognitionEarly.containmentProbability >
+  cfRecognitionLate.containmentProbability);
+console.log("OK: production XI consumes a four-action timeline and cue-specific delay.");
