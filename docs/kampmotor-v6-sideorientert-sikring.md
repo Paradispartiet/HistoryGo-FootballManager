@@ -42,3 +42,40 @@ Kun for `tacticalBehaviour.pressEscapeRoute = "switch_play"` kan `tacticalBehavi
 Dette er **rolle- og retningsspesifikk** sikring, ikke posisjonssporing i sanntid. For realistisk forskyvning må motoren i en senere versjon ha kildebelagt informasjon om ballside, faktisk avstand, bevegelsestid, pressutløser, antall støtteledd og forflytning over tid. Uten slike data skal motoren ikke utgi rolleetiketter for å være koordinater.
 
 Koeffisienten og grensene er testbare spilldesignhypoteser, ikke empirisk kalibrert effekt fra kampdata.
+
+
+## Dokumentert reaksjons- og forskyvningsvindu (neste fase)
+
+En forsvarer kan ha riktig sikringsrolle, men likevel komme for sent til rommet når motstanderen har spilt gjennom første press. Dette bygger på *covering* (riktig avstand/vinkel før gjennombruddet) og *recovering* (forflytning tilbake etter gjennombruddet). FIFA og England Football fremhever at forsinkelse av ballføreren og organisert returløp gir lagkameratene nødvendig tid til å sikre rommene.
+
+- [England Football: What is covering and recovering? (2023)](https://learn.englandfootball.com/articles-and-resources/coaching/resources/2023/What-is-covering-and-recovering)
+- [FIFA Training Centre: Abdallah Idrissi – Recovering shape in defensive transitions (2022)](https://www.fifatrainingcentre.com/en/practice/elite-sessions/transition-to-defending/defensive-transitions.php)
+- [England Football: How to defend like England – transition](https://www.thefa.com/bootroom/resources/coaching/how-to-defend-like-england-transition)
+
+**Datakontrakt:** Dette er frivillig, eksplisitt scenariodata, ikke automatiske tidsestimater. Når `pressEscapeRoute` er en støttet `third_man`, `switch_play` eller `direct`-rute, kan scenarioet oppgi:
+
+```js
+tacticalBehaviour: {
+  pressEscapeRoute: "third_man",
+  pressEscapeTiming: {
+    basis: "authored_scenario",
+    route: "third_man",
+    attackWindowSeconds: 3.0,
+    defenderArrivalSecondsByPlayerId: {
+      "known-balancing-six-id": 2.1,
+      "known-pressing-midfielder-id": 2.5
+    }
+  }
+}
+```
+
+* **Tilgjengelig tid** starter når første press er brutt og slutter når motstanderens neste angrepshandling når den eksponerte korridoren. Det er *scenariopåstander*, ikke målinger fra en tracker.
+* **Sikringens ankomsttid** må gis eksplisitt for **hver** relevant spiller-ID i det aktuelle defensive rolleparet. Vi bruker den senest ankomne av spillerne som må samarbeide. Ukjent eller ugyldig verdi, feil rute, feil datagrunnlag eller manglende spiller-ID gir tilstanden `invalid_or_incomplete`; hele pressberegningen forblir ellers som før.
+* **Innenfor tidsvinduet:** Eksisterende rollebasert sikringsbonus beholdes; ingen tidsbonus legges til.
+* **For sent:** Bare den eksisterende spesialistjusteringen (maks 3 prosentpoeng) faller bort. Lagets beregnede `restDefenseScore` og `balanceScore` forblir intakt.
+* **Uten tidspunkt:** Oppførselen fra #503 beholdes nøyaktig. Ukjente data fortolkes verken som rask eller treg respons.
+* **Ingen dobbeltelling:** Ingen endring i første pressfase, ingen ekstra xG for en sen spiller eller den gjenstående samhandlingskjeden.
+
+`evidence.routeCoverTiming` og `counterplay.defensiveReply.coverTiming` lagrer `status` (`not_provided`, `invalid_or_incomplete`, `in_time`, `late` eller `not_applicable`), `basis`, tilgjengelig tid, seneste ankomst og differansen. Dette er **beregnet scenarioutfall**, ikke observert løpshastighet eller romlig posisjon.
+
+**Testbar antakelse:** Den svakeste/seneste nødvendige deltakeren styrer om en koordinert spesialistkjede blir klar før angrepet. Den binære tidsporten er spilldesign, ikke empirisk kalibrert sannsynlighet. En framtidig dynamisk modell må kjenne faktiske spillerposisjoner, hastighet, pasningstidspunkter og motstanderens valg før den kan erstatte dette med simulerte bevegelser.
