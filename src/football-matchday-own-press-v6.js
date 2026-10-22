@@ -199,6 +199,41 @@ function defensiveReplyForPressExit(route, lineup, profile, outcome, targetFlank
   };
 }
 
+// Recovery timing is an OPTIONAL authored-scenario input, never inferred from
+// positions, player fit, or tactical labels. All complementary specialists must
+// reach their cover positions before the documented attacking outlet deadline.
+// The timing result only GATES the existing <=0.03 coordination bonus: it
+// cannot penalise generic rest defence, alter initial pressure or add xG.
+// Missing / untrusted timing data preserves the previous baseline exactly.
+function specialistRecoveryWindow(route, playerIds, timing) {
+  const neutral = { status: "not_provided", basis: null,
+    attackWindowSeconds: null, latestRecoverySeconds: null, marginSeconds: null };
+  if (timing == null) return neutral;
+  const invalid = { ...neutral, status: "invalid_or_incomplete" };
+  if (!timing || typeof timing !== "object" || Array.isArray(timing) ||
+    timing.basis !== "authored_scenario" || timing.route !== route ||
+    !finite(timing.attackWindowSeconds) ||
+    timing.attackWindowSeconds <= 0 || timing.attackWindowSeconds > 20 ||
+    !timing.defenderArrivalSecondsByPlayerId ||
+    typeof timing.defenderArrivalSecondsByPlayerId !== "object" ||
+    Array.isArray(timing.defenderArrivalSecondsByPlayerId) ||
+    !Array.isArray(playerIds) || playerIds.length === 0) return invalid;
+  const arrival = playerIds.map(id =>
+    Object.prototype.hasOwnProperty.call(timing.defenderArrivalSecondsByPlayerId, id)
+      ? timing.defenderArrivalSecondsByPlayerId[id] : null);
+  if (!arrival.every(time => finite(time) && time >= 0 && time <= 20))
+    return invalid;
+  const latest = Math.max(...arrival);
+  const margin = timing.attackWindowSeconds - latest;
+  return {
+    status: margin >= 0 ? "in_time" : "late",
+    basis: "authored_scenario",
+    attackWindowSeconds: timing.attackWindowSeconds,
+    latestRecoverySeconds: latest,
+    marginSeconds: Math.round(margin * 1000) / 1000
+  };
+}
+
 // Stage two only: a documented offensive escape meets the *matching*
 // defensive reply. The small additional coverage term is a bounded GAME
 // HYPOTHESIS, not an empirically calibrated percentage. It is earned only by
@@ -206,8 +241,11 @@ function defensiveReplyForPressExit(route, lineup, profile, outcome, targetFlank
 // Unknown scouting/fit gets 0, never a fictitious weakness or free bonus.
 // Existing aggregate rest-defence/balance metrics remain the base probability;
 // this additional term measures route-specific COORDINATION, once per phase.
-function routeCoverEvidence(opponentRoute, escapeEvidence, lineup, profile, targetFlank) {
-  const neutral = { adjustment: 0, weakestCoverFit: null };
+function routeCoverEvidence(opponentRoute, escapeEvidence, lineup, profile, targetFlank, timingInput) {
+  const neutral = { adjustment: 0, weakestCoverFit: null, timing: {
+    status: "not_applicable", basis: null, attackWindowSeconds: null,
+    latestRecoverySeconds: null, marginSeconds: null
+  } };
   if (escapeEvidence !== "supported" ||
     !Object.prototype.hasOwnProperty.call(PRESS_EXIT_DEFENCES, opponentRoute))
     return neutral;
@@ -220,11 +258,14 @@ function routeCoverEvidence(opponentRoute, escapeEvidence, lineup, profile, targ
     finite(player.matchScore))?.matchScore);
   if (scores.length !== ids.length || !scores.every(finite)) return neutral;
   const weakestCoverFit = Math.min(...scores);
-  // Maximum +0.03 containment for complete and well-fitted specialist cover.
-  // No modifier to the probability of winning the first press and no new xG.
+  // Missing authored timing never changes existing gameplay. Fully evidenced
+  // late coordination forfeits ONLY the specialist term already earned.
+  const timing = specialistRecoveryWindow(opponentRoute, ids, timingInput);
+  const specialistAdjustment = clamp((weakestCoverFit - 60) * 0.0015, 0, 0.03);
   return {
-    adjustment: clamp((weakestCoverFit - 60) * 0.0015, 0, 0.03),
-    weakestCoverFit
+    adjustment: timing.status === "late" ? 0 : specialistAdjustment,
+    weakestCoverFit,
+    timing
   };
 }
 
@@ -257,7 +298,8 @@ function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup,
     defensiveReply: {
       ...defensiveReplyForPressExit(opponentRoute, lineup, profile, outcome, targetFlank),
       containmentAdjustment: round3(cover.adjustment),
-      weakestCoverFit: cover.weakestCoverFit
+      weakestCoverFit: cover.weakestCoverFit,
+      coverTiming: cover.timing
     },
     containedCause: pathway.containedCause,
     escapedCause: pathway.escapedCause
@@ -334,7 +376,8 @@ export function resolveOwnPressAgainstOpponent(session, {
   const regained = clamp(pressResult, 0, 0.999999999) < pressProbability;
   // Rest defence is evaluated only if the opponent gets beyond the press.
   const cover = routeCoverEvidence(counter, escapeEvidence,
-    session.lineupSnapshot, profile, targetFlank);
+    session.lineupSnapshot, profile, targetFlank,
+    opponent?.tacticalBehaviour?.pressEscapeTiming);
   const containment = clamp(
     0.48 + (restDefense - 65) * 0.005 +
       (balance - 65) * 0.002 +
@@ -385,6 +428,7 @@ export function resolveOwnPressAgainstOpponent(session, {
       opponentEscapeEvidence: escapeEvidence || "unknown",
       resolvedEscapePathway: counterplay?.pathwayId || "unknown",
       routeCoverFitFloor: cover.weakestCoverFit,
+      routeCoverTiming: cover.timing,
       support: players.map(p => ({
         playerId: p.playerId, position: p.position,
         roleId: p.roleId, matchScore: p.matchScore
