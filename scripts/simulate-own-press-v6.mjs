@@ -379,9 +379,10 @@ const authoredSequence = (finalPassSeconds, defenders = sequenceResponse,
   ],
   defenderResponsesByPlayerId: defenders
 });
-const sequenceTrial = (timeline, draw = 0.99, withLegacy = undefined) => resolve(
+const sequenceTrial = (timeline, draw = 0.99, withLegacy = undefined,
+  activeEleven = eleven) => resolve(
   session("midfield_press_trap", {
-    lineupSnapshot: eleven,
+    lineupSnapshot: activeEleven,
     opponent: { ...opponent, tacticalBehaviour: {
       pressEscapeRoute: "third_man",
       pressEscapeActionSequence: timeline,
@@ -427,6 +428,31 @@ const mixedCue = {
 assert.equal(sequenceTrial(authoredSequence(1.2, mixedCue))
   .evidence.routeCoverTiming.status, "late",
   "one required covering player recognising late loses the coordination term");
+// The scenario supplies BOTH cue alternatives. Only genuinely sourced
+// anticipation (never high generic match fit) authorises the early one.
+const adaptiveResponse = { ...onFirstCue, [centralIds[0]]: {
+  recognitionDelaySeconds: 0.4, coverMoveSeconds: 2.1,
+  sourcedCue: {
+    skill: "anticipation", earlyActionId: "receive", defaultActionId: "layoff"
+  }
+} };
+const xiNoProof = eleven.map(player => ({
+  ...player, sourcedRecoverySkills: []
+}));
+const xiWithProof = xiNoProof.map(player =>
+  player.playerId === centralIds[0]
+    ? { ...player, sourcedRecoverySkills: ["anticipation"] } : player);
+const adaptiveWithoutProof = sequenceTrial(
+  authoredSequence(1.2, adaptiveResponse), 0.99, undefined, xiNoProof);
+const adaptiveWithProof = sequenceTrial(
+  authoredSequence(1.2, adaptiveResponse), 0.99, undefined, xiWithProof);
+assert.equal(adaptiveWithoutProof.evidence.routeCoverTiming.status, "late");
+assert.equal(adaptiveWithProof.evidence.routeCoverTiming.status, "in_time");
+assert.equal(adaptiveWithoutProof.probability, adaptiveWithProof.probability);
+assert.equal(adaptiveWithoutProof.evidence.routeCoverFitFloor,
+  adaptiveWithProof.evidence.routeCoverFitFloor);
+assert.ok(adaptiveWithProof.containmentProbability >
+  adaptiveWithoutProof.containmentProbability);
 for (const bad of [
   authoredSequence(0),
   authoredSequence(25),
@@ -440,6 +466,13 @@ for (const bad of [
     [centralIds[0]]: { ...sequenceResponse[centralIds[0]],
       triggerActionId: null } }),
   authoredSequence(0.2, sequenceResponse, "switch_play"),
+  authoredSequence(0.2, { ...adaptiveResponse, [centralIds[0]]: {
+    ...adaptiveResponse[centralIds[0]], triggerActionId: "receive"
+  } }),
+  authoredSequence(0.2, { ...adaptiveResponse, [centralIds[0]]: {
+    ...adaptiveResponse[centralIds[0]],
+    sourcedCue: { skill: "imaginary", earlyActionId: "receive", defaultActionId: "layoff" }
+  } }),
   { ...authoredSequence(0.2), actions: [{ id: "layoff", durationSeconds: 2 }] },
   { ...authoredSequence(0.2), basis: "tracking_observation" }
 ]) {
