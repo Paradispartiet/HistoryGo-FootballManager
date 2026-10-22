@@ -415,6 +415,16 @@ assert.equal(cfThirdMan.summary.edge, 0);
 assert.equal(cfSwitch.summary.edge, 0);
 assert.equal(cfThirdMan.forcedBreak.evidence.opponentEscapeRoute, "third_man");
 assert.equal(cfSwitch.forcedBreak.evidence.opponentEscapeRoute, "switch_play");
+assert.equal(cfThirdMan.forcedBreak.counterplay.pathwayId, "third_man");
+assert.equal(cfThirdMan.forcedBreak.counterplay.exposedChannel, "central_between_lines");
+assert.equal(cfSwitch.forcedBreak.counterplay.pathwayId, "switch_play");
+assert.equal(cfSwitch.forcedBreak.counterplay.exposedChannel, "far_side_wide");
+assert.notDeepEqual(cfThirdMan.forcedBreak.counterplay.actions,
+  cfSwitch.forcedBreak.counterplay.actions,
+  "same XI and random draw must yield distinct third-man and far-side causal explanations");
+assert.equal(cfThirdMan.forcedBreak.xgDeltaAgainst,
+  cfSwitch.forcedBreak.xgDeltaAgainst,
+  "distinct route explanations must not invent separate uncalibrated xG credits");
 // These authored offensive routes currently share one probability penalty;
 // do not claim that the engine already distinguishes their spatial mechanics.
 assert.equal(cfThirdMan.forcedBreak.probability,
@@ -512,6 +522,17 @@ assert.ok(cfHighBacks.forcedBreak.containmentProbability <
 assert.ok(cfHighBacks.forcedBreak.xgDeltaAgainst >=
   cfBase.forcedBreak.xgDeltaAgainst,
   "weak rest defence cannot erase the chance conceded after press failure");
+const cfHighSwitch = cfTrial("same_players_higher_backs_switch_play",
+  withCfOpponent({ tacticalBehaviour: { pressEscapeRoute: "switch_play" } }), cfHighBacksXI);
+assert.equal(cfHighSwitch.forcedBreak.counterplay.pathwayId, "switch_play");
+assert.equal(cfHighSwitch.forcedBreak.counterplay.advancedFullbacks.length, 2);
+assert.equal(cfSwitch.forcedBreak.counterplay.advancedFullbacks.length, 0);
+assert.ok(cfHighSwitch.forcedBreak.containmentProbability <
+  cfSwitch.forcedBreak.containmentProbability,
+  "far-side role exposure must flow through the actual calculated rest-defence metric");
+assert.equal(cfHighSwitch.forcedBreak.xgDeltaAgainst,
+  cfHighBacks.forcedBreak.xgDeltaAgainst,
+  "same calculated rest defence determines xG risk; no free stacking from a route label");
 console.log("OK: full-XI midfield pressure, matched static/live escape evidence, shared-roll rest-defence trade-off, unknown scouting and role fit.");
 
 
