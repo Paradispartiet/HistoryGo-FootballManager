@@ -12,6 +12,8 @@ import { evaluatePlanVsOpponent, scorePlanNow } from "../src/football-match-plan
 import { HISTORICAL_OPPONENT_PROFILES } from "../src/football-historical-opponent-profiles.js";
 import { TACTICAL_SEQUENCES } from "../src/football-tactical-sequences.js";
 import { resolveOwnPressAgainstOpponent } from "../src/football-matchday-own-press-v6.js";
+import { derivePlayerAttributes } from "../src/football-player-attributes.js";
+import { applyP2SourceClaimsToPlayer, getP2SourceRecord } from "../src/football-player-source-claims-p2.js";
 
 const load = (name) => JSON.parse(readFileSync(new URL("../data/" + name, import.meta.url), "utf8"));
 const formations = load("football_formations.json").formations;
@@ -505,3 +507,72 @@ assert.ok(cfHighBacks.forcedBreak.xgDeltaAgainst >=
   cfBase.forcedBreak.xgDeltaAgainst,
   "weak rest defence cannot erase the chance conceded after press failure");
 console.log("OK: full-XI midfield pressure, matched static/live escape evidence, shared-roll rest-defence trade-off, unknown scouting and role fit.");
+
+
+// Two source-audited REAL footballers, compared in the SAME canonical CM
+// position, with the same other ten control players, roles and match context.
+// This is not a claim that the composite XI ever played together. Unlike the
+// other 648 fixtures, the differing CM skills and their original source URLs
+// come from the existing P2 claim registry (SNL), never from invented ratings.
+const rawCanonicalPlayers = load("football_players.json").players;
+const attributeCatalogue = load("football_attributes.json");
+const realMidfielderSetup = playerId => {
+  const raw = rawCanonicalPlayers.find(p => p.id === playerId);
+  assert.ok(raw && raw.naturalPositions.includes("CM"),
+    "selected source-backed athlete must be a real canonical central midfielder");
+  const record = getP2SourceRecord(raw);
+  assert.ok(record?.source?.startsWith("https://snl.no/"),
+    "historical skill claim must retain its real source URL");
+  const sourced = applyP2SourceClaimsToPlayer(raw);
+  assert.deepEqual(sourced.strengths, record.strengths);
+  const attributes = derivePlayerAttributes(sourced, {
+    catalogue: attributeCatalogue, roles
+  });
+  assert.ok(attributes?.provenance, "canonical sourced attributes required");
+  const livePlayer = { ...sourced, attributes };
+  const control = buildFixture("4-3-3", cfTrap, {
+    st: "pressing_forward", lcm: "pressing_midfielder"
+  });
+  const oldId = control.lineup.lcm.playerId;
+  const players = control.players.filter(p => p.id !== oldId).concat(livePlayer);
+  const lineup = {
+    ...control.lineup,
+    lcm: { playerId: livePlayer.id, roleId: "pressing_midfielder" }
+  };
+  const fit = calculateTeamFit({
+    lineup, formation: control.formation, tactic: cfTrap, players, roles
+  });
+  assert.equal(fit.completeCount, 11);
+  assert.equal(fit.duplicatePlayers.length, 0);
+  assert.ok(fit.assignments.find(a => a.player?.id === playerId)
+    ?.fit?.matchScore > 0, "real player must have calculated role fit");
+  const strength = calculateMatchStrength({
+    teamFit: fit, formation: control.formation
+  });
+  return { ...control, lineup, players, fit, strength, source: record.source };
+};
+const riiseXI = realMidfielderSetup("bjorn_helge_riise");
+const legernesXI = realMidfielderSetup("arne_legernes");
+const riiseContribution = riiseXI.fit.sourcedSkillTendencies.pressScore;
+const legernesContribution = legernesXI.fit.sourcedSkillTendencies.pressScore;
+assert.ok(riiseContribution.players.includes("Bjørn Helge Riise"));
+assert.ok(legernesContribution.players.includes("Arne Legernes"));
+assert.ok(riiseContribution.bonus > legernesContribution.bonus,
+  "SNL-backed work_rate + stamina should provide more press-specific evidence than stamina alone");
+assert.ok(riiseXI.fit.baseMetrics.pressScore >
+  legernesXI.fit.baseMetrics.pressScore,
+  "actual documented pressing skills must change actual calculated team metric");
+const riiseRun = cfTrial("source_backed_bjorn_helge_riise",
+  withCfOpponent(), riiseXI);
+const legernesRun = cfTrial("source_backed_arne_legernes",
+  withCfOpponent(), legernesXI);
+console.log("Real-source midfield contrast: " + JSON.stringify({
+  riise: { source: riiseXI.source, sourcedPressBonus: riiseContribution.bonus,
+    pressScore: riiseRun.info.ownPress,
+    phase: riiseRun.info.matchdayPhase, xg: riiseRun.info.actualXg },
+  legernes: { source: legernesXI.source,
+    sourcedPressBonus: legernesContribution.bonus,
+    pressScore: legernesRun.info.ownPress,
+    phase: legernesRun.info.matchdayPhase, xg: legernesRun.info.actualXg }
+}));
+console.log("OK: two source-backed real CM profiles flow through player-fit, team-fit and the same v6 match phase.");
