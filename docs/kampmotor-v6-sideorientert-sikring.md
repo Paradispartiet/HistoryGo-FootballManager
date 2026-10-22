@@ -156,3 +156,36 @@ reaksjonsutløser.
 
 Det er fortsatt ikke GPS-posisjoner, fysisk fart eller maskinlært
 reaksjonstid: trigger og varighet må oppgis eksplisitt.
+
+
+## Kildebelagt reaksjonsferdighet uten oppdiktede sekunder
+
+Kampens spiller-snapshot bærer nå `sourcedRecoverySkills`: bare
+`anticipation`, `game_reading` og `defensive_reading` med **direkte
+`belagt` proveniens og samsvarende faktisk styrketoken**. Det samme feltet
+oppdateres for benkespillere, innbyttere og taktikkbytte når rosterkildene
+foreligger. En tidligere spillers ferdighet må aldri arves av innbytteren.
+
+Et scenarioutkast kan angi to **forfattede reaksjonsutløsere** for en konkret
+forsvarer:
+
+```js
+sourcedCue: {
+  skill: "anticipation",
+  earlyActionId: "receive",
+  defaultActionId: "layoff"
+}
+```
+
+Bare når spilleren i den aktive elleveren har direkte belagt ferdighet,
+brukes den tidlige reaksjonsutløseren. Uten kilde forblir scenariets
+uttrykkelige standardutløser gjeldende. Begge grenene bruker scenarioets
+allerede fastsatte `recognitionDelaySeconds` og `coverMoveSeconds`:
+**ferdigheter omregnes ikke til fysisk løpstid**. Et felt med både
+`sourcedCue` og `triggerActionId`, ugyldig skill-ID, omvendt
+tidsrekkefølge eller ukjent handlings-ID er ugyldig og gir nøytral
+fallback. Det legges ikke på en separat attributtbonus eller xG.
+
+Dette er et kildebevisst *taktisk cue-valg*, ikke kalibrert reaksjonshastighet.
+Det bør testes videre mot reelle klipp før automatiserte tidspunkt eller
+distanser introduseres.
