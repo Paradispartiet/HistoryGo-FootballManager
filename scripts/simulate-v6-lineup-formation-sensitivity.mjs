@@ -219,3 +219,68 @@ for (const row of summaries) {
 console.log("OK: " + comparisons + " plan × opponent × real-lineup-pipeline comparisons; " +
   matchupDifferences + " matchup contrasts; " +
   differingPhaseOutcomes + " outcome contrasts; " + resolvedPhases + " v6 phases.");
+
+
+// Isolated tactical counterfactuals for the 4-4-2 mid-block press trap.
+// The broad 648-case test can legitimately keep the same static edge across
+// its synthetic roles. Here we vary ONE known readiness/counter condition
+// at a time, without inventing match events or player strengths.
+const trap = byPlan.get("midfield_press_trap");
+const trapTeam = Object.freeze({
+  pressScore: 68, balanceScore: 67, restDefenseScore: 67,
+  depthScore: 62, widthScore: 58, buildUpScore: 60
+});
+const trapOpponent = Object.freeze({
+  id: "synthetic-midblock-opponent",
+  pressResistance: 70, defensiveStructure: 65,
+  styleTraits: {
+    possessionControl: 76, pressIntensity: 50,
+    defensiveCompactness: 50, highLine: 50,
+    shortBuildUp: 50, transitionThreat: 50
+  }
+});
+const trapPreview = (team = trapTeam, rival = trapOpponent) =>
+  evaluatePlanVsOpponent(trap, rival, { tacticalProfile: team });
+const trapReady = trapPreview();
+assert.equal(trapReady.sequences.length, 1);
+assert.equal(trapReady.sequences[0].status, "advantage");
+assert.equal(trapReady.edge, 1, "supported mid-block trigger has one specific static edge");
+for (const [metric, insufficient] of [["pressScore", 58], ["balanceScore", 61]]) {
+  const result = trapPreview({ ...trapTeam, [metric]: insufficient });
+  assert.equal(result.sequences[0].status, "unsupported",
+    "missing " + metric + " must break the collective press trap");
+  assert.equal(result.edge, 0, "incomplete mid-block must receive no free edge");
+}
+const pressEscape = trapPreview(trapTeam,
+  { ...trapOpponent, pressResistance: 82 });
+assert.equal(pressEscape.sequences[0].status, "countered");
+assert.equal(pressEscape.edge, 0, "press resistance must neutralise the full chain");
+const { pressResistance: omittedResistance, ...unscoutedOpponent } = trapOpponent;
+assert.equal(omittedResistance, 70);
+const unknownCounter = trapPreview(trapTeam, unscoutedOpponent);
+assert.equal(unknownCounter.sequences[0].status, "unknown_counter");
+assert.equal(unknownCounter.edge, 0, "unscouted counter must not be treated as absent");
+const noTrigger = trapPreview(trapTeam, {
+  ...trapOpponent,
+  styleTraits: { ...trapOpponent.styleTraits, possessionControl: 58 }
+});
+assert.equal(noTrigger.sequences.length, 0);
+assert.equal(noTrigger.edge, 0, "without the central-pass trigger no trap is awarded");
+const observedEscape = trapPreview(trapTeam, {
+  ...trapOpponent, tacticalBehaviour: { pressEscape: "supported" }
+});
+assert.equal(observedEscape.sequences[0].liveExchange?.status, "countered");
+assert.equal(observedEscape.edge, 0, "observed third-man escape overrides optimistic portrait");
+const observedNoEscape = trapPreview(trapTeam, {
+  ...trapOpponent, pressResistance: 82,
+  tacticalBehaviour: { pressEscape: "isolated" }
+});
+assert.equal(observedNoEscape.sequences[0].liveExchange?.status, "advantage");
+assert.equal(observedNoEscape.edge, 1, "specific observed isolation overrides generic resistance");
+const unrelated = byPlan.get("central_possession_4231");
+const unrelatedEdge = rival => evaluatePlanVsOpponent(unrelated, rival,
+  { tacticalProfile: trapTeam }).edge;
+assert.equal(unrelatedEdge(trapOpponent),
+  unrelatedEdge({ ...trapOpponent, pressResistance: 82 }),
+  "mid-block escape test must not award every unrelated plan a generic edge");
+console.log("OK: midfield press trap controlled readiness, trigger, counter, unknown-data and observed escape contrasts.");

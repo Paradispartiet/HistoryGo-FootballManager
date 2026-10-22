@@ -19,3 +19,14 @@ Testen benytter **virkelige kanoniske formasjoner og rolledefinisjoner fra spill
 Kjør `npm run sim:v6-lineup-sensitivity`. Testen feiler hvis faktiske rolleendringer ikke får noen taktisk effekt over matrisen, om de modellerte fordelene og risikoene feilaktig går samme vei i de isolerte kontrollene, om historiske motstanderprofiler eller lagdata muteres, eller om xG-kreditt kan stables for samme v6-hendelse.
 
 **Dette er fortsatt programvareverifikasjon.** Simulerte kontrollspillere kan ikke dokumentere historisk korrekt styrke for navngitte fotballspillere, og 648 interne tester er ikke ekstern kalibrering. Neste trinn for den fulle oppgave #495 er å kjøre et kildeauditert utvalg faktiske spillerprofiler og teste flere motgrepskjeder med uavhengige, annoterte kampdata før eventuelle empiriske påstander.
+
+
+## Midtbanepress: isolert kontrafaktisk kontroll
+
+Matrisesammendraget må ikke tolkes som at \`midfield_press_trap\` er universelt invariant. Planen bruker middels press og kontrollerte sentrale avstander; ingen av de generelle høypressreglene i \`evaluatePlanVsOpponent\` slår automatisk inn. Den spesifikke presskjeden trenger dokumentert \`pressScore >= 59\`, \`balanceScore >= 62\`, motstanderens \`possessionControl >= 65\`, og et kjent motgrep; et kjent \`pressResistance >= 78\` kan nøytralisere den. Tallgrensene er **simuleringshypoteser**, ikke målt virkelighet.
+
+Den utvidede \`sim:v6-lineup-sensitivity\` tester nå identiske taktiske input med én endring om gangen: under terskel for eget førstepress, under terskel for kollektiv midtbanedekning, nøytraliserende pressresistens, ukjent motgrep, manglende pressutløser, og et uttrykkelig observert pressgjennombrudd. Den sjekker også at en ikke-relatert ballbesittelsesplan ikke får samme statiske fordel. Dette beviser *betinget* taktisk respons i evaluatorens kontrakt, ikke historisk realistisk hyppighet eller empirisk xG.
+
+**Åpen modellavgrensning:** \`tacticalBehaviour.wideShift\` beskriver primært motstanderens *defensive* sideforskyvning. Det er **ikke** dokumentasjon på angripende sideskift mot midtbanepresset. En egen, faktisk kjent offensiv sidevendings- og pressutløsermekanisme må utredes før den får påvirke statisk edge, v6-fase eller balltapsrisiko. Ikke bruk generisk \`wideShift\` som snarvei.
+
+Faglig referanse: [FIFA om midtblokk og pressutløsere](https://www.fifatrainingcentre.com/en/fwc2022/technical-and-tactical-analysis/controlling-the-game-without-the-ball--the-mid-block-and-compactness.php), [FIFA om 4-4-2-midtpresse](https://www.fifatrainingcentre.com/en/practice/elite-sessions/out-of-possession/keeping-the-centre-compact-in-a-4-4-2-mid-press.php) og [FIFA om å spille seg forbi press](https://www.fifatrainingcentre.com/en/game/game-analysis/transition-to-attacking/passing-the-press.php).
