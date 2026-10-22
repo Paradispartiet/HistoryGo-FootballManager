@@ -96,8 +96,9 @@ const PRESS_EXIT_PATHWAYS = Object.freeze({
 // Route-specific defensive replies inspect real formation slots, player role
 // evidence and existing team metrics. They describe *possible* protection,
 // not a free probability/xG boost and not observed player coordinates.
-// A support role on one flank does not identify the eventual weak-side flank,
-// so both sides must be known before classifying a switch as role-supported.
+// Without a documented target flank, both backs must be known for a switch.
+// With an explicitly documented DEFENDING-team left/right target flank, inspect
+// only that flank. This is nominal formation coverage, not live tracking data.
 const PRESS_EXIT_DEFENCES = Object.freeze({
   third_man: Object.freeze({
     id: "screen_layoff_and_track_third_runner",
@@ -134,7 +135,7 @@ const PRESS_EXIT_DEFENCES = Object.freeze({
   })
 });
 
-function defensiveReplyForPressExit(route, lineup, profile, outcome) {
+function defensiveReplyForPressExit(route, lineup, profile, outcome, targetFlank = null) {
   const config = PRESS_EXIT_DEFENCES[route];
   if (!config) return null;
   const all = Array.isArray(lineup) ? lineup : [];
@@ -148,6 +149,10 @@ function defensiveReplyForPressExit(route, lineup, profile, outcome) {
   const pressingMidfielder = list(["CM", "DM"], ["pressing_midfielder"]);
   const leftSupport = list(["LB"], ["support_fullback"]);
   const rightSupport = list(["RB"], ["support_fullback"]);
+  const documentedFlank = route === "switch_play" &&
+    ["left", "right"].includes(targetFlank) ? targetFlank : null;
+  const targetSideSupport = documentedFlank === "left" ? leftSupport :
+    documentedFlank === "right" ? rightSupport : [...leftSupport, ...rightSupport];
   const centralBacks = list(["CB"]);
   const knownTacticalRoles = known.some(player => [
     "balancing_six", "pressing_midfielder", "support_fullback",
@@ -158,12 +163,13 @@ function defensiveReplyForPressExit(route, lineup, profile, outcome) {
   const roleSupported = route === "third_man"
     ? screeningSix.length > 0 && pressingMidfielder.length > 0
     : route === "switch_play"
-      ? leftSupport.length > 0 && rightSupport.length > 0
+      ? documentedFlank ? targetSideSupport.length > 0 :
+        leftSupport.length > 0 && rightSupport.length > 0
       : centralBacks.length >= 2 && screeningSix.length > 0;
   const activeCover = route === "third_man"
     ? [...screeningSix, ...pressingMidfielder]
     : route === "switch_play"
-      ? [...leftSupport, ...rightSupport]
+      ? targetSideSupport
       : [...centralBacks, ...screeningSix];
   return {
     id: config.id, title: config.title, target: config.target,
@@ -181,6 +187,7 @@ function defensiveReplyForPressExit(route, lineup, profile, outcome) {
       supportingPlayerIds: [...new Set(activeCover)],
       screenedCentralBy: screeningSix, thirdRunnerTrackedBy: pressingMidfielder,
       farSideBackCandidates: { left: leftSupport, right: rightSupport },
+      documentedTargetFlank: documentedFlank,
       availableCentreBacks: centralBacks,
       formationPositions: known.map(player => player.position),
       balanceScore: finite(profile?.balanceScore) ? profile.balanceScore : null,
@@ -199,12 +206,12 @@ function defensiveReplyForPressExit(route, lineup, profile, outcome) {
 // Unknown scouting/fit gets 0, never a fictitious weakness or free bonus.
 // Existing aggregate rest-defence/balance metrics remain the base probability;
 // this additional term measures route-specific COORDINATION, once per phase.
-function routeCoverEvidence(opponentRoute, escapeEvidence, lineup, profile) {
+function routeCoverEvidence(opponentRoute, escapeEvidence, lineup, profile, targetFlank) {
   const neutral = { adjustment: 0, weakestCoverFit: null };
   if (escapeEvidence !== "supported" ||
     !Object.prototype.hasOwnProperty.call(PRESS_EXIT_DEFENCES, opponentRoute))
     return neutral;
-  const reply = defensiveReplyForPressExit(opponentRoute, lineup, profile, "preflight");
+  const reply = defensiveReplyForPressExit(opponentRoute, lineup, profile, "preflight", targetFlank);
   if (reply?.roleReadiness !== "supported_by_roles") return neutral;
   const ids = reply.evidence.supportingPlayerIds;
   if (!ids.length) return neutral;
@@ -221,7 +228,7 @@ function routeCoverEvidence(opponentRoute, escapeEvidence, lineup, profile) {
   };
 }
 
-function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup, profile, cover) {
+function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup, profile, cover, targetFlank) {
   // An explicit observation of isolation overrides an older authored route.
   // A generic 'supported' observation with no named route must not invent one.
   if (escapeEvidence !== "supported" ||
@@ -233,6 +240,7 @@ function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup,
       .map(player => player.playerId) : [];
   return {
     pathwayId: opponentRoute, label: pathway.label,
+    documentedTargetFlank: targetFlank,
     exposedChannel: pathway.exposedChannel,
     basis: "simulated_tactical_hypothesis_v6",
     status: outcome === "regain" ? "prevented" :
@@ -247,7 +255,7 @@ function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup,
     // containment probability; never count these advanced backs a second time.
     advancedFullbacks,
     defensiveReply: {
-      ...defensiveReplyForPressExit(opponentRoute, lineup, profile, outcome),
+      ...defensiveReplyForPressExit(opponentRoute, lineup, profile, outcome, targetFlank),
       containmentAdjustment: round3(cover.adjustment),
       weakestCoverFit: cover.weakestCoverFit
     },
@@ -307,6 +315,11 @@ export function resolveOwnPressAgainstOpponent(session, {
   // one documented route through the press. "isolated" is stronger direct
   // evidence than an older route label; unknown data awards no free bypass.
   const escapeEvidence = resolvePressEscapeEvidence(opponent?.tacticalBehaviour);
+  // Input convention: target flank is expressed from OUR defending viewpoint.
+  // No guess from a route label or lineup when the destination is unknown.
+  const targetFlankInput = opponent?.tacticalBehaviour?.pressEscapeTargetFlank;
+  const targetFlank = counter === "switch_play" && escapeEvidence === "supported" &&
+    ["left", "right"].includes(targetFlankInput) ? targetFlankInput : null;
   const documentedEscape = escapeEvidence === "supported";
   const pressProbability = clamp(
     0.53 + (avgFit - 65) * 0.004 +
@@ -321,7 +334,7 @@ export function resolveOwnPressAgainstOpponent(session, {
   const regained = clamp(pressResult, 0, 0.999999999) < pressProbability;
   // Rest defence is evaluated only if the opponent gets beyond the press.
   const cover = routeCoverEvidence(counter, escapeEvidence,
-    session.lineupSnapshot, profile);
+    session.lineupSnapshot, profile, targetFlank);
   const containment = clamp(
     0.48 + (restDefense - 65) * 0.005 +
       (balance - 65) * 0.002 +
@@ -334,7 +347,7 @@ export function resolveOwnPressAgainstOpponent(session, {
   const contained = !regained && clamp(protection, 0, 0.999999999) < containment;
   const outcome = regained ? "regain" : contained ? "contained" : "escaped";
   const counterplay = counterplayForPressExit(counter, escapeEvidence,
-    outcome, session.lineupSnapshot, profile, cover);
+    outcome, session.lineupSnapshot, profile, cover, targetFlank);
   const chanceSide = regained ? "for" : outcome === "escaped" ? "against" : null;
   const steps = config.steps.map((action, i) => ({
     action,
@@ -368,6 +381,7 @@ export function resolveOwnPressAgainstOpponent(session, {
       opponentTrigger: config.opponentMetric, opponentValue: scenario,
       pressResistance: resistance, transitionThreat: threat,
       opponentEscapeRoute: counter || "unknown",
+      documentedTargetFlank: targetFlank,
       opponentEscapeEvidence: escapeEvidence || "unknown",
       resolvedEscapePathway: counterplay?.pathwayId || "unknown",
       routeCoverFitFloor: cover.weakestCoverFit,
