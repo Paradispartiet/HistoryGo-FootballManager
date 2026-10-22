@@ -361,6 +361,69 @@ assert.equal(timedThird(authoredWindow(2), 0.99,
   swapRole("CM", "deep_playmaker")).routeCoverAdjustment, 0,
   "timing cannot rescue a missing complementary specialist role");
 
+ 
+// Match-situation timeline: four explicit offensive actions against the
+// defenders' own trigger recognition and recovery movement. This feeds the
+// SAME stage-two gate, not a newly minted movement probability or xG event.
+const sequenceResponse = Object.fromEntries(centralIds.map(id => [id, {
+  recognitionDelaySeconds: 0.4, coverMoveSeconds: 2.1
+}]));
+const authoredSequence = (finalPassSeconds, defenders = sequenceResponse,
+  route = "third_man") => ({
+  basis: "authored_action_sequence", route,
+  actions: [
+    { id: "receive", durationSeconds: 0.7 },
+    { id: "layoff", durationSeconds: 0.5 },
+    { id: "third_runner", durationSeconds: 0.7 },
+    { id: "through_pass", durationSeconds: finalPassSeconds }
+  ],
+  defenderResponsesByPlayerId: defenders
+});
+const sequenceTrial = (timeline, draw = 0.99, withLegacy = undefined) => resolve(
+  session("midfield_press_trap", {
+    lineupSnapshot: eleven,
+    opponent: { ...opponent, tacticalBehaviour: {
+      pressEscapeRoute: "third_man",
+      pressEscapeActionSequence: timeline,
+      ...(withLegacy === undefined ? {} : { pressEscapeTiming: withLegacy })
+    } }
+  }), 0.99, draw);
+const sequenceTimely = sequenceTrial(authoredSequence(1.2));
+const sequenceLate = sequenceTrial(authoredSequence(0.2));
+assert.equal(sequenceTimely.evidence.routeCoverTiming.status, "in_time");
+assert.equal(sequenceLate.evidence.routeCoverTiming.status, "late");
+assert.equal(sequenceTimely.evidence.routeCoverTiming.basis, "authored_action_sequence");
+assert.equal(sequenceTimely.evidence.routeCoverTiming.attackWindowSeconds, 3.1);
+assert.equal(sequenceLate.evidence.routeCoverTiming.marginSeconds, -0.4);
+assert.equal(sequenceTimely.routeCoverAdjustment, noWindow.routeCoverAdjustment);
+assert.equal(sequenceLate.routeCoverAdjustment, 0);
+assert.equal(sequenceTimely.probability, sequenceLate.probability);
+assert.equal(sequenceTimely.xgDeltaAgainst, sequenceLate.xgDeltaAgainst);
+const sequenceCutoff = (sequenceTimely.containmentProbability +
+  sequenceLate.containmentProbability) / 2;
+assert.equal(sequenceTrial(authoredSequence(1.2), sequenceCutoff).status, "contained");
+assert.equal(sequenceTrial(authoredSequence(0.2), sequenceCutoff).status, "escaped");
+assert.equal(sequenceTrial(authoredSequence(1.2), sequenceCutoff).xgDeltaAgainst, 0.02);
+assert.equal(sequenceTrial(authoredSequence(0.2), sequenceCutoff).xgDeltaAgainst, 0.06);
+for (const bad of [
+  authoredSequence(0),
+  authoredSequence(25),
+  authoredSequence(0.2, {}),
+  authoredSequence(0.2, { ...sequenceResponse,
+    [centralIds[0]]: { recognitionDelaySeconds: -1, coverMoveSeconds: 2 } }),
+  authoredSequence(0.2, sequenceResponse, "switch_play"),
+  { ...authoredSequence(0.2), actions: [{ id: "layoff", durationSeconds: 2 }] },
+  { ...authoredSequence(0.2), basis: "tracking_observation" }
+]) {
+  const result = sequenceTrial(bad);
+  assert.equal(result.evidence.routeCoverTiming.status, "invalid_or_incomplete");
+  assert.equal(result.routeCoverAdjustment, noWindow.routeCoverAdjustment,
+    "unverified action timings must never supply a fictitious recovery outcome");
+}
+assert.equal(sequenceTrial(authoredSequence(0.2), 0.99, authoredWindow(3.0))
+  .evidence.routeCoverTiming.basis, "authored_scenario",
+  "legacy explicit window wins if both formats are present");
+
 const resistant = resolve(session("high_press_343", {
   opponent: { ...opponent, pressResistance: 90 }
 }), 0.4, 0.4);
