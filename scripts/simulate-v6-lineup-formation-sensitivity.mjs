@@ -11,6 +11,7 @@ import {
 import { evaluatePlanVsOpponent, scorePlanNow } from "../src/football-match-plan.js";
 import { HISTORICAL_OPPONENT_PROFILES } from "../src/football-historical-opponent-profiles.js";
 import { TACTICAL_SEQUENCES } from "../src/football-tactical-sequences.js";
+import { resolveOwnPressAgainstOpponent } from "../src/football-matchday-own-press-v6.js";
 
 const load = (name) => JSON.parse(readFileSync(new URL("../data/" + name, import.meta.url), "utf8"));
 const formations = load("football_formations.json").formations;
@@ -284,3 +285,180 @@ assert.equal(unrelatedEdge(trapOpponent),
   unrelatedEdge({ ...trapOpponent, pressResistance: 82 }),
   "mid-block escape test must not award every unrelated plan a generic edge");
 console.log("OK: midfield press trap controlled readiness, trigger, counter, unknown-data and observed escape contrasts.");
+
+
+// Full-XI counterfactual for the midfield trap: use ACTUAL calculated team
+// metrics and snapshots, not a handcrafted tacticalProfile. Change exactly
+// one opponent condition at a time, retaining the same valid XI, match state,
+// plan, opponent identity, and deterministic matchday seed.
+const cfTrap = byPlan.get("midfield_press_trap");
+const cfXI = buildFixture("4-3-3", cfTrap, {
+  st: "pressing_forward", lcm: "pressing_midfielder"
+});
+const cfProfile = cfXI.strength.tacticalProfile;
+assert.ok(cfProfile.pressScore >= 59,
+  "complete XI must actually supply the static midblock pressing prerequisite");
+assert.ok(cfProfile.balanceScore >= 62,
+  "complete XI must actually supply the static midblock collective cover");
+assert.equal(cfXI.fit.completeCount, 11);
+assert.equal(cfXI.fit.duplicatePlayers.length, 0);
+const cfHistorical = HISTORICAL_OPPONENT_PROFILES[0];
+const cfOpponent = Object.freeze({
+  ...cfHistorical,
+  id: "controlled-midfield-trap-opponent",
+  transitionThreat: 72,
+  pressResistance: 77,
+  tacticalBehaviour: null,
+  styleTraits: {
+    ...cfHistorical.styleTraits,
+    possessionControl: 65,
+    transitionThreat: 72
+  }
+});
+const withCfOpponent = (patch = {}) => ({
+  ...cfOpponent,
+  ...patch,
+  styleTraits: { ...cfOpponent.styleTraits, ...(patch.styleTraits || {}) }
+});
+const cfTrial = (label, rival, setup = cfXI) => {
+  const unchanged = JSON.stringify(rival);
+  const summary = evaluatePlanVsOpponent(cfTrap, rival, {
+    tacticalProfile: setup.strength.tacticalProfile
+  });
+  const session = kickoff(setup, rival);
+  session.id = "stable-midfield-trap-xi-seed";
+  session.score = { for: 1, against: 0 };
+  const lineupIds = session.lineupSnapshot.map(p => p.playerId);
+  assert.equal(new Set(lineupIds).size, 11);
+  assert.ok(session.lineupSnapshot.every(p => p.matchFitKnown === true));
+  assert.equal(session.teamFitSnapshot.tacticalProfile.pressScore,
+    setup.fit.metrics.pressScore);
+  const forcedBreak = resolveOwnPressAgainstOpponent(session, {
+    pressureRoll: () => 0.99, protectionRoll: () => 0.99
+  });
+  const period = advanceMatchClock(session).timeline[0];
+  assert.ok(period && Number.isFinite(period.expectedGoals.for) &&
+    Number.isFinite(period.expectedGoals.against));
+  if (forcedBreak) {
+    assert.equal(forcedBreak.route, "midfield_trap");
+    assert.equal(forcedBreak.status, "escaped");
+    assert.equal(forcedBreak.side, "against");
+    assert.equal(period.tacticalPhase?.route, "midfield_trap",
+      "full-XI counterfactual must reach actual matchday v6 press phase");
+    assert.equal(period.tacticalXg, undefined, "no double static xG payment");
+    for (const side of ["for", "against"]) {
+      const delta = Math.round((period.expectedGoals[side] -
+        period.baselineExpectedGoals[side]) * 100) / 100;
+      assert.equal(delta, period.tacticalPhase[
+        side === "for" ? "xgDeltaFor" : "xgDeltaAgainst"
+      ], "one causal terminal phase controls each xG delta");
+    }
+  }
+  assert.equal(JSON.stringify(rival), unchanged, "opponent must not mutate");
+  const info = {
+    label, ownPress: setup.fit.metrics.pressScore,
+    ownBalance: setup.fit.metrics.balanceScore,
+    ownRestDefense: setup.fit.metrics.restDefenseScore,
+    trigger: rival.styleTraits.possessionControl,
+    resistance: Number.isFinite(rival.pressResistance) ? rival.pressResistance : null,
+    escape: rival.tacticalBehaviour?.pressEscapeRoute ||
+      rival.tacticalBehaviour?.pressEscape || "unknown",
+    sequence: summary.sequences[0]?.status || "no_trigger",
+    liveExchange: summary.sequences[0]?.liveExchange?.status || "unobserved",
+    staticEdge: summary.edge,
+    forcedBreak: forcedBreak?.status || "not_eligible",
+    pressProbability: forcedBreak?.probability ?? null,
+    containmentProbability: forcedBreak?.containmentProbability ?? null,
+    forcedBreakXgAgainst: forcedBreak?.xgDeltaAgainst ?? null,
+    matchdayPhase: period.tacticalPhase?.status || "fallback",
+    baselineXg: period.baselineExpectedGoals || null,
+    actualXg: period.expectedGoals
+  };
+  console.log("  " + JSON.stringify(info));
+  return { info, summary, session, period, forcedBreak };
+};
+
+console.log("Kampmotor v6 – full XI, one-variable midfield-trap counterfactuals");
+const cfBase = cfTrial("ready_65_resistance_77", withCfOpponent());
+const cfBeforeTrigger = cfTrial("below_trigger_64", withCfOpponent({
+  styleTraits: { possessionControl: 64 }
+}));
+assert.equal(cfBase.summary.sequences[0]?.status, "advantage");
+assert.equal(cfBeforeTrigger.summary.sequences.length, 0);
+assert.equal(cfBeforeTrigger.forcedBreak, null);
+assert.ok(cfBase.forcedBreak, "known central possession must trigger own press");
+
+const cfCounter = cfTrial("resistance_78", withCfOpponent({
+  pressResistance: 78
+}));
+assert.equal(cfCounter.summary.sequences[0]?.status, "countered");
+assert.equal(cfCounter.summary.edge, 0);
+assert.equal(cfBase.summary.edge, 1);
+assert.ok(cfCounter.forcedBreak.probability < cfBase.forcedBreak.probability,
+  "documented opponent resistance must lower real press success probability");
+
+const cfThirdMan = cfTrial("documented_third_man", withCfOpponent({
+  tacticalBehaviour: { pressEscapeRoute: "third_man" }
+}));
+const cfSwitch = cfTrial("documented_switch_play", withCfOpponent({
+  tacticalBehaviour: { pressEscapeRoute: "switch_play" }
+}));
+assert.ok(cfThirdMan.forcedBreak.probability < cfBase.forcedBreak.probability);
+assert.ok(cfSwitch.forcedBreak.probability < cfBase.forcedBreak.probability);
+assert.equal(cfThirdMan.forcedBreak.evidence.opponentEscapeRoute, "third_man");
+assert.equal(cfSwitch.forcedBreak.evidence.opponentEscapeRoute, "switch_play");
+// These authored offensive routes currently share one probability penalty;
+// do not claim that the engine already distinguishes their spatial mechanics.
+assert.equal(cfThirdMan.forcedBreak.probability,
+  cfSwitch.forcedBreak.probability,
+  "two known offensive exits are currently modelled with one shared penalty");
+
+const cfObservedEscape = cfTrial("live_press_escape_supported", withCfOpponent({
+  tacticalBehaviour: { pressEscape: "supported" }
+}));
+assert.equal(cfObservedEscape.summary.sequences[0]?.liveExchange?.status, "countered");
+assert.equal(cfObservedEscape.summary.edge, 0);
+// Static observed pressEscape and v6 authored pressEscapeRoute are different
+// signals today. Record the distinction rather than quietly invent a link.
+assert.equal(cfObservedEscape.forcedBreak.probability,
+  cfBase.forcedBreak.probability,
+  "live coverage observation is not yet the v6 authored route signal");
+
+const cfMissingResistance = cfTrial("unscouted_resistance", withCfOpponent({
+  pressResistance: undefined
+}));
+assert.equal(cfMissingResistance.summary.sequences[0]?.status,
+  "unknown_counter");
+assert.equal(cfMissingResistance.summary.edge, 0);
+assert.equal(cfMissingResistance.forcedBreak, null,
+  "unscouted press resistance cannot create a causal v6 opportunity");
+
+const cfLowPressXI = buildFixture("4-3-3", cfTrap);
+assert.deepEqual(cfLowPressXI.players.map(p => p.id),
+  cfXI.players.map(p => p.id), "role variation retains the eleven players");
+const cfLowPress = cfTrial("same_players_without_press_roles",
+  withCfOpponent(), cfLowPressXI);
+assert.ok(cfLowPress.info.ownPress < cfBase.info.ownPress);
+assert.equal(cfLowPress.summary.sequences[0]?.status, "unsupported");
+
+// Remove back protection via legal role choices, keeping the exact same
+// player identities and an unchanged opponent. A broken press has a second
+// independent containment stage; better width must not yield free cover.
+const cfHighBacksXI = buildFixture("4-3-3", cfTrap, {
+  st: "pressing_forward", lcm: "pressing_midfielder",
+  lb: "overlapping_fullback", rb: "overlapping_fullback"
+});
+assert.deepEqual(cfHighBacksXI.players.map(p => p.id),
+  cfXI.players.map(p => p.id));
+assert.ok(cfHighBacksXI.fit.metrics.widthScore >= cfXI.fit.metrics.widthScore);
+assert.ok(cfHighBacksXI.fit.metrics.restDefenseScore <
+  cfXI.fit.metrics.restDefenseScore, "advancing both backs exposes actual cover");
+const cfHighBacks = cfTrial("same_players_higher_backs",
+  withCfOpponent(), cfHighBacksXI);
+assert.ok(cfHighBacks.forcedBreak.containmentProbability <
+  cfBase.forcedBreak.containmentProbability,
+  "lower calculated cover must worsen real containment after escaped press");
+assert.ok(cfHighBacks.forcedBreak.xgDeltaAgainst >=
+  cfBase.forcedBreak.xgDeltaAgainst,
+  "weak rest defence cannot erase the chance conceded after press failure");
+console.log("OK: full-XI midfield pressure, trigger, resistance, two offensive exits, unknown scouting, role fit and rest-defence risk.");
