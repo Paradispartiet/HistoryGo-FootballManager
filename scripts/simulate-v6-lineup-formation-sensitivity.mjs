@@ -485,6 +485,12 @@ const cfLowPress = cfTrial("same_players_without_press_roles",
   withCfOpponent(), cfLowPressXI);
 assert.ok(cfLowPress.info.ownPress < cfBase.info.ownPress);
 assert.equal(cfLowPress.summary.sequences[0]?.status, "unsupported");
+assert.ok(cfLowPress.forcedBreak && cfBase.forcedBreak &&
+  cfLowPress.forcedBreak.probability < cfBase.forcedBreak.probability,
+  "removing pressing roles must reduce causal v6 press success, not merely the static evaluation");
+assert.deepEqual(cfLowPress.forcedBreak.evidence.support.map(p => p.playerId),
+  cfBase.forcedBreak.evidence.support.map(p => p.playerId),
+  "causal role variation must retain the same four distinct pressing players");
 
 // Remove back protection via legal role choices, keeping the exact same
 // player identities and an unchanged opponent. A broken press has a second
