@@ -660,3 +660,135 @@ console.log("Real-source midfield contrast: " + JSON.stringify({
     phase: legernesRun.info.matchdayPhase, xg: legernesRun.info.actualXg }
 }));
 console.log("OK: two source-backed real CM profiles flow through player-fit, team-fit and the same v6 match phase.");
+
+
+// Cross-formation route-cover falsification. Synthetic named control players,
+// ACTUAL calculateTeamFit + matchday pipeline: no invented source attributes.
+// Test (1) four canonical formations, (2) low/high known role familiarity,
+// (3) three distinct offensive exits, (4) observed isolation, (5) same-draw
+// terminal outcomes. Only existing complementary specialist roles count.
+const routeMatrix = [
+  { formation: "4-3-3",
+    overrides: { st: "pressing_forward", lcm: "pressing_midfielder" },
+    specialistSlots: ["dm", "lcm", "lb", "rb", "lcb", "rcb"],
+    supported: ["third_man", "switch_play", "direct"] },
+  { formation: "4-2-3-1",
+    overrides: { st: "pressing_forward", rdm: "pressing_midfielder" },
+    specialistSlots: ["ldm", "rdm", "lb", "rb", "lcb", "rcb"],
+    supported: ["third_man", "switch_play", "direct"] },
+  { formation: "4-4-2",
+    overrides: { lst: "pressing_forward", lcm: "pressing_midfielder" },
+    specialistSlots: ["lb", "rb"],
+    supported: ["switch_play"] },
+  { formation: "3-4-3",
+    overrides: { st: "pressing_forward", lcm: "pressing_midfielder" },
+    specialistSlots: ["lcb", "ccb", "rcb"],
+    supported: [] }
+];
+const offensiveExits = ["third_man", "switch_play", "direct"];
+function enhanceKnownRoleFit(setup, slotIds) {
+  const preferred = new Set(slotIds);
+  const enhancedPlayers = setup.players.map(player => {
+    const slot = setup.formation.slots.find(candidate =>
+      setup.lineup[candidate.slotId]?.playerId === player.id);
+    assert.ok(slot, "same canonical player must retain exact XI slot");
+    return {
+      ...player,
+      preferredRoles: preferred.has(slot.slotId)
+        ? [setup.lineup[slot.slotId].roleId] : player.preferredRoles
+    };
+  });
+  const fit = calculateTeamFit({
+    lineup: setup.lineup, formation: setup.formation, tactic: setup.tactic,
+    players: enhancedPlayers, roles
+  });
+  assert.equal(fit.completeCount, 11);
+  assert.equal(fit.duplicatePlayers.length, 0);
+  const strength = calculateMatchStrength({ teamFit: fit,
+    formation: setup.formation });
+  return { ...setup, players: enhancedPlayers, fit, strength };
+}
+function routeMatrixPhase(setup, behaviour, protectionDraw = 0.99) {
+  const rival = withCfOpponent({ tacticalBehaviour: behaviour });
+  const session = kickoff(setup, rival);
+  session.id = "route-cover-cross-formation-fixed-seed";
+  session.score = { for: 1, against: 0 };
+  const phase = resolveOwnPressAgainstOpponent(session, {
+    pressureRoll: () => 0.99, protectionRoll: () => protectionDraw
+  });
+  assert.ok(phase, setup.formation.id + " must have complete known XI");
+  assert.equal(phase.route, "midfield_trap");
+  assert.equal(phase.version, 6);
+  return phase;
+}
+let crossFormationChecks = 0, routeContainmentFlips = 0;
+for (const row of routeMatrix) {
+  const baseline = buildFixture(row.formation, cfTrap, row.overrides);
+  const enhanced = enhanceKnownRoleFit(baseline, row.specialistSlots);
+  assert.deepEqual(enhanced.players.map(p => p.id),
+    baseline.players.map(p => p.id), "higher role-fit must not replace players");
+  assert.ok(enhanced.fit.averageMatchScore >= baseline.fit.averageMatchScore ||
+    enhanced.fit.metrics.roleFitAverage >= baseline.fit.metrics.roleFitAverage,
+    "known preferred-role evidence cannot lower aggregate lineup fit");
+  const byVariant = [];
+  for (const [level, setup] of [["baseline", baseline], ["preferred", enhanced]]) {
+    const outcomes = [];
+    for (const exit of offensiveExits) {
+      const named = routeMatrixPhase(setup, { pressEscapeRoute: exit });
+      const isolated = routeMatrixPhase(setup, {
+        pressEscapeRoute: exit, pressEscape: "isolated"
+      });
+      assert.equal(named.status, "escaped");
+      assert.equal(isolated.status, "escaped");
+      assert.equal(isolated.routeCoverAdjustment, 0,
+        "observed isolation beats stale authored route across formations");
+      const expected = row.supported.includes(exit);
+      assert.equal(named.counterplay?.defensiveReply?.roleReadiness,
+        expected ? "supported_by_roles" : "not_supported_by_checked_roles",
+        row.formation + " " + exit + " documented complementary roles");
+      assert.ok(named.routeCoverAdjustment >= 0 &&
+        named.routeCoverAdjustment <= 0.03);
+      assert.equal(named.routeCoverAdjustment > 0, expected,
+        "only relevant valid roles with positive calculated match-fit get cover");
+      assert.ok(Math.abs((named.containmentProbability -
+        isolated.containmentProbability) - named.routeCoverAdjustment) <= 0.0011,
+        "route specialization may affect stage-two containment exactly once");
+      assert.equal(named.counterplay.defensiveReply.containmentAdjustment,
+        named.routeCoverAdjustment);
+      assert.equal(named.xgDeltaAgainst, isolated.xgDeltaAgainst,
+        "route metadata must not pay a second xG event");
+      if (expected) {
+        const midpoint = (named.containmentProbability +
+          isolated.containmentProbability) / 2;
+        const saved = routeMatrixPhase(setup,
+          { pressEscapeRoute: exit }, midpoint);
+        const exposed = routeMatrixPhase(setup,
+          { pressEscapeRoute: exit, pressEscape: "isolated" }, midpoint);
+        assert.equal(saved.status, "contained",
+          "relevant cover must stop the same real matchday draw");
+        assert.equal(exposed.status, "escaped",
+          "without observed supported route the same draw must escape");
+        assert.equal(saved.xgDeltaAgainst, 0.02);
+        assert.ok(exposed.xgDeltaAgainst > saved.xgDeltaAgainst);
+        routeContainmentFlips += 1;
+      }
+      outcomes.push(named);
+      crossFormationChecks += 1;
+    }
+    assert.equal(new Set(outcomes.map(p => p.probability)).size, 1,
+      "three named offensive exits use same initial press chance");
+    assert.equal(new Set(outcomes.map(p => p.xgDeltaAgainst)).size, 1,
+      "one XI cannot receive invented route-specific xG charges");
+    byVariant.push(outcomes);
+  }
+  for (let i = 0; i < offensiveExits.length; i++) {
+    assert.ok(byVariant[1][i].routeCoverAdjustment >=
+      byVariant[0][i].routeCoverAdjustment,
+      "better real specialist fit must not worsen complementary cover");
+  }
+}
+assert.equal(crossFormationChecks, 4 * 2 * 3);
+assert.equal(routeContainmentFlips, (3 + 3 + 1) * 2);
+console.log("OK: " + crossFormationChecks +
+  " canonical 4-3-3/4-2-3-1/4-4-2/3-4-3 route-cover checks, " +
+  routeContainmentFlips + " controlled containment flips; no extra xG.");
