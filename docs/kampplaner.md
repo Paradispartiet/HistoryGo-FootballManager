@@ -129,6 +129,13 @@ Kampbildet leser stillingen når den finnes:
 Etiketten skal aldri motsi tavla den står ved siden av: «Du leder» ved 1–1 var
 en direkte løgn, og er nå «Jevnt – du har taket».
 
+**Kampstilling er ikke momentum.** Ved 1–1 er tilstanden alltid `level`,
+og momentum styrer bare tillegget «du har taket»/«de har taket». Dermed får
+`chase_the_equaliser` og `all_out_attack` en egen v6-kjede bare når laget
+faktisk ligger under. Ved ledelse eller uavgjort skal de ikke få en ekstra
+sluttpressbonus selv om motstanderen står i lav blokk. Det tilsvarende
+ledelseskravet for `see_out_the_game` er beholdt.
+
 En kamp som avsluttes uten at klokka har gått (eldre lagring, motoren brukt
 direkte) faller tilbake til det gamle sluttkastet, så ingenting mister et
 resultat.

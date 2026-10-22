@@ -128,12 +128,16 @@ export function readGameState(session) {
     state = goalDiff > 0 ? "leading" : "behind";
     label = GAME_STATE_LABELS[state];
   } else {
-    state = totals.momentum >= 2 ? "leading" : totals.momentum <= -2 ? "behind" : "level";
+    // Once the score is known, a level score is ALWAYS the "level" state.
+    // Momentum still describes who has initiative in the label, not whether
+    // a score-dependent plan qualifies for a tactical bonus.
+    state = played ? "level"
+      : totals.momentum >= 2 ? "leading" : totals.momentum <= -2 ? "behind" : "level";
     // Står det likt, er det SPILLET som går din vei — ikke tavla. «Du leder»
     // ved 1-1 var en direkte løgn mot resultattavla ved siden av.
-    label = state === "leading"
+    label = totals.momentum >= 2
       ? "Jevnt – du har taket"
-      : state === "behind"
+      : totals.momentum <= -2
         ? "Jevnt – de har taket"
         : GAME_STATE_LABELS.level;
   }

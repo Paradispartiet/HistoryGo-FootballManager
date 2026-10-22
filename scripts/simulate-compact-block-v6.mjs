@@ -45,7 +45,8 @@ const plans = {
   chase_the_equaliser: "late_commitment", all_out_attack: "late_commitment"
 };
 for (const [plan, route] of Object.entries(plans)) {
-  const phase = resolve(session(plan), 0);
+  const phase = resolve(session(plan, ["chase_the_equaliser", "all_out_attack"].includes(plan)
+    ? { score: { for: 0, against: 1 } } : {}), 0);
   assert.equal(phase.route, route, plan);
   assert.equal(phase.status, "breakthrough");
   assert.equal(phase.side, "for");
@@ -54,6 +55,16 @@ for (const [plan, route] of Object.entries(plans)) {
     route === "crossing" || route === "late_commitment" ? 4 : 3);
   assert.ok(phase.xgDeltaFor >= 0.09 && phase.xgDeltaFor <= 0.12);
   assert.equal(phase.xgDeltaAgainst, 0);
+}
+
+for (const plan of ["chase_the_equaliser", "all_out_attack"]) {
+  const trailing = session(plan, { score: { for: 0, against: 1 } });
+  assert.equal(resolve(trailing, 0).route, "late_commitment");
+  for (const score of [{ for: 0, against: 0 }, { for: 1, against: 0 },
+    { for: 2, against: 2 }, null]) {
+    assert.equal(resolve(session(plan, { score }), 0), null,
+      plan + " must not win a late-pressure v6 advantage without trailing");
+  }
 }
 
 const normal = resolve(session(), 0.4);
