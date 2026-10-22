@@ -93,7 +93,105 @@ const PRESS_EXIT_PATHWAYS = Object.freeze({
   })
 });
 
-function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup) {
+// Route-specific defensive replies inspect real formation slots, player role
+// evidence and existing team metrics. They describe *possible* protection,
+// not a free probability/xG boost and not observed player coordinates.
+// A support role on one flank does not identify the eventual weak-side flank,
+// so both sides must be known before classifying a switch as role-supported.
+const PRESS_EXIT_DEFENCES = Object.freeze({
+  third_man: Object.freeze({
+    id: "screen_layoff_and_track_third_runner",
+    title: "Sikre avlegget og følge tredjemann",
+    target: "central_between_lines",
+    actions: Object.freeze([
+      "Sekseren skygger avlegget til støttepasningen",
+      "Nærmeste indreløper følger tredjemannsbevegelsen",
+      "Midtstopperen holder igjen og sikrer mellomrommet",
+      "Bakre ledd møter gjennomspillet uten å åpne rom sentralt"
+    ])
+  }),
+  switch_play: Object.freeze({
+    id: "recover_far_side_and_hold_width",
+    title: "Forskyve og sikre motsatt kant",
+    target: "far_side_wide",
+    actions: Object.freeze([
+      "Ballsidepresset holder igjen den første vendingen",
+      "Midtbanen flytter samlet idet pasningen vendes",
+      "Motsatt back sikrer ytterkorridoren",
+      "Bakre ledd beskytter boksen mens kanten får støtte"
+    ])
+  }),
+  direct: Object.freeze({
+    id: "hold_depth_and_compete_for_second_ball",
+    title: "Sikre dybden og andreballen",
+    target: "depth_behind_press",
+    actions: Object.freeze([
+      "Første stopper faller av foran den direkte pasningen",
+      "Andre stopper dekker mottakerens første berøring",
+      "Sekseren orienterer seg mot nedfalls- eller avleggsrommet",
+      "Bakre ledd står igjen for å stoppe løpet etter mottaket"
+    ])
+  })
+});
+
+function defensiveReplyForPressExit(route, lineup, profile, outcome) {
+  const config = PRESS_EXIT_DEFENCES[route];
+  if (!config) return null;
+  const all = Array.isArray(lineup) ? lineup : [];
+  const known = all.filter(player => player?.playerId &&
+    player.matchFitKnown === true && finite(player.matchScore) &&
+    typeof player.roleId === "string" && player.roleId.length);
+  const list = (positions, roles = null) => known.filter(player =>
+    positions.includes(player.position) &&
+    (!roles || roles.includes(player.roleId))).map(player => player.playerId);
+  const screeningSix = list(["DM", "CM"], ["balancing_six"]);
+  const pressingMidfielder = list(["CM", "DM"], ["pressing_midfielder"]);
+  const leftSupport = list(["LB"], ["support_fullback"]);
+  const rightSupport = list(["RB"], ["support_fullback"]);
+  const centralBacks = list(["CB"]);
+  const knownTacticalRoles = known.some(player => [
+    "balancing_six", "pressing_midfielder", "support_fullback",
+    "overlapping_fullback", "ball_playing_centre_back", "wingback"
+  ].includes(player.roleId));
+  const sufficientEvidence = known.length >= 10 && knownTacticalRoles &&
+    finite(profile?.balanceScore) && finite(profile?.restDefenseScore);
+  const roleSupported = route === "third_man"
+    ? screeningSix.length > 0 && pressingMidfielder.length > 0
+    : route === "switch_play"
+      ? leftSupport.length > 0 && rightSupport.length > 0
+      : centralBacks.length >= 2 && screeningSix.length > 0;
+  const activeCover = route === "third_man"
+    ? [...screeningSix, ...pressingMidfielder]
+    : route === "switch_play"
+      ? [...leftSupport, ...rightSupport]
+      : [...centralBacks, ...screeningSix];
+  return {
+    id: config.id, title: config.title, target: config.target,
+    // Weak evidence must not be misreported as a tactical weakness.
+    roleReadiness: !sufficientEvidence ? "unknown" :
+      roleSupported ? "supported_by_roles" : "not_supported_by_checked_roles",
+    simulatedResult: outcome === "regain" ? "not_required" :
+      outcome === "contained" ? "stopped_attack" : "could_not_stop_attack",
+    actions: config.actions.map((action, index) => ({
+      action, result: outcome === "regain" ? "not_required" :
+        outcome === "contained" && index === 3 ? "completed" :
+          outcome === "escaped" && index === 3 ? "breached" : "attempted"
+    })),
+    evidence: {
+      supportingPlayerIds: [...new Set(activeCover)],
+      screenedCentralBy: screeningSix, thirdRunnerTrackedBy: pressingMidfielder,
+      farSideBackCandidates: { left: leftSupport, right: rightSupport },
+      availableCentreBacks: centralBacks,
+      formationPositions: known.map(player => player.position),
+      balanceScore: finite(profile?.balanceScore) ? profile.balanceScore : null,
+      restDefenseScore: finite(profile?.restDefenseScore) ? profile.restDefenseScore : null
+    },
+    basis: "documented_lineup_roles_and_calculated_team_metrics",
+    probabilityAdjustment: 0
+  };
+}
+
+function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup, profile) {
   // An explicit observation of isolation overrides an older authored route.
   // A generic 'supported' observation with no named route must not invent one.
   if (escapeEvidence !== "supported" ||
@@ -118,6 +216,7 @@ function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup)
     // This is descriptive role evidence. Rest-defence already affects the
     // containment probability; never count these advanced backs a second time.
     advancedFullbacks,
+    defensiveReply: defensiveReplyForPressExit(opponentRoute, lineup, profile, outcome),
     containedCause: pathway.containedCause,
     escapedCause: pathway.escapedCause
   };
@@ -198,7 +297,7 @@ export function resolveOwnPressAgainstOpponent(session, {
   const contained = !regained && clamp(protection, 0, 0.999999999) < containment;
   const outcome = regained ? "regain" : contained ? "contained" : "escaped";
   const counterplay = counterplayForPressExit(counter, escapeEvidence,
-    outcome, session.lineupSnapshot);
+    outcome, session.lineupSnapshot, profile);
   const chanceSide = regained ? "for" : outcome === "escaped" ? "against" : null;
   const steps = config.steps.map((action, i) => ({
     action,
