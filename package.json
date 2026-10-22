@@ -19,6 +19,7 @@
     "sim:own-press-v6": "node scripts/simulate-own-press-v6.mjs",
     "sim:game-control-v6": "node scripts/simulate-game-control-v6.mjs",
     "sim:v6-historical-matrix": "node scripts/simulate-v6-historical-matrix.mjs",
+    "sim:real-role-formation-matrix": "node scripts/simulate-real-role-formation-matrix.mjs",
     "sim:v6-lineup-sensitivity": "node scripts/simulate-v6-lineup-formation-sensitivity.mjs",
     "sim:mini-season": "node scripts/simulate-mini-season.mjs",
     "sim:league-season": "node scripts/simulate-real-league-season.mjs",

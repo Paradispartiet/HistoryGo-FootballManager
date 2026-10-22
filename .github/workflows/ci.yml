@@ -146,6 +146,7 @@ jobs:
           npm run sim:own-press-v6
           npm run sim:game-control-v6
           npm run sim:v6-historical-matrix
+          npm run sim:real-role-formation-matrix
           npm run sim:v6-lineup-sensitivity
           npm run sim:mini-season
           npm run sim:tournament
