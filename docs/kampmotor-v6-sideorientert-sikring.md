@@ -100,16 +100,25 @@ pressEscapeActionSequence: {
     { id: "through_pass", durationSeconds: 1.2 }
   ],
   defenderResponsesByPlayerId: {
-    "known-six-id": { recognitionDelaySeconds: 0.4, coverMoveSeconds: 2.1 },
-    "known-midfielder-id": { recognitionDelaySeconds: 0.4, coverMoveSeconds: 1.9 }
+    "known-six-id": {
+      triggerActionId: "receive",
+      recognitionDelaySeconds: 0.4, coverMoveSeconds: 2.1
+    },
+    "known-midfielder-id": {
+      triggerActionId: "layoff",
+      recognitionDelaySeconds: 0.4, coverMoveSeconds: 1.9
+    }
   }
 }
 ```
 
 Tidsbudsjettet fra gjennombrudd i første press til neste farlige korridor
 er summen av de fire offensive handlingsvarighetene. Ankomsttiden for en
-relevant forsvarer er *gjenkjenningsforsinkelse + bevegelses-/sikringstid*;
-seneste av de nødvendige spillerne bestemmer om spesialistdekningen er på plass.
+relevant forsvarer er *forløpt tid frem til eget navngitte press-/sikringssignal
++ gjenkjenningsforsinkelse + bevegelses-/sikringstid*. Uten
+`triggerActionId` regnes tiden fra starten av første angrepshandling.
+Ukjent signal gir `invalid_or_incomplete`. Seneste av de nødvendige
+spillerne bestemmer om spesialistdekningen er på plass.
 Dette er en **diskret, forfattet hendelsestidslinje**, ikke kontinuerlig
 bevegelsessimulering. Verdiene over er kun demonstrasjonsdata.
 
@@ -132,3 +141,18 @@ pressposisjon eller kampens faktiske koordinater. Følgelig kan tidslinjen
 bare påvirke spill ved eksplisitt scenariodata. Før automatisk generering
 må vi etablere spillerferdigheter med kjent proveniens, startrom og
 pressutløser og validere en modell mot uavhengig annoterte sekvenser.
+
+
+### Pressignal og reaksjonsforsinkelse
+
+`triggerActionId` kan eksplisitt peke på ett av de fire handlingsleddene.
+En sekser kan reagere når første pasning tas imot, mens en indreløper
+først gjenkjenner tredjemannsløpet. Vi summerer da tidligere handlingers
+varighet før hans gjenkjennings- og løpstider. Ingen forsvarer får
+automatisk «spå» et senere løp, og tidsforsinkelsen gir verken
+selvstendig xG eller nye tilfeldige hendelser. Produksjons-XI og syntetiske
+regresjonstester sammenlikner identiske lag/trekninger med tidlig og sen
+reaksjonsutløser.
+
+Det er fortsatt ikke GPS-posisjoner, fysisk fart eller maskinlært
+reaksjonstid: trigger og varighet må oppgis eksplisitt.
