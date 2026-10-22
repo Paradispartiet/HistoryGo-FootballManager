@@ -79,3 +79,56 @@ tacticalBehaviour: {
 `evidence.routeCoverTiming` og `counterplay.defensiveReply.coverTiming` lagrer `status` (`not_provided`, `invalid_or_incomplete`, `in_time`, `late` eller `not_applicable`), `basis`, tilgjengelig tid, seneste ankomst og differansen. Dette er **beregnet scenarioutfall**, ikke observert løpshastighet eller romlig posisjon.
 
 **Testbar antakelse:** Den svakeste/seneste nødvendige deltakeren styrer om en koordinert spesialistkjede blir klar før angrepet. Den binære tidsporten er spilldesign, ikke empirisk kalibrert sannsynlighet. En framtidig dynamisk modell må kjenne faktiske spillerposisjoner, hastighet, pasningstidspunkter og motstanderens valg før den kan erstatte dette med simulerte bevegelser.
+
+
+## Fireleddets tidslinje i aktiv kampsimulering
+
+Når første press er brutt, kan kampens eksisterende `opponent.tacticalBehaviour`
+levere et eksplisitt sekvensforløp i `pressEscapeActionSequence`. Denne går
+gjennom den **samme** `resolveOwnPressAgainstOpponent`-kjeden som allerede
+kjøres av `advanceMatchClock`. Den lager ingen ekstra sjanse eller xG.
+
+```js
+pressEscapeRoute: "third_man",
+pressEscapeActionSequence: {
+  basis: "authored_action_sequence",
+  route: "third_man",
+  actions: [
+    { id: "receive", durationSeconds: 0.7 },
+    { id: "layoff", durationSeconds: 0.5 },
+    { id: "third_runner", durationSeconds: 0.7 },
+    { id: "through_pass", durationSeconds: 1.2 }
+  ],
+  defenderResponsesByPlayerId: {
+    "known-six-id": { recognitionDelaySeconds: 0.4, coverMoveSeconds: 2.1 },
+    "known-midfielder-id": { recognitionDelaySeconds: 0.4, coverMoveSeconds: 1.9 }
+  }
+}
+```
+
+Tidsbudsjettet fra gjennombrudd i første press til neste farlige korridor
+er summen av de fire offensive handlingsvarighetene. Ankomsttiden for en
+relevant forsvarer er *gjenkjenningsforsinkelse + bevegelses-/sikringstid*;
+seneste av de nødvendige spillerne bestemmer om spesialistdekningen er på plass.
+Dette er en **diskret, forfattet hendelsestidslinje**, ikke kontinuerlig
+bevegelsessimulering. Verdiene over er kun demonstrasjonsdata.
+
+Rute-ID-er må stemme med alle fire handlings-ID-ene, i fast rekkefølge:
+`third_man`: receive, layoff, third_runner, through_pass;
+`switch_play`: receive, release, switch_pass, wide_attack;
+`direct`: receive, direct_ball, first_touch, support_run.
+
+Ukjent, ikke-endelig, negativ eller manglende forsvarstid, manglende spiller-ID,
+feil rute eller ugyldige offensive varigheter gir `invalid_or_incomplete`
+uten effekt på den gamle sikringsbonusen. Ingen sekvens gir `not_provided`.
+Dersom begge feltene finnes, brukes den opprinnelige
+`pressEscapeTiming` for kompatibilitet med eksisterende save/scenario.
+Målrettede tester dekker en ellever gjennom produksjonsfit, forskjellig
+utfall med samme trekning, ugyldige sekvenser og uforandret xG-regnskap.
+
+**Nåværende evidensgrense:** Verken gjenkjenningstid, pasningstid eller
+forsvarernes forflytning er avledet automatisk fra ferdigheter, sprint,
+pressposisjon eller kampens faktiske koordinater. Følgelig kan tidslinjen
+bare påvirke spill ved eksplisitt scenariodata. Før automatisk generering
+må vi etablere spillerferdigheter med kjent proveniens, startrom og
+pressutløser og validere en modell mot uavhengig annoterte sekvenser.
