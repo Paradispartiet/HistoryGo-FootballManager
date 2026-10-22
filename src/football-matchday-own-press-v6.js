@@ -215,7 +215,8 @@ const PRESS_EXIT_TIMED_ACTIONS = Object.freeze({
 });
 
 // Resolve authored action durations and each specialist's independent
-// recognition + repositioning delays. No time is inferred from ratings,
+// recognition + repositioning delays, anchored to an optional named cue.
+// No time is inferred from ratings,
 // nominal formations, historical players, or a generic 'fast' tactic tag.
 function recoveryFromAuthoredActions(route, playerIds, sequence) {
   const expected = PRESS_EXIT_TIMED_ACTIONS[route];
@@ -237,10 +238,20 @@ function recoveryFromAuthoredActions(route, playerIds, sequence) {
     if (!response || typeof response !== "object" || Array.isArray(response) ||
       !finite(response.recognitionDelaySeconds) ||
       !finite(response.coverMoveSeconds) ||
-      response.recognitionDelaySeconds < 0 || response.coverMoveSeconds < 0 ||
-      response.recognitionDelaySeconds + response.coverMoveSeconds > 20) return null;
-    defenderArrivalSecondsByPlayerId[id] =
-      response.recognitionDelaySeconds + response.coverMoveSeconds;
+      response.recognitionDelaySeconds < 0 || response.coverMoveSeconds < 0)
+      return null;
+    // Recognition starts when the defender sees a named attacking cue.
+    // No cue means the first action, preserving old scenario behaviour.
+    const hasCue = Object.prototype.hasOwnProperty.call(response, "triggerActionId");
+    const cueIndex = hasCue
+      ? expected.indexOf(response.triggerActionId) : 0;
+    if (cueIndex < 0) return null;
+    const elapsedBeforeCue = sequence.actions.slice(0, cueIndex)
+      .reduce((sum, action) => sum + action.durationSeconds, 0);
+    const arrival = elapsedBeforeCue + response.recognitionDelaySeconds +
+      response.coverMoveSeconds;
+    if (arrival > 20) return null;
+    defenderArrivalSecondsByPlayerId[id] = arrival;
   }
   return { basis: "authored_scenario", route, attackWindowSeconds,
     defenderArrivalSecondsByPlayerId };
