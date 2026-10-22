@@ -1009,8 +1009,9 @@ check("planen vurderes mot motstanderens historiske stil", () => {
   // Barcelona 2008-12 bygger kort — press skal lønne seg mot dem.
   const possessionSide = getHistoricalOpponentProfile("barcelona_2008_12_positional_play");
   assert.ok(possessionSide, "fant ikke motstanderprofilen");
-  const press = evaluatePlanVsOpponent(byId.get("counter_press_recovery"), possessionSide);
-  assert.ok(press.edge > 0, "press mot kort oppbygging må være gunstig");
+  const press = evaluatePlanVsOpponent(byId.get("counter_press_recovery"), possessionSide,
+    { tacticalProfile: { pressScore: 80 } });
+  assert.ok(press.edge > 0, "documented pressing support must exploit short build-up");
   assert.ok(press.notes.length > 0);
 
   // Leicester 2015-16 lever på omstilling — en høy linje mot dem er dyrt.
