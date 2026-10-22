@@ -119,6 +119,82 @@ const annotatedSwitch = annotateOwnPressChances([
   { side: "against", quality: 0.1 }
 ], switchExit);
 assert.equal(annotatedSwitch[0].tacticalMoment.counterplay.pathwayId, "switch_play");
+assert.equal(annotatedSwitch[0].tacticalMoment.counterplay.pathwayId, "switch_play");
+
+// A full XI, with existing role vocabulary, supplies distinct COVERAGE
+// requirements for each opponent exit. Coverage is role evidence, not an
+// invented deterministic success or another hidden modifier to probabilities.
+const eleven = lineup.concat([{
+  playerId: "press-second-cb", position: "CB",
+  roleId: "ball_playing_centre_back", matchScore: 75, matchFitKnown: true
+}]).map(player => ({
+  ...player,
+  roleId: player.position === "DM" ? "balancing_six" :
+    player.position === "CM" ? "pressing_midfielder" :
+    ["LB", "RB"].includes(player.position) ? "support_fullback" :
+    player.position === "CB" ? "ball_playing_centre_back" : player.roleId
+}));
+const replyRun = (route, currentLineup = eleven) =>
+  resolve(session("midfield_press_trap", {
+    opponent: knownExit(route).opponent,
+    lineupSnapshot: currentLineup
+  }), 0.99, 0.99);
+const centralCover = replyRun("third_man");
+const flankCover = replyRun("switch_play");
+const depthCover = replyRun("direct");
+assert.deepEqual([
+  centralCover.counterplay.defensiveReply.id,
+  flankCover.counterplay.defensiveReply.id,
+  depthCover.counterplay.defensiveReply.id
+], [
+  "screen_layoff_and_track_third_runner",
+  "recover_far_side_and_hold_width",
+  "hold_depth_and_compete_for_second_ball"
+]);
+for (const phase of [centralCover, flankCover, depthCover]) {
+  assert.equal(phase.counterplay.defensiveReply.roleReadiness, "supported_by_roles");
+  assert.equal(phase.counterplay.defensiveReply.simulatedResult, "could_not_stop_attack");
+  assert.equal(phase.counterplay.defensiveReply.actions.length, 4);
+  assert.equal(phase.counterplay.defensiveReply.actions[3].result, "breached");
+  assert.equal(phase.counterplay.defensiveReply.probabilityAdjustment, 0);
+  assert.equal(phase.xgDeltaAgainst, 0.06);
+}
+assert.notDeepEqual(centralCover.counterplay.defensiveReply.actions,
+  flankCover.counterplay.defensiveReply.actions);
+const swapRole = (position, roleId) => eleven.map(player =>
+  player.position === position ? { ...player, roleId } : player);
+const withoutPressMid = replyRun("third_man", swapRole("CM", "deep_playmaker"));
+assert.equal(withoutPressMid.counterplay.defensiveReply.roleReadiness,
+  "not_supported_by_checked_roles");
+assert.equal(replyRun("switch_play", swapRole("CM", "deep_playmaker"))
+  .counterplay.defensiveReply.roleReadiness, "supported_by_roles",
+  "changing central cover must not disable an unrelated far-side reply");
+const withHighLeftBack = replyRun("switch_play", swapRole("LB", "overlapping_fullback"));
+assert.equal(withHighLeftBack.counterplay.defensiveReply.roleReadiness,
+  "not_supported_by_checked_roles");
+assert.equal(replyRun("third_man", swapRole("LB", "overlapping_fullback"))
+  .counterplay.defensiveReply.roleReadiness, "supported_by_roles",
+  "advanced back changes the flank defence but not central role coverage");
+const withoutHoldingSix = replyRun("direct", swapRole("DM", "deep_playmaker"));
+assert.equal(withoutHoldingSix.counterplay.defensiveReply.roleReadiness,
+  "not_supported_by_checked_roles");
+for (const altered of [withoutPressMid, withHighLeftBack, withoutHoldingSix]) {
+  assert.equal(altered.probability, centralCover.probability,
+    "non-calibrated coverage metadata must not alter press probability");
+  assert.equal(altered.containmentProbability, centralCover.containmentProbability,
+    "role-readiness metadata must not double-charge precomputed rest defence");
+}
+const unknownCover = replyRun("switch_play", eleven.map(player =>
+  ({ ...player, matchFitKnown: false })));
+assert.equal(unknownCover, null,
+  "unknown role fit cannot enter a causal pressing phase");
+const unnamedRoles = replyRun("switch_play", eleven.map(player =>
+  ({ ...player, roleId: "unverified_role" })));
+assert.equal(unnamedRoles.counterplay.defensiveReply.roleReadiness, "unknown",
+  "unverified role vocabulary must not imply specific defensive weakness");
+assert.equal(replyRun("third_man").counterplay.defensiveReply.evidence
+  .supportingPlayerIds.length, 2);
+
 const resistant = resolve(session("high_press_343", {
   opponent: { ...opponent, pressResistance: 90 }
 }), 0.4, 0.4);
