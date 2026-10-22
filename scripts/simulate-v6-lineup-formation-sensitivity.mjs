@@ -792,3 +792,46 @@ assert.equal(routeContainmentFlips, (3 + 3 + 1) * 2);
 console.log("OK: " + crossFormationChecks +
   " canonical 4-3-3/4-2-3-1/4-4-2/3-4-3 route-cover checks, " +
   routeContainmentFlips + " controlled containment flips; no extra xG.");
+
+
+// Real calculated XI, asymmetric fullback choices and documented target side.
+// Same 4-3-3 players, team metrics, opponent and press roll, so any difference
+// comes only from the match between the threatened flank and its surviving
+// support fullback. No coordinates or recovery times are invented.
+const cfLeftHighXI = buildFixture("4-3-3", cfTrap, {
+  st: "pressing_forward", lcm: "pressing_midfielder",
+  lb: "overlapping_fullback"
+});
+assert.deepEqual(cfLeftHighXI.players.map(p => p.id),
+  cfXI.players.map(p => p.id));
+const cfDirectionalSwitch = side => cfTrial("asymmetric_switch_target_" +
+  String(side), withCfOpponent({ tacticalBehaviour: {
+    pressEscapeRoute: "switch_play",
+    ...(side ? { pressEscapeTargetFlank: side } : {})
+  }}), cfLeftHighXI);
+const cfUnknownFlank = cfDirectionalSwitch(null);
+const cfRightFlank = cfDirectionalSwitch("right");
+const cfLeftFlank = cfDirectionalSwitch("left");
+assert.equal(cfUnknownFlank.forcedBreak.routeCoverAdjustment, 0,
+  "unknown weak-side direction cannot use only one support back");
+assert.equal(cfLeftFlank.forcedBreak.routeCoverAdjustment, 0,
+  "advanced LB has no documented support cover on own left");
+assert.ok(cfRightFlank.forcedBreak.routeCoverAdjustment > 0,
+  "right support back protects a documented right-side switch");
+assert.equal(cfRightFlank.forcedBreak.probability,
+  cfLeftFlank.forcedBreak.probability,
+  "actual destination cannot rewrite first pressing stage");
+assert.ok(cfRightFlank.forcedBreak.containmentProbability >
+  cfLeftFlank.forcedBreak.containmentProbability,
+  "side-appropriate role-fit must affect only secondary containment");
+assert.equal(cfRightFlank.forcedBreak.xgDeltaAgainst,
+  cfLeftFlank.forcedBreak.xgDeltaAgainst);
+const rightSideDraw = (cfRightFlank.forcedBreak.containmentProbability +
+  cfLeftFlank.forcedBreak.containmentProbability) / 2;
+const onSameDraw = side => resolveOwnPressAgainstOpponent(
+  kickoff(cfLeftHighXI, withCfOpponent({ tacticalBehaviour: {
+    pressEscapeRoute: "switch_play", pressEscapeTargetFlank: side
+  }})), { pressureRoll: () => 0.99, protectionRoll: () => rightSideDraw });
+assert.equal(onSameDraw("right").status, "contained");
+assert.equal(onSameDraw("left").status, "escaped");
+console.log("OK: production XI proves directional switch protection with one advanced back.");
