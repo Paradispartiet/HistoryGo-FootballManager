@@ -181,6 +181,57 @@ assert.equal(withHighLeftBack.counterplay.defensiveReply.roleReadiness,
 assert.equal(replyRun("third_man", swapRole("LB", "overlapping_fullback"))
   .counterplay.defensiveReply.roleReadiness, "supported_by_roles",
   "advanced back changes the flank defence but not central role coverage");
+// A supported far-side SWITCH can name its actual destination in the
+// defending team's left/right frame. One high back must not erase sound cover
+// on the other flank; without destination evidence, remain conservative.
+const asymmetricBacks = swapRole("LB", "overlapping_fullback");
+const targetedSwitch = (targetFlank, lineupToUse = asymmetricBacks, draw = 0.99,
+  pressEscape = undefined) => resolve(session("midfield_press_trap", {
+  opponent: { ...opponent, tacticalBehaviour: {
+    pressEscapeRoute: "switch_play", pressEscapeTargetFlank: targetFlank,
+    ...(pressEscape ? { pressEscape } : {})
+  } },
+  lineupSnapshot: lineupToUse
+}), 0.99, draw);
+const unsightedSwitch = targetedSwitch(undefined);
+const rightSideSwitch = targetedSwitch("right");
+const leftSideSwitch = targetedSwitch("left");
+const badSideSwitch = targetedSwitch("centre");
+assert.equal(unsightedSwitch.routeCoverAdjustment, 0);
+assert.equal(badSideSwitch.routeCoverAdjustment, 0,
+  "unrecognised flank name cannot become invented spatial information");
+assert.equal(rightSideSwitch.counterplay.documentedTargetFlank, "right");
+assert.equal(rightSideSwitch.counterplay.defensiveReply.evidence.documentedTargetFlank,
+  "right");
+assert.equal(rightSideSwitch.counterplay.defensiveReply.roleReadiness,
+  "supported_by_roles", "supported RIGHT back can protect named right flank");
+assert.ok(rightSideSwitch.routeCoverAdjustment > 0);
+assert.equal(rightSideSwitch.counterplay.defensiveReply.evidence
+  .supportingPlayerIds.length, 1,
+  "targeted switch must not include irrelevant opposite-side back in fit floor");
+assert.equal(leftSideSwitch.routeCoverAdjustment, 0,
+  "advanced left back cannot claim left-side containment");
+assert.equal(leftSideSwitch.counterplay.defensiveReply.roleReadiness,
+  "not_supported_by_checked_roles");
+assert.equal(leftSideSwitch.counterplay.documentedTargetFlank, "left");
+assert.equal(rightSideSwitch.probability, leftSideSwitch.probability,
+  "changing destination of switch never changes initial press");
+assert.equal(rightSideSwitch.xgDeltaAgainst, leftSideSwitch.xgDeltaAgainst,
+  "side-aware cover must not pay additional expected goals");
+assert.ok(rightSideSwitch.containmentProbability >
+  leftSideSwitch.containmentProbability);
+const flankMidpoint = (rightSideSwitch.containmentProbability +
+  leftSideSwitch.containmentProbability) / 2;
+const protectedRight = targetedSwitch("right", asymmetricBacks, flankMidpoint);
+const exposedLeft = targetedSwitch("left", asymmetricBacks, flankMidpoint);
+assert.equal(protectedRight.status, "contained");
+assert.equal(exposedLeft.status, "escaped");
+assert.equal(protectedRight.xgDeltaAgainst, 0.02);
+assert.equal(exposedLeft.xgDeltaAgainst, 0.06);
+assert.equal(targetedSwitch("right", asymmetricBacks, 0.99, "isolated")
+  .routeCoverAdjustment, 0,
+  "explicitly observed isolation must suppress an older labelled exit");
+
 const withoutHoldingSix = replyRun("direct", swapRole("DM", "deep_playmaker"));
 assert.equal(withoutHoldingSix.counterplay.defensiveReply.roleReadiness,
   "not_supported_by_checked_roles");
