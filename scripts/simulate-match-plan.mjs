@@ -1036,7 +1036,9 @@ check("motstandersvakheter krever faktisk rolle-, egenskaps- og formasjonsdeknin
     "a failed exploit must identify missing tactical support, not blame player talent");
   assert.equal(evaluatePlanVsOpponent(plan, possession).edge,
     evaluatePlanVsOpponent(plan, possession, { tacticalProfile: {} }).edge,
-    "unknown role metrics must preserve legacy pre-match matchup semantics");
+    "legacy and empty profiles must both stay neutral when no player support is documented");
+  assert.ok(evaluatePlanVsOpponent(plan, possession).notes.some(note => note.includes("ukjent")),
+    "missing team metrics must be identified as unknown, not inadequate players");
 
   const highLine = getHistoricalOpponentProfile("milan_1988_90_sacchi");
   const fast = byId.get("all_out_attack");
@@ -1062,6 +1064,54 @@ check("motstandersvakheter krever faktisk rolle-, egenskaps- og formasjonsdeknin
   assert.ok(stretched.edge > narrow.edge,
     "formation and wide role supply must unlock compact-block exploit");
   assert.ok(narrow.notes.some(note => note.includes("bredderoller")));
+});
+
+check("ukjente lagmetrikker gir aldri press-, dybde- eller breddebonus", () => {
+  const cases = [
+    {
+      id: "press_build_up", metric: "pressScore",
+      plan: byId.get("counter_press_recovery"),
+      opponent: { styleTraits: { shortBuildUp: 80, highLine: 50,
+        defensiveCompactness: 40, transitionThreat: 40, pressIntensity: 45 } }
+    },
+    {
+      id: "runs_behind", metric: "depthScore",
+      plan: byId.get("all_out_attack"),
+      opponent: { styleTraits: { shortBuildUp: 40, highLine: 80,
+        defensiveCompactness: 40, transitionThreat: 40, pressIntensity: 45 } }
+    },
+    {
+      id: "stretch_compact", metric: "widthScore",
+      plan: { ...byId.get("all_out_attack"), width: "wide" },
+      opponent: { styleTraits: { shortBuildUp: 40, highLine: 40,
+        defensiveCompactness: 80, transitionThreat: 40, pressIntensity: 45 } }
+    }
+  ];
+  for (const { id, metric, plan, opponent } of cases) {
+    const evaluate = (profile) =>
+      evaluatePlanVsOpponent(plan, opponent, { tacticalProfile: profile });
+    const unknown = evaluate({});
+    const missingProfile = evaluatePlanVsOpponent(plan, opponent);
+    const gap = evaluate({ [metric]: 59 });
+    const ready = evaluate({ [metric]: 60 });
+    assert.equal(unknown.opportunities.find((entry) => entry.id === id)?.readiness,
+      "unknown", id + ": missing metric must be unknown");
+    assert.equal(unknown.edge, gap.edge,
+      id + ": absence must not grant more edge than documented insufficient support");
+    assert.equal(missingProfile.edge, gap.edge,
+      id + ": legacy preview must not assume tactical player abilities");
+    assert.equal(ready.edge, gap.edge + 1,
+      id + ": exactly one supported opportunity must give one bounded edge");
+    assert.ok(unknown.notes.some((note) => note.includes("ukjent")),
+      id + ": analysis must not diagnose undocumented players as weak");
+    for (const invalid of [undefined, null, NaN, Infinity, -Infinity, "99"]) {
+      const result = evaluate({ [metric]: invalid });
+      assert.equal(result.edge, gap.edge,
+        id + ": invalid/non-numeric metric must never give free tactical advantage");
+      assert.equal(result.opportunities.find((entry) => entry.id === id)?.readiness,
+        "unknown", id + ": invalid metric must remain unknown");
+    }
+  }
 });
 
 check("den samme matchup-forskjellen når kampmotorens xG", () => {
