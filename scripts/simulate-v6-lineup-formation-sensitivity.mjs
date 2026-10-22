@@ -29,7 +29,7 @@ for (const plan of plans) assert.ok(canonicalPlanIds.has(plan.id), plan.id);
 
 const defaultRoles = Object.freeze({
   GK: "sweeperkeeper", LB: "support_fullback", RB: "support_fullback",
-  CB: "ball_playing_centre_back", DM: "balancing_six", CM: "box_to_box",
+  CB: "ball_playing_centre_back", DM: "balancing_six", CM: "deep_playmaker",
   AM: "classic_ten", WB: "wingback", LW: "wide_dribbler",
   RW: "inverted_winger", ST: "channel_runner"
 });
