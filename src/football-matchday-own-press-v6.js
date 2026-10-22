@@ -205,31 +205,78 @@ function defensiveReplyForPressExit(route, lineup, profile, outcome, targetFlank
 // The timing result only GATES the existing <=0.03 coordination bonus: it
 // cannot penalise generic rest defence, alter initial pressure or add xG.
 // Missing / untrusted timing data preserves the previous baseline exactly.
+// Each route has four named post-break attack decisions. Durations are
+// explicitly authored and start AFTER the first press has been beaten. The
+// scenario does not assert that these were observed movements or GPS points.
+const PRESS_EXIT_TIMED_ACTIONS = Object.freeze({
+  third_man: Object.freeze(["receive", "layoff", "third_runner", "through_pass"]),
+  switch_play: Object.freeze(["receive", "release", "switch_pass", "wide_attack"]),
+  direct: Object.freeze(["receive", "direct_ball", "first_touch", "support_run"])
+});
+
+// Resolve authored action durations and each specialist's independent
+// recognition + repositioning delays. No time is inferred from ratings,
+// nominal formations, historical players, or a generic 'fast' tactic tag.
+function recoveryFromAuthoredActions(route, playerIds, sequence) {
+  const expected = PRESS_EXIT_TIMED_ACTIONS[route];
+  if (!expected || sequence?.route !== route ||
+    !Array.isArray(sequence.actions) || sequence.actions.length !== expected.length ||
+    !sequence.actions.every((entry, index) =>
+      entry?.id === expected[index] && finite(entry.durationSeconds) &&
+      entry.durationSeconds > 0 && entry.durationSeconds <= 20)) return null;
+  const attackWindowSeconds = sequence.actions.reduce(
+    (total, entry) => total + entry.durationSeconds, 0);
+  if (attackWindowSeconds > 20) return null;
+  const responses = sequence.defenderResponsesByPlayerId;
+  if (!responses || typeof responses !== "object" || Array.isArray(responses) ||
+    !Array.isArray(playerIds) || playerIds.length === 0) return null;
+  const defenderArrivalSecondsByPlayerId = {};
+  for (const id of playerIds) {
+    const response = Object.prototype.hasOwnProperty.call(responses, id)
+      ? responses[id] : null;
+    if (!response || typeof response !== "object" || Array.isArray(response) ||
+      !finite(response.recognitionDelaySeconds) ||
+      !finite(response.coverMoveSeconds) ||
+      response.recognitionDelaySeconds < 0 || response.coverMoveSeconds < 0 ||
+      response.recognitionDelaySeconds + response.coverMoveSeconds > 20) return null;
+    defenderArrivalSecondsByPlayerId[id] =
+      response.recognitionDelaySeconds + response.coverMoveSeconds;
+  }
+  return { basis: "authored_scenario", route, attackWindowSeconds,
+    defenderArrivalSecondsByPlayerId };
+}
+
+// Recovery timing is OPTIONAL scenario input, never inferred from fitness,
+// player fit or coordinates. A late specialist gates only an ALREADY earned
+// route-specific coordination term; there is no new xG, time bonus or penalty.
 function specialistRecoveryWindow(route, playerIds, timing) {
   const neutral = { status: "not_provided", basis: null,
     attackWindowSeconds: null, latestRecoverySeconds: null, marginSeconds: null };
   if (timing == null) return neutral;
   const invalid = { ...neutral, status: "invalid_or_incomplete" };
-  if (!timing || typeof timing !== "object" || Array.isArray(timing) ||
-    timing.basis !== "authored_scenario" || timing.route !== route ||
-    !finite(timing.attackWindowSeconds) ||
-    timing.attackWindowSeconds <= 0 || timing.attackWindowSeconds > 20 ||
-    !timing.defenderArrivalSecondsByPlayerId ||
-    typeof timing.defenderArrivalSecondsByPlayerId !== "object" ||
-    Array.isArray(timing.defenderArrivalSecondsByPlayerId) ||
+  if (!timing || typeof timing !== "object" || Array.isArray(timing)) return invalid;
+  const isSequence = timing.basis === "authored_action_sequence";
+  const derived = isSequence
+    ? recoveryFromAuthoredActions(route, playerIds, timing) : timing;
+  if (!derived || derived.basis !== "authored_scenario" ||
+    derived.route !== route || !finite(derived.attackWindowSeconds) ||
+    derived.attackWindowSeconds <= 0 || derived.attackWindowSeconds > 20 ||
+    !derived.defenderArrivalSecondsByPlayerId ||
+    typeof derived.defenderArrivalSecondsByPlayerId !== "object" ||
+    Array.isArray(derived.defenderArrivalSecondsByPlayerId) ||
     !Array.isArray(playerIds) || playerIds.length === 0) return invalid;
   const arrival = playerIds.map(id =>
-    Object.prototype.hasOwnProperty.call(timing.defenderArrivalSecondsByPlayerId, id)
-      ? timing.defenderArrivalSecondsByPlayerId[id] : null);
+    Object.prototype.hasOwnProperty.call(derived.defenderArrivalSecondsByPlayerId, id)
+      ? derived.defenderArrivalSecondsByPlayerId[id] : null);
   if (!arrival.every(time => finite(time) && time >= 0 && time <= 20))
     return invalid;
   const latest = Math.max(...arrival);
-  const margin = timing.attackWindowSeconds - latest;
+  const margin = derived.attackWindowSeconds - latest;
   return {
     status: margin >= 0 ? "in_time" : "late",
-    basis: "authored_scenario",
-    attackWindowSeconds: timing.attackWindowSeconds,
-    latestRecoverySeconds: latest,
+    basis: isSequence ? "authored_action_sequence" : "authored_scenario",
+    attackWindowSeconds: Math.round(derived.attackWindowSeconds * 1000) / 1000,
+    latestRecoverySeconds: Math.round(latest * 1000) / 1000,
     marginSeconds: Math.round(margin * 1000) / 1000
   };
 }
@@ -377,7 +424,10 @@ export function resolveOwnPressAgainstOpponent(session, {
   // Rest defence is evaluated only if the opponent gets beyond the press.
   const cover = routeCoverEvidence(counter, escapeEvidence,
     session.lineupSnapshot, profile, targetFlank,
-    opponent?.tacticalBehaviour?.pressEscapeTiming);
+    // Explicit aggregate timing retains precedence for older fixtures/saves.
+    // A four-action in-match sequence is an alternate, never an extra modifier.
+    opponent?.tacticalBehaviour?.pressEscapeTiming ??
+      opponent?.tacticalBehaviour?.pressEscapeActionSequence);
   const containment = clamp(
     0.48 + (restDefense - 65) * 0.005 +
       (balance - 65) * 0.002 +
