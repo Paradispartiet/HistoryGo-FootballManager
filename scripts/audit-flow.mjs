@@ -566,7 +566,8 @@ stage("16. Kampplan");
   check(
     "valgt kampplan teller mot motstanderen fra avspark",
     /planMatchup: evaluatePlanVsOpponent\(tactic, matchOpponent, \{ tacticalProfile \}\)/.test(matchdayEngine)
-      && matchPlanEngine.includes("hasTacticalSupport(tacticalProfile")
+      && matchPlanEngine.includes("function tacticalMetricReadiness(profile, key, minimum)")
+      && matchPlanEngine.includes('if (!Number.isFinite(value)) return "unknown";')
       && /planEdge: num\(session\.planMatchup\?\.edge\)/.test(matchdayEngine)
       && matchdayEngine.includes("expectedGoalsFor += num(planEdge)")
   );

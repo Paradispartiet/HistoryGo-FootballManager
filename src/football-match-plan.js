@@ -241,11 +241,12 @@ export function evaluatePlanForGameState(plan, gameState) {
 // motstanderprofilene allerede bærer — ingen ny motstanderdata.
 // ----------------------------------------------------------------------------
 // En kampplan får først uttelling når lagets FAKTISKE rolle-, ferdighets- og
-// formasjonsbidrag kan utføre den. Uten snapshot brukes den gamle, nøytrale
-// forhåndsvurderingen (legacy-saves og ren forhåndsvisning).
-function hasTacticalSupport(profile, key, minimum) {
-  if (!profile || !Number.isFinite(profile[key])) return true;
-  return profile[key] >= minimum;
+// formasjonsbidrag kan utføre den. Forhåndsvisning og eldre lagringer uten
+// dokumenterte lagmetrikker får status "unknown", aldri en gratis bonus.
+function tacticalMetricReadiness(profile, key, minimum) {
+  const value = profile?.[key];
+  if (!Number.isFinite(value)) return "unknown";
+  return value >= minimum ? "ready" : "gap";
 }
 
 export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {}) {
@@ -272,20 +273,23 @@ export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {})
   const recordOpportunity = (id, label, metric) => {
     const value = tacticalProfile?.[metric];
     const metricValue = Number.isFinite(value) ? value : null;
+    const readiness = tacticalMetricReadiness(tacticalProfile, metric, 60);
     opportunities.push({
-      id, label, metric, metricValue, threshold: 60,
-      readiness: metricValue === null ? "unknown" : metricValue >= 60 ? "ready" : "gap"
+      id, label, metric, metricValue, threshold: 60, readiness
     });
+    return readiness;
   };
 
   // Utsatte motstandere er ikke nok: egne roller må gjennomføre planen.
   // Profilmetrikkene bygges allerede av dokumenterte spillerferdigheter,
   // relasjoner og formasjon. Ingen nye eller gjettede individuelle egenskaper.
   if (planPress >= 70 && shortBuildUp >= 60) {
-    recordOpportunity("press_build_up", "Høyt press mot kort oppbygging", "pressScore");
-    if (hasTacticalSupport(tacticalProfile, "pressScore", 60)) {
+    const pressReadiness = recordOpportunity("press_build_up", "Høyt press mot kort oppbygging", "pressScore");
+    if (pressReadiness === "ready") {
       edge += 1;
       notes.push("Presset treffer oppbyggingen deres.");
+    } else if (pressReadiness === "unknown") {
+      notes.push("Kort oppbygging gir en mulig pressmulighet, men lagets pressdekning er ukjent; ingen bonus beregnes.");
     } else {
       notes.push("Kort oppbygging kan presses, men dine pressroller og samspill gir ikke nok samlet press ennå.");
     }
@@ -295,19 +299,23 @@ export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {})
     notes.push("Den høye linja gir dem akkurat rommet de vil ha.");
   }
   if (planTempo >= 55 && highLine >= 65) {
-    recordOpportunity("runs_behind", "Dybdeløp mot høy forsvarslinje", "depthScore");
-    if (hasTacticalSupport(tacticalProfile, "depthScore", 60)) {
+    const depthReadiness = recordOpportunity("runs_behind", "Dybdeløp mot høy forsvarslinje", "depthScore");
+    if (depthReadiness === "ready") {
       edge += 1;
       notes.push("Dybderollene treffer bakrommet bak den høye linja deres.");
+    } else if (depthReadiness === "unknown") {
+      notes.push("Motstanderen gir bakrom, men lagets dybdetrussel er ukjent; ingen bonus beregnes.");
     } else {
       notes.push("De gir bakrom, men dine angriperroller skaper ikke nok dybdetrussel til å utnytte det.");
     }
   }
   if (planWidth >= 70 && compactness >= 65) {
-    recordOpportunity("stretch_compact", "Bredde mot kompakt forsvar", "widthScore");
-    if (hasTacticalSupport(tacticalProfile, "widthScore", 60)) {
+    const widthReadiness = recordOpportunity("stretch_compact", "Bredde mot kompakt forsvar", "widthScore");
+    if (widthReadiness === "ready") {
       edge += 1;
       notes.push("Kant- og backrollene strekker den kompakte blokka deres.");
+    } else if (widthReadiness === "unknown") {
+      notes.push("Den kompakte blokka kan strekkes, men lagets breddekapasitet er ukjent; ingen bonus beregnes.");
     } else {
       notes.push("Den kompakte blokka kan strekkes, men lagets faktiske bredderoller gir for lite bredde.");
     }
@@ -371,7 +379,7 @@ export function evaluatePlanVsOpponent(plan, opponent, { tacticalProfile } = {})
       const raw = tacticalProfile?.[metric];
       const value = Number.isFinite(raw) ? raw : null;
       return { metric, label, value, minimum,
-        status: value === null ? "unknown" : value >= minimum ? "ready" : "gap" };
+        status: tacticalMetricReadiness(tacticalProfile, metric, minimum) };
     });
     const allReady = factors.every((factor) => factor.status === "ready");
     const unknown = factors.some((factor) => factor.status === "unknown");
