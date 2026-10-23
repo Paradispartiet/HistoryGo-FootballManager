@@ -3,6 +3,7 @@ import {
   EXERCISE_DESIGN_CONTROLS,
   TRAINING_EXERCISE_DESIGN_VERSION,
   createTrainingExerciseHypothesis,
+  createTrainingExerciseFieldSetup,
   createDefaultExerciseDesign,
   evaluateTrainingExerciseDesign,
   normalizeExerciseDesignConfig,
@@ -134,6 +135,32 @@ ok("ingen skjult spillscore i output", () => {
   const serialized = JSON.stringify(result);
   assert.doesNotMatch(serialized, /overall|matchScore|exerciseScore|scoreDelta/i);
   assert.match(result.guardrail, /endrer ikke lagret treningsbelastning/i);
+});
+
+
+ok("feltoppsettet endres deterministisk med areal og spillerbalanse", () => {
+  const session = { title: "Høyt press" };
+  const before = createTrainingExerciseFieldSetup(session, { area: "tight", numbers: "even" });
+  const after = createTrainingExerciseFieldSetup(session, { area: "large", numbers: "attack_overload", direction: "transition", touches: "two" });
+  assert.equal(before.area.width, 20);
+  assert.equal(after.area.width, 48);
+  assert.equal(before.markers.length, 8);
+  assert.equal(after.markers.length, 9);
+  assert.equal(after.markers.filter((marker) => marker.team === "ball").length, 5);
+  assert.equal(after.markers.filter((marker) => marker.team === "press").length, 4);
+  assert.match(after.steps[2], /maks 2 touch/);
+  assert.match(after.visualDescription, /48 × 36/);
+  assert.doesNotMatch(JSON.stringify(after), /matchScore|scoreDelta|bonus/i);
+});
+
+ok("restitusjonsøkt vises som rolig stasjonsarbeid, men omstilling bytter til spillsituasjon", () => {
+  const rest = createTrainingExerciseFieldSetup({ title: "Restitusjonsøkt" });
+  const game = createTrainingExerciseFieldSetup({ title: "Restitusjonsøkt" }, { direction: "transition" });
+  assert.equal(rest.mode, "stations");
+  assert.equal(rest.markers.filter((marker) => marker.team === "station").length, 4);
+  assert.match(rest.steps[2], /belastning/i);
+  assert.equal(game.mode, "game");
+  assert.equal(game.markers.length, 8);
 });
 
 console.log(`\nTreningsøvelser v1 simulering: ${passed}/${passed}`);
