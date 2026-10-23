@@ -69,17 +69,23 @@ test("kalenderfooteren blir mer kompakt når vinduet snevres inn og hele stripen
   await page.locator('.app-subtab[data-tab-target="trening"]').click();
   await expect(page.locator("#managerTrainingDay")).toBeVisible();
 
-  async function footerHeightAt(width) {
+  async function actionStripHeightAt(width) {
     await page.setViewportSize({ width, height: 900 });
     await expectCalendarFooter(page);
-    return page.locator("manager-next-action .site-footer").evaluate((footer) => footer.getBoundingClientRect().height);
+    return page.locator("#nextActionStrip").evaluate((strip) => strip.getBoundingClientRect().height);
   }
 
-  const wideHeight = await footerHeightAt(1180);
-  const compactHeight = await footerHeightAt(820);
-  const mobileHeight = await footerHeightAt(390);
+  const wideHeight = await actionStripHeightAt(1180);
+  const compactHeight = await actionStripHeightAt(820);
+  const mobileHeight = await actionStripHeightAt(390);
+  // Compare the same action component at all widths. On mobile, the five
+  // main tabs intentionally share its footer container as one unified dock.
   expect(compactHeight).toBeLessThanOrEqual(wideHeight + 1);
   expect(mobileHeight).toBeLessThanOrEqual(compactHeight + 1);
+  const dockHeight = await page.locator("manager-next-action .site-footer")
+    .evaluate((footer) => footer.getBoundingClientRect().height);
+  expect(dockHeight).toBeLessThanOrEqual(125);
+  await expect(page.locator("manager-next-action .main-nav")).toHaveCount(1);
 
   await page.setViewportSize({ width: 1180, height: 900 });
   const destinationBox = await page.locator("#nextActionStrip .next-action-destination").boundingBox();
