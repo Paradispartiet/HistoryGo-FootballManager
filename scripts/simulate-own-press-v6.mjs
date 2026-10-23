@@ -486,6 +486,50 @@ assert.equal(sequenceTrial(authoredSequence(0.2), 0.99, authoredWindow(3.0))
   "legacy explicit window wins if both formats are present");
 
  
+
+// The six and the covering runner can have DIFFERENT intervention deadlines.
+// The six may have to close the third-runner lane BEFORE the final pass,
+// while the other player still has until the end of the full escape.
+const timedByAction = deadlineAction => authoredSequence(1.2, {
+  ...sequenceResponse,
+  [centralIds[0]]: {
+    recognitionDelaySeconds: 0.4, coverMoveSeconds: 1,
+    triggerActionId: "receive",
+    mustCoverByActionId: deadlineAction
+  }
+});
+const readyForFinalPass = sequenceTrial(timedByAction("through_pass"));
+const tooLateForThirdRunner = sequenceTrial(timedByAction("third_runner"));
+assert.equal(readyForFinalPass.evidence.routeCoverTiming.status, "in_time");
+assert.equal(tooLateForThirdRunner.evidence.routeCoverTiming.status, "late");
+assert.equal(readyForFinalPass.evidence.routeCoverTiming.deadlineModel,
+  "per_defender_action_start");
+assert.equal(readyForFinalPass.evidence.routeCoverTiming.criticalDefenderId,
+  centralIds[0]);
+assert.equal(readyForFinalPass.evidence.routeCoverTiming.criticalDeadlineSeconds, 1.9);
+assert.equal(readyForFinalPass.evidence.routeCoverTiming.marginSeconds, 0.5);
+assert.equal(tooLateForThirdRunner.evidence.routeCoverTiming.criticalDeadlineSeconds, 1.2);
+assert.equal(tooLateForThirdRunner.evidence.routeCoverTiming.marginSeconds, -0.2);
+assert.equal(readyForFinalPass.evidence.routeCoverTiming.attackWindowSeconds, 3.1);
+assert.equal(readyForFinalPass.probability, tooLateForThirdRunner.probability);
+assert.ok(readyForFinalPass.containmentProbability >
+  tooLateForThirdRunner.containmentProbability);
+const deadlineDraw = (readyForFinalPass.containmentProbability +
+  tooLateForThirdRunner.containmentProbability) / 2;
+assert.equal(sequenceTrial(timedByAction("through_pass"), deadlineDraw)
+  .status, "contained");
+assert.equal(sequenceTrial(timedByAction("third_runner"), deadlineDraw)
+  .status, "escaped");
+assert.equal(sequenceTrial(timedByAction("through_pass"), deadlineDraw)
+  .xgDeltaAgainst, 0.02);
+assert.equal(sequenceTrial(timedByAction("third_runner"), deadlineDraw)
+  .xgDeltaAgainst, 0.06);
+for (const malformed of [null, "", "missing_action", 5]) {
+  const invalid = sequenceTrial(timedByAction(malformed));
+  assert.equal(invalid.evidence.routeCoverTiming.status, "invalid_or_incomplete");
+  assert.equal(invalid.routeCoverAdjustment, noWindow.routeCoverAdjustment);
+}
+
 // Authored geometry: same XI and action clock, but a defender starts too far
 // from the cover corridor in one scenario. Travel time is calculated from
 // documented SCENARIO metres/speed, NEVER from matchScore or invented pace.
@@ -640,6 +684,8 @@ const routeSpatialPhase = (spec, options = {}) => {
   const lateId = ids[ids.length - 1];
   const responses = Object.fromEntries(ids.map(id => [id, {
     recognitionDelaySeconds: 0.3, triggerActionId: "receive",
+    ...(options.mustCoverByActionId !== undefined
+      ? { mustCoverByActionId: options.mustCoverByActionId } : {}),
     coverMovement: {
       basis: "authored_pitch_geometry", startMeters:
         id === lateId && options.late ? spec.lateStart : spec.start,
@@ -709,6 +755,32 @@ for (const spec of spatialCases) {
     assert.ok(invalid.routeCoverAdjustment > 0,
       "invalid scenario does not fabricate a late recovery penalty");
   }
+  // Route-specific deadline: a runner, far-side back or CB can reach the
+  // FINAL corridor but miss the earlier pass that opens it.
+  const deadlines = spec.route === "third_man"
+    ? ["layoff", "third_runner"] :
+      spec.route === "switch_play" ? ["switch_pass", "wide_attack"] :
+        ["first_touch", "support_run"];
+  const missedIntervention = routeSpatialPhase(spec, {
+    mustCoverByActionId: deadlines[0]
+  });
+  const reachedIntervention = routeSpatialPhase(spec, {
+    mustCoverByActionId: deadlines[1]
+  });
+  assert.equal(missedIntervention.evidence.routeCoverTiming.status, "late",
+    spec.route + " early defensive intervention");
+  assert.equal(reachedIntervention.evidence.routeCoverTiming.status, "in_time",
+    spec.route + " late defensive intervention");
+  assert.equal(missedIntervention.routeCoverAdjustment, 0);
+  assert.equal(reachedIntervention.routeCoverAdjustment, timely.routeCoverAdjustment);
+  assert.equal(missedIntervention.probability, reachedIntervention.probability);
+  assert.equal(missedIntervention.xgDeltaAgainst, reachedIntervention.xgDeltaAgainst);
+  const wrongAction = routeSpatialPhase(spec, {
+    mustCoverByActionId: "action_not_on_this_route"
+  });
+  assert.equal(wrongAction.evidence.routeCoverTiming.status,
+    "invalid_or_incomplete");
+  assert.ok(wrongAction.routeCoverAdjustment > 0);
   const legacyCompatible = routeSpatialPhase(spec, { noLane: true });
   assert.equal(legacyCompatible.evidence.routeCoverTiming.status, "in_time");
   assert.equal(legacyCompatible.evidence.routeCoverTiming.spatialLane, null);
