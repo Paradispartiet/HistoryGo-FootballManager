@@ -115,6 +115,18 @@ Mus, Enter og mellomrom åpner en modal øvelsesflate med:
 
 Hvis treningsprogram ennå ikke er valgt, er de fire plassholderøktene ikke interaktive. Manageren sendes ikke inn i et oppdiktet øvelsesoppsett uten en faktisk økt som utgangspunkt.
 
+## Praktisk feltplanlegger i spillet
+
+Øvelsesverkstedet begynner nå med **Sett opp økta**: en skjematisk bane, markerte spillere/stasjoner, forslag til materiell og en kort operativ oppsettsliste. Feltvisningen reagerer umiddelbart på de samme fire valgene (areal, spillerbalanse, retning og touch); den forklarende teorien ligger samlet i en sammenleggbar del.
+
+- Areal illustreres med eksempelmål på 20 × 16, 32 × 24 eller 48 × 36 meter. Dette er **veiledende øvelseseksempler**, ikke dokumenterte anleggsmål for navngitte klubber.
+- Spillerbalanse vises som 4 mot 4, 5 mot 4 eller 4 mot 5, der antall og vester/ball-lag er tydelige. Ingen nye spillere hentes eller låses opp.
+- Retning avgjør om målsonene synes, og om oppsettsinstruksjonen handler om angrep, posisjonsspill eller omstilling.
+- Touchregel er eksplisitt del av instruksjonen treneren skal gi.
+- Et typisk restitusjonsoppsett vises som fire kontrollerte stasjoner framfor konkurransespill. Når manageren velger overgangsspill, vises spillformatet og eksisterende faglige advarsel om at intensiteten kan bli feil for restitusjon.
+
+Dette er en **interaktiv plan for organisering av økten** og benytter `createTrainingExerciseFieldSetup` i den eksisterende øvelsesdesignmodulen. Eksempeltallene er ikke nye motorparametere. De endrer ikke program, fatigue, skadefare, kampbonus, progresjon eller lagring. Samme hypotese- og modussesjonssystem brukes som tidligere. Vi legger ikke til en ny treningsmotor eller en ny `localStorage`-nøkkel.
+
 ## Produktgrense
 
 V1 er bevisst pedagogisk før den blir mekanisk.
