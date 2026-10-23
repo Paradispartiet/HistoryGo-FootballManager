@@ -265,15 +265,27 @@ function renderSessions(surface, context) {
   const list = surface.querySelector("#trainingDaySessions");
   if (!list) return;
   const sessions = selectedSessions();
+  const programTitle = selectedProgramTitle();
+  const hypothesis = activeModeLearningState().trainingExerciseHypothesis;
+  const savedPlans = Number(hypothesis?.week) === Number(context.week)
+    && String(hypothesis?.programTitle || "") === programTitle
+    ? (Array.isArray(hypothesis.sessionPlans) ? hypothesis.sessionPlans : [hypothesis])
+    : [];
+  const setupSaved = (session, index) => savedPlans.some((plan) =>
+    Number(plan?.sessionIndex) === index
+    && String(plan?.title || "") === String(session.title || "")
+    && String(plan?.programTitle || "") === programTitle
+  );
   const signature = JSON.stringify({
     week: Number(context.week) || 1,
     dayIndex: Number(context.dayIndex) || 3,
     day: String(context.day || ""),
-    sessions: sessions.map((session) => ({
+    sessions: sessions.map((session, index) => ({
       day: String(session.day || ""),
       title: String(session.title || ""),
       intensity: String(session.intensity || ""),
-      openable: isExerciseSession(session)
+      openable: isExerciseSession(session),
+      saved: setupSaved(session, index)
     }))
   });
   if (list.dataset.renderSignature === signature) return;
@@ -283,8 +295,10 @@ function renderSessions(surface, context) {
     const item = node("li", "training-day-session");
     const sameDay = session.day.toLocaleLowerCase("nb-NO").startsWith(context.day.toLocaleLowerCase("nb-NO"));
     const openable = isExerciseSession(session);
+    const isSaved = setupSaved(session, index);
     item.dataset.currentCalendarDay = sameDay ? "true" : "false";
     item.dataset.exerciseOpenable = openable ? "true" : "false";
+    item.dataset.setupSaved = isSaved ? "true" : "false";
     item.append(
       node("span", "training-day-session-index", String(index + 1).padStart(2, "0")),
       node("span", "training-day-session-day", session.day),
@@ -296,7 +310,7 @@ function renderSessions(surface, context) {
       item.tabIndex = 0;
       item.setAttribute("role", "button");
       item.setAttribute("aria-haspopup", "dialog");
-      item.setAttribute("aria-label", `Sett opp treningsøvelsen ${session.title}`);
+      item.setAttribute("aria-label", `Sett opp treningsøvelsen ${session.title}${isSaved ? " – oppsett lagret" : ""}`);
       item.title = "Sett opp øvelse på banen";
       item.addEventListener("click", () => openExerciseDesign(session, index, context));
       item.addEventListener("keydown", (event) => {
@@ -378,7 +392,10 @@ function renderTrainingDay() {
     hypothesisCard.hidden = !hypothesis;
     const title = hypothesisCard.querySelector("#trainingDayHypothesisTitle");
     const detail = hypothesisCard.querySelector("#trainingDayHypothesisDetail");
-    if (title) title.textContent = hypothesis ? `${hypothesis.day || "Økt"} · ${hypothesis.title || "Treningsøvelse"}` : "";
+    if (title) {
+      const count = Array.isArray(hypothesis?.sessionPlans) ? hypothesis.sessionPlans.length : hypothesis ? 1 : 0;
+      title.textContent = hypothesis ? `${count} av 4 økter med lagret oppsett · sist: ${hypothesis.title || "Treningsøvelse"}` : "";
+    }
     if (detail) detail.textContent = hypothesis ? `${hypothesis.setup}. ${hypothesis.hypothesis}` : "";
   }
 
