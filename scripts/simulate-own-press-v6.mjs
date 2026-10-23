@@ -162,6 +162,8 @@ for (const phase of [centralCover, flankCover, depthCover]) {
   assert.equal(phase.counterplay.defensiveReply.containmentAdjustment,
     phase.routeCoverAdjustment);
   assert.equal(phase.counterplay.defensiveReply.weakestCoverFit, 75);
+  assert.equal(phase.counterplay.defensiveReply.coverTimingExplanation.kind,
+    "unknown", "no authored timing must not imply a defensive error");
   assert.equal(phase.evidence.routeCoverFitFloor, 75);
   assert.equal(phase.xgDeltaAgainst, 0.06);
 }
@@ -742,6 +744,8 @@ for (const spec of spatialCases) {
     "escaped");
   const wrongLane = routeSpatialPhase(spec, { wrong: true });
   assert.equal(wrongLane.evidence.routeCoverTiming.status, "wrong_corridor");
+  assert.equal(wrongLane.counterplay.defensiveReply
+    .coverTimingExplanation.kind, "wrong_corridor");
   assert.equal(wrongLane.routeCoverAdjustment, 0,
     "a VALID authored defender moving to the wrong lane loses specialist cover");
   assert.equal(wrongLane.probability, timely.probability);
@@ -752,6 +756,8 @@ for (const spec of spatialCases) {
     const invalid = routeSpatialPhase(spec, invalidOpts);
     assert.equal(invalid.evidence.routeCoverTiming.status,
       "invalid_or_incomplete", spec.route + " " + JSON.stringify(invalidOpts));
+    assert.equal(invalid.counterplay.defensiveReply
+      .coverTimingExplanation.kind, "unknown");
     assert.ok(invalid.routeCoverAdjustment > 0,
       "invalid scenario does not fabricate a late recovery penalty");
   }
@@ -867,6 +873,17 @@ for (const [route, side] of [
   const late = lateEarlyScreen.evidence.routeCoverTiming;
   assert.equal(good.status, "in_time", route + " " + side);
   assert.equal(late.status, "late", route + " " + side);
+  assert.equal(timely.counterplay.defensiveReply.coverTimingExplanation.kind,
+    "in_time");
+  assert.equal(lateEarlyScreen.counterplay.defensiveReply.coverTimingExplanation.kind,
+    "late_task");
+  assert.ok(lateEarlyScreen.counterplay.defensiveReply
+    .coverTimingExplanation.description.length > 20);
+  assert.equal(annotateOwnPressChances([
+    { side: "against", quality: 0.1 }
+  ], lateEarlyScreen)[0].tacticalMoment.counterplay
+    .defensiveReply.coverTimingExplanation.kind, "late_task",
+    "the replay chance must retain the same explanation");
   assert.equal(good.defensiveSequenceModel, "sequential_defender_tasks");
   assert.equal(good.defensiveTransitions.length, 3);
   assert.equal(late.defensiveTransitions[0].status, "late");
@@ -918,6 +935,12 @@ for (const route of ["third_man", "direct"]) {
   assert.equal(b.status, "late", route + " missing handoff");
   assert.equal(a.coverHandoff.status, "in_time");
   assert.equal(b.coverHandoff.status, "late");
+  assert.equal(onTime.counterplay.defensiveReply.coverTimingExplanation.kind,
+    "in_time");
+  assert.equal(tooLate.counterplay.defensiveReply.coverTimingExplanation.kind,
+    "late_handoff");
+  assert.match(tooLate.counterplay.defensiveReply
+    .coverTimingExplanation.description, /Avløseren/);
   assert.equal(a.coverHandoff.releaseSeconds, 0.8);
   assert.equal(a.coverHandoff.takeoverSeconds, 0.7);
   assert.equal(b.coverHandoff.takeoverSeconds, 1.1);
