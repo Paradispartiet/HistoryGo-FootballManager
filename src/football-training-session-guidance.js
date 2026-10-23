@@ -40,7 +40,7 @@ function exerciseForSession(session = {}, { tacticName = "", opponentStyle = "",
   const styles = new Set(Array.isArray(opponentStyles) ? opponentStyles : []);
   const versusHighPress = ["high_press", "aggressive_man_press", "two_striker_press"].some((key) => styles.has(key))
     || /høy.?press|high.?press|aggressiv.?press/i.test(opponentStyle);
-  const versusLowBlock = ["compact_532", "narrow_442", "passive_mid_block", "deep_low_block"].some((key) => styles.has(key))
+  const versusLowBlock = ["compact_532", "passive_mid_block", "deep_low_block"].some((key) => styles.has(key))
     || /lav.?blokk|low.?block|kompakt.?forsvar/i.test(opponentStyle);
   const versusCounter = ["direct_counter", "fast_transition"].some((key) => styles.has(key))
     || /kontring|counter.?attack|omstilling|transition/i.test(opponentStyle);
