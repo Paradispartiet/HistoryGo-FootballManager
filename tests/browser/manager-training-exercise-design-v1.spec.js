@@ -101,6 +101,38 @@ test("en konkret treningsøkt åpner et interaktivt øvelsesverksted", async ({ 
   await expect(dialog.locator("#trainingExerciseGuardrail")).toContainText("endrer ikke lagret treningsbelastning");
 });
 
+test("oppsettet viser felt, spillere, utstyr og tre praktiske steg som endres med valgene", async ({ page }) => {
+  await openTraining(page);
+  await page.locator('#trainingDaySessions .training-day-session[data-exercise-openable="true"]').first().click();
+  const dialog = page.locator("#managerTrainingExerciseDesignV1");
+
+  // The recovery program opens as a calm station circuit, not an invented match.
+  await expect(dialog.locator("#trainingExercisePitch")).toHaveAttribute("data-mode", "stations");
+  await expect(dialog.locator("#trainingExercisePitchMarkers .is-station")).toHaveCount(4);
+  await expect(dialog.locator("#trainingExerciseSetupSteps li")).toHaveCount(3);
+  await expect(dialog.locator("#trainingExerciseBoardEquipment")).toContainText("Matter");
+  await expect(dialog.locator("#trainingExerciseExplanation")).not.toHaveAttribute("open", "");
+
+  await dialog.locator('label:has(input[name="direction"][value="transition"])').click();
+  await dialog.locator('label:has(input[name="numbers"][value="attack_overload"])').click();
+  await dialog.locator('label:has(input[name="area"][value="large"])').click();
+  await dialog.locator('label:has(input[name="touches"][value="two"])').click();
+  await expect(dialog.locator("#trainingExercisePitch")).toHaveAttribute("data-mode", "game");
+  await expect(dialog.locator("#trainingExercisePitch")).toHaveAttribute("data-area", "large");
+  await expect(dialog.locator("#trainingExercisePitch")).toHaveAttribute("data-direction", "transition");
+  await expect(dialog.locator("#trainingExercisePitchMarkers .is-ball")).toHaveCount(5);
+  await expect(dialog.locator("#trainingExercisePitchMarkers .is-press")).toHaveCount(4);
+  await expect(dialog.locator("#trainingExerciseBoardArea")).toContainText("48 × 36 m");
+  await expect(dialog.locator("#trainingExerciseBoardFormat")).toHaveText("5 med ball · 4 uten ball");
+  await expect(dialog.locator("#trainingExerciseSetupSteps")).toContainText("maks 2 touch");
+  await expect(dialog.locator("#trainingExercisePitch")).toHaveAttribute("aria-label", /9|5 spillere med ball/);
+
+  await dialog.locator("#trainingExerciseExplanation summary").click();
+  await expect(dialog.locator("#trainingExerciseExplanation")).toHaveAttribute("open", "");
+  await dialog.locator("#trainingExerciseReset").click();
+  await expect(dialog.locator("#trainingExercisePitch")).toHaveAttribute("data-mode", "stations");
+});
+
 test("areal retning og touch endrer forklaringen uten å endre save-state", async ({ page }) => {
   await openTraining(page);
   const before = await page.evaluate(() => ({
