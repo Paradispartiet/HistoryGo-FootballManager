@@ -650,6 +650,57 @@ function routeCoverEvidence(opponentRoute, escapeEvidence, lineup, profile, targ
   };
 }
 
+// The tactical replay can explain the decisive COVER failure without
+// pretending to have live tracking data. Explanations are descriptive only:
+// the probability and the single terminal xG result remain unchanged.
+const DEFENSIVE_TASK_LABELS = Object.freeze({
+  screen_layoff: "skjermingen av avlegget",
+  follow_third_runner: "følgingen av tredjemann",
+  drop_for_through_pass: "fallet mot gjennomspillet",
+  delay_release: "forsinkelsen av vendingen",
+  shift_to_far_side: "forskyvningen mot motsatt side",
+  hold_wide_channel: "sikringen av ytterkorridoren",
+  drop_behind_press: "fallet bak pressleddet",
+  challenge_first_touch: "presset mot førsteberøringen",
+  protect_support_run: "sikringen av støtteløpet"
+});
+
+function explainDefensiveCoverTiming(timing) {
+  if (!timing || timing.status === "not_applicable" ||
+    timing.status === "not_provided") return {
+    kind: "unknown", label: "Sikring uten tidsmåling",
+    description: "Ingen dokumenterte individuelle sikringstider er tilgjengelige."
+  };
+  if (timing.status === "invalid_or_incomplete") return {
+    kind: "unknown", label: "Uavklart sikringsforløp",
+    description: "Sikringsdataene er ufullstendige eller motstridende. Det er ikke påvist en defensiv tidsfeil."
+  };
+  if (timing.status === "wrong_corridor") return {
+    kind: "wrong_corridor", label: "Feil sikringsrom",
+    description: "Forsvaret rekker frem, men sikrer ikke den dokumenterte angrepskorridoren."
+  };
+  if (timing.status === "in_time") return {
+    kind: "in_time", label: "Sikringen er på plass",
+    description: timing.coverHandoff
+      ? "Sikringsbyttet og de nødvendige defensive handlingene ble fullført innen fristene."
+      : "De dokumenterte defensive handlingene ble fullført innen fristene."
+  };
+  if (timing.status === "late" && timing.criticalHandoff) return {
+    kind: "late_handoff", label: "For sent sikringsbytte",
+    description: "Avløseren nådde sikringskorridoren etter at første forsvarer startet sin neste oppgave."
+  };
+  if (timing.status === "late" && timing.criticalTaskId) return {
+    kind: "late_task", label: "For sen defensiv handling",
+    description: "Forsvaret kom for sent med " +
+      (DEFENSIVE_TASK_LABELS[timing.criticalTaskId] || "den nødvendige sikringsoppgaven") +
+      "."
+  };
+  return {
+    kind: "late_recovery", label: "For sen sikring",
+    description: "En nødvendig forsvarer nådde ikke sikringsrommet innen sin dokumenterte frist."
+  };
+}
+
 function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup, profile, cover, targetFlank) {
   // An explicit observation of isolation overrides an older authored route.
   // A generic 'supported' observation with no named route must not invent one.
@@ -680,7 +731,8 @@ function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup,
       ...defensiveReplyForPressExit(opponentRoute, lineup, profile, outcome, targetFlank),
       containmentAdjustment: round3(cover.adjustment),
       weakestCoverFit: cover.weakestCoverFit,
-      coverTiming: cover.timing
+      coverTiming: cover.timing,
+      coverTimingExplanation: explainDefensiveCoverTiming(cover.timing)
     },
     containedCause: pathway.containedCause,
     escapedCause: pathway.escapedCause
