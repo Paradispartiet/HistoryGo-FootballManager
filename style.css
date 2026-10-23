@@ -8022,6 +8022,7 @@ body { grid-template-columns: minmax(0, 1fr); }
 /* Defensive replay evidence stays inside the existing tactical disclosure;
    one restrained status, no extra card or invented match observation. */
 .matchday-tactical-moment {
+  grid-column: 2 / -1;
   min-width: 0;
   margin: 6px 0 2px;
   border-left: 2px solid var(--line-soft);
