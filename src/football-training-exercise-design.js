@@ -357,3 +357,65 @@ export function createTrainingExerciseHypothesis(session = {}, value = null) {
     coachingPoints: [...model.coachingPoints]
   };
 }
+
+
+// Et illustrativt, konkret feltoppsett over samme fire valg. Det eier verken
+// treningsmotor, belastning, kampbonus eller nye save-felter.
+export function createTrainingExerciseFieldSetup(session = {}, value = null) {
+  const model = evaluateTrainingExerciseDesign(session, value);
+  const { config, archetype, selections } = model;
+  const area = {
+    tight: { width: 20, height: 16, cones: 8 },
+    medium: { width: 32, height: 24, cones: 8 },
+    large: { width: 48, height: 36, cones: 12 }
+  }[config.area];
+  const stations = archetype.id === "recovery" && config.direction === "positional";
+  const withBall = config.numbers === "defence_overload" ? 4 : config.numbers === "attack_overload" ? 5 : 4;
+  const withoutBall = config.numbers === "defence_overload" ? 5 : 4;
+  const touches = config.touches === "free" ? "Frie touch" : config.touches === "two" ? "Maks 2 touch" : "Maks 3 touch";
+  const playingRule = config.direction === "positional"
+    ? "Hold ballen i laget. Bytt rolle ved balltap."
+    : config.direction === "transition"
+      ? "Ved balltap skifter lagene umiddelbart retning."
+      : "Angrip målsone eller småmål i motsatt ende.";
+  const ballPositions = [[28, 25], [23, 72], [43, 38], [44, 78], [35, 55]];
+  const defendingPositions = [[64, 26], [70, 69], [80, 43], [61, 85], [82, 83]];
+  const markers = stations
+    ? [[25, 27], [75, 27], [25, 73], [75, 73]].map(([x, y], index) => ({ team: "station", label: String(index + 1), x, y }))
+    : [
+      ...ballPositions.slice(0, withBall).map(([x, y]) => ({ team: "ball", x, y })),
+      ...defendingPositions.slice(0, withoutBall).map(([x, y]) => ({ team: "press", x, y }))
+    ];
+  const format = stations
+    ? "4 stasjoner · 2 per stasjon"
+    : `${withBall} med ball · ${withoutBall} uten ball`;
+  const equipment = stations
+    ? "Matter, strikker og kjegler – tilpass tilgjengelig utstyr"
+    : `${area.cones} kjegler, vester og baller${config.direction === "positional" ? "" : ", 2 småmål eller markerte målsoner"}`;
+  const steps = stations
+    ? [
+      "Del området i fire tydelige stasjoner med god plass mellom gruppene.",
+      "La to spillere arbeide ved hver stasjon. Bytt kontrollert mellom oppgavene.",
+      "Prioriter god utførelse, rolige overganger og tilpasset belastning."
+    ]
+    : [
+      `Marker et eksempelområde på ${area.width} × ${area.height} meter med ${area.cones} kjegler.`,
+      `Fordel spillerne: ${withBall} med ball og ${withoutBall} motspillere. Bruk vester som skiller lagene.`,
+      `${playingRule} Regel: ${touches.toLocaleLowerCase("nb-NO")}.`
+    ];
+  return {
+    config: { ...config },
+    archetypeId: archetype.id,
+    mode: stations ? "stations" : "game",
+    area: { ...area },
+    format,
+    equipment,
+    markers,
+    touches,
+    playingRule,
+    steps,
+    visualDescription: stations
+      ? "Illustrasjon av fire rolige treningsstasjoner. To spillere ved hver stasjon i dette eksemplet."
+      : `Illustrativ ${area.width} × ${area.height} meters treningsbane med ${withBall} spillere med ball og ${withoutBall} uten ball. ${selections.direction}. ${touches}.`
+  };
+}
