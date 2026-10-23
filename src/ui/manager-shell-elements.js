@@ -96,6 +96,37 @@ function ensureShellStyle() {
   document.head.append(style);
 }
 
+/* Keep the existing navigation nodes/handlers and place the main tabs next
+   to their contextual action on phones. Wider layouts retain the top nav. */
+function ensureCompactDockStyle() {
+  if (document.getElementById("manager-compact-dock-v1-style")) return;
+  const link = document.createElement("link");
+  link.id = "manager-compact-dock-v1-style";
+  link.rel = "stylesheet";
+  link.href = new URL("./manager-compact-dock-v1.css", import.meta.url).href;
+  document.head.append(link);
+}
+
+function syncManagerCompactDock() {
+  const nav = document.querySelector(".main-nav");
+  const footer = document.querySelector("manager-next-action .site-footer");
+  const desktopAnchor = document.querySelector("#secondaryModeBar");
+  if (!nav || !footer || !desktopAnchor) return;
+  const mobile = window.matchMedia("(max-width: 760px)").matches;
+  if (mobile && nav.parentElement !== footer) footer.append(nav);
+  if (!mobile && nav.parentElement === footer) desktopAnchor.before(nav);
+  const layout = mobile ? "mobile" : "desktop";
+  if (document.documentElement.dataset.managerCompactDock !== layout) {
+    document.documentElement.dataset.managerCompactDock = layout;
+  }
+}
+
+function installManagerCompactDock() {
+  ensureCompactDockStyle();
+  syncManagerCompactDock();
+  window.addEventListener("resize", syncManagerCompactDock);
+}
+
 function activateShellTarget(target) {
   const section = document.querySelector(`[data-tab-section="${target}"]`);
   if (!section) return;
@@ -278,6 +309,7 @@ function applyManagerInformationArchitectureV4() {
   }
 
   installLocationBar();
+  installManagerCompactDock();
 
   const observer = new MutationObserver(() => queueMicrotask(syncOrientation));
   document.querySelectorAll("[data-tab-section]").forEach((section) => {
