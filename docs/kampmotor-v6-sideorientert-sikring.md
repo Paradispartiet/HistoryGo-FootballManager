@@ -340,3 +340,58 @@ Ukjent handlings-ID gir `invalid_or_incomplete` og ingen påstått
 taktisk svakhet. Testene skiller mellom tidsvinduer før
 avlegg, tredjemannsløp, sideskift, breddeangrep, førsteberøring
 og støttebevegelse i dokumenterte scenarioer.
+
+
+## Sammenhengende defensivt svar i ett angrep
+
+Én navngitt forsvarer kan nå ha en `defensiveActionChain` i stedet for én
+`recognitionDelaySeconds` + `coverMoveSeconds`. Dette er en **alternativ
+representasjon**, ikke en ekstra modifikator. Hvert ledd må ha en gyldig
+`taskId`, `triggerActionId`, eksplisitt `recognitionDelaySeconds` og
+`coverMoveSeconds`. Oppgavene følger angrepets rekkefølge. Neste ledd
+kan starte tidligst når BÅDE signalet er kommet og forrige defensive
+handling faktisk er fullført.
+
+Eksempel for én sekser mot tredjemann:
+
+```js
+{
+  defensiveActionChain: [
+    { taskId: "screen_layoff", triggerActionId: "receive",
+      recognitionDelaySeconds: 0.1, coverMoveSeconds: 0.4 },
+    { taskId: "follow_third_runner", triggerActionId: "layoff",
+      recognitionDelaySeconds: 0.1, coverMoveSeconds: 0.2 },
+    { taskId: "drop_for_through_pass", triggerActionId: "third_runner",
+      recognitionDelaySeconds: 0.1, coverMoveSeconds: 0.3 }
+  ]
+}
+```
+
+Oppgavene gjelder de tre motveiene:
+
+| Angrepsrute | Defensive omstillinger i rekkefølge |
+| --- | --- |
+| Tredjemann | skjerme avlegg → følge tredjemann → falle for gjennomspill |
+| Sideskift | forsinke vending → flytte til fjernside → holde breddekorridor |
+| Direkte | falle bak press → utfordre førsteberøring → sikre støtteløp |
+
+Hvert oppgavenavn gir én eksplisitt frist: starten av den tilknyttede
+angrepshandlingen. Modellen evaluerer **laveste tidsmargin på tvers av
+ALLE ledd og spesialister**. En spiller som kommer frem til siste rom i
+tide, men tidligere ikke stoppet avlegget, har ikke gjennomført
+sikringskjeden. `routeCoverTiming.defensiveTransitions` viser oppgaven,
+signalet, fristen, sluttidspunktet og om dette leddet var i tide.
+`criticalTaskId` identifiserer svikten som faktisk avgjorde vurderingen.
+
+Modellen krever eksplisitte scenariosekunder, ikke oppdiktede trackingdata.
+Den kombinerer **ikke** en sekvens med `spatialLane`, fordi eksakte
+romoverganger da måtte ha dokumentert geometri for hvert enkelt ledd.
+Ugyldige, omvendte eller overlappende kontrakter regnes som **ukjent**
+slik at eksisterende rollebasert sikring ikke feilaktig straffes.
+Gammel enkeltsikring og historiske kamper beholder sine verdier.
+Kun den tidligere koordineringskomponenten (maks 0,03) kan falle bort:
+press-sannsynlighet og ett terminalt xG-utfall er uendret.
+
+Simuleringene kontrollerer tredjemann, begge sider av sideskift og
+direkte utspill, inkludert tilfeller der sluttposisjonen er identisk,
+men første defensive oppgave kom for sent.
