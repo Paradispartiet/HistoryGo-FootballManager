@@ -2,6 +2,7 @@ import {
   EXERCISE_DESIGN_CONTROLS,
   createTrainingExerciseHypothesis,
   createDefaultExerciseDesign,
+  createTrainingExerciseFieldSetup,
   evaluateTrainingExerciseDesign
 } from "../football-training-exercise-design.js";
 import { MODE_SESSION_KEY } from "../football-mode-sessions.js";
@@ -71,11 +72,29 @@ function ensureDialog() {
       </header>
 
       <div class="training-exercise-body">
-        <section class="training-exercise-setup" aria-labelledby="trainingExerciseSetupTitle">
-          <span>Et mulig grunnoppsett</span>
-          <h3 id="trainingExerciseSetupTitle">Fra økt til øvelse</h3>
-          <p id="trainingExerciseSetup"></p>
-          <p class="training-exercise-guardrail" id="trainingExerciseGuardrail"></p>
+        <section class="training-exercise-board" aria-labelledby="trainingExerciseBoardTitle">
+          <header>
+            <span>På treningsfeltet</span>
+            <h3 id="trainingExerciseBoardTitle">Sett opp økta</h3>
+            <p class="training-exercise-board-note">Et illustrativt oppsett. Endre valgene til høyre og se organiseringen på feltet.</p>
+          </header>
+          <div class="training-exercise-board-meta" aria-live="polite">
+            <span id="trainingExerciseBoardArea"></span>
+            <strong id="trainingExerciseBoardFormat"></strong>
+          </div>
+          <div class="training-exercise-pitch-frame">
+            <div id="trainingExercisePitch" class="training-exercise-pitch" role="img" aria-label="Skjematisk treningsfelt">
+              <div class="training-exercise-pitch-half" aria-hidden="true"></div>
+              <div class="training-exercise-pitch-circle" aria-hidden="true"></div>
+              <div class="training-exercise-goal training-exercise-goal-left" aria-hidden="true"></div>
+              <div class="training-exercise-goal training-exercise-goal-right" aria-hidden="true"></div>
+              <div id="trainingExercisePitchMarkers" aria-hidden="true"></div>
+              <div id="trainingExercisePitchBall" class="training-exercise-ball" aria-hidden="true">⚽</div>
+            </div>
+          </div>
+          <div class="training-exercise-pitch-legend" aria-hidden="true"><span><i class="training-exercise-dot with-ball"></i> Med ball</span><span><i class="training-exercise-dot without-ball"></i> Uten ball</span></div>
+          <p class="training-exercise-equipment" id="trainingExerciseBoardEquipment"></p>
+          <ol class="training-exercise-setup-steps" id="trainingExerciseSetupSteps"></ol>
         </section>
 
         <section class="training-exercise-controls" aria-labelledby="trainingExerciseControlsTitle">
@@ -85,18 +104,6 @@ function ensureDialog() {
           </header>
           <div id="trainingExerciseControlGroups" class="training-exercise-control-groups"></div>
           <button type="button" class="training-exercise-reset" id="trainingExerciseReset">Nullstill til anbefalt utgangspunkt</button>
-        </section>
-
-        <section class="training-exercise-learning" aria-labelledby="trainingExerciseLearningTitle">
-          <header>
-            <span>Læringseffekt</span>
-            <h3 id="trainingExerciseLearningTitle">Dette trener oppsettet mer eller mindre av</h3>
-          </header>
-          <div id="trainingExerciseEffects" class="training-exercise-effects"></div>
-          <div class="training-exercise-topic">
-            <span>For denne økta</span>
-            <p id="trainingExerciseTopicEffect"></p>
-          </div>
         </section>
 
         <section class="training-exercise-coaching" aria-labelledby="trainingExerciseCoachingTitle">
@@ -111,6 +118,29 @@ function ensureDialog() {
             <button type="button" class="training-exercise-save" id="trainingExerciseSave">Lagre som treningshypotese</button>
           </div>
         </section>
+
+        <details class="training-exercise-explainer" id="trainingExerciseExplanation">
+          <summary>Hvorfor endrer disse valgene øvelsen?</summary>
+          <div class="training-exercise-explainer-content">
+        <section class="training-exercise-setup" aria-labelledby="trainingExerciseSetupTitle">
+          <span>Et mulig grunnoppsett</span>
+          <h3 id="trainingExerciseSetupTitle">Fra økt til øvelse</h3>
+          <p id="trainingExerciseSetup"></p>
+          <p class="training-exercise-guardrail" id="trainingExerciseGuardrail"></p>
+        </section>
+        <section class="training-exercise-learning" aria-labelledby="trainingExerciseLearningTitle">
+          <header>
+            <span>Læringseffekt</span>
+            <h3 id="trainingExerciseLearningTitle">Dette trener oppsettet mer eller mindre av</h3>
+          </header>
+          <div id="trainingExerciseEffects" class="training-exercise-effects"></div>
+          <div class="training-exercise-topic">
+            <span>For denne økta</span>
+            <p id="trainingExerciseTopicEffect"></p>
+          </div>
+        </section>
+          </div>
+        </details>
       </div>
     </article>`;
 
@@ -183,10 +213,54 @@ function renderControls(dialog, model) {
   host.replaceChildren(fragment);
 }
 
+function renderFieldSetup(dialog) {
+  if (!activeSession) return;
+  const plan = createTrainingExerciseFieldSetup(activeSession, activeConfig);
+  const pitch = dialog.querySelector("#trainingExercisePitch");
+  const markers = dialog.querySelector("#trainingExercisePitchMarkers");
+  const area = dialog.querySelector("#trainingExerciseBoardArea");
+  const format = dialog.querySelector("#trainingExerciseBoardFormat");
+  const equipment = dialog.querySelector("#trainingExerciseBoardEquipment");
+  const steps = dialog.querySelector("#trainingExerciseSetupSteps");
+  const legend = dialog.querySelector(".training-exercise-pitch-legend");
+  const ball = dialog.querySelector("#trainingExercisePitchBall");
+  if (pitch) {
+    pitch.dataset.area = plan.config.area;
+    pitch.dataset.direction = plan.config.direction;
+    pitch.dataset.mode = plan.mode;
+    pitch.setAttribute("aria-label", plan.visualDescription);
+  }
+  if (area) area.textContent = plan.mode === "stations" ? "Stasjonsarbeid" : `${plan.area.width} × ${plan.area.height} m · eksempel`;
+  if (format) format.textContent = plan.format;
+  if (equipment) equipment.textContent = `Utstyr: ${plan.equipment}`;
+  if (legend) legend.hidden = plan.mode === "stations";
+  if (ball) ball.hidden = plan.mode === "stations";
+  if (markers) {
+    const signature = JSON.stringify(plan.markers);
+    if (markers.dataset.signature !== signature) {
+      markers.replaceChildren(...plan.markers.map(({ team, x, y, label }) => {
+        const marker = node("span", `training-exercise-player is-${team}`, label || "");
+        marker.style.left = `${x}%`;
+        marker.style.top = `${y}%`;
+        return marker;
+      }));
+      markers.dataset.signature = signature;
+    }
+  }
+  if (steps) {
+    const signature = JSON.stringify(plan.steps);
+    if (steps.dataset.signature !== signature) {
+      steps.replaceChildren(...plan.steps.map((step) => node("li", "", step)));
+      steps.dataset.signature = signature;
+    }
+  }
+}
+
 function renderLearning(dialog) {
   if (!activeSession) return;
   const model = evaluateTrainingExerciseDesign(activeSession, activeConfig);
   activeConfig = model.config;
+  renderFieldSetup(dialog);
 
   const effects = dialog.querySelector("#trainingExerciseEffects");
   if (effects) {
