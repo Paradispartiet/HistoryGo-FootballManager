@@ -144,7 +144,8 @@ test("øvelsene beholder åpne begrunnelser når skjermen er bred og smal", asyn
     await page.setViewportSize({ width, height: 844 });
     const first = page.locator("#trainingDaySessions .training-day-session-advice").first();
     await expect(first.locator("summary .training-day-session-recommendation")).toBeVisible();
-    if (!(await first.getAttribute("open"))) await first.locator("summary").click();
+    // <details open> serializes as open="", which is present but falsy.
+    if ((await first.getAttribute("open")) === null) await first.locator("summary").click();
     await expect(first.locator(".training-day-session-advice-body p")).toBeVisible();
     await expectNoHorizontalOverflow(page);
   }
