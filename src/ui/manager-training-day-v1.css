@@ -10,7 +10,10 @@
 
 .trening-view.has-manager-training-day-v1 #trainingCommandPanel,
 .trening-view.has-manager-training-day-v1 #teamTrainingSelectedState,
-.trening-view.has-manager-training-day-v1 #trainingDepth {
+.trening-view.has-manager-training-day-v1 #trainingDepth,
+.trening-view.has-manager-training-day-v1 #trainingWorkspace {
+  /* Legacy controls stay in the DOM for the drawer and app state, but may not
+     leak under the new single-screen Training Day presentation. */
   display: none !important;
 }
 
@@ -281,4 +284,42 @@
   .training-day-side { grid-template-columns: 1fr; }
   .training-day-card:nth-child(odd) { border-right: 0; }
   .training-day-calendar-return { width: 100%; }
+}
+
+/* Existing football knowledge actions remain available in one quiet disclosure. */
+.training-day-resources {
+  margin: .35rem .85rem .85rem;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: .65rem;
+  background: rgba(255,255,255,.025);
+}
+.training-day-resources > summary {
+  cursor: pointer;
+  padding: .7rem .85rem;
+  font-size: .85rem;
+  font-weight: 750;
+  color: #dce5ed;
+}
+.training-day-resources > summary:focus-visible {
+  outline: 2px solid #c1f7d7;
+  outline-offset: 2px;
+}
+.training-day-resources-body { padding: 0 .65rem .7rem; }
+.training-day-resources-body .training-support-actions {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+}
+.training-day-resources-body .training-support-actions button {
+  flex: 1 1 9rem;
+  min-height: 2.45rem;
+  font-size: .8rem;
+}
+@media (max-width: 560px) {
+  .training-day-resources { margin-inline: .65rem; }
+  .training-day-resources-body .training-support-actions button {
+    flex-basis: 100%;
+    min-height: 2.4rem;
+  }
 }
