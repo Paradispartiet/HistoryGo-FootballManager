@@ -280,9 +280,12 @@ Dette er modellens **normerte soner**, ikke målte spillerposisjoner:
 
 Alle nødvendige forsvarere må ha gyldige forfattede
 `coverMovement`-punkter i riktig sone; en ren ferdig sekundverdi kan
-ikke bekrefte en *romlig* korridor. Feil kanal, motsatt kant eller feil
-koordinatramme gir `invalid_or_incomplete` (nøytral gammel dekning,
-ingen funnet-på forsinkelse). Resultatet viser bekreftet kanal i
+ikke bekrefte en *romlig* korridor. Ugyldig rutemerking, uavklart/motstridende kant,
+feil koordinatramme og manglende eller ugyldig måleinput gir
+`invalid_or_incomplete` (nøytral gammel dekning). En **gyldig forfattet
+målposisjon utenfor riktig korridor** gir derimot `wrong_corridor`:
+spesialistdekningen tapes, også om spilleren rekker målet i tide.
+Det er en kjent taktisk feilplassering, ikke manglende informasjon. Resultatet viser bekreftet kanal i
 `evidence.routeCoverTiming.spatialLane`. Uten `spatialLane` er den
 tidligere sekund-/geometrimodellen helt uendret.
 
