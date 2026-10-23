@@ -40,16 +40,53 @@ function showDialog(dialog) {
   else dialog.setAttribute("open", "");
 }
 
-function savedHypothesisFor(session) {
+function latestSavedTrainingHypothesis() {
   try {
     const envelope = JSON.parse(localStorage.getItem(MODE_SESSION_KEY) || "null");
-    const saved = envelope?.sessions?.[envelope?.activeMode]?.trainingExerciseHypothesis;
-    if (!saved || Number(saved.week) !== Number(session.week)) return null;
-    if (Number(saved.sessionIndex) !== Number(session.index)) return null;
-    return String(saved.title || "") === String(session.title || "") ? saved : null;
+    return envelope?.sessions?.[envelope?.activeMode]?.trainingExerciseHypothesis || null;
   } catch {
     return null;
   }
+}
+
+function matchesExerciseSession(plan, session) {
+  return Number(plan?.week) === Number(session.week)
+    && Number(plan?.sessionIndex) === Number(session.index)
+    && String(plan?.title || "") === String(session.title || "")
+    && String(plan?.programTitle || "") === String(session.programTitle || "");
+}
+
+// Backwards compatible with the original single-hypothesis snapshot: the
+// latest exercise still owns match-day observation, while sessionPlans retains
+// all four preparations inside the same mode-session property.
+function savedSessionPlansFor(session) {
+  const saved = latestSavedTrainingHypothesis();
+  if (!saved || Number(saved.week) !== Number(session.week)) return [];
+  if (String(saved.programTitle || "") !== String(session.programTitle || "")) return [];
+  const candidates = Array.isArray(saved.sessionPlans) ? saved.sessionPlans : [saved];
+  return candidates.filter((plan) => plan
+    && Number(plan.week) === Number(session.week)
+    && String(plan.programTitle || "") === String(session.programTitle || "")
+    && Number.isInteger(Number(plan.sessionIndex))
+    && Number(plan.sessionIndex) >= 0
+    && Number(plan.sessionIndex) < 4);
+}
+
+function savedHypothesisFor(session) {
+  return savedSessionPlansFor(session).find((plan) => matchesExerciseSession(plan, session)) || null;
+}
+
+function withSessionPlan(hypothesis, session) {
+  const plans = savedSessionPlansFor(session);
+  const { sessionPlans: unused, ...single } = hypothesis;
+  const latest = [...plans.filter((plan) => Number(plan.sessionIndex) !== Number(single.sessionIndex)), single]
+    .sort((a, b) => Number(a.sessionIndex) - Number(b.sessionIndex))
+    .slice(0, 4)
+    .map((plan) => {
+      const { sessionPlans: nested, ...snapshot } = plan;
+      return snapshot;
+    });
+  return { ...single, sessionPlans: latest };
 }
 
 function ensureDialog() {
@@ -163,7 +200,10 @@ function ensureDialog() {
 
   dialog.querySelector("#trainingExerciseSave")?.addEventListener("click", () => {
     if (!activeSession) return;
-    const hypothesis = createTrainingExerciseHypothesis(activeSession, activeConfig);
+    const hypothesis = withSessionPlan(
+      createTrainingExerciseHypothesis(activeSession, activeConfig),
+      activeSession
+    );
     window.dispatchEvent(new CustomEvent("hgfm:training-exercise-save", { detail: { hypothesis } }));
     const status = dialog.querySelector("#trainingExerciseSaveStatus");
     if (status) status.textContent = `Lagret: ${hypothesis.setup}`;
