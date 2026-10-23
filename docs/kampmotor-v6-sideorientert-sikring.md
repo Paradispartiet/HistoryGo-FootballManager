@@ -79,3 +79,113 @@ tacticalBehaviour: {
 `evidence.routeCoverTiming` og `counterplay.defensiveReply.coverTiming` lagrer `status` (`not_provided`, `invalid_or_incomplete`, `in_time`, `late` eller `not_applicable`), `basis`, tilgjengelig tid, seneste ankomst og differansen. Dette er **beregnet scenarioutfall**, ikke observert løpshastighet eller romlig posisjon.
 
 **Testbar antakelse:** Den svakeste/seneste nødvendige deltakeren styrer om en koordinert spesialistkjede blir klar før angrepet. Den binære tidsporten er spilldesign, ikke empirisk kalibrert sannsynlighet. En framtidig dynamisk modell må kjenne faktiske spillerposisjoner, hastighet, pasningstidspunkter og motstanderens valg før den kan erstatte dette med simulerte bevegelser.
+
+
+## Fireleddets tidslinje i aktiv kampsimulering
+
+Når første press er brutt, kan kampens eksisterende `opponent.tacticalBehaviour`
+levere et eksplisitt sekvensforløp i `pressEscapeActionSequence`. Denne går
+gjennom den **samme** `resolveOwnPressAgainstOpponent`-kjeden som allerede
+kjøres av `advanceMatchClock`. Den lager ingen ekstra sjanse eller xG.
+
+```js
+pressEscapeRoute: "third_man",
+pressEscapeActionSequence: {
+  basis: "authored_action_sequence",
+  route: "third_man",
+  actions: [
+    { id: "receive", durationSeconds: 0.7 },
+    { id: "layoff", durationSeconds: 0.5 },
+    { id: "third_runner", durationSeconds: 0.7 },
+    { id: "through_pass", durationSeconds: 1.2 }
+  ],
+  defenderResponsesByPlayerId: {
+    "known-six-id": {
+      triggerActionId: "receive",
+      recognitionDelaySeconds: 0.4, coverMoveSeconds: 2.1
+    },
+    "known-midfielder-id": {
+      triggerActionId: "layoff",
+      recognitionDelaySeconds: 0.4, coverMoveSeconds: 1.9
+    }
+  }
+}
+```
+
+Tidsbudsjettet fra gjennombrudd i første press til neste farlige korridor
+er summen av de fire offensive handlingsvarighetene. Ankomsttiden for en
+relevant forsvarer er *forløpt tid frem til eget navngitte press-/sikringssignal
++ gjenkjenningsforsinkelse + bevegelses-/sikringstid*. Uten
+`triggerActionId` regnes tiden fra starten av første angrepshandling.
+Ukjent signal gir `invalid_or_incomplete`. Seneste av de nødvendige
+spillerne bestemmer om spesialistdekningen er på plass.
+Dette er en **diskret, forfattet hendelsestidslinje**, ikke kontinuerlig
+bevegelsessimulering. Verdiene over er kun demonstrasjonsdata.
+
+Rute-ID-er må stemme med alle fire handlings-ID-ene, i fast rekkefølge:
+`third_man`: receive, layoff, third_runner, through_pass;
+`switch_play`: receive, release, switch_pass, wide_attack;
+`direct`: receive, direct_ball, first_touch, support_run.
+
+Ukjent, ikke-endelig, negativ eller manglende forsvarstid, manglende spiller-ID,
+feil rute eller ugyldige offensive varigheter gir `invalid_or_incomplete`
+uten effekt på den gamle sikringsbonusen. Ingen sekvens gir `not_provided`.
+Dersom begge feltene finnes, brukes den opprinnelige
+`pressEscapeTiming` for kompatibilitet med eksisterende save/scenario.
+Målrettede tester dekker en ellever gjennom produksjonsfit, forskjellig
+utfall med samme trekning, ugyldige sekvenser og uforandret xG-regnskap.
+
+**Nåværende evidensgrense:** Verken gjenkjenningstid, pasningstid eller
+forsvarernes forflytning er avledet automatisk fra ferdigheter, sprint,
+pressposisjon eller kampens faktiske koordinater. Følgelig kan tidslinjen
+bare påvirke spill ved eksplisitt scenariodata. Før automatisk generering
+må vi etablere spillerferdigheter med kjent proveniens, startrom og
+pressutløser og validere en modell mot uavhengig annoterte sekvenser.
+
+
+### Pressignal og reaksjonsforsinkelse
+
+`triggerActionId` kan eksplisitt peke på ett av de fire handlingsleddene.
+En sekser kan reagere når første pasning tas imot, mens en indreløper
+først gjenkjenner tredjemannsløpet. Vi summerer da tidligere handlingers
+varighet før hans gjenkjennings- og løpstider. Ingen forsvarer får
+automatisk «spå» et senere løp, og tidsforsinkelsen gir verken
+selvstendig xG eller nye tilfeldige hendelser. Produksjons-XI og syntetiske
+regresjonstester sammenlikner identiske lag/trekninger med tidlig og sen
+reaksjonsutløser.
+
+Det er fortsatt ikke GPS-posisjoner, fysisk fart eller maskinlært
+reaksjonstid: trigger og varighet må oppgis eksplisitt.
+
+
+## Kildebelagt reaksjonsferdighet uten oppdiktede sekunder
+
+Kampens spiller-snapshot bærer nå `sourcedRecoverySkills`: bare
+`anticipation`, `game_reading` og `defensive_reading` med **direkte
+`belagt` proveniens og samsvarende faktisk styrketoken**. Det samme feltet
+oppdateres for benkespillere, innbyttere og taktikkbytte når rosterkildene
+foreligger. En tidligere spillers ferdighet må aldri arves av innbytteren.
+
+Et scenarioutkast kan angi to **forfattede reaksjonsutløsere** for en konkret
+forsvarer:
+
+```js
+sourcedCue: {
+  skill: "anticipation",
+  earlyActionId: "receive",
+  defaultActionId: "layoff"
+}
+```
+
+Bare når spilleren i den aktive elleveren har direkte belagt ferdighet,
+brukes den tidlige reaksjonsutløseren. Uten kilde forblir scenariets
+uttrykkelige standardutløser gjeldende. Begge grenene bruker scenarioets
+allerede fastsatte `recognitionDelaySeconds` og `coverMoveSeconds`:
+**ferdigheter omregnes ikke til fysisk løpstid**. Et felt med både
+`sourcedCue` og `triggerActionId`, ugyldig skill-ID, omvendt
+tidsrekkefølge eller ukjent handlings-ID er ugyldig og gir nøytral
+fallback. Det legges ikke på en separat attributtbonus eller xG.
+
+Dette er et kildebevisst *taktisk cue-valg*, ikke kalibrert reaksjonshastighet.
+Det bør testes videre mot reelle klipp før automatiserte tidspunkt eller
+distanser introduseres.

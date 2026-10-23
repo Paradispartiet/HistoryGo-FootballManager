@@ -872,3 +872,48 @@ const cfWindowDraw = (cfTimely.containmentProbability +
 assert.equal(cfTimingTrial(3.0, cfWindowDraw).status, "contained");
 assert.equal(cfTimingTrial(2.0, cfWindowDraw).status, "escaped");
 console.log("OK: real lineup demonstrates only documented specialist recovery timing can gate containment.");
+ 
+// Real formation/player match-fit stays in the existing engine. Only a
+// separately documented in-match action trace supplies elapsed seconds.
+const cfSequence = (finalPassSeconds) => ({
+  basis: "authored_action_sequence", route: "third_man",
+  actions: [
+    { id: "receive", durationSeconds: 0.7 },
+    { id: "layoff", durationSeconds: 0.5 },
+    { id: "third_runner", durationSeconds: 0.7 },
+    { id: "through_pass", durationSeconds: finalPassSeconds }
+  ],
+  defenderResponsesByPlayerId: Object.fromEntries(cfTrackingIds.map(id =>
+    [id, { recognitionDelaySeconds: 0.4, coverMoveSeconds: 2.1 }]))
+});
+const cfSequenceTrial = (finalPassSeconds, triggeredOn = null) => {
+  const sequence = cfSequence(finalPassSeconds);
+  if (triggeredOn) sequence.defenderResponsesByPlayerId =
+    Object.fromEntries(cfTrackingIds.map(id => [id, {
+      recognitionDelaySeconds: 0.4, coverMoveSeconds: 2.1,
+      triggerActionId: triggeredOn
+    }]));
+  return resolveOwnPressAgainstOpponent(kickoff(cfXI, withCfOpponent({
+    tacticalBehaviour: {
+      pressEscapeRoute: "third_man",
+      pressEscapeActionSequence: sequence
+    }
+  })), { pressureRoll: () => 0.99, protectionRoll: () => 0.99 });
+};
+const cfSequenceOnTime = cfSequenceTrial(1.2);
+const cfSequenceTooLate = cfSequenceTrial(0.2);
+assert.equal(cfSequenceOnTime.evidence.routeCoverTiming.basis, "authored_action_sequence");
+assert.equal(cfSequenceOnTime.evidence.routeCoverTiming.status, "in_time");
+assert.equal(cfSequenceTooLate.evidence.routeCoverTiming.status, "late");
+assert.equal(cfSequenceOnTime.probability, cfSequenceTooLate.probability);
+assert.equal(cfSequenceOnTime.evidence.routeCoverFitFloor,
+  cfSequenceTooLate.evidence.routeCoverFitFloor);
+assert.ok(cfSequenceOnTime.containmentProbability > cfSequenceTooLate.containmentProbability);
+const cfRecognitionEarly = cfSequenceTrial(1.2, "receive");
+const cfRecognitionLate = cfSequenceTrial(1.2, "layoff");
+assert.equal(cfRecognitionEarly.evidence.routeCoverTiming.status, "in_time");
+assert.equal(cfRecognitionLate.evidence.routeCoverTiming.status, "late");
+assert.equal(cfRecognitionEarly.probability, cfRecognitionLate.probability);
+assert.ok(cfRecognitionEarly.containmentProbability >
+  cfRecognitionLate.containmentProbability);
+console.log("OK: production XI consumes a four-action timeline and cue-specific delay.");

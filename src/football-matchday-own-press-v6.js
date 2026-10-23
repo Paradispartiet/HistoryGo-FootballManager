@@ -205,31 +205,106 @@ function defensiveReplyForPressExit(route, lineup, profile, outcome, targetFlank
 // The timing result only GATES the existing <=0.03 coordination bonus: it
 // cannot penalise generic rest defence, alter initial pressure or add xG.
 // Missing / untrusted timing data preserves the previous baseline exactly.
-function specialistRecoveryWindow(route, playerIds, timing) {
+// Each route has four named post-break attack decisions. Durations are
+// explicitly authored and start AFTER the first press has been beaten. The
+// scenario does not assert that these were observed movements or GPS points.
+const PRESS_EXIT_TIMED_ACTIONS = Object.freeze({
+  third_man: Object.freeze(["receive", "layoff", "third_runner", "through_pass"]),
+  switch_play: Object.freeze(["receive", "release", "switch_pass", "wide_attack"]),
+  direct: Object.freeze(["receive", "direct_ball", "first_touch", "support_run"])
+});
+
+// Resolve authored action durations and each specialist's independent
+// recognition + repositioning delays, anchored to an optional named cue.
+// No time is inferred from ratings,
+// nominal formations, historical players, or a generic 'fast' tactic tag.
+function recoveryFromAuthoredActions(route, playerIds, sequence, lineup) {
+  const expected = PRESS_EXIT_TIMED_ACTIONS[route];
+  if (!expected || sequence?.route !== route ||
+    !Array.isArray(sequence.actions) || sequence.actions.length !== expected.length ||
+    !sequence.actions.every((entry, index) =>
+      entry?.id === expected[index] && finite(entry.durationSeconds) &&
+      entry.durationSeconds > 0 && entry.durationSeconds <= 20)) return null;
+  const attackWindowSeconds = sequence.actions.reduce(
+    (total, entry) => total + entry.durationSeconds, 0);
+  if (attackWindowSeconds > 20) return null;
+  const responses = sequence.defenderResponsesByPlayerId;
+  if (!responses || typeof responses !== "object" || Array.isArray(responses) ||
+    !Array.isArray(playerIds) || playerIds.length === 0) return null;
+  const defenderArrivalSecondsByPlayerId = {};
+  for (const id of playerIds) {
+    const response = Object.prototype.hasOwnProperty.call(responses, id)
+      ? responses[id] : null;
+    if (!response || typeof response !== "object" || Array.isArray(response) ||
+      !finite(response.recognitionDelaySeconds) ||
+      !finite(response.coverMoveSeconds) ||
+      response.recognitionDelaySeconds < 0 || response.coverMoveSeconds < 0)
+      return null;
+    // Recognition starts when the defender sees a named attacking cue.
+    // No cue means the first action, preserving old scenario behaviour.
+    const hasCue = Object.prototype.hasOwnProperty.call(response, "triggerActionId");
+    const hasSourcedCue = Object.prototype.hasOwnProperty.call(response, "sourcedCue");
+    if (hasCue && hasSourcedCue) return null;
+    let cueId = hasCue ? response.triggerActionId : expected[0];
+    if (hasSourcedCue) {
+      const cue = response.sourcedCue;
+      const validSkill = ["anticipation", "game_reading", "defensive_reading"]
+        .includes(cue?.skill);
+      if (!cue || typeof cue !== "object" || Array.isArray(cue) ||
+        !validSkill || !expected.includes(cue.earlyActionId) ||
+        !expected.includes(cue.defaultActionId) ||
+        expected.indexOf(cue.earlyActionId) > expected.indexOf(cue.defaultActionId))
+        return null;
+      const player = Array.isArray(lineup)
+        ? lineup.find(entry => entry?.playerId === id) : null;
+      const sourceConfirmed = Array.isArray(player?.sourcedRecoverySkills) &&
+        player.sourcedRecoverySkills.includes(cue.skill);
+      cueId = sourceConfirmed ? cue.earlyActionId : cue.defaultActionId;
+    }
+    const cueIndex = expected.indexOf(cueId);
+    if (cueIndex < 0) return null;
+    const elapsedBeforeCue = sequence.actions.slice(0, cueIndex)
+      .reduce((sum, action) => sum + action.durationSeconds, 0);
+    const arrival = elapsedBeforeCue + response.recognitionDelaySeconds +
+      response.coverMoveSeconds;
+    if (arrival > 20) return null;
+    defenderArrivalSecondsByPlayerId[id] = arrival;
+  }
+  return { basis: "authored_scenario", route, attackWindowSeconds,
+    defenderArrivalSecondsByPlayerId };
+}
+
+// Recovery timing is OPTIONAL scenario input, never inferred from fitness,
+// player fit or coordinates. A late specialist gates only an ALREADY earned
+// route-specific coordination term; there is no new xG, time bonus or penalty.
+function specialistRecoveryWindow(route, playerIds, timing, lineup) {
   const neutral = { status: "not_provided", basis: null,
     attackWindowSeconds: null, latestRecoverySeconds: null, marginSeconds: null };
   if (timing == null) return neutral;
   const invalid = { ...neutral, status: "invalid_or_incomplete" };
-  if (!timing || typeof timing !== "object" || Array.isArray(timing) ||
-    timing.basis !== "authored_scenario" || timing.route !== route ||
-    !finite(timing.attackWindowSeconds) ||
-    timing.attackWindowSeconds <= 0 || timing.attackWindowSeconds > 20 ||
-    !timing.defenderArrivalSecondsByPlayerId ||
-    typeof timing.defenderArrivalSecondsByPlayerId !== "object" ||
-    Array.isArray(timing.defenderArrivalSecondsByPlayerId) ||
+  if (!timing || typeof timing !== "object" || Array.isArray(timing)) return invalid;
+  const isSequence = timing.basis === "authored_action_sequence";
+  const derived = isSequence
+    ? recoveryFromAuthoredActions(route, playerIds, timing, lineup) : timing;
+  if (!derived || derived.basis !== "authored_scenario" ||
+    derived.route !== route || !finite(derived.attackWindowSeconds) ||
+    derived.attackWindowSeconds <= 0 || derived.attackWindowSeconds > 20 ||
+    !derived.defenderArrivalSecondsByPlayerId ||
+    typeof derived.defenderArrivalSecondsByPlayerId !== "object" ||
+    Array.isArray(derived.defenderArrivalSecondsByPlayerId) ||
     !Array.isArray(playerIds) || playerIds.length === 0) return invalid;
   const arrival = playerIds.map(id =>
-    Object.prototype.hasOwnProperty.call(timing.defenderArrivalSecondsByPlayerId, id)
-      ? timing.defenderArrivalSecondsByPlayerId[id] : null);
+    Object.prototype.hasOwnProperty.call(derived.defenderArrivalSecondsByPlayerId, id)
+      ? derived.defenderArrivalSecondsByPlayerId[id] : null);
   if (!arrival.every(time => finite(time) && time >= 0 && time <= 20))
     return invalid;
   const latest = Math.max(...arrival);
-  const margin = timing.attackWindowSeconds - latest;
+  const margin = derived.attackWindowSeconds - latest;
   return {
     status: margin >= 0 ? "in_time" : "late",
-    basis: "authored_scenario",
-    attackWindowSeconds: timing.attackWindowSeconds,
-    latestRecoverySeconds: latest,
+    basis: isSequence ? "authored_action_sequence" : "authored_scenario",
+    attackWindowSeconds: Math.round(derived.attackWindowSeconds * 1000) / 1000,
+    latestRecoverySeconds: Math.round(latest * 1000) / 1000,
     marginSeconds: Math.round(margin * 1000) / 1000
   };
 }
@@ -260,7 +335,7 @@ function routeCoverEvidence(opponentRoute, escapeEvidence, lineup, profile, targ
   const weakestCoverFit = Math.min(...scores);
   // Missing authored timing never changes existing gameplay. Fully evidenced
   // late coordination forfeits ONLY the specialist term already earned.
-  const timing = specialistRecoveryWindow(opponentRoute, ids, timingInput);
+  const timing = specialistRecoveryWindow(opponentRoute, ids, timingInput, lineup);
   const specialistAdjustment = clamp((weakestCoverFit - 60) * 0.0015, 0, 0.03);
   return {
     adjustment: timing.status === "late" ? 0 : specialistAdjustment,
@@ -377,7 +452,10 @@ export function resolveOwnPressAgainstOpponent(session, {
   // Rest defence is evaluated only if the opponent gets beyond the press.
   const cover = routeCoverEvidence(counter, escapeEvidence,
     session.lineupSnapshot, profile, targetFlank,
-    opponent?.tacticalBehaviour?.pressEscapeTiming);
+    // Explicit aggregate timing retains precedence for older fixtures/saves.
+    // A four-action in-match sequence is an alternate, never an extra modifier.
+    opponent?.tacticalBehaviour?.pressEscapeTiming ??
+      opponent?.tacticalBehaviour?.pressEscapeActionSequence);
   const containment = clamp(
     0.48 + (restDefense - 65) * 0.005 +
       (balance - 65) * 0.002 +

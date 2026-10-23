@@ -121,6 +121,16 @@ export function positionGroup(position) {
 // Elleveren slik statistikkmotoren trenger den: id, navn, posisjon, rolle og
 // hvor godt spilleren passer der. Bygges fra teamFit én gang ved avspark, så
 // kampmotoren slipper å bære hele teamFit videre inn i lagringen.
+// Directly source-supported recognition skills only: never infer speed or
+// timing from positions, classHeight or an overall match-fit score.
+const RECOVERY_CUE_SKILLS = new Set(["anticipation", "game_reading", "defensive_reading"]);
+export function sourcedRecoverySkillsForPlayer(player) {
+  const strengths = Array.isArray(player?.strengths) ? player.strengths : [];
+  const provenance = player?.attributes?.provenance || {};
+  return [...new Set(strengths.filter(skill =>
+    RECOVERY_CUE_SKILLS.has(skill) && provenance[skill] === "belagt"))].sort();
+}
+
 export function createLineupSnapshot(teamFit, { freshnessByPlayerId = {} } = {}) {
   const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
   return assignments
@@ -134,6 +144,7 @@ export function createLineupSnapshot(teamFit, { freshnessByPlayerId = {} } = {})
       position: str(assignment.slot?.position).toUpperCase(),
       roleId: str(assignment.role?.id),
       roleName: str(assignment.role?.name),
+      sourcedRecoverySkills: sourcedRecoverySkillsForPlayer(assignment.player),
       // Fra hvilket minutt spilleren har vært på banen. Startellever: 0.
       onFrom: 0,
       // Friskheten han STARTET kampen med. En som allerede var sliten før

@@ -1,4 +1,4 @@
-import { createLineupSnapshot, attributeGoal, createMatchPlayerStats } from "./football-player-stats.js";
+import { createLineupSnapshot, attributeGoal, createMatchPlayerStats, sourcedRecoverySkillsForPlayer } from "./football-player-stats.js";
 import { applySubstitution, aggregateSourcedMetricBonuses, createBenchSnapshot, playedPlayersFor, sourcedMetricBonusesForAssignment } from "./football-substitutions.js";
 import { evaluateTrainingDecisionSupport } from "./football-training-week.js";
 import { buildMatchExplanation } from "./football-match-explanation-engine.js";
@@ -1976,6 +1976,7 @@ export function applyMatchPlanChange(session, nextPlan, { opponent, currentTeamF
       const previousBonuses = aggregateSourcedMetricBonuses(currentEntries);
       updatedLineup = currentEntries.map((entry, i) => ({
         ...entry,
+        sourcedRecoverySkills: sourcedRecoverySkillsForPlayer(assignments[i].player),
         sourcedMetricBonuses: sourcedMetricBonusesForAssignment(assignments[i], nextPlan)
       }));
       const activeBonuses = aggregateSourcedMetricBonuses(updatedLineup);
