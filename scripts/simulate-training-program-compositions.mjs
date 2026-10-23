@@ -19,6 +19,7 @@
 //
 // Exit code 1 hvis en sjekk feiler, ellers 0.
 
+import { readFileSync } from "node:fs";
 import {
   createTrainingProgramCompositions,
   scoreTrainingProgramComposition,
@@ -448,6 +449,43 @@ check("spilleren får akkurat fire automatiske økter fra valgt program", propos
 check("anbefalte øvelser begrunnes i taktikk, motstander og tropp", proposals.every((x) => x.relevance.includes("Kontrollert oppbygging") && x.relevance.includes("Brann") && x.load.includes("slitne")));
 check("ingen ny øvelsesbank eller fritekstvalg", proposals.every((x) => x.source === "selected-program" && typeof x.exercise === "string" && x.exercise.length > 0 && !("options" in x)));
 check("kildens treningsbelastning blir ikke endret", proposals.every((x,i) => x.fatigueLoad === program.sessions[i].fatigueLoad && x.injuryRiskModifier === program.sessions[i].injuryRiskModifier));
+
+// The recommendations must read authored club style tokens, not infer from
+// evocative club nicknames. Exercise text never owns game load/score.
+const authoredProfiles = JSON.parse(
+  readFileSync(new URL("../data/football_league_club_profiles.json", import.meta.url), "utf8")
+).profiles;
+const profile = (id) => authoredProfiles.find((entry) => entry.clubId === id);
+const opponentExercises = (program, opponent) => createContextualTrainingSessions(program, {
+  opponent: { name: opponent.clubId, styleName: opponent.styleName, matchupStyles: opponent.matchupStyles },
+  tactic: { name: "Balansert kampplan" }
+});
+const buildup = getTrainingProgramCompositionById("buildup_vs_press");
+const versusBrann = opponentExercises(buildup, profile("brann"));
+const withoutStyle = createContextualTrainingSessions(buildup, {
+  opponent: { name: "Ukjent motstander", styleName: "Ukjent stil" }
+});
+check("Eliteserien: Branns faktiske høypress-profil gir pressmotstandsøvelse",
+  versusBrann[0].exercise.includes("simulert høyt press")
+  && !withoutStyle[0].exercise.includes("simulert høyt press"));
+const finishing = getTrainingProgramCompositionById("finishing_week");
+const versusViking = opponentExercises(finishing, profile("viking"));
+const versusKongsvinger = opponentExercises(finishing, profile("kongsvinger"));
+check("Eliteserien: Vikings faktiske lavblokk endrer avslutningsøvelsen",
+  versusViking[0].exercise.includes("kompakt forsvar"));
+check("OBOS-ligaen: Kongsvingers faktiske defensive profil gir tilpasset øvelse",
+  versusKongsvinger[0].exercise.includes("kompakt forsvar"));
+const versusGlimt = opponentExercises(finishing, profile("bodo_glimt"));
+check("smal 4-4-2 er ikke i seg selv det samme som lavblokk",
+  !versusGlimt[0].exercise.includes("kompakt forsvar"));
+
+check("ingen oppdiktet spillvirkning eller ekstra økt",
+  versusBrann.length === buildup.sessions.length
+  && versusBrann.every((entry, index) =>
+    entry.fatigueLoad === buildup.sessions[index].fatigueLoad
+    && entry.injuryRiskModifier === buildup.sessions[index].injuryRiskModifier
+    && !Object.hasOwn(entry, "bonus")
+  ));
 
 // --- Rapport ---------------------------------------------------------------
 console.log("\nEksempel — fullt datagrunnlag (sortert etter uttelling):");

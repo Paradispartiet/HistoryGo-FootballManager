@@ -77,3 +77,16 @@ Spillet foreslår ikke en løs øvelsesbank. Manageren velger blant eksisterende
 - Ingen nye lagringsnøkler, evalueringsmotorer eller bonusregler.
 
 Dette gjelder særlig det prioriterte ligaspillet i Eliteserien og OBOS-ligaen.
+
+## Revisjonskontroll – relevans, lagring og visuell prioritet
+
+Ved kvalitetssikring av treningssystemet er disse kontraktene presisert:
+
+- En autoritativ aktiv modussesjon eier valgt treningsprogram og klubbuke. Eldre liganøkler brukes bare som fallback for ligasaver uten disse feltene, aldri for å blande trening mellom moduser.
+- Anbefalt øvelse **er synlig i selve økta uten ekstra trykk**; manageren kan folde ut begrunnelse og belastningsråd ved behov. Det er ikke et eget øvelsesverksted eller en oppgavebank.
+- Gamle lagrede treningshypoteser beholdes internt for bakoverkompatibilitet, men er **ikke en del av den aktive treningsdagen**. Et slikt notat skal ikke distrahere fra programmets faktiske fire økter.
+- Motstandertilpasning bruker klubbenes eksisterende `matchupStyles` (blant annet `high_press`, `direct_counter`, `compact_532` og `deep_low_block`). Beskrivende stilnavn brukes bare som fallback; det er ikke forsvarlig å trekke taktiske slutninger bare fra et poetisk klubbkallenavn.
+- De eksisterende skademotorene, off-pitch-signalene, valgt fokus, treningsprogram og ukebelastning er fortsatt autoritative. Den nye presentasjonen verken overstyrer intensitet eller simulerer nye økteffekter.
+- Responsiv nettleserkontroll må dekke svært smal mobil (320 px), vanlig mobil (390 px), nettbrett (768–820 px) og PC (1280 px). Øvelsestittel, valgknapper og belastningsråd må være leselige og tastaturtilgjengelige.
+
+Dette er en teknisk og faglig korrekthetsport, ikke en påstand om at enhver navngitt klubb følger akkurat den foreslåtte treningsøvelsen i virkeligheten.

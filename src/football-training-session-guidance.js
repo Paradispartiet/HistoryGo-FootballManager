@@ -33,11 +33,17 @@ export function summarizeTrainingReadiness(conditions = []) {
   };
 }
 
-function exerciseForSession(session = {}, { tacticName = "", opponentStyle = "", readiness = null } = {}) {
+function exerciseForSession(session = {}, { tacticName = "", opponentStyle = "", opponentStyles = [], readiness = null } = {}) {
   const phrase = [session.focusId, session.title].map(text).join(" ");
-  const versusHighPress = /høy.?press|high.?press|aggressiv.?press|gjenvinn/i.test(opponentStyle);
-  const versusLowBlock = /lav.?blokk|low.?block|kompakt.?forsvar/i.test(opponentStyle);
-  const versusCounter = /kontring|counter.?attack|omstilling|transition/i.test(opponentStyle);
+  // Match real authored league style tokens first. The club's poetic style
+  // name (e.g. "Fotballrepublikken") need not contain tactical keywords.
+  const styles = new Set(Array.isArray(opponentStyles) ? opponentStyles : []);
+  const versusHighPress = ["high_press", "aggressive_man_press", "two_striker_press"].some((key) => styles.has(key))
+    || /høy.?press|high.?press|aggressiv.?press/i.test(opponentStyle);
+  const versusLowBlock = ["compact_532", "passive_mid_block", "deep_low_block"].some((key) => styles.has(key))
+    || /lav.?blokk|low.?block|kompakt.?forsvar/i.test(opponentStyle);
+  const versusCounter = ["direct_counter", "fast_transition"].some((key) => styles.has(key))
+    || /kontring|counter.?attack|omstilling|transition/i.test(opponentStyle);
   const tacticalPress = /høy.?press|pressing|gjenvinn/i.test(tacticName);
   const wornDown = Number(readiness?.tired) > 0;
   if (/restitu|recovery|mobilit|skadeforebygg|injury_prevention|bevegelighet/i.test(phrase)) {
@@ -89,12 +95,13 @@ export function createContextualTrainingSessions(program, {
   const tacticName = text(tactic?.name || tactic?.label);
   const opponentName = text(opponent?.name || opponent?.displayName);
   const opponentStyle = text(opponent?.styleName || opponent?.archetypeName);
+  const opponentStyles = Array.isArray(opponent?.matchupStyles) ? opponent.matchupStyles : [];
   const signals = new Set(Array.isArray(program.sourceSignals) ? program.sourceSignals : []);
   const tired = Math.max(0, Number(readiness?.tired) || 0);
   const injured = Math.max(0, Number(readiness?.injured) || 0);
   const focusAligned = selectedFocusId && (program.relatedTrainingFocusIds || []).includes(selectedFocusId);
   return program.sessions.slice(0, 4).map((session) => {
-    const exercise = exerciseForSession(session, { tacticName, opponentStyle, readiness });
+    const exercise = exerciseForSession(session, { tacticName, opponentStyle, opponentStyles, readiness });
     const objective = text(session.tacticalObjective);
     const nextOpponent = opponentName
       ? `Mot ${opponentName}${opponentStyle ? ` (${opponentStyle})` : ""}: knytt dette til kampforberedelsen.`

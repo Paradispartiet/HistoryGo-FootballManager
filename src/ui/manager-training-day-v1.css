@@ -6,7 +6,6 @@
 }
 
 .training-day-problem-suggestion small { opacity: .72; line-height: 1.4; }
-.training-day-saved-hypothesis { border-style: dashed !important; }
 
 .trening-view.has-manager-training-day-v1 #trainingCommandPanel,
 .trening-view.has-manager-training-day-v1 #teamTrainingSelectedState,
@@ -115,8 +114,8 @@
 .training-day-card > span,
 .training-day-card header span,
 .training-day-footer span {
-  color: rgba(255,255,255,.56);
-  font-size: .63rem;
+  color: rgba(255,255,255,.68);
+  font-size: .75rem;
   font-weight: 900;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -124,15 +123,15 @@
 
 .training-day-section-head h3 {
   margin: .18rem 0 0;
-  font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+  font-size: clamp(1.2rem, 2.5vw, 1.55rem);
 }
 
 .training-day-exercise-hint {
   display: block;
   margin-top: .28rem;
   color: rgba(255,255,255,.52);
-  font-size: .67rem;
-  line-height: 1.35;
+  font-size: .82rem;
+  line-height: 1.4;
 }
 
 .training-day-action,
@@ -197,37 +196,55 @@
 }
 
 .training-day-session-advice > summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .24rem .7rem;
+  align-items: center;
+  min-width: 0;
   cursor: pointer;
-  padding: .65rem .8rem;
+  list-style: none;
+  padding: .7rem .85rem;
   color: #e6f0e9;
-  font-size: .85rem;
-  font-weight: 800;
-  line-height: 1.4;
+  line-height: 1.45;
 }
+.training-day-session-advice > summary::-webkit-details-marker { display: none; }
 .training-day-session-advice > summary:focus-visible {
   outline: 2px solid #c1f7d7;
   outline-offset: 2px;
 }
+.training-day-session-advice-label {
+  grid-column: 1 / -1;
+  color: #b9d9c7;
+  font-size: .78rem;
+  font-weight: 800;
+}
+.training-day-session-recommendation {
+  min-width: 0;
+  font-size: .98rem;
+  font-weight: 800;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.training-day-session-expand {
+  color: #d1e3dc;
+  font-size: .8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.training-day-session-expand::after { content: " +"; }
+.training-day-session-advice[open] .training-day-session-expand::after { content: " −"; }
 .training-day-session-advice-body {
   display: grid;
-  gap: .35rem;
-  padding: .15rem .8rem .8rem;
-}
-.training-day-session-advice-label {
-  font-size: .7rem;
-  font-weight: 850;
-  color: #b9d9c7;
-}
-.training-day-session-advice-body strong {
-  font-size: .9rem;
-  line-height: 1.45;
+  gap: .5rem;
+  padding: .2rem .85rem .85rem;
+  border-top: 1px solid rgba(255,255,255,.12);
 }
 .training-day-session-advice-body p,
 .training-day-session-advice-body small {
   margin: 0;
-  font-size: .78rem;
-  line-height: 1.45;
-  color: rgba(255,255,255,.78);
+  font-size: .85rem;
+  line-height: 1.5;
+  color: rgba(255,255,255,.84);
 }
 
 .training-day-session[data-current-calendar-day="true"] {
@@ -238,13 +255,13 @@
 .training-day-session-index,
 .training-day-session-day,
 .training-day-session-intensity {
-  color: rgba(255,255,255,.58);
-  font-size: .68rem;
+  color: rgba(255,255,255,.7);
+  font-size: .78rem;
   font-weight: 850;
 }
 
 .training-day-session-index { font-variant-numeric: tabular-nums; }
-.training-day-session-title { min-width: 0; font-size: .86rem; line-height: 1.35; }
+.training-day-session-title { min-width: 0; font-size: .93rem; line-height: 1.35; }
 .training-day-session-intensity { text-align: right; }
 
 .training-day-side {
@@ -263,8 +280,8 @@
 }
 
 .training-day-card:last-child { border-bottom: 0; }
-.training-day-card strong { font-size: .9rem; line-height: 1.35; overflow-wrap: anywhere; }
-.training-day-card p { margin: 0; color: rgba(255,255,255,.62); font-size: .7rem; line-height: 1.45; }
+.training-day-card strong { font-size: 1rem; line-height: 1.35; overflow-wrap: anywhere; }
+.training-day-card p { margin: 0; color: rgba(255,255,255,.78); font-size: .85rem; line-height: 1.45; }
 .training-day-assistant { box-shadow: inset 3px 0 0 rgba(255,255,255,.54); }
 .training-day-condition { background: rgba(255,255,255,.025); }
 
@@ -342,4 +359,13 @@
     flex-basis: 100%;
     min-height: 2.4rem;
   }
+}
+
+/* The proposed exercise is always visible; explanations remain optional. */
+@media (max-width: 560px) {
+  .training-day-session-advice > summary { grid-template-columns: 1fr; }
+  .training-day-session-expand { white-space: normal; }
+  .training-day-session { padding-block: .9rem; }
+  .training-day-section-head { align-items: start; }
+  .training-day-action { font-size: .84rem; }
 }

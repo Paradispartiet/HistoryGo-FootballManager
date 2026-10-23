@@ -28,6 +28,12 @@ function readJson(key, fallback = null) {
 }
 
 function clubWeekState() {
+  // Prefer active mode-session data. The legacy league snapshot is only a
+  // fallback; otherwise switching modes can display the wrong calendar week.
+  const envelope = readJson(MODE_SESSION_KEY, null);
+  const activeWeek = envelope?.sessions?.[envelope.activeMode]?.clubWeekState;
+  if (activeWeek && Number(activeWeek.week) >= 1) return activeWeek;
+  if (envelope?.activeMode && envelope.activeMode !== "league") return { week: 1, phase: "analysis" };
   const merits = readJson(TEAM_MERITS_KEY, {}) || {};
   return merits.clubWeekState || { week: 1, phase: "analysis" };
 }
@@ -38,9 +44,14 @@ function activeModeLearningState() {
 }
 
 function currentContext() {
-  if (calendarContext?.target === "trening") return calendarContext;
   const clubWeek = clubWeekState();
   const week = Math.max(1, Number(clubWeek.week) || 1);
+  // A calendar navigation context belongs to one concrete club week. Once
+  // matchday advances the save, don't keep displaying last week's Wednesday.
+  if (calendarContext?.target === "trening" && Number(calendarContext.week) === week) {
+    return calendarContext;
+  }
+  if (calendarContext && Number(calendarContext.week) !== week) calendarContext = null;
   const dayIndex = currentManagerDayIndex(clubWeek);
   return {
     week,
@@ -84,7 +95,6 @@ function ensureSurface() {
   surface = node("section", "manager-training-day");
   surface.id = SURFACE_ID;
   surface.setAttribute("aria-label", "Treningsdag");
-  surface.setAttribute("aria-live", "polite");
   surface.innerHTML = `
     <header class="training-day-head">
       <div>
@@ -118,11 +128,6 @@ function ensureSurface() {
           <strong id="trainingDayProblemTitle">Problem å følge opp</strong>
           <p id="trainingDayProblemDetail"></p>
           <small>Forslaget endrer ikke program eller fokus automatisk. Du tar fortsatt valget.</small>
-        </section>
-        <section class="training-day-card training-day-saved-hypothesis" id="trainingDaySavedHypothesis" hidden>
-          <span>Lagret treningshypotese</span>
-          <strong id="trainingDayHypothesisTitle"></strong>
-          <p id="trainingDayHypothesisDetail"></p>
         </section>
         <section class="training-day-card">
           <header><span>Ukens fokus</span><button type="button" id="trainingDayChangeFocus">Endre</button></header>
@@ -176,8 +181,18 @@ function ensureSurface() {
 }
 
 function selectedProgramModel() {
-  const stored = readJson(WEEKLY_TRAINING_PROGRAM_KEY, null);
+  const envelope = readJson(MODE_SESSION_KEY, null);
+  const activeSession = envelope?.sessions?.[envelope.activeMode] || {};
+  // The mode-session is authoritative for the currently active save. Only
+  // league or pre-envelope games may read the legacy league key.
+  const stored = Object.hasOwn(activeSession, "weeklyTrainingProgram")
+    ? activeSession.weeklyTrainingProgram
+    : envelope?.activeMode && envelope.activeMode !== "league"
+      ? null
+      : readJson(WEEKLY_TRAINING_PROGRAM_KEY, null);
   const programId = typeof stored?.programId === "string" ? stored.programId : "";
+  const currentWeek = Math.max(1, Number(clubWeekState().week) || 1);
+  if (Number(stored?.week) !== currentWeek) return null;
   return programId ? getTrainingProgramCompositionById(programId) : null;
 }
 
@@ -293,12 +308,15 @@ function renderSessions(surface, context) {
 
     if (openable) {
       const details = node("details", "training-day-session-advice");
-      const summary = node("summary", "", "Se anbefalt øvelse");
+      const summary = node("summary", "");
+      summary.append(
+        node("span", "training-day-session-advice-label", "Anbefalt øvelse"),
+        node("strong", "training-day-session-recommendation", session.exercise || session.title),
+        node("span", "training-day-session-expand", "Hvorfor denne øvelsen?")
+      );
       details.append(summary);
       const recommendation = node("div", "training-day-session-advice-body");
       recommendation.append(
-        node("span", "training-day-session-advice-label", `Øvelse · ${session.basis || "valgt program"}`),
-        node("strong", "", session.exercise || session.title),
         node("p", "", session.relevance || "Denne økta følger det valgte treningsprogrammets mål."),
         node("small", "", session.load || "Belastningen følger det valgte programmet.")
       );
@@ -348,7 +366,6 @@ function renderTrainingDay() {
   const opponent = surface.querySelector("#trainingDayOpponent");
   const learningState = activeModeLearningState();
   const suggestion = learningState.trainingProblemSuggestion;
-  const hypothesis = learningState.trainingExerciseHypothesis;
 
   if (program) program.textContent = selectedProgramTitle();
   if (focus) focus.textContent = selectedFocus();
@@ -370,18 +387,6 @@ function renderTrainingDay() {
     if (title) title.textContent = suggestion?.title || "Problem å følge opp";
     if (detail) detail.textContent = suggestion?.question || suggestion?.problem || "Vurder problemet før du velger ukas arbeid.";
   }
-  const hypothesisCard = surface.querySelector("#trainingDaySavedHypothesis");
-  if (hypothesisCard) {
-    // Appstaten rydder bort hypotesen når klubbuka skifter. En ekstra
-    // sammenligning mot kalender-UI-et kan skjule en gyldig hypotese i framen
-    // der modussesjonen allerede er lagret, men kalenderflaten ikke er ferdig.
-    hypothesisCard.hidden = !hypothesis;
-    const title = hypothesisCard.querySelector("#trainingDayHypothesisTitle");
-    const detail = hypothesisCard.querySelector("#trainingDayHypothesisDetail");
-    if (title) title.textContent = hypothesis ? `${hypothesis.day || "Økt"} · ${hypothesis.title || "Treningsøvelse"}` : "";
-    if (detail) detail.textContent = hypothesis ? `${hypothesis.setup}. ${hypothesis.hypothesis}` : "";
-  }
-
   renderSessions(surface, context);
   syncLocation(context);
 }
