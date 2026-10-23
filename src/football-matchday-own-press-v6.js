@@ -314,6 +314,8 @@ function recoveryFromAuthoredActions(route, playerIds, sequence, lineup, targetF
   const laneStatus = authoredLaneCheck(route, sequence, playerIds, targetFlank);
   if (laneStatus === "invalid") return null;
   const defenderArrivalSecondsByPlayerId = {};
+  const defenderDeadlineSecondsByPlayerId = {};
+  let usesIndividualDeadline = false;
   const movementModels = new Set();
   for (const id of playerIds) {
     const response = Object.prototype.hasOwnProperty.call(responses, id)
@@ -354,9 +356,23 @@ function recoveryFromAuthoredActions(route, playerIds, sequence, lineup, targetF
       travel.seconds;
     if (arrival > 20) return null;
     defenderArrivalSecondsByPlayerId[id] = arrival;
+    // A specialist may have to seal a pass or runner BEFORE the next
+    // attacking action begins, not just before this four-step move ends.
+    // The optional deadline is an authored scenario premise, never a
+    // duration inferred from player skills or formation.
+    const hasDeadline = Object.prototype.hasOwnProperty.call(
+      response, "mustCoverByActionId");
+    const deadlineIndex = hasDeadline
+      ? expected.indexOf(response.mustCoverByActionId) : expected.length;
+    if (deadlineIndex < 0) return null;
+    if (hasDeadline) usesIndividualDeadline = true;
+    defenderDeadlineSecondsByPlayerId[id] = sequence.actions
+      .slice(0, deadlineIndex)
+      .reduce((sum, action) => sum + action.durationSeconds, 0);
   }
   return { basis: "authored_scenario", route, attackWindowSeconds,
     defenderArrivalSecondsByPlayerId,
+    ...(usesIndividualDeadline ? { defenderDeadlineSecondsByPlayerId } : {}),
     movementModel: movementModels.size === 1 ? [...movementModels][0] :
       "mixed_authored_responses",
     spatialLane: sequence.spatialLane?.channel || null,
@@ -389,7 +405,17 @@ function specialistRecoveryWindow(route, playerIds, timing, lineup, targetFlank)
   if (!arrival.every(time => finite(time) && time >= 0 && time <= 20))
     return invalid;
   const latest = Math.max(...arrival);
-  const margin = derived.attackWindowSeconds - latest;
+  const actionDeadlines = isSequence
+    ? derived.defenderDeadlineSecondsByPlayerId : null;
+  const deadlineSeconds = actionDeadlines
+    ? playerIds.map(id => Object.prototype.hasOwnProperty.call(actionDeadlines, id)
+      ? actionDeadlines[id] : null)
+    : playerIds.map(() => derived.attackWindowSeconds);
+  if (!deadlineSeconds.every(time => finite(time) &&
+    time >= 0 && time <= derived.attackWindowSeconds)) return invalid;
+  const remainingTimes = deadlineSeconds.map((time, i) => time - arrival[i]);
+  const margin = Math.min(...remainingTimes);
+  const mostUrgentIndex = remainingTimes.indexOf(margin);
   return {
     status: isSequence && derived.laneStatus === "wrong_corridor"
       ? "wrong_corridor" : margin >= 0 ? "in_time" : "late",
@@ -398,7 +424,13 @@ function specialistRecoveryWindow(route, playerIds, timing, lineup, targetFlank)
     latestRecoverySeconds: Math.round(latest * 1000) / 1000,
     marginSeconds: Math.round(margin * 1000) / 1000,
     movementModel: isSequence ? derived.movementModel : null,
-    spatialLane: isSequence ? derived.spatialLane : null
+    spatialLane: isSequence ? derived.spatialLane : null,
+    ...(actionDeadlines ? {
+      deadlineModel: "per_defender_action_start",
+      criticalDefenderId: playerIds[mostUrgentIndex],
+      criticalDeadlineSeconds:
+        Math.round(deadlineSeconds[mostUrgentIndex] * 1000) / 1000
+    } : {})
   };
 }
 
