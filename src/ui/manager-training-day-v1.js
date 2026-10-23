@@ -362,7 +362,11 @@ function renderTrainingDay() {
   const opponent = surface.querySelector("#trainingDayOpponent");
   const learningState = activeModeLearningState();
   const suggestion = learningState.trainingProblemSuggestion;
-  const hypothesis = learningState.trainingExerciseHypothesis;
+  const savedHypothesis = learningState.trainingExerciseHypothesis;
+  const hypothesis = Number(savedHypothesis?.week) === Number(context.week)
+    && String(savedHypothesis?.programTitle || "") === selectedProgramTitle()
+    ? savedHypothesis
+    : null;
 
   if (program) program.textContent = selectedProgramTitle();
   if (focus) focus.textContent = selectedFocus();
