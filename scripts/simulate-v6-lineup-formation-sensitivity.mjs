@@ -916,4 +916,41 @@ assert.equal(cfRecognitionLate.evidence.routeCoverTiming.status, "late");
 assert.equal(cfRecognitionEarly.probability, cfRecognitionLate.probability);
 assert.ok(cfRecognitionEarly.containmentProbability >
   cfRecognitionLate.containmentProbability);
+// Real calculated XI continues to own role/formation fit; the new spatial
+// field changes only the documented timing of the second defensive phase.
+const cfSpatialTrial = (distanceMeters, protectionDraw = 0.99) => {
+  const spatial = cfSequence(1.2);
+  spatial.pitchDimensionsMeters = { widthMeters: 68, lengthMeters: 105 };
+  spatial.defenderResponsesByPlayerId = Object.fromEntries(
+    cfTrackingIds.map((id, index) => [id, {
+      recognitionDelaySeconds: 0.4,
+      triggerActionId: "receive",
+      coverMovement: {
+        basis: "authored_pitch_geometry",
+        startMeters: { x: 15, y: 55 },
+        coverMeters: { x: 15 + (index === 0 ? 6 : distanceMeters), y: 55 },
+        averageSpeedMetersPerSecond: 4
+      }
+    }]));
+  return resolveOwnPressAgainstOpponent(kickoff(cfXI, withCfOpponent({
+    tacticalBehaviour: {
+      pressEscapeRoute: "third_man", pressEscapeActionSequence: spatial
+    }
+  })), { pressureRoll: () => 0.99, protectionRoll: () => protectionDraw });
+};
+const cfSpatialClose = cfSpatialTrial(6);
+const cfSpatialFar = cfSpatialTrial(14);
+assert.equal(cfSpatialClose.evidence.routeCoverTiming.status, "in_time");
+assert.equal(cfSpatialFar.evidence.routeCoverTiming.status, "late");
+assert.equal(cfSpatialClose.evidence.routeCoverTiming.movementModel,
+  "authored_pitch_geometry");
+assert.equal(cfSpatialClose.evidence.routeCoverFitFloor,
+  cfSpatialFar.evidence.routeCoverFitFloor);
+assert.equal(cfSpatialClose.probability, cfSpatialFar.probability);
+assert.ok(cfSpatialClose.containmentProbability > cfSpatialFar.containmentProbability);
+const cfSpatialThreshold = (cfSpatialClose.containmentProbability +
+  cfSpatialFar.containmentProbability) / 2;
+assert.equal(cfSpatialTrial(6, cfSpatialThreshold).status, "contained");
+assert.equal(cfSpatialTrial(14, cfSpatialThreshold).status, "escaped");
+console.log("OK: production XI consumes authored geometric recovery distance.");
 console.log("OK: production XI consumes a four-action timeline and cue-specific delay.");

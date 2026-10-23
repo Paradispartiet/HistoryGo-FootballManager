@@ -189,3 +189,64 @@ fallback. Det legges ikke på en separat attributtbonus eller xG.
 Dette er et kildebevisst *taktisk cue-valg*, ikke kalibrert reaksjonshastighet.
 Det bør testes videre mot reelle klipp før automatiserte tidspunkt eller
 distanser introduseres.
+
+
+## Geometrisk sikringsvindu – eksplisitt scenariomodell
+
+Kampmotoren kan nå beregne **forflytningstid** fra start- og sikringspunkt,
+i stedet for å kreve at hele `coverMoveSeconds` skrives inn. Dette er en
+alternativ form av det samme forfattede `pressEscapeActionSequence`, **ikke**
+automatisk rekonstruksjon av lagets posisjoner.
+
+```js
+pitchDimensionsMeters: { widthMeters: 68, lengthMeters: 105 },
+defenderResponsesByPlayerId: {
+  "documented-defender-id": {
+    triggerActionId: "receive",
+    recognitionDelaySeconds: 0.4,
+    coverMovement: {
+      basis: "authored_pitch_geometry",
+      startMeters: { x: 20, y: 50 },
+      coverMeters: { x: 26, y: 50 },
+      averageSpeedMetersPerSecond: 4
+    }
+  }
+}
+```
+
+`x` går på tvers av banen (0 til banebredden), `y` langs banen
+(0 til lengden), begge i meter fra **samme forsvarsperspektiv**.
+Banemål må oppgis og ligge innenfor IFABs dimensjoner:
+45–90 m bredde og 90–120 m lengde.
+https://www.theifab.com/laws/latest/the-field-of-play/
+
+Regneregel: Forflytningstid = euklidsk rettlinjedistanse fra
+`startMeters` til `coverMeters` delt på scenarioets **eksplisitt
+forfattede gjennomsnittlige forflytningsfart**.
+Ankomsttid = tid før spillerens utløser + reaksjonsforsinkelse
++ forflytningstid. Dette er en **nedre idealisert distansebane**, ikke
+virkelig sprintbane gjennom pressende spillere. Scenariobruker må
+oppgi start-/sikringspunkter og forflytningsfart; modellen utleder
+aldri spillerfart fra generisk rating, rolle, formasjon eller ferdigheter.
+Fartsgrenser (0,5–10 m/s) er inputvalidering, ikke en målt
+hastighetsfordeling. Reelle spillerdata mangler fortsatt presise
+posisjoner og hastigheter.
+
+`coverMoveSeconds` er fortsatt et gyldig alternativ i eldre
+scenarier, og kan brukes av andre forsvarere i samme angrepsforløp.
+Det er ikke lov å gi både sekundtall og geometri for samme forsvarer.
+Ugyldig banestørrelse, utenfor-banen-koordinater, ugyldig fart,
+manglende punkter eller ankomst over 20 sekunder er nøytralt
+`invalid_or_incomplete` i hele spesialistkjeden.
+`evidence.routeCoverTiming.movementModel` skiller mellom
+`authored_pitch_geometry`, `authored_move_seconds` og
+`mixed_authored_responses`. Verken første pressfase,
+grunnsikring eller xG-betaling endres.
+
+**Fotballfaglig motivasjon:** FIFA beskriver nærmeste press, medspilleres
+dekning, laget som en kompakt struktur og returløp i direkte sammenheng.
+Den konkrete formelen, grensene og scenariotidene er spilldesign,
+ikke tall utledet fra FIFA eller validert kamptracking.
+
+- https://www.fifatrainingcentre.com/en/practice/elite-sessions/transition-to-defending/defensive-transitions.php
+- https://www.fifatrainingcentre.com/en/practice/talent-coach-programme/zonal-defending/developing-defensive-coordination-in-small-groups.php

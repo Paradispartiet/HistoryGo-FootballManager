@@ -218,6 +218,42 @@ const PRESS_EXIT_TIMED_ACTIONS = Object.freeze({
 // recognition + repositioning delays, anchored to an optional named cue.
 // No time is inferred from ratings,
 // nominal formations, historical players, or a generic 'fast' tactic tag.
+// Optional discrete geometry is an AUTHORED scenario calculation, not
+// observed tracking or a movement speed derived from a player's skill score.
+// The pitch size must be explicit; coordinates use metres from a shared
+// defending-team viewpoint (x across the width, y along the length).
+function authoredCoverMove(response, sequence) {
+  const withSeconds = Object.prototype.hasOwnProperty.call(response, "coverMoveSeconds");
+  const withGeometry = Object.prototype.hasOwnProperty.call(response, "coverMovement");
+  // Both modes supplied (or neither) is ambiguous and cannot earn cover.
+  if (withSeconds === withGeometry) return null;
+  if (withSeconds) return finite(response.coverMoveSeconds) &&
+    response.coverMoveSeconds >= 0 && response.coverMoveSeconds <= 20
+    ? { seconds: response.coverMoveSeconds, model: "authored_move_seconds" } : null;
+  const pitch = sequence.pitchDimensionsMeters;
+  const movement = response.coverMovement;
+  if (!pitch || typeof pitch !== "object" || Array.isArray(pitch) ||
+    !finite(pitch.widthMeters) || pitch.widthMeters < 45 || pitch.widthMeters > 90 ||
+    !finite(pitch.lengthMeters) || pitch.lengthMeters < 90 || pitch.lengthMeters > 120 ||
+    !movement || typeof movement !== "object" || Array.isArray(movement) ||
+    movement.basis !== "authored_pitch_geometry" ||
+    !finite(movement.averageSpeedMetersPerSecond) ||
+    movement.averageSpeedMetersPerSecond < 0.5 ||
+    movement.averageSpeedMetersPerSecond > 10) return null;
+  const validPoint = point => point && typeof point === "object" &&
+    !Array.isArray(point) && finite(point.x) && finite(point.y) &&
+    point.x >= 0 && point.x <= pitch.widthMeters &&
+    point.y >= 0 && point.y <= pitch.lengthMeters;
+  if (!validPoint(movement.startMeters) || !validPoint(movement.coverMeters))
+    return null;
+  const dx = movement.coverMeters.x - movement.startMeters.x;
+  const dy = movement.coverMeters.y - movement.startMeters.y;
+  const distanceMeters = Math.hypot(dx, dy);
+  const seconds = distanceMeters / movement.averageSpeedMetersPerSecond;
+  return finite(seconds) && seconds <= 20
+    ? { seconds, model: "authored_pitch_geometry" } : null;
+}
+
 function recoveryFromAuthoredActions(route, playerIds, sequence, lineup) {
   const expected = PRESS_EXIT_TIMED_ACTIONS[route];
   if (!expected || sequence?.route !== route ||
@@ -232,14 +268,17 @@ function recoveryFromAuthoredActions(route, playerIds, sequence, lineup) {
   if (!responses || typeof responses !== "object" || Array.isArray(responses) ||
     !Array.isArray(playerIds) || playerIds.length === 0) return null;
   const defenderArrivalSecondsByPlayerId = {};
+  const movementModels = new Set();
   for (const id of playerIds) {
     const response = Object.prototype.hasOwnProperty.call(responses, id)
       ? responses[id] : null;
     if (!response || typeof response !== "object" || Array.isArray(response) ||
       !finite(response.recognitionDelaySeconds) ||
-      !finite(response.coverMoveSeconds) ||
-      response.recognitionDelaySeconds < 0 || response.coverMoveSeconds < 0)
+      response.recognitionDelaySeconds < 0 || response.recognitionDelaySeconds > 20)
       return null;
+    const travel = authoredCoverMove(response, sequence);
+    if (!travel) return null;
+    movementModels.add(travel.model);
     // Recognition starts when the defender sees a named attacking cue.
     // No cue means the first action, preserving old scenario behaviour.
     const hasCue = Object.prototype.hasOwnProperty.call(response, "triggerActionId");
@@ -266,12 +305,14 @@ function recoveryFromAuthoredActions(route, playerIds, sequence, lineup) {
     const elapsedBeforeCue = sequence.actions.slice(0, cueIndex)
       .reduce((sum, action) => sum + action.durationSeconds, 0);
     const arrival = elapsedBeforeCue + response.recognitionDelaySeconds +
-      response.coverMoveSeconds;
+      travel.seconds;
     if (arrival > 20) return null;
     defenderArrivalSecondsByPlayerId[id] = arrival;
   }
   return { basis: "authored_scenario", route, attackWindowSeconds,
-    defenderArrivalSecondsByPlayerId };
+    defenderArrivalSecondsByPlayerId,
+    movementModel: movementModels.size === 1 ? [...movementModels][0] :
+      "mixed_authored_responses" };
 }
 
 // Recovery timing is OPTIONAL scenario input, never inferred from fitness,
@@ -279,7 +320,8 @@ function recoveryFromAuthoredActions(route, playerIds, sequence, lineup) {
 // route-specific coordination term; there is no new xG, time bonus or penalty.
 function specialistRecoveryWindow(route, playerIds, timing, lineup) {
   const neutral = { status: "not_provided", basis: null,
-    attackWindowSeconds: null, latestRecoverySeconds: null, marginSeconds: null };
+    attackWindowSeconds: null, latestRecoverySeconds: null, marginSeconds: null,
+    movementModel: null };
   if (timing == null) return neutral;
   const invalid = { ...neutral, status: "invalid_or_incomplete" };
   if (!timing || typeof timing !== "object" || Array.isArray(timing)) return invalid;
@@ -305,7 +347,8 @@ function specialistRecoveryWindow(route, playerIds, timing, lineup) {
     basis: isSequence ? "authored_action_sequence" : "authored_scenario",
     attackWindowSeconds: Math.round(derived.attackWindowSeconds * 1000) / 1000,
     latestRecoverySeconds: Math.round(latest * 1000) / 1000,
-    marginSeconds: Math.round(margin * 1000) / 1000
+    marginSeconds: Math.round(margin * 1000) / 1000,
+    movementModel: isSequence ? derived.movementModel : null
   };
 }
 
