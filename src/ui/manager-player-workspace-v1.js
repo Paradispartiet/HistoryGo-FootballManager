@@ -59,6 +59,29 @@ const POSITION_POINTS = Object.freeze({
   DM: [50, 57], CM: [50, 43], AM: [50, 29], LW: [20, 25], RW: [80, 25], ST: [50, 12]
 });
 const CATEGORY_LABELS = Object.freeze({ teknisk: "Teknisk", mental: "Mental", taktisk: "Taktisk", fysisk: "Fysisk" });
+/* These are translations of game-catalogue archetypes, not verified biographical claims. */
+const TRAIT_LABELS = Object.freeze({
+  aerial: "Luftspill", balance: "Balanse", ball_winner: "Ballvinner",
+  between_lines: "Mellom ledd", box_defender: "Boksforsvarer",
+  box_presence: "Boksspill", build_up_defender: "Oppspillende forsvarer",
+  club_professional: "Rutine", combination_player: "Kombinasjonsspill",
+  command_of_area: "Kontroll i feltet", composure: "Ro med ball",
+  controller: "Spillkontroll", creator: "Kreativ spiller",
+  crossing: "Innlegg", defensive_balance: "Defensiv balanse",
+  defensive_presence: "Defensiv tilstedeværelse", defensive_reading: "Spilleforståelse defensivt",
+  depth_threat: "Bakromstrussel", distribution: "Distribusjon",
+  dribbler: "Dribler", duel: "Duellspill", duel_winner: "Duellsterk",
+  false_nine: "Falsk nier", final_pass: "Sistepasning",
+  finisher: "Avslutter", leader: "Leder", line_keeper: "Linjekeeper",
+  link_player: "Bindeledd", movement: "Bevegelse", one_vs_one: "Én mot én",
+  overlap: "Overlapp", pace: "Hurtighet", passer: "Pasningsspiller",
+  positional_freedom: "Posisjonell frihet", positioning: "Posisjonering",
+  power: "Kraft", pressing_intelligence: "Pressforståelse",
+  runner: "Løpssterk", shot_stopper: "Skuddstopper", stamina: "Utholdenhet",
+  target: "Oppspillspunkt", tempo_setter: "Temposetter",
+  transition_midfielder: "Overgangsmidtbanespiller", wide_creator: "Kantskaper",
+  wide_support: "Kantstøtte"
+});
 let runtimePromise = null;
 let runtime = null;
 let currentProfileTab = "season";
@@ -221,10 +244,24 @@ function playerClubLabel(row) {
   if (!row.clubHistory.length) return "Klubbhistorikk mangler i spillerkatalogen";
   const hasUnverified = row.clubHistory.some((club) => club.evidence !== "belagt");
   const heading = hasUnverified ? "Registrert klubbtilknytning" : "Spilte for";
-  return heading + ": " + row.clubHistory.map((club) => club.name).join(" · ");
+  return heading + ": " + row.clubHistory.map((club) =>
+    club.name + (club.evidence === "belagt" ? "" : " (ikke verifisert)")
+  ).join(" · ");
 }
 function registeredStrengthLabels(player, limit = 3) {
   return asArray(player?.strengths).slice(0, limit).map((id) => runtime?.catalogue?.byId.get(id)?.name || formatToken(id));
+}
+export function getPlayerSummary(player, { attributeNames = new Map(), roleNames = new Map() } = {}) {
+  const attrs = attributeNames instanceof Map ? attributeNames : new Map();
+  const roles = roleNames instanceof Map ? roleNames : new Map();
+  return {
+    registeredStrengths: asArray(player?.strengths).slice(0, 5)
+      .map((id) => attrs.get(id)?.name || formatToken(id)),
+    modelTraits: asArray(player?.archetypes).slice(0, 3)
+      .map((id) => TRAIT_LABELS[id] || formatToken(id)),
+    preferredRoles: asArray(player?.preferredRoles).slice(0, 2)
+      .map((id) => roles.get(id)?.name || formatToken(id))
+  };
 }
 function modeledHighlights(id, limit = 3) {
   const profile = runtime?.attributeIndex?.profiles?.[id];
@@ -250,8 +287,10 @@ function appendPlayerHistoryPreview(playerCell, row) {
   if (known.length) {
     details.append(node("span", "manager-roster-known-strengths", "Registrerte styrker: " + known.join(" · ")));
   } else {
-    details.append(node("span", "manager-roster-strengths-missing", "Ingen kildebelagte styrker registrert"));
+    details.append(node("span", "manager-roster-strengths-missing", "Ingen individuelle styrker registrert"));
   }
+  const traits = getPlayerSummary(row.player).modelTraits;
+  if (traits.length) details.append(node("span", "manager-roster-model-traits", "Spillstil (modell): " + traits.slice(0, 2).join(" · ")));
   const modeled = modeledHighlights(row.id);
   if (modeled.length) {
     const hint = node("span", "manager-roster-model-values", "Spillverdier (modell 1–20): " + modeled.join(" · "));
@@ -279,12 +318,43 @@ function renderAttributes(profile) { const host = node("section", "manager-playe
 function tokenList(title, values, className = "") { const section = node("section", `manager-player-token-section ${className}`.trim()); section.append(node("h3", "", title)); const list = node("div", "manager-player-token-list"); const tokens = asArray(values); if (!tokens.length) list.append(node("span", "is-empty", "Ingen registrerte data")); tokens.forEach((value) => list.append(node("span", "", formatToken(value)))); section.append(list); return section; }
 function renderRolePanel(player) { const store = readStorage(STORAGE.merits, {})?.roleFamiliarity || {}; const roleMap = new Map(runtime.roles.map((role) => [role.id, role])); const section = node("section", "manager-player-role-panel"); section.append(node("h3", "", "Aktuelle roller")); const list = node("div", "manager-player-role-list"); const roles = asArray(player.preferredRoles); if (!roles.length) list.append(node("p", "muted-text", "Ingen foretrukne roller er registrert.")); roles.forEach((roleId) => { const familiarity = getRoleFamiliarity(store, player.id, roleId); const description = describeRoleFamiliarity(familiarity); const card = node("article", "manager-player-role-card"); card.append(node("strong", "", roleMap.get(roleId)?.name || formatToken(roleId)), node("span", "", `${familiarity}% · ${description.label}`), node("small", "", description.hint)); list.append(card); }); section.append(list); return section; }
 function renderCurrentPanel(data) { const { row, player, recruitable } = data; const section = node("section", "manager-player-current-panel"); section.append(node("h3", "", "Akkurat nå")); const metrics = node("div", "manager-player-current-grid"); [["Kampklarhet", row.status.label, describeCondition(row.condition)], ["Form", row.form.text, `${row.appearances} kamper denne sesongen`], ["Taktisk fit", row.fit.label, selectedTacticId() ? "Mot valgt kampplan" : "Velg kampplan for vurdering"], ["Tropp", recruitable ? "I troppen" : "Ikke i troppen", recruitable ? "Spilleren kan brukes i oppstilling, trening og kamp." : "Profilen kan undersøkes uten at spilleren er valgt til klubbtroppen."], ["Individuell trening", row.training ? runtime.trainingById.get(row.training.trackId)?.name || formatToken(row.training.trackId || row.training.roleId) : "Ingen", row.training?.roleId ? `Rollefokus: ${formatToken(row.training.roleId)}` : "Ingen aktiv oppfølging"]].forEach(([label, value, detail]) => { const article = node("article"); article.append(node("span", "", label), node("strong", "", value), node("small", "", detail)); metrics.append(article); }); section.append(metrics); if (player.warningWhenMisused) { const warning = node("div", "manager-player-misuse-warning"); warning.append(node("span", "", "Misbruksvarsel"), node("strong", "", player.warningWhenMisused)); section.append(warning); } return section; }
-function profileTabContent(data, tab) { const { row, player } = data; const host = node("div", "manager-player-profile-tab-content"); if (tab === "training") { host.append(tokenList("Det spilleren trenger", player.needs)); const box = node("section", "manager-player-history-card"); box.append(node("h3", "", "Individuell trening")); if (row.training) { box.append(node("strong", "", runtime.trainingById.get(row.training.trackId)?.name || formatToken(row.training.trackId || row.training.roleId))); if (row.training.roleId) box.append(node("p", "muted-text", `Rollefokus: ${formatToken(row.training.roleId)}`)); } else box.append(node("p", "muted-text", "Ingen individuell trening er satt denne uka.")); host.append(box); return host; } if (tab === "history") { const places = asArray(player.sourcePlaceIds).map((id) => runtime.placesById.get(id) || formatToken(id)); const source = node("section", "manager-player-history-card"); source.append(node("h3", "", "Registrert klubbhistorikk"), node("p", "", playerClubLabel(row)), node("h3", "", "History Go-tilknytning"), node("p", "", places.length ? places.join(" · ") : "Ingen stedstilknytning registrert.")); if (player.era) source.append(node("small", "", `Epoke: ${formatToken(player.era)}`)); host.append(source, tokenList("Taktikker spilleren trives i", player.likesTactics, "is-positive"), tokenList("Taktikker spilleren mistrives i", player.dislikesTactics, "is-negative")); return host; } const season = node("section", "manager-player-season-card"); [["Kamper", row.appearances], ["Minutter", row.minutes], ["Mål", row.goals], ["Målgivende", row.assists]].forEach(([label, value]) => { const article = node("article"); article.append(node("span", "", label), node("strong", "", value)); season.append(article); }); host.append(season, tokenList("Registrerte styrker", player.strengths, "is-positive")); return host; }
+function profileTabContent(data, tab) { const { row, player } = data; const host = node("div", "manager-player-profile-tab-content"); if (tab === "training") { host.append(tokenList("Det spilleren trenger", player.needs)); const box = node("section", "manager-player-history-card"); box.append(node("h3", "", "Individuell trening")); if (row.training) { box.append(node("strong", "", runtime.trainingById.get(row.training.trackId)?.name || formatToken(row.training.trackId || row.training.roleId))); if (row.training.roleId) box.append(node("p", "muted-text", `Rollefokus: ${formatToken(row.training.roleId)}`)); } else box.append(node("p", "muted-text", "Ingen individuell trening er satt denne uka.")); host.append(box); return host; } if (tab === "history") { const places = asArray(player.sourcePlaceIds).map((id) => runtime.placesById.get(id) || formatToken(id)); const source = node("section", "manager-player-history-card"); source.append(node("h3", "", "Registrert klubbhistorikk"), node("p", "", playerClubLabel(row)),
+  node("p", "muted-text", "En selvstendig biografi med kildehenvisninger er ikke registrert i spillerkatalogen."),
+  node("h3", "", "History Go-tilknytning"), node("p", "", places.length ? places.join(" · ") : "Ingen stedstilknytning registrert.")); if (player.era) source.append(node("small", "", `Epoke: ${formatToken(player.era)}`)); host.append(source, tokenList("Taktikker spilleren trives i", player.likesTactics, "is-positive"), tokenList("Taktikker spilleren mistrives i", player.dislikesTactics, "is-negative")); return host; } const season = node("section", "manager-player-season-card"); [["Kamper", row.appearances], ["Minutter", row.minutes], ["Mål", row.goals], ["Målgivende", row.assists]].forEach(([label, value]) => { const article = node("article"); article.append(node("span", "", label), node("strong", "", value)); season.append(article); }); host.append(season, tokenList("Registrerte styrker", player.strengths, "is-positive")); return host; }
+
+function renderPlayerSummary(data) {
+  const { row, player } = data;
+  const roleNames = new Map(runtime.roles.map((role) => [role.id, role]));
+  const summary = getPlayerSummary(player, { attributeNames: runtime.catalogue.byId, roleNames });
+  const section = node("section", "manager-player-summary");
+  section.setAttribute("aria-label", "Kortprofil for " + row.name);
+  const intro = node("div", "manager-player-summary-intro");
+  intro.append(node("h3", "", "Kortprofil"), node("span", "", "Opplysninger fra spillerkatalogen"));
+  section.append(intro);
+  const grid = node("div", "manager-player-summary-grid");
+  [
+    ["Registrerte styrker", summary.registeredStrengths, "Ingen individuelle styrker registrert", "manager-player-summary-strengths"],
+    ["Spillstil (modell)", summary.modelTraits, "Ingen spillstiltrekk beregnet", "manager-player-summary-model"],
+    ["Foretrukne roller", summary.preferredRoles, "Ingen roller registrert", "manager-player-summary-roles"],
+    ["Sterkeste spillverdier (modell 1–20)", modeledHighlights(row.id, 3), "Ingen modellverdier", "manager-player-summary-values"]
+  ].forEach(([title, items, missing, className]) => {
+    const card = node("div", `manager-player-summary-card ${className}`);
+    card.append(node("h4", "", title));
+    const list = node("div", "manager-player-summary-items");
+    if (!items.length) list.append(node("span", "is-empty", missing));
+    items.forEach((item) => list.append(node("span", "", item)));
+    card.append(list);
+    grid.append(card);
+  });
+  section.append(grid, node("p", "manager-player-summary-note",
+    "Registrerte styrker mangler individuelle kildehenvisninger i katalogen. Spillstil og verdier er spillmodell, ikke dokumentert biografi."));
+  return section;
+}
 
 function renderProfile(playerId, allowLocked = false) {
   const data = profileData(playerId, allowLocked); if (!data) return false; const dialog = ensureProfileDialog(); const { row, player, attributes } = data; const shell = node("article", "manager-player-profile-shell"); const top = node("header", "manager-player-profile-head"); const identity = node("div", "manager-player-profile-identity"); identity.append(node("p", "eyebrow", "Virkelig spiller · klubbhistorikk fra katalogen"), node("h2", "", row.name), node("p", "manager-profile-club-history", playerClubLabel(row)), node("p", "", [player.nationality, [...row.naturalPositions, ...row.usablePositions].join(" / "), player.era ? `Epoke: ${player.era}` : ""].filter(Boolean).join(" · "))); const close = node("button", "manager-player-profile-close", "×"); close.type = "button"; close.setAttribute("aria-label", "Lukk spillerprofil"); close.addEventListener("click", () => dialog.close()); top.append(identity, close);
   const overview = node("div", "manager-player-profile-overview"); const left = node("div", "manager-player-profile-left"); left.append(renderMiniPitch(player), renderRolePanel(player)); const right = node("div", "manager-player-profile-right"); right.append(renderCurrentPanel(data), tokenList("Registrerte styrker", player.strengths, "is-positive"), tokenList("Trenger rundt seg", player.needs)); overview.append(left, renderAttributes(attributes), right);
-  const tabs = node("nav", "manager-player-profile-tabs"); tabs.setAttribute("aria-label", "Spillerprofil detaljer"); [["season", "Sesong"], ["training", "Trening"], ["history", "Historikk"]].forEach(([id, label]) => { const button = node("button", id === currentProfileTab ? "is-active" : "", label); button.type = "button"; button.setAttribute("aria-pressed", id === currentProfileTab ? "true" : "false"); button.addEventListener("click", () => { currentProfileTab = id; renderProfile(playerId, allowLocked); }); tabs.append(button); }); shell.append(top, overview, tabs, profileTabContent(data, currentProfileTab)); dialog.replaceChildren(shell); return true;
+  const tabs = node("nav", "manager-player-profile-tabs"); tabs.setAttribute("aria-label", "Spillerprofil detaljer"); [["season", "Sesong"], ["training", "Trening"], ["history", "Historikk"]].forEach(([id, label]) => { const button = node("button", id === currentProfileTab ? "is-active" : "", label); button.type = "button"; button.setAttribute("aria-pressed", id === currentProfileTab ? "true" : "false"); button.addEventListener("click", () => { currentProfileTab = id; renderProfile(playerId, allowLocked); }); tabs.append(button); }); shell.append(top, renderPlayerSummary(data), overview, tabs, profileTabContent(data, currentProfileTab)); dialog.replaceChildren(shell); return true;
 }
 export function openManagerPlayerProfile(playerId, { allowLocked = false } = {}) { if (!runtime || !playerId) return false; currentProfileTab = "season"; const dialog = ensureProfileDialog(); if (!renderProfile(String(playerId), allowLocked)) return false; if (!dialog.open) dialog.showModal(); return true; }
 
