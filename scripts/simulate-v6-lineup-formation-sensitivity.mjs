@@ -983,7 +983,9 @@ const cfLaneAligned = cfLaneResponse(true);
 const cfLaneMiss = cfLaneResponse(false);
 assert.equal(cfLaneAligned.evidence.routeCoverTiming.status, "in_time");
 assert.equal(cfLaneMiss.evidence.routeCoverTiming.status,
-  "invalid_or_incomplete");
+  "wrong_corridor");
+assert.equal(cfLaneMiss.routeCoverAdjustment, 0);
+assert.ok(cfLaneAligned.routeCoverAdjustment > 0);
 assert.equal(cfLaneAligned.probability, cfLaneMiss.probability);
 assert.equal(cfLaneAligned.evidence.routeCoverFitFloor,
   cfLaneMiss.evidence.routeCoverFitFloor);
