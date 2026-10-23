@@ -125,7 +125,11 @@ Hvis treningsprogram ennå ikke er valgt, er de fire plassholderøktene ikke int
 - Touchregel er eksplisitt del av instruksjonen treneren skal gi.
 - Et typisk restitusjonsoppsett vises som fire kontrollerte stasjoner framfor konkurransespill. Når manageren velger overgangsspill, vises spillformatet og eksisterende faglige advarsel om at intensiteten kan bli feil for restitusjon.
 
-Dette er en **interaktiv plan for organisering av økten** og benytter `createTrainingExerciseFieldSetup` i den eksisterende øvelsesdesignmodulen. Eksempeltallene er ikke nye motorparametere. De endrer ikke program, fatigue, skadefare, kampbonus, progresjon eller lagring. Samme hypotese- og modussesjonssystem brukes som tidligere. Vi legger ikke til en ny treningsmotor eller en ny `localStorage`-nøkkel.
+Dette er en **interaktiv plan for organisering av økten** og benytter `createTrainingExerciseFieldSetup` i den eksisterende øvelsesdesignmodulen. Eksempeltallene er ikke nye motorparametere. De endrer ikke program, fatigue, skadefare, kampbonus eller progresjon.
+
+Hver av de **fire øktene** kan nå lagre sitt eget oppsett. Oppsettene bor i `trainingExerciseHypothesis.sessionPlans` innenfor den allerede eksisterende aktive modussesjonen `hgfm.modeSessions.v1`; ingen ny `localStorage`-nøkkel eller ny treningsmotor introduseres. Rotverdien `trainingExerciseHypothesis` er fortsatt **sist lagrede økt**, slik at gammel kampledelse og etterkampanalyse får samme enkle hypotesesnapshot som før. Eldre saves med bare én hypotese leses fortsatt. Ved uke-/programbytte blandes ikke gamle øvelser inn i den nye uka.
+
+Treningsdagen viser eksplisitt hvilke av de fire øktene som har lagret oppsett. Dette er en treningsplanlegger og tilhørende observasjonshypoteser, ikke ny belastningsberegning.
 
 ## Produktgrense
 
