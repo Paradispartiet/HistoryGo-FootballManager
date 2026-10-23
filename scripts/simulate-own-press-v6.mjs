@@ -485,6 +485,114 @@ assert.equal(sequenceTrial(authoredSequence(0.2), 0.99, authoredWindow(3.0))
   .evidence.routeCoverTiming.basis, "authored_scenario",
   "legacy explicit window wins if both formats are present");
 
+ 
+// Authored geometry: same XI and action clock, but a defender starts too far
+// from the cover corridor in one scenario. Travel time is calculated from
+// documented SCENARIO metres/speed, NEVER from matchScore or invented pace.
+const pitchDimensionsMeters = { widthMeters: 68, lengthMeters: 105 };
+const scenarioGeometryResponses = Object.fromEntries(centralIds.map(id => [id, {
+  recognitionDelaySeconds: 0.4, triggerActionId: "receive",
+  coverMovement: {
+    basis: "authored_pitch_geometry",
+    startMeters: { x: 20, y: 50 },
+    coverMeters: { x: 26, y: 50 },
+    averageSpeedMetersPerSecond: 4
+  }
+}]));
+const geometricTimeline = responses => ({
+  ...authoredSequence(1.2, responses), pitchDimensionsMeters
+});
+const nearbyCover = sequenceTrial(geometricTimeline(scenarioGeometryResponses));
+const farCoverResponses = {
+  ...scenarioGeometryResponses,
+  [centralIds[1]]: {
+    ...scenarioGeometryResponses[centralIds[1]],
+    coverMovement: {
+      ...scenarioGeometryResponses[centralIds[1]].coverMovement,
+      coverMeters: { x: 34, y: 50 }
+    }
+  }
+};
+const distantCover = sequenceTrial(geometricTimeline(farCoverResponses));
+assert.equal(nearbyCover.evidence.routeCoverTiming.status, "in_time");
+assert.equal(distantCover.evidence.routeCoverTiming.status, "late");
+assert.equal(nearbyCover.evidence.routeCoverTiming.movementModel,
+  "authored_pitch_geometry");
+assert.equal(nearbyCover.evidence.routeCoverTiming.latestRecoverySeconds, 1.9);
+assert.equal(distantCover.evidence.routeCoverTiming.latestRecoverySeconds, 3.9);
+assert.equal(nearbyCover.evidence.routeCoverTiming.attackWindowSeconds, 3.1);
+assert.equal(nearbyCover.probability, distantCover.probability);
+assert.equal(distantCover.routeCoverAdjustment, 0);
+assert.equal(nearbyCover.routeCoverAdjustment, noWindow.routeCoverAdjustment);
+const geometryMidpoint = (nearbyCover.containmentProbability +
+  distantCover.containmentProbability) / 2;
+assert.equal(sequenceTrial(geometricTimeline(scenarioGeometryResponses),
+  geometryMidpoint).status, "contained");
+assert.equal(sequenceTrial(geometricTimeline(farCoverResponses),
+  geometryMidpoint).status, "escaped");
+assert.equal(sequenceTrial(geometricTimeline(scenarioGeometryResponses),
+  geometryMidpoint).xgDeltaAgainst, 0.02);
+assert.equal(sequenceTrial(geometricTimeline(farCoverResponses),
+  geometryMidpoint).xgDeltaAgainst, 0.06);
+// A sourced cue works with geometry too, without creating a new speed bonus.
+const geometryCueResponses = { ...farCoverResponses, [centralIds[1]]: {
+  ...farCoverResponses[centralIds[1]],
+  coverMovement: {
+    ...farCoverResponses[centralIds[1]].coverMovement,
+    coverMeters: { x: 30, y: 50 }
+  },
+  sourcedCue: {
+    skill: "anticipation", earlyActionId: "receive",
+    defaultActionId: "layoff"
+  },
+  triggerActionId: undefined
+} };
+delete geometryCueResponses[centralIds[1]].triggerActionId;
+const geomUnproven = sequenceTrial(geometricTimeline(geometryCueResponses),
+  0.99, undefined, xiNoProof);
+const geomProven = sequenceTrial(geometricTimeline(geometryCueResponses),
+  0.99, undefined, xiNoProof.map(player => player.playerId === centralIds[1]
+    ? { ...player, sourcedRecoverySkills: ["anticipation"] } : player));
+assert.equal(geomUnproven.evidence.routeCoverTiming.status, "late");
+assert.equal(geomProven.evidence.routeCoverTiming.status, "in_time");
+assert.equal(geomUnproven.probability, geomProven.probability);
+for (const badGeometry of [
+  { ...geometricTimeline(scenarioGeometryResponses), pitchDimensionsMeters: null },
+  { ...geometricTimeline(scenarioGeometryResponses),
+    pitchDimensionsMeters: { widthMeters: 20, lengthMeters: 105 } },
+  geometricTimeline({ ...scenarioGeometryResponses, [centralIds[0]]: {
+    ...scenarioGeometryResponses[centralIds[0]], coverMoveSeconds: 1
+  } }),
+  geometricTimeline({ ...scenarioGeometryResponses, [centralIds[0]]: {
+    ...scenarioGeometryResponses[centralIds[0]], coverMovement: {
+      ...scenarioGeometryResponses[centralIds[0]].coverMovement,
+      coverMeters: { x: 70, y: 50 }
+    }
+  } }),
+  geometricTimeline({ ...scenarioGeometryResponses, [centralIds[0]]: {
+    ...scenarioGeometryResponses[centralIds[0]], coverMovement: {
+      ...scenarioGeometryResponses[centralIds[0]].coverMovement,
+      averageSpeedMetersPerSecond: 0
+    }
+  } }),
+  geometricTimeline({ ...scenarioGeometryResponses, [centralIds[0]]: {
+    ...scenarioGeometryResponses[centralIds[0]], coverMovement: {
+      ...scenarioGeometryResponses[centralIds[0]].coverMovement,
+      averageSpeedMetersPerSecond: 11
+    }
+  } }),
+  geometricTimeline({ ...scenarioGeometryResponses, [centralIds[0]]: {
+    ...scenarioGeometryResponses[centralIds[0]], coverMovement: {
+      ...scenarioGeometryResponses[centralIds[0]].coverMovement,
+      startMeters: { x: Number.NaN, y: 50 }
+    }
+  } })
+]) {
+  const result = sequenceTrial(badGeometry);
+  assert.equal(result.evidence.routeCoverTiming.status, "invalid_or_incomplete");
+  assert.equal(result.routeCoverAdjustment, noWindow.routeCoverAdjustment);
+}
+
 const resistant = resolve(session("high_press_343", {
   opponent: { ...opponent, pressResistance: 90 }
 }), 0.4, 0.4);
