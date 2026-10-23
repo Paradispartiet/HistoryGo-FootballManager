@@ -26,6 +26,7 @@ import {
   getTrainingProgramCompositionById,
   getTrainingProgramCompositionIds
 } from "../src/football-training-program-compositions.js";
+import { createContextualTrainingSessions, summarizeTrainingReadiness } from "../src/football-training-session-guidance.js";
 import { TRAINING_FOCUSES } from "../src/football-training-week.js";
 import { OPPONENT_PROFILES } from "../src/football-matchday-engine.js";
 import { getHistoricalOpponentProfile } from "../src/football-historical-opponent-profiles.js";
@@ -419,6 +420,34 @@ check(
     return Array.isArray(list) && list.length >= 2;
   })
 );
+
+// Reelle spillertilstander kobles inn i eksisterende programranking.
+const restedSquad = summarizeTrainingReadiness([
+  { playerId: "a", load: 12, injury: null },
+  { playerId: "b", load: 17, injury: null }
+]);
+const tiredSquad = summarizeTrainingReadiness([
+  { playerId: "a", load: 82, injury: null },
+  { playerId: "b", load: 74, injury: null },
+  { playerId: "c", load: 65, injury: { weeksOut: 2 } }
+]);
+check("slitasjesignal beregnes fra faktiske spillere", restedSquad.fatigueRisk < tiredSquad.fatigueRisk && tiredSquad.tired === 2 && tiredSquad.injured === 1);
+check("manglende spillerdata gir ingen oppdiktet slitasje", summarizeTrainingReadiness().fatigueRisk === null);
+const press = getTrainingProgramCompositionById("press_week");
+const pressRested = scoreTrainingProgramComposition(press, { fatigueRisk: restedSquad.fatigueRisk });
+const loadedPressScore = scoreTrainingProgramComposition(press, { fatigueRisk: tiredSquad.fatigueRisk });
+check("sliten tropp senker rangeringen av pressuke", loadedPressScore.totalScore < pressRested.totalScore);
+const program = getTrainingProgramCompositionById("buildup_vs_press");
+const proposals = createContextualTrainingSessions(program, {
+  tactic: { name: "Kontrollert oppbygging" },
+  opponent: { name: "Brann", styleName: "Høyt press" },
+  readiness: tiredSquad,
+  selectedFocusId: "build_up"
+});
+check("spilleren får akkurat fire automatiske økter fra valgt program", proposals.length === 4 && proposals.every((x,i) => x.title === program.sessions[i].title));
+check("anbefalte øvelser begrunnes i taktikk, motstander og tropp", proposals.every((x) => x.relevance.includes("Kontrollert oppbygging") && x.relevance.includes("Brann") && x.load.includes("slitne")));
+check("ingen ny øvelsesbank eller fritekstvalg", proposals.every((x) => x.source === "selected-program" && typeof x.exercise === "string" && x.exercise.length > 0 && !("options" in x)));
+check("kildens treningsbelastning blir ikke endret", proposals.every((x,i) => x.fatigueLoad === program.sessions[i].fatigueLoad && x.injuryRiskModifier === program.sessions[i].injuryRiskModifier));
 
 // --- Rapport ---------------------------------------------------------------
 console.log("\nEksempel — fullt datagrunnlag (sortert etter uttelling):");

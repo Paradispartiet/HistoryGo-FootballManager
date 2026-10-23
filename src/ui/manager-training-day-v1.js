@@ -105,7 +105,7 @@ function ensureSurface() {
           <div>
             <span>Valgt program</span>
             <h3 id="trainingDayProgramTitle">Ikke valgt</h3>
-            <small class="training-day-exercise-hint" id="trainingDayExerciseHint">Klikk en økt for å åpne øvelsesdesign.</small>
+            <small class="training-day-exercise-hint" id="trainingDayExerciseHint">Spillet foreslår øvelser ut fra ukas program, taktikk, motstander og tropp.</small>
           </div>
           <button type="button" class="training-day-action" id="trainingDayChangeProgram">Endre program</button>
         </header>
@@ -199,14 +199,24 @@ function parseSession(text, index) {
 function selectedSessions() {
   const rows = Array.from(document.querySelectorAll("#trainingPrograms .training-program-card.is-selected .training-program-sessions li"))
     .slice(0, 4)
-    .map((item, index) => parseSession(item.textContent, index));
+    .map((item, index) => ({
+      ...parseSession(item.textContent, index),
+      exercise: item.dataset.exercise || "",
+      relevance: item.dataset.relevance || "",
+      load: item.dataset.load || "",
+      basis: item.dataset.basis || ""
+    }));
 
   if (!rows.length) {
     const program = selectedProgramModel();
     rows.push(...(Array.isArray(program?.sessions) ? program.sessions : []).slice(0, 4).map((session, index) => ({
       day: String(session?.day || `Økt ${index + 1}`),
       title: String(session?.title || "Velg treningsprogram"),
-      intensity: String(session?.intensity || "")
+      intensity: String(session?.intensity || ""),
+      exercise: String(session?.tacticalObjective || ""),
+      relevance: "Økta følger det valgte treningsprogrammets fotballfaglige mål.",
+      load: "Belastningen styres av ukas valgte program.",
+      basis: "valgt program"
     })));
   }
 
@@ -218,21 +228,6 @@ function selectedSessions() {
 
 function isExerciseSession(session) {
   return Boolean(session?.title) && !/^velg treningsprogram/i.test(String(session.title));
-}
-
-function openExerciseDesign(session, index, context) {
-  if (!isExerciseSession(session)) return;
-  window.dispatchEvent(new CustomEvent("hgfm:training-exercise-open", {
-    detail: {
-      session: {
-        ...session,
-        index,
-        week: context.week,
-        programTitle: selectedProgramTitle(),
-        calendarDay: context.day
-      }
-    }
-  }));
 }
 
 function compactText(selector, fallback = "") {
@@ -273,7 +268,11 @@ function renderSessions(surface, context) {
       day: String(session.day || ""),
       title: String(session.title || ""),
       intensity: String(session.intensity || ""),
-      openable: isExerciseSession(session)
+      openable: isExerciseSession(session),
+      exercise: String(session.exercise || ""),
+      relevance: String(session.relevance || ""),
+      load: String(session.load || ""),
+      basis: String(session.basis || "")
     }))
   });
   if (list.dataset.renderSignature === signature) return;
@@ -293,17 +292,18 @@ function renderSessions(surface, context) {
     );
 
     if (openable) {
-      item.tabIndex = 0;
-      item.setAttribute("role", "button");
-      item.setAttribute("aria-haspopup", "dialog");
-      item.setAttribute("aria-label", `Åpne øvelsesdesign for ${session.title}`);
-      item.title = "Åpne øvelsesdesign";
-      item.addEventListener("click", () => openExerciseDesign(session, index, context));
-      item.addEventListener("keydown", (event) => {
-        if (event.key !== "Enter" && event.key !== " ") return;
-        event.preventDefault();
-        openExerciseDesign(session, index, context);
-      });
+      const details = node("details", "training-day-session-advice");
+      const summary = node("summary", "", "Se anbefalt øvelse");
+      details.append(summary);
+      const recommendation = node("div", "training-day-session-advice-body");
+      recommendation.append(
+        node("span", "training-day-session-advice-label", `Øvelse · ${session.basis || "valgt program"}`),
+        node("strong", "", session.exercise || session.title),
+        node("p", "", session.relevance || "Denne økta følger det valgte treningsprogrammets mål."),
+        node("small", "", session.load || "Belastningen følger det valgte programmet.")
+      );
+      details.append(recommendation);
+      item.append(details);
     } else {
       item.setAttribute("aria-disabled", "true");
     }

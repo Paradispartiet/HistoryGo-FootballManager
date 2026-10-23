@@ -48,7 +48,7 @@ async function openTraining(page) {
   await page.locator('.app-subtab[data-tab-target="trening"]').click();
   await expect(page.locator('[data-tab-section="trening"]')).toBeVisible();
   await expect(page.locator("#managerTrainingDay")).toBeVisible();
-  await expect(page.locator('#trainingDaySessions .training-day-session[data-exercise-openable="true"]')).toHaveCount(4);
+  await expect(page.locator('#trainingDaySessions .training-day-session-advice')).toHaveCount(4);
 }
 
 async function expectNoHorizontalOverflow(page) {
@@ -84,111 +84,61 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator("#managerTrainingDay")).toBeAttached();
 });
 
-test("en konkret treningsøkt åpner et interaktivt øvelsesverksted", async ({ page }) => {
+test("spillet gir fire økter fra valgt program, uten manuell øvelsesbank", async ({ page }) => {
   await openTraining(page);
-  const first = page.locator('#trainingDaySessions .training-day-session[data-exercise-openable="true"]').first();
-  await expect(first).toHaveAttribute("role", "button");
-  await expect(first).toHaveAttribute("aria-haspopup", "dialog");
-  await first.click();
-
-  const dialog = page.locator("#managerTrainingExerciseDesignV1");
-  await expect(dialog).toBeVisible();
-  await expect(dialog.locator("#trainingExerciseTitle")).not.toBeEmpty();
-  await expect(dialog.locator("#trainingExerciseObjective")).not.toBeEmpty();
-  await expect(dialog.locator(".training-exercise-control")).toHaveCount(4);
-  await expect(dialog.locator(".training-exercise-effect")).toHaveCount(4);
-  await expect(dialog.locator("#trainingExerciseCoachingPoints li")).toHaveCount(3);
-  await expect(dialog.locator("#trainingExerciseGuardrail")).toContainText("endrer ikke lagret treningsbelastning");
-});
-
-test("areal retning og touch endrer forklaringen uten å endre save-state", async ({ page }) => {
-  await openTraining(page);
-  const before = await page.evaluate(() => ({
-    program: localStorage.getItem("hgfm.weeklyTrainingProgram.v1"),
-    keys: Object.keys(localStorage).sort()
-  }));
-
-  await page.locator('#trainingDaySessions .training-day-session[data-exercise-openable="true"]').first().click();
-  const dialog = page.locator("#managerTrainingExerciseDesignV1");
-  const originalArea = await dialog.locator('[data-effect="area"] p').textContent();
-
-  const largeArea = dialog.locator('label:has(input[name="area"][value="large"])');
-  const transitionDirection = dialog.locator('label:has(input[name="direction"][value="transition"])');
-  const twoTouches = dialog.locator('label:has(input[name="touches"][value="two"])');
-  await largeArea.click();
-  await transitionDirection.click();
-  await twoTouches.click();
-  await expect(largeArea.locator("input")).toBeChecked();
-  await expect(transitionDirection.locator("input")).toBeChecked();
-  await expect(twoTouches.locator("input")).toBeChecked();
-
-  await expect(dialog.locator('[data-effect="area"] p')).not.toHaveText(originalArea || "");
-  await expect(dialog.locator('[data-effect="direction"] p')).toContainText("balltap");
-  await expect(dialog.locator('[data-effect="touches"] p')).toContainText("orientering");
-
-  const after = await page.evaluate(() => ({
-    program: localStorage.getItem("hgfm.weeklyTrainingProgram.v1"),
-    keys: Object.keys(localStorage).sort()
-  }));
-  expect(after.program).toBe(before.program);
-  expect(after.keys).toEqual(before.keys);
-  expect(after.keys.some((key) => /exercise.?design/i.test(key))).toBe(false);
-});
-
-test("manageren lagrer og gjenåpner øvelsen som hypotese i eksisterende modussesjon", async ({ page }) => {
-  await openTraining(page);
-  const first = page.locator('#trainingDaySessions .training-day-session[data-exercise-openable="true"]').first();
-  await first.click();
-  const dialog = page.locator("#managerTrainingExerciseDesignV1");
-  await dialog.locator('label:has(input[name="area"][value="large"])').click();
-  await dialog.locator('label:has(input[name="direction"][value="transition"])').click();
-  await dialog.locator('label:has(input[name="touches"][value="three"])').click();
-  await dialog.locator("#trainingExerciseSave").click();
-  await expect(dialog.locator("#trainingExerciseSaveStatus")).toContainText("Lagret:");
-
-  const persisted = await page.evaluate(() => {
-    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "null");
-    return {
-      keys: Object.keys(localStorage).filter((key) => /exercise.?design|hypothesis/i.test(key)),
-      hypothesis: envelope?.sessions?.[envelope.activeMode]?.trainingExerciseHypothesis
-    };
-  });
-  expect(persisted.keys).toEqual([]);
-  expect(persisted.hypothesis.setup).toContain("Stort område");
-  expect(persisted.hypothesis.config.direction).toBe("transition");
-  expect(persisted.hypothesis).not.toHaveProperty("score");
-  expect(persisted.hypothesis).not.toHaveProperty("bonus");
-
-  await dialog.locator("[data-exercise-close]").click();
-  await first.click();
-  await expect(dialog.locator('input[name="area"][value="large"]')).toBeChecked();
-  await expect(dialog.locator('input[name="direction"][value="transition"]')).toBeChecked();
-  await expect(dialog.locator("#trainingExerciseSaveStatus")).toContainText("Lagret hypotese:");
-  await dialog.locator("[data-exercise-close]").click();
-  await expect(page.locator("#trainingDaySavedHypothesis")).toBeVisible();
-  await expect(page.locator("#trainingDaySavedHypothesis")).toContainText("Stort område");
-});
-
-test("øvelsesdesign kan åpnes med tastatur og lukkes uten å flytte manageren", async ({ page }) => {
-  await openTraining(page);
-  const first = page.locator('#trainingDaySessions .training-day-session[data-exercise-openable="true"]').first();
-  await first.focus();
-  await page.keyboard.press("Enter");
-  await expect(page.locator("#managerTrainingExerciseDesignV1")).toBeVisible();
-  await page.keyboard.press("Escape");
+  const sessions = page.locator("#trainingDaySessions .training-day-session");
+  await expect(sessions).toHaveCount(4);
+  await expect(sessions.locator(".training-day-session-advice")).toHaveCount(4);
+  await expect(page.locator("#trainingDayExerciseHint")).toContainText("taktikk");
   await expect(page.locator("#managerTrainingExerciseDesignV1")).toBeHidden();
-  await expect(page.locator('[data-tab-section="trening"]')).toBeVisible();
+  await expect(page.locator("#trainingDaySessions input, #trainingDaySessions textarea")).toHaveCount(0);
+  await expect(page.locator("#trainingDaySessions .training-day-session[role=button]")).toHaveCount(0);
+
+  const advice = sessions.first().locator(".training-day-session-advice");
+  await advice.locator("summary").click();
+  await expect(advice).toHaveAttribute("open", "");
+  await expect(advice.locator(".training-day-session-advice-body strong")).not.toBeEmpty();
+  await expect(advice.locator(".training-day-session-advice-body p")).toContainText("Mot");
+  await expect(advice.locator(".training-day-session-advice-body small")).toContainText("belastning");
 });
 
-test("øvelsesverkstedet har ingen mobil overflow eller alvorlige WCAG-brudd", async ({ page }) => {
+test("neste motstander og kampplan står i begrunnelsen for anbefalt øvelse", async ({ page }) => {
+  await openTraining(page);
+  const card = page.locator("#trainingPrograms .training-program-card.is-selected");
+  await expect(card).toHaveCount(1);
+  const list = card.locator(".training-program-sessions li");
+  await expect(list).toHaveCount(4);
+  const tactical = await page.locator("#tacticSelect").inputValue();
+  expect(tactical).toBeTruthy();
+
+  const all = await list.evaluateAll((nodes) => nodes.map((li) => ({
+    exercise: li.dataset.exercise,
+    relevance: li.dataset.relevance,
+    load: li.dataset.load,
+    basis: li.dataset.basis
+  })));
+  expect(all).toHaveLength(4);
+  expect(all.every((item) => item.exercise && item.relevance && item.load && item.basis)).toBeTruthy();
+  expect(all.every((item) => /Viking|Brann|motstanderen|Mot /.test(item.relevance))).toBeTruthy();
+
+  const session = page.locator("#trainingDaySessions .training-day-session").first();
+  await session.locator("summary").click();
+  const recommendation = session.locator(".training-day-session-advice-body");
+  await expect(recommendation).toContainText(all[0].exercise);
+  await expect(recommendation).toContainText(all[0].relevance);
+});
+
+test("øktforslag er lesbare og tilgjengelige på mobil uten horisontal scrolling", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await openTraining(page);
-  await page.locator('#trainingDaySessions .training-day-session[data-exercise-openable="true"]').first().click();
-  await expect(page.locator("#managerTrainingExerciseDesignV1")).toBeVisible();
+  const first = page.locator("#trainingDaySessions .training-day-session-advice").first();
+  await first.locator("summary").focus();
+  await page.keyboard.press("Enter");
+  await expect(first).toHaveAttribute("open", "");
   await expectNoHorizontalOverflow(page);
 
   const results = await new AxeBuilder({ page })
-    .include("#managerTrainingExerciseDesignV1")
+    .include("#managerTrainingDay")
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
     .analyze();
   const serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
