@@ -137,7 +137,8 @@
 
 .training-day-action,
 .training-day-card button,
-.training-day-calendar-return {
+.training-day-calendar-return,
+.training-day-next-action {
   min-height: 2.65rem;
   border: 1px solid rgba(255,255,255,.34);
   background: #0f151c;
@@ -151,7 +152,8 @@
 
 .training-day-action:hover,
 .training-day-card button:hover,
-.training-day-calendar-return:hover {
+.training-day-calendar-return:hover,
+.training-day-next-action:hover {
   border-color: rgba(255,255,255,.8);
   background: #151e27;
 }
@@ -160,6 +162,7 @@
 .training-day-action:focus-visible,
 .training-day-card button:focus-visible,
 .training-day-calendar-return:focus-visible,
+.training-day-next-action:focus-visible,
 .training-day-session[role="button"]:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 2px;
@@ -242,6 +245,46 @@
 .training-day-card p { margin: 0; color: rgba(255,255,255,.62); font-size: .7rem; line-height: 1.45; }
 .training-day-assistant { box-shadow: inset 3px 0 0 rgba(255,255,255,.54); }
 .training-day-condition { background: rgba(255,255,255,.025); }
+.training-day-coherence[data-level="sprik"] {
+  padding-left: .55rem;
+  border-left: 2px solid #eac78a;
+  color: #eac78a;
+}
+.training-day-squad-details {
+  margin-top: .2rem;
+  border-top: 1px solid rgba(255,255,255,.14);
+  padding-top: .55rem;
+}
+.training-day-squad-details summary {
+  cursor: pointer;
+  color: #dbe5ec;
+  font-size: .78rem;
+  font-weight: 800;
+  line-height: 1.4;
+}
+.training-day-squad-details summary:focus-visible {
+  outline: 2px solid #c1f7d7;
+  outline-offset: 2px;
+}
+.training-day-squad-details p { padding-top: .5rem; }
+.training-day-squad-details .squad-condition-list {
+  display: grid;
+  gap: .5rem;
+  list-style: none;
+  padding: .45rem 0 0;
+  margin: 0;
+}
+.training-day-squad-details .squad-condition-list li {
+  display: grid;
+  gap: .12rem;
+  padding: .4rem .5rem;
+  background: rgba(255,255,255,.05);
+  border-left: 2px solid rgba(255,255,255,.28);
+  font-size: .74rem;
+}
+.training-day-squad-details .squad-condition-list li.is-injured { border-left-color: #f0a1a1; }
+.training-day-squad-details .squad-condition-list li.is-tired { border-left-color: #f1d190; }
+.training-day-squad-details .squad-condition-list li span { color: rgba(255,255,255,.72); line-height: 1.4; }
 
 .training-day-footer {
   padding: .7rem clamp(.9rem, 2.3vw, 1.3rem);
@@ -250,6 +293,17 @@
 }
 
 .training-day-footer > div { display: grid; gap: .16rem; }
+.training-day-footer > .training-day-footer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: .5rem;
+}
+.training-day-next-action {
+  border-color: rgba(177,240,205,.62);
+  background: #17382b;
+  color: #fff;
+}
 .training-day-footer strong { font-size: .82rem; }
 
 @media (max-width: 820px) {
@@ -283,7 +337,9 @@
   }
   .training-day-side { grid-template-columns: 1fr; }
   .training-day-card:nth-child(odd) { border-right: 0; }
-  .training-day-calendar-return { width: 100%; }
+  .training-day-calendar-return,
+  .training-day-next-action { width: 100%; }
+  .training-day-footer > .training-day-footer-actions { width: 100%; }
 }
 
 /* Existing football knowledge actions remain available in one quiet disclosure. */
