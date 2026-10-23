@@ -435,8 +435,8 @@ check("slitasjesignal beregnes fra faktiske spillere", restedSquad.fatigueRisk <
 check("manglende spillerdata gir ingen oppdiktet slitasje", summarizeTrainingReadiness().fatigueRisk === null);
 const press = getTrainingProgramCompositionById("press_week");
 const pressRested = scoreTrainingProgramComposition(press, { fatigueRisk: restedSquad.fatigueRisk });
-const pressTired = scoreTrainingProgramComposition(press, { fatigueRisk: tiredSquad.fatigueRisk });
-check("sliten tropp senker rangeringen av pressuke", pressTired.totalScore < pressRested.totalScore);
+const loadedPressScore = scoreTrainingProgramComposition(press, { fatigueRisk: tiredSquad.fatigueRisk });
+check("sliten tropp senker rangeringen av pressuke", loadedPressScore.totalScore < pressRested.totalScore);
 const program = getTrainingProgramCompositionById("buildup_vs_press");
 const proposals = createContextualTrainingSessions(program, {
   tactic: { name: "Kontrollert oppbygging" },
