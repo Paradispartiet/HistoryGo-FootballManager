@@ -30,8 +30,10 @@ function readJson(key, fallback = null) {
 function clubWeekState() {
   // Prefer active mode-session data. The legacy league snapshot is only a
   // fallback; otherwise switching modes can display the wrong calendar week.
-  const activeWeek = activeModeLearningState().clubWeekState;
+  const envelope = readJson(MODE_SESSION_KEY, null);
+  const activeWeek = envelope?.sessions?.[envelope.activeMode]?.clubWeekState;
   if (activeWeek && Number(activeWeek.week) >= 1) return activeWeek;
+  if (envelope?.activeMode && envelope.activeMode !== "league") return { week: 1, phase: "analysis" };
   const merits = readJson(TEAM_MERITS_KEY, {}) || {};
   return merits.clubWeekState || { week: 1, phase: "analysis" };
 }
@@ -174,12 +176,15 @@ function ensureSurface() {
 }
 
 function selectedProgramModel() {
-  const activeSession = activeModeLearningState();
-  // The mode-session is authoritative for the currently active save. A legacy
-  // league key must not leak its program into another save or game mode.
+  const envelope = readJson(MODE_SESSION_KEY, null);
+  const activeSession = envelope?.sessions?.[envelope.activeMode] || {};
+  // The mode-session is authoritative for the currently active save. Only
+  // league or pre-envelope games may read the legacy league key.
   const stored = Object.hasOwn(activeSession, "weeklyTrainingProgram")
     ? activeSession.weeklyTrainingProgram
-    : readJson(WEEKLY_TRAINING_PROGRAM_KEY, null);
+    : envelope?.activeMode && envelope.activeMode !== "league"
+      ? null
+      : readJson(WEEKLY_TRAINING_PROGRAM_KEY, null);
   const programId = typeof stored?.programId === "string" ? stored.programId : "";
   const currentWeek = Math.max(1, Number(clubWeekState().week) || 1);
   if (Number(stored?.week) !== currentWeek) return null;
