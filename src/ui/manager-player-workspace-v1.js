@@ -1,4 +1,7 @@
 import { derivePlayerAttributeIndex, normalizeAttributeCatalogue } from "../football-player-attributes.js";
+import { getP1HeritageForPlayer, getP1NewSourceRecord, P1_EXISTING_SUPPLEMENTS } from "../football-player-source-claims-p1.js";
+import { getP2SourceRecord } from "../football-player-source-claims-p2.js";
+import { getSourceDepthRecord } from "../football-player-source-claims-depth.js";
 import { describeCondition, freshnessFor, isInjured } from "../football-player-condition.js";
 import { describeRoleFamiliarity, getRoleFamiliarity } from "../football-role-familiarity-engine.js";
 import {
@@ -263,6 +266,44 @@ export function getPlayerSummary(player, { attributeNames = new Map(), roleNames
       .map((id) => roles.get(id)?.name || formatToken(id))
   };
 }
+
+/* Only existing player-ID-linked evidence may describe a historical playing
+   style. P1 ownership has precedence; registry URLs are references, not
+   claims that the whole career biography is complete. */
+export function getPlayerSourcedSummary(player, { attributeNames = new Map() } = {}) {
+  if (!player?.id) return null;
+  const heritage = getP1HeritageForPlayer(player);
+  let record = null;
+  if (heritage?.generation === "new") {
+    const candidate = getP1NewSourceRecord(player);
+    if (candidate?.status === "DOKUMENTERT") record = candidate;
+  } else if (heritage) {
+    record = P1_EXISTING_SUPPLEMENTS.find((entry) =>
+      entry.playerId === player.id && entry.placeId === heritage.placeId) || null;
+  } else {
+    record = getP2SourceRecord(player) || getSourceDepthRecord(player);
+  }
+  if (!record || typeof record.source !== "string") return null;
+  let sourceUrl;
+  try {
+    sourceUrl = new URL(record.source);
+    if (sourceUrl.protocol !== "https:") return null;
+  } catch {
+    return null;
+  }
+  const names = attributeNames instanceof Map ? attributeNames : new Map();
+  const traits = asArray(record.strengths).slice(0, 5)
+    .map((id) => names.get(id)?.name || formatToken(id));
+  const description = text(record.playingStyle) || (traits.length ? "Kilden omtaler: " + traits.join(" · ") : "");
+  if (!description) return null;
+  return {
+    description,
+    traits,
+    sourceUrl: sourceUrl.href,
+    sourceHost: sourceUrl.hostname.replace(/^www\./, "")
+  };
+}
+
 function modeledHighlights(id, limit = 3) {
   const profile = runtime?.attributeIndex?.profiles?.[id];
   return Object.entries(profile?.values || {})
@@ -283,6 +324,8 @@ function createPlayerLink(row) {
 function appendPlayerHistoryPreview(playerCell, row) {
   const details = node("div", "manager-roster-player-details");
   details.append(node("span", "manager-roster-identity", [row.naturalPositions.join("/"), row.nationality, row.player.era ? `Epoke: ${row.player.era}` : ""].filter(Boolean).join(" · ")));
+  const sourced = getPlayerSourcedSummary(row.player, { attributeNames: runtime?.catalogue?.byId });
+  if (sourced) details.append(node("span", "manager-roster-sourced-style", "Historisk spillestil (kilde): " + sourced.description));
   const known = registeredStrengthLabels(row.player);
   if (known.length) {
     details.append(node("span", "manager-roster-known-strengths", "Registrerte styrker: " + known.join(" · ")));
@@ -320,7 +363,25 @@ function renderRolePanel(player) { const store = readStorage(STORAGE.merits, {})
 function renderCurrentPanel(data) { const { row, player, recruitable } = data; const section = node("section", "manager-player-current-panel"); section.append(node("h3", "", "Akkurat nå")); const metrics = node("div", "manager-player-current-grid"); [["Kampklarhet", row.status.label, describeCondition(row.condition)], ["Form", row.form.text, `${row.appearances} kamper denne sesongen`], ["Taktisk fit", row.fit.label, selectedTacticId() ? "Mot valgt kampplan" : "Velg kampplan for vurdering"], ["Tropp", recruitable ? "I troppen" : "Ikke i troppen", recruitable ? "Spilleren kan brukes i oppstilling, trening og kamp." : "Profilen kan undersøkes uten at spilleren er valgt til klubbtroppen."], ["Individuell trening", row.training ? runtime.trainingById.get(row.training.trackId)?.name || formatToken(row.training.trackId || row.training.roleId) : "Ingen", row.training?.roleId ? `Rollefokus: ${formatToken(row.training.roleId)}` : "Ingen aktiv oppfølging"]].forEach(([label, value, detail]) => { const article = node("article"); article.append(node("span", "", label), node("strong", "", value), node("small", "", detail)); metrics.append(article); }); section.append(metrics); if (player.warningWhenMisused) { const warning = node("div", "manager-player-misuse-warning"); warning.append(node("span", "", "Misbruksvarsel"), node("strong", "", player.warningWhenMisused)); section.append(warning); } return section; }
 function profileTabContent(data, tab) { const { row, player } = data; const host = node("div", "manager-player-profile-tab-content"); if (tab === "training") { host.append(tokenList("Det spilleren trenger", player.needs)); const box = node("section", "manager-player-history-card"); box.append(node("h3", "", "Individuell trening")); if (row.training) { box.append(node("strong", "", runtime.trainingById.get(row.training.trackId)?.name || formatToken(row.training.trackId || row.training.roleId))); if (row.training.roleId) box.append(node("p", "muted-text", `Rollefokus: ${formatToken(row.training.roleId)}`)); } else box.append(node("p", "muted-text", "Ingen individuell trening er satt denne uka.")); host.append(box); return host; } if (tab === "history") { const places = asArray(player.sourcePlaceIds).map((id) => runtime.placesById.get(id) || formatToken(id)); const source = node("section", "manager-player-history-card"); source.append(node("h3", "", "Registrert klubbhistorikk"), node("p", "", playerClubLabel(row)),
   node("p", "muted-text", "En selvstendig biografi med kildehenvisninger er ikke registrert i spillerkatalogen."),
-  node("h3", "", "History Go-tilknytning"), node("p", "", places.length ? places.join(" · ") : "Ingen stedstilknytning registrert.")); if (player.era) source.append(node("small", "", `Epoke: ${formatToken(player.era)}`)); host.append(source, tokenList("Taktikker spilleren trives i", player.likesTactics, "is-positive"), tokenList("Taktikker spilleren mistrives i", player.dislikesTactics, "is-negative")); return host; } const season = node("section", "manager-player-season-card"); [["Kamper", row.appearances], ["Minutter", row.minutes], ["Mål", row.goals], ["Målgivende", row.assists]].forEach(([label, value]) => { const article = node("article"); article.append(node("span", "", label), node("strong", "", value)); season.append(article); }); host.append(season, tokenList("Registrerte styrker", player.strengths, "is-positive")); return host; }
+  node("h3", "", "History Go-tilknytning"), node("p", "", places.length ? places.join(" · ") : "Ingen stedstilknytning registrert.")); if (player.era) source.append(node("small", "", `Epoke: ${formatToken(player.era)}`)); source.append(renderPlayerSourceEvidence(player)); host.append(source, tokenList("Taktikker spilleren trives i", player.likesTactics, "is-positive"), tokenList("Taktikker spilleren mistrives i", player.dislikesTactics, "is-negative")); return host; } const season = node("section", "manager-player-season-card"); [["Kamper", row.appearances], ["Minutter", row.minutes], ["Mål", row.goals], ["Målgivende", row.assists]].forEach(([label, value]) => { const article = node("article"); article.append(node("span", "", label), node("strong", "", value)); season.append(article); }); host.append(season, tokenList("Registrerte styrker", player.strengths, "is-positive")); return host; }
+
+
+function renderPlayerSourceEvidence(player) {
+  const block = node("section", "manager-player-source-evidence");
+  block.append(node("h4", "", "Historisk spillestil"));
+  const sourced = getPlayerSourcedSummary(player, { attributeNames: runtime?.catalogue?.byId });
+  if (!sourced) {
+    block.append(node("p", "is-missing", "Ingen individuell kildebeskrivelse registrert."));
+    return block;
+  }
+  block.append(node("p", "", sourced.description));
+  const link = node("a", "manager-player-source-link", "Les registrert originalkilde · " + sourced.sourceHost);
+  link.href = sourced.sourceUrl;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  block.append(link);
+  return block;
+}
 
 function renderPlayerSummary(data) {
   const { row, player } = data;
@@ -330,7 +391,7 @@ function renderPlayerSummary(data) {
   section.setAttribute("aria-label", "Kortprofil for " + row.name);
   const intro = node("div", "manager-player-summary-intro");
   intro.append(node("h3", "", "Kortprofil"), node("span", "", "Opplysninger fra spillerkatalogen"));
-  section.append(intro);
+  section.append(intro, renderPlayerSourceEvidence(player));
   const grid = node("div", "manager-player-summary-grid");
   [
     ["Registrerte styrker", summary.registeredStrengths, "Ingen individuelle styrker registrert", "manager-player-summary-strengths"],
