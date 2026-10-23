@@ -989,6 +989,37 @@ assert.ok(cfLaneAligned.routeCoverAdjustment > 0);
 assert.equal(cfLaneAligned.probability, cfLaneMiss.probability);
 assert.equal(cfLaneAligned.evidence.routeCoverFitFloor,
   cfLaneMiss.evidence.routeCoverFitFloor);
+
+// The production XI has a known six + pressing midfielder. Arrival at
+// 1.4 s beats the through-pass trigger (1.9 s), but not the
+// third-runner trigger (1.2 s) within the SAME 3.1 s attacking sequence.
+const cfActionDeadlineTrial = deadlineAction => {
+  const sequence = cfSequence(1.2);
+  sequence.defenderResponsesByPlayerId = Object.fromEntries(
+    cfTrackingIds.map((id, index) => [id, {
+      recognitionDelaySeconds: 0.4,
+      coverMoveSeconds: index === 0 ? 1.0 : 2.1,
+      mustCoverByActionId: index === 0 ? deadlineAction : undefined
+    }]));
+  for (const id of cfTrackingIds.slice(1)) {
+    delete sequence.defenderResponsesByPlayerId[id].mustCoverByActionId;
+  }
+  return resolveOwnPressAgainstOpponent(kickoff(cfXI, withCfOpponent({
+    tacticalBehaviour: {
+      pressEscapeRoute: "third_man", pressEscapeActionSequence: sequence
+    }
+  })), { pressureRoll: () => 0.99, protectionRoll: () => 0.99 });
+};
+const cfBeforePass = cfActionDeadlineTrial("through_pass");
+const cfBeforeRunner = cfActionDeadlineTrial("third_runner");
+assert.equal(cfBeforePass.evidence.routeCoverTiming.status, "in_time");
+assert.equal(cfBeforeRunner.evidence.routeCoverTiming.status, "late");
+assert.equal(cfBeforePass.evidence.routeCoverTiming.deadlineModel,
+  "per_defender_action_start");
+assert.equal(cfBeforePass.probability, cfBeforeRunner.probability);
+assert.ok(cfBeforePass.containmentProbability >
+  cfBeforeRunner.containmentProbability);
+
 console.log("OK: production XI preserves roles and validates central cover lane.");
 
 console.log("OK: production XI consumes authored geometric recovery distance.");
