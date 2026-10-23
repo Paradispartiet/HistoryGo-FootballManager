@@ -635,7 +635,8 @@ const routeSpatialPhase = (spec, options = {}) => {
     opponent: { ...opponent, tacticalBehaviour: scouting }
   }), 0.99, 0.99);
   const ids = supported.counterplay.defensiveReply.evidence.supportingPlayerIds;
-  assert.equal(ids.length, spec.expectedRoles, spec.route + " role contract");
+  assert.equal(ids.length, targetFlank === null && spec.route === "switch_play"
+    ? 2 : spec.expectedRoles, spec.route + " role contract");
   const lateId = ids[ids.length - 1];
   const responses = Object.fromEntries(ids.map(id => [id, {
     recognitionDelaySeconds: 0.3, triggerActionId: "receive",
@@ -658,8 +659,8 @@ const routeSpatialPhase = (spec, options = {}) => {
     pitchDimensionsMeters: { widthMeters: 68, lengthMeters: 105 },
     spatialLane: {
       basis: "authored_route_lane",
-      route: options.wrongRoute ? "third_man" : spec.route,
-      channel: options.wrongChannel ? "far_side_wide" : spatialChannels[spec.route],
+      route: options.wrongRoute ? "wrong_route" : spec.route,
+      channel: options.wrongChannel ? "wrong_channel" : spatialChannels[spec.route],
       coordinateFrame: "defending_goal_y0_right_xmax",
       ...(spec.route === "switch_play" ? {
         targetFlank: options.laneFlank ?? spec.side
