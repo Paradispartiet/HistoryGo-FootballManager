@@ -257,7 +257,7 @@ function selectedIndividual() {
 
 function individualCapacityHint() {
   const value = compactText("#individualTrainingCapacity");
-  const headline = value.match(/^.*?[.!?](?=\\s|$)/)?.[0] || value;
+  const headline = value.match(/^.*?[.!?](?=\s|$)/)?.[0] || value;
   return `Valgfritt · ${headline || "Velg en spiller dersom noen trenger individuell oppfølging."}`;
 }
 
