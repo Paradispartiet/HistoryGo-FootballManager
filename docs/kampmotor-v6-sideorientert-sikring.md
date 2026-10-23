@@ -466,3 +466,23 @@ Forklaringen følger eksisterende `counterplay` inn i kampens
 endrer **ikke** sannsynligheter, taktikkbonuser, xG, valg av spiller,
 eller allerede lagrede kampdata. Dette er ikke live tracking og
 kan ikke brukes til å hevde at en bestemt virkelig spiller gjorde feil.
+
+
+## Visning på kampdagen
+
+Den eksisterende **Kampen minutt for minutt → Spill og motspill**-utvidelsen
+viser en kort `Sikring:`-forklaring når sjansens
+`tacticalMoment.counterplay.defensiveReply.coverTimingExplanation` har
+en kjent status. Forklaringen ligger inne i hendelsen og åpnes av
+manageren; den lager ikke nye hendelser eller en ny analysefane.
+
+- Varsel om sen handling, manglende sikringsbytte og feil korridor
+  skilles fra vellykket sikring.
+- Ufullstendige data vises som `Uavklart sikringsforløp`, **ikke**
+  som et påstått tabbeøyeblikk.
+- Eldre kampdata uten en forklaringskontrakt beholder den gamle
+  kamploggen uten tomt kort.
+- Responsiv visning og tre tilfeller testes i
+  `tests/browser/manager-matchday-scene-v1.spec.js`.
+- Ingen spillertracking, xG-endringer eller flere sjanser blir
+  konstruert av presentasjonslaget.
