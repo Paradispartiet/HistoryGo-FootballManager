@@ -339,6 +339,7 @@ function recoveryFromAuthoredActions(route, playerIds, sequence, lineup, targetF
   const defenderArrivalSecondsByPlayerId = {};
   const defenderDeadlineSecondsByPlayerId = {};
   const defenderTransitionStages = [];
+  let defenderCoverHandoff = null;
   let usesIndividualDeadline = false;
   const movementModels = new Set();
   for (const id of playerIds) {
@@ -386,13 +387,14 @@ function recoveryFromAuthoredActions(route, playerIds, sequence, lineup, targetF
           .reduce((sum, action) => sum + action.durationSeconds, 0);
         const deadlineSeconds = sequence.actions.slice(0, deadlineIndex)
           .reduce((sum, action) => sum + action.durationSeconds, 0);
-        const completionSeconds = Math.max(cueSeconds, previousCompletion) +
-          stage.recognitionDelaySeconds + move.seconds;
+        const movementStartSeconds = Math.max(cueSeconds, previousCompletion) +
+          stage.recognitionDelaySeconds;
+        const completionSeconds = movementStartSeconds + move.seconds;
         if (completionSeconds > 20) return null;
         defenderTransitionStages.push({
           defenderId: id, taskId: stage.taskId,
           triggerActionId: stage.triggerActionId, deadlineActionId,
-          completionSeconds, deadlineSeconds
+          movementStartSeconds, completionSeconds, deadlineSeconds
         });
         previousCompletion = completionSeconds;
         previousTaskIndex = taskIndex;
@@ -455,10 +457,50 @@ function recoveryFromAuthoredActions(route, playerIds, sequence, lineup, targetF
       .slice(0, deadlineIndex)
       .reduce((sum, action) => sum + action.durationSeconds, 0);
   }
+  // An authored handoff connects TWO of the existing route specialists.
+  // The incoming player must take the shared corridor BEFORE the departing
+  // defender starts moving toward his NEXT defensive task. Neither a second
+  // bonus nor arbitrary new players are introduced by this contract.
+  if (Object.prototype.hasOwnProperty.call(sequence, "defenderCoverHandoff")) {
+    const h = sequence.defenderCoverHandoff;
+    if (!h || typeof h !== "object" || Array.isArray(h) ||
+      !playerIds.includes(h.fromDefenderId) ||
+      !playerIds.includes(h.toDefenderId) ||
+      h.fromDefenderId === h.toDefenderId ||
+      h.coveredChannel !== PRESS_EXIT_DEFENCES[route].target)
+      return null;
+    // An unobserved target flank cannot be invented from a general
+    // switch-play label. Require a named defensive side and two relevant
+    // specialists on that side when a flank-specific handoff is claimed.
+    if (route === "switch_play"
+      ? !["left", "right"].includes(targetFlank) ||
+        h.targetFlank !== targetFlank
+      : Object.prototype.hasOwnProperty.call(h, "targetFlank"))
+      return null;
+    const sourceStages = defenderTransitionStages.filter(
+      stage => stage.defenderId === h.fromDefenderId);
+    const departingStage = sourceStages.find(
+      stage => stage.taskId === h.releaseTaskId);
+    const receiver = responses[h.toDefenderId];
+    // Without explicit intermediate corridor occupancy, a receiver who is
+    // already executing another chain cannot be asserted to still be here.
+    if (sourceStages.indexOf(departingStage) < 1 ||
+      Object.prototype.hasOwnProperty.call(receiver, "defensiveActionChain"))
+      return null;
+    defenderCoverHandoff = {
+      fromDefenderId: h.fromDefenderId,
+      toDefenderId: h.toDefenderId,
+      coveredChannel: h.coveredChannel,
+      releaseTaskId: h.releaseTaskId,
+      releaseSeconds: departingStage.movementStartSeconds,
+      takeoverSeconds: defenderArrivalSecondsByPlayerId[h.toDefenderId]
+    };
+  }
   return { basis: "authored_scenario", route, attackWindowSeconds,
     defenderArrivalSecondsByPlayerId,
     ...(usesIndividualDeadline ? { defenderDeadlineSecondsByPlayerId } : {}),
     ...(defenderTransitionStages.length ? { defenderTransitionStages } : {}),
+    ...(defenderCoverHandoff ? { defenderCoverHandoff } : {}),
     movementModel: movementModels.size === 1 ? [...movementModels][0] :
       "mixed_authored_responses",
     spatialLane: sequence.spatialLane?.channel || null,
@@ -508,6 +550,12 @@ function specialistRecoveryWindow(route, playerIds, timing, lineup, targetFlank)
       defenderId: stage.defenderId, taskId: stage.taskId,
       arrival: stage.completionSeconds, deadline: stage.deadlineSeconds
     })),
+    ...(isSequence && derived.defenderCoverHandoff ? [{
+      defenderId: derived.defenderCoverHandoff.toDefenderId,
+      taskId: null, handoff: derived.defenderCoverHandoff,
+      arrival: derived.defenderCoverHandoff.takeoverSeconds,
+      deadline: derived.defenderCoverHandoff.releaseSeconds
+    }] : []),
     ...playerIds.map((id, i) => ({
       defenderId: id, taskId: null,
       arrival: arrival[i], deadline: deadlineSeconds[i]
@@ -529,7 +577,26 @@ function specialistRecoveryWindow(route, playerIds, timing, lineup, targetFlank)
       deadlineModel: "per_defender_action_start",
       criticalDefenderId: critical.defenderId,
       criticalDeadlineSeconds: Math.round(critical.deadline * 1000) / 1000,
-      ...(critical.taskId ? { criticalTaskId: critical.taskId } : {})
+      ...(critical.taskId ? { criticalTaskId: critical.taskId } : {}),
+      ...(critical.handoff ? { criticalHandoff: {
+        fromDefenderId: critical.handoff.fromDefenderId,
+        toDefenderId: critical.handoff.toDefenderId,
+        releaseTaskId: critical.handoff.releaseTaskId
+      } } : {})
+    } : {}),
+    ...(isSequence && derived.defenderCoverHandoff ? {
+      coverHandoff: {
+        fromDefenderId: derived.defenderCoverHandoff.fromDefenderId,
+        toDefenderId: derived.defenderCoverHandoff.toDefenderId,
+        coveredChannel: derived.defenderCoverHandoff.coveredChannel,
+        releaseTaskId: derived.defenderCoverHandoff.releaseTaskId,
+        releaseSeconds: round3(derived.defenderCoverHandoff.releaseSeconds),
+        takeoverSeconds: round3(derived.defenderCoverHandoff.takeoverSeconds),
+        marginSeconds: round3(derived.defenderCoverHandoff.releaseSeconds -
+          derived.defenderCoverHandoff.takeoverSeconds),
+        status: derived.defenderCoverHandoff.takeoverSeconds <=
+          derived.defenderCoverHandoff.releaseSeconds ? "in_time" : "late"
+      }
     } : {}),
     ...(transitionStages?.length ? {
       defensiveSequenceModel: "sequential_defender_tasks",
