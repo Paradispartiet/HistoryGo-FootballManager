@@ -105,7 +105,7 @@ function ensureSurface() {
           <div>
             <span>Valgt program</span>
             <h3 id="trainingDayProgramTitle">Ikke valgt</h3>
-            <small class="training-day-exercise-hint" id="trainingDayExerciseHint">Klikk en økt for å åpne øvelsesdesign.</small>
+            <small class="training-day-exercise-hint" id="trainingDayExerciseHint">Velg en økt for å sette opp bane, spillere, utstyr og regler.</small>
           </div>
           <button type="button" class="training-day-action" id="trainingDayChangeProgram">Endre program</button>
         </header>
@@ -296,8 +296,8 @@ function renderSessions(surface, context) {
       item.tabIndex = 0;
       item.setAttribute("role", "button");
       item.setAttribute("aria-haspopup", "dialog");
-      item.setAttribute("aria-label", `Åpne øvelsesdesign for ${session.title}`);
-      item.title = "Åpne øvelsesdesign";
+      item.setAttribute("aria-label", `Sett opp treningsøvelsen ${session.title}`);
+      item.title = "Sett opp øvelse på banen";
       item.addEventListener("click", () => openExerciseDesign(session, index, context));
       item.addEventListener("keydown", (event) => {
         if (event.key !== "Enter" && event.key !== " ") return;
