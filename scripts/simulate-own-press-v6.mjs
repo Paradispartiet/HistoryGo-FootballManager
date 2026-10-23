@@ -593,6 +593,132 @@ for (const badGeometry of [
   assert.equal(result.routeCoverAdjustment, noWindow.routeCoverAdjustment);
 }
 
+
+// Three distinct, explicit defending corridors: central third-man lane,
+// named far-side channel after a switch, and depth toward our own goal line.
+// All scenarios use the SAME XI and preserve first-phase press probability.
+// Time values are authored test inputs, not real historical tracking data.
+const spatialActions = {
+  third_man: ["receive", "layoff", "third_runner", "through_pass"],
+  switch_play: ["receive", "release", "switch_pass", "wide_attack"],
+  direct: ["receive", "direct_ball", "first_touch", "support_run"]
+};
+const spatialChannels = {
+  third_man: "central_between_lines",
+  switch_play: "far_side_wide",
+  direct: "depth_behind_press"
+};
+const spatialCases = [
+  { route: "third_man", side: null,
+    start: { x: 30, y: 55 }, cover: { x: 34, y: 55 },
+    lateStart: { x: 18, y: 55 }, wrong: { x: 60, y: 55 },
+    expectedRoles: 2 },
+  { route: "switch_play", side: "right",
+    start: { x: 50, y: 55 }, cover: { x: 60, y: 55 },
+    lateStart: { x: 25, y: 55 }, wrong: { x: 8, y: 55 },
+    expectedRoles: 1 },
+  { route: "switch_play", side: "left",
+    start: { x: 18, y: 55 }, cover: { x: 8, y: 55 },
+    lateStart: { x: 43, y: 55 }, wrong: { x: 60, y: 55 },
+    expectedRoles: 1 },
+  { route: "direct", side: null,
+    start: { x: 34, y: 38 }, cover: { x: 34, y: 32 },
+    lateStart: { x: 34, y: 60 }, wrong: { x: 34, y: 80 },
+    expectedRoles: 3 }
+];
+const routeSpatialPhase = (spec, options = {}) => {
+  const targetFlank = options.side === undefined ? spec.side : options.side;
+  const scouting = { pressEscapeRoute: spec.route };
+  if (targetFlank !== null) scouting.pressEscapeTargetFlank = targetFlank;
+  const supported = resolve(session("midfield_press_trap", {
+    lineupSnapshot: eleven,
+    opponent: { ...opponent, tacticalBehaviour: scouting }
+  }), 0.99, 0.99);
+  const ids = supported.counterplay.defensiveReply.evidence.supportingPlayerIds;
+  assert.equal(ids.length, spec.expectedRoles, spec.route + " role contract");
+  const lateId = ids[ids.length - 1];
+  const responses = Object.fromEntries(ids.map(id => [id, {
+    recognitionDelaySeconds: 0.3, triggerActionId: "receive",
+    coverMovement: {
+      basis: "authored_pitch_geometry", startMeters:
+        id === lateId && options.late ? spec.lateStart : spec.start,
+      coverMeters: id === lateId && options.wrong ? spec.wrong : spec.cover,
+      averageSpeedMetersPerSecond: 4
+    }
+  }]));
+  if (options.noGeometry) {
+    responses[lateId] = { recognitionDelaySeconds: 0.3,
+      coverMoveSeconds: 1 };
+  }
+  const timeline = {
+    basis: "authored_action_sequence", route: spec.route,
+    actions: spatialActions[spec.route].map(id => ({
+      id, durationSeconds: spec.route === "direct" ? 0.65 : 1
+    })),
+    pitchDimensionsMeters: { widthMeters: 68, lengthMeters: 105 },
+    spatialLane: {
+      basis: "authored_route_lane",
+      route: options.wrongRoute ? "third_man" : spec.route,
+      channel: options.wrongChannel ? "far_side_wide" : spatialChannels[spec.route],
+      coordinateFrame: "defending_goal_y0_right_xmax",
+      ...(spec.route === "switch_play" ? {
+        targetFlank: options.laneFlank ?? spec.side
+      } : {})
+    },
+    defenderResponsesByPlayerId: responses
+  };
+  if (options.noLane) delete timeline.spatialLane;
+  if (options.noFrame) delete timeline.spatialLane.coordinateFrame;
+  scouting.pressEscapeActionSequence = timeline;
+  return resolve(session("midfield_press_trap", {
+    lineupSnapshot: eleven,
+    opponent: { ...opponent, tacticalBehaviour: scouting }
+  }), 0.99, options.draw ?? 0.99);
+};
+for (const spec of spatialCases) {
+  const timely = routeSpatialPhase(spec);
+  const distant = routeSpatialPhase(spec, { late: true });
+  assert.equal(timely.evidence.routeCoverTiming.status, "in_time", spec.route);
+  assert.equal(distant.evidence.routeCoverTiming.status, "late", spec.route);
+  assert.equal(timely.evidence.routeCoverTiming.spatialLane,
+    spatialChannels[spec.route]);
+  assert.equal(timely.evidence.routeCoverTiming.movementModel,
+    "authored_pitch_geometry");
+  assert.equal(timely.probability, distant.probability);
+  assert.equal(timely.xgDeltaAgainst, distant.xgDeltaAgainst);
+  assert.ok(timely.routeCoverAdjustment > 0);
+  assert.equal(distant.routeCoverAdjustment, 0);
+  const cutoff = (timely.containmentProbability +
+    distant.containmentProbability) / 2;
+  assert.equal(routeSpatialPhase(spec, { draw: cutoff }).status, "contained");
+  assert.equal(routeSpatialPhase(spec, { late: true, draw: cutoff }).status,
+    "escaped");
+  for (const invalidOpts of [
+    { wrong: true }, { wrongChannel: true }, { wrongRoute: true },
+    { noFrame: true }, { noGeometry: true }
+  ]) {
+    const invalid = routeSpatialPhase(spec, invalidOpts);
+    assert.equal(invalid.evidence.routeCoverTiming.status,
+      "invalid_or_incomplete", spec.route + " " + JSON.stringify(invalidOpts));
+    assert.ok(invalid.routeCoverAdjustment > 0,
+      "invalid scenario does not fabricate a late recovery penalty");
+  }
+  const legacyCompatible = routeSpatialPhase(spec, { noLane: true });
+  assert.equal(legacyCompatible.evidence.routeCoverTiming.status, "in_time");
+  assert.equal(legacyCompatible.evidence.routeCoverTiming.spatialLane, null);
+  if (spec.route === "switch_play") {
+    assert.equal(routeSpatialPhase(spec, { laneFlank:
+      spec.side === "left" ? "right" : "left" })
+      .evidence.routeCoverTiming.status, "invalid_or_incomplete");
+    // A spatially labelled wide lane cannot claim the correct specialist
+    // when the attack destination is missing from the scouting source.
+    const noScoutedSide = routeSpatialPhase(spec, { side: null });
+    assert.equal(noScoutedSide.evidence.routeCoverTiming.status,
+      "invalid_or_incomplete");
+  }
+}
+console.log("OK: four route/flank geometries require aligned tactical lanes.");
+
 const resistant = resolve(session("high_press_343", {
   opponent: { ...opponent, pressResistance: 90 }
 }), 0.4, 0.4);
