@@ -201,6 +201,49 @@ test("manageren lagrer og gjenåpner øvelsen som hypotese i eksisterende moduss
   await expect(page.locator("#trainingDaySavedHypothesis")).toContainText("Stort område");
 });
 
+test("alle fire økter kan beholde egne oppsett uten ekstra lagringsnøkler", async ({ page }) => {
+  await openTraining(page);
+  const sessions = page.locator('#trainingDaySessions .training-day-session[data-exercise-openable="true"]');
+  const dialog = page.locator("#managerTrainingExerciseDesignV1");
+  const beforeKeys = await page.evaluate(() => Object.keys(localStorage).sort());
+
+  await sessions.nth(0).click();
+  await dialog.locator('label:has(input[name="area"][value="large"])').click();
+  await dialog.locator("#trainingExerciseSave").click();
+  await dialog.locator("[data-exercise-close]").click();
+  await expect(sessions.nth(0)).toHaveAttribute("data-setup-saved", "true");
+
+  await sessions.nth(1).click();
+  await dialog.locator('label:has(input[name="area"][value="tight"])').click();
+  await dialog.locator("#trainingExerciseSave").click();
+  await dialog.locator("[data-exercise-close]").click();
+
+  await expect(sessions.nth(0)).toHaveAttribute("data-setup-saved", "true");
+  await expect(sessions.nth(1)).toHaveAttribute("data-setup-saved", "true");
+  await expect(sessions.nth(2)).toHaveAttribute("data-setup-saved", "false");
+  await expect(page.locator("#trainingDayHypothesisTitle")).toContainText("2 av 4");
+
+  const snapshot = await page.evaluate(() => {
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1"));
+    return { keys: Object.keys(localStorage).sort(), current: envelope.sessions[envelope.activeMode].trainingExerciseHypothesis };
+  });
+  expect(snapshot.keys).toEqual(beforeKeys);
+  expect(snapshot.current.sessionIndex).toBe(1);
+  expect(snapshot.current.sessionPlans).toHaveLength(2);
+  expect(snapshot.current.sessionPlans[0].config.area).toBe("large");
+  expect(snapshot.current.sessionPlans[1].config.area).toBe("tight");
+
+  await page.reload();
+  await openTraining(page);
+  await expect(sessions.nth(0)).toHaveAttribute("data-setup-saved", "true");
+  await expect(sessions.nth(1)).toHaveAttribute("data-setup-saved", "true");
+  await sessions.nth(0).click();
+  await expect(dialog.locator('input[name="area"][value="large"]')).toBeChecked();
+  await dialog.locator("[data-exercise-close]").click();
+  await sessions.nth(1).click();
+  await expect(dialog.locator('input[name="area"][value="tight"]')).toBeChecked();
+});
+
 test("øvelsesdesign kan åpnes med tastatur og lukkes uten å flytte manageren", async ({ page }) => {
   await openTraining(page);
   const first = page.locator('#trainingDaySessions .training-day-session[data-exercise-openable="true"]').first();
