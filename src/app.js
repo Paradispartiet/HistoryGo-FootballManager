@@ -13086,14 +13086,21 @@ function buildTrainingProgramCard(program, context = {}) {
   summary.textContent = program.summary;
   card.append(summary);
 
-  // Playable Manager Flow Polish v1: kort, lesbar "Passer nå fordi"-etikett i
-  // stedet for et nøytralt avsnitt.
-  if (program.recommendedBecause.length > 0) {
-    const why = document.createElement("p");
-    why.className = "training-program-why";
-    why.textContent = `Passer nå fordi: ${program.recommendedBecause[0]}`;
-    card.append(why);
-  }
+  // Vis bare kontekstpåstander som faktisk finnes i scorerens signalkilder.
+  const sources = new Set(Array.isArray(program.sourceSignals) ? program.sourceSignals : []);
+  const readiness = context.trainingContext?.readiness;
+  const upcoming = context.trainingContext?.opponent?.name;
+  const reasons = [];
+  if (sources.has("opponent") && upcoming) reasons.push(`motstander ${upcoming}`);
+  if (sources.has("fatigueRisk") && Number(readiness?.tired) > 0) reasons.push(`${readiness.tired} slitne spillere`);
+  if (sources.has("formation") || sources.has("formationMatchup")) reasons.push("lagets formasjon og kampplan");
+  if (sources.has("teamFit")) reasons.push("lagets taktiske styrker og svakheter");
+  const why = document.createElement("p");
+  why.className = "training-program-why";
+  why.textContent = reasons.length
+    ? `Foreslått ut fra ${reasons.join(", ")}.`
+    : `Programmets mål: ${program.weekGoal || program.summary}`;
+  card.append(why);
 
   // Forbereder mot: matchup-relevansen mot neste motstander, vist når programmet
   // er foreslått nettopp pga. motstanderen (sourceSignals inneholder "opponent").
@@ -13238,7 +13245,12 @@ function renderTrainingProgramCompositions(teamFit) {
   visiblePrograms.forEach((program, index) => {
     const sectionLabel = document.createElement("p");
     sectionLabel.className = "training-program-section-label";
-    sectionLabel.textContent = index === 0 ? "Anbefalt nå" : index === 1 ? "Andre trygge valg" : "Dypere treningsprogram / historikk";
+    const recommendedRank = programs.findIndex((candidate) => candidate.id === program.id);
+    sectionLabel.textContent = recommendedRank === 0
+      ? "Anbefalt nå"
+      : program.id === selectedProgramId && recommendedRank < 0
+        ? "Ditt valgte program"
+        : "Alternativ for treningsuka";
     container.append(sectionLabel);
     container.append(
       buildTrainingProgramCard(program, {
