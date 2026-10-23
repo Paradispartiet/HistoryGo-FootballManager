@@ -102,6 +102,9 @@ test("Trening er én faktisk treningsdag med fire økter og uten gammel kommando
   await expect(page.locator("#trainingDayIndividual")).toHaveText("Ingen individuell oppfølging valgt");
   await expect(page.locator("#trainingDayIndividualHint")).toContainText("Valgfritt");
   await expect(page.locator("#trainingDayResources")).toBeVisible();
+  await expect(page.locator("#trainingDaySquadDetails")).toBeVisible();
+  await expect(page.locator("#trainingDayCoherence")).not.toBeEmpty();
+  await expect(page.locator("#trainingDayNextAction")).toBeVisible();
   await expect(page.locator('#trainingDayResources [data-modal-open="modalWeaknesses"]')).toBeHidden();
   await page.locator("#trainingDayResources summary").click();
   await expect(page.locator('#trainingDayResources [data-modal-open="modalWeaknesses"]')).toBeVisible();
@@ -167,4 +170,48 @@ test("individuell oppfølging vises som kort oppsummering, ikke hele kontrollpan
   await expect(page.locator("#trainingDayIndividual")).toHaveText("Ingen individuell oppfølging valgt");
   await expect(page.locator("#trainingDayIndividual")).not.toContainText("Legg til oppfølging");
   await expect(page.locator("#trainingDayIndividualHint")).not.toContainText("Kapasiteten er derfor");
+});
+
+test("troppens reelle skader og belastning er tilgjengelig på Treningsdagen", async ({ page }) => {
+  await openTraining(page);
+  const summary = await page.locator("#squadConditionSummary").textContent();
+  const sourceRows = await page.locator("#squadConditionList > li").allTextContents();
+  await page.locator("#trainingDaySquadDetails summary").click();
+  await expect(page.locator("#trainingDaySquadSummary")).toHaveText(summary.trim());
+  await expect(page.locator("#trainingDaySquadList > li")).toHaveCount(sourceRows.length);
+  expect(await page.locator("#trainingDaySquadList > li").allTextContents()).toEqual(sourceRows);
+  // The original data/renderers must remain intact and hidden outside the app scene.
+  await expect(page.locator("#trainingDepth")).toBeHidden();
+});
+
+test("neste handling bruker den autoritative ukeplanen, ikke skjult arbeidsflate", async ({ page }) => {
+  await openTraining(page);
+  const next = page.locator("#trainingDayNextAction");
+  const nextStep = await next.getAttribute("data-next-step");
+  expect(["inbox", "program", "focus", "kamp"]).toContain(nextStep);
+  const sourceIndex = await page.locator("#trainingPlanSteps").evaluate((list) =>
+    [...list.children].findIndex((row) => row.classList.contains("is-next"))
+  );
+  const ready = await page.locator("#trainingGoMatch").evaluate((button) => !button.hidden);
+  const expected = ready && (sourceIndex === -1 || sourceIndex === 3)
+    ? "kamp"
+    : ["inbox", "program", "focus", "individual"][sourceIndex] || "program";
+  expect(nextStep).toBe(expected);
+  await next.click();
+  if (nextStep === "inbox") {
+    await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
+  } else if (nextStep === "kamp") {
+    await expect(page.locator('[data-tab-section="kamp"]')).toBeVisible();
+  } else {
+    await expect(page.locator("#managerTeamChoiceDrawer")).toBeVisible();
+  }
+});
+
+test("tropp og neste handling får plass på smal mobil", async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 740 });
+  await openTraining(page);
+  await page.locator("#trainingDaySquadDetails summary").click();
+  await expect(page.locator("#trainingDaySquadList")).toBeVisible();
+  await expect(page.locator("#trainingDayNextAction")).toBeVisible();
+  await expectNoHorizontalOverflow(page);
 });
