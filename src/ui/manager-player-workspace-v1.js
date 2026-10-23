@@ -136,7 +136,7 @@ function bestRole(player, rolesById, store) {
   return { ...role, familiarityLabel: describeRoleFamiliarity(role.familiarity).label };
 }
 
-export function createRosterViewModel({ players = [], unlockedPlayerIds = new Set(), statsRows = [], conditions = [], roleFamiliarity = {}, individualTraining = [], roles = [], tacticId = "" } = {}) {
+export function createRosterViewModel({ players = [], unlockedPlayerIds = new Set(), statsRows = [], conditions = [], roleFamiliarity = {}, individualTraining = [], roles = [], tacticId = "", clubsById = new Map() } = {}) {
   const stats = new Map(asArray(statsRows).map((row) => [String(row.playerId), row]));
   const conditionMap = new Map(asArray(conditions).map((entry) => [String(entry.playerId), entry]));
   const trainingMap = new Map(asArray(individualTraining).map((entry) => [String(entry.playerId), entry]));
@@ -147,7 +147,7 @@ export function createRosterViewModel({ players = [], unlockedPlayerIds = new Se
     const condition = conditionMap.get(String(player.id)) || { playerId: player.id, load: 0, form: 0, injury: null };
     return {
       id: player.id, player, name: player.name || player.id, nationality: player.nationality || "",
-      clubHistory: getPlayerClubHistory(player, runtime?.clubsById),
+      clubHistory: getPlayerClubHistory(player, clubsById),
       naturalPositions: asArray(player.naturalPositions), usablePositions: asArray(player.usablePositions),
       role: bestRole(player, rolesById, roleFamiliarity), status: conditionStatus(condition), form: formStatus(condition), fit: tacticFit(player, tacticId),
       appearances: Number(stat.appearances) || 0, goals: Number(stat.goals) || 0, assists: Number(stat.assists) || 0, minutes: Number(stat.minutes) || 0,
@@ -190,7 +190,7 @@ function liveRows({ includePlayerId = null } = {}) {
   if (!runtime) return [];
   const merits = readStorage(STORAGE.merits, {}); const stats = readStorage(STORAGE.stats, { rows: [] }); const conditions = readStorage(STORAGE.conditions, []); const individual = readStorage(STORAGE.individualTraining, { assignments: [] });
   const unlocked = resolveUnlockedPlayerIds(runtime.players, runtime.unlocks); if (includePlayerId) unlocked.add(String(includePlayerId));
-  return createRosterViewModel({ players: runtime.players, unlockedPlayerIds: unlocked, statsRows: stats?.rows, conditions, roleFamiliarity: merits?.roleFamiliarity || {}, individualTraining: individual?.assignments, roles: runtime.roles, tacticId: selectedTacticId() });
+  return createRosterViewModel({ players: runtime.players, unlockedPlayerIds: unlocked, statsRows: stats?.rows, conditions, roleFamiliarity: merits?.roleFamiliarity || {}, individualTraining: individual?.assignments, roles: runtime.roles, tacticId: selectedTacticId(), clubsById: runtime.clubsById });
 }
 
 function ensureStyles() { if (document.getElementById(STYLE_ID)) return; const link = document.createElement("link"); link.id = STYLE_ID; link.rel = "stylesheet"; link.href = new URL("./manager-player-workspace-v1.css", import.meta.url).href; document.head.append(link); }
@@ -209,7 +209,7 @@ function renderCompactStatus(rows = liveRows()) {
 function ensureWorkspace() {
   const panel = document.getElementById("rosterReadinessPanel"); if (!panel) return null; panel.classList.add("has-manager-player-workspace"); let workspace = document.getElementById(WORKSPACE_ID); if (workspace) return workspace;
   workspace = node("div", "manager-player-workspace"); workspace.id = WORKSPACE_ID; workspace.innerHTML = `
-    <header class="manager-player-workspace-head"><div><p class="eyebrow">Lag · Tropp</p><h2>Troppen din</h2><p class="muted-text">Dette er spillerne klubben bruker i oppstilling, roller, trening og kamp. Åpne en spiller for detaljene, eller velg Endre tropp for å hente alternativer fra Min spillerpool.</p></div><strong id="managerRosterCount" class="manager-roster-count">0 spillere</strong></header>
+    <header class="manager-player-workspace-head"><div><p class="eyebrow">Lag · Tropp</p><h2>Troppen din</h2><p class="muted-text">Se spillerens virkelige klubbhistorikk og registrerte styrker først. Spillverdier er beregnet for simuleringen, ikke offisielle ferdighetsmålinger.</p></div><strong id="managerRosterCount" class="manager-roster-count">0 spillere</strong></header>
     <form class="manager-roster-tools" id="managerRosterTools" role="search"><label><span>Søk spiller</span><input id="managerRosterSearch" type="search" autocomplete="off" placeholder="Navn eller rolle"></label><label><span>Posisjon</span><select id="managerRosterPosition"><option value="all">Alle posisjoner</option></select></label><label><span>Tilgjengelighet</span><select id="managerRosterAvailability"><option value="all">Alle</option><option value="ready">Klar</option><option value="loaded">Belastet</option><option value="tired">Sliten</option><option value="injured">Skadet</option></select></label><label><span>Sorter</span><select id="managerRosterSort"><option value="position">Posisjon</option><option value="name">Navn</option><option value="appearances">Kamper</option><option value="goals">Mål</option><option value="assists">Målgivende</option><option value="status">Status</option></select></label></form>
     <div class="manager-roster-table-wrap"><table class="manager-roster-table"><thead><tr><th>Spiller</th><th>Pos</th><th>Rolle</th><th>Status</th><th>Fit</th><th>Form</th><th>Kamper</th><th>Mål</th><th>Målgivende</th><th>Trening</th></tr></thead><tbody id="managerRosterBody"></tbody></table><div id="managerRosterEmpty" class="manager-roster-empty" hidden>Ingen spillere matcher filtrene.</div></div>`;
   panel.append(workspace); const positionSelect = workspace.querySelector("#managerRosterPosition"); Object.keys(POSITION_ORDER).sort((a, b) => POSITION_ORDER[a] - POSITION_ORDER[b]).forEach((position) => { const option = node("option", "", position); option.value = position; positionSelect?.append(option); });
@@ -218,9 +218,10 @@ function ensureWorkspace() {
 function rosterControls(workspace) { return { query: workspace.querySelector("#managerRosterSearch")?.value || "", position: workspace.querySelector("#managerRosterPosition")?.value || "all", availability: workspace.querySelector("#managerRosterAvailability")?.value || "all", sort: workspace.querySelector("#managerRosterSort")?.value || "position" }; }
 function rosterSignature(rows, controls) { return JSON.stringify({ controls, rows: rows.map((row) => [row.id, row.status.id, row.fit.id, row.form.label, row.appearances, row.goals, row.assists, row.training?.trackId || row.training?.roleId || "", row.clubHistory.map((club) => club.clubId).join("|"), asArray(row.player.strengths).join("|")]) }); }
 function playerClubLabel(row) {
-  return row.clubHistory.length
-    ? "Spilte for: " + row.clubHistory.map((club) => club.name).join(" · ")
-    : "Ingen klubbhistorikk registrert i spillerkatalogen";
+  if (!row.clubHistory.length) return "Klubbhistorikk mangler i spillerkatalogen";
+  const hasUnverified = row.clubHistory.some((club) => club.evidence !== "belagt");
+  const heading = hasUnverified ? "Registrert klubbtilknytning" : "Spilte for";
+  return heading + ": " + row.clubHistory.map((club) => club.name).join(" · ");
 }
 function registeredStrengthLabels(player, limit = 3) {
   return asArray(player?.strengths).slice(0, limit).map((id) => runtime?.catalogue?.byId.get(id)?.name || formatToken(id));
