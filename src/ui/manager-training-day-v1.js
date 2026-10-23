@@ -128,6 +128,7 @@ function ensureSurface() {
           <header><span>Ukens fokus</span><button type="button" id="trainingDayChangeFocus">Endre</button></header>
           <strong id="trainingDayFocus">Ikke valgt</strong>
           <p id="trainingDayFocusHint">Velg kampens viktigste treningstema.</p>
+          <p id="trainingDayCoherence" class="training-day-coherence" aria-live="polite"></p>
         </section>
         <section class="training-day-card">
           <header><span>Individuell oppfølging</span><button type="button" id="trainingDayChangeIndividual">Endre</button></header>
@@ -143,6 +144,11 @@ function ensureSurface() {
           <span>Troppstilstand</span>
           <strong id="trainingDayCondition">Ingen akutte varsler</strong>
           <p id="trainingDayLoad">Belastning beregnes fra valgt program.</p>
+          <details class="training-day-squad-details" id="trainingDaySquadDetails">
+            <summary>Vis spillere som trenger oppfølging</summary>
+            <p id="trainingDaySquadSummary"></p>
+            <ul id="trainingDaySquadList" class="squad-condition-list"></ul>
+          </details>
         </section>
       </aside>
     </div>
@@ -154,7 +160,10 @@ function ensureSurface() {
 
     <footer class="training-day-footer">
       <div><span>Neste kamp</span><strong id="trainingDayOpponent">Motstander ikke klar</strong></div>
-      <button type="button" class="training-day-calendar-return" id="trainingDayReturnCalendar">Tilbake til kalenderdagen</button>
+      <div class="training-day-footer-actions">
+        <button type="button" class="training-day-calendar-return" id="trainingDayReturnCalendar">Tilbake til kalenderdagen</button>
+        <button type="button" class="training-day-next-action" id="trainingDayNextAction" data-next-step="program">Fortsett: velg ukas ramme</button>
+      </div>
     </footer>`;
 
   const anchor = document.getElementById("trainingCommandPanel") || section.firstElementChild;
@@ -172,6 +181,14 @@ function ensureSurface() {
   surface.querySelector("#trainingDayChooseSuggestedFocus")?.addEventListener("click", () => openExistingChoice("teamChangeTrainingFocus"));
   surface.querySelector("#trainingDayBackCalendar")?.addEventListener("click", returnToCalendarDay);
   surface.querySelector("#trainingDayReturnCalendar")?.addEventListener("click", returnToCalendarDay);
+  surface.querySelector("#trainingDayNextAction")?.addEventListener("click", () => {
+    const step = surface.querySelector("#trainingDayNextAction")?.dataset.nextStep;
+    if (step === "program") surface.querySelector("#trainingDayChangeProgram")?.click();
+    else if (step === "focus") surface.querySelector("#trainingDayChangeFocus")?.click();
+    else if (step === "individual") surface.querySelector("#trainingDayChangeIndividual")?.click();
+    else if (step === "inbox") document.getElementById("trainingPlanNext")?.click();
+    else if (step === "kamp") document.getElementById("trainingGoMatch")?.click();
+  });
   return surface;
 }
 
@@ -321,6 +338,47 @@ function syncLocation(context) {
   if (location && location.textContent !== value) location.textContent = value;
 }
 
+// Read the existing condition renderer instead of inventing a second medical or
+// fatigue calculation. Its complete list is hidden with the legacy depth panel.
+function renderSquadDetails(surface) {
+  const source = document.getElementById("squadConditionList");
+  const list = surface.querySelector("#trainingDaySquadList");
+  const summary = surface.querySelector("#trainingDaySquadSummary");
+  if (!source || !list || !summary) return;
+  const description = compactText("#squadConditionSummary", "Troppstilstand er ikke klar.");
+  if (summary.textContent !== description) summary.textContent = description;
+  const entries = [...source.children].filter((item) => item.tagName === "LI");
+  const signature = JSON.stringify(entries.map((item) => [item.className, item.textContent]));
+  if (list.dataset.renderSignature !== signature) {
+    list.replaceChildren(...entries.map((item) => item.cloneNode(true)));
+    list.dataset.renderSignature = signature;
+  }
+}
+
+function renderTrainingNextAction(surface) {
+  const button = surface.querySelector("#trainingDayNextAction");
+  if (!button) return;
+  const planSteps = document.getElementById("trainingPlanSteps");
+  const activeStep = planSteps?.querySelector(".training-plan-step.is-next");
+  const index = activeStep ? [...planSteps.children].indexOf(activeStep) : -1;
+  const available = ["inbox", "program", "focus", "individual"];
+  let step = available[index] || null;
+  const matchReady = document.getElementById("trainingGoMatch")?.hidden === false;
+  // Individual follow-up is optional once the existing weekly plan is playable.
+  if (matchReady && (!step || step === "individual")) step = "kamp";
+  if (!step) step = "program";
+
+  const labels = {
+    inbox: "Fortsett: les signalene",
+    program: "Fortsett: velg ukas ramme",
+    focus: "Fortsett: prioriter ett tema",
+    individual: "Fortsett: følg opp enkeltspillere",
+    kamp: "Treningsuka er klar · Gå til kamp"
+  };
+  if (button.dataset.nextStep !== step) button.dataset.nextStep = step;
+  if (button.textContent !== labels[step]) button.textContent = labels[step];
+}
+
 function renderTrainingDay() {
   const surface = ensureSurface();
   if (!surface) return;
@@ -353,6 +411,12 @@ function renderTrainingDay() {
   if (program) program.textContent = selectedProgramTitle();
   if (focus) focus.textContent = selectedFocus();
   if (focusHint) focusHint.textContent = compactText("#weeklyTrainingRecommendation", "Fokuset kobles til den eksisterende kamp- og treningsplanen.");
+  const coherence = surface.querySelector("#trainingDayCoherence");
+  const originalCoherence = document.getElementById("trainingPlanCoherence");
+  if (coherence && originalCoherence) {
+    coherence.textContent = compactText("#trainingPlanCoherence");
+    coherence.dataset.level = originalCoherence.dataset.level || "ufullstendig";
+  }
   if (individual) individual.textContent = selectedIndividual();
   const individualHint = surface.querySelector("#trainingDayIndividualHint");
   if (individualHint) individualHint.textContent = individualCapacityHint();
@@ -383,6 +447,8 @@ function renderTrainingDay() {
   }
 
   renderSessions(surface, context);
+  renderSquadDetails(surface);
+  renderTrainingNextAction(surface);
   syncLocation(context);
 }
 
@@ -448,6 +514,11 @@ function installObservers() {
     "#teamSelectedIndividualTraining",
     "#weeklyTrainingStatus",
     "#individualTrainingCapacity",
+    "#squadConditionSummary",
+    "#squadConditionList",
+    "#trainingPlanSteps",
+    "#trainingGoMatch",
+    "#trainingPlanCoherence",
     ".training-assistant-signal",
     ".training-command-status",
     ".training-load-brief",
