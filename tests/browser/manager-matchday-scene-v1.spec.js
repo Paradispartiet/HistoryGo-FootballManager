@@ -240,3 +240,80 @@ test("kampdagen har ingen alvorlige tilgjengelighetsbrudd", async ({ page }) => 
   const serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
   expect(serious, serious.map((violation) => `${violation.id}: ${violation.help}`).join("\n")).toEqual([]);
 });
+
+
+test("spill og motspill forklarer sikringsbytte uten å endre sjanser eller eldre hendelser", async ({ page }) => {
+  await page.evaluate(() => {
+    const moment = (kind, label, description) => ({
+      label: "Motstander spiller av press",
+      description: "Et modellert pressforløp.",
+      cause: "Sikringen blir utfordret.",
+      steps: [{ action: "Følge tredjemann", outcome: "blocked" }],
+      counterplay: kind === null ? null : {
+        defensiveReply: {
+          coverTimingExplanation: { kind, label, description }
+        }
+      }
+    });
+    const lastMatch = {
+      id: "completed-r1-brann", version: 2, outcome: "draw",
+      score: { for: 0, against: 0 },
+      expectedGoals: { for: 1.2, against: 0.8 },
+      opponent: { id: "brann", name: "Brann", style: "høyt press" },
+      formationSnapshot: { name: "4-2-3-1", baseShape: "4-2-3-1" },
+      tacticSnapshot: { name: "Balansert" },
+      decisions: [], playerStats: { goals: [] },
+      clubConsequences: { effects: {} },
+      playedInClubWeek: 1,
+      minuteLog: [
+        {
+          minute: 12, type: "chance", side: "against", detail: "Pressutspill",
+          tacticalMoment: moment("late_handoff", "For sent sikringsbytte",
+            "Avløseren nådde sikringskorridoren etter at første forsvarer startet sin neste oppgave.")
+        },
+        {
+          minute: 22, type: "chance", side: "against", detail: "Uavklart angrep",
+          tacticalMoment: moment("unknown", "Uavklart sikringsforløp",
+            "Sikringsdataene er ufullstendige. Det er ikke påvist en defensiv tidsfeil.")
+        },
+        {
+          minute: 33, type: "chance", side: "for", detail: "Eldre simulering",
+          tacticalMoment: moment(null)
+        }
+      ]
+    };
+    const matchday = { lastMatch, session: null, lastSeenMatchId: null };
+    localStorage.setItem("hgfm.matchday.v1", JSON.stringify(matchday));
+    const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
+    merits.clubWeekState = { ...(merits.clubWeekState || {}), week: 1, phase: "review" };
+    localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify(merits));
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "{}");
+    if (envelope.sessions?.league) {
+      envelope.sessions.league.matchday = matchday;
+      envelope.sessions.league.clubWeekState = merits.clubWeekState;
+    }
+    localStorage.setItem("hgfm.modeSessions.v1", JSON.stringify(envelope));
+  });
+  await page.reload();
+  await openMatchday(page);
+  const report = page.locator("#matchdayResult .matchday-report-card");
+  await expect(report).toBeVisible();
+  await expect(report.locator(".matchday-defensive-cover")).toHaveCount(2);
+  const drawer = report.locator(".matchday-detail-drawer");
+  await expect(drawer).not.toHaveAttribute("open", "");
+  await drawer.locator("summary").first().click();
+  const traces = drawer.locator(".matchday-tactical-moment");
+  await expect(traces).toHaveCount(3);
+  await traces.nth(0).locator("summary").click();
+  await expect(traces.nth(0).locator('.matchday-defensive-cover[data-kind="late_handoff"]'))
+    .toContainText("Avløseren nådde sikringskorridoren");
+  await traces.nth(1).locator("summary").click();
+  await expect(traces.nth(1).locator('.matchday-defensive-cover[data-kind="unknown"]'))
+    .toContainText("Det er ikke påvist en defensiv tidsfeil");
+  await traces.nth(2).locator("summary").click();
+  await expect(traces.nth(2).locator(".matchday-defensive-cover")).toHaveCount(0);
+  await expect(drawer.locator(".matchday-minute.is-chance")).toHaveCount(3);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expectNoHorizontalOverflow(page);
+  await expect(traces.nth(0).locator(".matchday-defensive-cover")).toBeVisible();
+});
