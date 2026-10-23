@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { getPlayerClubHistory, createRosterViewModel } from "../../src/ui/manager-player-workspace-v1.js";
+import { getPlayerClubHistory, getPlayerSummary, createRosterViewModel } from "../../src/ui/manager-player-workspace-v1.js";
 
 test("real-player history helper never invents club identities", () => {
   const clubs = new Map([["lyn", "Lyn"], ["rana", "Rana"]]);
@@ -24,6 +24,20 @@ test("real-player history helper never invents club identities", () => {
   });
   expect(rows[0].clubHistory[0].name).toBe("Lyn");
   expect(rows).toHaveLength(1);
+});
+
+test("card summary uses only registered traits and openly marks modeled information", () => {
+  const summary = getPlayerSummary({
+    strengths: ["finishing"], archetypes: ["finisher", "duel_winner"], preferredRoles: ["poacher"]
+  }, {
+    attributeNames: new Map([["finishing", { name: "Avslutninger" }]]),
+    roleNames: new Map([["poacher", { name: "Boksspiss" }]])
+  });
+  expect(summary.registeredStrengths).toEqual(["Avslutninger"]);
+  expect(summary.modelTraits).toEqual(["Avslutter", "Duellsterk"]);
+  expect(summary.preferredRoles).toEqual(["Boksspiss"]);
+  expect(getPlayerSummary({ id: "unknown", archetypes: [] }).registeredStrengths).toEqual([]);
+  expect(getPlayerSummary({ id: "unknown", strengths: [] }).modelTraits).toEqual([]);
 });
 
 test.beforeEach(async ({ page }) => {
@@ -70,6 +84,11 @@ test("player details preserve club history and disclose that 1–20 ratings are 
   const dialog = page.locator("#managerPlayerProfileDialog");
   await expect(dialog).toBeVisible();
   await expect(dialog.locator(".manager-profile-club-history")).toHaveText(initialHistory);
+  await expect(dialog.locator(".manager-player-summary")).toBeVisible();
+  await expect(dialog.locator(".manager-player-summary-strengths")).toBeVisible();
+  await expect(dialog.locator(".manager-player-summary-model")).toBeVisible();
+  await expect(dialog.locator(".manager-player-summary-values")).toBeVisible();
+  await expect(dialog.locator(".manager-player-summary-note")).toContainText("ikke dokumentert biografi");
   await expect(dialog.getByText("Spillverdier (beregnet modell)")).toBeVisible();
   await dialog.locator(".manager-player-profile-tabs button").filter({ hasText: "Historikk" }).click();
   await expect(dialog.getByText("Registrert klubbhistorikk")).toBeVisible();
