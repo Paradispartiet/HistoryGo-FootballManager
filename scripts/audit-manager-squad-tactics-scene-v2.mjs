@@ -39,7 +39,7 @@ const checks = [
   ["Trening viser valgte verdier på hovedflaten", files.drawer.includes("teamTrainingSelectedState") && files.drawer.includes("teamSelectedTrainingProgram") && files.drawer.includes("teamSelectedTrainingFocus")],
   ["treningsprogramalternativer flyttes til drawer", files.drawer.includes('trainingSource("trainingPrograms")') && files.drawer.includes("teamChangeTrainingProgram")],
   ["treningsfokusalternativer flyttes til drawer", files.drawer.includes('trainingSource("weeklyTrainingOptions")') && files.drawer.includes("teamChangeTrainingFocus")],
-  ["individuell picker flyttes til drawer", files.drawer.includes('trainingSource("individualTrainingPicker")') && files.drawer.includes("teamChangeIndividualTraining")],
+  ["hel individuell arbeidsflate flyttes til drawer", files.drawer.includes('trainingSource("individualTrainingStepBody")') && files.drawer.includes("teamChangeIndividualTraining") && files.drawer.includes("wasHidden")],
   ["Systemet viser aktiv formasjon og kampplan", files.drawer.includes("teamSystemSelectedState") && files.drawer.includes("teamSystemFormation") && files.drawer.includes("teamSystemTactic")],
   ["Systemet v2 delegerer formasjon og kampplan til eksisterende valg", files.systemV2.includes('document.getElementById("teamChangeFormation")?.click()') && files.systemV2.includes('document.getElementById("teamChangeTactic")?.click()')],
   ["Systemet beholder samme autoritative formasjon/kampplan-drawer", files.drawer.includes("teamChangeSystem") && files.drawer.includes('source: form')],
