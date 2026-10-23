@@ -16,6 +16,7 @@ import { createMatchdaySceneModel, renderManagerMatchdayCommand } from "./ui/man
 import { createSeasonSceneModel, renderSeasonCommand, renderSeasonLeagueOverview } from "./ui/manager-season-presentation.js";
 import { createOfficeSceneModel, renderOfficeCommand } from "./ui/manager-office-presentation.js";
 import { createManagerTrainingSceneModel, renderManagerTrainingCommand } from "./ui/manager-training-presentation.js";
+import { createContextualTrainingSessions, summarizeTrainingReadiness } from "./football-training-session-guidance.js";
 import { getTacticalKnowledgeForTactic } from "./football-tactical-knowledge.js";
 import { TACTICAL_SEQUENCES } from "./football-tactical-sequences.js";
 import { calculateTeamFit } from "./football-team-fit-engine.js";
@@ -13104,7 +13105,9 @@ function buildTrainingProgramCard(program, context = {}) {
     card.append(prepares);
   }
 
-  // Øktene i uka — kompakt, foldet liste så kortet ikke domineres av detaljene.
+  // Ett automatisk anbefalt treningsopplegg, ikke et øvelsesbibliotek.
+  // Øktene hører til programmets autoritative, beregnede fire økter.
+  const guidedSessions = createContextualTrainingSessions(program, context.trainingContext || {});
   const sessionsDetails = document.createElement("details");
   sessionsDetails.className = "training-program-sessions-details";
   const sessionsSummary = document.createElement("summary");
@@ -13112,9 +13115,16 @@ function buildTrainingProgramCard(program, context = {}) {
   sessionsDetails.append(sessionsSummary);
   const sessions = document.createElement("ul");
   sessions.className = "training-program-sessions";
-  program.sessions.forEach((session) => {
+  program.sessions.forEach((session, index) => {
     const li = document.createElement("li");
     li.textContent = `${session.day}: ${session.title} (${PROGRAM_INTENSITY_LABEL[session.intensity] || session.intensity})`;
+    const recommendation = guidedSessions[index];
+    if (recommendation) {
+      li.dataset.exercise = recommendation.exercise;
+      li.dataset.relevance = recommendation.relevance;
+      li.dataset.load = recommendation.load;
+      li.dataset.basis = recommendation.contextualBasis;
+    }
     sessions.append(li);
   });
   sessionsDetails.append(sessions);
@@ -13181,22 +13191,24 @@ function renderTrainingProgramCompositions(teamFit) {
 
   const opponent = getMiniSeasonNextOpponent();
   const offPitchState = getOffPitchState();
-  const programs = createTrainingProgramCompositions({
+  const tactic = getTactic();
+  const readiness = summarizeTrainingReadiness(getPlayerCondition());
+  const recommendationContext = {
     teamFit,
     opponent,
     formation: getFormation(),
-    tactic: getTactic(),
+    tactic,
     formationMatchup: getFormationMatchupVsOpponent(opponent),
     coachContext: getCoachContext(),
     lastMatchWeaknessMetric: state.matchday?.lastMatch?.exposedWeaknessMetric || null,
-    // Off-pitch Parameters v1: slitasje/skadefare/press kommer nå fra manager-
-    // statens kontekstlag. Restitusjon/skadeforebygging blir dermed situasjons-
-    // bestemt — den må fortjenes av faktisk slitasje, ikke velges som vane.
     offPitchState,
     recentTrainingFocusIds: offPitchState.recentTrainingProgramIds,
     staffIdentity: getStaffIdentitySummary(),
-    limit: 3
-  });
+    // Reelle kampbelastninger inngår nå i prioriteringen av eksisterende
+    // programalternativer. Ingen ny fatigue- eller treningsmotor.
+    ...(readiness.fatigueRisk === null ? {} : { fatigueRisk: readiness.fatigueRisk })
+  };
+  const programs = createTrainingProgramCompositions({ ...recommendationContext, limit: 3 });
 
   if (!Array.isArray(programs) || programs.length === 0) {
     updateWeeklyTrainingProgramStatus(null);
@@ -13213,19 +13225,7 @@ function renderTrainingProgramCompositions(teamFit) {
   let visiblePrograms = programs;
   let selectedProgram = programs.find((program) => program.id === selectedProgramId) || null;
   if (selectedProgramId && !selectedProgram) {
-    const extra = createTrainingProgramCompositions({
-      teamFit,
-      opponent,
-      formation: getFormation(),
-      tactic: getTactic(),
-      formationMatchup: getFormationMatchupVsOpponent(opponent),
-      coachContext: getCoachContext(),
-      lastMatchWeaknessMetric: state.matchday?.lastMatch?.exposedWeaknessMetric || null,
-      offPitchState,
-      recentTrainingFocusIds: offPitchState.recentTrainingProgramIds,
-      staffIdentity: getStaffIdentitySummary(),
-      limit: 8
-    });
+    const extra = createTrainingProgramCompositions({ ...recommendationContext, limit: 8 });
     selectedProgram = (Array.isArray(extra) ? extra : []).find((program) => program.id === selectedProgramId) || null;
     if (selectedProgram) {
       visiblePrograms = [selectedProgram, ...programs.filter((program) => program.id !== selectedProgramId)];
@@ -13244,7 +13244,13 @@ function renderTrainingProgramCompositions(teamFit) {
       buildTrainingProgramCard(program, {
         isSelected: program.id === selectedProgramId,
         locked,
-        opponentName: opponent?.name || null
+        opponentName: opponent?.name || null,
+        trainingContext: {
+          tactic,
+          opponent,
+          readiness,
+          selectedFocusId: state.weeklyTrainingFocus?.focusId || null
+        }
       })
     );
   });
