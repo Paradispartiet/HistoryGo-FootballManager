@@ -694,8 +694,13 @@ for (const spec of spatialCases) {
   assert.equal(routeSpatialPhase(spec, { draw: cutoff }).status, "contained");
   assert.equal(routeSpatialPhase(spec, { late: true, draw: cutoff }).status,
     "escaped");
+  const wrongLane = routeSpatialPhase(spec, { wrong: true });
+  assert.equal(wrongLane.evidence.routeCoverTiming.status, "wrong_corridor");
+  assert.equal(wrongLane.routeCoverAdjustment, 0,
+    "a VALID authored defender moving to the wrong lane loses specialist cover");
+  assert.equal(wrongLane.probability, timely.probability);
   for (const invalidOpts of [
-    { wrong: true }, { wrongChannel: true }, { wrongRoute: true },
+    { wrongChannel: true }, { wrongRoute: true },
     { noFrame: true }, { noGeometry: true }
   ]) {
     const invalid = routeSpatialPhase(spec, invalidOpts);
