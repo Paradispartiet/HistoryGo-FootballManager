@@ -907,7 +907,7 @@ for (const [route, side] of [
 // A player leaving to track the runner cannot leave his former corridor
 // unattended. The receiver must be set BEFORE the source starts its next
 // move. Both original individual covers are otherwise on time.
-for (const route of ["third_man", "switch_play", "direct"]) {
+for (const route of ["third_man", "direct"]) {
   const onTime = linkedDefensiveReply(route, null, false, 0.99, null,
     { receiverMoveSeconds: 0.6 });
   const tooLate = linkedDefensiveReply(route, null, false, 0.99, null,
@@ -957,7 +957,7 @@ for (const route of ["third_man", "switch_play", "direct"]) {
       "untrusted handoffs are neutral, not asserted tactical failures");
   }
 }
-// When the far-side back is the ONLY known relevant covering specialist,
+// Without a named target flank a switch-play handoff may not assert\n// that two opposite-side backs share one specific defensive corridor.\nconst unscoutedSwitchHandoff = linkedDefensiveReply("switch_play", null,\n  false, 0.99, null, { receiverMoveSeconds: 0.6 });\nassert.equal(unscoutedSwitchHandoff.evidence.routeCoverTiming.status,\n  "invalid_or_incomplete");\nassert.ok(unscoutedSwitchHandoff.routeCoverAdjustment > 0);\n// When the far-side back is the ONLY known relevant covering specialist,
 // do not invent another fullback to create a handoff on either flank.
 for (const side of ["left", "right"]) {
   const invalid = linkedDefensiveReply("switch_play", side, false, 0.99,
