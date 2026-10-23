@@ -952,5 +952,42 @@ const cfSpatialThreshold = (cfSpatialClose.containmentProbability +
   cfSpatialFar.containmentProbability) / 2;
 assert.equal(cfSpatialTrial(6, cfSpatialThreshold).status, "contained");
 assert.equal(cfSpatialTrial(14, cfSpatialThreshold).status, "escaped");
+
+// Production-fit XI: the same specialist must actually defend a route-aligned
+// centre lane. A central runner and a far-side back are not interchangeable.
+const cfLaneResponse = (inLane) => {
+  const line = cfSequence(1.2);
+  line.pitchDimensionsMeters = { widthMeters: 68, lengthMeters: 105 };
+  line.spatialLane = {
+    basis: "authored_route_lane", route: "third_man",
+    channel: "central_between_lines",
+    coordinateFrame: "defending_goal_y0_right_xmax"
+  };
+  line.defenderResponsesByPlayerId = Object.fromEntries(cfTrackingIds.map(id => [
+    id, {
+      recognitionDelaySeconds: 0.4,
+      coverMovement: {
+        basis: "authored_pitch_geometry",
+        startMeters: { x: 30, y: 55 },
+        coverMeters: { x: inLane ? 36 : 58, y: 55 },
+        averageSpeedMetersPerSecond: 4
+      }
+    }
+  ]));
+  return resolveOwnPressAgainstOpponent(kickoff(cfXI, withCfOpponent({
+    tacticalBehaviour: { pressEscapeRoute: "third_man",
+      pressEscapeActionSequence: line }
+  })), { pressureRoll: () => 0.99, protectionRoll: () => 0.99 });
+};
+const cfLaneAligned = cfLaneResponse(true);
+const cfLaneMiss = cfLaneResponse(false);
+assert.equal(cfLaneAligned.evidence.routeCoverTiming.status, "in_time");
+assert.equal(cfLaneMiss.evidence.routeCoverTiming.status,
+  "invalid_or_incomplete");
+assert.equal(cfLaneAligned.probability, cfLaneMiss.probability);
+assert.equal(cfLaneAligned.evidence.routeCoverFitFloor,
+  cfLaneMiss.evidence.routeCoverFitFloor);
+console.log("OK: production XI preserves roles and validates central cover lane.");
+
 console.log("OK: production XI consumes authored geometric recovery distance.");
 console.log("OK: production XI consumes a four-action timeline and cue-specific delay.");
