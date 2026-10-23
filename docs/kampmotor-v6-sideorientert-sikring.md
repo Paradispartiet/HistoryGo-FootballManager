@@ -250,3 +250,54 @@ ikke tall utledet fra FIFA eller validert kamptracking.
 
 - https://www.fifatrainingcentre.com/en/practice/elite-sessions/transition-to-defending/defensive-transitions.php
 - https://www.fifatrainingcentre.com/en/practice/talent-coach-programme/zonal-defending/developing-defensive-coordination-in-small-groups.php
+
+
+## Rutespesifikke sikringskorridorer (valgfri scenariokontrakt)
+
+Et nytt valgfritt felt `spatialLane` knytter den *forfattede*
+geometriske sikringen til **den samme motspillruten**:
+
+```js
+spatialLane: {
+  basis: "authored_route_lane",
+  route: "switch_play",
+  channel: "far_side_wide",
+  coordinateFrame: "defending_goal_y0_right_xmax",
+  targetFlank: "right"
+}
+```
+
+Dette er modellens **normerte soner**, ikke målte spillerposisjoner:
+
+- **Tredjemann (`third_man`)**: `central_between_lines`, sikringspunkter
+  i midtre halvdel av banebredden (25–75 %).
+- **Sideskift (`switch_play`)**: `far_side_wide`, sikringspunkter i ytterste
+  fjerdedel på korrekt navngitte kant, sett fra forsvarets perspektiv.
+  `targetFlank` må stemme med motstanderens dokumenterte
+  `pressEscapeTargetFlank`, og den tilhørende backen må være rollevaliderte.
+- **Direkte bak presset (`direct`)**: `depth_behind_press`, sikringspunkter
+  på forsvarets egen banehalvdel, målt fra forsvarsmålet ved `y=0`.
+
+Alle nødvendige forsvarere må ha gyldige forfattede
+`coverMovement`-punkter i riktig sone; en ren ferdig sekundverdi kan
+ikke bekrefte en *romlig* korridor. Ugyldig rutemerking, uavklart/motstridende kant,
+feil koordinatramme og manglende eller ugyldig måleinput gir
+`invalid_or_incomplete` (nøytral gammel dekning). En **gyldig forfattet
+målposisjon utenfor riktig korridor** gir derimot `wrong_corridor`:
+spesialistdekningen tapes, også om spilleren rekker målet i tide.
+Det er en kjent taktisk feilplassering, ikke manglende informasjon. Resultatet viser bekreftet kanal i
+`evidence.routeCoverTiming.spatialLane`. Uten `spatialLane` er den
+tidligere sekund-/geometrimodellen helt uendret.
+
+En back som er langt unna *riktig* kant kan derfor komme for sent,
+selv når han har riktig rolle. En spiller som løper til feil side
+kan ikke påberope seg koordinert spesialistsikring. Dette påvirker
+fortsatt **bare** den tidligere avgrensede spesialistjusteringen –
+det skaper ingen ny pressbonus eller ekstra xG.
+
+**Viktig evidensgrense:** 25/75 %-grensene er en eksplisitt,
+diskret **spillregel** for scenarioenes koordinatbruk, ikke
+empirisk dokumenterte presslinjer eller påstander om faktiske
+spillerposisjoner. Tak på spillernes fart og tid fra forrige
+leveranse er uendret. Testene varierer både riktig/feil sone
+og ankomsttid under samme ellever og RNG.

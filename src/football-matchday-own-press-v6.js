@@ -254,7 +254,51 @@ function authoredCoverMove(response, sequence) {
     ? { seconds, model: "authored_pitch_geometry" } : null;
 }
 
-function recoveryFromAuthoredActions(route, playerIds, sequence, lineup) {
+// Optional *route-specific* lane contract. These fractions are EXPLICIT game
+// zoning conventions (central half / outer quarter / defending half), not
+// inferred tracking coordinates or evidence that a real player occupied them.
+// A scenario with such a contract must assign all route specialists geometry
+// inside the SAME defended channel. Older scenarios remain fully compatible.
+function authoredLaneCheck(route, sequence, playerIds, targetFlank) {
+  const lane = sequence.spatialLane;
+  if (lane == null) return "not_provided";
+  const pitch = sequence.pitchDimensionsMeters;
+  const expectedChannel = PRESS_EXIT_DEFENCES[route]?.target;
+  if (!lane || typeof lane !== "object" || Array.isArray(lane) ||
+    lane.basis !== "authored_route_lane" || lane.route !== route ||
+    lane.channel !== expectedChannel ||
+    lane.coordinateFrame !== "defending_goal_y0_right_xmax" ||
+    !pitch || !finite(pitch.widthMeters) || !finite(pitch.lengthMeters))
+    return "invalid";
+  const side = lane.targetFlank;
+  if (route === "switch_play") {
+    if (!["left", "right"].includes(side) || side !== targetFlank) return "invalid";
+  } else if (Object.prototype.hasOwnProperty.call(lane, "targetFlank"))
+    return "invalid";
+  // Invalid or missing movement evidence cannot claim a known positional
+  // error. Only a VALID authored endpoint in the wrong defensive lane
+  // produces a genuine tactical failure rather than a neutral fallback.
+  const moves = playerIds.map(id =>
+    sequence.defenderResponsesByPlayerId?.[id]?.coverMovement);
+  if (moves.some((move, i) =>
+    move?.basis !== "authored_pitch_geometry" ||
+    !authoredCoverMove(sequence.defenderResponsesByPlayerId[playerIds[i]], sequence)))
+    return "invalid";
+  const isAligned = point => {
+    if (route === "third_man")
+      return point.x >= pitch.widthMeters * 0.25 &&
+        point.x <= pitch.widthMeters * 0.75;
+    if (route === "switch_play")
+      return side === "left"
+        ? point.x <= pitch.widthMeters * 0.25
+        : point.x >= pitch.widthMeters * 0.75;
+    return route === "direct" && point.y <= pitch.lengthMeters * 0.5;
+  };
+  return moves.every(move => isAligned(move.coverMeters))
+    ? "aligned" : "wrong_corridor";
+}
+
+function recoveryFromAuthoredActions(route, playerIds, sequence, lineup, targetFlank) {
   const expected = PRESS_EXIT_TIMED_ACTIONS[route];
   if (!expected || sequence?.route !== route ||
     !Array.isArray(sequence.actions) || sequence.actions.length !== expected.length ||
@@ -267,6 +311,8 @@ function recoveryFromAuthoredActions(route, playerIds, sequence, lineup) {
   const responses = sequence.defenderResponsesByPlayerId;
   if (!responses || typeof responses !== "object" || Array.isArray(responses) ||
     !Array.isArray(playerIds) || playerIds.length === 0) return null;
+  const laneStatus = authoredLaneCheck(route, sequence, playerIds, targetFlank);
+  if (laneStatus === "invalid") return null;
   const defenderArrivalSecondsByPlayerId = {};
   const movementModels = new Set();
   for (const id of playerIds) {
@@ -312,22 +358,24 @@ function recoveryFromAuthoredActions(route, playerIds, sequence, lineup) {
   return { basis: "authored_scenario", route, attackWindowSeconds,
     defenderArrivalSecondsByPlayerId,
     movementModel: movementModels.size === 1 ? [...movementModels][0] :
-      "mixed_authored_responses" };
+      "mixed_authored_responses",
+    spatialLane: sequence.spatialLane?.channel || null,
+    laneStatus };
 }
 
 // Recovery timing is OPTIONAL scenario input, never inferred from fitness,
 // player fit or coordinates. A late specialist gates only an ALREADY earned
 // route-specific coordination term; there is no new xG, time bonus or penalty.
-function specialistRecoveryWindow(route, playerIds, timing, lineup) {
+function specialistRecoveryWindow(route, playerIds, timing, lineup, targetFlank) {
   const neutral = { status: "not_provided", basis: null,
     attackWindowSeconds: null, latestRecoverySeconds: null, marginSeconds: null,
-    movementModel: null };
+    movementModel: null, spatialLane: null };
   if (timing == null) return neutral;
   const invalid = { ...neutral, status: "invalid_or_incomplete" };
   if (!timing || typeof timing !== "object" || Array.isArray(timing)) return invalid;
   const isSequence = timing.basis === "authored_action_sequence";
   const derived = isSequence
-    ? recoveryFromAuthoredActions(route, playerIds, timing, lineup) : timing;
+    ? recoveryFromAuthoredActions(route, playerIds, timing, lineup, targetFlank) : timing;
   if (!derived || derived.basis !== "authored_scenario" ||
     derived.route !== route || !finite(derived.attackWindowSeconds) ||
     derived.attackWindowSeconds <= 0 || derived.attackWindowSeconds > 20 ||
@@ -343,12 +391,14 @@ function specialistRecoveryWindow(route, playerIds, timing, lineup) {
   const latest = Math.max(...arrival);
   const margin = derived.attackWindowSeconds - latest;
   return {
-    status: margin >= 0 ? "in_time" : "late",
+    status: isSequence && derived.laneStatus === "wrong_corridor"
+      ? "wrong_corridor" : margin >= 0 ? "in_time" : "late",
     basis: isSequence ? "authored_action_sequence" : "authored_scenario",
     attackWindowSeconds: Math.round(derived.attackWindowSeconds * 1000) / 1000,
     latestRecoverySeconds: Math.round(latest * 1000) / 1000,
     marginSeconds: Math.round(margin * 1000) / 1000,
-    movementModel: isSequence ? derived.movementModel : null
+    movementModel: isSequence ? derived.movementModel : null,
+    spatialLane: isSequence ? derived.spatialLane : null
   };
 }
 
@@ -378,10 +428,11 @@ function routeCoverEvidence(opponentRoute, escapeEvidence, lineup, profile, targ
   const weakestCoverFit = Math.min(...scores);
   // Missing authored timing never changes existing gameplay. Fully evidenced
   // late coordination forfeits ONLY the specialist term already earned.
-  const timing = specialistRecoveryWindow(opponentRoute, ids, timingInput, lineup);
+  const timing = specialistRecoveryWindow(opponentRoute, ids, timingInput, lineup, targetFlank);
   const specialistAdjustment = clamp((weakestCoverFit - 60) * 0.0015, 0, 0.03);
   return {
-    adjustment: timing.status === "late" ? 0 : specialistAdjustment,
+    adjustment: ["late", "wrong_corridor"].includes(timing.status)
+      ? 0 : specialistAdjustment,
     weakestCoverFit,
     timing
   };
