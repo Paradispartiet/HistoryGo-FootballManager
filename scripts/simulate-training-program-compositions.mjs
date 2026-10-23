@@ -475,6 +475,10 @@ check("Eliteserien: Vikings faktiske lavblokk endrer avslutningsøvelsen",
   versusViking[0].exercise.includes("kompakt forsvar"));
 check("OBOS-ligaen: Kongsvingers faktiske defensive profil gir tilpasset øvelse",
   versusKongsvinger[0].exercise.includes("kompakt forsvar"));
+const versusGlimt = opponentExercises(finishing, profile("bodo_glimt"));
+check("smal 4-4-2 er ikke i seg selv det samme som lavblokk",
+  !versusGlimt[0].exercise.includes("kompakt forsvar"));
+
 check("ingen oppdiktet spillvirkning eller ekstra økt",
   versusBrann.length === buildup.sessions.length
   && versusBrann.every((entry, index) =>
