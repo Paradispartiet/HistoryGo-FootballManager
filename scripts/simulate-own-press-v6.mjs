@@ -795,6 +795,181 @@ for (const spec of spatialCases) {
       "invalid_or_incomplete");
   }
 }
+// Defensive reactions are one LINKED chain, not three independent cover
+// bonuses. A late first screen cannot be rescued by a timely FINAL position.
+const defensiveTaskRoutes = {
+  third_man: {
+    actions: ["receive", "layoff", "third_runner", "through_pass"],
+    tasks: ["screen_layoff", "follow_third_runner", "drop_for_through_pass"]
+  },
+  switch_play: {
+    actions: ["receive", "release", "switch_pass", "wide_attack"],
+    tasks: ["delay_release", "shift_to_far_side", "hold_wide_channel"]
+  },
+  direct: {
+    actions: ["receive", "direct_ball", "first_touch", "support_run"],
+    tasks: ["drop_behind_press", "challenge_first_touch", "protect_support_run"]
+  }
+};
+const linkedDefensiveReply = (route, side = null, lateFirst = false,
+  draw = 0.99, edit = null, handoffOptions = null) => {
+  const config = defensiveTaskRoutes[route];
+  const basePhase = route === "switch_play" && side
+    ? targetedSwitch(side, eleven) : replyRun(route);
+  const ids = basePhase.counterplay.defensiveReply.evidence.supportingPlayerIds;
+  assert.ok(ids.length, route + " has known specialists");
+  const stages = config.tasks.map((taskId, i) => ({
+    taskId,
+    triggerActionId: config.actions[i],
+    recognitionDelaySeconds: 0.1,
+    coverMoveSeconds: i === 0 ? (lateFirst ? 0.66 : 0.4) :
+      i === 1 ? 0.2 : 0.3
+  }));
+  if (edit) edit(stages);
+  const responders = Object.fromEntries(ids.map((id, i) => [id, i === 0 ?
+    { defensiveActionChain: stages } :
+    { recognitionDelaySeconds: 0.1,
+      coverMoveSeconds: handoffOptions?.receiverMoveSeconds ?? 1.9 }]));
+  const coverHandoff = handoffOptions ? {
+    fromDefenderId: ids[0], toDefenderId: ids[1],
+    releaseTaskId: config.tasks[1],
+    coveredChannel: {
+      third_man: "central_between_lines",
+      switch_play: "far_side_wide", direct: "depth_behind_press"
+    }[route],
+    ...(side ? { targetFlank: side } : {})
+  } : null;
+  if (handoffOptions?.editHandoff) handoffOptions.editHandoff(coverHandoff);
+  const timeline = {
+    basis: "authored_action_sequence", route,
+    actions: config.actions.map((id, i) => ({
+      id, durationSeconds: [0.7, 0.5, 0.7, 1.2][i]
+    })),
+    defenderResponsesByPlayerId: responders,
+    ...(coverHandoff ? { defenderCoverHandoff: coverHandoff } : {})
+  };
+  return resolve(session("midfield_press_trap", {
+    lineupSnapshot: eleven,
+    opponent: { ...opponent, tacticalBehaviour: {
+      pressEscapeRoute: route,
+      ...(side ? { pressEscapeTargetFlank: side } : {}),
+      pressEscapeActionSequence: timeline
+    } }
+  }), 0.99, draw);
+};
+for (const [route, side] of [
+  ["third_man", null], ["switch_play", null],
+  ["switch_play", "left"], ["switch_play", "right"], ["direct", null]
+]) {
+  const timely = linkedDefensiveReply(route, side);
+  const lateEarlyScreen = linkedDefensiveReply(route, side, true);
+  const good = timely.evidence.routeCoverTiming;
+  const late = lateEarlyScreen.evidence.routeCoverTiming;
+  assert.equal(good.status, "in_time", route + " " + side);
+  assert.equal(late.status, "late", route + " " + side);
+  assert.equal(good.defensiveSequenceModel, "sequential_defender_tasks");
+  assert.equal(good.defensiveTransitions.length, 3);
+  assert.equal(late.defensiveTransitions[0].status, "late");
+  assert.equal(late.defensiveTransitions[1].status, "in_time");
+  assert.equal(late.defensiveTransitions[2].status, "in_time");
+  assert.equal(late.criticalTaskId, defensiveTaskRoutes[route].tasks[0]);
+  assert.equal(late.defensiveTransitions[2].completionSeconds,
+    good.defensiveTransitions[2].completionSeconds,
+    "same last arrival does NOT erase missed first transition");
+  assert.equal(timely.probability, lateEarlyScreen.probability);
+  assert.equal(timely.routeCoverAdjustment > 0, true);
+  assert.equal(lateEarlyScreen.routeCoverAdjustment, 0);
+  assert.equal(timely.xgDeltaAgainst, lateEarlyScreen.xgDeltaAgainst);
+  const cutoff = (timely.containmentProbability +
+    lateEarlyScreen.containmentProbability) / 2;
+  assert.equal(linkedDefensiveReply(route, side, false, cutoff).status,
+    "contained");
+  assert.equal(linkedDefensiveReply(route, side, true, cutoff).status,
+    "escaped");
+  assert.equal(linkedDefensiveReply(route, side, false, cutoff).xgDeltaAgainst,
+    0.02);
+  assert.equal(linkedDefensiveReply(route, side, true, cutoff).xgDeltaAgainst,
+    0.06);
+  for (const badEdit of [
+    stages => { stages[0].taskId = "task_from_another_route"; },
+    stages => { stages[1].taskId = stages[0].taskId; },
+    stages => { stages[1].triggerActionId = "missing_cue"; },
+    stages => { stages[1].coverMoveSeconds = -1; },
+    stages => { stages[1].coverMovement = { basis: "authored_pitch_geometry" }; }
+  ]) {
+    const bad = linkedDefensiveReply(route, side, false, 0.99, badEdit);
+    assert.equal(bad.evidence.routeCoverTiming.status,
+      "invalid_or_incomplete", route + " " + side + " invalid chain");
+    assert.equal(bad.routeCoverAdjustment, timely.routeCoverAdjustment,
+      "invalid chain stays neutral, never fabricates a defensive failure");
+  }
+}
+// A player leaving to track the runner cannot leave his former corridor
+// unattended. The receiver must be set BEFORE the source starts its next
+// move. Both original individual covers are otherwise on time.
+for (const route of ["third_man", "direct"]) {
+  const onTime = linkedDefensiveReply(route, null, false, 0.99, null,
+    { receiverMoveSeconds: 0.6 });
+  const tooLate = linkedDefensiveReply(route, null, false, 0.99, null,
+    { receiverMoveSeconds: 1.0 });
+  const a = onTime.evidence.routeCoverTiming;
+  const b = tooLate.evidence.routeCoverTiming;
+  assert.equal(a.status, "in_time", route + " timely handoff");
+  assert.equal(b.status, "late", route + " missing handoff");
+  assert.equal(a.coverHandoff.status, "in_time");
+  assert.equal(b.coverHandoff.status, "late");
+  assert.equal(a.coverHandoff.releaseSeconds, 0.8);
+  assert.equal(a.coverHandoff.takeoverSeconds, 0.7);
+  assert.equal(b.coverHandoff.takeoverSeconds, 1.1);
+  assert.equal(b.coverHandoff.marginSeconds, -0.3);
+  assert.equal(b.criticalDefenderId, b.coverHandoff.toDefenderId);
+  assert.equal(b.criticalHandoff.releaseTaskId,
+    defensiveTaskRoutes[route].tasks[1]);
+  assert.equal(b.defensiveTransitions.every(step =>
+    step.status === "in_time"), true,
+    "all individual tasks succeed; only the missing transfer fails");
+  assert.equal(onTime.probability, tooLate.probability);
+  assert.ok(onTime.routeCoverAdjustment > 0);
+  assert.equal(tooLate.routeCoverAdjustment, 0);
+  assert.equal(onTime.xgDeltaAgainst, tooLate.xgDeltaAgainst);
+  const threshold = (onTime.containmentProbability +
+    tooLate.containmentProbability) / 2;
+  assert.equal(linkedDefensiveReply(route, null, false, threshold, null,
+    { receiverMoveSeconds: 0.6 }).status, "contained");
+  assert.equal(linkedDefensiveReply(route, null, false, threshold, null,
+    { receiverMoveSeconds: 1.0 }).status, "escaped");
+  const noTransfer = linkedDefensiveReply(route);
+  assert.equal(noTransfer.evidence.routeCoverTiming.coverHandoff, undefined,
+    "old action chains must keep existing behaviour");
+  for (const editHandoff of [
+    h => { h.fromDefenderId = h.toDefenderId; },
+    h => { h.toDefenderId = "unregistered-defender"; },
+    h => { h.releaseTaskId = "missing-task"; },
+    h => { h.releaseTaskId = defensiveTaskRoutes[route].tasks[0]; },
+    h => { h.coveredChannel = "wrong_corridor"; },
+    h => { h.targetFlank = "unknown"; }
+  ]) {
+    const bad = linkedDefensiveReply(route, null, false, 0.99, null,
+      { receiverMoveSeconds: 0.6, editHandoff });
+    assert.equal(bad.evidence.routeCoverTiming.status,
+      "invalid_or_incomplete", route + " invalid handoff");
+    assert.equal(bad.routeCoverAdjustment, noTransfer.routeCoverAdjustment,
+      "untrusted handoffs are neutral, not asserted tactical failures");
+  }
+}
+// Without a named target flank a switch-play handoff may not assert\n// that two opposite-side backs share one specific defensive corridor.\nconst unscoutedSwitchHandoff = linkedDefensiveReply("switch_play", null,\n  false, 0.99, null, { receiverMoveSeconds: 0.6 });\nassert.equal(unscoutedSwitchHandoff.evidence.routeCoverTiming.status,\n  "invalid_or_incomplete");\nassert.ok(unscoutedSwitchHandoff.routeCoverAdjustment > 0);\n// When the far-side back is the ONLY known relevant covering specialist,
+// do not invent another fullback to create a handoff on either flank.
+for (const side of ["left", "right"]) {
+  const invalid = linkedDefensiveReply("switch_play", side, false, 0.99,
+    null, { receiverMoveSeconds: 0.6 });
+  assert.equal(invalid.evidence.routeCoverTiming.status,
+    "invalid_or_incomplete");
+  assert.ok(invalid.routeCoverAdjustment > 0);
+}
+console.log("OK: two-defender handoffs gate one existing cover term.");
+
+console.log("OK: linked defensive tasks for all routes and both flanks.");
+
 console.log("OK: four route/flank geometries require aligned tactical lanes.");
 
 const resistant = resolve(session("high_press_343", {

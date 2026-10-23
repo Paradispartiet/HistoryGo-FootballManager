@@ -214,6 +214,29 @@ const PRESS_EXIT_TIMED_ACTIONS = Object.freeze({
   direct: Object.freeze(["receive", "direct_ball", "first_touch", "support_run"])
 });
 
+// Named defensive tasks pair an actual change of defensive responsibility
+// with the *next attacking action* it must prevent. These are authored
+// tactical contracts; neither movement times nor positions are inferred.
+// A chain is evaluated IN ORDER, with no reset of the defender's clock.
+// This is the same single route-cover gate, not one modifier per transition.
+const PRESS_EXIT_DEFENSIVE_TASKS = Object.freeze({
+  third_man: Object.freeze({
+    screen_layoff: "layoff",
+    follow_third_runner: "third_runner",
+    drop_for_through_pass: "through_pass"
+  }),
+  switch_play: Object.freeze({
+    delay_release: "release",
+    shift_to_far_side: "switch_pass",
+    hold_wide_channel: "wide_attack"
+  }),
+  direct: Object.freeze({
+    drop_behind_press: "direct_ball",
+    challenge_first_touch: "first_touch",
+    protect_support_run: "support_run"
+  })
+});
+
 // Resolve authored action durations and each specialist's independent
 // recognition + repositioning delays, anchored to an optional named cue.
 // No time is inferred from ratings,
@@ -315,13 +338,77 @@ function recoveryFromAuthoredActions(route, playerIds, sequence, lineup, targetF
   if (laneStatus === "invalid") return null;
   const defenderArrivalSecondsByPlayerId = {};
   const defenderDeadlineSecondsByPlayerId = {};
+  const defenderTransitionStages = [];
+  let defenderCoverHandoff = null;
   let usesIndividualDeadline = false;
   const movementModels = new Set();
   for (const id of playerIds) {
     const response = Object.prototype.hasOwnProperty.call(responses, id)
       ? responses[id] : null;
-    if (!response || typeof response !== "object" || Array.isArray(response) ||
-      !finite(response.recognitionDelaySeconds) ||
+    if (!response || typeof response !== "object" || Array.isArray(response))
+      return null;
+    // An optional sequential reply replaces, rather than stacks on top of,
+    // the legacy single-response model. A defender starts each next move no
+    // earlier than BOTH the named cue and the end of the previous move.
+    if (Object.prototype.hasOwnProperty.call(response, "defensiveActionChain")) {
+      const tasks = PRESS_EXIT_DEFENSIVE_TASKS[route];
+      const stages = response.defensiveActionChain;
+      if (laneStatus !== "not_provided" ||
+        ["recognitionDelaySeconds", "coverMoveSeconds", "coverMovement",
+          "triggerActionId", "sourcedCue", "mustCoverByActionId"]
+          .some(key => Object.prototype.hasOwnProperty.call(response, key)) ||
+        !Array.isArray(stages) || stages.length < 2 || stages.length > 3)
+        return null;
+      let previousCompletion = 0;
+      let previousTaskIndex = -1;
+      let previousDeadlineIndex = -1;
+      const taskNames = Object.keys(tasks);
+      for (const stage of stages) {
+        if (!stage || typeof stage !== "object" || Array.isArray(stage) ||
+          !Object.prototype.hasOwnProperty.call(tasks, stage.taskId) ||
+          !Object.prototype.hasOwnProperty.call(stage, "triggerActionId") ||
+          !finite(stage.recognitionDelaySeconds) ||
+          stage.recognitionDelaySeconds < 0 ||
+          stage.recognitionDelaySeconds > 20) return null;
+        const taskIndex = taskNames.indexOf(stage.taskId);
+        const deadlineActionId = tasks[stage.taskId];
+        const deadlineIndex = expected.indexOf(deadlineActionId);
+        const cueIndex = expected.indexOf(stage.triggerActionId);
+        // A reply cannot be completed before it is triggered, skip back to a
+        // previous task, or count two independent moves for the same deadline.
+        if (cueIndex < 0 || cueIndex >= deadlineIndex ||
+          deadlineIndex <= previousDeadlineIndex ||
+          taskIndex <= previousTaskIndex) return null;
+        const move = authoredCoverMove(stage, sequence);
+        // Explicit times are supported for these named sub-corridors.
+        // Unverified geometry across different corridors is NOT.
+        if (move?.model !== "authored_move_seconds") return null;
+        const cueSeconds = sequence.actions.slice(0, cueIndex)
+          .reduce((sum, action) => sum + action.durationSeconds, 0);
+        const deadlineSeconds = sequence.actions.slice(0, deadlineIndex)
+          .reduce((sum, action) => sum + action.durationSeconds, 0);
+        const movementStartSeconds = Math.max(cueSeconds, previousCompletion) +
+          stage.recognitionDelaySeconds;
+        const completionSeconds = movementStartSeconds + move.seconds;
+        if (completionSeconds > 20) return null;
+        defenderTransitionStages.push({
+          defenderId: id, taskId: stage.taskId,
+          triggerActionId: stage.triggerActionId, deadlineActionId,
+          movementStartSeconds, completionSeconds, deadlineSeconds
+        });
+        previousCompletion = completionSeconds;
+        previousTaskIndex = taskIndex;
+        previousDeadlineIndex = deadlineIndex;
+      }
+      defenderArrivalSecondsByPlayerId[id] = previousCompletion;
+      defenderDeadlineSecondsByPlayerId[id] = sequence.actions
+        .slice(0, previousDeadlineIndex)
+        .reduce((sum, action) => sum + action.durationSeconds, 0);
+      usesIndividualDeadline = true;
+      movementModels.add("authored_sequential_moves");
+      continue;
+    }
+    if (!finite(response.recognitionDelaySeconds) ||
       response.recognitionDelaySeconds < 0 || response.recognitionDelaySeconds > 20)
       return null;
     const travel = authoredCoverMove(response, sequence);
@@ -370,9 +457,50 @@ function recoveryFromAuthoredActions(route, playerIds, sequence, lineup, targetF
       .slice(0, deadlineIndex)
       .reduce((sum, action) => sum + action.durationSeconds, 0);
   }
+  // An authored handoff connects TWO of the existing route specialists.
+  // The incoming player must take the shared corridor BEFORE the departing
+  // defender starts moving toward his NEXT defensive task. Neither a second
+  // bonus nor arbitrary new players are introduced by this contract.
+  if (Object.prototype.hasOwnProperty.call(sequence, "defenderCoverHandoff")) {
+    const h = sequence.defenderCoverHandoff;
+    if (!h || typeof h !== "object" || Array.isArray(h) ||
+      !playerIds.includes(h.fromDefenderId) ||
+      !playerIds.includes(h.toDefenderId) ||
+      h.fromDefenderId === h.toDefenderId ||
+      h.coveredChannel !== PRESS_EXIT_DEFENCES[route].target)
+      return null;
+    // An unobserved target flank cannot be invented from a general
+    // switch-play label. Require a named defensive side and two relevant
+    // specialists on that side when a flank-specific handoff is claimed.
+    if (route === "switch_play"
+      ? !["left", "right"].includes(targetFlank) ||
+        h.targetFlank !== targetFlank
+      : Object.prototype.hasOwnProperty.call(h, "targetFlank"))
+      return null;
+    const sourceStages = defenderTransitionStages.filter(
+      stage => stage.defenderId === h.fromDefenderId);
+    const departingStage = sourceStages.find(
+      stage => stage.taskId === h.releaseTaskId);
+    const receiver = responses[h.toDefenderId];
+    // Without explicit intermediate corridor occupancy, a receiver who is
+    // already executing another chain cannot be asserted to still be here.
+    if (sourceStages.indexOf(departingStage) < 1 ||
+      Object.prototype.hasOwnProperty.call(receiver, "defensiveActionChain"))
+      return null;
+    defenderCoverHandoff = {
+      fromDefenderId: h.fromDefenderId,
+      toDefenderId: h.toDefenderId,
+      coveredChannel: h.coveredChannel,
+      releaseTaskId: h.releaseTaskId,
+      releaseSeconds: departingStage.movementStartSeconds,
+      takeoverSeconds: defenderArrivalSecondsByPlayerId[h.toDefenderId]
+    };
+  }
   return { basis: "authored_scenario", route, attackWindowSeconds,
     defenderArrivalSecondsByPlayerId,
     ...(usesIndividualDeadline ? { defenderDeadlineSecondsByPlayerId } : {}),
+    ...(defenderTransitionStages.length ? { defenderTransitionStages } : {}),
+    ...(defenderCoverHandoff ? { defenderCoverHandoff } : {}),
     movementModel: movementModels.size === 1 ? [...movementModels][0] :
       "mixed_authored_responses",
     spatialLane: sequence.spatialLane?.channel || null,
@@ -413,9 +541,29 @@ function specialistRecoveryWindow(route, playerIds, timing, lineup, targetFlank)
     : playerIds.map(() => derived.attackWindowSeconds);
   if (!deadlineSeconds.every(time => finite(time) &&
     time >= 0 && time <= derived.attackWindowSeconds)) return invalid;
-  const remainingTimes = deadlineSeconds.map((time, i) => time - arrival[i]);
-  const margin = Math.min(...remainingTimes);
-  const mostUrgentIndex = remainingTimes.indexOf(margin);
+  const transitionStages = isSequence ? derived.defenderTransitionStages : null;
+  // Every required earlier task is decisive even if the defender reaches the
+  // FINAL corridor on time. The smallest margin across ALL required tasks
+  // controls the single existing containment adjustment.
+  const candidates = [
+    ...(transitionStages || []).map(stage => ({
+      defenderId: stage.defenderId, taskId: stage.taskId,
+      arrival: stage.completionSeconds, deadline: stage.deadlineSeconds
+    })),
+    ...(isSequence && derived.defenderCoverHandoff ? [{
+      defenderId: derived.defenderCoverHandoff.toDefenderId,
+      taskId: null, handoff: derived.defenderCoverHandoff,
+      arrival: derived.defenderCoverHandoff.takeoverSeconds,
+      deadline: derived.defenderCoverHandoff.releaseSeconds
+    }] : []),
+    ...playerIds.map((id, i) => ({
+      defenderId: id, taskId: null,
+      arrival: arrival[i], deadline: deadlineSeconds[i]
+    }))
+  ];
+  const critical = candidates.reduce((a, b) =>
+    b.deadline - b.arrival < a.deadline - a.arrival ? b : a);
+  const margin = critical.deadline - critical.arrival;
   return {
     status: isSequence && derived.laneStatus === "wrong_corridor"
       ? "wrong_corridor" : margin >= 0 ? "in_time" : "late",
@@ -427,9 +575,41 @@ function specialistRecoveryWindow(route, playerIds, timing, lineup, targetFlank)
     spatialLane: isSequence ? derived.spatialLane : null,
     ...(actionDeadlines ? {
       deadlineModel: "per_defender_action_start",
-      criticalDefenderId: playerIds[mostUrgentIndex],
-      criticalDeadlineSeconds:
-        Math.round(deadlineSeconds[mostUrgentIndex] * 1000) / 1000
+      criticalDefenderId: critical.defenderId,
+      criticalDeadlineSeconds: Math.round(critical.deadline * 1000) / 1000,
+      ...(critical.taskId ? { criticalTaskId: critical.taskId } : {}),
+      ...(critical.handoff ? { criticalHandoff: {
+        fromDefenderId: critical.handoff.fromDefenderId,
+        toDefenderId: critical.handoff.toDefenderId,
+        releaseTaskId: critical.handoff.releaseTaskId
+      } } : {})
+    } : {}),
+    ...(isSequence && derived.defenderCoverHandoff ? {
+      coverHandoff: {
+        fromDefenderId: derived.defenderCoverHandoff.fromDefenderId,
+        toDefenderId: derived.defenderCoverHandoff.toDefenderId,
+        coveredChannel: derived.defenderCoverHandoff.coveredChannel,
+        releaseTaskId: derived.defenderCoverHandoff.releaseTaskId,
+        releaseSeconds: round3(derived.defenderCoverHandoff.releaseSeconds),
+        takeoverSeconds: round3(derived.defenderCoverHandoff.takeoverSeconds),
+        marginSeconds: round3(derived.defenderCoverHandoff.releaseSeconds -
+          derived.defenderCoverHandoff.takeoverSeconds),
+        status: derived.defenderCoverHandoff.takeoverSeconds <=
+          derived.defenderCoverHandoff.releaseSeconds ? "in_time" : "late"
+      }
+    } : {}),
+    ...(transitionStages?.length ? {
+      defensiveSequenceModel: "sequential_defender_tasks",
+      defensiveTransitions: transitionStages.map(stage => ({
+        defenderId: stage.defenderId, taskId: stage.taskId,
+        triggerActionId: stage.triggerActionId,
+        deadlineActionId: stage.deadlineActionId,
+        completionSeconds: round3(stage.completionSeconds),
+        deadlineSeconds: round3(stage.deadlineSeconds),
+        marginSeconds: round3(stage.deadlineSeconds - stage.completionSeconds),
+        status: stage.completionSeconds <= stage.deadlineSeconds ?
+          "in_time" : "late"
+      }))
     } : {})
   };
 }
