@@ -301,3 +301,42 @@ empirisk dokumenterte presslinjer eller påstander om faktiske
 spillerposisjoner. Tak på spillernes fart og tid fra forrige
 leveranse er uendret. Testene varierer både riktig/feil sone
 og ankomsttid under samme ellever og RNG.
+
+
+## Ulike sikringsfrister før ulike angrepshandlinger
+
+En forsvarer kan måtte dekke rommet **før en tidligere handling**
+i motstanderens fireleddede angrep starter. Dette kan nå angis i den
+enkelte spillers `defenderResponsesByPlayerId`:
+
+```js
+{
+  triggerActionId: "receive",
+  recognitionDelaySeconds: 0.4,
+  coverMoveSeconds: 1.0,
+  mustCoverByActionId: "through_pass"
+}
+```
+
+`mustCoverByActionId` er en valgfri navngitt frist. Den må vise til en
+handling i **samme rute**, og betyr *før starten* av denne handlingen.
+For eksempel må sikring før `third_runner` rekke frem før løpetrinnet
+begynner; en stopper som bare må sikre foran `through_pass` får den
+lengre fristen. Fristen beregnes ved å summere alle *foregående*
+handlingers eksplisitte `durationSeconds`. Uten feltet gjelder den
+tidligere fristen ved **slutten** av hele angrepet.
+
+Den svakeste individuelle **tidsmarginen** er styrende, også dersom
+andre forsvarere ankommer tidlig. `marginSeconds` representerer derfor
+minste av (spillerens frist – spillerens ankomst).
+Ved individuelle handlingsfrister viser evidensen også
+`deadlineModel: "per_defender_action_start"`,
+`criticalDefenderId` og `criticalDeadlineSeconds`.
+
+Dette virker samtidig med `sourcedCue` og forfattet geometri /
+`spatialLane`, men angir **ingen automatisk utledede frister**.
+Samme pressannsynlighet og terminale xG-regnskap beholdes.
+Ukjent handlings-ID gir `invalid_or_incomplete` og ingen påstått
+taktisk svakhet. Testene skiller mellom tidsvinduer før
+avlegg, tredjemannsløp, sideskift, breddeangrep, førsteberøring
+og støttebevegelse i dokumenterte scenarioer.
