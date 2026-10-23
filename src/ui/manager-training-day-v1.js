@@ -44,9 +44,14 @@ function activeModeLearningState() {
 }
 
 function currentContext() {
-  if (calendarContext?.target === "trening") return calendarContext;
   const clubWeek = clubWeekState();
   const week = Math.max(1, Number(clubWeek.week) || 1);
+  // A calendar navigation context belongs to one concrete club week. Once
+  // matchday advances the save, don't keep displaying last week's Wednesday.
+  if (calendarContext?.target === "trening" && Number(calendarContext.week) === week) {
+    return calendarContext;
+  }
+  if (calendarContext && Number(calendarContext.week) !== week) calendarContext = null;
   const dayIndex = currentManagerDayIndex(clubWeek);
   return {
     week,
