@@ -93,12 +93,9 @@ export function createContextualTrainingSessions(program, {
       nextOpponent
     ].join(" ");
     let load = INTENSITY[session.intensity] || "Belastning fra valgt program";
-    if (session.intensity === "high" && (tired || injured)) {
-      load += `. Troppen har ${tired} slitne og ${injured} skadde: tilpass deltakelse og vurder hvile.`;
-    } else if (injured) {
-      load += `. ${injured} skadde må følges opp uten å forutsette full deltakelse.`;
-    } else if (tired) {
-      load += `. ${tired} slitne spillere: følg belastningen.`;
+    if (tired || injured) {
+      load += `. ${tired} slitne og ${injured} skadde: vurder deltakelse og individuelt tilpasset belastning.`;
+      if (session.intensity === "high") load += " Vurder ekstra hvile før en hard økt.";
     }
     const contextualBasis = [
       tacticName ? "taktikk" : null,
