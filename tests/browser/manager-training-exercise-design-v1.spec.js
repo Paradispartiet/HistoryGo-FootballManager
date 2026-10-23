@@ -97,7 +97,7 @@ test("spillet gir fire økter fra valgt program, uten manuell øvelsesbank", asy
   const advice = sessions.first().locator(".training-day-session-advice");
   await advice.locator("summary").click();
   await expect(advice).toHaveAttribute("open", "");
-  await expect(advice.locator(".training-day-session-advice-body strong")).not.toBeEmpty();
+  await expect(advice.locator("summary .training-day-session-recommendation")).not.toBeEmpty();
   await expect(advice.locator(".training-day-session-advice-body p")).toContainText("Mot");
   await expect(advice.locator(".training-day-session-advice-body small")).toContainText("belastning");
 });
@@ -124,8 +124,30 @@ test("neste motstander og kampplan står i begrunnelsen for anbefalt øvelse", a
   const session = page.locator("#trainingDaySessions .training-day-session").first();
   await session.locator("summary").click();
   const recommendation = session.locator(".training-day-session-advice-body");
-  await expect(recommendation).toContainText(all[0].exercise);
+  await expect(session.locator("summary .training-day-session-recommendation")).toHaveText(all[0].exercise);
   await expect(recommendation).toContainText(all[0].relevance);
+});
+
+test("anbefalt øvelse er synlig uten klikk og gammel øvelsesbank er ute av treningsdagen", async ({ page }) => {
+  await openTraining(page);
+  const sessions = page.locator("#trainingDaySessions .training-day-session");
+  await expect(sessions.locator(".training-day-session-recommendation")).toHaveCount(4);
+  await expect(sessions.first().locator("summary .training-day-session-recommendation")).toBeVisible();
+  await expect(sessions.first().locator("summary")).toContainText("Hvorfor denne øvelsen?");
+  await expect(page.locator("#trainingDaySavedHypothesis")).toHaveCount(0);
+  await expect(page.locator("#trainingDaySessions input, #trainingDaySessions textarea")).toHaveCount(0);
+});
+
+test("øvelsene beholder åpne begrunnelser når skjermen er bred og smal", async ({ page }) => {
+  await openTraining(page);
+  for (const width of [1280, 820, 768, 390, 320]) {
+    await page.setViewportSize({ width, height: 844 });
+    const first = page.locator("#trainingDaySessions .training-day-session-advice").first();
+    await expect(first.locator("summary .training-day-session-recommendation")).toBeVisible();
+    if (!(await first.getAttribute("open"))) await first.locator("summary").click();
+    await expect(first.locator(".training-day-session-advice-body p")).toBeVisible();
+    await expectNoHorizontalOverflow(page);
+  }
 });
 
 test("øktforslag er lesbare og tilgjengelige på mobil uten horisontal scrolling", async ({ page }) => {
