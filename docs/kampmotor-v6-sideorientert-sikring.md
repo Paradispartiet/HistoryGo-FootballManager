@@ -445,3 +445,24 @@ avvises derfor som handoff-scenarier uten å straffe forsvaret.
 Dette er fremdeles en stilisert, forfattet simulering, ikke et utsagn
 om reell tracking, dokumenterte fotballhendelser eller kalibrerte
 prosentverdier.
+
+
+## Forklaring av sikringsforløpet i kampreplay
+
+`counterplay.defensiveReply.coverTimingExplanation` er en ny, kompakt
+forklaringskontrakt med `kind`, `label` og `description`. Den
+benytter **bare allerede validerte** tids- og korridorresultater:
+
+- `in_time`: nødvendige defensive handlinger (og eventuelt bytte) i tide.
+- `late_task`: navngitt defensiv oppgave ble for sen.
+- `late_handoff`: avløseren nådde rommet etter at første forsvarer dro.
+- `late_recovery`: en spesialist var for sent fremme uten navngitt oppgave.
+- `wrong_corridor`: spilleren nådde frem, men feil sikringsrom.
+- `unknown`: tid mangler, eller data er ugyldige; **ingen** konklusjon
+  om at en forsvarer har sviktet.
+
+Forklaringen følger eksisterende `counterplay` inn i kampens
+`tacticalMoment` når en sjanse knyttes til pressforløpet. Den
+endrer **ikke** sannsynligheter, taktikkbonuser, xG, valg av spiller,
+eller allerede lagrede kampdata. Dette er ikke live tracking og
+kan ikke brukes til å hevde at en bestemt virkelig spiller gjorde feil.
