@@ -91,7 +91,7 @@ function ensureSurface() {
         <button type="button" class="training-day-calendar-link" id="trainingDayBackCalendar">Kalender · Uke 1 · Onsdag</button>
         <p class="eyebrow" id="trainingDayEyebrow">Lag · Trening · Onsdag</p>
         <h2>Treningsdag</h2>
-        <p class="training-day-lede" id="trainingDayLede">Dagens treningsarbeid samler program, økter, fokus og individuell oppfølging.</p>
+        <p class="training-day-lede" id="trainingDayLede">Velg ukas program, se de fire øktene og tilpass fokus. Følg opp enkeltspillere ved behov.</p>
       </div>
       <div class="training-day-clock">
         <span id="trainingDayTime">11:00</span>
@@ -147,6 +147,11 @@ function ensureSurface() {
       </aside>
     </div>
 
+    <details class="training-day-resources" id="trainingDayResources">
+      <summary>Fotballfaglig fordypning</summary>
+      <div class="training-day-resources-body" id="trainingDayResourcesBody"></div>
+    </details>
+
     <footer class="training-day-footer">
       <div><span>Neste kamp</span><strong id="trainingDayOpponent">Motstander ikke klar</strong></div>
       <button type="button" class="training-day-calendar-return" id="trainingDayReturnCalendar">Tilbake til kalenderdagen</button>
@@ -154,6 +159,11 @@ function ensureSurface() {
 
   const anchor = document.getElementById("trainingCommandPanel") || section.firstElementChild;
   section.insertBefore(surface, anchor || null);
+  // Keep the old educational modal actions reachable, but fold them into the
+  // actual training scene instead of leaving a second standalone button wall.
+  const resources = section.querySelector(".training-support-actions");
+  const resourcesBody = surface.querySelector("#trainingDayResourcesBody");
+  if (resources && resourcesBody) resourcesBody.append(resources);
 
   const openExistingChoice = (id) => document.getElementById(id)?.click();
   surface.querySelector("#trainingDayChangeProgram")?.addEventListener("click", () => openExistingChoice("teamChangeTrainingProgram"));
@@ -233,10 +243,22 @@ function selectedFocus() {
   return compactText("#teamSelectedTrainingFocus", compactText("#weeklyTrainingStatus", "Treningsfokus ikke valgt"));
 }
 
+export function summarizeVisibleIndividualAssignments(names = []) {
+  const players = (Array.isArray(names) ? names : []).map((name) => String(name || "").trim()).filter(Boolean);
+  if (!players.length) return "Ingen individuell oppfølging valgt";
+  return `${players.length} ${players.length === 1 ? "spiller" : "spillere"}: ${players.join(" · ")}`;
+}
+
 function selectedIndividual() {
-  const assignmentText = compactText("#individualTrainingAssignments");
-  if (assignmentText) return assignmentText;
-  return compactText("#teamSelectedIndividualTraining", compactText("#individualTrainingCapacity", "Ingen individuell oppfølging valgt"));
+  const names = [...document.querySelectorAll("#individualTrainingAssignments .individual-training-card h5")]
+    .map((title) => title.textContent);
+  return summarizeVisibleIndividualAssignments(names);
+}
+
+function individualCapacityHint() {
+  const value = compactText("#individualTrainingCapacity");
+  const headline = value.match(/^.*?[.!?](?=\s|$)/)?.[0] || value;
+  return `Valgfritt · ${headline || "Velg en spiller dersom noen trenger individuell oppfølging."}`;
 }
 
 function renderSessions(surface, context) {
@@ -311,9 +333,7 @@ function renderTrainingDay() {
   const event = surface.querySelector("#trainingDayEvent");
   if (back) back.textContent = `Kalender · Uke ${context.week} · ${context.day}`;
   if (eyebrow) eyebrow.textContent = `Lag · Trening · Uke ${context.week} · ${context.day}`;
-  if (lede) lede.textContent = context.source === "calendar"
-    ? `Åpnet fra kalenderen. Fullfør arbeidet for ${context.day.toLocaleLowerCase("nb-NO")} uten å opprette en ny tidsflyt.`
-    : "Dette treningsarbeidet ligger i kalenderuka. Kalenderen er fortsatt fasit for når arbeidet skjer.";
+  if (lede) lede.textContent = "Velg treningsprogram, se øktene og tilpass ukas fokus. Individuell oppfølging er valgfri.";
   if (time) time.textContent = context.time || "Trening";
   if (event) event.textContent = context.eventTitle || "Treningsarbeid";
 
@@ -334,6 +354,8 @@ function renderTrainingDay() {
   if (focus) focus.textContent = selectedFocus();
   if (focusHint) focusHint.textContent = compactText("#weeklyTrainingRecommendation", "Fokuset kobles til den eksisterende kamp- og treningsplanen.");
   if (individual) individual.textContent = selectedIndividual();
+  const individualHint = surface.querySelector("#trainingDayIndividualHint");
+  if (individualHint) individualHint.textContent = individualCapacityHint();
   if (assistant) assistant.textContent = compactText(".training-assistant-signal strong", "Les dagens signaler før økta.");
   if (assistantDetail) assistantDetail.textContent = compactText(".training-assistant-signal p", "Assistentens råd bruker den eksisterende treningskonteksten.");
   if (condition) condition.textContent = compactText('.training-command-status[data-training-target="details"] .training-command-status-value', "Ingen akutte varsler");

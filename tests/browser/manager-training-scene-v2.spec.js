@@ -98,6 +98,13 @@ test("Trening er én faktisk treningsdag med fire økter og uten gammel kommando
   await expect(page.locator("#trainingCommandPanel")).toBeHidden();
   await expect(page.locator("#trainingDepth")).toBeHidden();
   await expect(page.locator("#teamTrainingSelectedState")).toBeHidden();
+  await expect(page.locator("#trainingWorkspace")).toBeHidden();
+  await expect(page.locator("#trainingDayIndividual")).toHaveText("Ingen individuell oppfølging valgt");
+  await expect(page.locator("#trainingDayIndividualHint")).toContainText("Valgfritt");
+  await expect(page.locator("#trainingDayResources")).toBeVisible();
+  await expect(page.locator('#trainingDayResources [data-modal-open="modalWeaknesses"]')).toBeHidden();
+  await page.locator("#trainingDayResources summary").click();
+  await expect(page.locator('#trainingDayResources [data-modal-open="modalWeaknesses"]')).toBeVisible();
 });
 
 test("program fokus og individuell oppfølging åpner komplette eksisterende valg i felles drawer", async ({ page }) => {
@@ -115,6 +122,12 @@ test("program fokus og individuell oppfølging åpner komplette eksisterende val
 
   await page.locator("#trainingDayChangeIndividual").click();
   await expect(page.locator("#managerTeamChoiceDrawerBody #individualTrainingPicker")).toBeVisible();
+  await expect(page.locator("#managerTeamChoiceDrawerBody #individualTrainingCapacity")).toBeVisible();
+  await expect(page.locator("#managerTeamChoiceDrawerBody #individualTrainingAssignments")).toBeVisible();
+  await expect(page.locator("#managerTeamChoiceDrawerBody h4")).toHaveText("Legg til oppfølging");
+  await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
+  await expect(page.locator("#individualTrainingStepBody")).toBeHidden();
+  await expect(page.locator("#trainingWorkspace")).toBeHidden();
 });
 
 test("kalenderhendelsen eier dagkonteksten og retur går tilbake til samme dag", async ({ page }) => {
@@ -146,4 +159,12 @@ test("treningsdagen har ingen alvorlige tilgjengelighetsbrudd", async ({ page })
     .analyze();
   const serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
   expect(serious, serious.map((violation) => `${violation.id}: ${violation.help}`).join("\n")).toEqual([]);
+});
+
+// The summary must never include the removed button text or full risk notes.
+test("individuell oppfølging vises som kort oppsummering, ikke hele kontrollpanelet", async ({ page }) => {
+  await openTraining(page);
+  await expect(page.locator("#trainingDayIndividual")).toHaveText("Ingen individuell oppfølging valgt");
+  await expect(page.locator("#trainingDayIndividual")).not.toContainText("Legg til oppfølging");
+  await expect(page.locator("#trainingDayIndividualHint")).not.toContainText("Kapasiteten er derfor");
 });
