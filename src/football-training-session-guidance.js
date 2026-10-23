@@ -33,22 +33,37 @@ export function summarizeTrainingReadiness(conditions = []) {
   };
 }
 
-function exerciseForSession(session = {}) {
+function exerciseForSession(session = {}, { tacticName = "", opponentStyle = "", readiness = null } = {}) {
   const phrase = [session.focusId, session.title].map(text).join(" ");
+  const versusHighPress = /høy.?press|high.?press|aggressiv.?press|gjenvinn/i.test(opponentStyle);
+  const versusLowBlock = /lav.?blokk|low.?block|kompakt.?forsvar/i.test(opponentStyle);
+  const versusCounter = /kontring|counter.?attack|omstilling|transition/i.test(opponentStyle);
+  const tacticalPress = /høy.?press|pressing|gjenvinn/i.test(tacticName);
+  const wornDown = Number(readiness?.tired) > 0;
   if (/restitu|recovery|mobilit|skadeforebygg|injury_prevention|bevegelighet/i.test(phrase)) {
-    return "Rolig mobilitet, teknikk og skadeforebyggende arbeid i små grupper.";
+    return wornDown
+      ? "Rolig mobilitet og kontrollert teknikk, med differensiert oppfølging av slitne spillere."
+      : "Rolig mobilitet, teknikk og skadeforebyggende arbeid i små grupper.";
   }
   if (/avslut|finishing|skudd|boks|sjanse/i.test(phrase)) {
-    return "Kampnære angrep som ender med sistepasning og avslutning mot mål.";
+    return versusLowBlock
+      ? "Angrip etablert, kompakt forsvar: skap overtall på siden og avslutt fra boksrom."
+      : "Kampnære angrep som ender med sistepasning og avslutning mot mål.";
   }
   if (/høyt press|pressing|pressutløs|motpress|counterpress|gjenvinn/i.test(phrase)) {
-    return "Retningsbestemt spill: én tydelig pressutløser, støtte fra neste ledd og gjenvinning.";
+    return tacticalPress
+      ? "Samordnet høy gjenvinning: første pressledd går, neste stenger pasningslinjene."
+      : "Retningsbestemt spill: én tydelig pressutløser, støtte fra neste ledd og gjenvinning.";
   }
   if (/restforsvar|rest_defence|transition|omstilling|kontring|sikring/i.test(phrase)) {
-    return "Spill mot mål med umiddelbar omstilling ved balltap og tydelig sikring.";
+    return versusCounter
+      ? "Angrip med sikringsledd på plass og forsvar en direkte kontring umiddelbart ved balltap."
+      : "Spill mot mål med umiddelbar omstilling ved balltap og tydelig sikring.";
   }
   if (/oppbygg|build_up|keeper|distribusjon|tredjemann|pressmotstand|pasning/i.test(phrase)) {
-    return "Spill ut fra bakre ledd mot press, med støttevinkler og tredje spiller.";
+    return versusHighPress
+      ? "Spill ut fra keeper under simulert høyt press med støttevinkler og tredjemann."
+      : "Spill ut fra bakre ledd mot press, med støttevinkler og tredje spiller.";
   }
   if (/rolle|formasjon|lagform|shape|kompakt|struktur|blokk|fase/i.test(phrase)) {
     return "Kampnær lagdelstrening: stopp, korriger avstander og start situasjonen igjen.";
@@ -79,7 +94,7 @@ export function createContextualTrainingSessions(program, {
   const injured = Math.max(0, Number(readiness?.injured) || 0);
   const focusAligned = selectedFocusId && (program.relatedTrainingFocusIds || []).includes(selectedFocusId);
   return program.sessions.slice(0, 4).map((session) => {
-    const exercise = exerciseForSession(session);
+    const exercise = exerciseForSession(session, { tacticName, opponentStyle, readiness });
     const objective = text(session.tacticalObjective);
     const nextOpponent = opponentName
       ? `Mot ${opponentName}${opponentStyle ? ` (${opponentStyle})` : ""}: knytt dette til kampforberedelsen.`
