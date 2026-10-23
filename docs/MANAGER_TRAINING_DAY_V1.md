@@ -65,3 +65,15 @@ Sannhetskilder er fortsatt blant annet:
 - eksisterende liga-/motstanderkontekst
 
 Presentasjonslaget må ikke beregne nye treningseffekter eller gjennomføre fasebytter.
+
+## Relevant økter direkte i spillet (kontekstavhengig arbeidsflyt)
+
+Spillet foreslår ikke en løs øvelsesbank. Manageren velger blant eksisterende **kontekstrangerte treningsprogrammer**, og hvert program eier de fire faktiske øktene. Oppsettene for øktene er spillets anbefaling, ikke frie øvelser spilleren må bygge selv.
+
+- Programrangeringen bruker eksisterende taktikkanalyse, motstanderprofil og off-pitch-signaler; faktisk belastning fra de eksisterende spillerregistreringene tas nå også inn som `fatigueRisk` i **samme** programscorer.
+- Hver av de fire øktene viser en ferdig foreslått øvelse, hvorfor den inngår (kampplan, motstander og øktas fotballfaglige mål), og konkret påminnelse om skadde eller slitne spillere.
+- Rådet vises i et naturlig `details/summary`-felt direkte under riktig økt. Ingen manuell banetegning, oppgavebank, radio-valg eller ekstra treningshypoteser er nødvendige.
+- Øktas canonical `intensity`, `fatigueLoad`, `injuryRiskModifier`, `duration` og `tacticalObjective` blir ikke endret av teksten i anbefalingen. Spillmotoren styrer fortsatt faktisk virkning, og spilleren bruker eksisterende program- og fokusvalg.
+- Ingen nye lagringsnøkler, evalueringsmotorer eller bonusregler.
+
+Dette gjelder særlig det prioriterte ligaspillet i Eliteserien og OBOS-ligaen.
