@@ -542,3 +542,168 @@
   .lineup-player-choice-row { grid-template-columns: minmax(0, 1fr) 4.45rem; }
   .manager-player-current-grid { grid-template-columns: 1fr; }
 }
+
+
+/* Real-player identities: historical clubs and registered source-backed
+   information come before simulated match totals on every screen. */
+.manager-roster-table th:first-child { width: 30%; }
+.manager-roster-table td:first-child {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  padding-block: .55rem;
+}
+.manager-roster-clubs {
+  display: block;
+  margin-top: .18rem;
+  color: #d2dce9 !important;
+  font-size: .74rem !important;
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.manager-roster-player-details {
+  display: grid;
+  gap: .22rem;
+  padding-top: .36rem;
+  font-size: .70rem;
+  line-height: 1.35;
+}
+.manager-roster-identity {
+  color: rgba(255,255,255,.72);
+}
+.manager-roster-known-strengths {
+  color: #d6ecd9;
+}
+.manager-roster-strengths-missing {
+  color: rgba(255,255,255,.55);
+}
+.manager-roster-model-values {
+  color: #aebcd0;
+}
+.manager-player-profile-identity .manager-profile-club-history {
+  margin: .35rem 0 .2rem;
+  color: #f2ebd5;
+  font-weight: 800;
+  font-size: .94rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 680px) {
+  .manager-roster-table tr {
+    min-height: 0;
+    padding: .85rem .8rem;
+  }
+  .manager-roster-table td:first-child {
+    margin-bottom: .25rem;
+    padding: 0;
+  }
+  .manager-roster-player-link {
+    padding-right: 4.8rem;
+  }
+  .manager-roster-player-link strong {
+    font-size: 1rem;
+    line-height: 1.25;
+  }
+  .manager-roster-player-link small.manager-roster-clubs {
+    display: block !important;
+    font-size: .81rem !important;
+    line-height: 1.4;
+    color: #dae1ec !important;
+    overflow: visible;
+    text-overflow: clip;
+  }
+  .manager-roster-player-details {
+    padding-top: .45rem;
+    gap: .34rem;
+    font-size: .77rem;
+  }
+  .manager-roster-table td:nth-child(2),
+  .manager-roster-table td:nth-child(7),
+  .manager-roster-table td:nth-child(8),
+  .manager-roster-table td:nth-child(9) { display: none !important; }
+  .manager-roster-table td:nth-child(4) {
+    top: .85rem;
+    right: .8rem;
+    font-size: .78rem;
+    color: #c4e9d0;
+  }
+  .manager-roster-player-link:focus-visible { outline-offset: 4px; }
+}
+
+
+/* The compact, honest identity snapshot leads the detailed player profile. */
+.manager-player-summary {
+  margin: .85rem .9rem 0;
+  padding: .8rem;
+  border: 1px solid rgba(255,255,255,.17);
+  background: #101923;
+}
+.manager-player-summary-intro {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: .3rem .8rem;
+  margin-bottom: .65rem;
+}
+.manager-player-summary-intro h3 {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+.manager-player-summary-intro span,
+.manager-player-summary-note {
+  color: rgba(255,255,255,.67);
+  font-size: .72rem;
+  line-height: 1.45;
+}
+.manager-player-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .55rem;
+}
+.manager-player-summary-card {
+  min-width: 0;
+  padding: .65rem;
+  border: 1px solid rgba(255,255,255,.15);
+  background: #081017;
+}
+.manager-player-summary-card h4 {
+  margin: 0 0 .5rem;
+  color: #e3ecf4;
+  font-size: .76rem;
+  line-height: 1.3;
+}
+.manager-player-summary-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem;
+}
+.manager-player-summary-items span {
+  max-width: 100%;
+  padding: .2rem .38rem;
+  border-radius: .25rem;
+  background: rgba(255,255,255,.09);
+  color: #f6f7f9;
+  font-size: .74rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.manager-player-summary-items span.is-empty {
+  background: transparent;
+  color: rgba(255,255,255,.6);
+  padding: 0;
+}
+.manager-player-summary-note { margin: .65rem 0 0; }
+.manager-roster-model-traits { color: #d3d8ea; }
+@media (max-width: 980px) {
+  .manager-player-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 680px) {
+  .manager-player-summary { margin: .65rem .7rem 0; padding: .65rem; }
+  .manager-player-summary-grid { gap: .4rem; }
+  .manager-player-summary-card { padding: .55rem; }
+  .manager-player-summary-card h4 { font-size: .72rem; }
+  .manager-player-summary-items span { font-size: .71rem; }
+}
