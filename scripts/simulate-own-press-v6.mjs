@@ -795,6 +795,105 @@ for (const spec of spatialCases) {
       "invalid_or_incomplete");
   }
 }
+// Defensive reactions are one LINKED chain, not three independent cover
+// bonuses. A late first screen cannot be rescued by a timely FINAL position.
+const defensiveTaskRoutes = {
+  third_man: {
+    actions: ["receive", "layoff", "third_runner", "through_pass"],
+    tasks: ["screen_layoff", "follow_third_runner", "drop_for_through_pass"]
+  },
+  switch_play: {
+    actions: ["receive", "release", "switch_pass", "wide_attack"],
+    tasks: ["delay_release", "shift_to_far_side", "hold_wide_channel"]
+  },
+  direct: {
+    actions: ["receive", "direct_ball", "first_touch", "support_run"],
+    tasks: ["drop_behind_press", "challenge_first_touch", "protect_support_run"]
+  }
+};
+const linkedDefensiveReply = (route, side = null, lateFirst = false,
+  draw = 0.99, edit = null) => {
+  const config = defensiveTaskRoutes[route];
+  const basePhase = route === "switch_play" && side
+    ? targetedSwitch(side, eleven) : replyRun(route);
+  const ids = basePhase.counterplay.defensiveReply.evidence.supportingPlayerIds;
+  assert.ok(ids.length, route + " has known specialists");
+  const stages = config.tasks.map((taskId, i) => ({
+    taskId,
+    triggerActionId: config.actions[i],
+    recognitionDelaySeconds: 0.1,
+    coverMoveSeconds: i === 0 ? (lateFirst ? 0.66 : 0.4) :
+      i === 1 ? 0.2 : 0.3
+  }));
+  if (edit) edit(stages);
+  const responders = Object.fromEntries(ids.map((id, i) => [id, i === 0 ?
+    { defensiveActionChain: stages } :
+    { recognitionDelaySeconds: 0.1, coverMoveSeconds: 1.9 }]));
+  const timeline = {
+    basis: "authored_action_sequence", route,
+    actions: config.actions.map((id, i) => ({
+      id, durationSeconds: [0.7, 0.5, 0.7, 1.2][i]
+    })),
+    defenderResponsesByPlayerId: responders
+  };
+  return resolve(session("midfield_press_trap", {
+    lineupSnapshot: eleven,
+    opponent: { ...opponent, tacticalBehaviour: {
+      pressEscapeRoute: route,
+      ...(side ? { pressEscapeTargetFlank: side } : {}),
+      pressEscapeActionSequence: timeline
+    } }
+  }), 0.99, draw);
+};
+for (const [route, side] of [
+  ["third_man", null], ["switch_play", null],
+  ["switch_play", "left"], ["switch_play", "right"], ["direct", null]
+]) {
+  const timely = linkedDefensiveReply(route, side);
+  const lateEarlyScreen = linkedDefensiveReply(route, side, true);
+  const good = timely.evidence.routeCoverTiming;
+  const late = lateEarlyScreen.evidence.routeCoverTiming;
+  assert.equal(good.status, "in_time", route + " " + side);
+  assert.equal(late.status, "late", route + " " + side);
+  assert.equal(good.defensiveSequenceModel, "sequential_defender_tasks");
+  assert.equal(good.defensiveTransitions.length, 3);
+  assert.equal(late.defensiveTransitions[0].status, "late");
+  assert.equal(late.defensiveTransitions[1].status, "in_time");
+  assert.equal(late.defensiveTransitions[2].status, "in_time");
+  assert.equal(late.criticalTaskId, defensiveTaskRoutes[route].tasks[0]);
+  assert.equal(late.defensiveTransitions[2].completionSeconds,
+    good.defensiveTransitions[2].completionSeconds,
+    "same last arrival does NOT erase missed first transition");
+  assert.equal(timely.probability, lateEarlyScreen.probability);
+  assert.equal(timely.routeCoverAdjustment > 0, true);
+  assert.equal(lateEarlyScreen.routeCoverAdjustment, 0);
+  assert.equal(timely.xgDeltaAgainst, lateEarlyScreen.xgDeltaAgainst);
+  const cutoff = (timely.containmentProbability +
+    lateEarlyScreen.containmentProbability) / 2;
+  assert.equal(linkedDefensiveReply(route, side, false, cutoff).status,
+    "contained");
+  assert.equal(linkedDefensiveReply(route, side, true, cutoff).status,
+    "escaped");
+  assert.equal(linkedDefensiveReply(route, side, false, cutoff).xgDeltaAgainst,
+    0.02);
+  assert.equal(linkedDefensiveReply(route, side, true, cutoff).xgDeltaAgainst,
+    0.06);
+  for (const badEdit of [
+    stages => { stages[0].taskId = "task_from_another_route"; },
+    stages => { stages[1].taskId = stages[0].taskId; },
+    stages => { stages[1].triggerActionId = "missing_cue"; },
+    stages => { stages[1].coverMoveSeconds = -1; },
+    stages => { stages[1].coverMovement = { basis: "authored_pitch_geometry" }; }
+  ]) {
+    const bad = linkedDefensiveReply(route, side, false, 0.99, badEdit);
+    assert.equal(bad.evidence.routeCoverTiming.status,
+      "invalid_or_incomplete", route + " " + side + " invalid chain");
+    assert.equal(bad.routeCoverAdjustment, timely.routeCoverAdjustment,
+      "invalid chain stays neutral, never fabricates a defensive failure");
+  }
+}
+console.log("OK: linked defensive tasks for all routes and both flanks.");
+
 console.log("OK: four route/flank geometries require aligned tactical lanes.");
 
 const resistant = resolve(session("high_press_343", {
