@@ -322,7 +322,7 @@ function ensureNavigation() {
   const staffButton = subnav?.querySelector('.app-subtab[data-tab-target="admin"]');
   if (staffButton) {
     staffButton.dataset.subnavParent = "dashboard";
-    staffButton.classList.remove("club-organization-deep-proxy");
+    staffButton.classList.remove("club-organization-deep-proxy", "office-subnav-proxy");
     staffButton.textContent = "Stab";
     if (boardButton && boardButton.nextElementSibling !== staffButton) boardButton.after(staffButton);
   }
