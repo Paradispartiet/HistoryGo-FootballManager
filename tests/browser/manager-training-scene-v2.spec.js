@@ -107,6 +107,73 @@ test("Trening er én faktisk treningsdag med fire økter og uten gammel kommando
   await expect(page.locator('#trainingDayResources [data-modal-open="modalWeaknesses"]')).toBeVisible();
 });
 
+test("slitne og skadde vises med navn og råd i et kompakt mobilpanel", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await openTraining(page);
+  await expect(page.locator("#trainingDayRiskDetails")).toBeHidden();
+
+  await page.evaluate(() => {
+    const list = document.getElementById("squadConditionList");
+    const entries = [
+      { type: "is-injured", name: "Skadet testspiller", advice: "Ute 2 uker." },
+      { type: "is-tired", name: "Sliten testspiller", advice: "Bør hviles før neste kamp." }
+    ];
+    list.replaceChildren(...entries.map(({ type, name, advice }) => {
+      const item = document.createElement("li");
+      item.className = type;
+      const strong = document.createElement("strong");
+      strong.textContent = name;
+      const span = document.createElement("span");
+      span.textContent = advice;
+      item.append(strong, span);
+      return item;
+    }));
+  });
+  await expect(page.locator("#trainingDayRiskDetails")).toBeVisible();
+  await expect(page.locator("#trainingDayRiskSummary")).toHaveText("Se 2 spillere som trenger oppfølging");
+  await page.locator("#trainingDayRiskSummary").click();
+  await expect(page.locator("#trainingDayRiskList .is-injured strong")).toHaveText("Skadet testspiller");
+  await expect(page.locator("#trainingDayRiskList .is-tired span")).toHaveText("Bør hviles før neste kamp.");
+  await expectNoHorizontalOverflow(page);
+
+  await page.evaluate(() => document.getElementById("squadConditionList").replaceChildren());
+  await expect(page.locator("#trainingDayRiskDetails")).toBeHidden();
+  await expect(page.locator("#trainingDepth")).toBeHidden();
+});
+
+test("neste treningssteg bruker programvalg og kampnavigasjon uten skjulte arbeidsflater", async ({ page }) => {
+  await openTraining(page);
+  await page.evaluate(() => {
+    const list = document.getElementById("trainingPlanSteps");
+    list.replaceChildren(...["Les innboks", "Treningsprogram", "Ukens fokus", "Individuell oppfølging"].map((title, index) => {
+      const row = document.createElement("li");
+      row.className = index === 1 ? "training-plan-step is-next" : "training-plan-step";
+      const heading = document.createElement("h3");
+      heading.textContent = `${index + 1}. ${title}`;
+      const detail = document.createElement("p");
+      detail.className = "training-plan-step-detail";
+      detail.textContent = "Velg treningsrammen før kampen.";
+      row.append(heading, detail);
+      return row;
+    }));
+    document.getElementById("trainingChoiceStatus").dataset.selected = "false";
+  });
+  await expect(page.locator("#trainingDayNextTitle")).toHaveText("Velg ukas treningsprogram");
+  await expect(page.locator("#trainingDayNextAction")).toHaveText("Velg program");
+  await page.locator("#trainingDayNextAction").click();
+  await expect(page.locator("#managerTeamChoiceDrawerBody #trainingPrograms")).toBeVisible();
+  await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
+  await expect(page.locator("#trainingWorkspace")).toBeHidden();
+
+  await page.evaluate(() => {
+    document.getElementById("trainingChoiceStatus").dataset.selected = "true";
+  });
+  await expect(page.locator("#trainingDayNextTitle")).toHaveText("Treningsuka er klar");
+  await expect(page.locator("#trainingDayNextAction")).toHaveText("Til Kamp");
+  await page.locator("#trainingDayNextAction").click();
+  await expect(page.locator('[data-tab-section="kamp"]')).toBeVisible();
+});
+
 test("program fokus og individuell oppfølging åpner komplette eksisterende valg i felles drawer", async ({ page }) => {
   await openTraining(page);
   await expect(page.locator("#teamChangeTrainingProgram")).toBeAttached();
