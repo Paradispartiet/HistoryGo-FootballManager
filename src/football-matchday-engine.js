@@ -1806,6 +1806,9 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     // v7.2: prefer a VERIFIED weak outlet only when multiple routes
     // were explicitly authored, never from missing scouting evidence.
     causalOpponentRouteAdaptationVersion: 1,
+    // v7.3: new games can compare each executed escape with prior
+    // simulated press phases, without changing the v7.2 choice or xG.
+    causalOpponentSequenceVersion: 1,
     // Four remaining plans opt in only on new match sessions.
     causalGameControlVersion: 1,
     sourcedSubstitutionVersion: 2,
