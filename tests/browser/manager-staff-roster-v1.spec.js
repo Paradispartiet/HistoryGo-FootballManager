@@ -38,7 +38,7 @@ test.beforeEach(async ({ page }) => {
       leagueName: "Eliteserien",
       leagueSeasonStatus: "active"
     }));
-    localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify({
+    if (!localStorage.getItem("hgfm.teamMerits.v1")) localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify({
       recruitmentVersion: 1,
       recruitedPlayerIds: [],
       unlockedPlaceIds: [],
