@@ -15952,7 +15952,11 @@ function renderStaffUnlocks() {
     const ul = document.createElement("ul");
     [...identity.strengths, ...identity.gaps].slice(0, 3).forEach((text) => { const li = document.createElement("li"); li.textContent = text; ul.append(li); });
     box.append(ul);
-    identityHost.prepend(box);
+    // Details requires its summary first: keep the assessment inside the fold,
+    // rather than showing a floating panel above the summary on mobile.
+    const summary = identityHost.querySelector(":scope > summary");
+    if (summary) summary.after(box);
+    else identityHost.prepend(box);
   }
 
   const availableList = elements.availableStaffList;
