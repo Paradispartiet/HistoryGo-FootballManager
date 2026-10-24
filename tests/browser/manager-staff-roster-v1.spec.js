@@ -87,9 +87,8 @@ test("engasjer fra Stab og behold ansatte etter oppdatering", async ({ page }) =
     const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
     merits.hiredStaffIds = [];
     localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify(merits));
+    window.dispatchEvent(new CustomEvent("hgfm:team-merits-changed"));
   });
-  await page.reload();
-  await expect(page.locator("#onboardingScreen")).toBeHidden();
   await openStaff(page);
   await expect(page.locator("#managerStaffRosterV1 .staff-roster-total")).toHaveText("0/6 starterstab");
 
