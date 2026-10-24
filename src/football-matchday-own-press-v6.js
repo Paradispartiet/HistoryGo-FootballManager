@@ -763,7 +763,7 @@ function explainDefensiveCoverTiming(timing) {
   };
 }
 
-function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup, profile, cover, targetFlank) {
+function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup, profile, cover, targetFlank, adaptiveChoice = null) {
   // An explicit observation of isolation overrides an older authored route.
   // A generic 'supported' observation with no named route must not invent one.
   if (escapeEvidence !== "supported" ||
@@ -775,7 +775,16 @@ function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup,
       .map(player => player.playerId) : [];
   return {
     pathwayId: opponentRoute, label: pathway.label,
-    documentedTargetFlank: targetFlank,
+    documentedTargetFlank: adaptiveChoice ? null : targetFlank,
+    ...(adaptiveChoice ? {
+      simulatedTargetFlank: targetFlank,
+      opponentAdaptation: {
+        policy: "weakest_verified_flank",
+        selectedFlank: targetFlank,
+        reason: adaptiveChoice.reason,
+        basis: adaptiveChoice.basis
+      }
+    } : {}),
     exposedChannel: pathway.exposedChannel,
     basis: "simulated_tactical_hypothesis_v6",
     status: outcome === "regain" ? "prevented" :
@@ -791,6 +800,10 @@ function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup,
     advancedFullbacks,
     defensiveReply: {
       ...defensiveReplyForPressExit(opponentRoute, lineup, profile, outcome, targetFlank),
+      ...(adaptiveChoice ? { evidence: {
+        ...defensiveReplyForPressExit(opponentRoute, lineup, profile, outcome, targetFlank).evidence,
+        documentedTargetFlank: null, simulatedTargetFlank: targetFlank
+      } } : {}),
       containmentAdjustment: round3(cover.adjustment),
       weakestCoverFit: cover.weakestCoverFit,
       coverTiming: cover.timing,
@@ -818,6 +831,49 @@ function distinctSupport(lineup, groups) {
     selected.push(player);
   }
   return selected;
+}
+
+
+// v7.1 opponent choice: a KNOWN wide-escape route may select the weaker
+// VERIFIED defensive flank. The opt-in describes a simulated tactical
+// decision, not historical scouting or hidden positional tracking.
+// We require both backs and their role fits, so missing data is not treated
+// as proof of a defensive weakness. Tied or near-equal fits are neutral.
+function selectVerifiedWeakFlank(lineup, profile) {
+  if (!Array.isArray(lineup) || !finite(profile?.balanceScore) ||
+    !finite(profile?.restDefenseScore)) return null;
+  const known = lineup.filter(player => player?.playerId &&
+    player.matchFitKnown === true && finite(player.matchScore) &&
+    typeof player.roleId === "string" && player.roleId.length);
+  if (known.length < 10) return null;
+  const back = position => {
+    const candidates = lineup.filter(player => player?.position === position);
+    if (candidates.length !== 1) return null;
+    const p = candidates[0];
+    return p?.playerId && p.matchFitKnown === true &&
+      finite(p.matchScore) && p.matchScore >= 0 && p.matchScore <= 100 &&
+      typeof p.roleId === "string" && p.roleId.length ? p : null;
+  };
+  const left = back("LB");
+  const right = back("RB");
+  if (!left || !right || left.playerId === right.playerId) return null;
+  const leftCovered = left.roleId === "support_fullback";
+  const rightCovered = right.roleId === "support_fullback";
+  // No evidence of ANY supported wide cover: do not rank two unknown gaps.
+  if (!leftCovered && !rightCovered) return null;
+  if (leftCovered !== rightCovered) return {
+    flank: leftCovered ? "right" : "left",
+    reason: "verified_role_coverage_gap",
+    basis: "known_formation_roles_and_fit"
+  };
+  // A 5-point game-model threshold avoids arbitrary switches on tiny fit
+  // differences. Ratings remain role-match evidence, not measured speed.
+  if (Math.abs(left.matchScore - right.matchScore) < 5) return null;
+  return {
+    flank: left.matchScore < right.matchScore ? "left" : "right",
+    reason: "weaker_documented_role_fit",
+    basis: "known_formation_roles_and_fit"
+  };
 }
 
 export function resolveOwnPressAgainstOpponent(session, {
@@ -855,8 +911,20 @@ export function resolveOwnPressAgainstOpponent(session, {
   // Input convention: target flank is expressed from OUR defending viewpoint.
   // No guess from a route label or lineup when the destination is unknown.
   const targetFlankInput = opponent?.tacticalBehaviour?.pressEscapeTargetFlank;
-  const targetFlank = counter === "switch_play" && escapeEvidence === "supported" &&
-    ["left", "right"].includes(targetFlankInput) ? targetFlankInput : null;
+  const explicitlyTargeted = counter === "switch_play" &&
+    escapeEvidence === "supported" && ["left", "right"].includes(targetFlankInput);
+  const adaptationRequested = counter === "switch_play" &&
+    escapeEvidence === "supported" && !explicitlyTargeted &&
+    opponent?.tacticalBehaviour?.pressEscapeTargetPolicy === "weakest_verified_flank";
+  // An authored timeline or historic timing window must never be silently
+  // remapped to a different channel. Authors must explicitly target it.
+  const canAdapt = adaptationRequested &&
+    opponent?.tacticalBehaviour?.pressEscapeTiming == null &&
+    opponent?.tacticalBehaviour?.pressEscapeActionSequence == null;
+  const adaptiveChoice = canAdapt
+    ? selectVerifiedWeakFlank(session.lineupSnapshot, profile) : null;
+  const targetFlank = explicitlyTargeted ? targetFlankInput :
+    adaptiveChoice?.flank || null;
   const documentedEscape = escapeEvidence === "supported";
   const pressProbability = clamp(
     0.53 + (avgFit - 65) * 0.004 +
@@ -888,7 +956,7 @@ export function resolveOwnPressAgainstOpponent(session, {
   const contained = !regained && clamp(protection, 0, 0.999999999) < containment;
   const outcome = regained ? "regain" : contained ? "contained" : "escaped";
   const counterplay = counterplayForPressExit(counter, escapeEvidence,
-    outcome, session.lineupSnapshot, profile, cover, targetFlank);
+    outcome, session.lineupSnapshot, profile, cover, targetFlank, adaptiveChoice);
   const chanceSide = regained ? "for" : outcome === "escaped" ? "against" : null;
   const steps = config.steps.map((action, i) => ({
     action,
@@ -910,19 +978,30 @@ export function resolveOwnPressAgainstOpponent(session, {
     xgDeltaAgainst: regained ? -0.01 : contained ? 0.02 :
       restDefense >= 70 ? 0.06 : 0.12,
     cause: regained ? config.regain :
-      contained
+      (contained
         ? counterplay?.containedCause ||
           "Motstanderen spiller seg ut av første press, men restforsvaret stanser overgangen."
         : counterplay?.escapedCause ||
           (documentedEscape
             ? "Motstanderen bruker dokumentert utvei fra presset; bakre sikring blir utfordret."
-            : "Første pressledd brytes og restforsvaret rekker ikke å stenge neste rom."),
+            : "Første pressledd brytes og restforsvaret rekker ikke å stenge neste rom.")) +
+      (adaptiveChoice
+        ? " Motstanderen valgte vår " +
+          (targetFlank === "left" ? "venstre" : "høyre") +
+          " kant ut fra kjent forsvarsrolle og rollepassform."
+        : ""),
     steps, counterplay,
     evidence: {
       opponentTrigger: config.opponentMetric, opponentValue: scenario,
       pressResistance: resistance, transitionThreat: threat,
       opponentEscapeRoute: counter || "unknown",
-      documentedTargetFlank: targetFlank,
+      documentedTargetFlank: adaptiveChoice ? null : targetFlank,
+      ...(adaptationRequested ? {
+        opponentFlankAdaptation: adaptiveChoice
+          ? { status: "selected", selectedFlank: adaptiveChoice.flank,
+              reason: adaptiveChoice.reason, basis: adaptiveChoice.basis }
+          : { status: "insufficient_or_conflicting_evidence" }
+      } : {}),
       opponentEscapeEvidence: escapeEvidence || "unknown",
       resolvedEscapePathway: counterplay?.pathwayId || "unknown",
       routeCoverFitFloor: cover.weakestCoverFit,
