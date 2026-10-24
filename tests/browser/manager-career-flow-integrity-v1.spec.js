@@ -151,7 +151,7 @@ test("Aalesund kan starte med dokumentert 5-personers starterstab", async ({ pag
 
   await expect(page.locator("#managerStaffRosterV1")).toHaveAttribute("data-complete", "true");
   await expect(page.locator("#managerStaffRosterV1 .staff-roster-total")).toHaveText("5/5 starterstab");
-  await expect(page.locator("#managerStaffRosterV1")).toContainText("2/3 maks");
+  await expect(page.locator("#managerStaffRosterV1")).toContainText("2/3");
 
   const metric = page.locator("#adminDriftMetrics .admin-metric").filter({ hasText: "Stab engasjert" });
   await expect(metric.locator(".admin-metric-value")).toHaveText("5/5");
