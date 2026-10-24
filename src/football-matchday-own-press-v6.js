@@ -876,6 +876,55 @@ function selectVerifiedWeakFlank(lineup, profile) {
   };
 }
 
+
+// v7.2: an opponent may CHOOSE only among explicitly supplied, independently
+// verified available outlets. Neither generic possession ratings nor the
+// defending XI create an attacking route. Each candidate uses the existing
+// single cover gate; unknown evidence or near-ties yield no inferred route.
+const VERIFIED_OUTLETS = new Set(["third_man", "switch_play", "direct"]);
+function selectVerifiedWeakOutlet(shape, lineup, profile) {
+  const candidates = shape?.pressEscapeCandidateRoutes;
+  if (shape?.pressEscape !== "supported" ||
+    shape?.pressEscapeRoutePolicy !== "weakest_verified_cover" ||
+    !Array.isArray(candidates) || candidates.length < 2 || candidates.length > 3 ||
+    candidates.some(route => !VERIFIED_OUTLETS.has(route)) ||
+    new Set(candidates).size !== candidates.length ||
+    !Array.isArray(lineup)) return null;
+
+  const flank = candidates.includes("switch_play")
+    ? selectVerifiedWeakFlank(lineup, profile) : null;
+  // A wide target with unknown left/right cover cannot be fairly compared
+  // against centrally named outlets.
+  if (candidates.includes("switch_play") && !flank) return null;
+  const verified = [];
+  for (const route of candidates) {
+    const target = route === "switch_play" ? flank.flank : null;
+    const reply = defensiveReplyForPressExit(
+      route, lineup, profile, "preflight", target);
+    if (!reply || reply.roleReadiness === "unknown") return null;
+    const cover = routeCoverEvidence(
+      route, "supported", lineup, profile, target, null);
+    verified.push({
+      route, targetFlank: target,
+      roleReadiness: reply.roleReadiness,
+      coverAdjustment: round3(cover.adjustment)
+    });
+  }
+  // Least protected FIRST, with a 0.008 probability-point separation
+  // between the two weakest lanes. This is an explicit model threshold,
+  // never observed opponent intelligence. Identical / near-tied routes
+  // remain unknown rather than being selected by array order.
+  const sorted = [...verified].sort((a, b) =>
+    a.coverAdjustment - b.coverAdjustment || a.route.localeCompare(b.route));
+  if (sorted[1].coverAdjustment - sorted[0].coverAdjustment < 0.008) return null;
+  return {
+    route: sorted[0].route,
+    flankChoice: sorted[0].route === "switch_play" ? flank : null,
+    candidates: verified,
+    basis: "authored_available_routes_and_verified_defensive_roles"
+  };
+}
+
 export function resolveOwnPressAgainstOpponent(session, {
   pressureRoll = Math.random,
   protectionRoll = Math.random
@@ -903,7 +952,15 @@ export function resolveOwnPressAgainstOpponent(session, {
 
   const avgFit = players.reduce((sum, p) => sum + p.matchScore, 0) / players.length;
   const weakestFit = Math.min(...players.map(p => p.matchScore));
-  const counter = opponent?.tacticalBehaviour?.pressEscapeRoute;
+  const shape = opponent?.tacticalBehaviour;
+  const routePolicyRequested = session.causalOpponentRouteAdaptationVersion === 1 &&
+    shape?.pressEscapeRoutePolicy === "weakest_verified_cover" &&
+    !Object.prototype.hasOwnProperty.call(shape, "pressEscapeRoute") &&
+    !Object.prototype.hasOwnProperty.call(shape, "pressEscapeTargetFlank") &&
+    shape.pressEscapeTiming == null && shape.pressEscapeActionSequence == null;
+  const routeChoice = routePolicyRequested
+    ? selectVerifiedWeakOutlet(shape, session.lineupSnapshot, profile) : null;
+  const counter = routeChoice?.route || shape?.pressEscapeRoute;
   // Both a known authored outlet and simulated live pressEscape describe
   // one documented route through the press. "isolated" is stronger direct
   // evidence than an older route label; unknown data awards no free bypass.
@@ -923,8 +980,8 @@ export function resolveOwnPressAgainstOpponent(session, {
   const canAdapt = adaptationRequested &&
     opponent?.tacticalBehaviour?.pressEscapeTiming == null &&
     opponent?.tacticalBehaviour?.pressEscapeActionSequence == null;
-  const adaptiveChoice = canAdapt
-    ? selectVerifiedWeakFlank(session.lineupSnapshot, profile) : null;
+  const adaptiveChoice = routeChoice?.flankChoice ||
+    (canAdapt ? selectVerifiedWeakFlank(session.lineupSnapshot, profile) : null);
   const targetFlank = explicitlyTargeted ? targetFlankInput :
     adaptiveChoice?.flank || null;
   const documentedEscape = escapeEvidence === "supported";
@@ -957,8 +1014,17 @@ export function resolveOwnPressAgainstOpponent(session, {
   if (!regained && !finite(protection)) return null;
   const contained = !regained && clamp(protection, 0, 0.999999999) < containment;
   const outcome = regained ? "regain" : contained ? "contained" : "escaped";
-  const counterplay = counterplayForPressExit(counter, escapeEvidence,
+  const originalCounterplay = counterplayForPressExit(counter, escapeEvidence,
     outcome, session.lineupSnapshot, profile, cover, targetFlank, adaptiveChoice);
+  const routeAdaptation = routeChoice ? {
+    status: "selected", selectedRoute: routeChoice.route,
+    candidates: routeChoice.candidates,
+    basis: routeChoice.basis
+  } : routePolicyRequested
+    ? { status: "insufficient_or_conflicting_evidence" } : null;
+  const counterplay = originalCounterplay && routeChoice ? {
+    ...originalCounterplay, opponentRouteAdaptation: routeAdaptation
+  } : originalCounterplay;
   const chanceSide = regained ? "for" : outcome === "escaped" ? "against" : null;
   const steps = config.steps.map((action, i) => ({
     action,
@@ -987,16 +1053,23 @@ export function resolveOwnPressAgainstOpponent(session, {
           (documentedEscape
             ? "Motstanderen bruker dokumentert utvei fra presset; bakre sikring blir utfordret."
             : "Første pressledd brytes og restforsvaret rekker ikke å stenge neste rom.")) +
-      (adaptiveChoice
+      (adaptiveChoice && !regained
         ? " Motstanderen valgte vår " +
           (targetFlank === "left" ? "venstre" : "høyre") +
           " kant ut fra kjent forsvarsrolle og rollepassform."
+        : "") +
+      (routeChoice && !regained
+        ? " Blant kjente utveier valgte motstanderen " +
+          (counter === "third_man" ? "tredjemann sentralt" :
+            counter === "switch_play" ? "sideskift" : "direkte utspill") +
+          " mot vår svakere dokumenterte sikring."
         : ""),
     steps, counterplay,
     evidence: {
       opponentTrigger: config.opponentMetric, opponentValue: scenario,
       pressResistance: resistance, transitionThreat: threat,
-      opponentEscapeRoute: counter || "unknown",
+      opponentEscapeRoute: shape?.pressEscapeRoute || "unknown",
+      ...(routePolicyRequested ? { opponentRouteAdaptation: routeAdaptation } : {}),
       documentedTargetFlank: adaptiveChoice ? null : targetFlank,
       ...(adaptationRequested ? {
         opponentFlankAdaptation: adaptiveChoice
