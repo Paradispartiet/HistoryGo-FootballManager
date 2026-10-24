@@ -21,7 +21,7 @@
 
 import { calculatePlayerMatchFit } from "./football-fit-engine.js";
 import { sourcedTeamSkillTendencies } from "./football-team-fit-engine.js";
-import { sourcedRecoverySkillsForPlayer } from "./football-player-stats.js";
+import { sourcedRecoverySkillsForPlayer, sourcedDefensiveReactionSkillsForPlayer } from "./football-player-stats.js";
 
 // Fire på benken, tre bytter. Du kan ikke bruke alle — valget skal koste noe.
 export const MAX_SUBSTITUTIONS = 3;
@@ -147,6 +147,7 @@ export function createBenchSnapshot({ benchPlayers, teamFit, tactic, roles = [] 
         name: str(player.name) || str(player.id),
         naturalPositions: asArray(player.naturalPositions).map((position) => str(position).toUpperCase()),
         sourcedRecoverySkills: sourcedRecoverySkillsForPlayer(player),
+        sourcedDefensiveReactionSkills: sourcedDefensiveReactionSkillsForPlayer(player),
         fitBySlot
       };
     });
@@ -335,6 +336,11 @@ export function applySubstitution(session, { outPlayerId, inPlayerId, minute = 0
             ...asArray(session.benchSnapshot)
               .find((bench) => bench.playerId === evaluation.inPlayerId)
               ?.sourcedRecoverySkills || []
+          ],
+          sourcedDefensiveReactionSkills: [
+            ...asArray(session.benchSnapshot)
+              .find((bench) => bench.playerId === evaluation.inPlayerId)
+              ?.sourcedDefensiveReactionSkills || []
           ],
           sourcedMetricBonuses: { ...evaluation.sourcedMetricBonusesAfter },
           // Den som kommer inn har spilt fra dette minuttet — ikke fra avspark.
