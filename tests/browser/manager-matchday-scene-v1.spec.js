@@ -317,3 +317,177 @@ test("spill og motspill forklarer sikringsbytte uten å endre sjanser eller eldr
   await expectNoHorizontalOverflow(page);
   await expect(traces.nth(0).locator(".matchday-defensive-cover")).toBeVisible();
 });
+
+
+test("v7.4: sett pressfase gir spillbart motgrep, lagring og forklarbart replay", async ({ page }) => {
+  // Bruk v7.4-motorens egen kildebaserte testscenario. Ordinære klubbprofiler
+  // får IKKE oppdiktede utveier bare for å gjøre knappen tilgjengelig.
+  const {
+    resolveOwnPressAgainstOpponent, getManagerPressCounterOptions,
+    annotateOwnPressChances
+  } = await import("../../src/football-matchday-own-press-v6.js");
+  const { applyMatchPressCounter, advanceMatchClock } =
+    await import("../../src/football-matchday-engine.js");
+  const positions = ["GK", "CB", "DM", "CM", "AM", "ST", "LW", "RW", "LB", "RB", "CB"];
+  const roles = {
+    CB: "ball_playing_centre_back", DM: "balancing_six",
+    CM: "pressing_midfielder", LB: "support_fullback", RB: "support_fullback"
+  };
+  const lineup = positions.map((position, index) => ({
+    playerId: "v74-browser-" + index,
+    position, roleId: roles[position] || "role_" + position,
+    matchFitKnown: true,
+    matchScore: position === "DM" ? 84 : position === "CM" ? 64 :
+      position === "CB" ? 83 : 75
+  }));
+  const tacticalProfile = {
+    pressScore: 78, balanceScore: 74, restDefenseScore: 71,
+    buildUpScore: 69, depthScore: 71, widthScore: 69,
+    relationshipScore: 72, teamScore: 75
+  };
+  const opponent = {
+    id: "v74-verified-outlets", name: "Motstander med verifiserte utveier",
+    strength: 72, pressResistance: 85,
+    defensiveStructure: 69, transitionThreat: 78,
+    styleTraits: { shortBuildUp: 82, possessionControl: 80, transitionThreat: 78 },
+    tacticalBehaviour: {
+      pressEscape: "supported",
+      pressEscapeRoutePolicy: "weakest_verified_cover",
+      pressEscapeCandidateRoutes: ["third_man", "direct"]
+    }
+  };
+  const known = {
+    id: "v74-browser-first", version: 2,
+    causalPressingVersion: 1, causalOpponentRouteAdaptationVersion: 1,
+    causalOpponentSequenceVersion: 1, causalManagerPressCounterVersion: 1,
+    selectedTacticId: "midfield_press_trap",
+    activePlanSnapshot: { id: "midfield_press_trap" },
+    tacticSnapshot: { id: "midfield_press_trap" },
+    lineupSnapshot: lineup, opponent,
+    teamFitSnapshot: { tacticalProfile, historicalScore: 70 },
+    strengthSnapshot: { finalStrength: 74, modifiers: { missing: 0 } },
+    planMatchup: { edge: 1.5 }, timeline: [], minuteLog: [],
+    events: [], decisions: [], substitutions: [], planChanges: [],
+    score: { for: 0, against: 0 }
+  };
+  const firstPhase = resolveOwnPressAgainstOpponent(known, {
+    pressureRoll: () => 0.99, protectionRoll: () => 0.99
+  });
+  expect(firstPhase.status).toBe("escaped");
+  expect(firstPhase.evidence.opponentRouteAdaptation.selectedRoute).toBe("third_man");
+
+  // Gå via appens virkelige kampdag, ikke en egen test-UI eller en engine-only test.
+  await prepareAndOpenPreMatch(page);
+  await page.locator("#matchdayCommand .matchday-scene-action").click();
+  await expect(page.locator("#matchdayCommand .matchday-scene")).toHaveAttribute("data-phase", "live");
+  const liveSession = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem("hgfm.matchday.v1") || "{}").session
+  );
+  expect(liveSession?.events?.length).toBeGreaterThan(1);
+
+  const openingChance = annotateOwnPressChances([{
+    minute: 12, side: "against", quality: 0.06, scored: false,
+    detail: "Motstanderen spiller seg ut av presset"
+  }], firstPhase)[0];
+  const seed = {
+    ...liveSession, ...known,
+    events: liveSession.events, phase: "event_1", liveMinute: 23,
+    minuteLog: [{ ...openingChance, type: "chance" }],
+    timeline: [{
+      segment: 0, range: { from: 1, to: 23 },
+      tacticalPhase: firstPhase
+    }]
+  };
+  expect(getManagerPressCounterOptions(seed)?.routes).toContain("third_man");
+
+  // Finn en deterministisk kamp der neste ekte motorperiode viser omfordelingen
+  // også i en eksisterende sjanses replay (ikke generer ekstra sjanse/xG).
+  let fixture = null;
+  for (let attempt = 0; attempt < 150; attempt += 1) {
+    const candidate = { ...seed, id: "v74-browser-" + attempt };
+    const preview = advanceMatchClock(applyMatchPressCounter(candidate, "third_man"));
+    const next = preview.timeline.at(-1)?.tacticalPhase;
+    if (next?.status === "escaped" &&
+        next.evidence?.opponentRouteAdaptation?.managerCounter?.status === "redistributed" &&
+        preview.minuteLog.some((entry) =>
+          entry.tacticalMoment?.counterplay?.opponentRouteAdaptation?.managerCounter?.status === "redistributed")) {
+      fixture = candidate;
+      break;
+    }
+  }
+  expect(fixture, "Deterministisk v7.4-scenario med synlig neste periode").not.toBeNull();
+
+  async function persistSession(session) {
+    await page.evaluate((savedSession) => {
+      const matchday = JSON.parse(localStorage.getItem("hgfm.matchday.v1") || "{}");
+      matchday.session = savedSession;
+      localStorage.setItem("hgfm.matchday.v1", JSON.stringify(matchday));
+      const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "{}");
+      if (envelope.sessions?.league) {
+        envelope.sessions.league.matchday = matchday;
+        localStorage.setItem("hgfm.modeSessions.v1", JSON.stringify(envelope));
+      }
+    }, session);
+  }
+
+  // Usett kampfase kan ikke avdekke knappen.
+  await persistSession({ ...fixture, liveMinute: 22 });
+  await page.reload();
+  await openMatchday(page);
+  const counter = page.locator("#matchdayResult details.match-plan-switcher")
+    .filter({ has: page.locator("summary", { hasText: "Motgrep mot utspill" }) });
+  await expect(counter).toHaveCount(0);
+
+  await persistSession(fixture);
+  await page.reload();
+  await openMatchday(page);
+  await expect(counter).toHaveCount(1);
+  await counter.locator("summary").click();
+  await expect(counter.getByRole("button", { name: "Sikre Tredjemann sentralt" })).toBeVisible();
+  await counter.getByRole("button", { name: "Sikre Tredjemann sentralt" }).click();
+
+  const afterChoice = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem("hgfm.matchday.v1")).session
+  );
+  expect(afterChoice.managerPressCounter).toMatchObject({
+    route: "third_man", observedRoute: "third_man", sourceSegment: 0
+  });
+  expect(afterChoice.minuteLog.filter((entry) => entry.type === "counter")).toHaveLength(1);
+  expect(afterChoice.timeline[0]).toEqual(fixture.timeline[0]);
+  await expect(counter).toContainText("Gjeldende prioritet");
+  await expect(counter.getByRole("button", { name: "Sikre Tredjemann sentralt" })).toHaveCount(0);
+
+  // Kontroller persistert grep, ikke bare tilstand i minnet.
+  await page.reload();
+  await openMatchday(page);
+  await expect(counter).toContainText("Motgrep mot utspill · Tredjemann sentralt");
+  const restored = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem("hgfm.matchday.v1")).session
+  );
+  expect(restored.managerPressCounter).toEqual(afterChoice.managerPressCounter);
+
+  await page.locator("#matchdayResult .matchday-event-card .matchday-decision-button").first().click();
+  const progressed = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem("hgfm.matchday.v1")).session
+  );
+  const next = progressed.timeline[1].tacticalPhase;
+  expect(next.evidence.opponentRouteAdaptation.managerCounter).toMatchObject({
+    status: "redistributed", prioritisedRoute: "third_man", exposedRoute: "direct"
+  });
+  expect(next.evidence.opponentRouteAdaptation.selectedRoute).toBe("direct");
+  expect(next.cause).toMatch(/omfordelt kjent sikring/);
+  expect(progressed.timeline[0]).toEqual(fixture.timeline[0]);
+
+  const skip = page.locator("#matchdayResult .matchday-live-button.is-secondary");
+  if (await skip.isVisible()) await skip.click();
+  const replay = page.locator("#matchdayResult .matchday-tactical-moment")
+    .filter({ hasText: "omfordelt kjent sikring" }).first();
+  await expect(replay).toHaveCount(1);
+  await replay.locator("summary").click();
+  await expect(replay.locator("p").first()).toContainText("omfordelt kjent sikring");
+  await page.setViewportSize({ width: 390, height: 844 });
+  const overflow = await page.evaluate(() =>
+    document.documentElement.scrollWidth - document.documentElement.clientWidth
+  );
+  expect(overflow).toBeLessThanOrEqual(1);
+});
