@@ -1800,6 +1800,9 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     causalCompactBlockVersion: 1,
     // Only new matches opt in to pre-chance pressing/escape sequences.
     causalPressingVersion: 1,
+    // v7.1: new matches can adapt a KNOWN switch-play route after an
+    // evidenced opponent reaction; existing saves retain their prior logic.
+    causalOpponentFlankAdaptationVersion: 1,
     // Four remaining plans opt in only on new match sessions.
     causalGameControlVersion: 1,
     sourcedSubstitutionVersion: 2,
@@ -2394,7 +2397,25 @@ export function applyOpponentAdaptation(session) {
   const adjustment = deriveOpponentAdjustment(readGameState(session), { alreadyAdjusted: done });
   if (!adjustment) return session;
 
-  const opponent = applyOpponentAdjustment(session.opponent, adjustment);
+  const adjustedOpponent = applyOpponentAdjustment(session.opponent, adjustment);
+  const priorBehaviour = session.opponent?.tacticalBehaviour;
+  // Preserve an already-authored SWITCH route only if the NEW opponent
+  // adjustment confirms an available press escape. No route is invented
+  // from generic possession scores, and old in-progress saves are unchanged.
+  const sourceConfirmed = session.causalOpponentFlankAdaptationVersion === 1 &&
+    priorBehaviour?.pressEscapeRoute === "switch_play" &&
+    adjustedOpponent?.tacticalBehaviour?.pressEscape === "supported" &&
+    !Object.prototype.hasOwnProperty.call(priorBehaviour, "pressEscapeTargetFlank") &&
+    priorBehaviour.pressEscapeTiming == null &&
+    priorBehaviour.pressEscapeActionSequence == null;
+  const opponent = sourceConfirmed ? {
+    ...adjustedOpponent,
+    tacticalBehaviour: {
+      ...adjustedOpponent.tacticalBehaviour,
+      pressEscapeRoute: "switch_play",
+      pressEscapeTargetPolicy: "weakest_verified_flank"
+    }
+  } : adjustedOpponent;
   const activePlan = session.activePlanSnapshot || session.tacticSnapshot || null;
 
   const adapted = {
