@@ -39,7 +39,7 @@ console.log("\nManager Club Organization v1 audit");
 check("managerskallet laster klubborganisasjonen", files.shell.includes('import "./manager-club-organization-v1.js"'));
 check("Klubben reparentes til Kontor", files.organization.includes('boardButton.dataset.subnavParent = "dashboard"') && files.organization.includes('boardSection.dataset.tabParent = "dashboard"'));
 check("Klubben heter Klubben og ikke Klubboversikt", files.organization.includes('boardButton.textContent = "Klubben"'));
-check("dype gamle underfaner skjules", files.organization.includes('["progression", "admin"]') && files.style.includes(".club-organization-deep-proxy"));
+check("klubbutvikling forblir dyplenke, Stab er synlig kontorfane", files.organization.includes('progressionButton.classList.add("club-organization-deep-proxy")') && files.organization.includes('staffButton.classList.remove("club-organization-deep-proxy", "office-subnav-proxy")') && files.organization.includes('staffButton.dataset.subnavParent = "dashboard"') && files.style.includes(".club-organization-deep-proxy"));
 check("hovedflaten er romkatalog", files.organization.includes('const SURFACE_ID = "managerClubOrganization"') && files.organization.includes("club-organization-room-list"));
 check("organisasjonen har Trenerteam", files.organization.includes('"coaches"') && files.organization.includes('"Trenerteam"'));
 check("organisasjonen har Treningsanlegg uten nivå", files.organization.includes('"training-ground"') && files.organization.includes("ikke oppdiktede nivå 1–3"));

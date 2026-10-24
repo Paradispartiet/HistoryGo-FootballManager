@@ -31,15 +31,15 @@ function currentClubId() {
   return readGameStart()?.takeoverClubId || null;
 }
 function ensureSurface() {
-  const section = document.querySelector('[data-tab-section="admin"]'); if (!section) return null;
+  const mount = document.getElementById("managerStaffOverviewMount"); if (!mount) return null;
   let surface = document.getElementById(SURFACE_ID); if (surface) return surface;
-  surface = el("section", "manager-staff-roster-v1"); surface.id = SURFACE_ID; surface.setAttribute("aria-labelledby", "managerStaffRosterTitle"); section.prepend(surface); return surface;
+  surface = el("section", "manager-staff-roster-v1"); surface.id = SURFACE_ID; surface.setAttribute("aria-labelledby", "managerStaffRosterTitle"); mount.append(surface); return surface;
 }
 function roleCard(role) {
   const card = el("article", "staff-role-slot");
-  const head = el("div", "staff-role-slot-head"); head.append(el("strong", "", role.label), el("span", "staff-role-count", `${role.filled}/${role.required} maks`)); card.append(head);
+  const head = el("div", "staff-role-slot-head"); head.append(el("strong", "", role.label), el("span", "staff-role-count", `${role.filled}/${role.required}`)); card.append(head);
   if (role.names.length) { const list = el("ul", "staff-role-names"); role.names.forEach((name) => list.append(el("li", "", name))); card.append(list); }
-  else card.append(el("p", "staff-role-missing", "Ingen aktiv"));
+  else card.append(el("p", "staff-role-missing", "Ledig"));
   return card;
 }
 export function renderManagerStaffRoster() {
@@ -52,12 +52,12 @@ export function renderManagerStaffRoster() {
   const readiness = summarizeStarterStaffReadiness(staffCatalogue, clubId, hired);
   surface.textContent = ""; surface.dataset.complete = readiness.complete ? "true" : "false";
   const head = el("header", "staff-roster-head"); const copy = el("div");
-  const eyebrow = el("p", "eyebrow", "Kontor · Klubbdrift · Stab & drift");
-  const title = el("h2", "", "Førstelagsstab"); title.id = "managerStaffRosterTitle";
+  const eyebrow = el("p", "eyebrow", "Bemanning");
+  const title = el("h2", "", "Førstelagets roller"); title.id = "managerStaffRosterTitle";
   copy.append(
     eyebrow,
     title,
-    el("p", "muted-text", "Rollefeltene viser aktiv bruk mot maksimal kapasitet. Før seriestart må startersettet for valgt klubb engasjeres.")
+    el("p", "muted-text", "Fyll ledige roller ved å engasjere kandidater nedenfor.")
   );
   head.append(copy, el("strong", "staff-roster-total", `${readiness.hiredCount}/${readiness.requiredCount} starterstab`));
   const grid = el("div", "staff-role-grid"); capacity.byRole.forEach((role) => grid.append(roleCard(role)));

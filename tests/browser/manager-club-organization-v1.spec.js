@@ -71,7 +71,9 @@ test("Klubben ligger under Kontor ved siden av Kalender og ikke som ny hovedfane
   await expect(page.locator('.app-subtab[data-tab-target="board"]')).toHaveAttribute("data-subnav-parent", "dashboard");
   await expect(page.locator('.app-subtab[data-tab-target="calendar"]')).toBeVisible();
   await expect(page.locator('.app-subtab[data-tab-target="progression"]')).toBeHidden();
-  await expect(page.locator('.app-subtab[data-tab-target="admin"]')).toBeHidden();
+  await expect(page.locator('.app-subtab[data-tab-target="admin"]')).toBeVisible();
+  await expect(page.locator('.app-subtab[data-tab-target="admin"]')).not.toHaveClass(/office-subnav-proxy|club-organization-deep-proxy/);
+  await expect(page.locator('.app-subtab[data-tab-target="admin"]')).toHaveAttribute("data-subnav-parent", "dashboard");
   await expect(page.locator('.main-nav [data-tab-target="dashboard"]')).toHaveAttribute("aria-selected", "true");
   await expect(page.locator('.main-nav [data-tab-target="historygo"] .nav-label')).toHaveText("Speiding");
 });
@@ -124,10 +126,10 @@ test("Trenerteam viser faktisk engasjert stab og åpner eksisterende stabsarbeid
   await expect(page.locator("#managerClubRoomBody")).toContainText("Jørgen Isnes");
   await page.locator('[data-club-room-action="admin"]').click();
   await expect(page.locator('[data-tab-section="admin"]')).toBeVisible();
-  await expect(page.locator('[data-tab-section="admin"] > .club-organization-back')).toBeVisible();
-  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Klubben · Administrasjon");
+  await expect(page.locator('.app-subtab[data-tab-target="admin"]')).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Stab");
   await expect(page.locator("#adminEconomyNote")).toHaveCount(0);
-  await page.locator('[data-tab-section="admin"] > .club-organization-back').click();
+  await page.locator('.app-subtab[data-tab-target="board"]').click();
   await expect(page.locator('[data-tab-section="board"]')).toBeVisible();
   await expect(page.locator("#managerClubOrganization")).toBeVisible();
 });

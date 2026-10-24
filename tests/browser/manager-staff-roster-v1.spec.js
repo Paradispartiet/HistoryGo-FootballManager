@@ -13,11 +13,10 @@ const COMPLETE = [
 async function openStaff(page) {
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
-  await page.locator('.app-subtab[data-tab-target="board"]').click();
-  await expect(page.locator("#managerClubOrganization")).toBeVisible();
-  await page.locator('[data-club-room="coaches"]').click();
-  await expect(page.locator("#managerClubRoomDrawer")).toBeVisible();
-  await page.locator('[data-club-room-action="admin"]').click();
+  const staff = page.locator('.app-subtab[data-tab-target="admin"]');
+  await expect(staff).toBeVisible();
+  await staff.click();
+  await expect(staff).toHaveAttribute("aria-selected", "true");
   await expect(page.locator('[data-tab-section="admin"]')).toBeVisible();
   await expect(page.locator("#managerStaffRosterV1")).toBeVisible();
 }
@@ -39,7 +38,7 @@ test.beforeEach(async ({ page }) => {
       leagueName: "Eliteserien",
       leagueSeasonStatus: "active"
     }));
-    localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify({
+    if (!localStorage.getItem("hgfm.teamMerits.v1")) localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify({
       recruitmentVersion: 1,
       recruitedPlayerIds: [],
       unlockedPlaceIds: [],
@@ -59,7 +58,7 @@ test("viser aktiv rollekapasitet og komplett generisk starterstab", async ({ pag
   await expect(page.locator("#managerStaffRosterV1 .staff-roster-total")).toHaveText("6/6 starterstab");
   await expect(page.locator("#managerStaffRosterV1")).toHaveAttribute("data-complete", "true");
   await expect(page.locator("#managerStaffRosterV1")).toContainText("Assistenttrener");
-  await expect(page.locator("#managerStaffRosterV1")).toContainText("3/3 maks");
+  await expect(page.locator("#managerStaffRosterV1")).toContainText("3/3");
   await expect(page.locator("#managerStaffRosterV1")).toContainText("Fysio");
   await expect(page.locator("#managerStaffRosterV1")).toContainText("Keepertrener");
 });
@@ -81,6 +80,40 @@ test("tre trenere alene fullfører ikke det generiske startersettet", async ({ p
   });
   await expect(page.locator("#managerStaffRosterV1")).toHaveAttribute("data-complete", "false");
   await expect(page.locator("#managerStaffRosterV1 .staff-roster-total")).toHaveText("3/6 starterstab");
+});
+
+test("engasjer fra Stab og behold ansatte etter oppdatering", async ({ page }) => {
+  await page.evaluate(() => {
+    const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
+    merits.hiredStaffIds = [];
+    localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify(merits));
+    window.dispatchEvent(new CustomEvent("hgfm:team-merits-changed"));
+  });
+  await openStaff(page);
+  await expect(page.locator("#managerStaffRosterV1 .staff-roster-total")).toHaveText("0/6 starterstab");
+
+  const candidate = page.locator("#availableStaffList .staff-person-card").first();
+  await expect(candidate).toBeVisible();
+  const name = await candidate.locator(".unlock-card-title").innerText();
+  await candidate.getByRole("button", { name: "Engasjer" }).click();
+
+  await expect(page.locator("#managerStaffRosterV1 .staff-roster-total")).toHaveText("1/6 starterstab");
+  await expect(page.locator("#availableStaffList .staff-person-card").filter({ hasText: name })).toHaveCount(0);
+  await page.locator(".staff-workspace-fold").first().locator("summary").click();
+  await expect(page.locator("#hiredStaffList")).toContainText(name);
+
+  await page.reload();
+  await openStaff(page);
+  await expect(page.locator("#managerStaffRosterV1 .staff-roster-total")).toHaveText("1/6 starterstab");
+});
+
+test("Stab er tilgjengelig på 320px og 390px uten horisontal scroll", async ({ page }) => {
+  for (const width of [320, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    await openStaff(page);
+    await expect(page.locator("#availableStaffTitle")).toBeVisible();
+    await noOverflow(page);
+  }
 });
 
 test("390px uten overflow", async ({ page }) => {

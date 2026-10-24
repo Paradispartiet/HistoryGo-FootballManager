@@ -172,7 +172,7 @@
     <button type="button" class="app-subtab" role="tab" data-subnav-parent="board" data-tab-target="board">Klubboversikt</button>
     <button type="button" class="app-subtab" role="tab" data-subnav-parent="board" data-tab-target="historygo">Speiding</button>
     <button type="button" class="app-subtab" role="tab" data-subnav-parent="board" data-tab-target="progression">Klubbutvikling</button>
-    <button type="button" class="app-subtab" role="tab" data-subnav-parent="board" data-tab-target="admin">Stab &amp; drift</button>
+    <button type="button" class="app-subtab" role="tab" data-subnav-parent="dashboard" data-tab-target="admin">Stab</button>
   </nav>
 
   <main class="app-shell" id="app">
@@ -995,40 +995,38 @@
     <!-- ============================ ADMINISTRASJON ============================ -->
     <!-- Admin v1: den operative driften rundt laget. Leser tropp-/stab-state
          direkte (rosterReadiness, hired staff) via renderAdminRoom(). -->
-    <div class="tab-section dept dept-admin" data-tab-section="admin" data-tab-parent="board" hidden>
-      <section class="dept-hero dept-hero-admin">
-        <div>
-          <p class="eyebrow">Klubbdrift</p>
-          <h2>Stabskontor</h2>
-          <p class="dept-hero-lede">Stab, kampklar tropp og den operative driften rundt laget.</p>
-        </div>
-        <div class="dept-hero-stat dept-hero-stat-live">
-          <strong id="adminSquadCount">0</strong>
-          <span>spillere i stallen</span>
-        </div>
-      </section>
+    <div class="tab-section dept dept-admin" data-tab-section="admin" data-tab-parent="dashboard" hidden>
+      <div class="staff-workspace-v2">
+        <header class="staff-workspace-header">
+          <div>
+            <p class="eyebrow">Kontor / Personell</p>
+            <h2>Stab</h2>
+            <p>Velg medarbeidere til trenerteamet og se hvilke roller som mangler.</p>
+          </div>
+          <strong id="adminStaffCount" class="staff-workspace-count" aria-live="polite">0 ansatte</strong>
+        </header>
 
-      <div class="admin-board">
-        <article class="panel admin-feature">
-          <p class="eyebrow">Kamptropp</p>
-          <h3>Stall og kampklar tropp</h3>
-          <p class="muted-text">Slik ser kamptroppen ut før neste kamp.</p>
+        <div id="managerStaffOverviewMount"></div>
+
+        <section class="panel staff-recruitment-available" aria-labelledby="availableStaffTitle">
+          <div class="staff-recruitment-heading">
+            <h3 id="availableStaffTitle">Tilgjengelige kandidater</h3>
+            <p id="adminStaffNote" class="muted-text">Velg hvem du vil engasjere.</p>
+          </div>
+          <div id="availableStaffList" class="unlock-grid staff-candidate-list"></div>
+        </section>
+
+        <details class="panel staff-workspace-fold">
+          <summary>Engasjerte medarbeidere</summary>
+          <div id="hiredStaffList" class="unlock-grid staff-candidate-list"></div>
+        </details>
+
+        <details class="panel staff-workspace-fold">
+          <summary>Mer om klubbdriften</summary>
+          <p class="muted-text">Oversikt over kamptropp og bemanning.</p>
+          <div class="staff-operations-count">Spillere i stallen: <strong id="adminSquadCount">0</strong></div>
           <ul id="adminDriftMetrics" class="admin-metrics" aria-label="Driftsstatus"></ul>
-        </article>
-        <article class="panel admin-side admin-staff">
-          <h3>Stab</h3>
-          <p id="adminStaffCount" class="admin-staff-count">0 ansatte</p>
-          <p id="adminStaffNote" class="muted-text">Stab hentes inn via History Go-progresjon.</p>
-        <div class="unlock-block">
-          <h4>Tilgjengelig stab</h4>
-          <div id="availableStaffList" class="unlock-grid"></div>
-        </div>
-        <div class="unlock-block">
-          <h4>Engasjert stab</h4>
-          <div id="hiredStaffList" class="unlock-grid"></div>
-        </div>
-      
-        </article>
+        </details>
       </div>
     </div>
 
