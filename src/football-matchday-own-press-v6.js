@@ -1009,7 +1009,14 @@ export function getManagerPressCounterOptions(session) {
   return {
     sourceSegment: last.segment, observedRoute: adaptation.selectedRoute,
     routes: adaptation.candidates
-      .filter(item => item.roleReadiness === "supported_by_roles")
+      .filter(item => item.roleReadiness === "supported_by_roles" &&
+        Number.isFinite(item.coverAdjustment) &&
+        item.coverAdjustment < 0.03 &&
+        adaptation.candidates.some(donor =>
+          donor.route !== item.route &&
+          donor.roleReadiness === "supported_by_roles" &&
+          Number.isFinite(donor.coverAdjustment) &&
+          donor.coverAdjustment > 0))
       .map(item => item.route)
   };
 }
