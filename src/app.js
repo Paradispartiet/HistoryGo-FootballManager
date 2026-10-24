@@ -9736,8 +9736,8 @@ function renderAdminRoom() {
 
   if (elements.adminStaffNote) {
     elements.adminStaffNote.textContent = staffCount > 0
-      ? "Staben støtter treningsuka og kampdagen."
-      : "Ingen stab engasjert ennå — stab hentes inn via History Go-progresjon.";
+      ? "Engasjer flere ved behov. Ansatte er samlet under «Engasjerte medarbeidere»."
+      : "Trykk Engasjer på en kandidat for å bygge opp støtteapparatet.";
   }
 }
 
@@ -15873,32 +15873,43 @@ function renderPlaceReports() {
   });
 }
 
-// Ett stab-kort: navn, type, hva de kan ansettes som, viktigste ekspertise,
-// og prototype-notat når isPlaceholder er satt.
+// Kortene viser forståelige roller og ett tydelig ansettelsesvalg.
+// Den eksisterende hireStaff()-motoren er fortsatt eneste kilde for lagring.
+const STAFF_TYPE_DISPLAY = Object.freeze({
+  assistant_coach: "Assistenttrener",
+  coach: "Trener",
+  training_coach: "Trener",
+  physical_coach: "Fysisk trener",
+  physio: "Fysioterapeut",
+  physiotherapist: "Fysioterapeut",
+  goalkeeper_coach: "Keepertrener",
+  goalkeeper_trainer: "Keepertrener",
+  former_goalkeeper_goalkeeper_coach: "Keepertrener",
+  head_coach: "Hovedtrener",
+  scout: "Speider",
+  doctor: "Lege"
+});
+
+function staffTypeDisplay(type) {
+  const key = String(type || "").trim();
+  return STAFF_TYPE_DISPLAY[key] || (key ? key.replaceAll("_", " ").replace(/^./, (letter) => letter.toUpperCase()) : "Medarbeider");
+}
+
 function createStaffCard(member) {
   const card = createUnlockCard();
+  card.classList.add("staff-person-card");
   appendUnlockTitle(card, member.name || member.id);
-  appendUnlockMeta(card, `Type: ${member.staffType || "ukjent"}`);
-
-  const canBeHiredAs = Array.isArray(member.canBeHiredAs) ? member.canBeHiredAs : [];
-  if (canBeHiredAs.length) {
-    appendUnlockMeta(card, `Kan ansettes som: ${canBeHiredAs.join(", ")}`);
-  }
-
-  const expertiseIds = Array.isArray(member.expertiseIds) ? member.expertiseIds : [];
-  if (expertiseIds.length) {
-    appendUnlockMeta(card, `Ekspertise: ${expertiseIds.slice(0, 4).join(", ")}`);
-  }
-
+  const types = [member.staffType, ...(Array.isArray(member.canBeHiredAs) ? member.canBeHiredAs : [])]
+    .filter(Boolean).map(staffTypeDisplay);
+  const roles = [...new Set(types)];
+  appendUnlockMeta(card, roles.length ? roles.join(" · ") : "Medarbeider");
   if (member.isPlaceholder) {
     const note = document.createElement("p");
     note.className = "staff-placeholder-note";
-    note.textContent = "Prototypeprofil – krever research.";
+    note.textContent = "Foreløpig profil";
     card.append(note);
   }
-
   appendStaffAction(card, member);
-
   return card;
 }
 
@@ -15946,9 +15957,13 @@ function renderStaffUnlocks() {
   const availableList = elements.availableStaffList;
   if (availableList) {
     availableList.innerHTML = "";
-    const available = getUnlockedStaff();
+    const hiredIds = new Set(getHiredStaff().map((member) => String(member.id)));
+    const available = getUnlockedStaff()
+      .filter((member) => !hiredIds.has(String(member.id)))
+      .sort((a, b) => Number(b.starterStaff === true) - Number(a.starterStaff === true)
+        || String(a.name || a.id).localeCompare(String(b.name || b.id), "nb"));
     if (!available.length) {
-      renderUnlockEmpty(availableList, "Ingen tilgjengelig stab ennå. Besøk flere steder.");
+      renderUnlockEmpty(availableList, "Ingen ledige kandidater nå. Engasjerte medarbeidere vises nedenfor.");
     } else {
       available.forEach((member) => availableList.append(createStaffCard(member)));
     }
