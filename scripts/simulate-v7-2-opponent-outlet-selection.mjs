@@ -139,8 +139,10 @@ for (const [lineup, behaviour, additions] of [
   [baseline, policy, { causalOpponentRouteAdaptationVersion: undefined }]
 ]) {
   const neutral = phase(lineup, behaviour, 0.99, additions);
-  assert.equal(neutral.evidence.opponentRouteAdaptation?.status === "selected", false);
-  assert.equal(neutral.counterplay?.opponentRouteAdaptation, undefined);
+  // The existing press guard can return null for an incomplete XI, which is
+  // itself a safe neutral outcome. Never dereference an unplayable phase.
+  assert.equal(neutral?.evidence?.opponentRouteAdaptation?.status === "selected", false);
+  assert.equal(neutral?.counterplay?.opponentRouteAdaptation, undefined);
   checks += 2;
 }
 // An explicitly authored single outlet wins, including when an alternate list
