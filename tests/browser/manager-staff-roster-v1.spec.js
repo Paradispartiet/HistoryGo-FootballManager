@@ -86,6 +86,13 @@ test("engasjer fra Stab og behold ansatte etter oppdatering", async ({ page }) =
   await page.evaluate(() => {
     const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
     merits.hiredStaffIds = [];
+    // The available-staff list only shows candidates earned from an unlocked
+    // place (or the active local starter squad). Give this hiring test a real
+    // source instead of assuming an empty collection offers staff.
+    merits.unlockedPlaceIds = [...new Set([
+      ...(Array.isArray(merits.unlockedPlaceIds) ? merits.unlockedPlaceIds : []),
+      "kfum_arena"
+    ])];
     localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify(merits));
     window.dispatchEvent(new CustomEvent("hgfm:team-merits-changed"));
   });
