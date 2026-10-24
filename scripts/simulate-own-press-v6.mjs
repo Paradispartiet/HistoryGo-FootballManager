@@ -6,6 +6,8 @@ import { advanceMatchClock, finalizeMatchdaySession }
   from "../src/football-matchday-engine.js";
 import { highPressPhaseRoll }
   from "../src/football-matchday-high-press-v6.js";
+import { sourcedDefensiveReactionSkillsForPlayer, createLineupSnapshot }
+  from "../src/football-player-stats.js";
 
 const lineup = ["GK", "CB", "DM", "CM", "AM", "ST", "LW", "RW", "LB", "RB"].map((position, i) => ({
   playerId: "press-" + i, position, roleId: "role_" + position,
@@ -1004,12 +1006,20 @@ const reactionUnprovedRecord = {
   ...reactionStrongRecord,
   attributes: { provenance: { pace: "udokumentert", game_reading: "belagt" } }
 };
-const sourcedSkillEvidence = player => {
-  const allowed = new Set(["pace", "positioning", "anticipation",
-    "game_reading", "defensive_reading", "marking", "tackling"]);
-  return player.strengths.filter(skill =>
-    allowed.has(skill) && player.attributes.provenance[skill] === "belagt");
-};
+const sourcedSkillEvidence = sourcedDefensiveReactionSkillsForPlayer;
+assert.deepEqual(sourcedSkillEvidence(reactionStrongRecord),
+  ["game_reading", "pace", "positioning", "tackling"]);
+assert.deepEqual(sourcedSkillEvidence(reactionUnprovedRecord),
+  ["game_reading"]);
+// The matchday snapshot must carry sourced skills, never raw unproved claims.
+const v7Snapshot = createLineupSnapshot({ assignments: [{
+  player: { id: "sourced-defender", name: "Kontrollstopper", ...reactionStrongRecord },
+  slot: { slotId: "cb1", position: "CB" },
+  role: { id: "ball_playing_centre_back", name: "Stopper" },
+  fit: { matchScore: 75 }
+}] });
+assert.deepEqual(v7Snapshot[0].sourcedDefensiveReactionSkills,
+  sourcedSkillEvidence(reactionStrongRecord));
 const v7DefenderId = centralIds[0];
 const v7SecondId = centralIds[1];
 const v7Fixture = (playerId, traits) => eleven.map(player =>
