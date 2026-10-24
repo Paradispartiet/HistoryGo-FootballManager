@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="src/ui/manager-shell-v3.css">
   <link rel="stylesheet" href="src/ui/manager-training-scene-v2.css">
   <link rel="stylesheet" href="src/ui/manager-matchday-scene-v1.css">
+  <link rel="stylesheet" href="src/ui/manager-welcome-v1.css">
 </head>
 <body>
   <!-- ============================ ONBOARDING (EGEN SKJERM) ============================
@@ -16,16 +17,31 @@
        over alt til et valg er tatt — aldri på selve spillflaten. -->
   <div class="onboarding-screen" id="onboardingScreen" role="dialog" aria-modal="true" aria-label="Velg spillmodus">
     <section class="onboarding-card first-time-playthrough-card mode-select-card" id="firstTimePlaythroughCard" aria-live="polite">
-      <div class="onboarding-brand">
+      <div class="onboarding-brand welcome-hero">
+        <span class="welcome-crest" aria-hidden="true">HG<span>FM</span></span>
         <p class="eyebrow">HG Football Manager</p>
-        <h1>Start som manager</h1>
-        <p class="muted-text">Velg hvordan du vil spille. Du kan bytte modus når som helst fra kontoret.</p>
+        <h1>Din klubb. Dine valg.</h1>
+        <p class="muted-text">Ta plass på trenerbenken. Bygg laget, ta beslutningene og opplev fotballen innenfra.</p>
+      </div>
+      <div class="welcome-resume" aria-label="Lagret spill">
+        <div class="welcome-resume-copy">
+          <span class="welcome-resume-kicker">DIN KARRIERE</span>
+          <strong>Fortsett fra lagret spill</strong>
+          <small id="welcomeResumeSummary" role="status">Ser etter lagret spill …</small>
+        </div>
+        <button type="button" id="continueSavedGame" class="welcome-resume-action" disabled>
+          Fortsett <span aria-hidden="true">→</span>
+        </button>
+      </div>
+      <div class="welcome-mode-heading">
+        <strong>Velg spillmodus</strong>
+        <span>Start en ny opplevelse eller bytt modus</span>
       </div>
       <div class="first-time-brief-grid mode-choice-grid">
-        <button type="button" class="mode-choice-card is-primary-mode" data-start-mode="league" aria-describedby="firstTimeAssistant"><span>Hovedspill</span><strong>Ligaspill</strong><small>Klubb · tropp · startellever · trening · terminliste · tabell · innboks · kampdag · styre</small></button>
-        <button type="button" class="mode-choice-card" data-start-mode="national" aria-describedby="firstTimeAssistant"><span>Landslag</span><strong>Landslagssjef</strong><small>Ta ut landslagstroppen av spillerne du har samlet – inkludert stjernene fra landslagsarenaene.</small></button>
-        <button type="button" class="mode-choice-card" data-start-mode="scenario" aria-describedby="firstTimeAssistant"><span>Valgfritt</span><strong>Scenarioer</strong><small>Korte historiske og taktiske utfordringer inspirert av lag, epoker og spillestiler.</small></button>
-        <button type="button" class="mode-choice-card" data-start-mode="training" aria-describedby="firstTimeAssistant"><span>Egen modul</span><strong>Fotballvitenskap</strong><small>Lær fotball: formasjonsbiblioteket epoke for epoke. Helt uavhengig av spillet – ingenting her rører klubben din.</small></button>
+        <button type="button" class="mode-choice-card is-primary-mode" data-start-mode="league" aria-describedby="firstTimeAssistant"><span>01 / Hovedspill</span><strong>Ligaspill</strong><small>Led klubben, bygg laget og spill sesongen.</small><i aria-hidden="true">↗</i></button>
+        <button type="button" class="mode-choice-card" data-start-mode="national" aria-describedby="firstTimeAssistant"><span>02 / Landslag</span><strong>Landslagssjef</strong><small>Velg spillere og led nasjonen din.</small><i aria-hidden="true">↗</i></button>
+        <button type="button" class="mode-choice-card" data-start-mode="scenario" aria-describedby="firstTimeAssistant"><span>03 / Utfordringer</span><strong>Scenarioer</strong><small>Historiske lag, taktiske valg og korte oppdrag.</small><i aria-hidden="true">↗</i></button>
+        <button type="button" class="mode-choice-card" data-start-mode="training" aria-describedby="firstTimeAssistant"><span>04 / Utforsk</span><strong>Fotballvitenskap</strong><small>Lær formasjoner og fotballhistorie.</small><i aria-hidden="true">↗</i></button>
       </div>
       <p class="assistant-note"><strong>Assistenttrener:</strong> <span id="firstTimeAssistant">Start i ligaspill: skaff tropp, sett startellever, velg trening og spill neste ligakamp.</span></p>
     </section>

@@ -659,6 +659,8 @@ const elements = {
   firstTimeOpponent: document.querySelector("#firstTimeOpponent"),
   firstTimeAssistant: document.querySelector("#firstTimeAssistant"),
   modeChoiceCards: Array.from(document.querySelectorAll("[data-start-mode]")),
+  continueSavedGame: document.querySelector("#continueSavedGame"),
+  welcomeResumeSummary: document.querySelector("#welcomeResumeSummary"),
   scenarioList: document.querySelector("#scenarioList"),
   trainingChoiceGate: document.querySelector("#trainingChoiceGate"),
   trainingChoiceStatus: document.querySelector("#trainingChoiceStatus"),
@@ -5499,11 +5501,39 @@ function saveOnboarded() {
   try { localStorage.setItem(ONBOARDED_KEY, state.onboarded ? "1" : "0"); } catch (_) { /* privat modus */ }
 }
 
-// Onboarding v2: egen startskjerm styres uavhengig av spillflaten. Den vises til
-// spilleren har valgt modus (`onboarded`), og igjen når «Bytt modus» åpner den.
+// Startskjermen leser kun den eksisterende, hydrerte manager-saven.
+// En tom mode-envelope fra førstegangsstart er ikke et lagret spill.
+function renderWelcomeResume() {
+  const button = elements.continueSavedGame;
+  const summary = elements.welcomeResumeSummary;
+  if (!button || !summary) return;
+  const mode = state.modeEnvelope?.activeMode || state.gameStartState?.selectedMode;
+  const canResume = ["league", "national", "scenario", "training"].includes(mode)
+    && (state.onboarded || Boolean(getSavedClubName()) || Boolean(state.gameStartState?.activeLeagueSaveId));
+  button.disabled = !canResume;
+  if (!canResume) {
+    summary.textContent = "Ingen lagring funnet på denne enheten.";
+    return;
+  }
+  const labels = {
+    league: "Ligaspill",
+    national: "Landslagssjef",
+    scenario: "Scenarioer",
+    training: "Fotballvitenskap"
+  };
+  const detail = mode === "league" ? getSavedClubName()
+    : mode === "national" ? getNationalTeamNationality()
+    : "";
+  summary.textContent = [labels[mode], detail].filter(Boolean).join(" · ");
+}
+
+// Onboarding v2: egen startskjerm vises for nye spillere og ved «Bytt modus».
+// Spillere med en eksisterende save fortsetter automatisk ved normal omlasting,
+// og kan åpne startskjermen igjen fra Innstillinger.
 function renderOnboardingScreen() {
   const screen = elements.onboardingScreen;
   if (!screen) return;
+  renderWelcomeResume();
   screen.hidden = state.onboarded && !state.modeChooserOpen;
   document.body.classList.toggle("is-onboarding", !screen.hidden);
   // Startskjermen åpner alltid på modusvalget; klubb-steget vises kun når
@@ -17497,6 +17527,25 @@ function bindGameModeControls() {
     if (!elements.firstTimeAssistant) return;
     elements.firstTimeAssistant.textContent = assistantByStartMode[mode] || assistantByStartMode.league;
   }
+
+  elements.continueSavedGame?.addEventListener("click", () => {
+    const mode = state.modeEnvelope?.activeMode || state.gameStartState?.selectedMode;
+    if (!["league", "national", "scenario", "training"].includes(mode)
+      || !(state.onboarded || getSavedClubName() || state.gameStartState?.activeLeagueSaveId)) return;
+    // Eldre saves kan mangle onboarding-flagget; ved gjenopptakelse markeres
+    // bare dette flagget, uten å endre dataene for sesongen.
+    state.onboarded = true;
+    saveOnboarded();
+    // Fortsett er bare en navigasjon: ikke kall selectGameMode(), reset eller
+    // opprett en ny sesjon. Den hydrerte saven forblir urørt.
+    state.modeChooserOpen = false;
+    showOnboardingModeStep();
+    if (mode === "scenario") activateTab("scenarios");
+    else if (mode === "training") activateTab("hgfmLibrary");
+    else if (mode === "national") activateTab("dashboard");
+    else activateTab("calendar");
+    renderApp();
+  });
 
   elements.modeChoiceCards.forEach((card) => {
     card.addEventListener("mouseenter", () => setStartModeAssistant(card.dataset.startMode));
