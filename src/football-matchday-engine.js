@@ -7,7 +7,7 @@ import { annotatePeriodTacticalChances } from "./football-tactical-match-moments
 import { resolveHighPressBuildUp, annotateHighPressBuildUpChances, highPressPhaseRoll } from "./football-matchday-high-press-v6.js";
 import { resolveTurnoverTransition } from "./football-matchday-turnover-v6.js";
 import { resolveCompactBlockAttack, annotateCompactBlockChances } from "./football-matchday-compact-block-v6.js";
-import { resolveOwnPressAgainstOpponent, annotateOwnPressChances } from "./football-matchday-own-press-v6.js";
+import { resolveOwnPressAgainstOpponent, annotateOwnPressChances, getManagerPressCounterOptions } from "./football-matchday-own-press-v6.js";
 import { resolveGameControlPhase, annotateGameControlChances } from "./football-matchday-control-v6.js";
 import {
   applyOpponentAdjustment,
@@ -1809,6 +1809,9 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     // v7.3: new games can compare each executed escape with prior
     // simulated press phases, without changing the v7.2 choice or xG.
     causalOpponentSequenceVersion: 1,
+    // v7.4: the manager can deliberately reallocate verified route cover
+    // after watching a completed, played press sequence.
+    causalManagerPressCounterVersion: 1,
     // Four remaining plans opt in only on new match sessions.
     causalGameControlVersion: 1,
     sourcedSubstitutionVersion: 2,
@@ -2386,6 +2389,41 @@ export function logMatchMoment(session, moment) {
 // gang; momentum avgjør bare når det står likt.
 export function getMatchdayGameState(session) {
   return readGameState(session);
+}
+
+// v7.4: manager instruction in an already played match event.
+// An earlier executed opponent escape is needed. The instruction only
+// redistributes a verified specialist cover term in the NEXT period;
+// generic decision-xG and earlier periods remain untouched.
+export function applyMatchPressCounter(session, route) {
+  if (!session || typeof session !== "object" ||
+    session.phase === "resolved" || typeof route !== "string") return session;
+  const observation = getManagerPressCounterOptions(session);
+  const last = Array.isArray(session.timeline) ? session.timeline.at(-1) : null;
+  // Do not allow a counter based on tactical outcomes the player has not
+  // seen yet while the match clock is revealing the current period.
+  if (!observation || !observation.routes.includes(route) ||
+    !Number.isFinite(session.liveMinute) ||
+    !Number.isFinite(last?.range?.to) ||
+    session.liveMinute < last.range.to) return session;
+  const names = {
+    third_man: "tredjemann gjennom midtbanen",
+    switch_play: "sideskift",
+    direct: "direkte utspill"
+  };
+  const next = {
+    ...session,
+    managerPressCounter: {
+      route, observedRoute: observation.observedRoute,
+      sourceSegment: observation.sourceSegment,
+      basis: "manager_choice_after_verified_executed_press"
+    }
+  };
+  return logMatchMoment(next, {
+    type: "counter", side: "manager",
+    detail: "Motgrep: prioriter sikring mot " + names[route] +
+      ". Dekningen tas fra en annen verifisert korridor; ingen ekstra xG."
+  });
 }
 
 // Motstanderen svarer. Ser de at kampen glipper, skyver de laget opp; leder de,
