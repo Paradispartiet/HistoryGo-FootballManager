@@ -15,6 +15,7 @@ import { compactPlayerName, describeTacticalFit } from "./ui/manager-lineup-pres
 import { createMatchdaySceneModel, renderManagerMatchdayCommand } from "./ui/manager-matchday-presentation.js";
 import { createSeasonSceneModel, renderSeasonCommand, renderSeasonLeagueOverview } from "./ui/manager-season-presentation.js";
 import { createOfficeSceneModel, renderOfficeCommand } from "./ui/manager-office-presentation.js";
+import { renderManagerStaffRoster } from "./ui/manager-staff-workspace-v1.js";
 import { createManagerTrainingSceneModel, renderManagerTrainingCommand } from "./ui/manager-training-presentation.js";
 import { createContextualTrainingSessions, summarizeTrainingReadiness } from "./football-training-session-guidance.js";
 import { getTacticalKnowledgeForTactic } from "./football-tactical-knowledge.js";
@@ -16793,6 +16794,8 @@ function renderApp() {
   renderUnlockedPlayers();
   renderPlaceReports();
   renderStaffUnlocks();
+  // Oppdater også rollekapasiteten i samme render som Engasjer-knappen.
+  renderManagerStaffRoster();
   renderExpertiseUnlocks();
   renderTrainingPrograms();
   renderHgTrainingWeek();
