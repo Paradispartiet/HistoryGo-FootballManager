@@ -989,6 +989,72 @@ for (const side of ["left", "right"]) {
     "invalid_or_incomplete");
   assert.ok(invalid.routeCoverAdjustment > 0);
 }
+// v7 counterfactual: same roles, formation, opposition, attack tempo and
+// random draw, but ONE defensive slot has a DIFFERENT sourced player.
+// Named authored inputs are remapped to the new player ID; we do not
+// pretend to know a real player's tracking or sprint time.
+const reactionStrongRecord = {
+  strengths: ["pace", "positioning", "game_reading", "tackling"],
+  attributes: { provenance: {
+    pace: "belagt", positioning: "belagt",
+    game_reading: "belagt", tackling: "belagt"
+  } }
+};
+const reactionUnprovedRecord = {
+  ...reactionStrongRecord,
+  attributes: { provenance: { pace: "udokumentert", game_reading: "belagt" } }
+};
+const sourcedSkillEvidence = player => {
+  const allowed = new Set(["pace", "positioning", "anticipation",
+    "game_reading", "defensive_reading", "marking", "tackling"]);
+  return player.strengths.filter(skill =>
+    allowed.has(skill) && player.attributes.provenance[skill] === "belagt");
+};
+const v7DefenderId = centralIds[0];
+const v7SecondId = centralIds[1];
+const v7Fixture = (playerId, traits) => eleven.map(player =>
+  player.playerId === v7DefenderId
+    ? { ...player, playerId, sourcedDefensiveReactionSkills: traits } : player);
+const v7Sequence = playerId => authoredSequence(0.2, {
+  [playerId]: { recognitionDelaySeconds: 0.4, coverMoveSeconds: 1.75 },
+  [v7SecondId]: { recognitionDelaySeconds: 0.4, coverMoveSeconds: 1.2 }
+});
+const v7Trial = (playerId, traits, draw = 0.99) =>
+  sequenceTrial(v7Sequence(playerId), draw, undefined,
+    v7Fixture(playerId, traits));
+const v7Plain = v7Trial("ordinary-defender", []);
+const v7Sourced = v7Trial("sourced-defender", sourcedSkillEvidence(reactionStrongRecord));
+assert.equal(v7Plain.evidence.routeCoverTiming.status, "late");
+assert.equal(v7Sourced.evidence.routeCoverTiming.status, "in_time");
+assert.equal(v7Plain.evidence.routeCoverTiming.marginSeconds < 0, true);
+assert.equal(v7Sourced.evidence.routeCoverTiming.marginSeconds > 0, true);
+assert.equal(v7Plain.probability, v7Sourced.probability,
+  "player effects do not buy another first-press probability");
+assert.ok(v7Plain.routeCoverAdjustment === 0 && v7Sourced.routeCoverAdjustment > 0,
+  "individual timing gates the ONE existing route-specific containment term");
+assert.deepEqual(v7Plain.evidence.routeCoverTiming.defenderSkillTiming, undefined,
+  "missing evidence is neutral");
+assert.deepEqual(v7Sourced.evidence.routeCoverTiming.defenderSkillTiming[0].skills,
+  ["game_reading", "pace", "positioning"]);
+assert.ok(v7Sourced.evidence.routeCoverTiming.defenderSkillTiming[0].secondsSaved <= 0.25);
+assert.match(v7Sourced.counterplay.defensiveReply.coverTimingExplanation.description,
+  /Kildebelagte spilleregenskaper/);
+assert.equal(sourcedSkillEvidence(reactionUnprovedRecord).includes("pace"), false);
+const v7NotSourced = v7Trial("unproven-defender", []);
+assert.equal(v7NotSourced.evidence.routeCoverTiming.status, v7Plain.evidence.routeCoverTiming.status);
+const v7Midpoint = (v7Plain.containmentProbability + v7Sourced.containmentProbability) / 2;
+assert.equal(v7Trial("ordinary-defender", [], v7Midpoint).status, "escaped");
+assert.equal(v7Trial("sourced-defender", sourcedSkillEvidence(reactionStrongRecord),
+  v7Midpoint).status, "contained");
+assert.equal(v7Plain.xgDeltaAgainst, v7Sourced.xgDeltaAgainst,
+  "identical chance roll still yields the old single terminal outcome, not stacked xG");
+const v7WithNoTimeline = timedThird(undefined, 0.99,
+  v7Fixture("sourced-defender", sourcedSkillEvidence(reactionStrongRecord)));
+assert.equal(v7WithNoTimeline.evidence.routeCoverTiming.status, "not_provided");
+assert.equal(v7WithNoTimeline.routeCoverAdjustment, noWindow.routeCoverAdjustment,
+  "player speed is not inferred without an authored movement scenario");
+console.log("OK: v7 one-player counterfactual, neutral provenance, single cover gate.");
+
 console.log("OK: two-defender handoffs gate one existing cover term.");
 
 console.log("OK: linked defensive tasks for all routes and both flanks.");
