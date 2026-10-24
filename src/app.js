@@ -36,10 +36,12 @@ import {
   logMatchMoment,
   applyMatchPlanChange,
   applyMatchdaySubstitution,
+  applyMatchPressCounter,
   applyOpponentAdaptation,
   OPPONENT_PROFILES,
   evaluateFormationMatchupVsOpponent
 } from "./football-matchday-engine.js";
+import { getManagerPressCounterOptions } from "./football-matchday-own-press-v6.js";
 import {
   HISTORICAL_OPPONENT_PROFILES,
   getHistoricalOpponentProfile,
@@ -10948,7 +10950,69 @@ function renderMatchdaySessionEvent(container, session, eventIndex) {
   // det større taktiske valget, ikke et alternativ til hendelsen foran deg.
   appendMatchPlanSwitcher(card, session);
   appendMatchSubstitutions(card, session);
+  appendMatchPressCounter(card, session, periodSeen);
   container.append(card);
+}
+
+
+// Managerens v7.4-motgrep. Only shown after the period has actually been
+// watched, and only when a previous executed press exposed known alternatives.
+// This remains behind one disclosure rather than cluttering the match scene.
+function appendMatchPressCounter(parent, session, periodSeen) {
+  if (!periodSeen || session?.causalManagerPressCounterVersion !== 1) return;
+  const options = getManagerPressCounterOptions(session);
+  const active = session.managerPressCounter;
+  if (!options?.routes?.length && !active) return;
+  const labels = {
+    third_man: "Tredjemann sentralt",
+    switch_play: "Sideskift",
+    direct: "Direkte utspill"
+  };
+  const wrap = document.createElement("details");
+  wrap.className = "match-plan-switcher";
+  const summary = document.createElement("summary");
+  summary.textContent = "Motgrep mot utspill" +
+    (active?.route ? " · " + labels[active.route] : "");
+  wrap.append(summary);
+  const description = document.createElement("p");
+  description.className = "muted-text match-plan-lead";
+  description.textContent = "Prioriter én kjent utvei etter å ha sett den i kampen. " +
+    "Sikring flyttes fra en annen dokumentert korridor, ikke fra en ekstra bonus.";
+  wrap.append(description);
+  if (active?.route) {
+    const current = document.createElement("p");
+    current.className = "matchday-meta";
+    current.textContent = "Gjeldende prioritet: " + labels[active.route] +
+      ". Motstanderen kan velge en annen kjent utvei i neste kampfase.";
+    wrap.append(current);
+  }
+  if (options?.routes?.length) {
+    const buttons = document.createElement("div");
+    buttons.className = "matchday-decision-options";
+    options.routes.forEach((route) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "matchday-decision-button";
+      button.textContent = "Sikre " + labels[route];
+      button.addEventListener("click", () => {
+        const live = state.matchday?.session;
+        if (!live) return;
+        const changed = applyMatchPressCounter(live, route);
+        if (changed === live) return;
+        state.matchday.session = changed;
+        saveMatchdayState();
+        renderApp();
+      });
+      buttons.append(button);
+    });
+    wrap.append(buttons);
+  } else {
+    const note = document.createElement("p");
+    note.className = "matchday-meta";
+    note.textContent = "Et nytt motgrep krever en ny gjennomført pressfase.";
+    wrap.append(note);
+  }
+  parent.append(wrap);
 }
 
 // Hva motstanderen gjorde med kampen. Uten dette ser det ut som om planen din
@@ -11307,7 +11371,8 @@ const MINUTE_LOG_TYPE_LABELS = {
   decision: "Grep",
   plan: "Kampplan",
   opponent: "Motstander",
-  substitution: "Innbytte"
+  substitution: "Innbytte",
+  counter: "Motgrep"
 };
 
 function appendMatchMinuteLog(parent, session) {
