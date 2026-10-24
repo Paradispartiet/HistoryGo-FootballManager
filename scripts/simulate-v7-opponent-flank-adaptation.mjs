@@ -1,6 +1,7 @@
 // v7.1 – deterministic opponent target selection, no fabricated scouting.
 import assert from "node:assert/strict";
 import { resolveOwnPressAgainstOpponent } from "../src/football-matchday-own-press-v6.js";
+import { applyOpponentAdaptation } from "../src/football-matchday-engine.js";
 
 const positions = ["GK", "CB", "DM", "CM", "AM", "ST", "LW", "RW", "LB", "RB", "CB"];
 const xi = positions.map((position, i) => ({
@@ -161,6 +162,49 @@ for (const plan of ["midfield_press_trap", "high_press_343",
   assert.equal(result.routeCoverAdjustment, 0);
   assertions += 3;
 }
+// Genuine in-match activation: the opponent reacts to a scoreboard lead.
+// The already documented wide outlet is retained ONLY for this new session,
+// and only when the changed opponent profile supports a press escape.
+const liveBase = {
+  ...situation(leftGap, { pressEscapeRoute: "switch_play" }),
+  causalOpponentFlankAdaptationVersion: 1,
+  opponent: { ...opponent, pressResistance: 85,
+    tacticalBehaviour: { pressEscapeRoute: "switch_play" } },
+  timeline: [{}], score: { for: 1, against: 0 }
+};
+const adjusted = applyOpponentAdaptation(liveBase);
+assert.notEqual(adjusted, liveBase);
+assert.equal(adjusted.opponentAdjustments.length, 1);
+assert.equal(adjusted.opponentAdjustments[0].id, "push_up");
+assert.equal(adjusted.opponent.tacticalBehaviour.pressEscape, "supported");
+assert.equal(adjusted.opponent.tacticalBehaviour.pressEscapeRoute, "switch_play");
+assert.equal(adjusted.opponent.tacticalBehaviour.pressEscapeTargetPolicy,
+  "weakest_verified_flank");
+const inMatch = resolveOwnPressAgainstOpponent(adjusted, {
+  pressureRoll: () => 0.99, protectionRoll: () => 0.99
+});
+assert.equal(inMatch.evidence.opponentFlankAdaptation.selectedFlank, "left");
+assert.equal(inMatch.counterplay.simulatedTargetFlank, "left");
+const legacySession = applyOpponentAdaptation({
+  ...liveBase, causalOpponentFlankAdaptationVersion: undefined
+});
+assert.equal(legacySession.opponent.tacticalBehaviour.pressEscapeTargetPolicy,
+  undefined, "old saves never silently gain adaptive scouting");
+const routeUnknown = applyOpponentAdaptation({
+  ...liveBase, opponent: { ...liveBase.opponent,
+    tacticalBehaviour: { pressEscape: "supported" } }
+});
+assert.equal(routeUnknown.opponent.tacticalBehaviour.pressEscapeTargetPolicy,
+  undefined, "generic opposition profile cannot invent a flank route");
+const poorEvidence = applyOpponentAdaptation({
+  ...liveBase, opponent: { ...liveBase.opponent, pressResistance: 65 }
+});
+assert.equal(poorEvidence.opponent.tacticalBehaviour.pressEscapeTargetPolicy,
+  undefined, "weak scouting data cannot create verified escape");
+assert.equal(applyOpponentAdaptation(adjusted), adjusted,
+  "the same in-match opponent adjustment is not applied twice");
+assertions += 13;
+
 console.log(JSON.stringify({
   ok: true, version: "v7.1", verifiedAssertions: assertions,
   tested: ["left/right role gap", "known match-fit weakness",
