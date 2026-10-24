@@ -913,8 +913,10 @@ export function resolveOwnPressAgainstOpponent(session, {
   const targetFlankInput = opponent?.tacticalBehaviour?.pressEscapeTargetFlank;
   const explicitlyTargeted = counter === "switch_play" &&
     escapeEvidence === "supported" && ["left", "right"].includes(targetFlankInput);
+  const hasAuthoredTarget = Object.prototype.hasOwnProperty.call(
+    opponent?.tacticalBehaviour || {}, "pressEscapeTargetFlank");
   const adaptationRequested = counter === "switch_play" &&
-    escapeEvidence === "supported" && !explicitlyTargeted &&
+    escapeEvidence === "supported" && !hasAuthoredTarget &&
     opponent?.tacticalBehaviour?.pressEscapeTargetPolicy === "weakest_verified_flank";
   // An authored timeline or historic timing window must never be silently
   // remapped to a different channel. Authors must explicitly target it.
