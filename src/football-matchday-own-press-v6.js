@@ -321,6 +321,48 @@ function authoredLaneCheck(route, sequence, playerIds, targetFlank) {
     ? "aligned" : "wrong_corridor";
 }
 
+// v7: modest causal sensitivity to independently sourced PLAYER strengths.
+// These are explicit GAME calibration factors, not measured running speeds.
+// They shorten only the supplied, authored action timings; missing skills
+// leave those timings untouched. Never invent a sequence from team ratings.
+// One task's total saving is bounded to 0.25 seconds, with no xG multiplier.
+function sourcedDefensiveTaskTiming(playerId, lineup, recognitionSeconds, moveSeconds, taskId = null) {
+  const player = Array.isArray(lineup)
+    ? lineup.find(entry => entry?.playerId === playerId) : null;
+  const sourced = Array.isArray(player?.sourcedDefensiveReactionSkills)
+    ? player.sourcedDefensiveReactionSkills : [];
+  const valid = new Set(["pace", "positioning", "anticipation", "game_reading",
+    "defensive_reading", "marking", "tackling"]);
+  const skills = [...new Set(sourced.filter(skill => valid.has(skill)))];
+  const recognition = skills.some(skill =>
+    ["anticipation", "game_reading", "defensive_reading"].includes(skill))
+    ? recognitionSeconds * 0.75 : recognitionSeconds;
+  let move = moveSeconds * (skills.includes("pace") ? 0.80 : 1) *
+    (skills.includes("positioning") ? 0.90 : 1);
+  // A documented defensive strength helps with the actual contest, not an
+  // unrelated covering run or a positional assignment.
+  if (taskId && ["challenge_first_touch", "follow_third_runner",
+    "protect_support_run"].includes(taskId) &&
+    skills.some(skill => ["marking", "tackling"].includes(skill)))
+    move *= 0.92;
+  const saving = recognitionSeconds + moveSeconds - recognition - move;
+  const scale = saving > 0.25 ? 0.25 / saving : 1;
+  const result = {
+    recognitionSeconds: recognitionSeconds - (recognitionSeconds - recognition) * scale,
+    moveSeconds: moveSeconds - (moveSeconds - move) * scale,
+    secondsSaved: Math.round(Math.min(0.25, saving) * 1000) / 1000,
+    // Report only traits that had a relevant effect on this task.
+    skills: [
+      ...skills.filter(skill => ["anticipation", "game_reading",
+        "defensive_reading"].includes(skill) && recognitionSeconds > 0),
+      ...skills.filter(skill => ["pace", "positioning"].includes(skill) && moveSeconds > 0),
+      ...skills.filter(skill => ["marking", "tackling"].includes(skill) && moveSeconds > 0 &&
+        ["challenge_first_touch", "follow_third_runner", "protect_support_run"].includes(taskId))
+    ]
+  };
+  return result;
+}
+
 function recoveryFromAuthoredActions(route, playerIds, sequence, lineup, targetFlank) {
   const expected = PRESS_EXIT_TIMED_ACTIONS[route];
   if (!expected || sequence?.route !== route ||
@@ -339,6 +381,7 @@ function recoveryFromAuthoredActions(route, playerIds, sequence, lineup, targetF
   const defenderArrivalSecondsByPlayerId = {};
   const defenderDeadlineSecondsByPlayerId = {};
   const defenderTransitionStages = [];
+  const defenderSkillTiming = [];
   let defenderCoverHandoff = null;
   let usesIndividualDeadline = false;
   const movementModels = new Set();
@@ -387,9 +430,15 @@ function recoveryFromAuthoredActions(route, playerIds, sequence, lineup, targetF
           .reduce((sum, action) => sum + action.durationSeconds, 0);
         const deadlineSeconds = sequence.actions.slice(0, deadlineIndex)
           .reduce((sum, action) => sum + action.durationSeconds, 0);
+        const skillTiming = sourcedDefensiveTaskTiming(id, lineup,
+          stage.recognitionDelaySeconds, move.seconds, stage.taskId);
+        if (skillTiming.secondsSaved > 0) defenderSkillTiming.push({
+          defenderId: id, taskId: stage.taskId, skills: skillTiming.skills,
+          secondsSaved: skillTiming.secondsSaved
+        });
         const movementStartSeconds = Math.max(cueSeconds, previousCompletion) +
-          stage.recognitionDelaySeconds;
-        const completionSeconds = movementStartSeconds + move.seconds;
+          skillTiming.recognitionSeconds;
+        const completionSeconds = movementStartSeconds + skillTiming.moveSeconds;
         if (completionSeconds > 20) return null;
         defenderTransitionStages.push({
           defenderId: id, taskId: stage.taskId,
@@ -439,8 +488,14 @@ function recoveryFromAuthoredActions(route, playerIds, sequence, lineup, targetF
     if (cueIndex < 0) return null;
     const elapsedBeforeCue = sequence.actions.slice(0, cueIndex)
       .reduce((sum, action) => sum + action.durationSeconds, 0);
-    const arrival = elapsedBeforeCue + response.recognitionDelaySeconds +
-      travel.seconds;
+    const skillTiming = sourcedDefensiveTaskTiming(id, lineup,
+      response.recognitionDelaySeconds, travel.seconds);
+    if (skillTiming.secondsSaved > 0) defenderSkillTiming.push({
+      defenderId: id, taskId: null, skills: skillTiming.skills,
+      secondsSaved: skillTiming.secondsSaved
+    });
+    const arrival = elapsedBeforeCue + skillTiming.recognitionSeconds +
+      skillTiming.moveSeconds;
     if (arrival > 20) return null;
     defenderArrivalSecondsByPlayerId[id] = arrival;
     // A specialist may have to seal a pass or runner BEFORE the next
@@ -500,6 +555,7 @@ function recoveryFromAuthoredActions(route, playerIds, sequence, lineup, targetF
     defenderArrivalSecondsByPlayerId,
     ...(usesIndividualDeadline ? { defenderDeadlineSecondsByPlayerId } : {}),
     ...(defenderTransitionStages.length ? { defenderTransitionStages } : {}),
+    ...(defenderSkillTiming.length ? { defenderSkillTiming } : {}),
     ...(defenderCoverHandoff ? { defenderCoverHandoff } : {}),
     movementModel: movementModels.size === 1 ? [...movementModels][0] :
       "mixed_authored_responses",
@@ -573,6 +629,9 @@ function specialistRecoveryWindow(route, playerIds, timing, lineup, targetFlank)
     marginSeconds: Math.round(margin * 1000) / 1000,
     movementModel: isSequence ? derived.movementModel : null,
     spatialLane: isSequence ? derived.spatialLane : null,
+    ...(isSequence && derived.defenderSkillTiming?.length ? {
+      defenderSkillTiming: derived.defenderSkillTiming
+    } : {}),
     ...(actionDeadlines ? {
       deadlineModel: "per_defender_action_start",
       criticalDefenderId: critical.defenderId,
@@ -681,9 +740,12 @@ function explainDefensiveCoverTiming(timing) {
   };
   if (timing.status === "in_time") return {
     kind: "in_time", label: "Sikringen er på plass",
-    description: timing.coverHandoff
+    description: (timing.coverHandoff
       ? "Sikringsbyttet og de nødvendige defensive handlingene ble fullført innen fristene."
-      : "De dokumenterte defensive handlingene ble fullført innen fristene."
+      : "De defensive handlingene ble fullført innen fristene.") +
+      (timing.defenderSkillTiming?.length
+        ? " Kildebelagte spilleregenskaper forkortet reaksjons- eller forflytningstiden i simuleringen."
+        : "")
   };
   if (timing.status === "late" && timing.criticalHandoff) return {
     kind: "late_handoff", label: "For sent sikringsbytte",

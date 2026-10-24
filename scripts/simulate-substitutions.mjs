@@ -355,12 +355,12 @@ console.log("\n10. Planbytte og innbytte bruker samme taktiske grunnlag");
 // through a substitution: old starter's anticipation must not leak to bench.
 {
   const sourcedStarter = startXI.map((p, i) => i === 9
-    ? { ...p, strengths: ["anticipation"], attributes: {
-      provenance: { anticipation: "belagt" }
+    ? { ...p, strengths: ["anticipation", "pace"], attributes: {
+      provenance: { anticipation: "belagt", pace: "belagt" }
     } } : p);
   const sourcedBench = benchPlayers.map((p, i) => i === 0
-    ? { ...p, strengths: ["game_reading"], attributes: {
-      provenance: { game_reading: "belagt" }
+    ? { ...p, strengths: ["game_reading", "positioning"], attributes: {
+      provenance: { game_reading: "belagt", positioning: "belagt" }
     } } : p);
   const revisedFit = buildTeamFit(sourcedStarter);
   const session = baseSession({
@@ -374,6 +374,10 @@ console.log("\n10. Planbytte og innbytte bruker samme taktiske grunnlag");
     outgoing.sourcedRecoverySkills.includes("anticipation"));
   check("bench snapshot stores its own sourced skill",
     incoming.sourcedRecoverySkills.includes("game_reading"));
+  check("v7 start and bench retain separately documented defensive traits",
+    outgoing.sourcedDefensiveReactionSkills.includes("pace") &&
+    incoming.sourcedDefensiveReactionSkills.includes("positioning") &&
+    !incoming.sourcedDefensiveReactionSkills.includes("pace"));
   const after = applySubstitution(session, {
     outPlayerId: outgoing.playerId, inPlayerId: incoming.playerId, minute: 62
   });
@@ -381,8 +385,13 @@ console.log("\n10. Planbytte og innbytte bruker samme taktiske grunnlag");
   check("substitute carries own evidence, not departed player's evidence",
     arrival?.sourcedRecoverySkills?.includes("game_reading") &&
     !arrival.sourcedRecoverySkills.includes("anticipation"));
+  check("v7 substitute uses own defensive reactions, not the outgoing player's",
+    arrival?.sourcedDefensiveReactionSkills?.includes("positioning") &&
+    arrival.sourcedDefensiveReactionSkills.includes("game_reading") &&
+    !arrival.sourcedDefensiveReactionSkills.includes("pace"));
   check("the original XI remains unchanged",
-    session.lineupSnapshot[9].sourcedRecoverySkills.includes("anticipation"));
+    session.lineupSnapshot[9].sourcedRecoverySkills.includes("anticipation") &&
+    session.lineupSnapshot[9].sourcedDefensiveReactionSkills.includes("pace"));
 }
 
 console.log(`\n${passed}/${passed + failed} sjekker bestått.`);
