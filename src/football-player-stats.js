@@ -124,6 +124,18 @@ export function positionGroup(position) {
 // Directly source-supported recognition skills only: never infer speed or
 // timing from positions, classHeight or an overall match-fit score.
 const RECOVERY_CUE_SKILLS = new Set(["anticipation", "game_reading", "defensive_reading"]);
+// A sourced strength is a qualitative trait, not an invented 0–100 sprint
+// measurement. The v7 defensive clock uses only claims with explicit provenance.
+const DEFENSIVE_REACTION_SKILLS = new Set([
+  "pace", "positioning", "anticipation", "game_reading",
+  "defensive_reading", "marking", "tackling"
+]);
+export function sourcedDefensiveReactionSkillsForPlayer(player) {
+  const strengths = Array.isArray(player?.strengths) ? player.strengths : [];
+  const provenance = player?.attributes?.provenance || {};
+  return [...new Set(strengths.filter(skill =>
+    DEFENSIVE_REACTION_SKILLS.has(skill) && provenance[skill] === "belagt"))].sort();
+}
 export function sourcedRecoverySkillsForPlayer(player) {
   const strengths = Array.isArray(player?.strengths) ? player.strengths : [];
   const provenance = player?.attributes?.provenance || {};
@@ -145,6 +157,7 @@ export function createLineupSnapshot(teamFit, { freshnessByPlayerId = {} } = {})
       roleId: str(assignment.role?.id),
       roleName: str(assignment.role?.name),
       sourcedRecoverySkills: sourcedRecoverySkillsForPlayer(assignment.player),
+      sourcedDefensiveReactionSkills: sourcedDefensiveReactionSkillsForPlayer(assignment.player),
       // Fra hvilket minutt spilleren har vært på banen. Startellever: 0.
       onFrom: 0,
       // Friskheten han STARTET kampen med. En som allerede var sliten før
