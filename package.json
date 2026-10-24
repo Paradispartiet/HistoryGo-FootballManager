@@ -21,7 +21,7 @@
     "sim:v7-opponent-adaptation": "node scripts/simulate-v7-opponent-flank-adaptation.mjs",
     "sim:v7-2-outlet-selection": "node scripts/simulate-v7-2-opponent-outlet-selection.mjs",
     "sim:v7-3-phase-counterplay": "node scripts/simulate-v7-3-phase-counterplay.mjs",
-    "sim:v7-4-manager-counter": "node scripts/simulate-v7-4-manager-counter.mjs",
+    "sim:v7-4-manager-tradeoff": "node scripts/simulate-v7-4-manager-counter.mjs",
     "sim:v7-4-manager-counter": "node scripts/simulate-v7-4-manager-press-counter.mjs",
     "sim:game-control-v6": "node scripts/simulate-game-control-v6.mjs",
     "sim:v6-historical-matrix": "node scripts/simulate-v6-historical-matrix.mjs",
