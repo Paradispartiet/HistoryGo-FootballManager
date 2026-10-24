@@ -11345,9 +11345,29 @@ function appendMatchMinuteLog(parent, session) {
         move.textContent = `${step.action}${step.outcome === "blocked" ? " – stanset" : ""}`;
         actions.append(move);
       });
+      // The existing minute-log disclosure is the tactical event view.
+      // Show only the compact, sourced engine explanation; do not turn a
+      // missing scenario or a legacy save into a claimed defensive error.
+      const cover = moment.counterplay?.defensiveReply?.coverTimingExplanation;
+      const kinds = ["in_time", "late_task", "late_handoff",
+        "late_recovery", "wrong_corridor", "unknown"];
+      const coverNote = document.createElement("div");
+      if (cover && kinds.includes(cover.kind) &&
+        typeof cover.label === "string" &&
+        typeof cover.description === "string") {
+        coverNote.className = "matchday-defensive-cover";
+        coverNote.dataset.kind = cover.kind;
+        const coverTitle = document.createElement("strong");
+        coverTitle.textContent = `Sikring: ${cover.label}`;
+        const coverDescription = document.createElement("p");
+        coverDescription.textContent = cover.description;
+        coverNote.append(coverTitle, coverDescription);
+      }
       const caution = document.createElement("small");
       caution.textContent = "Koblet til denne eksisterende sjansen, uten ekstra mål eller xG. Ikke faktisk spillertracking.";
-      trace.append(head, explanation, actions, caution);
+      trace.append(head, explanation, actions);
+      if (coverNote.childElementCount) trace.append(coverNote);
+      trace.append(caution);
       item.append(trace);
     }
     list.append(item);
