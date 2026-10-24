@@ -72,6 +72,7 @@ test("Klubben ligger under Kontor ved siden av Kalender og ikke som ny hovedfane
   await expect(page.locator('.app-subtab[data-tab-target="calendar"]')).toBeVisible();
   await expect(page.locator('.app-subtab[data-tab-target="progression"]')).toBeHidden();
   await expect(page.locator('.app-subtab[data-tab-target="admin"]')).toBeVisible();
+  await expect(page.locator('.app-subtab[data-tab-target="admin"]')).not.toHaveClass(/office-subnav-proxy|club-organization-deep-proxy/);
   await expect(page.locator('.app-subtab[data-tab-target="admin"]')).toHaveAttribute("data-subnav-parent", "dashboard");
   await expect(page.locator('.main-nav [data-tab-target="dashboard"]')).toHaveAttribute("aria-selected", "true");
   await expect(page.locator('.main-nav [data-tab-target="historygo"] .nav-label')).toHaveText("Speiding");
