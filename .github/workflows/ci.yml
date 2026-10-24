@@ -148,6 +148,7 @@ jobs:
           npm run sim:v7-opponent-adaptation
           npm run sim:v7-2-outlet-selection
           npm run sim:v7-3-phase-counterplay
+          npm run sim:v7-4-manager-counter
           npm run sim:game-control-v6
           npm run sim:v6-historical-matrix
           npm run sim:real-role-formation-matrix
