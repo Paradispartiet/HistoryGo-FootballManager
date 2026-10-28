@@ -91,8 +91,10 @@ test("iPhone WebKit: reelle treningsvalg overlever reload og Til Kamp flytter ik
   await expect(page.locator("#managerTeamChoiceDrawerBody #trainingPrograms")).toBeVisible();
   await page.locator("#managerTeamChoiceDrawerBody .training-program-select:enabled").first().click();
   await expect.poll(async () => (await readSavedChoices(page)).programId).not.toBeNull();
+  // Storage can be updated before the derived training-day card re-renders.
+  // Assert the visible choice before capturing the reload baseline.
+  await expect(page.locator("#trainingDayProgramTitle")).not.toContainText(/ikke valgt/i);
   const programTitle = (await page.locator("#trainingDayProgramTitle").textContent()).trim();
-  expect(programTitle).not.toBe("Ikke valgt");
 
   const done = page.locator("#managerTeamChoiceDrawer .manager-team-choice-done");
   if (await done.isVisible()) await done.click();
@@ -100,8 +102,13 @@ test("iPhone WebKit: reelle treningsvalg overlever reload og Til Kamp flytter ik
   await expect(page.locator("#managerTeamChoiceDrawerBody #weeklyTrainingOptions")).toBeVisible();
   await page.locator("#managerTeamChoiceDrawerBody #weeklyTrainingOptions .weekly-training-card button:enabled").first().click();
   await expect.poll(async () => (await readSavedChoices(page)).focusId).not.toBeNull();
-  const selectedFocus = (await page.locator("#trainingDayFocus").textContent()).trim();
-  expect(selectedFocus).not.toBe("Ikke valgt");
+  // Wait for the canonical focus label AND its projection to update. Reading
+  // the card immediately after localStorage changes captured the stale
+  // "Velg ett fokus" prompt and gave a false negative after reload.
+  const focusLabel = page.locator("#teamSelectedTrainingFocus");
+  await expect(focusLabel).toContainText("· valgt");
+  const selectedFocus = (await focusLabel.textContent()).trim();
+  await expect(page.locator("#trainingDayFocus")).toHaveText(selectedFocus);
   if (await done.isVisible()) await done.click();
 
   const stored = await readSavedChoices(page);
