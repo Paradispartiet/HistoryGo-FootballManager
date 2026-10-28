@@ -215,3 +215,14 @@ jobs:
       - name: Responsive nettleservakter og visuelle differanser
         if: steps.scope.outputs.lane == 'full'
         run: npm run test:browser -- --project=chromium
+
+      # Save synthetic training-day screenshots as review evidence.
+      # This supplements Chromium assertions; it is not physical iOS QA.
+      - name: Arkiver treningsdagens mobilbilder
+        if: ${{ always() && steps.scope.outputs.lane == 'full' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: training-day-mobile-screenshots
+          path: test-results/training-day-*.png
+          if-no-files-found: warn
+          retention-days: 14
