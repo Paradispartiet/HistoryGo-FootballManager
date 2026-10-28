@@ -107,6 +107,24 @@ test("Trening er én faktisk treningsdag med fire økter og uten gammel kommando
   await expect(page.locator('#trainingDayResources [data-modal-open="modalWeaknesses"]')).toBeVisible();
 });
 
+test("program/fokus-samsvar følger den eksisterende ukeplanen på mobil", async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 740 });
+  await openTraining(page);
+  const source = page.locator("#trainingPlanCoherence");
+  const note = page.locator("#trainingDayCoherence");
+  await expect(note).toHaveText((await source.textContent()).trim());
+  await expect(note).toHaveAttribute("data-level", await source.getAttribute("data-level"));
+
+  await page.evaluate(() => {
+    const original = document.getElementById("trainingPlanCoherence");
+    original.textContent = "Treningsprogrammet og kampfokuset peker i ulike retninger.";
+    original.dataset.level = "sprik";
+  });
+  await expect(note).toHaveText("Treningsprogrammet og kampfokuset peker i ulike retninger.");
+  await expect(note).toHaveAttribute("data-level", "sprik");
+  await expectNoHorizontalOverflow(page);
+});
+
 test("slitne og skadde vises med navn og råd i et kompakt mobilpanel", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await openTraining(page);
