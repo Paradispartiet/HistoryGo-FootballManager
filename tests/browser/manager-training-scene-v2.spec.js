@@ -122,9 +122,17 @@ test("program/fokus-samsvar følger den eksisterende ukeplanen på mobil", async
   });
   await expect(note).toHaveText("Treningsprogrammet og kampfokuset peker i ulike retninger.");
   await expect(note).toHaveAttribute("data-level", "sprik");
-  // A synthetic visual example for reviewers; not a real player's data.
-  await page.locator("#managerTrainingDay").screenshot({
+  // A full tall element screenshot can contain unpainted/black regions in
+  // headless Chromium. Capture the actual 360px viewport after scrolling the
+  // synthetic warning into view, plus a close-up of the focus card.
+  await note.scrollIntoViewIfNeeded();
+  await expect(note).toBeInViewport();
+  await page.screenshot({
     path: "test-results/training-day-coherence-warning-360.png",
+    animations: "disabled"
+  });
+  await note.locator("xpath=..").screenshot({
+    path: "test-results/training-day-coherence-card-360.png",
     animations: "disabled"
   });
 
@@ -164,9 +172,17 @@ test("slitne og skadde vises med navn og råd i et kompakt mobilpanel", async ({
   await expect(page.locator("#trainingDayRiskList .is-injured strong")).toHaveText("Skadet testspiller");
   await expect(page.locator("#trainingDayRiskList .is-tired span")).toHaveText("Bør hviles før neste kamp.");
   await expectNoHorizontalOverflow(page);
-  // Uses synthetic injury/fatigue rows created by this test.
-  await page.locator("#managerTrainingDay").screenshot({
+  // Uses synthetic injury/fatigue rows created by this test. Save a 390px
+  // viewport with the expanded player list in view, plus the condition card.
+  const conditionCard = page.locator("#trainingDayRiskDetails").locator("xpath=..");
+  await conditionCard.scrollIntoViewIfNeeded();
+  await expect(page.locator("#trainingDayRiskSummary")).toBeInViewport();
+  await page.screenshot({
     path: "test-results/training-day-squad-attention-390.png",
+    animations: "disabled"
+  });
+  await conditionCard.screenshot({
+    path: "test-results/training-day-squad-card-390.png",
     animations: "disabled"
   });
 
