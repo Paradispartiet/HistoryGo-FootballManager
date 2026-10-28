@@ -122,6 +122,12 @@ test("program/fokus-samsvar følger den eksisterende ukeplanen på mobil", async
   });
   await expect(note).toHaveText("Treningsprogrammet og kampfokuset peker i ulike retninger.");
   await expect(note).toHaveAttribute("data-level", "sprik");
+
+  // A pure level change (without changing text) must also refresh the view.
+  await page.evaluate(() => {
+    document.getElementById("trainingPlanCoherence").dataset.level = "godt";
+  });
+  await expect(note).toHaveAttribute("data-level", "godt");
   await expectNoHorizontalOverflow(page);
 });
 
