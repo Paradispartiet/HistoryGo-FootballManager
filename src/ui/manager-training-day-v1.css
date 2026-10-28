@@ -273,6 +273,18 @@
 .training-day-risk-list strong { font-size: .83rem; overflow-wrap: anywhere; }
 .training-day-risk-list span { font-size: .75rem; line-height: 1.45; color: rgba(255,255,255,.75); }
 
+/* The plan already computes whether the selected program supports the focus. */
+.training-day-card .training-day-coherence {
+  padding-left: .55rem;
+  border-left: 2px solid rgba(255,255,255,.25);
+  color: rgba(255,255,255,.75);
+}
+.training-day-card .training-day-coherence[data-level="sprik"] {
+  color: #eac78a;
+  border-left-color: currentColor;
+}
+.training-day-coherence[hidden] { display: none !important; }
+
 .training-day-next {
   display: flex;
   align-items: center;
