@@ -125,9 +125,9 @@ test("program/fokus-samsvar følger den eksisterende ukeplanen på mobil", async
 
   // A pure level change (without changing text) must also refresh the view.
   await page.evaluate(() => {
-    document.getElementById("trainingPlanCoherence").dataset.level = "godt";
+    document.getElementById("trainingPlanCoherence").dataset.level = "samsvar";
   });
-  await expect(note).toHaveAttribute("data-level", "godt");
+  await expect(note).toHaveAttribute("data-level", "samsvar");
   await expectNoHorizontalOverflow(page);
 });
 
