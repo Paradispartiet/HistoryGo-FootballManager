@@ -603,7 +603,7 @@ function installObservers() {
     if (!mutations.some(touchesTrainingSource)) return;
     scheduleRender();
   });
-  observer.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["hidden", "class", "data-selected"] });
+  observer.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["hidden", "class", "data-selected", "data-level"] });
 }
 
 function boot() {
