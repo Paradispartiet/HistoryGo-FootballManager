@@ -128,6 +128,7 @@ function ensureSurface() {
           <header><span>Ukens fokus</span><button type="button" id="trainingDayChangeFocus">Endre</button></header>
           <strong id="trainingDayFocus">Ikke valgt</strong>
           <p id="trainingDayFocusHint">Velg kampens viktigste treningstema.</p>
+          <p class="training-day-coherence" id="trainingDayCoherence" data-level="ufullstendig"></p>
         </section>
         <section class="training-day-card">
           <header><span>Individuell oppfølging</span><button type="button" id="trainingDayChangeIndividual">Endre</button></header>
@@ -463,6 +464,17 @@ function renderTrainingDay() {
   if (program) program.textContent = selectedProgramTitle();
   if (focus) focus.textContent = selectedFocus();
   if (focusHint) focusHint.textContent = compactText("#weeklyTrainingRecommendation", "Fokuset kobles til den eksisterende kamp- og treningsplanen.");
+  // Render the existing plan's factual program/focus coherence note. This is
+  // presentation only: the weekly training engine still owns its assessment.
+  const coherence = surface.querySelector("#trainingDayCoherence");
+  const coherenceSource = document.getElementById("trainingPlanCoherence");
+  if (coherence) {
+    const note = String(coherenceSource?.textContent || "").trim();
+    if (coherence.textContent !== note) coherence.textContent = note;
+    const level = coherenceSource?.dataset.level || "ufullstendig";
+    if (coherence.dataset.level !== level) coherence.dataset.level = level;
+    coherence.hidden = !note;
+  }
   if (individual) individual.textContent = selectedIndividual();
   const individualHint = surface.querySelector("#trainingDayIndividualHint");
   if (individualHint) individualHint.textContent = individualCapacityHint();
@@ -564,6 +576,7 @@ function installObservers() {
     "#squadConditionList",
     "#squadConditionSummary",
     "#trainingPlanSteps",
+    "#trainingPlanCoherence",
     "#trainingChoiceStatus",
     "#trainingPlanNext",
     ".training-assistant-signal",
