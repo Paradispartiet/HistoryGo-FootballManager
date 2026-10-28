@@ -242,6 +242,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: training-day-mobile-screenshots
-          path: test-results/training-day-*.png
+          path: |
+            test-results/training-day-coherence-*.png
+            test-results/training-day-squad-*.png
           if-no-files-found: warn
           retention-days: 14
