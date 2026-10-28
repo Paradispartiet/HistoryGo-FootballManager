@@ -167,6 +167,10 @@ test("slitne og skadde vises med navn og råd i et kompakt mobilpanel", async ({
     }));
   });
   await expect(page.locator("#trainingDayRiskDetails")).toBeVisible();
+  // The hidden canonical load brief has multiple block elements. Its compact
+  // copy must preserve word boundaries between label, detail and coherence.
+  await expect(page.locator("#trainingDayLoad")).toContainText("Normal uke · Balansert:");
+  await expect(page.locator("#trainingDayLoad")).not.toContainText("ukeBalansert");
   await expect(page.locator("#trainingDayRiskSummary")).toHaveText("Se 2 spillere som trenger oppfølging");
   await page.locator("#trainingDayRiskSummary").click();
   await expect(page.locator("#trainingDayRiskList .is-injured strong")).toHaveText("Skadet testspiller");
