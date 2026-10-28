@@ -481,7 +481,14 @@ function renderTrainingDay() {
   if (assistant) assistant.textContent = compactText(".training-assistant-signal strong", "Les dagens signaler før økta.");
   if (assistantDetail) assistantDetail.textContent = compactText(".training-assistant-signal p", "Assistentens råd bruker den eksisterende treningskonteksten.");
   if (condition) condition.textContent = compactText('.training-command-status[data-training-target="details"] .training-command-status-value', "Ingen akutte varsler");
-  if (load) load.textContent = compactText(".training-load-brief", "Belastning beregnes fra valgt program.");
+  // The source brief uses separate block elements. textContent concatenates
+  // them without spaces (e.g. "ukeBalansert"); join the existing facts visibly.
+  const loadSource = document.querySelector(".training-load-brief");
+  if (load) {
+    const parts = loadSource ? [...loadSource.querySelectorAll("strong, p, small")]
+      .map((part) => String(part.textContent || "").trim()).filter(Boolean) : [];
+    load.textContent = parts.join(" · ") || "Belastning beregnes fra valgt program.";
+  }
   if (opponent) opponent.textContent = compactText(".training-opponent-brief strong", "Motstander ikke klar");
 
   renderSquadAttention(surface);
