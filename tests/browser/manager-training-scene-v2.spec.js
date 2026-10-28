@@ -122,6 +122,11 @@ test("program/fokus-samsvar følger den eksisterende ukeplanen på mobil", async
   });
   await expect(note).toHaveText("Treningsprogrammet og kampfokuset peker i ulike retninger.");
   await expect(note).toHaveAttribute("data-level", "sprik");
+  // A synthetic visual example for reviewers; not a real player's data.
+  await page.locator("#managerTrainingDay").screenshot({
+    path: "test-results/training-day-coherence-warning-360.png",
+    animations: "disabled"
+  });
 
   // A pure level change (without changing text) must also refresh the view.
   await page.evaluate(() => {
@@ -159,6 +164,11 @@ test("slitne og skadde vises med navn og råd i et kompakt mobilpanel", async ({
   await expect(page.locator("#trainingDayRiskList .is-injured strong")).toHaveText("Skadet testspiller");
   await expect(page.locator("#trainingDayRiskList .is-tired span")).toHaveText("Bør hviles før neste kamp.");
   await expectNoHorizontalOverflow(page);
+  // Uses synthetic injury/fatigue rows created by this test.
+  await page.locator("#managerTrainingDay").screenshot({
+    path: "test-results/training-day-squad-attention-390.png",
+    animations: "disabled"
+  });
 
   await page.evaluate(() => document.getElementById("squadConditionList").replaceChildren());
   await expect(page.locator("#trainingDayRiskDetails")).toBeHidden();
