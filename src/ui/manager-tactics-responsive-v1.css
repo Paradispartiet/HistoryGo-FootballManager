@@ -185,6 +185,36 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
 .fm-phase-player.is-selected { border-color: #66e4c0; }
 .fm-phase-player.is-misused { border-color: #ec7b85; }
 
+/* Lille draktsilhuett over navneplaten: ren CSS og nøytrale draktfarger.
+   Ingen oppdiktede klubbdrakter eller spillernummer. */
+.fm-tactics-grid #lineupSlots .player-chip::after,
+.fm-tactics-grid .fm-phase-player::before {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(19px, 7.2cqw, 29px);
+  height: clamp(17px, 6.6cqw, 26px);
+  background: linear-gradient(90deg, #14598a 0 28%, #34b5df 28% 72%, #14598a 72% 100%);
+  border: 1px solid rgba(241, 251, 255, .9);
+  box-shadow: 0 3px 8px #02101eaa;
+  clip-path: polygon(25% 0, 41% 0, 45% 10%, 55% 10%, 59% 0, 75% 0, 100% 24%, 87% 52%, 77% 42%, 77% 100%, 23% 100%, 23% 42%, 13% 52%, 0 24%);
+  pointer-events: none;
+}
+.fm-tactics-grid #lineupSlots .player-chip[data-line="keeper"]::after,
+.fm-tactics-grid .fm-phase-player.is-keeper::before {
+  background: linear-gradient(90deg, #a27412 0 28%, #ffdc64 28% 72%, #a27412 72% 100%);
+}
+.fm-tactics-grid .fm-phase-player.is-empty::before,
+.fm-tactics-grid #lineupSlots .player-chip:not([data-player-id])::after,
+.fm-tactics-grid #lineupSlots .player-chip[data-player-id=""]::after {
+  background: linear-gradient(90deg, #273a4b, #668098, #273a4b);
+  opacity: .62;
+}
+
+
 .fm-squad-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
 .fm-open-roster {
   flex: 0 0 auto;
