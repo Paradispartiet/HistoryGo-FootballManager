@@ -94,12 +94,21 @@ test("fasebanen leser faktisk med/uten-ball-form fra valgt system, uten å endre
   await expect(pitch).toHaveAttribute("data-shape", formation.outOfPossessionShape);
   await expect(page.locator("#fmPhaseHeading")).toContainText(formation.outOfPossessionShape);
   await expect(page.locator('[data-fm-phase="out"]')).toHaveAttribute("aria-pressed", "true");
+  const outPositions = await pitch.locator(".fm-phase-player").evaluateAll(
+    (items) => items.map((item) => `${item.style.left}|${item.style.top}`).sort()
+  );
 
   await page.locator('[data-fm-phase="in"]').click();
   await expect(pitch).toHaveAttribute("data-phase", "in");
   await expect(pitch).toHaveAttribute("data-shape", formation.inPossessionShape);
   await expect(page.locator("#fmPhaseHeading")).toContainText(formation.inPossessionShape);
   await expect(pitch.locator(".fm-phase-player")).toHaveCount(11);
+  const inPositions = await pitch.locator(".fm-phase-player").evaluateAll(
+    (items) => items.map((item) => `${item.style.left}|${item.style.top}`).sort()
+  );
+  if (formation.inPossessionShape !== formation.outOfPossessionShape) {
+    expect(inPositions).not.toEqual(outPositions);
+  }
 
   const lineupIdsAfter = await page.locator("#lineupSlots .player-chip").evaluateAll(
     (items) => items.map((chip) => chip.dataset.playerId)
