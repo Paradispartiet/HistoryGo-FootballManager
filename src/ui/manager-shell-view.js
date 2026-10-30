@@ -3,6 +3,7 @@ import "./manager-player-workspace-v1.js";
 import "./manager-player-pool-squad-v1.js";
 import "./manager-team-choice-drawer-v1.js";
 import "./manager-lineup-slot-inspector-v1.js";
+import "./manager-tactics-responsive-v1.js";
 import "./manager-scouting-workspace-v1.js";
 import "./manager-calendar-workspace-v1.js";
 import "./manager-training-day-v1.js";
