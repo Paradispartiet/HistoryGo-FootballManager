@@ -262,7 +262,7 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
 .fm-tactics-view-switch { display: none; }
 
 /* Medium touch screens: one focused pane at a time, no 3-column microtype. */
-@media (max-width: 1099px) {
+@media (max-width: 979px) {
   .fm-tactics-view-switch {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -311,7 +311,7 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
 
 /* On landscape phones preserve a usable list beside the tactical surface.
    The three view buttons switch the primary drawing, not create a scroll trap. */
-@media (max-width: 1099px) and (min-width: 700px) and (orientation: landscape) {
+@media (max-width: 979px) and (min-width: 700px) and (orientation: landscape) {
   .fm-tactics-grid {
     grid-template-columns: minmax(0, 1.07fr) minmax(270px, .93fr) !important;
     grid-template-areas: "pitch squad" "phase squad" "bench bench" "details details";
