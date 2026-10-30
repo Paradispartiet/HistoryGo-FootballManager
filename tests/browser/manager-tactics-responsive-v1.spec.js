@@ -158,18 +158,19 @@ test("alle 46 formasjonskildene gir 11 entydige brikker i begge faser", async ({
 test("taktikkbrikkene viser draktmarkør uten å skjule spillerknapper", async ({ page }) => {
   await expect(page.locator("#lineupSlots .player-chip")).toHaveCount(11);
   await expect(page.locator("#fmPhasePitch .fm-phase-player")).toHaveCount(11);
+  // Stylesheet is injected as a separate link and may finish loading a tick
+  // after the source chips render. Poll for actual CSS rather than racing it.
+  await expect.poll(() => page.locator("#lineupSlots .player-chip").first().evaluate(
+    (item) => getComputedStyle(item, "::after").content
+  )).not.toBe("none");
+  await expect.poll(() => page.locator("#fmPhasePitch .fm-phase-player").first().evaluate(
+    (item) => getComputedStyle(item, "::before").content
+  )).not.toBe("none");
   const visuals = await page.evaluate(() => {
     const source = document.querySelector("#lineupSlots .player-chip");
     const phase = document.querySelector("#fmPhasePitch .fm-phase-player");
-    return {
-      kit: getComputedStyle(source, "::after").content,
-      phaseKit: getComputedStyle(phase, "::before").content,
-      interactive: source.tagName === "BUTTON",
-      phaseReadOnly: phase.tagName !== "BUTTON"
-    };
+    return { interactive: source.tagName === "BUTTON", phaseReadOnly: phase.tagName !== "BUTTON" };
   });
-  expect(visuals.kit).not.toBe("none");
-  expect(visuals.phaseKit).not.toBe("none");
   expect(visuals.interactive).toBe(true);
   expect(visuals.phaseReadOnly).toBe(true);
 });
