@@ -161,6 +161,8 @@ function renderProjection(pitch) {
     mirror.style.left = shifted ? `${shifted.x}%` : chip.style.left;
     mirror.style.top = shifted ? `${shifted.y}%` : chip.style.top;
     mirror.append(element("b", "", pos), element("span", "", name === "Tom plass" ? "Ledig" : name));
+    if (pos === "GK") mirror.classList.add("is-keeper");
+    if (!chip.dataset.playerId) mirror.classList.add("is-empty");
     if (chip.classList.contains("is-selected")) mirror.classList.add("is-selected");
     if (chip.dataset.fitTone === "misused") mirror.classList.add("is-misused");
     phaseNodes.push(mirror);
