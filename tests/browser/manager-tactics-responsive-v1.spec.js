@@ -174,3 +174,16 @@ test("taktikkbrikkene viser draktmarkør uten å skjule spillerknapper", async (
   expect(visuals.interactive).toBe(true);
   expect(visuals.phaseReadOnly).toBe(true);
 });
+
+test("kildebaserte spillerbidrag finnes fortsatt i en utvidbar seksjon", async ({ page }) => {
+  const disclosure = page.locator(".fm-tactics-insights");
+  await expect(disclosure).toBeAttached();
+  await expect(page.locator("#sourcedLineupImpact")).toBeAttached();
+  const ownership = await page.evaluate(() =>
+    document.querySelector("#sourcedLineupImpact")?.closest(".fm-tactics-insights")?.tagName
+  );
+  expect(ownership).toBe("DETAILS");
+  await disclosure.locator("summary").click();
+  await expect(disclosure).toHaveAttribute("open", "");
+  await expect(page.locator("#sourcedLineupImpact")).toBeVisible();
+});
