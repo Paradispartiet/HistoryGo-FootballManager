@@ -129,3 +129,47 @@ test("faseformasjon følger nytt systemvalg uten egen lagring", async ({ page })
   await expect(page.locator("#fmPhasePitch")).toHaveAttribute("data-formation-id", alternative);
   await expect(page.locator("#fmPhasePitch .fm-phase-player")).toHaveCount(11);
 });
+
+test("alle 46 formasjonskildene gir 11 entydige brikker i begge faser", async ({ page }) => {
+  const result = await page.evaluate(async () => {
+    const { projectFormationPhase } = await import("/src/ui/manager-tactics-phase-projection.js");
+    const { buildFormationSlots } = await import("/src/hg-football-formation-adapter.js");
+    const formations = (await (await fetch("data/hgFootball/formations.json")).json()).formations;
+    const starting = buildFormationSlots("4-2-3-1").map((slot, index) => ({
+      id: "starting_" + index, position: slot.position, x: slot.x, y: slot.y
+    }));
+    const errors = [];
+    for (const formation of formations) {
+      for (const phase of ["in", "out"]) {
+        const result = projectFormationPhase(starting, formation, phase);
+        if (!result || result.players.length !== 11 ||
+            new Set(result.players.map((player) => player.id)).size !== 11 ||
+            result.players.filter((player) => player.position === "GK").length !== 1) {
+          errors.push(formation.id + ":" + phase);
+        }
+      }
+    }
+    return { count: formations.length, errors };
+  });
+  expect(result.count).toBe(46);
+  expect(result.errors).toEqual([]);
+});
+
+test("taktikkbrikkene viser draktmarkør uten å skjule spillerknapper", async ({ page }) => {
+  await expect(page.locator("#lineupSlots .player-chip")).toHaveCount(11);
+  await expect(page.locator("#fmPhasePitch .fm-phase-player")).toHaveCount(11);
+  const visuals = await page.evaluate(() => {
+    const source = document.querySelector("#lineupSlots .player-chip");
+    const phase = document.querySelector("#fmPhasePitch .fm-phase-player");
+    return {
+      kit: getComputedStyle(source, "::after").content,
+      phaseKit: getComputedStyle(phase, "::before").content,
+      interactive: source.tagName === "BUTTON",
+      phaseReadOnly: phase.tagName !== "BUTTON"
+    };
+  });
+  expect(visuals.kit).not.toBe("none");
+  expect(visuals.phaseKit).not.toBe("none");
+  expect(visuals.interactive).toBe(true);
+  expect(visuals.phaseReadOnly).toBe(true);
+});
