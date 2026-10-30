@@ -29,6 +29,8 @@
 - Liggende mobil, fra 640 px: bane og spillerliste side om side, med fasepanelet som valgbar bane.
 - Ingen tvungen skjermorientering, skalering som gjør skriften uleselig, eller duplisering av originalt laguttak.
 
+- Panelet for dokumenterte spillerbidrag ligger i en tilgjengelig, utvidbar seksjon **under** taktikktavlene. Den eksisterende kildelisten (`#sourcedLineupImpact`) beholdes i DOM-en og oppdateres av samme app-motor.
+
 ## Verifikasjon før merge
 
 - Browser: `tests/browser/manager-tactics-responsive-v1.spec.js`, inkludert autentiske faseverdier og bytte av formasjon.
