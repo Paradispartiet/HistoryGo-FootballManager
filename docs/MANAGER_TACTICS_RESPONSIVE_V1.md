@@ -1,28 +1,31 @@
-# Responsive tactics board v1 — reference-inspired UI
+# Responsivt taktikkbrett – PR #529
 
-Design target: a compact three-column tactics screen on landscape iPad/desktop, with the **actual editable lineup** on the left, a **clearly labelled static formation reference** in the center and a **real-player-derived shortlist** on the right. Registered bench buttons are relocated below the grid without replacing their existing click handlers.
+## Autoritet og redigering
 
-## Sources and interaction
+- `#lineupSlots` er fortsatt den **eneste spillbare/redigerbare banen**. Spilleruttak, bytter, lagring og profilhandlinger forblir hos eksisterende `app.js`.
+- Benken flyttes som original DOM-node under tavlene, uten kopiering av knapper eller hendelseslyttere.
+- Startelleverlisten leser navn, posisjon, rolle og kvalitativ fit fra originalens spillerbrikker.
+- Ikke legg til overall-rating eller oppdiktede stjerner.
 
-- The editable pitch continues to be the existing #lineupSlots, including pointer-based movement and exchanges.
-- The central pitch mirrors **exactly the chosen formation and positions**, but is not a second tactical engine. It never claims to calculate pressing shape, off-ball rotations, probabilities or phase changes. Its label explains this.
-- The right-hand list reads player name, position, role and qualitative fit directly from the source pitch, opens the existing profile via the established player-profile event and links to the full Tropp view.
-- Existing #benchPlayersList DOM is **moved**, not copied. The authoritative app.js event handlers and save-state remain attached.
-- Existing selected-slot inspector remains accessible below the grid.
-- The existing Lag/Tropp/Systemet/Trening structure is unchanged. No overall stars or invented player ratings are introduced.
+## Fasevisning fra ekte kildedata
 
-## Responsive contract
+- `src/ui/manager-tactics-phase-projection.js` leser formasjonen gjennom de eksisterende feltene `inPossessionShape` og `outOfPossessionShape` i `data/hgFootball/formations.json`.
+- Fasepanelet kan vise **Med ball** og **Uten ball** fra valgt system. Eksempel: `modern_4231` er 2-4-3-1 med ball og 4-4-1-1 uten ball. Feltverdiene kommer fra formasjonsbiblioteket, ikke hardkodede UI-antakelser.
+- Spillerne fordeles til fasestrukturens slot-koordinater gjennom en deterministisk minimumsavstandsfordeling. Dette er en **illustrasjon av faseformen**, ikke spillernes faktiske løp, nye individuelle rolleordre eller utfall av kampmotoren. Det opplyses direkte i grensesnittet.
+- Fasediagrammet er alltid skrivebeskyttet. Originalens laguttak, profil, kampplan, formasjon og save-state endres ikke av å bytte diagram.
+- Hvis data mangler eller faseformen ikke kan tegnes, viser vi eksplisitt grunnformasjonen som fallback, ikke en oppdiktet fase. Ingen ny lagringsnøkkel eller parallell taktikkmotor.
+- Det historiske biblioteket er fortsatt kilden til faseformasjonene; kampmotoren har egne eksisterende mekanismer og blir ikke endret her.
 
-- Width 980px and above: three columns, source pitch + static phase reference + starting eleven, followed by horizontal substitutes rail.
-- Below 980px in portrait: large buttons switch between the three views, one main panel at a time.
-- Phone-sized landscape: show source/phase pitch next to player list, with a switch between pitch references. Preserve touch targets and allow vertical scrolling rather than shrinking text until it is illegible.
-- No fixed landscape-only viewport, forced orientation, direct pixel scaling, new storage key or secondary data engine.
-- Native keyboard focus, reduced-motion and safe horizontal bench scrolling remain available.
+## Responsiv flyt
 
-## Follow-up scope (not implemented by this v1)
+- Liggende iPad og desktop, fra 980 px: tre paneler — spillbart laguttak, fasevisning, startellever — med original benk nedenfor.
+- Stående mobil: store faner for **Laguttak**, **Taktiske faser** og **Spillere**. Inne på fasepanelet velges **Med ball** eller **Uten ball**.
+- Liggende mobil, fra 640 px: bane og spillerliste side om side, med fasepanelet som valgbar bane.
+- Ingen tvungen skjermorientering, skalering som gjør skriften uleselig, eller duplisering av originalt laguttak.
 
-The design reference shows two genuinely different in-possession and out-of-possession shapes. That requires a phase-level transformation from authoritative tactical data, not visual invention. A later PR can add it once existing models and formation metadata are mapped and tested. No in-game ability stars or generic average ratings should be invented to imitate the reference screenshot.
+## Verifikasjon før merge
 
-## Verification
-
-Browser spec: tests/browser/manager-tactics-responsive-v1.spec.js. Cover landscape iPad, portrait phone, landscape phone, mirroring 11 real positions, original bench node and existing player profile. Run existing lineup, drawer and manager-shell regressions before merging.
+- Browser: `tests/browser/manager-tactics-responsive-v1.spec.js`, inkludert autentiske faseverdier og bytte av formasjon.
+- Kjør eksisterende lineup-, drawer-, manager-shell- og CI-regresjoner.
+- Kontroller visuelt i faktisk iPad Safari, stående og liggende, og mobil i begge retninger.
+- Behold PR som utkast til testene og visuell kontroll er godkjent.
