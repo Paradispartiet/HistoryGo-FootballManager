@@ -75,3 +75,48 @@ test("spillerprofil åpnes fra reell spiller-ID, ikke en ny score eller kopi av 
     await expect(page.locator("#fmTacticsSquadRows")).toContainText("Tom plass");
   }
 });
+
+test("fasebanen leser faktisk med/uten-ball-form fra valgt system, uten å endre elleveren", async ({ page }) => {
+  await expect.poll(async () => page.locator("#lineupSlots .player-chip").count()).toBe(11);
+  const formation = await page.evaluate(async () => {
+    const formationId = document.querySelector("#formationSelect")?.value;
+    const response = await fetch("data/hgFootball/formations.json");
+    const data = await response.json();
+    return data.formations.find((item) => item.id === formationId);
+  });
+  expect(formation).toBeTruthy();
+
+  const lineupIdsBefore = await page.locator("#lineupSlots .player-chip").evaluateAll(
+    (items) => items.map((chip) => chip.dataset.playerId)
+  );
+  const pitch = page.locator("#fmPhasePitch");
+  await expect(pitch).toHaveAttribute("data-phase", "out");
+  await expect(pitch).toHaveAttribute("data-shape", formation.outOfPossessionShape);
+  await expect(page.locator("#fmPhaseHeading")).toContainText(formation.outOfPossessionShape);
+  await expect(page.locator('[data-fm-phase="out"]')).toHaveAttribute("aria-pressed", "true");
+
+  await page.locator('[data-fm-phase="in"]').click();
+  await expect(pitch).toHaveAttribute("data-phase", "in");
+  await expect(pitch).toHaveAttribute("data-shape", formation.inPossessionShape);
+  await expect(page.locator("#fmPhaseHeading")).toContainText(formation.inPossessionShape);
+  await expect(pitch.locator(".fm-phase-player")).toHaveCount(11);
+
+  const lineupIdsAfter = await page.locator("#lineupSlots .player-chip").evaluateAll(
+    (items) => items.map((chip) => chip.dataset.playerId)
+  );
+  expect(lineupIdsAfter).toEqual(lineupIdsBefore);
+  await expect(page.locator("#benchPlayersList")).toBeAttached();
+});
+
+test("faseformasjon følger nytt systemvalg uten egen lagring", async ({ page }) => {
+  const choices = await page.locator("#formationSelect option:not([disabled])").evaluateAll(
+    (nodes) => nodes.map((node) => node.value).filter(Boolean)
+  );
+  if (choices.length < 2) return;
+  const select = page.locator("#formationSelect");
+  const original = await select.inputValue();
+  const alternative = choices.find((id) => id !== original);
+  await select.selectOption(alternative);
+  await expect(page.locator("#fmPhasePitch")).toHaveAttribute("data-formation-id", alternative);
+  await expect(page.locator("#fmPhasePitch .fm-phase-player")).toHaveCount(11);
+});
