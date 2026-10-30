@@ -4,6 +4,11 @@
  * Autoritet: #lineupSlots, #benchPlayersList og den eksisterende Tropp-fanen.
  * Ingen ekstra spiller-, posisjons-, fase-, fit- eller lagringsmotor.
  */
+import { projectFormationPhase } from "./manager-tactics-phase-projection.js";
+
+const formationIndex = new Map();
+let activePhase = "out";
+
 const GRID_ID = "fmResponsiveTacticsGrid";
 const PHASE_ID = "fmBaseFormationPhase";
 const SQUAD_ID = "fmTacticsSquad";
@@ -42,8 +47,8 @@ function ensureLayout() {
   nav.id = NAV_ID;
   nav.setAttribute("aria-label", "Velg taktikkvisning");
   [
-    ["pitch", "Med ball"],
-    ["phase", "Uten ball"],
+    ["pitch", "Laguttak"],
+    ["phase", "Taktiske faser"],
     ["squad", "Spillere"]
   ].forEach(([name, title]) => {
     const button = element("button", "", title);
@@ -64,14 +69,26 @@ function ensureLayout() {
   phase.id = PHASE_ID;
   phase.setAttribute("aria-label", "Utgangsformasjon uten ball");
   const phaseHead = element("div", "fm-panel-heading");
-  phaseHead.append(
-    element("h3", "", "Uten ball · grunnformasjon"),
-    element("p", "", "Viser samme valgte utgangsposisjoner. Press og bevegelser simuleres ikke her.")
-  );
+  const title = element("h3", "", "Uten ball · laster fasestruktur");
+  title.id = "fmPhaseHeading";
+  const description = element("p", "", "Faseformen hentes fra det valgte systemet. Spillerfordelingen er illustrativ, ikke simulerte løp.");
+  description.id = "fmPhaseExplanation";
+  phaseHead.append(title, description);
+
+  const phaseControls = element("div", "fm-phase-controls");
+  phaseControls.setAttribute("role", "group");
+  phaseControls.setAttribute("aria-label", "Vis form med eller uten ball");
+  [["in", "Med ball"], ["out", "Uten ball"]].forEach(([key, label]) => {
+    const button = element("button", "", label);
+    button.type = "button";
+    button.dataset.fmPhase = key;
+    button.setAttribute("aria-pressed", key === activePhase ? "true" : "false");
+    phaseControls.append(button);
+  });
   const phasePitch = element("div", "pitch fm-phase-pitch");
   phasePitch.id = "fmPhasePitch";
-  phasePitch.setAttribute("aria-label", "Speiling av valgt ellever som referanse");
-  phase.append(phaseHead, phasePitch);
+  phasePitch.setAttribute("aria-label", "Illustrativ fasefordeling av valgt ellever");
+  phase.append(phaseHead, phaseControls, phasePitch);
   stage.after(phase);
 
   const squad = element("section", "manager-surface fm-squad-panel");
@@ -113,13 +130,36 @@ function renderProjection(pitch) {
   target.dataset.narrow = pitch.dataset.narrow || "false";
   target.style.setProperty("--chip-w", pitch.style.getPropertyValue("--chip-w") || "18cqw");
 
+  const formation = formationIndex.get(document.getElementById("formationSelect")?.value);
+  const projection = projectFormationPhase(
+    source.map((chip) => ({
+      id: chip.dataset.slotId,
+      position: chip.dataset.position,
+      x: chip.dataset.x,
+      y: chip.dataset.y
+    })),
+    formation,
+    activePhase
+  );
+  const projectedPlayers = new Map((projection?.players || []).map((player) => [player.id, player]));
+  const phaseLabel = activePhase === "in" ? "Med ball" : "Uten ball";
+  document.getElementById("fmPhaseHeading").textContent =
+    projection ? `${phaseLabel} · ${projection.shape}` : `${phaseLabel} · grunnformasjon`;
+  document.getElementById("fmPhaseExplanation").textContent = projection
+    ? "Faseform fra formasjonsbiblioteket. Spillerne fordeles illustrativt ut fra laguttaket; ingen løp eller kampinstrukser simuleres."
+    : "Fasedata ikke tilgjengelige. Banen viser grunnformasjonen, ikke en egen fase.";
+  target.dataset.phase = projection ? activePhase : "base";
+  target.dataset.shape = projection?.shape || "";
+  target.dataset.formationId = projection?.formationId || "";
+
   const phaseNodes = [];
   source.forEach((chip) => {
     const name = chip.dataset.playerName || "Ledig plass";
-    const pos = chip.dataset.position || chip.dataset.slotLabel || "–";
+    const shifted = projectedPlayers.get(chip.dataset.slotId);
+    const pos = shifted?.position || chip.dataset.position || chip.dataset.slotLabel || "–";
     const mirror = element("span", "fm-phase-player");
-    mirror.style.left = chip.style.left;
-    mirror.style.top = chip.style.top;
+    mirror.style.left = shifted ? `${shifted.x}%` : chip.style.left;
+    mirror.style.top = shifted ? `${shifted.y}%` : chip.style.top;
     mirror.append(element("b", "", pos), element("span", "", name === "Tom plass" ? "Ledig" : name));
     if (chip.classList.contains("is-selected")) mirror.classList.add("is-selected");
     if (chip.dataset.fitTone === "misused") mirror.classList.add("is-misused");
@@ -170,6 +210,30 @@ function boot() {
   };
   const observer = new MutationObserver(schedule);
   observer.observe(layout.pitch, { childList: true, subtree: false });
+  document.getElementById("formationSelect")?.addEventListener("change", schedule);
+  document.querySelectorAll("[data-fm-phase]").forEach((button) => {
+    button.addEventListener("click", () => {
+      activePhase = button.dataset.fmPhase;
+      document.querySelectorAll("[data-fm-phase]").forEach((item) => {
+        item.setAttribute("aria-pressed", String(item === button));
+      });
+      schedule();
+    });
+  });
+
+  // One read of the canonical formation file; no new tactical state or save.
+  fetch(new URL("../../data/hgFootball/formations.json", import.meta.url))
+    .then((response) => {
+      if (!response.ok) throw new Error("Formation data unavailable");
+      return response.json();
+    })
+    .then((data) => {
+      for (const formation of data.formations || []) {
+        if (formation?.id) formationIndex.set(formation.id, formation);
+      }
+      schedule();
+    })
+    .catch(() => schedule());
   schedule();
 }
 
