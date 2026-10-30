@@ -16,6 +16,12 @@
 - Hvis data mangler eller faseformen ikke kan tegnes, viser vi eksplisitt grunnformasjonen som fallback, ikke en oppdiktet fase. Ingen ny lagringsnøkkel eller parallell taktikkmotor.
 - Det historiske biblioteket er fortsatt kilden til faseformasjonene; kampmotoren har egne eksisterende mekanismer og blir ikke endret her.
 
+## Spillerbrikker og drakter
+
+- Draktsilhuetter tegnes i CSS over eksisterende spillerbrikker, også på den skrivebeskyttede fasebanen.
+- Keeperen får egen gul farge, og ledige plasser nøytral grå. Øvrige farger er generiske, ikke en påstand om klubbens virkelige drakt.
+- Ingen nye spillerbilder, falske spillernumre, lagret drakttilstand eller endringer i hvordan brukeren flytter spillerne.
+
 ## Responsiv flyt
 
 - Liggende iPad og desktop, fra 980 px: tre paneler — spillbart laguttak, fasevisning, startellever — med original benk nedenfor.
