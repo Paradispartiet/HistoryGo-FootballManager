@@ -48,7 +48,7 @@ function ensureLayout() {
   nav.setAttribute("aria-label", "Velg taktikkvisning");
   [
     ["pitch", "Laguttak"],
-    ["phase", "Taktiske faser"],
+    ["phase", "Faser"],
     ["squad", "Spillere"]
   ].forEach(([name, title]) => {
     const button = element("button", "", title);
@@ -67,7 +67,7 @@ function ensureLayout() {
 
   const phase = element("section", "manager-surface fm-phase-panel");
   phase.id = PHASE_ID;
-  phase.setAttribute("aria-label", "Utgangsformasjon uten ball");
+  phase.setAttribute("aria-label", "Formasjoner med og uten ball");
   const phaseHead = element("div", "fm-panel-heading");
   const title = element("h3", "", "Uten ball · laster fasestruktur");
   title.id = "fmPhaseHeading";
