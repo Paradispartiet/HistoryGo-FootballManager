@@ -34,7 +34,8 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
   grid-template-areas:
     "pitch phase squad"
     "bench bench bench"
-    "details details details";
+    "details details details"
+    "insights insights insights";
   gap: 12px;
   align-items: start;
   min-width: 0;
@@ -44,7 +45,8 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
 .fm-tactics-grid > .fm-phase-panel,
 .fm-tactics-grid > .fm-squad-panel,
 .fm-tactics-grid > .fm-tactics-bench,
-.fm-tactics-grid > #sidePanel {
+.fm-tactics-grid > #sidePanel,
+.fm-tactics-grid > .fm-tactics-insights {
   min-width: 0;
   max-width: 100%;
   margin: 0;
@@ -59,6 +61,28 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
 .fm-tactics-grid > .fm-squad-panel { grid-area: squad; }
 .fm-tactics-grid > .fm-tactics-bench { grid-area: bench; }
 .fm-tactics-grid > #sidePanel { grid-area: details; padding: 14px; }
+.fm-tactics-grid > .fm-tactics-insights {
+  grid-area: insights;
+  padding: 0;
+  overflow: hidden;
+}
+.fm-tactics-insights > summary {
+  padding: 12px 15px;
+  min-height: 46px;
+  font-weight: 800;
+  font-size: .84rem;
+  color: #d8efff;
+  cursor: pointer;
+}
+.fm-tactics-insights > summary:focus-visible {
+  outline: 3px solid #a7f0ff;
+  outline-offset: -3px;
+}
+.fm-tactics-insights .lineup-sourced-impact {
+  padding: 12px 15px 16px;
+  margin: 0;
+  border-top: 1px solid var(--fm-edge);
+}
 
 .fm-tactics-grid > .pitch-stage .pitch-stage-head h2 {
   font-size: clamp(1rem, 1.5vw, 1.35rem);
@@ -345,7 +369,7 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
 
   .fm-tactics-grid {
     grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-areas: "pitch" "phase" "squad" "bench" "details";
+    grid-template-areas: "pitch" "phase" "squad" "bench" "details" "insights";
   }
   .fm-tactics-grid > .pitch-stage { grid-column: 1 !important; }
   .fm-tactics-grid[data-view="pitch"] > .fm-phase-panel,
@@ -369,7 +393,7 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
 @media (max-width: 979px) and (min-width: 640px) and (orientation: landscape) {
   .fm-tactics-grid {
     grid-template-columns: minmax(0, 1.07fr) minmax(270px, .93fr) !important;
-    grid-template-areas: "pitch squad" "phase squad" "bench bench" "details details";
+    grid-template-areas: "pitch squad" "phase squad" "bench bench" "details details" "insights insights";
   }
   .fm-tactics-grid[data-view="pitch"] > .fm-squad-panel,
   .fm-tactics-grid[data-view="phase"] > .fm-squad-panel { display: grid !important; }
