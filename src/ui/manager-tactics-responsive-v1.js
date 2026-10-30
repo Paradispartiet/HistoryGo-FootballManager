@@ -117,6 +117,16 @@ function ensureLayout() {
     bench.classList.add("fm-tactics-bench");
     grid.append(bench);
   }
+
+  // Long source-backed impact notes remain available without stretching the
+  // live pitch column below the two tactical diagrams.
+  const impact = stage.querySelector(".lineup-sourced-impact");
+  if (impact) {
+    const disclosure = element("details", "fm-tactics-insights");
+    disclosure.append(element("summary", "", "Dokumenterte spillerbidrag"));
+    disclosure.append(impact);
+    grid.append(disclosure);
+  }
   return { grid, pitch };
 }
 
