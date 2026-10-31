@@ -465,3 +465,203 @@
     max-width: none;
   }
 }
+
+
+/* Squad workspace v2 — the same data-backed roster, in the new visual system. */
+.hgfm-universe-v2 #rosterReadinessPanel.has-manager-player-workspace {
+  border: 1px solid var(--fmuv-line);
+  border-radius: 13px;
+  background: #0b172b;
+  overflow: hidden;
+  width: 100%;
+  max-width: none;
+}
+.hgfm-universe-v2 #managerPlayerWorkspace { background: #0b172b; color: var(--fmuv-ink); }
+.hgfm-universe-v2 .manager-player-workspace-head {
+  align-items: center;
+  padding: clamp(14px, 2vw, 22px);
+  background: linear-gradient(110deg, #142647, #0b1730);
+  border-bottom: 1px solid var(--fmuv-line);
+}
+.hgfm-universe-v2 .manager-player-workspace-head h2 { color: #f2f5ff; }
+.hgfm-universe-v2 .manager-roster-count {
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: #331f54;
+  border: 1px solid #8850d0;
+  color: #dfcaff;
+}
+.hgfm-universe-v2 .fmuv-roster-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--fmuv-line);
+}
+.hgfm-universe-v2 .fmuv-roster-kpis article {
+  display: grid;
+  gap: 6px;
+  padding: 11px 13px;
+  background: #112440;
+  border: 1px solid #314c76;
+  border-radius: 10px;
+  min-width: 0;
+}
+.hgfm-universe-v2 .fmuv-roster-kpis span {
+  color: #abc1dc;
+  font-size: .72rem;
+  font-weight: 700;
+}
+.hgfm-universe-v2 .fmuv-roster-kpis strong {
+  color: #e7f2ff;
+  font-size: clamp(1.2rem, 1.8vw, 1.7rem);
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+.hgfm-universe-v2 .fmuv-roster-kpis article:nth-child(2) strong { color: #58e5b7; }
+.hgfm-universe-v2 .fmuv-roster-kpis article:nth-child(3) strong { color: #ffc980; }
+.hgfm-universe-v2 .fmuv-roster-kpis article:nth-child(4) strong { color: #ff9aa4; }
+.hgfm-universe-v2 .manager-roster-tools {
+  background: #0d1d35;
+  border-bottom: 1px solid var(--fmuv-line);
+  gap: 10px;
+  padding: 13px 14px;
+}
+.hgfm-universe-v2 .manager-roster-tools label > span {
+  color: #b1c3de;
+  font-size: .69rem;
+}
+.hgfm-universe-v2 .manager-roster-tools input,
+.hgfm-universe-v2 .manager-roster-tools select {
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 1px solid #405e85;
+  border-radius: 8px;
+  background: #101e37;
+  color: #eff4ff;
+}
+.hgfm-universe-v2 .manager-roster-tools input:focus-visible,
+.hgfm-universe-v2 .manager-roster-tools select:focus-visible {
+  outline: 3px solid #cc9fff;
+  outline-offset: 2px;
+}
+.hgfm-universe-v2 .manager-roster-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  background: #0b182d;
+}
+.hgfm-universe-v2 .manager-roster-table { color: #e5eefa; min-width: 940px; font-size: .79rem; }
+.hgfm-universe-v2 .manager-roster-table th {
+  padding: 12px 10px;
+  background: #142845;
+  color: #b5c9e6;
+  border-bottom: 1px solid #3d527b;
+  font-size: .68rem;
+}
+.hgfm-universe-v2 .manager-roster-table td {
+  height: 54px;
+  padding: 7px 10px;
+  border-color: #2b3f5e;
+}
+.hgfm-universe-v2 .manager-roster-table tbody tr:nth-child(even) { background: #10213c; }
+.hgfm-universe-v2 .manager-roster-table tbody tr:hover { background: #292247; }
+.hgfm-universe-v2 .manager-roster-player-link strong { color: #f3f4ff; font-size: .88rem; }
+.hgfm-universe-v2 .manager-roster-player-link small { color: #b2c2d9; }
+.hgfm-universe-v2 .manager-roster-positions {
+  font-weight: 850;
+  letter-spacing: .04em;
+  color: #cce7ff;
+}
+.hgfm-universe-v2 .manager-roster-table tr[data-position-group="defense"] .manager-roster-positions { color: #5cbfff; }
+.hgfm-universe-v2 .manager-roster-table tr[data-position-group="midfield"] .manager-roster-positions { color: #68e2b7; }
+.hgfm-universe-v2 .manager-roster-table tr[data-position-group="attack"] .manager-roster-positions { color: #deabff; }
+.hgfm-universe-v2 .manager-roster-table td[data-tone="positive"] { color: #6de5ba; }
+.hgfm-universe-v2 .manager-roster-table td[data-tone="attention"] { color: #ffc783; }
+.hgfm-universe-v2 .manager-roster-table td[data-tone="negative"] { color: #ff9da2; }
+.hgfm-universe-v2 .manager-roster-table td[data-fit="good"] { color: #6ce5b9; }
+.hgfm-universe-v2 .manager-roster-table td[data-fit="poor"] { color: #ff9da2; }
+
+/* Tactics: reference-like twin green boards, compact squads and purple controls.
+   All positions, names, availability and tactical fit remain canonical. */
+.hgfm-universe-v2 [data-tab-section="tactics"] {
+  --fm-edge: #38537f;
+  --fm-panel: #0c1d36;
+  --fm-panel-deep: #08152b;
+}
+.hgfm-universe-v2 .fm-tactics-grid {
+  column-gap: clamp(8px, 1.1vw, 14px);
+  row-gap: 10px;
+}
+.hgfm-universe-v2 .fm-tactics-grid > .pitch-stage,
+.hgfm-universe-v2 .fm-tactics-grid > .fm-phase-panel,
+.hgfm-universe-v2 .fm-tactics-grid > .fm-squad-panel,
+.hgfm-universe-v2 .fm-tactics-grid > .fm-tactics-bench,
+.hgfm-universe-v2 .fm-tactics-grid > #sidePanel {
+  background: linear-gradient(155deg, #102844, #09162c);
+  border: 1px solid #355179;
+  border-radius: 12px;
+  box-shadow: 0 6px 22px #03071473;
+}
+.hgfm-universe-v2 .fm-panel-heading h3 { color: #f2f5ff; font-size: clamp(.94rem, 1.45vw, 1.15rem); }
+.hgfm-universe-v2 .fm-panel-heading p { color: #adc3db; }
+.hgfm-universe-v2 .fm-tactics-grid .fm-compare-switch,
+.hgfm-universe-v2 .fm-open-roster {
+  min-height: 44px;
+  border: 1px solid #9c62e7;
+  border-radius: 8px;
+  background: #5e20ba;
+  color: white;
+}
+.hgfm-universe-v2 .fm-tactics-grid #lineupSlots,
+.hgfm-universe-v2 .fm-tactics-grid .fm-phase-pitch {
+  border-color: #329975;
+  background-color: #11624c;
+}
+.hgfm-universe-v2 .fm-phase-player {
+  border-radius: 7px;
+  border-color: #7594bb;
+  background: #0c1c32f5;
+  color: #edf5ff;
+  box-shadow: 0 2px 7px #0008;
+}
+.hgfm-universe-v2 .fm-phase-player b { color: #83ebc9; }
+.hgfm-universe-v2 .fm-squad-column-head {
+  color: #b2c8e1;
+  border-color: #375479;
+  font-size: .7rem;
+}
+.hgfm-universe-v2 .fm-squad-row {
+  min-height: 46px;
+  border-color: #274364;
+  font-size: .73rem;
+}
+.hgfm-universe-v2 .fm-squad-row:nth-child(even) { background: #13294a; }
+.hgfm-universe-v2 .fm-squad-row.is-selected { background: #392158; }
+.hgfm-universe-v2 .fm-position { border-color: #5475bb; background: #203b77; color: #e7f2ff; }
+.hgfm-universe-v2 .fm-player-role { color: #b7d1ee; }
+.hgfm-universe-v2 .fm-player-fit { color: #66e8b4; }
+.hgfm-universe-v2 .fm-player-profile { border-color: #576e9d; background: #162d50; color: #e3edff; }
+.hgfm-universe-v2 .fm-tactics-bench .bench-player-card {
+  background: #132947;
+  border: 1px solid #395784;
+  border-radius: 9px;
+}
+.hgfm-universe-v2 .fm-tactics-view-switch { border-color: #4f438e; background: #111b38; }
+.hgfm-universe-v2 .fm-tactics-view-switch button[aria-pressed="true"],
+.hgfm-universe-v2 .fm-phase-controls button[aria-pressed="true"] {
+  background: #5e20ba;
+  color: #fff;
+  border-color: #aa6cf2;
+}
+@media (max-width: 950px) {
+  .hgfm-universe-v2 .fmuv-roster-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 620px) {
+  .hgfm-universe-v2 .fmuv-roster-kpis { gap: 7px; padding: 9px; }
+  .hgfm-universe-v2 .fmuv-roster-kpis article { padding: 10px; }
+  .hgfm-universe-v2 .manager-player-workspace-head { padding: 13px; }
+  .hgfm-universe-v2 .manager-roster-table { min-width: 880px; }
+  .hgfm-universe-v2 .fm-squad-row { min-height: 48px; }
+}
