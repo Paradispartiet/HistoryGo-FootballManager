@@ -53,8 +53,7 @@
 }
 .hgfm-universe-v2 .app-shell > .tab-section:not(.fmuv-screen) > .panel,
 .hgfm-universe-v2 .app-shell > .tab-section:not(.fmuv-screen) > .manager-surface,
-.hgfm-universe-v2 .app-shell > .tab-section:not(.fmuv-screen) > .dept-hero,
-.hgfm-universe-v2 .app-shell > .tab-section:not(.fmuv-screen) > .manager-calendar-surface {
+.hgfm-universe-v2 .app-shell > .tab-section:not(.fmuv-screen) > .dept-hero {
   background: linear-gradient(145deg, #0c1c31, #081322);
   border: 1px solid var(--fmuv-line);
   border-radius: 12px;
@@ -790,4 +789,13 @@
 .hgfm-universe-v2 #managerScoutingRecruitable {
   border-radius: 0;
   box-shadow: none;
+}
+
+/* Visual identity regression: these are flat *workspaces*, never cards.
+   Keep the distinctive timeline and scouting layouts while preserving
+   shared brand styling for controls INSIDE those workspaces. */
+html.hgfm-universe-v2 body[data-manager-area="office"] .manager-calendar-surface,
+html.hgfm-universe-v2 body[data-manager-area="scouting"] #managerScoutingRecruitable {
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
