@@ -25,6 +25,9 @@ test("Hjem viser ekte kalenderkontekst og snarveier til spillflatene", async ({ 
   await expect(page.locator("#fmuvHome")).toBeVisible();
   await expect(page.locator("#fmuvMatchName")).not.toBeEmpty();
   await expect(page.locator("#fmuvWeek")).not.toBeEmpty();
+  await expect(page.locator("#fmuvHomeStanding")).toHaveText(await page.locator("#statsStanding").textContent());
+  await expect(page.locator("#fmuvHomeMatches")).toHaveText(await page.locator("#statsMatches").textContent());
+  await expect(page.locator("#fmuvHomeGoals")).toHaveText(await page.locator("#statsGoals").textContent());
   await expect(page.locator("#fmuvHomeMail")).toBeVisible();
   await expect(page.locator("#fmuvHome .fmuv-quick-action")).toHaveCount(7);
   await page.locator("#fmuvHome .fmuv-quick-action").filter({ hasText: "Taktikk" }).click();
