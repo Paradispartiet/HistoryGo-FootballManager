@@ -221,3 +221,38 @@ jobs:
       - name: Responsive nettleservakter og visuelle differanser
         if: steps.scope.outputs.lane == 'full'
         run: npm run test:browser -- --project=chromium
+
+      # Archive Chromium screenshots before the next Playwright invocation.
+      # Playwright removes test-results at the start of the WebKit run.
+      # Save synthetic training-day screenshots as review evidence.
+      # This supplements Chromium assertions; it is not physical iOS QA.
+      - name: Arkiver treningsdagens mobilbilder
+        if: ${{ always() && steps.scope.outputs.lane == 'full' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: training-day-mobile-screenshots
+          path: |
+            test-results/training-day-coherence-*.png
+            test-results/training-day-squad-*.png
+          if-no-files-found: warn
+          retention-days: 14
+
+      # Focused WebKit smoke checks exercise the Safari engine on emulated
+      # phone/tablet devices. They do not substitute for physical iOS QA.
+      - name: Installer WebKit for treningsdagens mobile nettleservakter
+        if: steps.scope.outputs.lane == 'full'
+        run: npx playwright install --with-deps webkit
+
+      - name: WebKit iPhone og iPad - treningsvalg lagring og navigasjon
+        if: steps.scope.outputs.lane == 'full'
+        run: npm run test:browser -- --project=webkit-training-iphone --project=webkit-training-ipad
+
+      - name: Arkiver WebKit-bilder fra treningsdagen
+        if: ${{ always() && steps.scope.outputs.lane == 'full' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: training-day-webkit-screenshots
+          path: test-results/training-day-webkit-*.png
+          if-no-files-found: warn
+          retention-days: 14
+

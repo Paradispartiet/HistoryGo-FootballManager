@@ -133,6 +133,7 @@ function ensureSurface() {
           <header><span>Ukens fokus</span><button type="button" id="trainingDayChangeFocus">Endre</button></header>
           <strong id="trainingDayFocus">Ikke valgt</strong>
           <p id="trainingDayFocusHint">Velg kampens viktigste treningstema.</p>
+          <p class="training-day-coherence" id="trainingDayCoherence" data-level="ufullstendig"></p>
         </section>
         <section class="training-day-card">
           <header><span>Individuell oppfølging</span><button type="button" id="trainingDayChangeIndividual">Endre</button></header>
@@ -148,9 +149,22 @@ function ensureSurface() {
           <span>Troppstilstand</span>
           <strong id="trainingDayCondition">Ingen akutte varsler</strong>
           <p id="trainingDayLoad">Belastning beregnes fra valgt program.</p>
+          <details class="training-day-risk-details" id="trainingDayRiskDetails" hidden>
+            <summary id="trainingDayRiskSummary">Se spillere som trenger oppfølging</summary>
+            <ul class="training-day-risk-list" id="trainingDayRiskList"></ul>
+          </details>
         </section>
       </aside>
     </div>
+
+    <section class="training-day-next" id="trainingDayNextStep" aria-label="Neste steg i treningsuka">
+      <div>
+        <span>Neste i treningsplanen</span>
+        <strong id="trainingDayNextTitle">Leser treningsplanen…</strong>
+        <p id="trainingDayNextDetail">Kalenderen og den eksisterende ukeplanen bestemmer neste steg.</p>
+      </div>
+      <button type="button" id="trainingDayNextAction" hidden>Fortsett</button>
+    </section>
 
     <details class="training-day-resources" id="trainingDayResources">
       <summary>Fotballfaglig fordypning</summary>
@@ -175,6 +189,14 @@ function ensureSurface() {
   surface.querySelector("#trainingDayChangeFocus")?.addEventListener("click", () => openExistingChoice("teamChangeTrainingFocus"));
   surface.querySelector("#trainingDayChangeIndividual")?.addEventListener("click", () => openExistingChoice("teamChangeIndividualTraining"));
   surface.querySelector("#trainingDayChooseSuggestedFocus")?.addEventListener("click", () => openExistingChoice("teamChangeTrainingFocus"));
+  surface.querySelector("#trainingDayNextAction")?.addEventListener("click", () => {
+    const kind = nextTrainingStep().kind;
+    if (kind === "program") openExistingChoice("teamChangeTrainingProgram");
+    else if (kind === "focus") openExistingChoice("teamChangeTrainingFocus");
+    else if (kind === "individual") openExistingChoice("teamChangeIndividualTraining");
+    else if (kind === "inbox") document.getElementById("trainingPlanNext")?.click();
+    else if (kind === "kamp") document.querySelector('.main-nav [role="tab"][data-tab-target="kamp"]')?.click();
+  });
   surface.querySelector("#trainingDayBackCalendar")?.addEventListener("click", returnToCalendarDay);
   surface.querySelector("#trainingDayReturnCalendar")?.addEventListener("click", returnToCalendarDay);
   return surface;
@@ -269,6 +291,95 @@ function individualCapacityHint() {
   const value = compactText("#individualTrainingCapacity");
   const headline = value.match(/^.*?[.!?](?=\s|$)/)?.[0] || value;
   return `Valgfritt · ${headline || "Velg en spiller dersom noen trenger individuell oppfølging."}`;
+}
+
+
+/**
+ * The authoritative condition engine already renders the named players inside
+ * #trainingDepth. Project those entries into a short disclosure instead of
+ * recalculating risk from ratings or duplicating the condition model.
+ */
+function renderSquadAttention(surface) {
+  const details = surface.querySelector("#trainingDayRiskDetails");
+  const list = surface.querySelector("#trainingDayRiskList");
+  const summary = surface.querySelector("#trainingDayRiskSummary");
+  const source = document.getElementById("squadConditionList");
+  if (!details || !list || !summary || !source) return;
+
+  const entries = [...source.querySelectorAll("li.is-injured, li.is-tired")].map((entry) => ({
+    kind: entry.classList.contains("is-injured") ? "injured" : "tired",
+    name: String(entry.querySelector("strong")?.textContent || "").trim(),
+    explanation: String(entry.querySelector("span")?.textContent || "").trim()
+  }));
+  details.hidden = entries.length === 0;
+  if (!entries.length) {
+    if (details.open) details.open = false;
+    return;
+  }
+  const count = entries.length;
+  const label = `Se ${count} ${count === 1 ? "spiller" : "spillere"} som trenger oppfølging`;
+  if (summary.textContent !== label) summary.textContent = label;
+  const signature = JSON.stringify(entries);
+  if (list.dataset.signature === signature) return;
+  const items = entries.map(({ kind, name, explanation }) => {
+    const item = node("li", kind === "injured" ? "is-injured" : "is-tired");
+    item.append(node("strong", "", name), node("span", "", explanation));
+    return item;
+  });
+  list.replaceChildren(...items);
+  list.dataset.signature = signature;
+}
+
+/**
+ * Read the already-rendered weekly plan. The fourth step is optional once the
+ * plan is ready; do not force individual assignments to unlock match prep.
+ */
+function nextTrainingStep() {
+  if (document.getElementById("trainingChoiceStatus")?.dataset.selected === "true") {
+    return {
+      kind: "kamp",
+      title: "Treningsuka er klar",
+      detail: "Individuell oppfølging er valgfri. Du kan fortsette til kampforberedelsen.",
+      action: "Til Kamp"
+    };
+  }
+  const steps = [...document.querySelectorAll("#trainingPlanSteps > .training-plan-step")];
+  const index = steps.findIndex((step) => step.classList.contains("is-next"));
+  const kind = ["inbox", "program", "focus", "individual"][index] || null;
+  if (!kind) {
+    return {
+      kind: null,
+      title: "Treningsplanen oppdateres",
+      detail: "Ingen ekstra handling kreves her før ukeplanen viser neste steg.",
+      action: ""
+    };
+  }
+  const titles = {
+    inbox: "Les signalene i innboksen",
+    program: "Velg ukas treningsprogram",
+    focus: "Velg treningsfokus",
+    individual: "Vurder individuell oppfølging"
+  };
+  const actions = { inbox: "Åpne innboks", program: "Velg program", focus: "Velg fokus", individual: "Se spillere" };
+  return {
+    kind,
+    title: titles[kind],
+    detail: String(steps[index].querySelector(".training-plan-step-detail")?.textContent || "").trim(),
+    action: actions[kind]
+  };
+}
+
+function renderTrainingNext(surface) {
+  const next = nextTrainingStep();
+  const title = surface.querySelector("#trainingDayNextTitle");
+  const detail = surface.querySelector("#trainingDayNextDetail");
+  const action = surface.querySelector("#trainingDayNextAction");
+  if (title && title.textContent !== next.title) title.textContent = next.title;
+  if (detail && detail.textContent !== next.detail) detail.textContent = next.detail;
+  if (action) {
+    action.hidden = !next.kind;
+    if (action.textContent !== next.action) action.textContent = next.action;
+  }
 }
 
 function renderSessions(surface, context) {
@@ -370,14 +481,35 @@ function renderTrainingDay() {
   if (program) program.textContent = selectedProgramTitle();
   if (focus) focus.textContent = selectedFocus();
   if (focusHint) focusHint.textContent = compactText("#weeklyTrainingRecommendation", "Fokuset kobles til den eksisterende kamp- og treningsplanen.");
+  // Render the existing plan's factual program/focus coherence note. This is
+  // presentation only: the weekly training engine still owns its assessment.
+  const coherence = surface.querySelector("#trainingDayCoherence");
+  const coherenceSource = document.getElementById("trainingPlanCoherence");
+  if (coherence) {
+    const note = String(coherenceSource?.textContent || "").trim();
+    if (coherence.textContent !== note) coherence.textContent = note;
+    const level = coherenceSource?.dataset.level || "ufullstendig";
+    if (coherence.dataset.level !== level) coherence.dataset.level = level;
+    coherence.hidden = !note;
+  }
   if (individual) individual.textContent = selectedIndividual();
   const individualHint = surface.querySelector("#trainingDayIndividualHint");
   if (individualHint) individualHint.textContent = individualCapacityHint();
   if (assistant) assistant.textContent = compactText(".training-assistant-signal strong", "Les dagens signaler før økta.");
   if (assistantDetail) assistantDetail.textContent = compactText(".training-assistant-signal p", "Assistentens råd bruker den eksisterende treningskonteksten.");
   if (condition) condition.textContent = compactText('.training-command-status[data-training-target="details"] .training-command-status-value', "Ingen akutte varsler");
-  if (load) load.textContent = compactText(".training-load-brief", "Belastning beregnes fra valgt program.");
+  // The source brief uses separate block elements. textContent concatenates
+  // them without spaces (e.g. "ukeBalansert"); join the existing facts visibly.
+  const loadSource = document.querySelector(".training-load-brief");
+  if (load) {
+    const parts = loadSource ? [...loadSource.querySelectorAll("strong, p, small")]
+      .map((part) => String(part.textContent || "").trim()).filter(Boolean) : [];
+    load.textContent = parts.join(" · ") || "Belastning beregnes fra valgt program.";
+  }
   if (opponent) opponent.textContent = compactText(".training-opponent-brief strong", "Motstander ikke klar");
+
+  renderSquadAttention(surface);
+  renderTrainingNext(surface);
 
   const suggestionCard = surface.querySelector("#trainingDayProblemSuggestion");
   if (suggestionCard) {
@@ -453,6 +585,12 @@ function installObservers() {
     "#teamSelectedIndividualTraining",
     "#weeklyTrainingStatus",
     "#individualTrainingCapacity",
+    "#squadConditionList",
+    "#squadConditionSummary",
+    "#trainingPlanSteps",
+    "#trainingPlanCoherence",
+    "#trainingChoiceStatus",
+    "#trainingPlanNext",
     ".training-assistant-signal",
     ".training-command-status",
     ".training-load-brief",
@@ -477,7 +615,7 @@ function installObservers() {
     if (!mutations.some(touchesTrainingSource)) return;
     scheduleRender();
   });
-  observer.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["hidden", "class", "data-selected"] });
+  observer.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["hidden", "class", "data-selected", "data-level"] });
 }
 
 function boot() {

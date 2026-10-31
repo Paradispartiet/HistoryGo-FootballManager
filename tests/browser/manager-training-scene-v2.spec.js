@@ -107,6 +107,127 @@ test("Trening er én faktisk treningsdag med fire økter og uten gammel kommando
   await expect(page.locator('#trainingDayResources [data-modal-open="modalWeaknesses"]')).toBeVisible();
 });
 
+test("program/fokus-samsvar følger den eksisterende ukeplanen på mobil", async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 740 });
+  await openTraining(page);
+  const source = page.locator("#trainingPlanCoherence");
+  const note = page.locator("#trainingDayCoherence");
+  await expect(note).toHaveText((await source.textContent()).trim());
+  await expect(note).toHaveAttribute("data-level", await source.getAttribute("data-level"));
+
+  await page.evaluate(() => {
+    const original = document.getElementById("trainingPlanCoherence");
+    original.textContent = "Treningsprogrammet og kampfokuset peker i ulike retninger.";
+    original.dataset.level = "sprik";
+  });
+  await expect(note).toHaveText("Treningsprogrammet og kampfokuset peker i ulike retninger.");
+  await expect(note).toHaveAttribute("data-level", "sprik");
+  // A full tall element screenshot can contain unpainted/black regions in
+  // headless Chromium. Capture the actual 360px viewport after scrolling the
+  // synthetic warning into view, plus a close-up of the focus card.
+  await note.scrollIntoViewIfNeeded();
+  await expect(note).toBeInViewport();
+  await page.screenshot({
+    path: "test-results/training-day-coherence-warning-360.png",
+    animations: "disabled"
+  });
+  await note.locator("xpath=..").screenshot({
+    path: "test-results/training-day-coherence-card-360.png",
+    animations: "disabled"
+  });
+
+  // A pure level change (without changing text) must also refresh the view.
+  await page.evaluate(() => {
+    document.getElementById("trainingPlanCoherence").dataset.level = "samsvar";
+  });
+  await expect(note).toHaveAttribute("data-level", "samsvar");
+  await expectNoHorizontalOverflow(page);
+});
+
+test("slitne og skadde vises med navn og råd i et kompakt mobilpanel", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await openTraining(page);
+  await expect(page.locator("#trainingDayRiskDetails")).toBeHidden();
+
+  await page.evaluate(() => {
+    const list = document.getElementById("squadConditionList");
+    const entries = [
+      { type: "is-injured", name: "Skadet testspiller", advice: "Ute 2 uker." },
+      { type: "is-tired", name: "Sliten testspiller", advice: "Bør hviles før neste kamp." }
+    ];
+    list.replaceChildren(...entries.map(({ type, name, advice }) => {
+      const item = document.createElement("li");
+      item.className = type;
+      const strong = document.createElement("strong");
+      strong.textContent = name;
+      const span = document.createElement("span");
+      span.textContent = advice;
+      item.append(strong, span);
+      return item;
+    }));
+  });
+  await expect(page.locator("#trainingDayRiskDetails")).toBeVisible();
+  // The hidden canonical load brief has multiple block elements. Its compact
+  // copy must preserve word boundaries between label, detail and coherence.
+  await expect(page.locator("#trainingDayLoad")).toContainText("Normal uke · Balansert:");
+  await expect(page.locator("#trainingDayLoad")).not.toContainText("ukeBalansert");
+  await expect(page.locator("#trainingDayRiskSummary")).toHaveText("Se 2 spillere som trenger oppfølging");
+  await page.locator("#trainingDayRiskSummary").click();
+  await expect(page.locator("#trainingDayRiskList .is-injured strong")).toHaveText("Skadet testspiller");
+  await expect(page.locator("#trainingDayRiskList .is-tired span")).toHaveText("Bør hviles før neste kamp.");
+  await expectNoHorizontalOverflow(page);
+  // Uses synthetic injury/fatigue rows created by this test. Save a 390px
+  // viewport with the expanded player list in view, plus the condition card.
+  const conditionCard = page.locator("#trainingDayRiskDetails").locator("xpath=..");
+  await conditionCard.scrollIntoViewIfNeeded();
+  await expect(page.locator("#trainingDayRiskSummary")).toBeInViewport();
+  await page.screenshot({
+    path: "test-results/training-day-squad-attention-390.png",
+    animations: "disabled"
+  });
+  await conditionCard.screenshot({
+    path: "test-results/training-day-squad-card-390.png",
+    animations: "disabled"
+  });
+
+  await page.evaluate(() => document.getElementById("squadConditionList").replaceChildren());
+  await expect(page.locator("#trainingDayRiskDetails")).toBeHidden();
+  await expect(page.locator("#trainingDepth")).toBeHidden();
+});
+
+test("neste treningssteg bruker programvalg og kampnavigasjon uten skjulte arbeidsflater", async ({ page }) => {
+  await openTraining(page);
+  await page.evaluate(() => {
+    const list = document.getElementById("trainingPlanSteps");
+    list.replaceChildren(...["Les innboks", "Treningsprogram", "Ukens fokus", "Individuell oppfølging"].map((title, index) => {
+      const row = document.createElement("li");
+      row.className = index === 1 ? "training-plan-step is-next" : "training-plan-step";
+      const heading = document.createElement("h3");
+      heading.textContent = `${index + 1}. ${title}`;
+      const detail = document.createElement("p");
+      detail.className = "training-plan-step-detail";
+      detail.textContent = "Velg treningsrammen før kampen.";
+      row.append(heading, detail);
+      return row;
+    }));
+    document.getElementById("trainingChoiceStatus").dataset.selected = "false";
+  });
+  await expect(page.locator("#trainingDayNextTitle")).toHaveText("Velg ukas treningsprogram");
+  await expect(page.locator("#trainingDayNextAction")).toHaveText("Velg program");
+  await page.locator("#trainingDayNextAction").click();
+  await expect(page.locator("#managerTeamChoiceDrawerBody #trainingPrograms")).toBeVisible();
+  await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
+  await expect(page.locator("#trainingWorkspace")).toBeHidden();
+
+  await page.evaluate(() => {
+    document.getElementById("trainingChoiceStatus").dataset.selected = "true";
+  });
+  await expect(page.locator("#trainingDayNextTitle")).toHaveText("Treningsuka er klar");
+  await expect(page.locator("#trainingDayNextAction")).toHaveText("Til Kamp");
+  await page.locator("#trainingDayNextAction").click();
+  await expect(page.locator('[data-tab-section="kamp"]')).toBeVisible();
+});
+
 test("program fokus og individuell oppfølging åpner komplette eksisterende valg i felles drawer", async ({ page }) => {
   await openTraining(page);
   await expect(page.locator("#teamChangeTrainingProgram")).toBeAttached();
