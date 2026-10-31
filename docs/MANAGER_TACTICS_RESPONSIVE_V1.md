@@ -22,6 +22,13 @@
 - Keeperen får egen gul farge, og ledige plasser nøytral grå. Øvrige farger er generiske, ikke en påstand om klubbens virkelige drakt.
 - Ingen nye spillerbilder, falske spillernumre, lagret drakttilstand eller endringer i hvordan brukeren flytter spillerne.
 
+## Ekte parallell sammenligning på liggende iPad
+
+- På skjermbredde **fra 980 px** kan spilleren velge **Sammenlign faser**. Da vises **Med ball** på første bane og **Uten ball** på den andre, samtidig med spillerlisten i tredje kolonne.
+- Begge bruker de historiske fasefeltene `inPossessionShape` og `outOfPossessionShape`, ikke grunnformasjonen brukt to ganger. Tegningene er fremdeles illustrative og skrivebeskyttede.
+- **Rediger laguttak** gir tilbake den originale interaktive banen og de eksisterende spiller- og rollehandlingene. Sammenligning endrer ikke laguttak, kampmotor eller lagring.
+- På smalere skjermer er sammenligningsknappen skjult; fanene **Laguttak**, **Faser**, **Spillere** og faseskiftet fortsetter å fungere som tidligere.
+
 ## Responsiv flyt
 
 - Liggende iPad og desktop, fra 980 px: tre paneler — spillbart laguttak, fasevisning, startellever — med original benk nedenfor.
