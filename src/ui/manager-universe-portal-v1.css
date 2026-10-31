@@ -1,0 +1,341 @@
+/* HG Football Manager visual universe — no change to game state or engine. */
+.hgfm-universe-v2 {
+  --fmuv-ink: #eaf2ff;
+  --fmuv-muted: #a8b9d3;
+  --fmuv-panel: #0a172b;
+  --fmuv-depth: #070f20;
+  --fmuv-line: rgba(114, 153, 217, .26);
+  --fmuv-purple: #8e30ed;
+  --fmuv-purple-deep: #4315a8;
+  --fmuv-positive: #40d7ab;
+}
+
+.hgfm-universe-v2 body {
+  --app-max: 1640px;
+  background: #050b18;
+  color: var(--fmuv-ink);
+}
+
+/* Shared chroming for all existing manager sections, not a second navigation. */
+.hgfm-universe-v2 .site-header {
+  background: linear-gradient(110deg, #071224 12%, #0a162d 60%, #0d1430);
+  border-bottom-color: var(--fmuv-line);
+}
+.hgfm-universe-v2 .site-header .header-inner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  gap: 12px;
+  align-items: center;
+}
+.hgfm-universe-v2 .site-header h1 { font-size: clamp(1.12rem, 1.8vw, 1.65rem); }
+.hgfm-universe-v2 .site-header .eyebrow { color: #e7eeff; letter-spacing: .06em; }
+.hgfm-universe-v2 .main-nav,
+.hgfm-universe-v2 .app-subnav,
+.hgfm-universe-v2 .manager-location-bar {
+  background: #070f21;
+  border-color: var(--fmuv-line);
+}
+.hgfm-universe-v2 .main-nav .nav-tab,
+.hgfm-universe-v2 .app-subnav .app-subtab {
+  border-color: transparent;
+  border-radius: 8px;
+  color: #c7d4e9;
+}
+.hgfm-universe-v2 .main-nav .nav-tab.is-active,
+.hgfm-universe-v2 .app-subnav .app-subtab.is-active {
+  background: linear-gradient(130deg, #31106f, #641bba);
+  color: #fff;
+  border-color: #9654eb;
+}
+.hgfm-universe-v2 .app-shell > .tab-section {
+  background: #071022;
+  padding: clamp(10px, 1.4vw, 22px);
+}
+.hgfm-universe-v2 .app-shell > .tab-section:not(.fmuv-screen) > .panel,
+.hgfm-universe-v2 .app-shell > .tab-section:not(.fmuv-screen) > .manager-surface,
+.hgfm-universe-v2 .app-shell > .tab-section:not(.fmuv-screen) > .dept-hero,
+.hgfm-universe-v2 .app-shell > .tab-section:not(.fmuv-screen) > .manager-calendar-surface {
+  background: linear-gradient(145deg, #0c1c31, #081322);
+  border: 1px solid var(--fmuv-line);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px #0003;
+}
+.hgfm-universe-v2 .app-shell > .tab-section:not(.fmuv-screen) button:focus-visible {
+  outline: 3px solid #d5adff;
+  outline-offset: 2px;
+}
+.hgfm-universe-v2 .site-footer {
+  background: #080f20;
+  border-color: var(--fmuv-line);
+}
+
+/* New utility entry points sit in the original header, not in a clone of
+   the five canonical manager main tabs. */
+.fmuv-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+}
+.fmuv-header-actions[hidden] { display: none !important; }
+.fmuv-header-button {
+  padding: 8px 12px;
+  min-height: 40px;
+  border: 1px solid var(--fmuv-line);
+  border-radius: 9px;
+  background: #111d38;
+  color: var(--fmuv-ink);
+  font-weight: 750;
+  cursor: pointer;
+}
+.fmuv-header-button.is-current {
+  background: linear-gradient(120deg, #5e1dba, #8e30ed);
+  border-color: #b576fa;
+}
+.fmuv-header-button:focus-visible { outline: 3px solid #d8b5ff; outline-offset: 2px; }
+
+/* Portal and inbox are true sections in the existing app shell. */
+.hgfm-universe-v2 .app-shell > .fmuv-screen {
+  color: var(--fmuv-ink);
+  background:
+    radial-gradient(630px 370px at 87% -190px, #3a145f58, transparent 88%),
+    #070f20;
+  gap: 14px;
+  font-size: clamp(.84rem, 1vw, 1rem);
+}
+.fmuv-screen * { box-sizing: border-box; }
+.fmuv-screen h2,
+.fmuv-screen h3,
+.fmuv-screen p { margin: 0; }
+.fmuv-screen-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 5px 3px 3px;
+}
+.fmuv-screen-heading h2 {
+  margin: 2px 0 4px;
+  font-size: clamp(1.5rem, 2.4vw, 2.3rem);
+  line-height: 1.05;
+  font-weight: 850;
+}
+.fmuv-lede { color: var(--fmuv-muted); line-height: 1.5; }
+.fmuv-eyebrow {
+  color: #aa88f2;
+  letter-spacing: .1em;
+  font-size: .68rem;
+  font-weight: 850;
+}
+.fmuv-secondary { color: var(--fmuv-muted); line-height: 1.45; }
+.fmuv-panel {
+  min-width: 0;
+  padding: clamp(14px, 1.4vw, 20px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border: 1px solid var(--fmuv-line);
+  border-radius: 13px;
+  background: linear-gradient(160deg, #0d1b33 0%, #091326 78%);
+  box-shadow: 0 9px 26px #01050f63;
+}
+.fmuv-panel-title {
+  font-size: .81rem;
+  font-weight: 850;
+  letter-spacing: .045em;
+  color: #eaf2ff;
+}
+.fmuv-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.fmuv-primary,
+.fmuv-outline,
+.fmuv-text-button,
+.fmuv-filter,
+.fmuv-quick-action {
+  min-height: 44px;
+  border-radius: 8px;
+  cursor: pointer;
+  font: inherit;
+}
+.fmuv-primary {
+  border: 1px solid #ad6afa;
+  background: linear-gradient(105deg, #6d21cf, #9729eb);
+  color: #fff;
+  font-weight: 800;
+  padding: 10px 16px;
+}
+.fmuv-outline {
+  border: 1px solid #41618d;
+  background: #111e37;
+  color: #e6edff;
+  font-weight: 750;
+  padding: 10px 14px;
+}
+.fmuv-text-button {
+  background: transparent;
+  border: 0;
+  color: #ca9cff;
+  min-height: 38px;
+  padding: 5px;
+  font-size: .84rem;
+  font-weight: 800;
+}
+.fmuv-screen button:focus-visible { outline: 3px solid #d7b6ff; outline-offset: 2px; }
+.fmuv-screen button:hover { filter: brightness(1.12); }
+
+.fmuv-home-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(230px, .73fr) minmax(310px, 1fr);
+  align-items: stretch;
+  gap: 12px;
+}
+.fmuv-match {
+  min-height: 292px;
+  background:
+    linear-gradient(160deg, #0b1b32e8 12%, #091426ec 90%),
+    repeating-linear-gradient(90deg, #236f6733 0 36px, #122f3430 36px 72px);
+}
+.fmuv-match-name {
+  display: block;
+  min-height: 80px;
+  font-size: clamp(1.4rem, 2.15vw, 2.25rem);
+  font-weight: 850;
+  line-height: 1.18;
+  overflow-wrap: anywhere;
+}
+.fmuv-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: auto; }
+.fmuv-week { justify-content: space-between; }
+.fmuv-large {
+  font-size: clamp(1.25rem, 2vw, 2rem);
+  font-weight: 850;
+}
+.fmuv-unread {
+  padding: 5px 9px;
+  border-radius: 50px;
+  background: #4e197780;
+  color: #e1b7ff;
+  font-size: .76rem;
+  font-weight: 800;
+}
+.fmuv-message-list {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.fmuv-message {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 9px 7px;
+  min-height: 60px;
+  border: 1px solid transparent;
+  border-bottom-color: #3b4d6b61;
+  border-radius: 8px;
+  background: #14213a72;
+  color: var(--fmuv-ink);
+  text-align: left;
+  cursor: pointer;
+}
+.fmuv-message[data-unread="true"] .fmuv-message-icon {
+  background: #6930b7;
+  color: #fff;
+}
+.fmuv-message.is-selected,
+.fmuv-message:hover { border-color: #8740d3; background: #30204d; }
+.fmuv-message-icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: #254369;
+  color: #bdceff;
+  font-weight: 850;
+}
+.fmuv-message-copy { display: grid; min-width: 0; gap: 3px; }
+.fmuv-message-copy strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .83rem; }
+.fmuv-message-copy small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--fmuv-muted); }
+.fmuv-message-time { color: var(--fmuv-muted); font-size: .7rem; white-space: nowrap; }
+.fmuv-empty { padding: 12px 6px; color: var(--fmuv-muted); }
+.fmuv-shortcuts { padding-block: 16px; }
+.fmuv-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 9px;
+}
+.fmuv-quick-action {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+  padding: 12px 10px;
+  border: 1px solid #344972;
+  background: linear-gradient(145deg, #15223f, #0b1730);
+  color: #f0e7ff;
+  text-align: center;
+  font-weight: 850;
+}
+.fmuv-quick-action small { color: #a7b9d2; font-size: .7rem; font-weight: 500; line-height: 1.3; }
+.fmuv-inbox-grid {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: minmax(165px, .52fr) minmax(250px, 1.1fr) minmax(0, 1.5fr);
+  gap: 12px;
+  min-height: 370px;
+}
+.fmuv-filters { justify-content: flex-start; align-items: stretch; }
+.fmuv-filter {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #c7d7ed;
+  text-align: left;
+  padding: 10px 12px;
+}
+.fmuv-filter[aria-pressed="true"] {
+  background: linear-gradient(110deg, #42148b, #711fd0);
+  border-color: #9b51eb;
+  color: #fff;
+}
+.fmuv-detail-panel { min-width: 0; }
+.fmuv-detail { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.fmuv-mail-head { display: grid; gap: 7px; border-bottom: 1px solid var(--fmuv-line); padding-bottom: 14px; }
+.fmuv-mail-head h3 { font-size: clamp(1.18rem, 1.85vw, 1.7rem); line-height: 1.2; overflow-wrap: anywhere; }
+.fmuv-mail-copy { color: #e0e8fb; line-height: 1.65; overflow-wrap: anywhere; }
+.fmuv-facts { display: grid; gap: 7px; margin: 0; padding: 10px; background: #12213e; border-radius: 8px; }
+.fmuv-facts > div { display: flex; gap: 12px; justify-content: space-between; }
+.fmuv-facts dt { color: var(--fmuv-muted); }
+.fmuv-facts dd { margin: 0; font-weight: 800; }
+.fmuv-mail-open { width: max-content; max-width: 100%; }
+
+@media (max-width: 1150px) {
+  .fmuv-home-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fmuv-home-inbox { grid-column: 1 / -1; }
+  .fmuv-inbox-grid { grid-template-columns: 160px minmax(200px, 1fr) minmax(0, 1.2fr); }
+  .fmuv-quick-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .hgfm-universe-v2 .site-header .header-inner { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .fmuv-header-actions { grid-column: 1 / -1; grid-row: 2; justify-content: stretch; }
+  .fmuv-header-actions > button { flex: 1; }
+  .fmuv-screen-heading { align-items: flex-start; }
+  .fmuv-home-grid { grid-template-columns: minmax(0, 1fr); }
+  .fmuv-home-inbox { grid-column: auto; }
+  .fmuv-quick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fmuv-inbox-grid { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+  .fmuv-filters { flex-direction: row; flex-wrap: wrap; gap: 6px; padding: 10px; }
+  .fmuv-filters .fmuv-panel-title { width: 100%; }
+  .fmuv-list-panel { max-height: 360px; overflow-y: auto; }
+  .fmuv-message-copy strong { white-space: normal; }
+}
+@media (max-width: 390px) {
+  .fmuv-screen-heading { flex-wrap: wrap; }
+  .fmuv-screen-heading > button { width: 100%; }
+  .fmuv-quick-grid { grid-template-columns: minmax(0, 1fr); }
+  .fmuv-actions > button { flex: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fmuv-screen *, .fmuv-header-actions * { transition: none !important; scroll-behavior: auto !important; }
+}
