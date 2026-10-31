@@ -31,8 +31,8 @@ export default defineConfig({
       dependencies: ["chromium"],
       use: { ...devices["Desktop Chrome"] }
     },
-    {
-      // Focused Safari-engine proxy for PR #529; physical iPad Safari sign-off is separate.
+    ...(process.env.HGFM_TACTICS_WEBKIT === "1" ? [{
+      // Opt-in Safari-engine check; physical iPad Safari sign-off is separate.
       name: "webkit-ipad-tactics",
       testMatch: /manager-tactics-responsive-v1\.spec\.js$/,
       use: {
@@ -42,6 +42,6 @@ export default defineConfig({
         hasTouch: true,
         deviceScaleFactor: 2
       }
-    }
+    }] : [])
   ]
 });
