@@ -230,4 +230,4 @@ jobs:
 
       - name: iPad Safari-motortest av taktikkbrett
         if: steps.scope.outputs.lane == 'full'
-        run: npx playwright test tests/browser/manager-tactics-responsive-v1.spec.js --project=webkit-ipad-tactics
+        run: HGFM_TACTICS_WEBKIT=1 npx playwright test tests/browser/manager-tactics-responsive-v1.spec.js --project=webkit-ipad-tactics
