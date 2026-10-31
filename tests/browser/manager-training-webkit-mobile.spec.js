@@ -124,7 +124,21 @@ test("iPhone WebKit: reelle treningsvalg overlever reload og Til Kamp flytter ik
   expect(reloaded.phase).toBe(stored.phase);
 
   await expect(page.locator("#trainingDayNextAction")).toHaveText("Til Kamp");
+  // In addition to the viewport image, capture the two off-screen cards.
+  // This gives reviewers visible evidence of the saved focus and match CTA,
+  // rather than only an assertion against content below the mobile fold.
   await page.screenshot({ path: "test-results/training-day-webkit-iphone.png", animations: "disabled" });
+  const focusCard = page.locator("#trainingDayFocus").locator("xpath=..");
+  await focusCard.scrollIntoViewIfNeeded();
+  await expect(page.locator("#trainingDayFocus")).toHaveText(selectedFocus);
+  await focusCard.screenshot({ path: "test-results/training-day-webkit-iphone-focus-card.png", animations: "disabled" });
+
+  const nextStep = page.locator("#trainingDayNextStep");
+  await nextStep.scrollIntoViewIfNeeded();
+  await expect(page.locator("#trainingDayNextAction")).toBeVisible();
+  await expect(page.locator("#trainingDayNextTitle")).toHaveText("Treningsuka er klar");
+  await nextStep.screenshot({ path: "test-results/training-day-webkit-iphone-next-kamp.png", animations: "disabled" });
+  await noHorizontalOverflow(page);
   const beforeNavigation = await readSavedChoices(page);
   await page.locator("#trainingDayNextAction").click();
   await expect(page.locator('[data-tab-section="kamp"]')).toBeVisible();
