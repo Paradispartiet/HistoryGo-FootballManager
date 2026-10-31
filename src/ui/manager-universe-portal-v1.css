@@ -781,3 +781,13 @@
  .hgfm-universe-v2 .fmuv-recruit-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
  .hgfm-universe-v2 .fmuv-recruit-kpis article:first-child{grid-column:1/-1}
 }
+
+/* Existing visual-identity contract: office and scouting are full-bleed
+   workspaces, not rounded generic cards. Only their internal controls use
+   the shared purple/blue accents. */
+.hgfm-universe-v2 .app-shell > [data-tab-section="calendar"] > .manager-calendar-surface,
+.hgfm-universe-v2 body[data-manager-area="office"] .manager-calendar-surface,
+.hgfm-universe-v2 #managerScoutingRecruitable {
+  border-radius: 0;
+  box-shadow: none;
+}
