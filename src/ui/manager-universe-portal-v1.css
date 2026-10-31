@@ -1,0 +1,801 @@
+/* HG Football Manager visual universe — no change to game state or engine. */
+.hgfm-universe-v2 {
+  --fmuv-ink: #eaf2ff;
+  --fmuv-muted: #a8b9d3;
+  --fmuv-panel: #0a172b;
+  --fmuv-depth: #070f20;
+  --fmuv-line: rgba(114, 153, 217, .26);
+  --fmuv-purple: #8e30ed;
+  --fmuv-purple-deep: #4315a8;
+  --fmuv-positive: #40d7ab;
+}
+
+.hgfm-universe-v2 body {
+  --app-max: 1640px;
+  background: #050b18;
+  color: var(--fmuv-ink);
+}
+
+/* Shared chroming for all existing manager sections, not a second navigation. */
+.hgfm-universe-v2 .site-header {
+  background: linear-gradient(110deg, #071224 12%, #0a162d 60%, #0d1430);
+  border-bottom-color: var(--fmuv-line);
+}
+.hgfm-universe-v2 .site-header .header-inner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  gap: 12px;
+  align-items: center;
+}
+.hgfm-universe-v2 .site-header h1 { font-size: clamp(1.12rem, 1.8vw, 1.65rem); }
+.hgfm-universe-v2 .site-header .eyebrow { color: #e7eeff; letter-spacing: .06em; }
+.hgfm-universe-v2 .main-nav,
+.hgfm-universe-v2 .app-subnav,
+.hgfm-universe-v2 .manager-location-bar {
+  background: #070f21;
+  border-color: var(--fmuv-line);
+}
+.hgfm-universe-v2 .main-nav .nav-tab,
+.hgfm-universe-v2 .app-subnav .app-subtab {
+  border-color: transparent;
+  border-radius: 8px;
+  color: #c7d4e9;
+}
+.hgfm-universe-v2 .main-nav .nav-tab.is-active,
+.hgfm-universe-v2 .app-subnav .app-subtab.is-active {
+  background: linear-gradient(130deg, #31106f, #641bba);
+  color: #fff;
+  border-color: #9654eb;
+}
+.hgfm-universe-v2 .app-shell > .tab-section {
+  background: #071022;
+  padding: clamp(10px, 1.4vw, 22px);
+}
+.hgfm-universe-v2 .app-shell > .tab-section:not(.fmuv-screen) > .panel,
+.hgfm-universe-v2 .app-shell > .tab-section:not(.fmuv-screen) > .manager-surface,
+.hgfm-universe-v2 .app-shell > .tab-section:not(.fmuv-screen) > .dept-hero {
+  background: linear-gradient(145deg, #0c1c31, #081322);
+  border: 1px solid var(--fmuv-line);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px #0003;
+}
+.hgfm-universe-v2 .app-shell > .tab-section:not(.fmuv-screen) button:focus-visible {
+  outline: 3px solid #d5adff;
+  outline-offset: 2px;
+}
+.hgfm-universe-v2 .site-footer {
+  background: #080f20;
+  border-color: var(--fmuv-line);
+}
+
+/* New utility entry points sit in the original header, not in a clone of
+   the five canonical manager main tabs. */
+.fmuv-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+}
+.fmuv-header-actions[hidden] { display: none !important; }
+.fmuv-header-button {
+  padding: 8px 12px;
+  min-height: 40px;
+  border: 1px solid var(--fmuv-line);
+  border-radius: 9px;
+  background: #111d38;
+  color: var(--fmuv-ink);
+  font-weight: 750;
+  cursor: pointer;
+}
+.fmuv-header-button.is-current {
+  background: linear-gradient(120deg, #5e1dba, #8e30ed);
+  border-color: #b576fa;
+}
+.fmuv-header-button:focus-visible { outline: 3px solid #d8b5ff; outline-offset: 2px; }
+
+/* Portal and inbox are true sections in the existing app shell. */
+.hgfm-universe-v2 .app-shell > .fmuv-screen {
+  color: var(--fmuv-ink);
+  background:
+    radial-gradient(630px 370px at 87% -190px, #3a145f58, transparent 88%),
+    #070f20;
+  gap: 14px;
+  font-size: clamp(.84rem, 1vw, 1rem);
+}
+.fmuv-screen * { box-sizing: border-box; }
+.fmuv-screen h2,
+.fmuv-screen h3,
+.fmuv-screen p { margin: 0; }
+.fmuv-screen-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 5px 3px 3px;
+}
+.fmuv-screen-heading h2 {
+  margin: 2px 0 4px;
+  font-size: clamp(1.5rem, 2.4vw, 2.3rem);
+  line-height: 1.05;
+  font-weight: 850;
+}
+.fmuv-lede { color: var(--fmuv-muted); line-height: 1.5; }
+.fmuv-eyebrow {
+  color: #aa88f2;
+  letter-spacing: .1em;
+  font-size: .68rem;
+  font-weight: 850;
+}
+.fmuv-secondary { color: var(--fmuv-muted); line-height: 1.45; }
+.fmuv-panel {
+  min-width: 0;
+  padding: clamp(14px, 1.4vw, 20px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border: 1px solid var(--fmuv-line);
+  border-radius: 13px;
+  background: linear-gradient(160deg, #0d1b33 0%, #091326 78%);
+  box-shadow: 0 9px 26px #01050f63;
+}
+.fmuv-panel-title {
+  font-size: .81rem;
+  font-weight: 850;
+  letter-spacing: .045em;
+  color: #eaf2ff;
+}
+.fmuv-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.fmuv-primary,
+.fmuv-outline,
+.fmuv-text-button,
+.fmuv-filter,
+.fmuv-quick-action {
+  min-height: 44px;
+  border-radius: 8px;
+  cursor: pointer;
+  font: inherit;
+}
+.fmuv-primary {
+  border: 1px solid #ad6afa;
+  background: linear-gradient(105deg, #6d21cf, #9729eb);
+  color: #fff;
+  font-weight: 800;
+  padding: 10px 16px;
+}
+.fmuv-outline {
+  border: 1px solid #41618d;
+  background: #111e37;
+  color: #e6edff;
+  font-weight: 750;
+  padding: 10px 14px;
+}
+.fmuv-text-button {
+  background: transparent;
+  border: 0;
+  color: #ca9cff;
+  min-height: 38px;
+  padding: 5px;
+  font-size: .84rem;
+  font-weight: 800;
+}
+.fmuv-screen button:focus-visible { outline: 3px solid #d7b6ff; outline-offset: 2px; }
+.fmuv-screen button:hover { filter: brightness(1.12); }
+
+.fmuv-home-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(230px, .73fr) minmax(310px, 1fr);
+  grid-template-areas:
+    "match season inbox"
+    "week week inbox";
+  align-items: stretch;
+  gap: 12px;
+}
+.fmuv-match { grid-area: match;
+  min-height: 292px;
+  background:
+    linear-gradient(160deg, #0b1b32e8 12%, #091426ec 90%),
+    repeating-linear-gradient(90deg, #236f6733 0 36px, #122f3430 36px 72px);
+}
+.fmuv-match-name {
+  display: block;
+  min-height: 80px;
+  font-size: clamp(1.4rem, 2.15vw, 2.25rem);
+  font-weight: 850;
+  line-height: 1.18;
+  overflow-wrap: anywhere;
+}
+.fmuv-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: auto; }
+.fmuv-week { grid-area: week; justify-content: space-between; }
+.fmuv-large {
+  font-size: clamp(1.25rem, 2vw, 2rem);
+  font-weight: 850;
+}
+.fmuv-home-inbox { grid-area: inbox; }
+.fmuv-season { grid-area: season; }
+.fmuv-season-facts {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+.fmuv-season-facts > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  padding: 9px 0;
+  border-bottom: 1px solid #30466f;
+}
+.fmuv-season-facts dt { color: #aec0dc; font-size: .78rem; }
+.fmuv-season-facts dd { margin: 0; color: #65e2b8; font-weight: 850; font-size: clamp(.95rem, 1.6vw, 1.25rem); font-variant-numeric: tabular-nums; }
+.fmuv-season > .fmuv-outline { margin-top: auto; }
+.fmuv-unread {
+  padding: 5px 9px;
+  border-radius: 50px;
+  background: #4e197780;
+  color: #e1b7ff;
+  font-size: .76rem;
+  font-weight: 800;
+}
+.fmuv-message-list {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.fmuv-message {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 9px 7px;
+  min-height: 60px;
+  border: 1px solid transparent;
+  border-bottom-color: #3b4d6b61;
+  border-radius: 8px;
+  background: #14213a72;
+  color: var(--fmuv-ink);
+  text-align: left;
+  cursor: pointer;
+}
+.fmuv-message[data-unread="true"] .fmuv-message-icon {
+  background: #6930b7;
+  color: #fff;
+}
+.fmuv-message.is-selected,
+.fmuv-message:hover { border-color: #8740d3; background: #30204d; }
+.fmuv-message-icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: #254369;
+  color: #bdceff;
+  font-weight: 850;
+}
+.fmuv-message-copy { display: grid; min-width: 0; gap: 3px; }
+.fmuv-message-copy strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .83rem; }
+.fmuv-message-copy small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--fmuv-muted); }
+.fmuv-message-time { color: var(--fmuv-muted); font-size: .7rem; white-space: nowrap; }
+.fmuv-empty { padding: 12px 6px; color: var(--fmuv-muted); }
+.fmuv-shortcuts { padding-block: 16px; }
+.fmuv-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 9px;
+}
+.fmuv-quick-action {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+  padding: 12px 10px;
+  border: 1px solid #344972;
+  background: linear-gradient(145deg, #15223f, #0b1730);
+  color: #f0e7ff;
+  text-align: center;
+  font-weight: 850;
+}
+.fmuv-quick-action small { color: #a7b9d2; font-size: .7rem; font-weight: 500; line-height: 1.3; }
+.fmuv-inbox-grid {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: minmax(165px, .52fr) minmax(250px, 1.1fr) minmax(0, 1.5fr);
+  gap: 12px;
+  min-height: 370px;
+}
+.fmuv-filters { justify-content: flex-start; align-items: stretch; }
+.fmuv-filter {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #c7d7ed;
+  text-align: left;
+  padding: 10px 12px;
+}
+.fmuv-filter[aria-pressed="true"] {
+  background: linear-gradient(110deg, #42148b, #711fd0);
+  border-color: #9b51eb;
+  color: #fff;
+}
+.fmuv-detail-panel { min-width: 0; }
+.fmuv-detail { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.fmuv-mail-head { display: grid; gap: 7px; border-bottom: 1px solid var(--fmuv-line); padding-bottom: 14px; }
+.fmuv-mail-head h3 { font-size: clamp(1.18rem, 1.85vw, 1.7rem); line-height: 1.2; overflow-wrap: anywhere; }
+.fmuv-mail-copy { color: #e0e8fb; line-height: 1.65; overflow-wrap: anywhere; }
+.fmuv-facts { display: grid; gap: 7px; margin: 0; padding: 10px; background: #12213e; border-radius: 8px; }
+.fmuv-facts > div { display: flex; gap: 12px; justify-content: space-between; }
+.fmuv-facts dt { color: var(--fmuv-muted); }
+.fmuv-facts dd { margin: 0; font-weight: 800; }
+.fmuv-mail-open { width: max-content; max-width: 100%; }
+
+@media (max-width: 1150px) {
+  .fmuv-home-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas: "match season" "week week" "inbox inbox";
+  }
+  .fmuv-home-inbox { grid-column: 1 / -1; }
+  .fmuv-inbox-grid { grid-template-columns: 160px minmax(200px, 1fr) minmax(0, 1.2fr); }
+  .fmuv-quick-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .hgfm-universe-v2 .site-header .header-inner { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .fmuv-header-actions { grid-column: 1 / -1; grid-row: 2; justify-content: stretch; }
+  .fmuv-header-actions > button { flex: 1; }
+  .fmuv-screen-heading { align-items: flex-start; }
+  .fmuv-home-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "match" "season" "inbox" "week";
+  }
+  .fmuv-home-inbox { grid-column: auto; }
+  .fmuv-quick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fmuv-inbox-grid { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+  .fmuv-filters { flex-direction: row; flex-wrap: wrap; gap: 6px; padding: 10px; }
+  .fmuv-filters .fmuv-panel-title { width: 100%; }
+  .fmuv-list-panel { max-height: 360px; overflow-y: auto; }
+  .fmuv-message-copy strong { white-space: normal; }
+}
+@media (max-width: 390px) {
+  .fmuv-screen-heading { flex-wrap: wrap; }
+  .fmuv-screen-heading > button { width: 100%; }
+  .fmuv-quick-grid { grid-template-columns: minmax(0, 1fr); }
+  .fmuv-actions > button { flex: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fmuv-screen *, .fmuv-header-actions * { transition: none !important; scroll-behavior: auto !important; }
+}
+
+
+/* Shared visual language across all canonical manager workspaces. The live
+   content remains owned by each existing workspace, not by mockup data. */
+.hgfm-universe-v2 [data-tab-section="squad"] .roster-readiness-panel,
+.hgfm-universe-v2 [data-tab-section="tactics"] .squad-setup-gate,
+.hgfm-universe-v2 [data-tab-section="kamp"] .matchday-panel,
+.hgfm-universe-v2 [data-tab-section="statistikk"] .season-command-panel,
+.hgfm-universe-v2 [data-tab-section="admin"] .staff-workspace-v2 .panel,
+.hgfm-universe-v2 [data-tab-section="board"] .manager-surface,
+.hgfm-universe-v2 [data-tab-section="historygo"] .manager-scouting-surface {
+  border-color: var(--fmuv-line);
+  border-radius: 13px;
+  background: linear-gradient(148deg, #0e1d37, #091428);
+  box-shadow: 0 8px 24px #01061345;
+}
+
+.hgfm-universe-v2 [data-tab-section="statistikk"] .stats-highlight-grid article,
+.hgfm-universe-v2 [data-tab-section="tactics"] .squad-setup-checklist article,
+.hgfm-universe-v2 [data-tab-section="squad"] .metric-grid article,
+.hgfm-universe-v2 [data-tab-section="historygo"] .metric-grid article {
+  min-width: 0;
+  border: 1px solid #34466f;
+  border-radius: 10px;
+  background: #11213d;
+  color: #eaf2ff;
+}
+.hgfm-universe-v2 [data-tab-section="statistikk"] .stats-highlight-grid strong,
+.hgfm-universe-v2 [data-tab-section="tactics"] .squad-setup-checklist strong {
+  font-variant-numeric: tabular-nums;
+  color: #6ee0bd;
+}
+.hgfm-universe-v2 [data-tab-section="historygo"] .scouting-head,
+.hgfm-universe-v2 [data-tab-section="historygo"] .scouting-tools {
+  background: #0e1d37;
+  border-color: var(--fmuv-line);
+}
+.hgfm-universe-v2 [data-tab-section="historygo"] .scouting-player-table th,
+.hgfm-universe-v2 [data-tab-section="historygo"] .scouting-club-table th {
+  background: #152845;
+  color: #cbd6ed;
+  border-color: #40567b;
+}
+.hgfm-universe-v2 [data-tab-section="historygo"] .scouting-player-table tbody tr:hover,
+.hgfm-universe-v2 [data-tab-section="historygo"] .scouting-club-table tbody tr:hover {
+  background: #27234a;
+}
+.hgfm-universe-v2 [data-tab-section="historygo"] .scouting-tools input,
+.hgfm-universe-v2 [data-tab-section="historygo"] .scouting-tools select {
+  min-height: 42px;
+  border: 1px solid #4c6386;
+  border-radius: 8px;
+  background: #0c1931;
+  color: #fff;
+}
+.hgfm-universe-v2 [data-tab-section="historygo"] .scouting-recruit-button {
+  border-radius: 8px;
+  border-color: #924aed;
+  background: #5819b1;
+  color: #fff;
+}
+.hgfm-universe-v2 [data-tab-section="historygo"] .scouting-recruit-button:focus-visible {
+  outline: 3px solid #d8b5ff;
+}
+
+.hgfm-universe-v2 [data-tab-section="admin"] .staff-workspace-header,
+.hgfm-universe-v2 [data-tab-section="squad"] .roster-readiness-head,
+.hgfm-universe-v2 [data-tab-section="tactics"] .pitch-stage-head {
+  color: #eaf2ff;
+}
+.hgfm-universe-v2 [data-tab-section="admin"] .staff-role-slot,
+.hgfm-universe-v2 [data-tab-section="admin"] .staff-person-card {
+  border-color: #30466e;
+  background: #10223d;
+  border-radius: 10px;
+}
+.hgfm-universe-v2 [data-tab-section="admin"] .staff-workspace-count {
+  color: #cda6ff;
+  border-color: #6c399e;
+  background: #211739;
+}
+.hgfm-universe-v2 [data-tab-section="kamp"] .matchday-result-card,
+.hgfm-universe-v2 [data-tab-section="kamp"] .match-flow {
+  border-color: #39628a;
+  border-radius: 12px;
+  background: #0c2035;
+}
+.hgfm-universe-v2 [data-tab-section="kamp"] .match-flow-momentum[data-tone="positive"] {
+  color: #61edbd;
+}
+.hgfm-universe-v2 [data-tab-section="tactics"] .fm-compare-switch,
+.hgfm-universe-v2 [data-tab-section="tactics"] .fm-phase-controls button[aria-pressed="true"] {
+  background: #5418a4;
+  border-color: #a76af2;
+  color: #fff;
+}
+.hgfm-universe-v2 [data-tab-section="tactics"] .fm-squad-row.is-selected {
+  background: #382258;
+}
+.hgfm-universe-v2 [data-tab-section="statistikk"] .stats-sort-button.is-active {
+  background: #6e1dce;
+  border-color: #b079f3;
+  color: #fff;
+}
+.hgfm-universe-v2 [data-tab-section="board"] .manager-club-organization,
+.hgfm-universe-v2 [data-tab-section="board"] .manager-club-room {
+  color: #eaf2ff;
+}
+
+/* Keep real-scrolling tables within their panels on portrait tablets and
+   phones, rather than shrinking player names into unreadable columns. */
+.hgfm-universe-v2 .scouting-table-wrap,
+.hgfm-universe-v2 .scouting-club-list-wrap,
+.hgfm-universe-v2 .player-stats-table {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+@media (max-width: 760px) {
+  .hgfm-universe-v2 [data-tab-section="admin"] .staff-workspace-v2,
+  .hgfm-universe-v2 [data-tab-section="squad"] .roster-readiness-panel {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+
+/* Squad workspace v2 — the same data-backed roster, in the new visual system. */
+.hgfm-universe-v2 #rosterReadinessPanel.has-manager-player-workspace {
+  border: 1px solid var(--fmuv-line);
+  border-radius: 13px;
+  background: #0b172b;
+  overflow: hidden;
+  width: 100%;
+  max-width: none;
+}
+.hgfm-universe-v2 #managerPlayerWorkspace { background: #0b172b; color: var(--fmuv-ink); }
+.hgfm-universe-v2 .manager-player-workspace-head {
+  align-items: center;
+  padding: clamp(14px, 2vw, 22px);
+  background: linear-gradient(110deg, #142647, #0b1730);
+  border-bottom: 1px solid var(--fmuv-line);
+}
+.hgfm-universe-v2 .manager-player-workspace-head h2 { color: #f2f5ff; }
+.hgfm-universe-v2 .manager-roster-count {
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: #331f54;
+  border: 1px solid #8850d0;
+  color: #dfcaff;
+}
+.hgfm-universe-v2 .fmuv-roster-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--fmuv-line);
+}
+.hgfm-universe-v2 .fmuv-roster-kpis article {
+  display: grid;
+  gap: 6px;
+  padding: 11px 13px;
+  background: #112440;
+  border: 1px solid #314c76;
+  border-radius: 10px;
+  min-width: 0;
+}
+.hgfm-universe-v2 .fmuv-roster-kpis span {
+  color: #abc1dc;
+  font-size: .72rem;
+  font-weight: 700;
+}
+.hgfm-universe-v2 .fmuv-roster-kpis strong {
+  color: #e7f2ff;
+  font-size: clamp(1.2rem, 1.8vw, 1.7rem);
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+.hgfm-universe-v2 .fmuv-roster-kpis article:nth-child(2) strong { color: #58e5b7; }
+.hgfm-universe-v2 .fmuv-roster-kpis article:nth-child(3) strong { color: #ffc980; }
+.hgfm-universe-v2 .fmuv-roster-kpis article:nth-child(4) strong { color: #ff9aa4; }
+.hgfm-universe-v2 .manager-roster-tools {
+  background: #0d1d35;
+  border-bottom: 1px solid var(--fmuv-line);
+  gap: 10px;
+  padding: 13px 14px;
+}
+.hgfm-universe-v2 .manager-roster-tools label > span {
+  color: #b1c3de;
+  font-size: .69rem;
+}
+.hgfm-universe-v2 .manager-roster-tools input,
+.hgfm-universe-v2 .manager-roster-tools select {
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 1px solid #405e85;
+  border-radius: 8px;
+  background: #101e37;
+  color: #eff4ff;
+}
+.hgfm-universe-v2 .manager-roster-tools input:focus-visible,
+.hgfm-universe-v2 .manager-roster-tools select:focus-visible {
+  outline: 3px solid #cc9fff;
+  outline-offset: 2px;
+}
+.hgfm-universe-v2 .manager-roster-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  background: #0b182d;
+}
+.hgfm-universe-v2 .manager-roster-table { color: #e5eefa; min-width: 940px; font-size: .79rem; }
+.hgfm-universe-v2 .manager-roster-table th {
+  padding: 12px 10px;
+  background: #142845;
+  color: #b5c9e6;
+  border-bottom: 1px solid #3d527b;
+  font-size: .68rem;
+}
+.hgfm-universe-v2 .manager-roster-table td {
+  height: 54px;
+  padding: 7px 10px;
+  border-color: #2b3f5e;
+}
+.hgfm-universe-v2 .manager-roster-table tbody tr:nth-child(even) { background: #10213c; }
+.hgfm-universe-v2 .manager-roster-table tbody tr:hover { background: #292247; }
+.hgfm-universe-v2 .manager-roster-player-link strong { color: #f3f4ff; font-size: .88rem; }
+.hgfm-universe-v2 .manager-roster-player-link small { color: #b2c2d9; }
+.hgfm-universe-v2 .manager-roster-positions {
+  font-weight: 850;
+  letter-spacing: .04em;
+  color: #cce7ff;
+}
+.hgfm-universe-v2 .manager-roster-table tr[data-position-group="defense"] .manager-roster-positions { color: #5cbfff; }
+.hgfm-universe-v2 .manager-roster-table tr[data-position-group="midfield"] .manager-roster-positions { color: #68e2b7; }
+.hgfm-universe-v2 .manager-roster-table tr[data-position-group="attack"] .manager-roster-positions { color: #deabff; }
+.hgfm-universe-v2 .manager-roster-table td[data-tone="positive"] { color: #6de5ba; }
+.hgfm-universe-v2 .manager-roster-table td[data-tone="attention"] { color: #ffc783; }
+.hgfm-universe-v2 .manager-roster-table td[data-tone="negative"] { color: #ff9da2; }
+.hgfm-universe-v2 .manager-roster-table td[data-fit="good"] { color: #6ce5b9; }
+.hgfm-universe-v2 .manager-roster-table td[data-fit="poor"] { color: #ff9da2; }
+
+/* Tactics: reference-like twin green boards, compact squads and purple controls.
+   All positions, names, availability and tactical fit remain canonical. */
+.hgfm-universe-v2 [data-tab-section="tactics"] {
+  --fm-edge: #38537f;
+  --fm-panel: #0c1d36;
+  --fm-panel-deep: #08152b;
+}
+.hgfm-universe-v2 .fm-tactics-grid {
+  column-gap: clamp(8px, 1.1vw, 14px);
+  row-gap: 10px;
+}
+.hgfm-universe-v2 .fm-tactics-grid > .pitch-stage,
+.hgfm-universe-v2 .fm-tactics-grid > .fm-phase-panel,
+.hgfm-universe-v2 .fm-tactics-grid > .fm-squad-panel,
+.hgfm-universe-v2 .fm-tactics-grid > .fm-tactics-bench,
+.hgfm-universe-v2 .fm-tactics-grid > #sidePanel {
+  background: linear-gradient(155deg, #102844, #09162c);
+  border: 1px solid #355179;
+  border-radius: 12px;
+  box-shadow: 0 6px 22px #03071473;
+}
+.hgfm-universe-v2 .fm-panel-heading h3 { color: #f2f5ff; font-size: clamp(.94rem, 1.45vw, 1.15rem); }
+.hgfm-universe-v2 .fm-panel-heading p { color: #adc3db; }
+.hgfm-universe-v2 .fm-tactics-grid .fm-compare-switch,
+.hgfm-universe-v2 .fm-open-roster {
+  min-height: 44px;
+  border: 1px solid #9c62e7;
+  border-radius: 8px;
+  background: #5e20ba;
+  color: white;
+}
+.hgfm-universe-v2 .fm-tactics-grid #lineupSlots,
+.hgfm-universe-v2 .fm-tactics-grid .fm-phase-pitch {
+  border-color: #329975;
+  background-color: #11624c;
+}
+.hgfm-universe-v2 .fm-phase-player {
+  border-radius: 7px;
+  border-color: #7594bb;
+  background: #0c1c32f5;
+  color: #edf5ff;
+  box-shadow: 0 2px 7px #0008;
+}
+.hgfm-universe-v2 .fm-phase-player b { color: #83ebc9; }
+.hgfm-universe-v2 .fm-squad-column-head {
+  color: #b2c8e1;
+  border-color: #375479;
+  font-size: .7rem;
+}
+.hgfm-universe-v2 .fm-squad-row {
+  min-height: 46px;
+  border-color: #274364;
+  font-size: .73rem;
+}
+.hgfm-universe-v2 .fm-squad-row:nth-child(even) { background: #13294a; }
+.hgfm-universe-v2 .fm-squad-row.is-selected { background: #392158; }
+.hgfm-universe-v2 .fm-position { border-color: #5475bb; background: #203b77; color: #e7f2ff; }
+.hgfm-universe-v2 .fm-player-role { color: #b7d1ee; }
+.hgfm-universe-v2 .fm-player-fit { color: #66e8b4; }
+.hgfm-universe-v2 .fm-player-profile { border-color: #576e9d; background: #162d50; color: #e3edff; }
+.hgfm-universe-v2 .fm-tactics-bench .bench-player-card {
+  background: #132947;
+  border: 1px solid #395784;
+  border-radius: 9px;
+}
+.hgfm-universe-v2 .fm-tactics-view-switch { border-color: #4f438e; background: #111b38; }
+.hgfm-universe-v2 .fm-tactics-view-switch button[aria-pressed="true"],
+.hgfm-universe-v2 .fm-phase-controls button[aria-pressed="true"] {
+  background: #5e20ba;
+  color: #fff;
+  border-color: #aa6cf2;
+}
+@media (max-width: 950px) {
+  .hgfm-universe-v2 .fmuv-roster-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 620px) {
+  .hgfm-universe-v2 .fmuv-roster-kpis { gap: 7px; padding: 9px; }
+  .hgfm-universe-v2 .fmuv-roster-kpis article { padding: 10px; }
+  .hgfm-universe-v2 .manager-player-workspace-head { padding: 13px; }
+  .hgfm-universe-v2 .manager-roster-table { min-width: 880px; }
+  .hgfm-universe-v2 .fm-squad-row { min-height: 48px; }
+}
+
+/* Kampdag: samme overflate som portalen, med ekte kampstatus og handlinger. */
+.hgfm-universe-v2 [data-tab-section="kamp"] .matchday-scene {
+  border:1px solid #385780;border-radius:13px;padding:clamp(12px,1.5vw,22px);
+  background:radial-gradient(70% 50% at 50% -18%,#6120ae2b,transparent),linear-gradient(160deg,#10233f,#071429);
+  box-shadow:0 10px 25px #0006;
+}
+.hgfm-universe-v2 .matchday-scene-head h2{color:#f3f5ff;font-size:clamp(1.4rem,2vw,2rem)}
+.hgfm-universe-v2 .matchday-scene-status{border-radius:8px;border-color:#6753a6;background:#2c2050;color:#f3eaff}
+.hgfm-universe-v2 .matchday-stage{border:1px solid #344a73;border-radius:8px;background:#0e1d39;color:#abbddc}
+.hgfm-universe-v2 .matchday-stage[data-state="active"]{border-color:#ad74ff;background:#432080;color:#fff}
+.hgfm-universe-v2 .matchday-stage[data-state="complete"]{border-color:#367e6c;background:#123f42;color:#82e7bf}
+.hgfm-universe-v2 .matchday-scene-team,.hgfm-universe-v2 .matchday-scene-marker{
+  border:1px solid #3b5880;border-radius:11px;background:#0c213f
+}
+.hgfm-universe-v2 .matchday-scene-team.is-home{box-shadow:inset 4px 0 #6ccab2}
+.hgfm-universe-v2 .matchday-scene-team.is-away{box-shadow:inset -4px 0 #8b5ce3}
+.hgfm-universe-v2 .matchday-scene-marker{border-color:#694ca9;background:#281b57}
+.hgfm-universe-v2 .matchday-scene-priority{border:1px solid #6e4ea6;border-radius:11px;background:#1b204a}
+.hgfm-universe-v2 .matchday-scene-action{
+ min-height:48px;border:1px solid #bc87ff;border-radius:9px;
+ background:linear-gradient(120deg,#6f24c6,#9733ec);color:#fff;cursor:pointer
+}
+.hgfm-universe-v2 .matchday-scene-context-card,.hgfm-universe-v2 .matchday-scene-status-card{
+ border:1px solid #355075;border-radius:9px;background:#11233e;color:#eaf4ff
+}
+.hgfm-universe-v2 .matchday-scene-context-card{border-left:3px solid #7d4ec4}
+.hgfm-universe-v2 .matchday-scene-status-card:hover{border-color:#a26ef2;background:#25234e}
+.hgfm-universe-v2 .matchday-scene-status-card[data-tone="blocked"]{border-color:#ca8f4f}
+.hgfm-universe-v2 .matchday-scene-status-card[data-tone="live"]{border-color:#b4576f}
+.hgfm-universe-v2 .matchday-depth{border:1px solid #365079;border-radius:10px;background:#0b1c34}
+
+/* Rekruttering: faktiske spillerpooltall og eksisterende spillerhandlinger. */
+.hgfm-universe-v2 .manager-scouting-surface{
+ border:1px solid #354f79;border-radius:12px;background:#0a172d;color:#eaf3ff;overflow:hidden
+}
+.hgfm-universe-v2 .scouting-head{
+ padding:clamp(13px,1.6vw,22px);align-items:center;
+ border-color:#36517c;background:linear-gradient(120deg,#142747,#0d1a36)
+}
+.hgfm-universe-v2 .scouting-head h2{font-size:clamp(1.35rem,2.1vw,2rem);color:#f2f4ff}
+.hgfm-universe-v2 .scouting-head>strong{
+ padding:8px 11px;border:1px solid #8052c4;border-radius:9px;background:#2a204b;color:#e6ceff
+}
+.hgfm-universe-v2 .fmuv-recruit-kpis{
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;
+ padding:12px 14px;border-bottom:1px solid #35517b;background:#0c1b33
+}
+.hgfm-universe-v2 .fmuv-recruit-kpis article{
+ display:grid;gap:6px;min-width:0;padding:12px 13px;
+ background:#132643;border:1px solid #34517d;border-radius:10px
+}
+.hgfm-universe-v2 .fmuv-recruit-kpis span{color:#b3c8e1;font-size:.75rem;font-weight:700}
+.hgfm-universe-v2 .fmuv-recruit-kpis strong{
+ color:#eaf4ff;font-size:clamp(1.1rem,1.8vw,1.75rem);font-variant-numeric:tabular-nums
+}
+.hgfm-universe-v2 .fmuv-recruit-kpis article:nth-child(2) strong{color:#60e0b0}
+.hgfm-universe-v2 .fmuv-recruit-kpis article:nth-child(3) strong{color:#c99cff}
+.hgfm-universe-v2 .scouting-tools{padding:12px 14px;background:#0d213a;border-color:#354f79}
+.hgfm-universe-v2 .scouting-tools input,.hgfm-universe-v2 .scouting-tools select{
+ min-height:44px;border:1px solid #4a618b;border-radius:8px;padding:8px 11px;
+ background:#10203d;color:#f1f3ff
+}
+.hgfm-universe-v2 .scouting-player-table,.hgfm-universe-v2 .scouting-club-table{background:#0b1932}
+.hgfm-universe-v2 .scouting-player-table th,.hgfm-universe-v2 .scouting-club-table th{
+ position:sticky;top:0;z-index:1;padding:11px 10px;
+ background:#162a48;border-bottom:1px solid #45628a;color:#bcd0e9;font-size:.69rem
+}
+.hgfm-universe-v2 .scouting-player-table td,.hgfm-universe-v2 .scouting-club-table td{
+ height:52px;padding:8px 10px;border-color:#324868;color:#e7f1ff
+}
+.hgfm-universe-v2 .scouting-player-table tbody tr:nth-child(even),
+.hgfm-universe-v2 .scouting-club-table tbody tr:nth-child(even){background:#10223d}
+.hgfm-universe-v2 .scouting-positions{color:#70c6ff}
+.hgfm-universe-v2 .scouting-status{color:#70e5b8}
+.hgfm-universe-v2 .scouting-recruit-button{
+ min-height:42px;min-width:72px;border:1px solid #ad6bef;
+ border-radius:8px;background:#5e25b3;color:#fff
+}
+.hgfm-universe-v2 .scouting-recruit-button:hover{background:#7a2ed0}
+.hgfm-universe-v2 .scouting-club-detail{background:#0e1e38;border-left:1px solid #304975}
+@media(max-width:800px){
+ .hgfm-universe-v2 .fmuv-recruit-kpis{gap:7px;padding:9px}
+ .hgfm-universe-v2 .fmuv-recruit-kpis article{padding:10px}
+}
+@media(max-width:520px){
+ .hgfm-universe-v2 .fmuv-recruit-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .hgfm-universe-v2 .fmuv-recruit-kpis article:first-child{grid-column:1/-1}
+}
+
+/* Existing visual-identity contract: office and scouting are full-bleed
+   workspaces, not rounded generic cards. Only their internal controls use
+   the shared purple/blue accents. */
+.hgfm-universe-v2 .app-shell > [data-tab-section="calendar"] > .manager-calendar-surface,
+.hgfm-universe-v2 body[data-manager-area="office"] .manager-calendar-surface,
+.hgfm-universe-v2 #managerScoutingRecruitable {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Visual identity regression: these are flat *workspaces*, never cards.
+   Keep the distinctive timeline and scouting layouts while preserving
+   shared brand styling for controls INSIDE those workspaces. */
+html.hgfm-universe-v2 body[data-manager-area="office"] .manager-calendar-surface,
+html.hgfm-universe-v2 body[data-manager-area="scouting"] #managerScoutingRecruitable {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
