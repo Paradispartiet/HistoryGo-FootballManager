@@ -198,3 +198,46 @@ test("kildebaserte spillerbidrag finnes fortsatt i en utvidbar seksjon", async (
   await expect(disclosure).toHaveAttribute("open", "");
   await expect(page.locator("#sourcedLineupImpact")).toBeVisible();
 });
+
+test("liggende iPad kan sammenligne to faktiske faser og returnere til redigerbart laguttak", async ({ page }) => {
+  await page.setViewportSize({ width: 1024, height: 768 });
+  await expect(page.locator("#lineupSlots .player-chip")).toHaveCount(11);
+  await expect(page.locator("#fmAttackPitch")).toBeHidden();
+  const before = await page.locator("#lineupSlots .player-chip").evaluateAll(
+    (items) => items.map((item) => ({ slot: item.dataset.slotId, player: item.dataset.playerId }))
+  );
+  const formation = await page.evaluate(async () => {
+    const data = await (await fetch("data/hgFootball/formations.json")).json();
+    return data.formations.find((item) => item.id === document.querySelector("#formationSelect")?.value);
+  });
+  expect(formation).toBeTruthy();
+
+  await page.locator("#fmComparePhases").click();
+  await expect(page.locator("#fmComparePhases")).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("#lineupSlots")).toBeHidden();
+  const attack = page.locator("#fmAttackPitch");
+  const defense = page.locator("#fmPhasePitch");
+  await expect(attack).toBeVisible();
+  await expect(defense).toBeVisible();
+  await expect(attack).toHaveAttribute("data-shape", formation.inPossessionShape);
+  await expect(defense).toHaveAttribute("data-shape", formation.outOfPossessionShape);
+  await expect(attack.locator(".fm-phase-player")).toHaveCount(11);
+  await expect(defense.locator(".fm-phase-player")).toHaveCount(11);
+  await expect(page.locator("#fmTacticsSquadRows .fm-squad-row")).toHaveCount(11);
+
+  await page.locator("#fmComparePhases").click();
+  await expect(page.locator("#fmComparePhases")).toHaveAttribute("aria-pressed", "false");
+  await expect(page.locator("#lineupSlots")).toBeVisible();
+  await expect(attack).toBeHidden();
+  const after = await page.locator("#lineupSlots .player-chip").evaluateAll(
+    (items) => items.map((item) => ({ slot: item.dataset.slotId, player: item.dataset.playerId }))
+  );
+  expect(after).toEqual(before);
+});
+
+test("stående mobil beholder redigerbar bane uten skrivebeskyttet sammenligning", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator("#fmComparePhases")).toBeHidden();
+  await expect(page.locator("#lineupSlots")).toBeVisible();
+  await expect(page.locator("#fmAttackPitch")).toBeHidden();
+});
