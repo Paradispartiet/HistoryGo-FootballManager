@@ -125,7 +125,9 @@ function ensureLayout() {
     const disclosure = element("details", "fm-tactics-insights");
     disclosure.append(element("summary", "", "Dokumenterte spillerbidrag"));
     disclosure.append(impact);
-    grid.append(disclosure);
+    // Keep reports outside the grid: the legacy player-profile column can
+    // grow taller than its grid row and must never cover the disclosure.
+    grid.after(disclosure);
   }
   return { grid, pitch };
 }
