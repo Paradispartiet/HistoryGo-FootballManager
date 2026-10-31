@@ -1,0 +1,278 @@
+import { expect, test } from "@playwright/test";
+
+test.beforeEach(async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(() => {
+    localStorage.setItem("hgfm.onboarded.v1", "1");
+    localStorage.setItem("hgfm.gameStartState.v1", JSON.stringify({
+      selectedMode: "league",
+      activeLeagueSaveId: "responsive_tactics_ui_v1",
+      clubName: "Rosenborg",
+      takeoverClubId: "rosenborg",
+      managerName: "Manager",
+      leagueName: "Eliteserien",
+      leagueSeasonStatus: "active",
+      boardExpectation: "Øvre halvdel"
+    }));
+  });
+  await page.goto("/");
+  await expect(page.locator("#onboardingScreen")).toBeHidden();
+  await page.locator('.main-nav [data-tab-target="tactics"]').click();
+  await expect(page.locator("#fmResponsiveTacticsGrid")).toBeVisible();
+});
+
+test("landskap på iPad viser to formasjonstavler, spillerliste og original benk", async ({ page }) => {
+  await page.setViewportSize({ width: 1024, height: 768 });
+  await expect(page.locator("#lineupSlots")).toBeVisible();
+  await expect(page.locator("#fmPhasePitch")).toBeVisible();
+  await expect(page.locator("#fmTacticsSquad")).toBeVisible();
+  await expect(page.locator("#benchPlayersList")).toBeAttached();
+
+  await expect.poll(async () => page.locator("#lineupSlots .player-chip").count()).toBe(11);
+  await expect.poll(async () => page.locator("#fmPhasePitch .fm-phase-player").count()).toBe(11);
+  await expect.poll(async () => page.locator("#fmTacticsSquadRows .fm-squad-row").count()).toBe(11);
+
+  const ownership = await page.evaluate(() => ({
+    benchParent: document.querySelector("#benchPlayersList")?.closest(".fm-tactics-bench")?.classList.contains("pitch-bench"),
+    lineupParent: document.querySelector("#lineupSlots")?.closest(".pitch-stage")?.classList.contains("pitch-stage")
+  }));
+  expect(ownership).toEqual({ benchParent: true, lineupParent: true });
+});
+
+test("mobil stående bruker store faner uten å duplisere den spillbare banen", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator("#lineupSlots")).toBeVisible();
+  await expect(page.locator("#fmPhasePitch")).toBeHidden();
+  await page.locator('[data-fm-view="phase"]').click();
+  await expect(page.locator("#fmPhasePitch")).toBeVisible();
+  await expect(page.locator("#lineupSlots")).toBeHidden();
+  await page.locator('[data-fm-view="squad"]').click();
+  await expect(page.locator("#fmTacticsSquad")).toBeVisible();
+  await expect(page.locator("#fmPhasePitch")).toBeHidden();
+  await page.locator('[data-fm-view="pitch"]').click();
+  await expect(page.locator("#lineupSlots")).toBeVisible();
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  expect(overflow).toBeLessThanOrEqual(1);
+});
+
+test("mobil liggende har taktikkvisning og spillerliste samtidig", async ({ page }) => {
+  await page.setViewportSize({ width: 844, height: 390 });
+  await expect(page.locator("#lineupSlots")).toBeVisible();
+  await expect(page.locator("#fmTacticsSquad")).toBeVisible();
+  await page.locator('[data-fm-view="phase"]').click();
+  await expect(page.locator("#fmPhasePitch")).toBeVisible();
+  await expect(page.locator("#fmTacticsSquad")).toBeVisible();
+});
+
+test("spillerprofil åpnes fra reell spiller-ID, ikke en ny score eller kopi av laguttaket", async ({ page }) => {
+  await expect.poll(async () => page.locator("#fmTacticsSquadRows .fm-squad-row").count()).toBe(11);
+  const player = page.locator("#fmTacticsSquadRows .fm-player-profile").first();
+  if (await player.count()) {
+    await player.click();
+    await expect(page.locator("#managerPlayerProfileDialog")).toBeVisible();
+  } else {
+    await expect(page.locator("#fmTacticsSquadRows")).toContainText("Tom plass");
+  }
+});
+
+test("fasebanen leser faktisk med/uten-ball-form fra valgt system, uten å endre elleveren", async ({ page }) => {
+  await expect.poll(async () => page.locator("#lineupSlots .player-chip").count()).toBe(11);
+  const formation = await page.evaluate(async () => {
+    const formationId = document.querySelector("#formationSelect")?.value;
+    const response = await fetch("data/hgFootball/formations.json");
+    const data = await response.json();
+    return data.formations.find((item) => item.id === formationId);
+  });
+  expect(formation).toBeTruthy();
+
+  const lineupIdsBefore = await page.locator("#lineupSlots .player-chip").evaluateAll(
+    (items) => items.map((chip) => chip.dataset.playerId)
+  );
+  const pitch = page.locator("#fmPhasePitch");
+  await expect(pitch).toHaveAttribute("data-phase", "out");
+  await expect(pitch).toHaveAttribute("data-shape", formation.outOfPossessionShape);
+  await expect(page.locator("#fmPhaseHeading")).toContainText(formation.outOfPossessionShape);
+  await expect(page.locator('[data-fm-phase="out"]')).toHaveAttribute("aria-pressed", "true");
+  const outPositions = await pitch.locator(".fm-phase-player").evaluateAll(
+    (items) => items.map((item) => `${item.style.left}|${item.style.top}`).sort()
+  );
+
+  await page.locator('[data-fm-phase="in"]').click();
+  await expect(pitch).toHaveAttribute("data-phase", "in");
+  await expect(pitch).toHaveAttribute("data-shape", formation.inPossessionShape);
+  await expect(page.locator("#fmPhaseHeading")).toContainText(formation.inPossessionShape);
+  await expect(pitch.locator(".fm-phase-player")).toHaveCount(11);
+  const inPositions = await pitch.locator(".fm-phase-player").evaluateAll(
+    (items) => items.map((item) => `${item.style.left}|${item.style.top}`).sort()
+  );
+  if (formation.inPossessionShape !== formation.outOfPossessionShape) {
+    expect(inPositions).not.toEqual(outPositions);
+  }
+
+  const lineupIdsAfter = await page.locator("#lineupSlots .player-chip").evaluateAll(
+    (items) => items.map((chip) => chip.dataset.playerId)
+  );
+  expect(lineupIdsAfter).toEqual(lineupIdsBefore);
+  await expect(page.locator("#benchPlayersList")).toBeAttached();
+});
+
+test("faseformasjon følger nytt systemvalg uten egen lagring", async ({ page }) => {
+  const choices = await page.locator("#formationSelect option:not([disabled])").evaluateAll(
+    (nodes) => nodes.map((node) => node.value).filter(Boolean)
+  );
+  if (choices.length < 2) return;
+  // Appen eier originalvelgeren i en endringsskuff. Ikke prøv å
+  // manipulere det skjulte skjemaet direkte som om det var synlig.
+  const select = page.locator("#formationSelect");
+  const original = await select.inputValue();
+  const alternative = choices.find((id) => id !== original);
+  await page.locator("#teamChangeFormation").click();
+  await expect(page.locator("#managerTeamChoiceDrawer")).toBeVisible();
+  await expect(select).toBeVisible();
+  await select.selectOption(alternative);
+  await expect(page.locator("#fmPhasePitch")).toHaveAttribute("data-formation-id", alternative);
+  await expect(page.locator("#fmPhasePitch .fm-phase-player")).toHaveCount(11);
+  await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
+  await expect(page.locator("#managerTeamChoiceDrawer")).toBeHidden();
+});
+
+test("alle 46 formasjonskildene gir 11 entydige brikker i begge faser", async ({ page }) => {
+  const result = await page.evaluate(async () => {
+    const { projectFormationPhase } = await import("/src/ui/manager-tactics-phase-projection.js");
+    const { buildFormationSlots } = await import("/src/hg-football-formation-adapter.js");
+    const formations = (await (await fetch("data/hgFootball/formations.json")).json()).formations;
+    const starting = buildFormationSlots("4-2-3-1").map((slot, index) => ({
+      id: "starting_" + index, position: slot.position, x: slot.x, y: slot.y
+    }));
+    const errors = [];
+    for (const formation of formations) {
+      for (const phase of ["in", "out"]) {
+        const result = projectFormationPhase(starting, formation, phase);
+        if (!result || result.players.length !== 11 ||
+            new Set(result.players.map((player) => player.id)).size !== 11 ||
+            result.players.filter((player) => player.position === "GK").length !== 1) {
+          errors.push(formation.id + ":" + phase);
+        }
+      }
+    }
+    return { count: formations.length, errors };
+  });
+  expect(result.count).toBe(46);
+  expect(result.errors).toEqual([]);
+});
+
+test("taktikkbrikkene viser draktmarkør uten å skjule spillerknapper", async ({ page }) => {
+  await expect(page.locator("#lineupSlots .player-chip")).toHaveCount(11);
+  await expect(page.locator("#fmPhasePitch .fm-phase-player")).toHaveCount(11);
+  // Stylesheet is injected as a separate link and may finish loading a tick
+  // after the source chips render. Poll for actual CSS rather than racing it.
+  await expect.poll(() => page.locator("#lineupSlots .player-chip").first().evaluate(
+    (item) => getComputedStyle(item, "::after").content
+  )).not.toBe("none");
+  await expect.poll(() => page.locator("#fmPhasePitch .fm-phase-player").first().evaluate(
+    (item) => getComputedStyle(item, "::before").content
+  )).not.toBe("none");
+  const visuals = await page.evaluate(() => {
+    const source = document.querySelector("#lineupSlots .player-chip");
+    const phase = document.querySelector("#fmPhasePitch .fm-phase-player");
+    return { interactive: source.tagName === "BUTTON", phaseReadOnly: phase.tagName !== "BUTTON" };
+  });
+  expect(visuals.interactive).toBe(true);
+  expect(visuals.phaseReadOnly).toBe(true);
+});
+
+test("kildebaserte spillerbidrag finnes fortsatt i en utvidbar seksjon", async ({ page }) => {
+  const disclosure = page.locator(".fm-tactics-insights");
+  await expect(disclosure).toBeAttached();
+  await expect(page.locator("#sourcedLineupImpact")).toBeAttached();
+  const ownership = await page.evaluate(() => {
+    const panel = document.querySelector(".fm-tactics-insights");
+    return {
+      tag: document.querySelector("#sourcedLineupImpact")?.closest(".fm-tactics-insights")?.tagName,
+      isBelowGrid: panel?.previousElementSibling?.id === "fmResponsiveTacticsGrid"
+    };
+  });
+  expect(ownership).toEqual({ tag: "DETAILS", isBelowGrid: true });
+  await disclosure.locator("summary").click();
+  await expect(disclosure).toHaveAttribute("open", "");
+  await expect(page.locator("#sourcedLineupImpact")).toBeVisible();
+});
+
+test("liggende iPad kan sammenligne to faktiske faser og returnere til redigerbart laguttak", async ({ page }) => {
+  await page.setViewportSize({ width: 1024, height: 768 });
+  await expect(page.locator("#lineupSlots .player-chip")).toHaveCount(11);
+  await expect(page.locator("#fmAttackPitch")).toBeHidden();
+  const before = await page.locator("#lineupSlots .player-chip").evaluateAll(
+    (items) => items.map((item) => ({ slot: item.dataset.slotId, player: item.dataset.playerId }))
+  );
+  const formation = await page.evaluate(async () => {
+    const data = await (await fetch("data/hgFootball/formations.json")).json();
+    return data.formations.find((item) => item.id === document.querySelector("#formationSelect")?.value);
+  });
+  expect(formation).toBeTruthy();
+
+  await page.locator("#fmComparePhases").click();
+  await expect(page.locator("#fmComparePhases")).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("#lineupSlots")).toBeHidden();
+  const attack = page.locator("#fmAttackPitch");
+  const defense = page.locator("#fmPhasePitch");
+  await expect(attack).toBeVisible();
+  await expect(defense).toBeVisible();
+  await expect(attack).toHaveAttribute("data-shape", formation.inPossessionShape);
+  await expect(defense).toHaveAttribute("data-shape", formation.outOfPossessionShape);
+  await expect(attack.locator(".fm-phase-player")).toHaveCount(11);
+  await expect(defense.locator(".fm-phase-player")).toHaveCount(11);
+  await expect(page.locator("#fmTacticsSquadRows .fm-squad-row")).toHaveCount(11);
+
+  await page.locator("#fmComparePhases").click();
+  await expect(page.locator("#fmComparePhases")).toHaveAttribute("aria-pressed", "false");
+  await expect(page.locator("#lineupSlots")).toBeVisible();
+  await expect(attack).toBeHidden();
+  const after = await page.locator("#lineupSlots .player-chip").evaluateAll(
+    (items) => items.map((item) => ({ slot: item.dataset.slotId, player: item.dataset.playerId }))
+  );
+  expect(after).toEqual(before);
+});
+
+test("iPad-rotasjon beholder samme startellever mellom sammenligning og redigering", async ({ page }) => {
+  await page.setViewportSize({ width: 1180, height: 820 });
+  const compare = page.locator("#fmComparePhases");
+  const lineup = page.locator("#lineupSlots");
+  const attack = page.locator("#fmAttackPitch");
+  const before = await lineup.locator(".player-chip").evaluateAll(
+    (chips) => chips.map((chip) => ({ slot: chip.dataset.slotId, player: chip.dataset.playerId }))
+  );
+  expect(before).toHaveLength(11);
+
+  await compare.click();
+  await expect(compare).toHaveAttribute("aria-pressed", "true");
+  await expect(attack).toBeVisible();
+  await expect(lineup).toBeHidden();
+
+  // Portrait mode restores the single active, editable pitch and hides comparison.
+  await page.setViewportSize({ width: 820, height: 1180 });
+  await expect(compare).toBeHidden();
+  await expect(attack).toBeHidden();
+  await expect(lineup).toBeVisible();
+
+  // Returning to landscape retains the user's mode until they explicitly edit.
+  await page.setViewportSize({ width: 1180, height: 820 });
+  await expect(compare).toBeVisible();
+  await expect(attack).toBeVisible();
+  await compare.click();
+  await expect(lineup).toBeVisible();
+  await expect(compare).toHaveAttribute("aria-pressed", "false");
+
+  const after = await lineup.locator(".player-chip").evaluateAll(
+    (chips) => chips.map((chip) => ({ slot: chip.dataset.slotId, player: chip.dataset.playerId }))
+  );
+  expect(after).toEqual(before);
+});
+
+test("stående mobil beholder redigerbar bane uten skrivebeskyttet sammenligning", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator("#fmComparePhases")).toBeHidden();
+  await expect(page.locator("#lineupSlots")).toBeVisible();
+  await expect(page.locator("#fmAttackPitch")).toBeHidden();
+});

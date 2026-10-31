@@ -30,6 +30,18 @@ export default defineConfig({
       testMatch: FULL_SEASON_SPEC,
       dependencies: ["chromium"],
       use: { ...devices["Desktop Chrome"] }
-    }
+    },
+    ...(process.env.HGFM_TACTICS_WEBKIT === "1" ? [{
+      // Opt-in Safari-engine check; physical iPad Safari sign-off is separate.
+      name: "webkit-ipad-tactics",
+      testMatch: /manager-tactics-responsive-v1\.spec\.js$/,
+      use: {
+        ...devices["Desktop Safari"],
+        viewport: { width: 1194, height: 834 },
+        isMobile: true,
+        hasTouch: true,
+        deviceScaleFactor: 2
+      }
+    }] : [])
   ]
 });

@@ -1,0 +1,465 @@
+/* Tactical board — visual skin only. Never invents player ratings or tactics. */
+body:has([data-tab-section="tactics"]:not([hidden])) .app-shell,
+body:has([data-tab-section="tactics"]:not([hidden])) .main-nav-layout,
+body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
+  width: min(1640px, calc(100% - 24px));
+}
+
+[data-tab-section="tactics"] {
+  --fm-panel: #091a29;
+  --fm-panel-deep: #061321;
+  --fm-edge: rgba(113, 172, 202, .24);
+  --fm-teal: #22d6a0;
+  --fm-blue: #3997f6;
+  color: #ecf6ff;
+}
+
+[data-tab-section="tactics"] #squadCompactStatus {
+  gap: 7px 14px;
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--fm-edge);
+  border-radius: 12px;
+  background: linear-gradient(90deg, #08192a, #071b21);
+  font-size: .78rem;
+}
+
+[data-tab-section="tactics"] #squadCompactStatus span + span::before {
+  color: var(--fm-teal);
+}
+
+.fm-tactics-grid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(310px, 1.08fr) !important;
+  grid-template-areas:
+    "pitch phase squad"
+    "bench bench bench"
+    "details details details";
+  gap: 12px;
+  align-items: start;
+  min-width: 0;
+}
+
+.fm-tactics-grid > .pitch-stage,
+.fm-tactics-grid > .fm-phase-panel,
+.fm-tactics-grid > .fm-squad-panel,
+.fm-tactics-grid > .fm-tactics-bench,
+.fm-tactics-grid > #sidePanel {
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  border: 1px solid var(--fm-edge);
+  border-radius: 14px;
+  background: linear-gradient(160deg, #092237, var(--fm-panel-deep) 75%);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .2);
+}
+
+.fm-tactics-grid > .pitch-stage { grid-area: pitch; padding: 12px; gap: 10px; }
+.fm-attack-panel { display: none; }
+.fm-compare-switch {
+  justify-self: start;
+  min-height: 42px;
+  padding: 8px 14px;
+  border: 1px solid #398fc0;
+  border-radius: 9px;
+  background: #103c5c;
+  color: #eff9ff;
+  font-weight: 800;
+  cursor: pointer;
+}
+.fm-compare-switch[aria-pressed="true"] {
+  background: #105a43;
+  border-color: #26ba94;
+}
+.fm-compare-switch:focus-visible { outline: 3px solid #a7f0ff; outline-offset: 2px; }
+
+/* Explicit comparison is read-only. The original 11 clickable chips remain in
+   the DOM and return unchanged when switching back to "Rediger laguttak". */
+@media (min-width: 980px) {
+  .fm-tactics-grid[data-layout="phases"] > .pitch-stage #lineupSlots,
+  .fm-tactics-grid[data-layout="phases"] > .pitch-stage .lineup-direct-editor,
+  .fm-tactics-grid[data-layout="phases"] > .pitch-stage .pitch-hint,
+  .fm-tactics-grid[data-layout="phases"] .fm-phase-controls { display: none !important; }
+  .fm-tactics-grid[data-layout="phases"] .fm-attack-panel {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+  }
+  .fm-tactics-grid[data-layout="phases"] .fm-attack-pitch { width: min(100%, 520px); }
+}
+@media (max-width: 979px) {
+  .fm-compare-switch { display: none !important; }
+}
+
+.fm-tactics-grid > .fm-phase-panel { grid-area: phase; }
+.fm-tactics-grid > .fm-squad-panel { grid-area: squad; }
+.fm-tactics-grid > .fm-tactics-bench { grid-area: bench; }
+.fm-tactics-grid > #sidePanel { grid-area: details; padding: 14px; }
+[data-tab-section="tactics"] > .fm-tactics-insights {
+  position: relative;
+  isolation: isolate;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  margin: 12px 0 0;
+  border: 1px solid var(--fm-edge);
+  border-radius: 14px;
+  background: linear-gradient(160deg, #092237, #061321 75%);
+  overflow: hidden;
+}
+.fm-tactics-insights > summary {
+  padding: 12px 15px;
+  min-height: 46px;
+  font-weight: 800;
+  font-size: .84rem;
+  color: #d8efff;
+  cursor: pointer;
+}
+.fm-tactics-insights > summary:focus-visible {
+  outline: 3px solid #a7f0ff;
+  outline-offset: -3px;
+}
+.fm-tactics-insights .lineup-sourced-impact {
+  padding: 12px 15px 16px;
+  margin: 0;
+  border-top: 1px solid var(--fm-edge);
+}
+
+.fm-tactics-grid > .pitch-stage .pitch-stage-head h2 {
+  font-size: clamp(1rem, 1.5vw, 1.35rem);
+  text-transform: none;
+  letter-spacing: -.02em;
+}
+
+.fm-tactics-grid > .pitch-stage .eyebrow { font-size: .65rem; letter-spacing: .08em; }
+.fm-tactics-grid > .pitch-stage .pitch-hint {
+  display: flex;
+  align-items: center;
+  font-size: .7rem;
+  line-height: 1.3;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: #a5bed0;
+}
+.fm-tactics-grid > .pitch-stage .pitch-hint .shortcut-button { min-height: 34px; padding: 5px 9px; font-size: .68rem; }
+
+/* Keep the interactive source pitch; none of the controls or drag handlers are cloned. */
+.fm-tactics-grid > .pitch-stage #lineupSlots {
+  width: min(100%, 520px);
+  aspect-ratio: 4 / 5;
+  min-height: 0;
+  max-height: none;
+  border: 1px solid #2e836f;
+  border-radius: 11px;
+  box-shadow: inset 0 0 65px rgba(0, 0, 0, .45);
+}
+
+.fm-tactics-grid #lineupSlots .player-chip {
+  min-height: 0;
+  width: clamp(27px, var(--chip-w, 19cqw), 78px);
+  gap: 2px;
+  padding: 4px 3px;
+  border-radius: 7px;
+  border-color: #5687b7;
+  background: #06182e;
+  box-shadow: 0 3px 9px #03101b7f;
+}
+.fm-tactics-grid #lineupSlots .player-chip.is-selected {
+  background: #e8f5ff;
+  border-color: #52d8ae;
+}
+.fm-tactics-grid #lineupSlots .chip-name { font-size: clamp(.5rem, 2.5cqw, .74rem); }
+.fm-tactics-grid #lineupSlots .chip-role { font-size: clamp(.45rem, 2cqw, .63rem); }
+.fm-tactics-grid #lineupSlots .player-chip:focus-visible,
+.fm-tactics-grid button:focus-visible {
+  outline: 3px solid #a7f0ff;
+  outline-offset: 2px;
+}
+
+/* The second pitch is a clearly labeled starting-shape reference, not invented
+   defensive movement. The exact selected players/positions come from #lineupSlots. */
+.fm-phase-panel,
+.fm-squad-panel {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  padding: 12px;
+}
+.fm-panel-heading h3 { margin: 0; font-size: clamp(.95rem, 1.5vw, 1.15rem); }
+.fm-panel-heading p {
+  margin: 4px 0 0;
+  color: #a6c0d2;
+  font-size: .72rem;
+  line-height: 1.35;
+}
+.fm-phase-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  padding: 4px;
+  border: 1px solid var(--fm-edge);
+  border-radius: 10px;
+  background: #08182b;
+}
+.fm-phase-controls button {
+  min-height: 42px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: #ccdbeb;
+  font-size: .8rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.fm-phase-controls button[aria-pressed="true"] {
+  border-color: #22bc93;
+  background: #105d4a;
+  color: #fff;
+}
+.fm-phase-controls button:focus-visible { outline: 3px solid #a7f0ff; outline-offset: 2px; }
+.fm-phase-pitch {
+  width: min(100%, 520px);
+  aspect-ratio: 4 / 5;
+  border-radius: 11px;
+  border-color: #317867;
+  box-shadow: inset 0 0 55px rgba(0, 0, 0, .48);
+  filter: saturate(.85);
+}
+.fm-phase-player {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  width: clamp(28px, var(--chip-w, 19cqw), 78px);
+  max-width: 23%;
+  padding: 4px 3px;
+  border: 1px solid #647d93;
+  border-radius: 7px;
+  background: #0c2032ed;
+  color: #eff8ff;
+  font-size: clamp(.44rem, 2.3cqw, .69rem);
+  line-height: 1.15;
+  text-align: center;
+  pointer-events: none;
+}
+.fm-phase-player b { color: #92e6cf; }
+.fm-phase-player span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fm-phase-player.is-selected { border-color: #66e4c0; }
+.fm-phase-player.is-misused { border-color: #ec7b85; }
+
+/* Lille draktsilhuett over navneplaten: ren CSS og nøytrale draktfarger.
+   Ingen oppdiktede klubbdrakter eller spillernummer. */
+.fm-tactics-grid #lineupSlots .player-chip::after,
+.fm-tactics-grid .fm-phase-player::before {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(19px, 7.2cqw, 29px);
+  height: clamp(17px, 6.6cqw, 26px);
+  background: linear-gradient(90deg, #14598a 0 28%, #34b5df 28% 72%, #14598a 72% 100%);
+  border: 1px solid rgba(241, 251, 255, .9);
+  box-shadow: 0 3px 8px #02101eaa;
+  clip-path: polygon(25% 0, 41% 0, 45% 10%, 55% 10%, 59% 0, 75% 0, 100% 24%, 87% 52%, 77% 42%, 77% 100%, 23% 100%, 23% 42%, 13% 52%, 0 24%);
+  pointer-events: none;
+}
+.fm-tactics-grid #lineupSlots .player-chip[data-line="keeper"]::after,
+.fm-tactics-grid .fm-phase-player.is-keeper::before {
+  background: linear-gradient(90deg, #a27412 0 28%, #ffdc64 28% 72%, #a27412 72% 100%);
+}
+.fm-tactics-grid .fm-phase-player.is-empty::before,
+.fm-tactics-grid #lineupSlots .player-chip:not([data-player-id])::after,
+.fm-tactics-grid #lineupSlots .player-chip[data-player-id=""]::after {
+  background: linear-gradient(90deg, #273a4b, #668098, #273a4b);
+  opacity: .62;
+}
+
+
+.fm-squad-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.fm-open-roster {
+  flex: 0 0 auto;
+  min-height: 40px;
+  padding: 8px 9px;
+  border: 1px solid #3e7baf;
+  border-radius: 8px;
+  background: #102d49;
+  color: #eff8ff;
+  font-weight: 800;
+  font-size: .68rem;
+  cursor: pointer;
+}
+.fm-open-roster:hover { background: #184269; }
+.fm-squad-column-head,
+.fm-squad-row {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) minmax(52px, .65fr) 53px 43px;
+  gap: 5px;
+  align-items: center;
+}
+.fm-squad-column-head {
+  padding: 6px;
+  border-bottom: 1px solid var(--fm-edge);
+  color: #97aabf;
+  font-size: .63rem;
+  font-weight: 800;
+}
+.fm-squad-column-head span:last-child { grid-column: 4; }
+.fm-squad-rows { display: grid; min-width: 0; }
+.fm-squad-row {
+  min-height: 43px;
+  padding: 5px 4px;
+  border-bottom: 1px solid rgba(136, 190, 224, .1);
+  font-size: .7rem;
+}
+.fm-squad-row.is-selected { background: rgba(34, 214, 160, .09); }
+.fm-position {
+  min-width: 0;
+  padding: 5px 2px;
+  border: 1px solid rgba(90, 171, 247, .52);
+  border-radius: 6px;
+  background: #17416a;
+  text-align: center;
+  font-size: .65rem;
+  font-weight: 800;
+}
+.fm-player-name, .fm-player-role, .fm-player-fit {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fm-player-name { font-weight: 750; }
+.fm-player-role { color: #b5cadd; }
+.fm-player-fit { color: #74dfaf; }
+.fm-player-fit[data-tone="misused"], .fm-player-fit[data-tone="risk"] { color: #f6b39c; }
+.fm-player-fit[data-tone="empty"] { color: #a8b9ca; }
+.fm-player-profile {
+  min-height: 34px;
+  padding: 4px 3px;
+  border: 1px solid rgba(103, 163, 231, .45);
+  border-radius: 6px;
+  background: #0c2842;
+  color: #e6f6ff;
+  font-size: .62rem;
+  cursor: pointer;
+}
+.fm-player-profile:hover { background: #16476b; }
+
+.fm-tactics-bench {
+  display: block;
+  padding: 12px 14px;
+  border-top: 1px solid var(--fm-edge);
+}
+.fm-tactics-bench .pitch-bench-head { align-items: center; }
+.fm-tactics-bench .pitch-bench-head p { font-size: .73rem; }
+.fm-tactics-bench .bench-player-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  padding: 5px 2px 10px;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+.fm-tactics-bench .bench-player-card {
+  flex: 0 0 clamp(145px, 13vw, 185px);
+  min-height: 66px;
+  padding: 9px;
+  scroll-snap-align: start;
+  border-radius: 8px;
+  background: #0c2742;
+}
+.fm-tactics-bench .bench-player-card:focus-visible { outline: 3px solid #9bffd9; }
+
+.fm-tactics-view-switch { display: none; }
+
+/* Medium touch screens: one focused pane at a time, no 3-column microtype. */
+@media (max-width: 979px) {
+  .fm-tactics-view-switch {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 5px;
+    margin: 0 0 10px;
+    padding: 5px;
+    border: 1px solid var(--fm-edge);
+    border-radius: 12px;
+    background: #081a2d;
+  }
+  .fm-tactics-view-switch button {
+    min-height: 44px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: transparent;
+    color: #c4d5e6;
+    font-size: .85rem;
+    font-weight: 800;
+  }
+  .fm-tactics-view-switch button[aria-pressed="true"] {
+    border-color: #20b98e;
+    background: #116549;
+    color: #fff;
+  }
+
+  .fm-tactics-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas: "pitch" "phase" "squad" "bench" "details";
+  }
+  .fm-tactics-grid > .pitch-stage { grid-column: 1 !important; }
+  .fm-tactics-grid[data-view="pitch"] > .fm-phase-panel,
+  .fm-tactics-grid[data-view="pitch"] > .fm-squad-panel,
+  .fm-tactics-grid[data-view="phase"] > .pitch-stage,
+  .fm-tactics-grid[data-view="phase"] > .fm-squad-panel,
+  .fm-tactics-grid[data-view="squad"] > .pitch-stage,
+  .fm-tactics-grid[data-view="squad"] > .fm-phase-panel { display: none !important; }
+
+  .fm-tactics-grid > .pitch-stage,
+  .fm-tactics-grid > .fm-phase-panel,
+  .fm-tactics-grid > .fm-squad-panel { width: 100%; }
+  .fm-tactics-grid > .pitch-stage #lineupSlots,
+  .fm-tactics-grid > .fm-phase-panel .fm-phase-pitch { width: min(100%, 510px); margin-inline: auto; }
+  .fm-squad-row { font-size: .84rem; min-height: 48px; }
+  .fm-tactics-bench .bench-player-card { flex-basis: 158px; }
+}
+
+/* On landscape phones preserve a usable list beside the tactical surface.
+   The three view buttons switch the primary drawing, not create a scroll trap. */
+@media (max-width: 979px) and (min-width: 640px) and (orientation: landscape) {
+  .fm-tactics-grid {
+    grid-template-columns: minmax(0, 1.07fr) minmax(270px, .93fr) !important;
+    grid-template-areas: "pitch squad" "phase squad" "bench bench" "details details";
+  }
+  .fm-tactics-grid[data-view="pitch"] > .fm-squad-panel,
+  .fm-tactics-grid[data-view="phase"] > .fm-squad-panel { display: grid !important; }
+  .fm-tactics-grid[data-view="squad"] > .fm-squad-panel { grid-column: 1 / -1; }
+  .fm-tactics-grid > .pitch-stage #lineupSlots,
+  .fm-tactics-grid > .fm-phase-panel .fm-phase-pitch { width: min(100%, 340px); }
+}
+
+@media (max-width: 599px) {
+  body:has([data-tab-section="tactics"]:not([hidden])) .app-shell { width: calc(100% - 16px); }
+  .fm-tactics-grid { gap: 9px; }
+  .fm-tactics-grid > .pitch-stage,
+  .fm-tactics-grid > .fm-phase-panel,
+  .fm-tactics-grid > .fm-squad-panel { padding: 10px; }
+  .fm-tactics-grid > .pitch-stage #lineupSlots,
+  .fm-tactics-grid > .fm-phase-panel .fm-phase-pitch { width: min(100%, 440px); aspect-ratio: 4 / 5; min-height: 0; }
+  .fm-squad-column-head,
+  .fm-squad-row { grid-template-columns: 34px minmax(0, 1fr) minmax(47px, .65fr) 44px 42px; gap: 3px; }
+  .fm-squad-row { font-size: .7rem; }
+  .fm-panel-heading p { font-size: .68rem; }
+  .fm-tactics-bench .pitch-bench-head { display: grid; gap: 5px; }
+  .fm-tactics-bench .bench-player-card { flex-basis: 150px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fm-tactics-grid *, .fm-tactics-view-switch * { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
