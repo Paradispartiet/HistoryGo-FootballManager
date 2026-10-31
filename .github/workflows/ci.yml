@@ -221,3 +221,13 @@ jobs:
       - name: Responsive nettleservakter og visuelle differanser
         if: steps.scope.outputs.lane == 'full'
         run: npm run test:browser -- --project=chromium
+
+      # Test the specific iPad tactics interaction in Safari's WebKit engine.
+      # WebKit emulation complements, but cannot replace, a real-device check.
+      - name: Installer WebKit for iPad-taktikk
+        if: steps.scope.outputs.lane == 'full'
+        run: npx playwright install --with-deps webkit
+
+      - name: iPad Safari-motortest av taktikkbrett
+        if: steps.scope.outputs.lane == 'full'
+        run: npx playwright test tests/browser/manager-tactics-responsive-v1.spec.js --project=webkit-ipad-tactics
