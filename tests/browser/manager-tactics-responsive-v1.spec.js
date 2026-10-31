@@ -235,6 +235,41 @@ test("liggende iPad kan sammenligne to faktiske faser og returnere til redigerba
   expect(after).toEqual(before);
 });
 
+test("iPad-rotasjon beholder samme startellever mellom sammenligning og redigering", async ({ page }) => {
+  await page.setViewportSize({ width: 1180, height: 820 });
+  const compare = page.locator("#fmComparePhases");
+  const lineup = page.locator("#lineupSlots");
+  const attack = page.locator("#fmAttackPitch");
+  const before = await lineup.locator(".player-chip").evaluateAll(
+    (chips) => chips.map((chip) => ({ slot: chip.dataset.slotId, player: chip.dataset.playerId }))
+  );
+  expect(before).toHaveLength(11);
+
+  await compare.click();
+  await expect(compare).toHaveAttribute("aria-pressed", "true");
+  await expect(attack).toBeVisible();
+  await expect(lineup).toBeHidden();
+
+  // Portrait mode restores the single active, editable pitch and hides comparison.
+  await page.setViewportSize({ width: 820, height: 1180 });
+  await expect(compare).toBeHidden();
+  await expect(attack).toBeHidden();
+  await expect(lineup).toBeVisible();
+
+  // Returning to landscape retains the user's mode until they explicitly edit.
+  await page.setViewportSize({ width: 1180, height: 820 });
+  await expect(compare).toBeVisible();
+  await expect(attack).toBeVisible();
+  await compare.click();
+  await expect(lineup).toBeVisible();
+  await expect(compare).toHaveAttribute("aria-pressed", "false");
+
+  const after = await lineup.locator(".player-chip").evaluateAll(
+    (chips) => chips.map((chip) => ({ slot: chip.dataset.slotId, player: chip.dataset.playerId }))
+  );
+  expect(after).toEqual(before);
+});
+
 test("stående mobil beholder redigerbar bane uten skrivebeskyttet sammenligning", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(page.locator("#fmComparePhases")).toBeHidden();
