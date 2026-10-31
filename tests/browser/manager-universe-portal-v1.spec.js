@@ -67,3 +67,37 @@ test("Eksisterende fem hovedområder beholdes og Kalender er fortsatt autoritati
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await expect(page.locator("#managerCalendarDays")).toBeVisible();
 });
+
+
+test("Tropp viser faktiske spillertall fra den samme spillerlisten", async ({ page }) => {
+  await page.locator(".main-nav [data-tab-target='tactics']").click();
+  await page.locator(".app-subtab[data-tab-target='squad']").click();
+  await expect(page.locator("#managerPlayerWorkspace")).toBeVisible();
+  await expect.poll(() => page.locator("#managerRosterBody tr").count()).toBeGreaterThan(0);
+  const count = Number(await page.locator("#fmuvRosterTotal").textContent());
+  const ready = Number(await page.locator("#fmuvRosterReady").textContent());
+  const loaded = Number(await page.locator("#fmuvRosterLoaded").textContent());
+  const injured = Number(await page.locator("#fmuvRosterInjured").textContent());
+  expect(count).toBeGreaterThan(0);
+  expect(ready + loaded + injured).toBe(count);
+  await expect(page.locator("#managerRosterBody tr").first()).toHaveAttribute("data-position-group", /^(defense|midfield|attack)$/);
+});
+
+test("Taktikk beholder spiller-ID og startellever ved sammenligning og tilbake", async ({ page }) => {
+  await page.locator(".main-nav [data-tab-target='tactics']").click();
+  await expect(page.locator("#fmResponsiveTacticsGrid")).toBeVisible();
+  const chips = page.locator("#lineupSlots .player-chip");
+  await expect(chips).toHaveCount(11);
+  const before = await chips.evaluateAll((items) => items.map((chip) => [
+    chip.dataset.slotId, chip.dataset.playerId || ""
+  ]));
+  await page.locator("#fmComparePhases").click();
+  await expect(page.locator("#fmAttackPitch")).toBeVisible();
+  await expect(page.locator("#fmPhasePitch")).toBeVisible();
+  await page.locator("#fmComparePhases").click();
+  await expect(page.locator("#lineupSlots")).toBeVisible();
+  const after = await chips.evaluateAll((items) => items.map((chip) => [
+    chip.dataset.slotId, chip.dataset.playerId || ""
+  ]));
+  expect(after).toEqual(before);
+});
