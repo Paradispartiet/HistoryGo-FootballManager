@@ -122,12 +122,19 @@ test("faseformasjon følger nytt systemvalg uten egen lagring", async ({ page })
     (nodes) => nodes.map((node) => node.value).filter(Boolean)
   );
   if (choices.length < 2) return;
+  // Appen eier originalvelgeren i en endringsskuff. Ikke prøv å
+  // manipulere det skjulte skjemaet direkte som om det var synlig.
   const select = page.locator("#formationSelect");
   const original = await select.inputValue();
   const alternative = choices.find((id) => id !== original);
+  await page.locator("#teamChangeFormation").click();
+  await expect(page.locator("#managerTeamChoiceDrawer")).toBeVisible();
+  await expect(select).toBeVisible();
   await select.selectOption(alternative);
   await expect(page.locator("#fmPhasePitch")).toHaveAttribute("data-formation-id", alternative);
   await expect(page.locator("#fmPhasePitch .fm-phase-player")).toHaveCount(11);
+  await page.locator("#managerTeamChoiceDrawer .manager-team-choice-done").click();
+  await expect(page.locator("#managerTeamChoiceDrawer")).toBeHidden();
 });
 
 test("alle 46 formasjonskildene gir 11 entydige brikker i begge faser", async ({ page }) => {
@@ -179,10 +186,14 @@ test("kildebaserte spillerbidrag finnes fortsatt i en utvidbar seksjon", async (
   const disclosure = page.locator(".fm-tactics-insights");
   await expect(disclosure).toBeAttached();
   await expect(page.locator("#sourcedLineupImpact")).toBeAttached();
-  const ownership = await page.evaluate(() =>
-    document.querySelector("#sourcedLineupImpact")?.closest(".fm-tactics-insights")?.tagName
-  );
-  expect(ownership).toBe("DETAILS");
+  const ownership = await page.evaluate(() => {
+    const panel = document.querySelector(".fm-tactics-insights");
+    return {
+      tag: document.querySelector("#sourcedLineupImpact")?.closest(".fm-tactics-insights")?.tagName,
+      isBelowGrid: panel?.previousElementSibling?.id === "fmResponsiveTacticsGrid"
+    };
+  });
+  expect(ownership).toEqual({ tag: "DETAILS", isBelowGrid: true });
   await disclosure.locator("summary").click();
   await expect(disclosure).toHaveAttribute("open", "");
   await expect(page.locator("#sourcedLineupImpact")).toBeVisible();
