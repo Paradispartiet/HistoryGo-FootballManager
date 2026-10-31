@@ -195,6 +195,21 @@ function ensureSections() {
   const weekAction = button("Åpne kalender", "calendar", "fmuv-outline");
   week.append(weekAction);
 
+  const season = makePanel("SESONGEN", "fmuv-season");
+  const seasonFacts = el("dl", "fmuv-season-facts");
+  [
+    ["Plassering", "fmuvHomeStanding"],
+    ["Spilte kamper", "fmuvHomeMatches"],
+    ["Mål", "fmuvHomeGoals"]
+  ].forEach(([label, id]) => {
+    const item = el("div");
+    const value = el("dd", "", "–");
+    value.id = id;
+    item.append(el("dt", "", label), value);
+    seasonFacts.append(item);
+  });
+  season.append(seasonFacts, button("Se tabell og statistikk", "statistikk", "fmuv-outline"));
+
   const homeInbox = makePanel("INNBOKS", "fmuv-home-inbox");
   const mailHead = el("div", "fmuv-panel-head");
   const unread = el("span", "fmuv-unread", "0 uleste");
@@ -204,7 +219,7 @@ function ensureSections() {
   const preview = el("div", "fmuv-message-list");
   preview.id = "fmuvHomeMail";
   homeInbox.append(preview);
-  overview.append(match, week, homeInbox);
+  overview.append(match, season, homeInbox, week);
   home.append(overview);
 
   const quick = makePanel("HURTIGHANDLINGER", "fmuv-shortcuts");
@@ -297,6 +312,9 @@ function renderHome() {
   const week = document.getElementById("managerCalendarNow")?.textContent?.trim();
   text("fmuvMatchName", next && next !== "Ingen terminfestet kamp" ? next : "Ingen terminfestet kamp");
   text("fmuvWeek", week || "Manageruka");
+  text("fmuvHomeStanding", document.getElementById("statsStanding")?.textContent?.trim() || "Ikke startet");
+  text("fmuvHomeMatches", document.getElementById("statsMatches")?.textContent?.trim() || "0");
+  text("fmuvHomeGoals", document.getElementById("statsGoals")?.textContent?.trim() || "0");
   const unread = currentMessages.filter((item) => !item.isRead).length;
   text("fmuvUnread", unread + " uleste");
   fillCards(document.getElementById("fmuvHomeMail"), currentMessages, "Ingen meldinger ennå.", MAX_PREVIEW);
@@ -384,7 +402,7 @@ function boot() {
   ensureSections();
   ensureHeaderActions();
   updateMode();
-  const observed = ["onboardingScreen", "headerClubName", "managerCalendarMatch", "managerCalendarNow"];
+  const observed = ["onboardingScreen", "headerClubName", "managerCalendarMatch", "managerCalendarNow", "statsStanding", "statsMatches", "statsGoals"];
   const obs = new MutationObserver(scheduleRefresh);
   observed.map((id) => document.getElementById(id)).filter(Boolean).forEach((item) => {
     obs.observe(item, { attributes: idIsOnboarding(item) ? true : false, attributeFilter: idIsOnboarding(item) ? ["hidden"] : undefined,
