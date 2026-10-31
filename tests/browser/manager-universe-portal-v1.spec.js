@@ -140,3 +140,29 @@ test("Innboksfiltre endrer kun presentasjon, ikke meldingens identitet", async (
   const restoredIds = await list.evaluateAll((items) => items.map((item) => item.dataset.messageId));
   expect(restoredIds).toEqual(allIds);
 });
+
+
+test("Rekruttering viser nøkkeltall fra den opprinnelige spillerpoolen", async ({ page }) => {
+  await page.locator('.main-nav [data-tab-target="historygo"]').click();
+  await expect(page.locator("#managerScoutingRecruitable")).toBeVisible();
+  await expect(page.locator("#fmuvRecruitTotal")).toBeVisible();
+  const total = Number(await page.locator("#fmuvRecruitTotal").textContent());
+  const squad = Number(await page.locator("#fmuvRecruitSquad").textContent());
+  const available = Number(await page.locator("#fmuvRecruitAvailable").textContent());
+  expect(total).toBeGreaterThanOrEqual(0);
+  expect(squad + available).toBe(total);
+  await expect(page.locator("#scoutingRecruitableBody tr")).toHaveCount(total);
+  // A search query is a presentation filter: totals still include the full pool.
+  await page.locator("#scoutingRecruitableSearch").fill("___ingen_spillere___");
+  await expect(page.locator("#scoutingRecruitableBody tr")).toHaveCount(0);
+  await expect(page.locator("#fmuvRecruitTotal")).toHaveText(String(total));
+});
+
+test("Kampdag viser klubbens faktiske motstander og beholder original handling", async ({ page }) => {
+  await page.locator('.main-nav [data-tab-target="kamp"]').click();
+  await expect(page.locator(".matchday-scene")).toBeVisible();
+  await expect(page.locator(".matchday-scene-versus .matchday-scene-team")).toHaveCount(2);
+  await expect(page.locator(".matchday-stage-rail .matchday-stage")).toHaveCount(3);
+  await expect(page.locator(".matchday-scene-action")).toBeVisible();
+  await expect(page.locator(".matchday-scene-status-grid .matchday-scene-status-card")).toHaveCount(4);
+});
