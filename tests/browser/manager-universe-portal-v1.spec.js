@@ -101,3 +101,39 @@ test("Taktikk beholder spiller-ID og startellever ved sammenligning og tilbake",
   ]));
   expect(after).toEqual(before);
 });
+
+
+test("Portal og Innboks tilpasser iPad i begge retninger uten sidelekkasje", async ({ page }) => {
+  for (const viewport of [
+    { width: 768, height: 1024 },
+    { width: 1024, height: 768 },
+    { width: 1194, height: 834 },
+    { width: 834, height: 1194 }
+  ]) {
+    await page.setViewportSize(viewport);
+    for (const [trigger, section] of [["#fmuvOpenHome", "#fmuvHome"], ["#fmuvOpenInbox", "#fmuvInbox"]]) {
+      await page.locator(trigger).click();
+      await expect(page.locator(section)).toBeVisible();
+      const overflow = await page.evaluate(() =>
+        document.documentElement.scrollWidth - document.documentElement.clientWidth
+      );
+      expect(overflow, "overflow at " + viewport.width + "x" + viewport.height).toBeLessThanOrEqual(1);
+    }
+  }
+});
+
+test("Innboksfiltre endrer kun presentasjon, ikke meldingens identitet", async ({ page }) => {
+  await page.locator("#fmuvOpenInbox").click();
+  const list = page.locator("#fmuvInboxList [data-message-id]");
+  await expect.poll(() => list.count()).toBeGreaterThan(0);
+  const allIds = await list.evaluateAll((items) => items.map((item) => item.dataset.messageId));
+  await page.locator('#fmuvInbox .fmuv-filter[data-filter="unread"]').click();
+  const unreadIds = await list.evaluateAll((items) => items.map((item) => item.dataset.messageId));
+  expect(unreadIds.every((id) => allIds.includes(id))).toBe(true);
+  await page.locator('#fmuvInbox .fmuv-filter[data-filter="important"]').click();
+  const importantIds = await list.evaluateAll((items) => items.map((item) => item.dataset.messageId));
+  expect(importantIds.every((id) => allIds.includes(id))).toBe(true);
+  await page.locator('#fmuvInbox .fmuv-filter[data-filter="all"]').click();
+  const restoredIds = await list.evaluateAll((items) => items.map((item) => item.dataset.messageId));
+  expect(restoredIds).toEqual(allIds);
+});
