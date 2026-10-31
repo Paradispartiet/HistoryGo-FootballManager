@@ -34,7 +34,7 @@ export default defineConfig({
     {
       // Focused Safari-engine proxy for PR #529; physical iPad Safari sign-off is separate.
       name: "webkit-ipad-tactics",
-      testMatch: /manager-tactics-responsive-v1\\.spec\\.js$/,
+      testMatch: /manager-tactics-responsive-v1\.spec\.js$/,
       use: {
         ...devices["Desktop Safari"],
         viewport: { width: 1194, height: 834 },
