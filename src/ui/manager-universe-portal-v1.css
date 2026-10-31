@@ -723,3 +723,61 @@
 .hgfm-universe-v2 .matchday-scene-status-card[data-tone="blocked"]{border-color:#ca8f4f}
 .hgfm-universe-v2 .matchday-scene-status-card[data-tone="live"]{border-color:#b4576f}
 .hgfm-universe-v2 .matchday-depth{border:1px solid #365079;border-radius:10px;background:#0b1c34}
+
+/* Rekruttering: faktiske spillerpooltall og eksisterende spillerhandlinger. */
+.hgfm-universe-v2 .manager-scouting-surface{
+ border:1px solid #354f79;border-radius:12px;background:#0a172d;color:#eaf3ff;overflow:hidden
+}
+.hgfm-universe-v2 .scouting-head{
+ padding:clamp(13px,1.6vw,22px);align-items:center;
+ border-color:#36517c;background:linear-gradient(120deg,#142747,#0d1a36)
+}
+.hgfm-universe-v2 .scouting-head h2{font-size:clamp(1.35rem,2.1vw,2rem);color:#f2f4ff}
+.hgfm-universe-v2 .scouting-head>strong{
+ padding:8px 11px;border:1px solid #8052c4;border-radius:9px;background:#2a204b;color:#e6ceff
+}
+.hgfm-universe-v2 .fmuv-recruit-kpis{
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;
+ padding:12px 14px;border-bottom:1px solid #35517b;background:#0c1b33
+}
+.hgfm-universe-v2 .fmuv-recruit-kpis article{
+ display:grid;gap:6px;min-width:0;padding:12px 13px;
+ background:#132643;border:1px solid #34517d;border-radius:10px
+}
+.hgfm-universe-v2 .fmuv-recruit-kpis span{color:#b3c8e1;font-size:.75rem;font-weight:700}
+.hgfm-universe-v2 .fmuv-recruit-kpis strong{
+ color:#eaf4ff;font-size:clamp(1.1rem,1.8vw,1.75rem);font-variant-numeric:tabular-nums
+}
+.hgfm-universe-v2 .fmuv-recruit-kpis article:nth-child(2) strong{color:#60e0b0}
+.hgfm-universe-v2 .fmuv-recruit-kpis article:nth-child(3) strong{color:#c99cff}
+.hgfm-universe-v2 .scouting-tools{padding:12px 14px;background:#0d213a;border-color:#354f79}
+.hgfm-universe-v2 .scouting-tools input,.hgfm-universe-v2 .scouting-tools select{
+ min-height:44px;border:1px solid #4a618b;border-radius:8px;padding:8px 11px;
+ background:#10203d;color:#f1f3ff
+}
+.hgfm-universe-v2 .scouting-player-table,.hgfm-universe-v2 .scouting-club-table{background:#0b1932}
+.hgfm-universe-v2 .scouting-player-table th,.hgfm-universe-v2 .scouting-club-table th{
+ position:sticky;top:0;z-index:1;padding:11px 10px;
+ background:#162a48;border-bottom:1px solid #45628a;color:#bcd0e9;font-size:.69rem
+}
+.hgfm-universe-v2 .scouting-player-table td,.hgfm-universe-v2 .scouting-club-table td{
+ height:52px;padding:8px 10px;border-color:#324868;color:#e7f1ff
+}
+.hgfm-universe-v2 .scouting-player-table tbody tr:nth-child(even),
+.hgfm-universe-v2 .scouting-club-table tbody tr:nth-child(even){background:#10223d}
+.hgfm-universe-v2 .scouting-positions{color:#70c6ff}
+.hgfm-universe-v2 .scouting-status{color:#70e5b8}
+.hgfm-universe-v2 .scouting-recruit-button{
+ min-height:42px;min-width:72px;border:1px solid #ad6bef;
+ border-radius:8px;background:#5e25b3;color:#fff
+}
+.hgfm-universe-v2 .scouting-recruit-button:hover{background:#7a2ed0}
+.hgfm-universe-v2 .scouting-club-detail{background:#0e1e38;border-left:1px solid #304975}
+@media(max-width:800px){
+ .hgfm-universe-v2 .fmuv-recruit-kpis{gap:7px;padding:9px}
+ .hgfm-universe-v2 .fmuv-recruit-kpis article{padding:10px}
+}
+@media(max-width:520px){
+ .hgfm-universe-v2 .fmuv-recruit-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .hgfm-universe-v2 .fmuv-recruit-kpis article:first-child{grid-column:1/-1}
+}
