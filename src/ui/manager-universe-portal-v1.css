@@ -692,3 +692,34 @@
   .hgfm-universe-v2 .manager-roster-table { min-width: 880px; }
   .hgfm-universe-v2 .fm-squad-row { min-height: 48px; }
 }
+
+/* Kampdag: samme overflate som portalen, med ekte kampstatus og handlinger. */
+.hgfm-universe-v2 [data-tab-section="kamp"] .matchday-scene {
+  border:1px solid #385780;border-radius:13px;padding:clamp(12px,1.5vw,22px);
+  background:radial-gradient(70% 50% at 50% -18%,#6120ae2b,transparent),linear-gradient(160deg,#10233f,#071429);
+  box-shadow:0 10px 25px #0006;
+}
+.hgfm-universe-v2 .matchday-scene-head h2{color:#f3f5ff;font-size:clamp(1.4rem,2vw,2rem)}
+.hgfm-universe-v2 .matchday-scene-status{border-radius:8px;border-color:#6753a6;background:#2c2050;color:#f3eaff}
+.hgfm-universe-v2 .matchday-stage{border:1px solid #344a73;border-radius:8px;background:#0e1d39;color:#abbddc}
+.hgfm-universe-v2 .matchday-stage[data-state="active"]{border-color:#ad74ff;background:#432080;color:#fff}
+.hgfm-universe-v2 .matchday-stage[data-state="complete"]{border-color:#367e6c;background:#123f42;color:#82e7bf}
+.hgfm-universe-v2 .matchday-scene-team,.hgfm-universe-v2 .matchday-scene-marker{
+  border:1px solid #3b5880;border-radius:11px;background:#0c213f
+}
+.hgfm-universe-v2 .matchday-scene-team.is-home{box-shadow:inset 4px 0 #6ccab2}
+.hgfm-universe-v2 .matchday-scene-team.is-away{box-shadow:inset -4px 0 #8b5ce3}
+.hgfm-universe-v2 .matchday-scene-marker{border-color:#694ca9;background:#281b57}
+.hgfm-universe-v2 .matchday-scene-priority{border:1px solid #6e4ea6;border-radius:11px;background:#1b204a}
+.hgfm-universe-v2 .matchday-scene-action{
+ min-height:48px;border:1px solid #bc87ff;border-radius:9px;
+ background:linear-gradient(120deg,#6f24c6,#9733ec);color:#fff;cursor:pointer
+}
+.hgfm-universe-v2 .matchday-scene-context-card,.hgfm-universe-v2 .matchday-scene-status-card{
+ border:1px solid #355075;border-radius:9px;background:#11233e;color:#eaf4ff
+}
+.hgfm-universe-v2 .matchday-scene-context-card{border-left:3px solid #7d4ec4}
+.hgfm-universe-v2 .matchday-scene-status-card:hover{border-color:#a26ef2;background:#25234e}
+.hgfm-universe-v2 .matchday-scene-status-card[data-tone="blocked"]{border-color:#ca8f4f}
+.hgfm-universe-v2 .matchday-scene-status-card[data-tone="live"]{border-color:#b4576f}
+.hgfm-universe-v2 .matchday-depth{border:1px solid #365079;border-radius:10px;background:#0b1c34}
