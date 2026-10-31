@@ -339,3 +339,129 @@
 @media (prefers-reduced-motion: reduce) {
   .fmuv-screen *, .fmuv-header-actions * { transition: none !important; scroll-behavior: auto !important; }
 }
+
+
+/* Shared visual language across all canonical manager workspaces. The live
+   content remains owned by each existing workspace, not by mockup data. */
+.hgfm-universe-v2 [data-tab-section="squad"] .roster-readiness-panel,
+.hgfm-universe-v2 [data-tab-section="tactics"] .squad-setup-gate,
+.hgfm-universe-v2 [data-tab-section="kamp"] .matchday-panel,
+.hgfm-universe-v2 [data-tab-section="statistikk"] .season-command-panel,
+.hgfm-universe-v2 [data-tab-section="admin"] .staff-workspace-v2 .panel,
+.hgfm-universe-v2 [data-tab-section="board"] .manager-surface,
+.hgfm-universe-v2 [data-tab-section="historygo"] .manager-scouting-surface {
+  border-color: var(--fmuv-line);
+  border-radius: 13px;
+  background: linear-gradient(148deg, #0e1d37, #091428);
+  box-shadow: 0 8px 24px #01061345;
+}
+
+.hgfm-universe-v2 [data-tab-section="statistikk"] .stats-highlight-grid article,
+.hgfm-universe-v2 [data-tab-section="tactics"] .squad-setup-checklist article,
+.hgfm-universe-v2 [data-tab-section="squad"] .metric-grid article,
+.hgfm-universe-v2 [data-tab-section="historygo"] .metric-grid article {
+  min-width: 0;
+  border: 1px solid #34466f;
+  border-radius: 10px;
+  background: #11213d;
+  color: #eaf2ff;
+}
+.hgfm-universe-v2 [data-tab-section="statistikk"] .stats-highlight-grid strong,
+.hgfm-universe-v2 [data-tab-section="tactics"] .squad-setup-checklist strong {
+  font-variant-numeric: tabular-nums;
+  color: #6ee0bd;
+}
+.hgfm-universe-v2 [data-tab-section="historygo"] .scouting-head,
+.hgfm-universe-v2 [data-tab-section="historygo"] .scouting-tools {
+  background: #0e1d37;
+  border-color: var(--fmuv-line);
+}
+.hgfm-universe-v2 [data-tab-section="historygo"] .scouting-player-table th,
+.hgfm-universe-v2 [data-tab-section="historygo"] .scouting-club-table th {
+  background: #152845;
+  color: #cbd6ed;
+  border-color: #40567b;
+}
+.hgfm-universe-v2 [data-tab-section="historygo"] .scouting-player-table tbody tr:hover,
+.hgfm-universe-v2 [data-tab-section="historygo"] .scouting-club-table tbody tr:hover {
+  background: #27234a;
+}
+.hgfm-universe-v2 [data-tab-section="historygo"] .scouting-tools input,
+.hgfm-universe-v2 [data-tab-section="historygo"] .scouting-tools select {
+  min-height: 42px;
+  border: 1px solid #4c6386;
+  border-radius: 8px;
+  background: #0c1931;
+  color: #fff;
+}
+.hgfm-universe-v2 [data-tab-section="historygo"] .scouting-recruit-button {
+  border-radius: 8px;
+  border-color: #924aed;
+  background: #5819b1;
+  color: #fff;
+}
+.hgfm-universe-v2 [data-tab-section="historygo"] .scouting-recruit-button:focus-visible {
+  outline: 3px solid #d8b5ff;
+}
+
+.hgfm-universe-v2 [data-tab-section="admin"] .staff-workspace-header,
+.hgfm-universe-v2 [data-tab-section="squad"] .roster-readiness-head,
+.hgfm-universe-v2 [data-tab-section="tactics"] .pitch-stage-head {
+  color: #eaf2ff;
+}
+.hgfm-universe-v2 [data-tab-section="admin"] .staff-role-slot,
+.hgfm-universe-v2 [data-tab-section="admin"] .staff-person-card {
+  border-color: #30466e;
+  background: #10223d;
+  border-radius: 10px;
+}
+.hgfm-universe-v2 [data-tab-section="admin"] .staff-workspace-count {
+  color: #cda6ff;
+  border-color: #6c399e;
+  background: #211739;
+}
+.hgfm-universe-v2 [data-tab-section="kamp"] .matchday-result-card,
+.hgfm-universe-v2 [data-tab-section="kamp"] .match-flow {
+  border-color: #39628a;
+  border-radius: 12px;
+  background: #0c2035;
+}
+.hgfm-universe-v2 [data-tab-section="kamp"] .match-flow-momentum[data-tone="positive"] {
+  color: #61edbd;
+}
+.hgfm-universe-v2 [data-tab-section="tactics"] .fm-compare-switch,
+.hgfm-universe-v2 [data-tab-section="tactics"] .fm-phase-controls button[aria-pressed="true"] {
+  background: #5418a4;
+  border-color: #a76af2;
+  color: #fff;
+}
+.hgfm-universe-v2 [data-tab-section="tactics"] .fm-squad-row.is-selected {
+  background: #382258;
+}
+.hgfm-universe-v2 [data-tab-section="statistikk"] .stats-sort-button.is-active {
+  background: #6e1dce;
+  border-color: #b079f3;
+  color: #fff;
+}
+.hgfm-universe-v2 [data-tab-section="board"] .manager-club-organization,
+.hgfm-universe-v2 [data-tab-section="board"] .manager-club-room {
+  color: #eaf2ff;
+}
+
+/* Keep real-scrolling tables within their panels on portrait tablets and
+   phones, rather than shrinking player names into unreadable columns. */
+.hgfm-universe-v2 .scouting-table-wrap,
+.hgfm-universe-v2 .scouting-club-list-wrap,
+.hgfm-universe-v2 .player-stats-table {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+@media (max-width: 760px) {
+  .hgfm-universe-v2 [data-tab-section="admin"] .staff-workspace-v2,
+  .hgfm-universe-v2 [data-tab-section="squad"] .roster-readiness-panel {
+    width: 100%;
+    max-width: none;
+  }
+}
