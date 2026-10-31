@@ -34,8 +34,7 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
   grid-template-areas:
     "pitch phase squad"
     "bench bench bench"
-    "details details details"
-    "insights insights insights";
+    "details details details";
   gap: 12px;
   align-items: start;
   min-width: 0;
@@ -45,8 +44,7 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
 .fm-tactics-grid > .fm-phase-panel,
 .fm-tactics-grid > .fm-squad-panel,
 .fm-tactics-grid > .fm-tactics-bench,
-.fm-tactics-grid > #sidePanel,
-.fm-tactics-grid > .fm-tactics-insights {
+.fm-tactics-grid > #sidePanel {
   min-width: 0;
   max-width: 100%;
   margin: 0;
@@ -61,9 +59,17 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
 .fm-tactics-grid > .fm-squad-panel { grid-area: squad; }
 .fm-tactics-grid > .fm-tactics-bench { grid-area: bench; }
 .fm-tactics-grid > #sidePanel { grid-area: details; padding: 14px; }
-.fm-tactics-grid > .fm-tactics-insights {
-  grid-area: insights;
-  padding: 0;
+[data-tab-section="tactics"] > .fm-tactics-insights {
+  position: relative;
+  isolation: isolate;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  margin: 12px 0 0;
+  border: 1px solid var(--fm-edge);
+  border-radius: 14px;
+  background: linear-gradient(160deg, #092237, #061321 75%);
   overflow: hidden;
 }
 .fm-tactics-insights > summary {
@@ -369,7 +375,7 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
 
   .fm-tactics-grid {
     grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-areas: "pitch" "phase" "squad" "bench" "details" "insights";
+    grid-template-areas: "pitch" "phase" "squad" "bench" "details";
   }
   .fm-tactics-grid > .pitch-stage { grid-column: 1 !important; }
   .fm-tactics-grid[data-view="pitch"] > .fm-phase-panel,
@@ -393,7 +399,7 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
 @media (max-width: 979px) and (min-width: 640px) and (orientation: landscape) {
   .fm-tactics-grid {
     grid-template-columns: minmax(0, 1.07fr) minmax(270px, .93fr) !important;
-    grid-template-areas: "pitch squad" "phase squad" "bench bench" "details details" "insights insights";
+    grid-template-areas: "pitch squad" "phase squad" "bench bench" "details details";
   }
   .fm-tactics-grid[data-view="pitch"] > .fm-squad-panel,
   .fm-tactics-grid[data-view="phase"] > .fm-squad-panel { display: grid !important; }
