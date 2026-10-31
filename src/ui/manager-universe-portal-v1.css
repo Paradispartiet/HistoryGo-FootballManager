@@ -185,10 +185,13 @@
 .fmuv-home-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(230px, .73fr) minmax(310px, 1fr);
+  grid-template-areas:
+    "match season inbox"
+    "week week inbox";
   align-items: stretch;
   gap: 12px;
 }
-.fmuv-match {
+.fmuv-match { grid-area: match;
   min-height: 292px;
   background:
     linear-gradient(160deg, #0b1b32e8 12%, #091426ec 90%),
@@ -203,11 +206,29 @@
   overflow-wrap: anywhere;
 }
 .fmuv-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: auto; }
-.fmuv-week { justify-content: space-between; }
+.fmuv-week { grid-area: week; justify-content: space-between; }
 .fmuv-large {
   font-size: clamp(1.25rem, 2vw, 2rem);
   font-weight: 850;
 }
+.fmuv-home-inbox { grid-area: inbox; }
+.fmuv-season { grid-area: season; }
+.fmuv-season-facts {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+.fmuv-season-facts > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  padding: 9px 0;
+  border-bottom: 1px solid #30466f;
+}
+.fmuv-season-facts dt { color: #aec0dc; font-size: .78rem; }
+.fmuv-season-facts dd { margin: 0; color: #65e2b8; font-weight: 850; font-size: clamp(.95rem, 1.6vw, 1.25rem); font-variant-numeric: tabular-nums; }
+.fmuv-season > .fmuv-outline { margin-top: auto; }
 .fmuv-unread {
   padding: 5px 9px;
   border-radius: 50px;
@@ -311,7 +332,10 @@
 .fmuv-mail-open { width: max-content; max-width: 100%; }
 
 @media (max-width: 1150px) {
-  .fmuv-home-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fmuv-home-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas: "match season" "week week" "inbox inbox";
+  }
   .fmuv-home-inbox { grid-column: 1 / -1; }
   .fmuv-inbox-grid { grid-template-columns: 160px minmax(200px, 1fr) minmax(0, 1.2fr); }
   .fmuv-quick-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -321,7 +345,10 @@
   .fmuv-header-actions { grid-column: 1 / -1; grid-row: 2; justify-content: stretch; }
   .fmuv-header-actions > button { flex: 1; }
   .fmuv-screen-heading { align-items: flex-start; }
-  .fmuv-home-grid { grid-template-columns: minmax(0, 1fr); }
+  .fmuv-home-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "match" "season" "inbox" "week";
+  }
   .fmuv-home-inbox { grid-column: auto; }
   .fmuv-quick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .fmuv-inbox-grid { grid-template-columns: minmax(0, 1fr); min-height: 0; }
