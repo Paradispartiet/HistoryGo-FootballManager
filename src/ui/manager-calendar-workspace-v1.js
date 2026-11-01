@@ -839,7 +839,7 @@ function installObservers() {
   const dashboardTab = document.querySelector('.main-nav .nav-tab[data-tab-target="dashboard"]');
   if (dashboardTab && dashboardTab.dataset.calendarOfficeBound !== "true") {
     dashboardTab.dataset.calendarOfficeBound = "true";
-    dashboardTab.addEventListener("click", () => queueMicrotask(redirectOfficeToCalendar));
+    dashboardTab.addEventListener("click", () => queueMicrotask(redirectOfficeToInbox));
   }
 
   const footerStrip = document.getElementById("nextActionStrip");
