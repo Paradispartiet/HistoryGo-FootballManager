@@ -184,7 +184,7 @@ test("Innboks har tynne lyse kortkanter og hvit tekst", async ({ page }) => {
     };
   });
   expect(styles.width).toBe("1px");
-  expect(styles.borderColor).toMatch(/^rgba?\\(/);
+  expect(styles.borderColor).toMatch(/^rgb/);
   expect(styles.textColor).toBe("rgb(255, 255, 255)");
   await page.locator('.app-subtab[data-tab-target="calendar"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
