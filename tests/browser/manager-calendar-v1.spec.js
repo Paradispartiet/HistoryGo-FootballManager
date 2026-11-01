@@ -52,9 +52,12 @@ test.beforeEach(async ({ page }, testInfo) => {
   await expect(page.locator('.app-subtab[data-tab-target="calendar"]')).toBeAttached();
 });
 
-test("aktiv ligasave starter direkte i managerkalenderen", async ({ page }) => {
-  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
-  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Kalender");
+test("aktiv ligasave åpner Hjem, mens managerkalenderen er initialisert", async ({ page }) => {
+  await expect(page.locator("#fmuvHome")).toBeVisible();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeHidden();
+  await expect(page.locator("#managerLocationText")).toHaveText("Hjem · Portal");
+  await expect(page.locator("#managerCalendarNow")).toHaveText("Uke 3 · Onsdag");
+  await openOfficeCalendar(page);
   await expect(page.locator("#managerCalendarNow")).toHaveText("Uke 3 · Onsdag");
 });
 

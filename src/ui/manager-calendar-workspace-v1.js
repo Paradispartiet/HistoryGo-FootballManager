@@ -801,6 +801,11 @@ function openLeagueCalendarAtStartup() {
   startupRouteApplied = true;
   selectedDayIndex = lastCalendarModel?.currentDayIndex || 1;
   activateCalendar();
+  // Calendar owns week initialization; the portal may own the landing screen.
+  // Dispatch on the next frame so all presentation modules have booted first.
+  requestAnimationFrame(() => {
+    window.dispatchEvent(new CustomEvent("hgfm:league-calendar-startup-ready"));
+  });
 }
 
 function installObservers() {
