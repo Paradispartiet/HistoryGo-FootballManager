@@ -53,6 +53,8 @@ test("mobilen har én samlet dock, ikke et ekstra navigasjonsfelt over spillet",
   await expect(page.locator("#fmuvHome")).toBeVisible();
   await expect(page.locator("#managerLocationText")).toHaveText("Hjem · Portal");
   await page.locator('.main-nav [data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Kalender");
 });
@@ -68,6 +70,8 @@ test("dock-faner og dagens neste handling fungerer etter flytting", async ({ pag
   await expect(page.locator('[data-tab-section="kamp"]')).toBeVisible();
 
   await page.locator('.main-nav [data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
 });
 
