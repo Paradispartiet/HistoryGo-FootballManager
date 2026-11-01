@@ -50,6 +50,10 @@ test("mobilen har én samlet dock, ikke et ekstra navigasjonsfelt over spillet",
   expect(geometry.breadcrumbWidth).toBeLessThanOrEqual(1);
   expect(geometry.breadcrumbHeight).toBeLessThanOrEqual(1);
   expect(geometry.overflow).toBeLessThanOrEqual(1);
+  await expect(page.locator("#fmuvHome")).toBeVisible();
+  await expect(page.locator("#managerLocationText")).toHaveText("Hjem · Portal");
+  await page.locator('.main-nav [data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Kalender");
 });
 
