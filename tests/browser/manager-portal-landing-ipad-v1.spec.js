@@ -41,6 +41,8 @@ test("Hjem er naturlig landing mens Kalender eier ukas faktiske fremdrift", asyn
 
   const savedWeek = await page.locator("#managerCalendarNow").textContent();
   await page.locator('.main-nav [data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await expect(page.locator("#managerCalendarNow")).toHaveText(savedWeek || "");
   await expect(page.locator("#managerCalendarDays .manager-calendar-day-button")).toHaveCount(7);
