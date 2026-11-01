@@ -378,7 +378,11 @@ function applyOfficeNavigationContract() {
   const historygo = subnav.querySelector('.app-subtab[data-tab-target="historygo"]');
 
   if (overview) overview.classList.add("office-subnav-proxy");
-  if (inbox) inbox.classList.add("office-subnav-proxy");
+  if (inbox) {
+    inbox.dataset.subnavParent = "dashboard";
+    inbox.textContent = "Innboks";
+    inbox.classList.remove("office-subnav-proxy");
+  }
   if (board) {
     board.textContent = "Klubben";
     board.classList.remove("office-subnav-proxy");
@@ -397,6 +401,8 @@ function applyOfficeNavigationContract() {
 
   if (calendar && board && calendar.parentElement === board.parentElement) subnav.insertBefore(calendar, board);
   else if (calendar) subnav.prepend(calendar);
+  // Innboks først i Kontor, Kalender som fane nummer to.
+  if (inbox && calendar) subnav.insertBefore(inbox, calendar);
 }
 
 function markerForDay(day) {
@@ -784,23 +790,23 @@ function scheduleRender() {
   });
 }
 
-function redirectOfficeToCalendar() {
+function redirectOfficeToInbox() {
   if (!isNormalLeagueSave() || redirectQueued) return;
   const active = document.querySelector('[data-tab-section]:not([hidden])');
-  const target = active?.dataset.tabSection;
-  if (target !== "dashboard" && target !== "inbox") return;
+  if (active?.dataset.tabSection !== "dashboard") return;
   redirectQueued = true;
   queueMicrotask(() => {
     redirectQueued = false;
-    activateCalendar();
+    // Kalender og Innboks er selvstendige faner; ruter bare hovedområdet Kontor.
+    if (document.querySelector('[data-tab-section="dashboard"]:not([hidden])')) activateTarget("inbox");
   });
 }
 
-function openLeagueCalendarAtStartup() {
+function openLeagueOfficeAtStartup() {
   if (startupRouteApplied || !isNormalLeagueSave()) return;
   startupRouteApplied = true;
   selectedDayIndex = lastCalendarModel?.currentDayIndex || 1;
-  activateCalendar();
+  activateTarget("inbox");
   // Calendar owns week initialization; the portal may own the landing screen.
   // Dispatch on the next frame so all presentation modules have booted first.
   requestAnimationFrame(() => {
@@ -824,7 +830,7 @@ function installObservers() {
   if (sections.length) {
     const observer = new MutationObserver(() => queueMicrotask(() => {
       applyOfficeNavigationContract();
-      redirectOfficeToCalendar();
+      redirectOfficeToInbox();
       syncCalendarLocation();
     }));
     sections.forEach((section) => observer.observe(section, { attributes: true, attributeFilter: ["hidden"] }));
@@ -869,7 +875,7 @@ function boot() {
   applyOfficeNavigationContract();
   renderCalendar();
   installObservers();
-  openLeagueCalendarAtStartup();
+  openLeagueOfficeAtStartup();
   syncCalendarLocation();
 }
 
