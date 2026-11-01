@@ -215,5 +215,6 @@ test("sentrale shell-knapper er mørke og har synlig tastaturfokus", async ({ pa
   }
   await expectDarkButton(page.locator("#settingsButton"));
   await openArea(page, "Kontor");
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
   await expectDarkButton(page.locator('#managerCalendarDays .manager-calendar-day-button[aria-current="date"]'));
 });
