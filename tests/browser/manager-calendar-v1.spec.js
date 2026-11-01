@@ -3,6 +3,8 @@ import { expect, test } from "@playwright/test";
 
 async function openOfficeCalendar(page) {
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Kalender");
 }
@@ -61,12 +63,15 @@ test("aktiv ligasave åpner Hjem, mens managerkalenderen er initialisert", async
   await expect(page.locator("#managerCalendarNow")).toHaveText("Uke 3 · Onsdag");
 });
 
-test("Kontor åpner Kalender direkte og skjuler separat Innboks", async ({ page }) => {
-  await openOfficeCalendar(page);
+test("Kontor åpner Innboks; Kalender er neste valg uten omdirigering", async ({ page }) => {
+  await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="inbox"]')).toBeVisible();
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="calendar"]')).toBeVisible();
-  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="inbox"]')).toBeHidden();
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]')).toHaveText("Klubben");
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="officeHelp"]')).toBeHidden();
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
 });
 
 test("Kalender viser syv valgbare dager og den faktiske arbeidsdagen", async ({ page }) => {
