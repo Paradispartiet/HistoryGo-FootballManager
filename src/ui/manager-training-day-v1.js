@@ -79,6 +79,8 @@ function returnToCalendarDay() {
   const office = document.querySelector('.main-nav [role="tab"][data-tab-target="dashboard"]');
   if (!(office instanceof HTMLElement)) return;
   office.click();
+  // Direkte retur til Kalender, ikke Kontors nye Innboks-standard.
+  document.querySelector('.app-subtab[data-tab-target="calendar"]')?.click();
   requestAnimationFrame(() => {
     const day = document.querySelector(`#managerCalendarDays .manager-calendar-day-button[data-day="${context.dayIndex}"]`);
     if (day instanceof HTMLElement) day.click();
