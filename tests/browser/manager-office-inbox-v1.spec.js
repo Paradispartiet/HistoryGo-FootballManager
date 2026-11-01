@@ -60,12 +60,14 @@ function seededSeason() {
 
 async function openOffice(page) {
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
-  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
-  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Kalender");
+  await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
+  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Innboks");
 }
 
 async function openCalendarMessage(page) {
   await openOffice(page);
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="1"]').click();
   await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Mandag");
   const message = page.locator('#managerCalendarTimeline [data-event-kind="message"]').first();
@@ -102,12 +104,15 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator('.app-subtab[data-tab-target="calendar"]')).toBeAttached();
 });
 
-test("Kontor åpner Kalender; Innboks og Oppstartshjelp er ikke parallelle normalfaner", async ({ page }) => {
+test("Kontor åpner Innboks som første fane, deretter Kalender", async ({ page }) => {
   await openOffice(page);
   await expect(page.locator('.app-subtab[data-tab-target="dashboard"]')).toBeHidden();
-  await expect(page.locator('.app-subtab[data-tab-target="inbox"]')).toBeHidden();
+  await expect(page.locator('.app-subtab[data-tab-target="inbox"]')).toBeVisible();
   await expect(page.locator('.app-subtab[data-tab-target="officeHelp"]')).toBeHidden();
   await expect(page.locator('.app-subtab[data-tab-target="board"]')).toHaveText("Klubben");
+  const officeTabs = page.locator('.app-subnav .app-subtab[data-subnav-parent="dashboard"]:visible');
+  await expect(officeTabs.nth(0)).toHaveAttribute("data-tab-target", "inbox");
+  await expect(officeTabs.nth(1)).toHaveAttribute("data-tab-target", "calendar");
   await expect(page.locator("#officeCommandPanel")).toBeHidden();
 });
 
@@ -118,7 +123,7 @@ test("innboksmotoren beholder fokus og kø som intern meldingskilde", async ({ p
   await expect(page.locator("#inboxQueueList")).toBeAttached();
   await expect(page.locator("#inboxSignalUnread")).toBeAttached();
   await expect(page.locator("#inboxSignalReplies")).toBeAttached();
-  await expect(page.locator('[data-tab-section="inbox"]')).toBeHidden();
+  await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
 });
 
 test("melding åpnes fra kalenderen i drawer med eksakt klubbmail", async ({ page }) => {
@@ -163,4 +168,26 @@ test("Kalender og meldingsdrawer har ingen alvorlige tilgjengelighetsbrudd", asy
     .analyze();
   const serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
   expect(serious, serious.map((violation) => `${violation.id}: ${violation.help}`).join("\n")).toEqual([]);
+});
+
+test("Innboks har tynne lyse kortkanter og hvit tekst", async ({ page }) => {
+  await openOffice(page);
+  const card = page.locator("#inboxThreadList .inbox-thread-card, #inboxThreadList .message-card").first();
+  await expect(card).toBeVisible();
+  const styles = await card.evaluate((node) => {
+    const border = getComputedStyle(node);
+    const title = node.querySelector(".inbox-thread-latest-title, .inbox-event-title, h3") || node;
+    return {
+      width: border.borderTopWidth,
+      borderColor: border.borderTopColor,
+      textColor: getComputedStyle(title).color
+    };
+  });
+  expect(styles.width).toBe("1px");
+  expect(styles.borderColor).toMatch(/^rgba?\\(/);
+  expect(styles.textColor).toBe("rgb(255, 255, 255)");
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  await page.locator('.app-subtab[data-tab-target="inbox"]').click();
+  await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
 });
