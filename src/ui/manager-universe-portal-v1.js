@@ -16,6 +16,7 @@ let activeFilter = "all";
 let currentMessages = [];
 let refreshPending = false;
 let startupHomeApplied = false;
+let startupNavigationRequested = false;
 
 function el(tag, className = "", text = "") {
   const item = document.createElement(tag);
@@ -388,6 +389,7 @@ function openPortalAfterCalendarReady() {
   // Only the initial league landing changes. Navigation is then entirely user-owned.
   if (startupHomeApplied || !leagueReady()) return;
   startupHomeApplied = true;
+  if (startupNavigationRequested) return;
   const active = activeSection()?.dataset.tabSection;
   if (active === "calendar" || active === "dashboard") showSurface(SECTION_HOME);
 }
@@ -413,6 +415,13 @@ function boot() {
   if (!document.getElementById(link.id)) document.head.append(link);
   ensureSections();
   ensureHeaderActions();
+  // A quick real user navigation during bootstrap takes precedence over the
+  // default Home landing. Do not steal focus back on the next animation frame.
+  document.addEventListener("pointerdown", (event) => {
+    if (event.isTrusted && event.target.closest(".main-nav, #appSubnav, #fmuvHeaderActions, #app")) {
+      startupNavigationRequested = true;
+    }
+  }, { capture: true });
   window.addEventListener("hgfm:league-calendar-startup-ready", openPortalAfterCalendarReady);
   updateMode();
   const observed = ["onboardingScreen", "headerClubName", "managerCalendarMatch", "managerCalendarNow", "statsStanding", "statsMatches", "statsGoals"];
