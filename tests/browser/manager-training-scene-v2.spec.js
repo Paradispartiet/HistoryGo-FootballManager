@@ -52,6 +52,7 @@ async function openTraining(page) {
 
 async function openCalendarTraining(page, day = 3, eventId = "team-training") {
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await page.locator(`#managerCalendarDays .manager-calendar-day-button[data-day="${day}"]`).click();
   await page.locator(`#managerCalendarTimeline [data-event-id="${eventId}"]`).click();
