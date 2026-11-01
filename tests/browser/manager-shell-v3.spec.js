@@ -16,7 +16,7 @@ async function openArea(page, name) {
     Stats: "statistikk"
   };
   await page.locator(`.main-nav [role="tab"][data-tab-target="${targetByArea[name]}"]`).click();
-  if (name === "Kontor") await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  if (name === "Kontor") await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
   if (name === "Speiding") await expect(page.locator('[data-tab-section="historygo"]')).toBeVisible();
 }
 
@@ -55,7 +55,7 @@ test("har fem stabile hovedområder med Speiding mellom Lag og Kamp", async ({ p
   await openArea(page, "Kontor");
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="dashboard"]')).toBeHidden();
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="calendar"]')).toHaveText("Kalender");
-  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="inbox"]')).toBeHidden();
+  await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="inbox"]')).toBeVisible();
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="board"]')).toHaveText("Klubben");
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="officeHelp"]')).toBeHidden();
   await expect(page.locator('.app-subtab[data-subnav-parent="dashboard"][data-tab-target="historygo"]')).toHaveCount(0);
@@ -64,12 +64,11 @@ test("har fem stabile hovedområder med Speiding mellom Lag og Kamp", async ({ p
   await expect(page.locator("#advanceClubWeekPhase, #leagueOnboardingPrimary, #portalPriorityAction")).toHaveCount(0);
 });
 
-test("Kontor åpner på Kalender og viser hvor du er", async ({ page }) => {
+test("Kontor åpner på Innboks og viser hvor du er", async ({ page }) => {
   await openArea(page, "Kontor");
-  await expect(page.locator("#managerCalendarDays")).toBeVisible();
-  await expect(page.locator("#managerCalendarTimeline")).toBeVisible();
-  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Kalender");
-  await expect(page.locator('[data-tab-section="inbox"]')).toBeHidden();
+  await expect(page.locator("#inboxThreadList")).toBeVisible();
+  await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Innboks");
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeHidden();
   await expect(page.locator("#leagueOnboardingPanel")).toBeHidden();
 });
 
