@@ -147,6 +147,7 @@ test("lukking av melding returnerer til samme kalenderdag", async ({ page }) => 
 
 test("kalenderens treningshendelse går direkte til trening", async ({ page }) => {
   await openOffice(page);
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
   await page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="3"]').click();
   await page.locator('#managerCalendarTimeline [data-event-id="team-training"]').click();
   await expect(page.locator('[data-tab-section="trening"]')).toBeVisible();
