@@ -106,6 +106,7 @@ test("kampforberedelsen gjør valgt trening til et konkret observasjonsspørsmå
   } } })));
   await page.setViewportSize({ width: 390, height: 844 });
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="5"]').click();
   await page.locator('#managerCalendarTimeline [data-event-id="match-prep"]').click();
