@@ -6,6 +6,8 @@ const SETTINGS_ICON = `
 
 const OFFICE_DEEP_TARGETS = new Set(["progression"]);
 const LOCATION_LABELS = Object.freeze({
+  universeHome: "Hjem · Portal",
+  universeInbox: "Hjem · Innboks",
   dashboard: "Kontor · Oppstartshjelp",
   inbox: "Kontor · Innboks",
   calendar: "Kontor · Kalender",

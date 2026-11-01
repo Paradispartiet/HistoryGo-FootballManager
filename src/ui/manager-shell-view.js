@@ -17,6 +17,7 @@ import "./manager-system-workspace-v2.js";
 import "./manager-football-learning-loop-v1.js";
 import "./manager-visual-identity-v1.js";
 import "./manager-league-next-suppression-v1.js";
+import "./manager-universe-portal-v1.js";
 
 export function createMatchFlowSnapshot(session, visibleLog = []) {
   const log = Array.isArray(visibleLog) ? visibleLog : [];
