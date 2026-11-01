@@ -228,6 +228,6 @@ jobs:
         if: steps.scope.outputs.lane == 'full'
         run: npx playwright install --with-deps webkit
 
-      - name: iPad Safari-motortest av taktikkbrett
+      - name: iPad Safari-motortest av taktikk og Hjem-navigasjon
         if: steps.scope.outputs.lane == 'full'
-        run: HGFM_TACTICS_WEBKIT=1 npx playwright test tests/browser/manager-tactics-responsive-v1.spec.js --project=webkit-ipad-tactics
+        run: HGFM_TACTICS_WEBKIT=1 npx playwright test tests/browser/manager-tactics-responsive-v1.spec.js tests/browser/manager-portal-landing-ipad-v1.spec.js --project=webkit-ipad-tactics
