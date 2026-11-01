@@ -79,7 +79,7 @@
 .fmuv-header-actions[hidden] { display: none !important; }
 .fmuv-header-button {
   padding: 8px 12px;
-  min-height: 40px;
+  min-height: 44px;
   border: 1px solid var(--fmuv-line);
   border-radius: 9px;
   background: #111d38;
