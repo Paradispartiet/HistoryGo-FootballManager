@@ -34,7 +34,7 @@ export default defineConfig({
     ...(process.env.HGFM_TACTICS_WEBKIT === "1" ? [{
       // Opt-in Safari-engine check; physical iPad Safari sign-off is separate.
       name: "webkit-ipad-tactics",
-      testMatch: /manager-tactics-responsive-v1\.spec\.js$/,
+      testMatch: /(?:manager-tactics-responsive-v1|manager-portal-landing-ipad-v1)\.spec\.js$/,
       use: {
         ...devices["Desktop Safari"],
         viewport: { width: 1194, height: 834 },
