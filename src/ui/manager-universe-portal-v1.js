@@ -15,6 +15,7 @@ let selectedId = "";
 let activeFilter = "all";
 let currentMessages = [];
 let refreshPending = false;
+let startupHomeApplied = false;
 
 function el(tag, className = "", text = "") {
   const item = document.createElement(tag);
@@ -84,6 +85,7 @@ function showSurface(id) {
   const subnav = document.getElementById("appSubnav");
   if (subnav) subnav.hidden = true;
   section.scrollTop = 0;
+  window.scrollTo({ top: 0, behavior: "instant" });
   text("managerLocationText", id === SECTION_HOME ? "Hjem · Portal" : "Hjem · Innboks");
   updateNavigation();
   refresh();
@@ -382,12 +384,22 @@ function updateMode() {
   }
 }
 
+function openPortalAfterCalendarReady() {
+  // Only the initial league landing changes. Navigation is then entirely user-owned.
+  if (startupHomeApplied || !leagueReady()) return;
+  startupHomeApplied = true;
+  const active = activeSection()?.dataset.tabSection;
+  if (active === "calendar" || active === "dashboard") showSurface(SECTION_HOME);
+}
+
 function scheduleRefresh() {
   if (refreshPending) return;
   refreshPending = true;
   requestAnimationFrame(() => {
     refreshPending = false;
     updateMode();
+    // A new league save can be created without a hard reload.
+    if (!startupHomeApplied && leagueReady()) openPortalAfterCalendarReady();
     if ([SECTION_HOME, SECTION_INBOX].includes(activeSection()?.dataset.tabSection)) refresh();
     updateNavigation();
   });
@@ -401,6 +413,7 @@ function boot() {
   if (!document.getElementById(link.id)) document.head.append(link);
   ensureSections();
   ensureHeaderActions();
+  window.addEventListener("hgfm:league-calendar-startup-ready", openPortalAfterCalendarReady);
   updateMode();
   const observed = ["onboardingScreen", "headerClubName", "managerCalendarMatch", "managerCalendarNow", "statsStanding", "statsMatches", "statsGoals"];
   const obs = new MutationObserver(scheduleRefresh);
