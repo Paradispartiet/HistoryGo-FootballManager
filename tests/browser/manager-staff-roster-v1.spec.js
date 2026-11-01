@@ -12,6 +12,7 @@ const COMPLETE = [
 
 async function openStaff(page) {
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   const staff = page.locator('.app-subtab[data-tab-target="admin"]');
   await expect(staff).toBeVisible();

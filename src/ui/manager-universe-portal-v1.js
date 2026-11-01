@@ -391,7 +391,7 @@ function openPortalAfterCalendarReady() {
   startupHomeApplied = true;
   if (startupNavigationRequested) return;
   const active = activeSection()?.dataset.tabSection;
-  if (active === "calendar" || active === "dashboard") showSurface(SECTION_HOME);
+  if (["calendar", "dashboard", "inbox"].includes(active)) showSurface(SECTION_HOME);
 }
 
 function scheduleRefresh() {

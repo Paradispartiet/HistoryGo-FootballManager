@@ -482,3 +482,75 @@ body[data-manager-area] select:focus-visible {
     transition: none;
   }
 }
+
+
+/* Kontor · Innboks: lette, separate kort og klar, hvit lesetekst. */
+body[data-manager-area="office"] .dept-inbox {
+  --inbox-hairline: rgba(246, 249, 255, .48);
+  color: #fff;
+}
+body[data-manager-area="office"] .dept-inbox .inbox-command-hero,
+body[data-manager-area="office"] .dept-inbox .manager-surface.inbox-focus-panel,
+body[data-manager-area="office"] .dept-inbox .manager-surface.inbox-briefing-panel,
+body[data-manager-area="office"] .dept-inbox .manager-surface.inbox-queue-panel {
+  border: 1px solid var(--inbox-hairline);
+  border-radius: 14px;
+  padding: clamp(16px, 2vw, 24px);
+  background: #0c1119;
+  box-shadow: none;
+}
+body[data-manager-area="office"] .dept-inbox .inbox-command-hero {
+  min-height: 0;
+  margin-bottom: 16px;
+}
+body[data-manager-area="office"] .dept-inbox .inbox-focus-list .inbox-thread-card,
+body[data-manager-area="office"] .dept-inbox .inbox-queue-list .inbox-thread-card,
+body[data-manager-area="office"] .dept-inbox .message-card,
+body[data-manager-area="office"] .dept-inbox .inbox-inline-stats > div,
+body[data-manager-area="office"] .dept-inbox .inbox-choice-response {
+  border: 1px solid var(--inbox-hairline);
+  border-radius: 12px;
+  background: #080d14;
+  color: #fff;
+}
+body[data-manager-area="office"] .dept-inbox .message-list { gap: 14px; }
+body[data-manager-area="office"] .dept-inbox .inbox-thread-toggle,
+body[data-manager-area="office"] .dept-inbox .inbox-thread-body {
+  color: #fff;
+  line-height: 1.55;
+}
+body[data-manager-area="office"] .dept-inbox .inbox-thread-toggle {
+  padding: clamp(16px, 2vw, 22px);
+}
+body[data-manager-area="office"] .dept-inbox :is(
+  .dept-hero-lede, .message-card p, .message-from, .message-tag,
+  .inbox-thread-latest-title, .inbox-thread-body p, .inbox-event-impact,
+  .inbox-event-status, .inbox-event-summary, .inbox-focus-status,
+  .inbox-queue-heading > span, .inbox-signal-status, .inbox-inline-stats dt,
+  .inbox-choice-response-body, .muted-text
+) {
+  color: #fff;
+  opacity: 1;
+}
+body[data-manager-area="office"] .dept-inbox .inbox-thread-toggle::after { color: #fff; }
+body[data-manager-area="office"] .dept-inbox .inbox-focus-heading h3,
+body[data-manager-area="office"] .dept-inbox .inbox-queue-heading h3,
+body[data-manager-area="office"] .dept-inbox .inbox-thread-latest-title {
+  color: #fff;
+  line-height: 1.3;
+}
+body[data-manager-area="office"] .dept-inbox .inbox-focus-list :is(.inbox-thread-card, .message-card).is-open {
+  border-color: rgba(255, 255, 255, .82);
+}
+body[data-manager-area="office"] .dept-inbox :is(.inbox-choice-button, .inbox-thread-read-button, .inbox-briefing-actions button) {
+  border: 1px solid var(--inbox-hairline);
+  color: #fff;
+}
+@media (max-width: 640px) {
+  body[data-manager-area="office"] .dept-inbox .inbox-command-hero,
+  body[data-manager-area="office"] .dept-inbox .manager-surface.inbox-focus-panel,
+  body[data-manager-area="office"] .dept-inbox .manager-surface.inbox-briefing-panel,
+  body[data-manager-area="office"] .dept-inbox .manager-surface.inbox-queue-panel { padding: 16px; }
+  body[data-manager-area="office"] .dept-inbox .inbox-thread-toggle { padding: 16px; }
+  body[data-manager-area="office"] .dept-inbox .inbox-thread-body { padding-inline: 16px; }
+}

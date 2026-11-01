@@ -67,6 +67,8 @@ test("Eksisterende fem hovedområder beholdes og Kalender er fortsatt autoritati
   ]);
   await page.locator("#fmuvOpenHome").click();
   await page.locator('.main-nav [data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await expect(page.locator("#managerCalendarDays")).toBeVisible();
 });

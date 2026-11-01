@@ -52,6 +52,7 @@ const analysisPlan = {
 
 async function openCalendar(page) {
   await page.locator('.main-nav [data-tab-target="dashboard"]').click();
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
 }
 

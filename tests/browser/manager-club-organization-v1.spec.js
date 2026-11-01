@@ -3,6 +3,7 @@ import { expect, test } from "@playwright/test";
 
 async function openClub(page) {
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   const club = page.locator('.app-subtab[data-tab-target="board"]');
   await expect(club).toBeVisible();

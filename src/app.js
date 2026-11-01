@@ -10330,7 +10330,8 @@ async function openManagerMatchdayTarget(target) {
       && state.clubWeekState?.phase === "analysis";
     if (!rolledToNextWeek) return;
 
-    activateTab("dashboard");
+    // Neste manageruke vises i Kalender; Kontor har nå Innboks som standard.
+    activateTab("calendar");
     renderApp();
     if (carryProblemToNextWeek) {
       window.dispatchEvent(new CustomEvent("hgfm:training-problem-suggested"));

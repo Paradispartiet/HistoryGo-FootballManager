@@ -12,6 +12,8 @@ const CONTEXT_BY_TARGET = Object.fromEntries(AREAS.map(([, target, area, surface
 
 async function openArea(page, target) {
   await page.locator(`.main-nav [role="tab"][data-tab-target="${target}"]`).click();
+  // Kalender er den tidsbaserte sceneprøven; Kontor starter ellers i Innboks.
+  if (target === "dashboard") await page.locator('.app-subtab[data-tab-target="calendar"]').click();
   const expected = CONTEXT_BY_TARGET[target];
   if (expected) {
     await expect(page.locator("body")).toHaveAttribute("data-manager-area", expected.area);

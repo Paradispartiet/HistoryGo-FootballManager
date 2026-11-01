@@ -536,6 +536,7 @@ test("sparket manager får ikke før-sesong tilbake etter reload", async ({ page
   await expect(page.locator("#onboardingScreen")).toBeHidden();
 
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
 
   await expect(page.locator("#startNewLeagueSeasonButton")).toBeHidden();
@@ -654,6 +655,7 @@ test("fullført sesong bruker sesongslutt i footer i stedet for ny manageruke", 
   await page.reload();
   await expect(page.locator("#onboardingScreen")).toBeHidden();
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
 
   await expect(page.locator("#managerCalendarMatch")).toHaveText("Ingen terminfestet kamp");
