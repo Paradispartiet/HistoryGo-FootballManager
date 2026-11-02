@@ -269,6 +269,36 @@ html[data-manager-compact-dock] .manager-location-bar {
 }
 
 
+/* Slim footer v3: reduce padding without changing the interaction model. */
+html[data-manager-office-calendar-v1="active"] manager-next-action .site-footer {
+  padding: 3px 10px max(3px, env(safe-area-inset-bottom)) !important;
+}
+
+html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-head .eyebrow,
+html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-tag,
+html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-hint,
+html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-secondary {
+  display: none !important;
+}
+
+html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-phase {
+  white-space: nowrap;
+  font-size: .66rem;
+  padding: 4px 8px;
+}
+
+html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-title {
+  display: block !important;
+  min-width: 0;
+  flex: 1 1 auto;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  overflow-wrap: normal !important;
+  font-size: .88rem !important;
+  line-height: 1.2;
+}
+
 /* Slim footer v3: preserve one 44px action row at every width.
    These selectors outrank Calendar's @container 900px/480px rules. */
 html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] {
@@ -319,5 +349,23 @@ html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionSt
 @media (max-width: 760px) {
   html[data-manager-compact-dock="mobile"][data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] {
     padding: 2px 6px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  html[data-manager-compact-dock="mobile"][data-manager-office-calendar-v1="active"] manager-next-action .site-footer {
+    padding: 0 0 env(safe-area-inset-bottom) !important;
+  }
+  html[data-manager-compact-dock="mobile"] manager-next-action .main-nav {
+    padding: 0 4px 1px !important;
+  }
+  html[data-manager-compact-dock="mobile"] manager-next-action .main-nav .nav-tab {
+    min-height: 46px !important;
+    padding: 3px 1px !important;
+    gap: 2px;
+  }
+  html[data-manager-compact-dock="mobile"] manager-next-action .main-nav .nav-icon {
+    width: 18px;
+    height: 18px;
   }
 }
