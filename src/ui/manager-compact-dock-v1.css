@@ -348,7 +348,7 @@ html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionSt
 
 @media (max-width: 760px) {
   html[data-manager-compact-dock="mobile"][data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] {
-    padding: 2px 6px !important;
+    padding: 0 !important;
   }
 }
 
