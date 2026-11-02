@@ -87,3 +87,36 @@ test("navigasjonen returnerer til toppen på store skjermer og tilbake ved mobil
   await page.locator('.main-nav [data-tab-target="tactics"]').click();
   await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
 });
+
+
+test("tynn footer på mobil og iPad beholder 44px trykkflater", async ({ page }) => {
+  for (const viewport of [
+    { width: 390, height: 844, mobile: true },
+    { width: 760, height: 1024, mobile: true },
+    { width: 768, height: 1024, mobile: false },
+    { width: 1194, height: 834, mobile: false },
+    { width: 1280, height: 900, mobile: false }
+  ]) {
+    await page.setViewportSize(viewport);
+    const action = page.locator("#nextActionPrimary");
+    await expect(action).toBeVisible();
+    const measurements = await page.evaluate(() => {
+      const footer = document.querySelector("manager-next-action .site-footer");
+      const primary = document.querySelector("#nextActionPrimary");
+      const tabs = [...document.querySelectorAll('.main-nav .nav-tab[data-nav-modes~="league"]:not([hidden])')];
+      return {
+        height: footer.getBoundingClientRect().height,
+        primaryHeight: primary.getBoundingClientRect().height,
+        tabHeights: tabs.filter((tab) => getComputedStyle(tab).display !== "none").map((tab) => tab.getBoundingClientRect().height),
+        overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+      };
+    });
+    expect(measurements.height, `footer at ${viewport.width}px`).toBeLessThanOrEqual(viewport.mobile ? 108 : 64);
+    expect(measurements.primaryHeight).toBeGreaterThanOrEqual(44);
+    expect(measurements.tabHeights).toHaveLength(5);
+    expect(measurements.tabHeights.every((height) => height >= 44)).toBe(true);
+    expect(measurements.overflow).toBeLessThanOrEqual(1);
+  }
+  await page.locator("#nextActionPrimary").click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+});

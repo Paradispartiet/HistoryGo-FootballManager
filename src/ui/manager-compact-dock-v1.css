@@ -267,3 +267,105 @@ html[data-manager-compact-dock] .manager-location-bar {
     font-size: .62rem !important;
   }
 }
+
+
+/* Slim footer v3: reduce padding without changing the interaction model. */
+html[data-manager-office-calendar-v1="active"] manager-next-action .site-footer {
+  padding: 3px 10px max(3px, env(safe-area-inset-bottom)) !important;
+}
+
+html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-head .eyebrow,
+html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-tag,
+html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-hint,
+html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-secondary {
+  display: none !important;
+}
+
+html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-phase {
+  white-space: nowrap;
+  font-size: .66rem;
+  padding: 4px 8px;
+}
+
+html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-title {
+  display: block !important;
+  min-width: 0;
+  flex: 1 1 auto;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  overflow-wrap: normal !important;
+  font-size: .88rem !important;
+  line-height: 1.2;
+}
+
+/* Slim footer v3: preserve one 44px action row at every width.
+   These selectors outrank Calendar's @container 900px/480px rules. */
+html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 9px !important;
+  padding: 0 !important;
+}
+
+html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-primary {
+  display: flex !important;
+  grid-template-columns: none !important;
+  align-items: center !important;
+  min-height: 44px !important;
+  height: 44px;
+  padding: 5px 12px !important;
+  gap: 9px !important;
+}
+
+html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-destination {
+  display: block !important;
+  margin-left: auto;
+  min-width: 76px;
+  white-space: nowrap !important;
+  color: #c3cbd5;
+}
+
+@media (max-width: 900px) {
+  html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] {
+    display: block !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 0 !important;
+  }
+
+  html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-head,
+  html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-destination {
+    display: none !important;
+  }
+
+  html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-primary {
+    min-height: 44px !important;
+    height: 44px;
+    grid-template-columns: none !important;
+  }
+}
+
+@media (max-width: 760px) {
+  html[data-manager-compact-dock="mobile"][data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] {
+    padding: 0 !important;
+  }
+}
+
+@media (max-width: 760px) {
+  html[data-manager-compact-dock="mobile"][data-manager-office-calendar-v1="active"] manager-next-action .site-footer {
+    padding: 0 0 env(safe-area-inset-bottom) !important;
+  }
+  html[data-manager-compact-dock="mobile"] manager-next-action .main-nav {
+    padding: 0 4px 1px !important;
+  }
+  html[data-manager-compact-dock="mobile"] manager-next-action .main-nav .nav-tab {
+    min-height: 46px !important;
+    padding: 3px 1px !important;
+    gap: 2px;
+  }
+  html[data-manager-compact-dock="mobile"] manager-next-action .main-nav .nav-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
