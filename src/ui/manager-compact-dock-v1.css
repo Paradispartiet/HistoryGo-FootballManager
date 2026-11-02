@@ -269,100 +269,55 @@ html[data-manager-compact-dock] .manager-location-bar {
 }
 
 
-/* Slim footer v2: one compact next-step row on tablet/desktop.
-   Only the visual density changes. NextAction / Calendar own the same action. */
-html[data-manager-office-calendar-v1="active"] manager-next-action .site-footer {
-  padding: 3px 10px max(3px, env(safe-area-inset-bottom)) !important;
-}
-
-html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip {
+/* Slim footer v3: preserve one 44px action row at every width.
+   These selectors outrank Calendar's @container 900px/480px rules. */
+html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] {
   display: grid !important;
   grid-template-columns: auto minmax(0, 1fr) !important;
   align-items: center !important;
   gap: 9px !important;
-  width: 100% !important;
-  margin: 0 !important;
   padding: 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
 }
 
-html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip .next-action-head {
-  display: flex !important;
-  align-items: center;
-  min-width: 0;
-}
-
-html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip .next-action-head .eyebrow,
-html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip .next-action-tag,
-html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip .next-action-hint,
-html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip .next-action-destination,
-html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip .next-action-secondary {
-  display: none !important;
-}
-
-html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip .next-action-phase {
-  white-space: nowrap;
-  font-size: .66rem;
-  padding: 4px 8px;
-}
-
-html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip .next-action-primary {
+html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-primary {
   display: flex !important;
   grid-template-columns: none !important;
   align-items: center !important;
-  width: 100%;
-  min-width: 0;
   min-height: 44px !important;
   height: 44px;
   padding: 5px 12px !important;
-  gap: 8px !important;
-  border-radius: 8px;
+  gap: 9px !important;
 }
 
-html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip .next-action-title {
+html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-destination {
   display: block !important;
-  min-width: 0;
-  width: 100%;
-  font-size: .88rem !important;
-  line-height: 1.2;
+  margin-left: auto;
+  min-width: 76px;
   white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  overflow-wrap: normal !important;
+  color: #c3cbd5;
 }
 
-/* On phones the navigation stays in the same dock; reclaim vertical space
-   without shrinking either the action button or nav hit areas below 44px. */
-@media (max-width: 760px) {
-  html[data-manager-compact-dock="mobile"][data-manager-office-calendar-v1="active"] manager-next-action .site-footer {
-    padding: 0 0 env(safe-area-inset-bottom) !important;
-  }
-  html[data-manager-compact-dock="mobile"][data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip {
+@media (max-width: 900px) {
+  html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] {
     display: block !important;
-    padding: 2px 6px !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 0 !important;
   }
-  html[data-manager-compact-dock="mobile"][data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip .next-action-head {
+
+  html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-head,
+  html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-destination {
     display: none !important;
   }
-  html[data-manager-compact-dock="mobile"][data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip .next-action-primary {
-    height: 44px;
+
+  html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] .next-action-primary {
     min-height: 44px !important;
-    max-height: none;
-    padding: 5px 10px !important;
+    height: 44px;
+    grid-template-columns: none !important;
   }
-  html[data-manager-compact-dock="mobile"] manager-next-action .main-nav {
-    padding: 0 4px 1px !important;
-  }
-  html[data-manager-compact-dock="mobile"] manager-next-action .main-nav .nav-tab {
-    min-height: 46px !important;
-    padding: 3px 1px !important;
-    gap: 2px;
-  }
-  html[data-manager-compact-dock="mobile"] manager-next-action .main-nav .nav-icon {
-    width: 18px;
-    height: 18px;
+}
+
+@media (max-width: 760px) {
+  html[data-manager-compact-dock="mobile"][data-manager-office-calendar-v1="active"] manager-next-action #nextActionStrip[data-surface="manager-calendar"] {
+    padding: 2px 6px !important;
   }
 }
