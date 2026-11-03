@@ -491,3 +491,44 @@ test("v7.4: sett pressfase gir spillbart motgrep, lagring og forklarbart replay"
   );
   expect(overflow).toBeLessThanOrEqual(1);
 });
+
+test("Kampdagen har kompakte statusvalg og spillbar primærhandling på mobil", async ({ page }) => {
+  await openMatchday(page);
+  const scene = page.locator("#matchdayCommand .matchday-scene");
+  const cards = scene.locator(".matchday-scene-status-card");
+  await expect(cards).toHaveCount(4);
+
+  for (const width of [360, 390, 430, 600]) {
+    await page.setViewportSize({ width, height: 844 });
+    const layout = await scene.evaluate((root) => {
+      const rect = (selector) => root.querySelector(selector).getBoundingClientRect();
+      const statusGrid = root.querySelector(".matchday-scene-status-grid");
+      const buttons = [...statusGrid.querySelectorAll(".matchday-scene-status-card")];
+      return {
+        columnCount: getComputedStyle(statusGrid).gridTemplateColumns.split(" ").length,
+        cardHeights: buttons.map((item) => item.getBoundingClientRect().height),
+        cardOverflow: buttons.map((item) => item.scrollWidth - item.clientWidth),
+        firstRowSameTop: Math.abs(buttons[0].getBoundingClientRect().top - buttons[1].getBoundingClientRect().top) < 2,
+        secondRowBelow: buttons[2].getBoundingClientRect().top >= buttons[0].getBoundingClientRect().bottom - 1,
+        primaryHeight: rect(".matchday-scene-action").height,
+        versusHeight: rect(".matchday-scene-versus").height,
+        sceneRight: root.getBoundingClientRect().right,
+        pageOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+      };
+    });
+    const label = "Kampdagen ved " + width + "px";
+    expect(layout.columnCount, label).toBe(2);
+    expect(layout.firstRowSameTop, label).toBe(true);
+    expect(layout.secondRowBelow, label).toBe(true);
+    expect(layout.cardHeights.every((height) => height >= 44), label).toBe(true);
+    expect(layout.cardOverflow.every((overflow) => overflow <= 1), label).toBe(true);
+    expect(layout.primaryHeight, label).toBeGreaterThanOrEqual(44);
+    expect(layout.versusHeight, label).toBeLessThanOrEqual(150);
+    expect(layout.sceneRight, label).toBeLessThanOrEqual(width + 1);
+    expect(layout.pageOverflow, label).toBeLessThanOrEqual(1);
+  }
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await scene.locator('.matchday-scene-status-card[data-matchday-target="details"]').first().click();
+  await expect(page.locator("#matchdayDepth")).toHaveAttribute("open", "");
+});
