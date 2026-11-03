@@ -317,6 +317,7 @@ test("taktikkens tropp har trygge profilknapper og åpne-tropp-handling på mobi
         roster: measure(".fm-open-roster"),
         profile: measure("#fmTacticsSquadRows .fm-player-profile"),
         list: measure("#fmTacticsSquadRows"),
+        row: measure("#fmTacticsSquadRows .fm-squad-row"),
         overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
       };
     });
@@ -325,6 +326,7 @@ test("taktikkens tropp har trygge profilknapper og åpne-tropp-handling på mobi
     expect(targets.profile, "profile button at " + width).not.toBeNull();
     expect(targets.profile.width, "profile width at " + width).toBeGreaterThanOrEqual(44);
     expect(targets.profile.height, "profile height at " + width).toBeGreaterThanOrEqual(44);
+    expect(targets.row.height, "compact row at " + width).toBeLessThanOrEqual(56);
     expect(targets.list.right, "list edge at " + width).toBeLessThanOrEqual(width + 1);
     expect(targets.overflow, "horizontal overflow at " + width).toBeLessThanOrEqual(1);
   }
