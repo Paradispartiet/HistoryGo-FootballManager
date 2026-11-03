@@ -2,13 +2,13 @@
 
 > **Videreført 10.08.2026:** `MANAGER_CLUB_COMMUNICATION_V3.md` er canonical for den synlige mailopplevelsen. V1-modellene består som kilder til tråder, valg og konsekvenser, men drawer-et flytter ikke lenger legacy-kort mellom DOM-flater.
 
-Denne leveransen etablerte Kontor- og innboksfunksjonene som egne managerflater. **Presentasjonsdelen er nå videreført av `MANAGER_CALENDAR_V1.md`: i en aktiv ligasave ligger Innboks inne i Kalender i stedet for å være en parallell Kontor-fane.**
+Denne leveransen etablerte Kontor- og innboksfunksjonene som egne managerflater. **Innboks er nå første fane under Kontor. Kalender ligger ved siden av, og begge bruker de samme eksisterende meldingsdataene.**
 
 Motorene og dataene fra denne leveransen består. Det er bare informasjonsarkitekturen som er endret.
 
 ## Canonical presentasjon etter Kalender + Kontor redesign
 
-Kontor åpner nå på **Kalender**. En innbokssak er en hendelse i managerens arbeidsdag, ikke et separat hovedrom ved siden av tiden.
+Kontor åpner nå på **Innboks**, som vises før **Kalender**. Meldinger står i tydelige kort med tynne lyse kantlinjer og hvit tekst. En innbokssak kan samtidig vises som hendelse i Kalender.
 
 Eksempel:
 
@@ -34,7 +34,7 @@ Den underliggende innboksmodellen behandles fortsatt som et beslutningsrom:
 - et køvalg kan flyttes til fokus uten å endre hendelses- eller svarmotoren;
 - avsluttede og arkiverte saker ligger i historikk.
 
-Disse strukturene kan fortsatt rendres internt og brukes av meldingsdrawer, arkiv eller senere filtre. De skal ikke tvinge fram en egen synlig Innboks-fane i normal managerloop.
+Disse strukturene vises i den egne Innboks-fanen, og kan fortsatt brukes av meldingsdrawer, arkiv og senere filtre. Begge faner beholder eksisterende svar- og konsekvenslogikk.
 
 ## Gammel Kontor-oversikt
 
@@ -62,8 +62,8 @@ Kalenderintegrasjonen bygger **ingen ny motor**. Den skriver ingen ny innboks- e
 Permanent verifikasjon skal nå låse at:
 
 - innboksmotoren og dens fokus/kø/historikk fortsatt finnes;
-- Kontor åpner Kalender i aktiv ligasave;
-- separat Innboks-fane er skjult i normal managerloop;
+- Kontor åpner Innboks i aktiv ligasave;
+- Innboks vises først, Kalender som nummer to;
 - en eksisterende innbokstråd kan åpnes fra en kalenderhendelse i drawer;
 - lukking av drawer returnerer til samme kalenderdag;
 - trening og andre handlinger åpnes fra den relevante hendelsen;

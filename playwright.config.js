@@ -32,7 +32,7 @@ export default defineConfig({
       dependencies: ["chromium"],
       use: { ...devices["Desktop Chrome"] }
     },
-    // WebKit on Linux is Safari-engine emulation, not physical iOS Safari.
+    // Safari-engine training coverage, separate from the existing tactics WebKit lane.
     {
       name: "webkit-training-iphone",
       testMatch: WEBKIT_TRAINING_SPEC,
@@ -42,6 +42,18 @@ export default defineConfig({
       name: "webkit-training-ipad",
       testMatch: WEBKIT_TRAINING_SPEC,
       use: { ...devices["iPad (gen 7)"] }
-    }
+    },
+    ...(process.env.HGFM_TACTICS_WEBKIT === "1" ? [{
+      // Opt-in Safari-engine check; physical iPad Safari sign-off is separate.
+      name: "webkit-ipad-tactics",
+      testMatch: /(?:manager-tactics-responsive-v1|manager-portal-landing-ipad-v1)\.spec\.js$/,
+      use: {
+        ...devices["Desktop Safari"],
+        viewport: { width: 1194, height: 834 },
+        isMobile: true,
+        hasTouch: true,
+        deviceScaleFactor: 2
+      }
+    }] : [])
   ]
 });

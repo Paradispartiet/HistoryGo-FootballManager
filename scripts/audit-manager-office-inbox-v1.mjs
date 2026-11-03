@@ -30,9 +30,9 @@ check("Innboks har kø", /id="inboxQueueList"/.test(html) && /queueCandidates/.t
 check("historikk er adskilt fra aktiv sak", /modalInboxArchive/.test(html) && /inboxThreadArchive/.test(app) && !/modalInboxWhy/.test(html));
 check("køvalg flyttes fortsatt til fokus", /state\.openInboxThreadId/.test(app) && /focusCandidate = selectedCandidate/.test(app));
 
-// Ny normal IA: meldingene ligger i Kalender.
-check("Kontor åpner Kalender i aktiv ligasave", /redirectOfficeToCalendar/.test(calendar) && /Kontor åpner Kalender/.test(browser));
-check("separat Innboks-fane skjules", /inbox\.classList\.add\("office-subnav-proxy"\)/.test(calendar) && /Innboks og Oppstartshjelp/.test(browser));
+// Ny normal IA: Innboks først, Kalender som egen fane.
+check("Kontor åpner Innboks i aktiv ligasave", /redirectOfficeToInbox/.test(calendar) && /Kontor åpner Innboks/.test(browser));
+check("Innboks er synlig første fane", /inbox\.classList\.remove\("office-subnav-proxy"\)/.test(calendar) && /subnav\.insertBefore\(inbox, calendar\)/.test(calendar));
 check("Oppstartshjelp skjules etter oppstart", /officeHelp\.classList\.toggle\("office-subnav-proxy", normalSave\)/.test(calendar));
 check("Klubben er synlig Kontor-motpart", /board\.textContent = "Klubben"/.test(calendar));
 check("melding er kalenderhendelse", /kind: "message"/.test(calendarModel) && /Les mail/.test(calendarModel));

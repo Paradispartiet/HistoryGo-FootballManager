@@ -102,7 +102,7 @@ test("legacy fasilitetsfasader lastes ikke lenger i runtime", async ({ page }) =
 test("Pass 7 beholder mobilflyt og WCAG A/AA", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole("tab", { name: "Kontor", exact: true }).click();
-  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
   const results = await new AxeBuilder({ page }).include("body").withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();

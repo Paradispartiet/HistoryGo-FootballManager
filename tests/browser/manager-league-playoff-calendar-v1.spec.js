@@ -151,6 +151,7 @@ test("aktiv kvalifisering holder managerkalenderen i spill", async ({ page }) =>
   await expect(page.locator("#onboardingScreen")).toBeHidden();
 
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
 
   await expect(page.locator("#managerCalendarMatch")).toContainText("Odd");
@@ -193,6 +194,7 @@ test("ferdig kvalifisering leverer kalenderfooteren til sesongdommen", async ({ 
   await expect(page.locator("#onboardingScreen")).toBeHidden();
 
   await page.locator('.main-nav [role="tab"][data-tab-target="dashboard"]').click();
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
 
   await expect(page.locator("#nextActionStrip")).toHaveAttribute("data-surface", "manager-calendar");

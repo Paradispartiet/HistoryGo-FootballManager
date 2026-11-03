@@ -50,6 +50,12 @@ test("mobilen har én samlet dock, ikke et ekstra navigasjonsfelt over spillet",
   expect(geometry.breadcrumbWidth).toBeLessThanOrEqual(1);
   expect(geometry.breadcrumbHeight).toBeLessThanOrEqual(1);
   expect(geometry.overflow).toBeLessThanOrEqual(1);
+  await expect(page.locator("#fmuvHome")).toBeVisible();
+  await expect(page.locator("#managerLocationText")).toHaveText("Hjem · Portal");
+  await page.locator('.main-nav [data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
   await expect(page.locator("#managerLocationText")).toHaveText("Kontor · Kalender");
 });
 
@@ -64,6 +70,8 @@ test("dock-faner og dagens neste handling fungerer etter flytting", async ({ pag
   await expect(page.locator('[data-tab-section="kamp"]')).toBeVisible();
 
   await page.locator('.main-nav [data-tab-target="dashboard"]').click();
+  await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
+  await page.locator('.app-subtab[data-tab-target="calendar"]').click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
 });
 
@@ -78,4 +86,92 @@ test("navigasjonen returnerer til toppen på store skjermer og tilbake ved mobil
   await expect(page.locator("manager-next-action .main-nav")).toHaveCount(1);
   await page.locator('.main-nav [data-tab-target="tactics"]').click();
   await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
+});
+
+
+test("tynn footer på mobil og iPad beholder 44px trykkflater", async ({ page }) => {
+  for (const viewport of [
+    { width: 390, height: 844, mobile: true },
+    { width: 760, height: 1024, mobile: true },
+    { width: 768, height: 1024, mobile: false },
+    { width: 1194, height: 834, mobile: false },
+    { width: 1280, height: 900, mobile: false }
+  ]) {
+    await page.setViewportSize(viewport);
+    const action = page.locator("#nextActionPrimary");
+    await expect(action).toBeVisible();
+    const measurements = await page.evaluate(() => {
+      const footer = document.querySelector("manager-next-action .site-footer");
+      const primary = document.querySelector("#nextActionPrimary");
+      const tabs = [...document.querySelectorAll('.main-nav .nav-tab[data-nav-modes~="league"]:not([hidden])')];
+      return {
+        height: footer.getBoundingClientRect().height,
+        primaryHeight: primary.getBoundingClientRect().height,
+        tabHeights: tabs.filter((tab) => getComputedStyle(tab).display !== "none").map((tab) => tab.getBoundingClientRect().height),
+        overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+      };
+    });
+    expect(measurements.height, `footer at ${viewport.width}px`).toBeLessThanOrEqual(viewport.mobile ? 108 : 64);
+    expect(measurements.primaryHeight).toBeGreaterThanOrEqual(44);
+    expect(measurements.tabHeights).toHaveLength(5);
+    expect(measurements.tabHeights.every((height) => height >= 44)).toBe(true);
+    expect(measurements.overflow).toBeLessThanOrEqual(1);
+  }
+  await page.locator("#nextActionPrimary").click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+});
+
+
+test("360–430px viser kompakt header og arbeidskort uten å krympe handlingene", async ({ page }) => {
+  for (const width of [360, 390, 430]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.locator("#fmuvOpenHome").click();
+    await expect(page.locator("#fmuvHome")).toBeVisible();
+
+    const layout = await page.evaluate(() => {
+      const rect = (selector) => document.querySelector(selector).getBoundingClientRect();
+      const header = rect("#clubIdentityHeader");
+      const homeButton = rect("#fmuvOpenHome");
+      const inboxButton = rect("#fmuvOpenInbox");
+      const settings = rect("#settingsButton");
+      const match = rect("#fmuvHome .fmuv-match");
+      const week = rect("#fmuvHome .fmuv-week");
+      const season = rect("#fmuvHome .fmuv-season");
+      const headerTitle = document.querySelector("#fmuvHome .fmuv-screen-heading h2");
+      return {
+        headerHeight: header.height,
+        buttonsSameRow: Math.abs(homeButton.top - inboxButton.top) < 3
+          && Math.abs(homeButton.top - settings.top) < 5,
+        buttonHeights: [homeButton.height, inboxButton.height, settings.height],
+        matchMinHeight: parseFloat(getComputedStyle(document.querySelector("#fmuvHome .fmuv-match")).minHeight),
+        matchHeight: match.height,
+        weekBeforeSeason: week.top >= match.bottom - 1 && season.top >= week.bottom - 1,
+        titleSize: parseFloat(getComputedStyle(headerTitle).fontSize),
+        overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+      };
+    });
+
+    expect(layout.headerHeight, `header ${width}px`).toBeLessThanOrEqual(72);
+    expect(layout.buttonsSameRow, `header controls ${width}px`).toBe(true);
+    expect(layout.buttonHeights.every((height) => height >= 44)).toBe(true);
+    expect(layout.matchMinHeight).toBeLessThanOrEqual(1);
+    expect(layout.matchHeight).toBeLessThan(285);
+    expect(layout.weekBeforeSeason).toBe(true);
+    expect(layout.titleSize).toBeGreaterThanOrEqual(18);
+    expect(layout.titleSize).toBeLessThanOrEqual(24);
+    expect(layout.overflow).toBeLessThanOrEqual(1);
+
+    for (const [selector, active] of [
+      ["#fmuvOpenInbox", "#fmuvInbox"],
+      ['.main-nav [data-tab-target="tactics"]', '[data-tab-section="tactics"]'],
+      ['.main-nav [data-tab-target="kamp"]', '[data-tab-section="kamp"]']
+    ]) {
+      await page.locator(selector).click();
+      await expect(page.locator(active)).toBeVisible();
+      const overflow = await page.evaluate(() =>
+        document.documentElement.scrollWidth - document.documentElement.clientWidth
+      );
+      expect(overflow, `${active} at ${width}px`).toBeLessThanOrEqual(1);
+    }
+  }
 });

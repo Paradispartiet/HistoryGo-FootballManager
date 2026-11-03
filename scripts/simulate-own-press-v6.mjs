@@ -6,6 +6,8 @@ import { advanceMatchClock, finalizeMatchdaySession }
   from "../src/football-matchday-engine.js";
 import { highPressPhaseRoll }
   from "../src/football-matchday-high-press-v6.js";
+import { sourcedDefensiveReactionSkillsForPlayer, createLineupSnapshot }
+  from "../src/football-player-stats.js";
 
 const lineup = ["GK", "CB", "DM", "CM", "AM", "ST", "LW", "RW", "LB", "RB"].map((position, i) => ({
   playerId: "press-" + i, position, roleId: "role_" + position,
@@ -162,6 +164,8 @@ for (const phase of [centralCover, flankCover, depthCover]) {
   assert.equal(phase.counterplay.defensiveReply.containmentAdjustment,
     phase.routeCoverAdjustment);
   assert.equal(phase.counterplay.defensiveReply.weakestCoverFit, 75);
+  assert.equal(phase.counterplay.defensiveReply.coverTimingExplanation.kind,
+    "unknown", "no authored timing must not imply a defensive error");
   assert.equal(phase.evidence.routeCoverFitFloor, 75);
   assert.equal(phase.xgDeltaAgainst, 0.06);
 }
@@ -360,6 +364,712 @@ for (const invalidTiming of [
 assert.equal(timedThird(authoredWindow(2), 0.99,
   swapRole("CM", "deep_playmaker")).routeCoverAdjustment, 0,
   "timing cannot rescue a missing complementary specialist role");
+
+ 
+// Match-situation timeline: four explicit offensive actions against the
+// defenders' own trigger recognition and recovery movement. This feeds the
+// SAME stage-two gate, not a newly minted movement probability or xG event.
+const sequenceResponse = Object.fromEntries(centralIds.map(id => [id, {
+  recognitionDelaySeconds: 0.4, coverMoveSeconds: 2.1
+}]));
+const authoredSequence = (finalPassSeconds, defenders = sequenceResponse,
+  route = "third_man") => ({
+  basis: "authored_action_sequence", route,
+  actions: [
+    { id: "receive", durationSeconds: 0.7 },
+    { id: "layoff", durationSeconds: 0.5 },
+    { id: "third_runner", durationSeconds: 0.7 },
+    { id: "through_pass", durationSeconds: finalPassSeconds }
+  ],
+  defenderResponsesByPlayerId: defenders
+});
+const sequenceTrial = (timeline, draw = 0.99, withLegacy = undefined,
+  activeEleven = eleven) => resolve(
+  session("midfield_press_trap", {
+    lineupSnapshot: activeEleven,
+    opponent: { ...opponent, tacticalBehaviour: {
+      pressEscapeRoute: "third_man",
+      pressEscapeActionSequence: timeline,
+      ...(withLegacy === undefined ? {} : { pressEscapeTiming: withLegacy })
+    } }
+  }), 0.99, draw);
+const sequenceTimely = sequenceTrial(authoredSequence(1.2));
+const sequenceLate = sequenceTrial(authoredSequence(0.2));
+assert.equal(sequenceTimely.evidence.routeCoverTiming.status, "in_time");
+assert.equal(sequenceLate.evidence.routeCoverTiming.status, "late");
+assert.equal(sequenceTimely.evidence.routeCoverTiming.basis, "authored_action_sequence");
+assert.equal(sequenceTimely.evidence.routeCoverTiming.attackWindowSeconds, 3.1);
+assert.equal(sequenceLate.evidence.routeCoverTiming.marginSeconds, -0.4);
+assert.equal(sequenceTimely.routeCoverAdjustment, noWindow.routeCoverAdjustment);
+assert.equal(sequenceLate.routeCoverAdjustment, 0);
+assert.equal(sequenceTimely.probability, sequenceLate.probability);
+assert.equal(sequenceTimely.xgDeltaAgainst, sequenceLate.xgDeltaAgainst);
+const sequenceCutoff = (sequenceTimely.containmentProbability +
+  sequenceLate.containmentProbability) / 2;
+assert.equal(sequenceTrial(authoredSequence(1.2), sequenceCutoff).status, "contained");
+assert.equal(sequenceTrial(authoredSequence(0.2), sequenceCutoff).status, "escaped");
+assert.equal(sequenceTrial(authoredSequence(1.2), sequenceCutoff).xgDeltaAgainst, 0.02);
+assert.equal(sequenceTrial(authoredSequence(0.2), sequenceCutoff).xgDeltaAgainst, 0.06);
+// Same four actions, player strengths and RNG; only the observed action
+// that triggers defender recognition changes the recovery outcome.
+const onFirstCue = Object.fromEntries(centralIds.map(id => [id, {
+  ...sequenceResponse[id], triggerActionId: "receive"
+}]));
+const onLayoffCue = Object.fromEntries(centralIds.map(id => [id, {
+  ...sequenceResponse[id], triggerActionId: "layoff"
+}]));
+const firstCue = sequenceTrial(authoredSequence(1.2, onFirstCue));
+const delayedCue = sequenceTrial(authoredSequence(1.2, onLayoffCue));
+assert.equal(firstCue.evidence.routeCoverTiming.status, "in_time");
+assert.equal(delayedCue.evidence.routeCoverTiming.status, "late");
+assert.equal(delayedCue.evidence.routeCoverTiming.latestRecoverySeconds, 3.2);
+assert.equal(delayedCue.evidence.routeCoverTiming.marginSeconds, -0.1);
+assert.equal(delayedCue.probability, firstCue.probability);
+assert.equal(delayedCue.routeCoverAdjustment, 0);
+const mixedCue = {
+  ...onFirstCue, [centralIds[1]]: onLayoffCue[centralIds[1]]
+};
+assert.equal(sequenceTrial(authoredSequence(1.2, mixedCue))
+  .evidence.routeCoverTiming.status, "late",
+  "one required covering player recognising late loses the coordination term");
+// The scenario supplies BOTH cue alternatives. Only genuinely sourced
+// anticipation (never high generic match fit) authorises the early one.
+const adaptiveResponse = { ...onFirstCue, [centralIds[0]]: {
+  recognitionDelaySeconds: 0.4, coverMoveSeconds: 2.1,
+  sourcedCue: {
+    skill: "anticipation", earlyActionId: "receive", defaultActionId: "layoff"
+  }
+} };
+const xiNoProof = eleven.map(player => ({
+  ...player, sourcedRecoverySkills: []
+}));
+const xiWithProof = xiNoProof.map(player =>
+  player.playerId === centralIds[0]
+    ? { ...player, sourcedRecoverySkills: ["anticipation"] } : player);
+const adaptiveWithoutProof = sequenceTrial(
+  authoredSequence(1.2, adaptiveResponse), 0.99, undefined, xiNoProof);
+const adaptiveWithProof = sequenceTrial(
+  authoredSequence(1.2, adaptiveResponse), 0.99, undefined, xiWithProof);
+assert.equal(adaptiveWithoutProof.evidence.routeCoverTiming.status, "late");
+assert.equal(adaptiveWithProof.evidence.routeCoverTiming.status, "in_time");
+assert.equal(adaptiveWithoutProof.probability, adaptiveWithProof.probability);
+assert.equal(adaptiveWithoutProof.evidence.routeCoverFitFloor,
+  adaptiveWithProof.evidence.routeCoverFitFloor);
+assert.ok(adaptiveWithProof.containmentProbability >
+  adaptiveWithoutProof.containmentProbability);
+for (const bad of [
+  authoredSequence(0),
+  authoredSequence(25),
+  authoredSequence(0.2, {}),
+  authoredSequence(0.2, { ...sequenceResponse,
+    [centralIds[0]]: { recognitionDelaySeconds: -1, coverMoveSeconds: 2 } }),
+  authoredSequence(0.2, { ...sequenceResponse,
+    [centralIds[0]]: { ...sequenceResponse[centralIds[0]],
+      triggerActionId: "no_actual_action" } }),
+  authoredSequence(0.2, { ...sequenceResponse,
+    [centralIds[0]]: { ...sequenceResponse[centralIds[0]],
+      triggerActionId: null } }),
+  authoredSequence(0.2, sequenceResponse, "switch_play"),
+  authoredSequence(0.2, { ...adaptiveResponse, [centralIds[0]]: {
+    ...adaptiveResponse[centralIds[0]], triggerActionId: "receive"
+  } }),
+  authoredSequence(0.2, { ...adaptiveResponse, [centralIds[0]]: {
+    ...adaptiveResponse[centralIds[0]],
+    sourcedCue: { skill: "imaginary", earlyActionId: "receive", defaultActionId: "layoff" }
+  } }),
+  { ...authoredSequence(0.2), actions: [{ id: "layoff", durationSeconds: 2 }] },
+  { ...authoredSequence(0.2), basis: "tracking_observation" }
+]) {
+  const result = sequenceTrial(bad);
+  assert.equal(result.evidence.routeCoverTiming.status, "invalid_or_incomplete");
+  assert.equal(result.routeCoverAdjustment, noWindow.routeCoverAdjustment,
+    "unverified action timings must never supply a fictitious recovery outcome");
+}
+assert.equal(sequenceTrial(authoredSequence(0.2), 0.99, authoredWindow(3.0))
+  .evidence.routeCoverTiming.basis, "authored_scenario",
+  "legacy explicit window wins if both formats are present");
+
+ 
+
+// The six and the covering runner can have DIFFERENT intervention deadlines.
+// The six may have to close the third-runner lane BEFORE the final pass,
+// while the other player still has until the end of the full escape.
+const timedByAction = deadlineAction => authoredSequence(1.2, {
+  ...sequenceResponse,
+  [centralIds[0]]: {
+    recognitionDelaySeconds: 0.4, coverMoveSeconds: 1,
+    triggerActionId: "receive",
+    mustCoverByActionId: deadlineAction
+  }
+});
+const readyForFinalPass = sequenceTrial(timedByAction("through_pass"));
+const tooLateForThirdRunner = sequenceTrial(timedByAction("third_runner"));
+assert.equal(readyForFinalPass.evidence.routeCoverTiming.status, "in_time");
+assert.equal(tooLateForThirdRunner.evidence.routeCoverTiming.status, "late");
+assert.equal(readyForFinalPass.evidence.routeCoverTiming.deadlineModel,
+  "per_defender_action_start");
+assert.equal(readyForFinalPass.evidence.routeCoverTiming.criticalDefenderId,
+  centralIds[0]);
+assert.equal(readyForFinalPass.evidence.routeCoverTiming.criticalDeadlineSeconds, 1.9);
+assert.equal(readyForFinalPass.evidence.routeCoverTiming.marginSeconds, 0.5);
+assert.equal(tooLateForThirdRunner.evidence.routeCoverTiming.criticalDeadlineSeconds, 1.2);
+assert.equal(tooLateForThirdRunner.evidence.routeCoverTiming.marginSeconds, -0.2);
+assert.equal(readyForFinalPass.evidence.routeCoverTiming.attackWindowSeconds, 3.1);
+assert.equal(readyForFinalPass.probability, tooLateForThirdRunner.probability);
+assert.ok(readyForFinalPass.containmentProbability >
+  tooLateForThirdRunner.containmentProbability);
+const deadlineDraw = (readyForFinalPass.containmentProbability +
+  tooLateForThirdRunner.containmentProbability) / 2;
+assert.equal(sequenceTrial(timedByAction("through_pass"), deadlineDraw)
+  .status, "contained");
+assert.equal(sequenceTrial(timedByAction("third_runner"), deadlineDraw)
+  .status, "escaped");
+assert.equal(sequenceTrial(timedByAction("through_pass"), deadlineDraw)
+  .xgDeltaAgainst, 0.02);
+assert.equal(sequenceTrial(timedByAction("third_runner"), deadlineDraw)
+  .xgDeltaAgainst, 0.06);
+for (const malformed of [null, "", "missing_action", 5]) {
+  const invalid = sequenceTrial(timedByAction(malformed));
+  assert.equal(invalid.evidence.routeCoverTiming.status, "invalid_or_incomplete");
+  assert.equal(invalid.routeCoverAdjustment, noWindow.routeCoverAdjustment);
+}
+
+// Authored geometry: same XI and action clock, but a defender starts too far
+// from the cover corridor in one scenario. Travel time is calculated from
+// documented SCENARIO metres/speed, NEVER from matchScore or invented pace.
+const pitchDimensionsMeters = { widthMeters: 68, lengthMeters: 105 };
+const scenarioGeometryResponses = Object.fromEntries(centralIds.map(id => [id, {
+  recognitionDelaySeconds: 0.4, triggerActionId: "receive",
+  coverMovement: {
+    basis: "authored_pitch_geometry",
+    startMeters: { x: 20, y: 50 },
+    coverMeters: { x: 26, y: 50 },
+    averageSpeedMetersPerSecond: 4
+  }
+}]));
+const geometricTimeline = responses => ({
+  ...authoredSequence(1.2, responses), pitchDimensionsMeters
+});
+const nearbyCover = sequenceTrial(geometricTimeline(scenarioGeometryResponses));
+const farCoverResponses = {
+  ...scenarioGeometryResponses,
+  [centralIds[1]]: {
+    ...scenarioGeometryResponses[centralIds[1]],
+    coverMovement: {
+      ...scenarioGeometryResponses[centralIds[1]].coverMovement,
+      coverMeters: { x: 34, y: 50 }
+    }
+  }
+};
+const distantCover = sequenceTrial(geometricTimeline(farCoverResponses));
+assert.equal(nearbyCover.evidence.routeCoverTiming.status, "in_time");
+assert.equal(distantCover.evidence.routeCoverTiming.status, "late");
+assert.equal(nearbyCover.evidence.routeCoverTiming.movementModel,
+  "authored_pitch_geometry");
+assert.equal(nearbyCover.evidence.routeCoverTiming.latestRecoverySeconds, 1.9);
+assert.equal(distantCover.evidence.routeCoverTiming.latestRecoverySeconds, 3.9);
+assert.equal(nearbyCover.evidence.routeCoverTiming.attackWindowSeconds, 3.1);
+assert.equal(nearbyCover.probability, distantCover.probability);
+assert.equal(distantCover.routeCoverAdjustment, 0);
+assert.equal(nearbyCover.routeCoverAdjustment, noWindow.routeCoverAdjustment);
+const geometryMidpoint = (nearbyCover.containmentProbability +
+  distantCover.containmentProbability) / 2;
+assert.equal(sequenceTrial(geometricTimeline(scenarioGeometryResponses),
+  geometryMidpoint).status, "contained");
+assert.equal(sequenceTrial(geometricTimeline(farCoverResponses),
+  geometryMidpoint).status, "escaped");
+assert.equal(sequenceTrial(geometricTimeline(scenarioGeometryResponses),
+  geometryMidpoint).xgDeltaAgainst, 0.02);
+assert.equal(sequenceTrial(geometricTimeline(farCoverResponses),
+  geometryMidpoint).xgDeltaAgainst, 0.06);
+// A sourced cue works with geometry too, without creating a new speed bonus.
+const geometryCueResponses = { ...farCoverResponses, [centralIds[1]]: {
+  ...farCoverResponses[centralIds[1]],
+  coverMovement: {
+    ...farCoverResponses[centralIds[1]].coverMovement,
+    coverMeters: { x: 30, y: 50 }
+  },
+  sourcedCue: {
+    skill: "anticipation", earlyActionId: "receive",
+    defaultActionId: "layoff"
+  },
+  triggerActionId: undefined
+} };
+delete geometryCueResponses[centralIds[1]].triggerActionId;
+const geomUnproven = sequenceTrial(geometricTimeline(geometryCueResponses),
+  0.99, undefined, xiNoProof);
+const geomProven = sequenceTrial(geometricTimeline(geometryCueResponses),
+  0.99, undefined, xiNoProof.map(player => player.playerId === centralIds[1]
+    ? { ...player, sourcedRecoverySkills: ["anticipation"] } : player));
+assert.equal(geomUnproven.evidence.routeCoverTiming.status, "late");
+assert.equal(geomProven.evidence.routeCoverTiming.status, "in_time");
+assert.equal(geomUnproven.probability, geomProven.probability);
+for (const badGeometry of [
+  { ...geometricTimeline(scenarioGeometryResponses), pitchDimensionsMeters: null },
+  { ...geometricTimeline(scenarioGeometryResponses),
+    pitchDimensionsMeters: { widthMeters: 20, lengthMeters: 105 } },
+  geometricTimeline({ ...scenarioGeometryResponses, [centralIds[0]]: {
+    ...scenarioGeometryResponses[centralIds[0]], coverMoveSeconds: 1
+  } }),
+  geometricTimeline({ ...scenarioGeometryResponses, [centralIds[0]]: {
+    ...scenarioGeometryResponses[centralIds[0]], coverMovement: {
+      ...scenarioGeometryResponses[centralIds[0]].coverMovement,
+      coverMeters: { x: 70, y: 50 }
+    }
+  } }),
+  geometricTimeline({ ...scenarioGeometryResponses, [centralIds[0]]: {
+    ...scenarioGeometryResponses[centralIds[0]], coverMovement: {
+      ...scenarioGeometryResponses[centralIds[0]].coverMovement,
+      averageSpeedMetersPerSecond: 0
+    }
+  } }),
+  geometricTimeline({ ...scenarioGeometryResponses, [centralIds[0]]: {
+    ...scenarioGeometryResponses[centralIds[0]], coverMovement: {
+      ...scenarioGeometryResponses[centralIds[0]].coverMovement,
+      averageSpeedMetersPerSecond: 11
+    }
+  } }),
+  geometricTimeline({ ...scenarioGeometryResponses, [centralIds[0]]: {
+    ...scenarioGeometryResponses[centralIds[0]], coverMovement: {
+      ...scenarioGeometryResponses[centralIds[0]].coverMovement,
+      startMeters: { x: Number.NaN, y: 50 }
+    }
+  } })
+]) {
+  const result = sequenceTrial(badGeometry);
+  assert.equal(result.evidence.routeCoverTiming.status, "invalid_or_incomplete");
+  assert.equal(result.routeCoverAdjustment, noWindow.routeCoverAdjustment);
+}
+
+
+// Three distinct, explicit defending corridors: central third-man lane,
+// named far-side channel after a switch, and depth toward our own goal line.
+// All scenarios use the SAME XI and preserve first-phase press probability.
+// Time values are authored test inputs, not real historical tracking data.
+const spatialActions = {
+  third_man: ["receive", "layoff", "third_runner", "through_pass"],
+  switch_play: ["receive", "release", "switch_pass", "wide_attack"],
+  direct: ["receive", "direct_ball", "first_touch", "support_run"]
+};
+const spatialChannels = {
+  third_man: "central_between_lines",
+  switch_play: "far_side_wide",
+  direct: "depth_behind_press"
+};
+const spatialCases = [
+  { route: "third_man", side: null,
+    start: { x: 30, y: 55 }, cover: { x: 34, y: 55 },
+    lateStart: { x: 18, y: 55 }, wrong: { x: 60, y: 55 },
+    expectedRoles: 2 },
+  { route: "switch_play", side: "right",
+    start: { x: 50, y: 55 }, cover: { x: 60, y: 55 },
+    lateStart: { x: 25, y: 55 }, wrong: { x: 8, y: 55 },
+    expectedRoles: 1 },
+  { route: "switch_play", side: "left",
+    start: { x: 18, y: 55 }, cover: { x: 8, y: 55 },
+    lateStart: { x: 43, y: 55 }, wrong: { x: 60, y: 55 },
+    expectedRoles: 1 },
+  { route: "direct", side: null,
+    start: { x: 34, y: 38 }, cover: { x: 34, y: 32 },
+    lateStart: { x: 34, y: 60 }, wrong: { x: 34, y: 80 },
+    expectedRoles: 3 }
+];
+const routeSpatialPhase = (spec, options = {}) => {
+  const targetFlank = options.side === undefined ? spec.side : options.side;
+  const scouting = { pressEscapeRoute: spec.route };
+  if (targetFlank !== null) scouting.pressEscapeTargetFlank = targetFlank;
+  const supported = resolve(session("midfield_press_trap", {
+    lineupSnapshot: eleven,
+    opponent: { ...opponent, tacticalBehaviour: scouting }
+  }), 0.99, 0.99);
+  const ids = supported.counterplay.defensiveReply.evidence.supportingPlayerIds;
+  assert.equal(ids.length, targetFlank === null && spec.route === "switch_play"
+    ? 2 : spec.expectedRoles, spec.route + " role contract");
+  const lateId = ids[ids.length - 1];
+  const responses = Object.fromEntries(ids.map(id => [id, {
+    recognitionDelaySeconds: 0.3, triggerActionId: "receive",
+    ...(options.mustCoverByActionId !== undefined
+      ? { mustCoverByActionId: options.mustCoverByActionId } : {}),
+    coverMovement: {
+      basis: "authored_pitch_geometry", startMeters:
+        id === lateId && options.late ? spec.lateStart : spec.start,
+      coverMeters: id === lateId && options.wrong ? spec.wrong : spec.cover,
+      averageSpeedMetersPerSecond: 4
+    }
+  }]));
+  if (options.noGeometry) {
+    responses[lateId] = { recognitionDelaySeconds: 0.3,
+      coverMoveSeconds: 1 };
+  }
+  const timeline = {
+    basis: "authored_action_sequence", route: spec.route,
+    actions: spatialActions[spec.route].map(id => ({
+      id, durationSeconds: spec.route === "direct" ? 0.65 : 1
+    })),
+    pitchDimensionsMeters: { widthMeters: 68, lengthMeters: 105 },
+    spatialLane: {
+      basis: "authored_route_lane",
+      route: options.wrongRoute ? "wrong_route" : spec.route,
+      channel: options.wrongChannel ? "wrong_channel" : spatialChannels[spec.route],
+      coordinateFrame: "defending_goal_y0_right_xmax",
+      ...(spec.route === "switch_play" ? {
+        targetFlank: options.laneFlank ?? spec.side
+      } : {})
+    },
+    defenderResponsesByPlayerId: responses
+  };
+  if (options.noLane) delete timeline.spatialLane;
+  if (options.noFrame) delete timeline.spatialLane.coordinateFrame;
+  scouting.pressEscapeActionSequence = timeline;
+  return resolve(session("midfield_press_trap", {
+    lineupSnapshot: eleven,
+    opponent: { ...opponent, tacticalBehaviour: scouting }
+  }), 0.99, options.draw ?? 0.99);
+};
+for (const spec of spatialCases) {
+  const timely = routeSpatialPhase(spec);
+  const distant = routeSpatialPhase(spec, { late: true });
+  assert.equal(timely.evidence.routeCoverTiming.status, "in_time", spec.route);
+  assert.equal(distant.evidence.routeCoverTiming.status, "late", spec.route);
+  assert.equal(timely.evidence.routeCoverTiming.spatialLane,
+    spatialChannels[spec.route]);
+  assert.equal(timely.evidence.routeCoverTiming.movementModel,
+    "authored_pitch_geometry");
+  assert.equal(timely.probability, distant.probability);
+  assert.equal(timely.xgDeltaAgainst, distant.xgDeltaAgainst);
+  assert.ok(timely.routeCoverAdjustment > 0);
+  assert.equal(distant.routeCoverAdjustment, 0);
+  const cutoff = (timely.containmentProbability +
+    distant.containmentProbability) / 2;
+  assert.equal(routeSpatialPhase(spec, { draw: cutoff }).status, "contained");
+  assert.equal(routeSpatialPhase(spec, { late: true, draw: cutoff }).status,
+    "escaped");
+  const wrongLane = routeSpatialPhase(spec, { wrong: true });
+  assert.equal(wrongLane.evidence.routeCoverTiming.status, "wrong_corridor");
+  assert.equal(wrongLane.counterplay.defensiveReply
+    .coverTimingExplanation.kind, "wrong_corridor");
+  assert.equal(wrongLane.routeCoverAdjustment, 0,
+    "a VALID authored defender moving to the wrong lane loses specialist cover");
+  assert.equal(wrongLane.probability, timely.probability);
+  for (const invalidOpts of [
+    { wrongChannel: true }, { wrongRoute: true },
+    { noFrame: true }, { noGeometry: true }
+  ]) {
+    const invalid = routeSpatialPhase(spec, invalidOpts);
+    assert.equal(invalid.evidence.routeCoverTiming.status,
+      "invalid_or_incomplete", spec.route + " " + JSON.stringify(invalidOpts));
+    assert.equal(invalid.counterplay.defensiveReply
+      .coverTimingExplanation.kind, "unknown");
+    assert.ok(invalid.routeCoverAdjustment > 0,
+      "invalid scenario does not fabricate a late recovery penalty");
+  }
+  // Route-specific deadline: a runner, far-side back or CB can reach the
+  // FINAL corridor but miss the earlier pass that opens it.
+  const deadlines = spec.route === "third_man"
+    ? ["layoff", "third_runner"] :
+      spec.route === "switch_play" ? ["switch_pass", "wide_attack"] :
+        ["first_touch", "support_run"];
+  const missedIntervention = routeSpatialPhase(spec, {
+    mustCoverByActionId: deadlines[0]
+  });
+  const reachedIntervention = routeSpatialPhase(spec, {
+    mustCoverByActionId: deadlines[1]
+  });
+  assert.equal(missedIntervention.evidence.routeCoverTiming.status, "late",
+    spec.route + " early defensive intervention");
+  assert.equal(reachedIntervention.evidence.routeCoverTiming.status, "in_time",
+    spec.route + " late defensive intervention");
+  assert.equal(missedIntervention.routeCoverAdjustment, 0);
+  assert.equal(reachedIntervention.routeCoverAdjustment, timely.routeCoverAdjustment);
+  assert.equal(missedIntervention.probability, reachedIntervention.probability);
+  assert.equal(missedIntervention.xgDeltaAgainst, reachedIntervention.xgDeltaAgainst);
+  const wrongAction = routeSpatialPhase(spec, {
+    mustCoverByActionId: "action_not_on_this_route"
+  });
+  assert.equal(wrongAction.evidence.routeCoverTiming.status,
+    "invalid_or_incomplete");
+  assert.ok(wrongAction.routeCoverAdjustment > 0);
+  const legacyCompatible = routeSpatialPhase(spec, { noLane: true });
+  assert.equal(legacyCompatible.evidence.routeCoverTiming.status, "in_time");
+  assert.equal(legacyCompatible.evidence.routeCoverTiming.spatialLane, null);
+  if (spec.route === "switch_play") {
+    assert.equal(routeSpatialPhase(spec, { laneFlank:
+      spec.side === "left" ? "right" : "left" })
+      .evidence.routeCoverTiming.status, "invalid_or_incomplete");
+    // A spatially labelled wide lane cannot claim the correct specialist
+    // when the attack destination is missing from the scouting source.
+    const noScoutedSide = routeSpatialPhase(spec, { side: null });
+    assert.equal(noScoutedSide.evidence.routeCoverTiming.status,
+      "invalid_or_incomplete");
+  }
+}
+// Defensive reactions are one LINKED chain, not three independent cover
+// bonuses. A late first screen cannot be rescued by a timely FINAL position.
+const defensiveTaskRoutes = {
+  third_man: {
+    actions: ["receive", "layoff", "third_runner", "through_pass"],
+    tasks: ["screen_layoff", "follow_third_runner", "drop_for_through_pass"]
+  },
+  switch_play: {
+    actions: ["receive", "release", "switch_pass", "wide_attack"],
+    tasks: ["delay_release", "shift_to_far_side", "hold_wide_channel"]
+  },
+  direct: {
+    actions: ["receive", "direct_ball", "first_touch", "support_run"],
+    tasks: ["drop_behind_press", "challenge_first_touch", "protect_support_run"]
+  }
+};
+const linkedDefensiveReply = (route, side = null, lateFirst = false,
+  draw = 0.99, edit = null, handoffOptions = null) => {
+  const config = defensiveTaskRoutes[route];
+  const basePhase = route === "switch_play" && side
+    ? targetedSwitch(side, eleven) : replyRun(route);
+  const ids = basePhase.counterplay.defensiveReply.evidence.supportingPlayerIds;
+  assert.ok(ids.length, route + " has known specialists");
+  const stages = config.tasks.map((taskId, i) => ({
+    taskId,
+    triggerActionId: config.actions[i],
+    recognitionDelaySeconds: 0.1,
+    coverMoveSeconds: i === 0 ? (lateFirst ? 0.66 : 0.4) :
+      i === 1 ? 0.2 : 0.3
+  }));
+  if (edit) edit(stages);
+  const responders = Object.fromEntries(ids.map((id, i) => [id, i === 0 ?
+    { defensiveActionChain: stages } :
+    { recognitionDelaySeconds: 0.1,
+      coverMoveSeconds: handoffOptions?.receiverMoveSeconds ?? 1.9 }]));
+  const coverHandoff = handoffOptions ? {
+    fromDefenderId: ids[0], toDefenderId: ids[1],
+    releaseTaskId: config.tasks[1],
+    coveredChannel: {
+      third_man: "central_between_lines",
+      switch_play: "far_side_wide", direct: "depth_behind_press"
+    }[route],
+    ...(side ? { targetFlank: side } : {})
+  } : null;
+  if (handoffOptions?.editHandoff) handoffOptions.editHandoff(coverHandoff);
+  const timeline = {
+    basis: "authored_action_sequence", route,
+    actions: config.actions.map((id, i) => ({
+      id, durationSeconds: [0.7, 0.5, 0.7, 1.2][i]
+    })),
+    defenderResponsesByPlayerId: responders,
+    ...(coverHandoff ? { defenderCoverHandoff: coverHandoff } : {})
+  };
+  return resolve(session("midfield_press_trap", {
+    lineupSnapshot: eleven,
+    opponent: { ...opponent, tacticalBehaviour: {
+      pressEscapeRoute: route,
+      ...(side ? { pressEscapeTargetFlank: side } : {}),
+      pressEscapeActionSequence: timeline
+    } }
+  }), 0.99, draw);
+};
+for (const [route, side] of [
+  ["third_man", null], ["switch_play", null],
+  ["switch_play", "left"], ["switch_play", "right"], ["direct", null]
+]) {
+  const timely = linkedDefensiveReply(route, side);
+  const lateEarlyScreen = linkedDefensiveReply(route, side, true);
+  const good = timely.evidence.routeCoverTiming;
+  const late = lateEarlyScreen.evidence.routeCoverTiming;
+  assert.equal(good.status, "in_time", route + " " + side);
+  assert.equal(late.status, "late", route + " " + side);
+  assert.equal(timely.counterplay.defensiveReply.coverTimingExplanation.kind,
+    "in_time");
+  assert.equal(lateEarlyScreen.counterplay.defensiveReply.coverTimingExplanation.kind,
+    "late_task");
+  assert.ok(lateEarlyScreen.counterplay.defensiveReply
+    .coverTimingExplanation.description.length > 20);
+  assert.equal(annotateOwnPressChances([
+    { side: "against", quality: 0.1 }
+  ], lateEarlyScreen)[0].tacticalMoment.counterplay
+    .defensiveReply.coverTimingExplanation.kind, "late_task",
+    "the replay chance must retain the same explanation");
+  assert.equal(good.defensiveSequenceModel, "sequential_defender_tasks");
+  assert.equal(good.defensiveTransitions.length, 3);
+  assert.equal(late.defensiveTransitions[0].status, "late");
+  assert.equal(late.defensiveTransitions[1].status, "in_time");
+  assert.equal(late.defensiveTransitions[2].status, "in_time");
+  assert.equal(late.criticalTaskId, defensiveTaskRoutes[route].tasks[0]);
+  assert.equal(late.defensiveTransitions[2].completionSeconds,
+    good.defensiveTransitions[2].completionSeconds,
+    "same last arrival does NOT erase missed first transition");
+  assert.equal(timely.probability, lateEarlyScreen.probability);
+  assert.equal(timely.routeCoverAdjustment > 0, true);
+  assert.equal(lateEarlyScreen.routeCoverAdjustment, 0);
+  assert.equal(timely.xgDeltaAgainst, lateEarlyScreen.xgDeltaAgainst);
+  const cutoff = (timely.containmentProbability +
+    lateEarlyScreen.containmentProbability) / 2;
+  assert.equal(linkedDefensiveReply(route, side, false, cutoff).status,
+    "contained");
+  assert.equal(linkedDefensiveReply(route, side, true, cutoff).status,
+    "escaped");
+  assert.equal(linkedDefensiveReply(route, side, false, cutoff).xgDeltaAgainst,
+    0.02);
+  assert.equal(linkedDefensiveReply(route, side, true, cutoff).xgDeltaAgainst,
+    0.06);
+  for (const badEdit of [
+    stages => { stages[0].taskId = "task_from_another_route"; },
+    stages => { stages[1].taskId = stages[0].taskId; },
+    stages => { stages[1].triggerActionId = "missing_cue"; },
+    stages => { stages[1].coverMoveSeconds = -1; },
+    stages => { stages[1].coverMovement = { basis: "authored_pitch_geometry" }; }
+  ]) {
+    const bad = linkedDefensiveReply(route, side, false, 0.99, badEdit);
+    assert.equal(bad.evidence.routeCoverTiming.status,
+      "invalid_or_incomplete", route + " " + side + " invalid chain");
+    assert.equal(bad.routeCoverAdjustment, timely.routeCoverAdjustment,
+      "invalid chain stays neutral, never fabricates a defensive failure");
+  }
+}
+// A player leaving to track the runner cannot leave his former corridor
+// unattended. The receiver must be set BEFORE the source starts its next
+// move. Both original individual covers are otherwise on time.
+for (const route of ["third_man", "direct"]) {
+  const onTime = linkedDefensiveReply(route, null, false, 0.99, null,
+    { receiverMoveSeconds: 0.6 });
+  const tooLate = linkedDefensiveReply(route, null, false, 0.99, null,
+    { receiverMoveSeconds: 1.0 });
+  const a = onTime.evidence.routeCoverTiming;
+  const b = tooLate.evidence.routeCoverTiming;
+  assert.equal(a.status, "in_time", route + " timely handoff");
+  assert.equal(b.status, "late", route + " missing handoff");
+  assert.equal(a.coverHandoff.status, "in_time");
+  assert.equal(b.coverHandoff.status, "late");
+  assert.equal(onTime.counterplay.defensiveReply.coverTimingExplanation.kind,
+    "in_time");
+  assert.equal(tooLate.counterplay.defensiveReply.coverTimingExplanation.kind,
+    "late_handoff");
+  assert.match(tooLate.counterplay.defensiveReply
+    .coverTimingExplanation.description, /Avløseren/);
+  assert.equal(a.coverHandoff.releaseSeconds, 0.8);
+  assert.equal(a.coverHandoff.takeoverSeconds, 0.7);
+  assert.equal(b.coverHandoff.takeoverSeconds, 1.1);
+  assert.equal(b.coverHandoff.marginSeconds, -0.3);
+  assert.equal(b.criticalDefenderId, b.coverHandoff.toDefenderId);
+  assert.equal(b.criticalHandoff.releaseTaskId,
+    defensiveTaskRoutes[route].tasks[1]);
+  assert.equal(b.defensiveTransitions.every(step =>
+    step.status === "in_time"), true,
+    "all individual tasks succeed; only the missing transfer fails");
+  assert.equal(onTime.probability, tooLate.probability);
+  assert.ok(onTime.routeCoverAdjustment > 0);
+  assert.equal(tooLate.routeCoverAdjustment, 0);
+  assert.equal(onTime.xgDeltaAgainst, tooLate.xgDeltaAgainst);
+  const threshold = (onTime.containmentProbability +
+    tooLate.containmentProbability) / 2;
+  assert.equal(linkedDefensiveReply(route, null, false, threshold, null,
+    { receiverMoveSeconds: 0.6 }).status, "contained");
+  assert.equal(linkedDefensiveReply(route, null, false, threshold, null,
+    { receiverMoveSeconds: 1.0 }).status, "escaped");
+  const noTransfer = linkedDefensiveReply(route);
+  assert.equal(noTransfer.evidence.routeCoverTiming.coverHandoff, undefined,
+    "old action chains must keep existing behaviour");
+  for (const editHandoff of [
+    h => { h.fromDefenderId = h.toDefenderId; },
+    h => { h.toDefenderId = "unregistered-defender"; },
+    h => { h.releaseTaskId = "missing-task"; },
+    h => { h.releaseTaskId = defensiveTaskRoutes[route].tasks[0]; },
+    h => { h.coveredChannel = "wrong_corridor"; },
+    h => { h.targetFlank = "unknown"; }
+  ]) {
+    const bad = linkedDefensiveReply(route, null, false, 0.99, null,
+      { receiverMoveSeconds: 0.6, editHandoff });
+    assert.equal(bad.evidence.routeCoverTiming.status,
+      "invalid_or_incomplete", route + " invalid handoff");
+    assert.equal(bad.routeCoverAdjustment, noTransfer.routeCoverAdjustment,
+      "untrusted handoffs are neutral, not asserted tactical failures");
+  }
+}
+// Without a named target flank a switch-play handoff may not assert\n// that two opposite-side backs share one specific defensive corridor.\nconst unscoutedSwitchHandoff = linkedDefensiveReply("switch_play", null,\n  false, 0.99, null, { receiverMoveSeconds: 0.6 });\nassert.equal(unscoutedSwitchHandoff.evidence.routeCoverTiming.status,\n  "invalid_or_incomplete");\nassert.ok(unscoutedSwitchHandoff.routeCoverAdjustment > 0);\n// When the far-side back is the ONLY known relevant covering specialist,
+// do not invent another fullback to create a handoff on either flank.
+for (const side of ["left", "right"]) {
+  const invalid = linkedDefensiveReply("switch_play", side, false, 0.99,
+    null, { receiverMoveSeconds: 0.6 });
+  assert.equal(invalid.evidence.routeCoverTiming.status,
+    "invalid_or_incomplete");
+  assert.ok(invalid.routeCoverAdjustment > 0);
+}
+// v7 counterfactual: same roles, formation, opposition, attack tempo and
+// random draw, but ONE defensive slot has a DIFFERENT sourced player.
+// Named authored inputs are remapped to the new player ID; we do not
+// pretend to know a real player's tracking or sprint time.
+const reactionStrongRecord = {
+  strengths: ["pace", "positioning", "game_reading", "tackling"],
+  attributes: { provenance: {
+    pace: "belagt", positioning: "belagt",
+    game_reading: "belagt", tackling: "belagt"
+  } }
+};
+const reactionUnprovedRecord = {
+  ...reactionStrongRecord,
+  attributes: { provenance: { pace: "udokumentert", game_reading: "belagt" } }
+};
+const sourcedSkillEvidence = sourcedDefensiveReactionSkillsForPlayer;
+assert.deepEqual(sourcedSkillEvidence(reactionStrongRecord),
+  ["game_reading", "pace", "positioning", "tackling"]);
+assert.deepEqual(sourcedSkillEvidence(reactionUnprovedRecord),
+  ["game_reading"]);
+// The matchday snapshot must carry sourced skills, never raw unproved claims.
+const v7Snapshot = createLineupSnapshot({ assignments: [{
+  player: { id: "sourced-defender", name: "Kontrollstopper", ...reactionStrongRecord },
+  slot: { slotId: "cb1", position: "CB" },
+  role: { id: "ball_playing_centre_back", name: "Stopper" },
+  fit: { matchScore: 75 }
+}] });
+assert.deepEqual(v7Snapshot[0].sourcedDefensiveReactionSkills,
+  sourcedSkillEvidence(reactionStrongRecord));
+const v7DefenderId = centralIds[0];
+const v7SecondId = centralIds[1];
+const v7Fixture = (playerId, traits) => eleven.map(player =>
+  player.playerId === v7DefenderId
+    ? { ...player, playerId, sourcedDefensiveReactionSkills: traits } : player);
+const v7Sequence = playerId => authoredSequence(0.2, {
+  [playerId]: { recognitionDelaySeconds: 0.4, coverMoveSeconds: 1.75 },
+  [v7SecondId]: { recognitionDelaySeconds: 0.4, coverMoveSeconds: 1.2 }
+});
+const v7Trial = (playerId, traits, draw = 0.99) =>
+  sequenceTrial(v7Sequence(playerId), draw, undefined,
+    v7Fixture(playerId, traits));
+const v7Plain = v7Trial("ordinary-defender", []);
+const v7Sourced = v7Trial("sourced-defender", sourcedSkillEvidence(reactionStrongRecord));
+assert.equal(v7Plain.evidence.routeCoverTiming.status, "late");
+assert.equal(v7Sourced.evidence.routeCoverTiming.status, "in_time");
+assert.equal(v7Plain.evidence.routeCoverTiming.marginSeconds < 0, true);
+assert.equal(v7Sourced.evidence.routeCoverTiming.marginSeconds > 0, true);
+assert.equal(v7Plain.probability, v7Sourced.probability,
+  "player effects do not buy another first-press probability");
+assert.ok(v7Plain.routeCoverAdjustment === 0 && v7Sourced.routeCoverAdjustment > 0,
+  "individual timing gates the ONE existing route-specific containment term");
+assert.deepEqual(v7Plain.evidence.routeCoverTiming.defenderSkillTiming, undefined,
+  "missing evidence is neutral");
+assert.deepEqual(v7Sourced.evidence.routeCoverTiming.defenderSkillTiming[0].skills,
+  ["game_reading", "pace", "positioning"]);
+assert.ok(v7Sourced.evidence.routeCoverTiming.defenderSkillTiming[0].secondsSaved <= 0.25);
+assert.match(v7Sourced.counterplay.defensiveReply.coverTimingExplanation.description,
+  /Kildebelagte spilleregenskaper/);
+assert.equal(sourcedSkillEvidence(reactionUnprovedRecord).includes("pace"), false);
+const v7NotSourced = v7Trial("unproven-defender", []);
+assert.equal(v7NotSourced.evidence.routeCoverTiming.status, v7Plain.evidence.routeCoverTiming.status);
+const v7Midpoint = (v7Plain.containmentProbability + v7Sourced.containmentProbability) / 2;
+assert.equal(v7Trial("ordinary-defender", [], v7Midpoint).status, "escaped");
+assert.equal(v7Trial("sourced-defender", sourcedSkillEvidence(reactionStrongRecord),
+  v7Midpoint).status, "contained");
+assert.equal(v7Plain.xgDeltaAgainst, v7Sourced.xgDeltaAgainst,
+  "identical chance roll still yields the old single terminal outcome, not stacked xG");
+const v7WithNoTimeline = timedThird(undefined, 0.99,
+  v7Fixture("sourced-defender", sourcedSkillEvidence(reactionStrongRecord)));
+assert.equal(v7WithNoTimeline.evidence.routeCoverTiming.status, "not_provided");
+assert.equal(v7WithNoTimeline.routeCoverAdjustment, noWindow.routeCoverAdjustment,
+  "player speed is not inferred without an authored movement scenario");
+console.log("OK: v7 one-player counterfactual, neutral provenance, single cover gate.");
+
+console.log("OK: two-defender handoffs gate one existing cover term.");
+
+console.log("OK: linked defensive tasks for all routes and both flanks.");
+
+console.log("OK: four route/flank geometries require aligned tactical lanes.");
 
 const resistant = resolve(session("high_press_343", {
   opponent: { ...opponent, pressResistance: 90 }

@@ -15,7 +15,9 @@ import { compactPlayerName, describeTacticalFit } from "./ui/manager-lineup-pres
 import { createMatchdaySceneModel, renderManagerMatchdayCommand } from "./ui/manager-matchday-presentation.js";
 import { createSeasonSceneModel, renderSeasonCommand, renderSeasonLeagueOverview } from "./ui/manager-season-presentation.js";
 import { createOfficeSceneModel, renderOfficeCommand } from "./ui/manager-office-presentation.js";
+import { renderManagerStaffRoster } from "./ui/manager-staff-workspace-v1.js";
 import { createManagerTrainingSceneModel, renderManagerTrainingCommand } from "./ui/manager-training-presentation.js";
+import { createContextualTrainingSessions, summarizeTrainingReadiness } from "./football-training-session-guidance.js";
 import { getTacticalKnowledgeForTactic } from "./football-tactical-knowledge.js";
 import { TACTICAL_SEQUENCES } from "./football-tactical-sequences.js";
 import { calculateTeamFit } from "./football-team-fit-engine.js";
@@ -34,10 +36,12 @@ import {
   logMatchMoment,
   applyMatchPlanChange,
   applyMatchdaySubstitution,
+  applyMatchPressCounter,
   applyOpponentAdaptation,
   OPPONENT_PROFILES,
   evaluateFormationMatchupVsOpponent
 } from "./football-matchday-engine.js";
+import { getManagerPressCounterOptions } from "./football-matchday-own-press-v6.js";
 import {
   HISTORICAL_OPPONENT_PROFILES,
   getHistoricalOpponentProfile,
@@ -657,6 +661,8 @@ const elements = {
   firstTimeOpponent: document.querySelector("#firstTimeOpponent"),
   firstTimeAssistant: document.querySelector("#firstTimeAssistant"),
   modeChoiceCards: Array.from(document.querySelectorAll("[data-start-mode]")),
+  continueSavedGame: document.querySelector("#continueSavedGame"),
+  welcomeResumeSummary: document.querySelector("#welcomeResumeSummary"),
   scenarioList: document.querySelector("#scenarioList"),
   trainingChoiceGate: document.querySelector("#trainingChoiceGate"),
   trainingChoiceStatus: document.querySelector("#trainingChoiceStatus"),
@@ -5497,11 +5503,39 @@ function saveOnboarded() {
   try { localStorage.setItem(ONBOARDED_KEY, state.onboarded ? "1" : "0"); } catch (_) { /* privat modus */ }
 }
 
-// Onboarding v2: egen startskjerm styres uavhengig av spillflaten. Den vises til
-// spilleren har valgt modus (`onboarded`), og igjen når «Bytt modus» åpner den.
+// Startskjermen leser kun den eksisterende, hydrerte manager-saven.
+// En tom mode-envelope fra førstegangsstart er ikke et lagret spill.
+function renderWelcomeResume() {
+  const button = elements.continueSavedGame;
+  const summary = elements.welcomeResumeSummary;
+  if (!button || !summary) return;
+  const mode = state.modeEnvelope?.activeMode || state.gameStartState?.selectedMode;
+  const canResume = ["league", "national", "scenario", "training"].includes(mode)
+    && (state.onboarded || Boolean(getSavedClubName()) || Boolean(state.gameStartState?.activeLeagueSaveId));
+  button.disabled = !canResume;
+  if (!canResume) {
+    summary.textContent = "Ingen lagring funnet på denne enheten.";
+    return;
+  }
+  const labels = {
+    league: "Ligaspill",
+    national: "Landslagssjef",
+    scenario: "Scenarioer",
+    training: "Fotballvitenskap"
+  };
+  const detail = mode === "league" ? getSavedClubName()
+    : mode === "national" ? getNationalTeamNationality()
+    : "";
+  summary.textContent = [labels[mode], detail].filter(Boolean).join(" · ");
+}
+
+// Onboarding v2: egen startskjerm vises for nye spillere og ved «Bytt modus».
+// Spillere med en eksisterende save fortsetter automatisk ved normal omlasting,
+// og kan åpne startskjermen igjen fra Innstillinger.
 function renderOnboardingScreen() {
   const screen = elements.onboardingScreen;
   if (!screen) return;
+  renderWelcomeResume();
   screen.hidden = state.onboarded && !state.modeChooserOpen;
   document.body.classList.toggle("is-onboarding", !screen.hidden);
   // Startskjermen åpner alltid på modusvalget; klubb-steget vises kun når
@@ -9735,8 +9769,8 @@ function renderAdminRoom() {
 
   if (elements.adminStaffNote) {
     elements.adminStaffNote.textContent = staffCount > 0
-      ? "Staben støtter treningsuka og kampdagen."
-      : "Ingen stab engasjert ennå — stab hentes inn via History Go-progresjon.";
+      ? "Engasjer flere ved behov. Ansatte er samlet under «Engasjerte medarbeidere»."
+      : "Trykk Engasjer på en kandidat for å bygge opp støtteapparatet.";
   }
 }
 
@@ -10296,7 +10330,8 @@ async function openManagerMatchdayTarget(target) {
       && state.clubWeekState?.phase === "analysis";
     if (!rolledToNextWeek) return;
 
-    activateTab("dashboard");
+    // Neste manageruke vises i Kalender; Kontor har nå Innboks som standard.
+    activateTab("calendar");
     renderApp();
     if (carryProblemToNextWeek) {
       window.dispatchEvent(new CustomEvent("hgfm:training-problem-suggested"));
@@ -10916,7 +10951,69 @@ function renderMatchdaySessionEvent(container, session, eventIndex) {
   // det større taktiske valget, ikke et alternativ til hendelsen foran deg.
   appendMatchPlanSwitcher(card, session);
   appendMatchSubstitutions(card, session);
+  appendMatchPressCounter(card, session, periodSeen);
   container.append(card);
+}
+
+
+// Managerens v7.4-motgrep. Only shown after the period has actually been
+// watched, and only when a previous executed press exposed known alternatives.
+// This remains behind one disclosure rather than cluttering the match scene.
+function appendMatchPressCounter(parent, session, periodSeen) {
+  if (!periodSeen || session?.causalManagerPressCounterVersion !== 1) return;
+  const options = getManagerPressCounterOptions(session);
+  const active = session.managerPressCounter;
+  if (!options?.routes?.length && !active) return;
+  const labels = {
+    third_man: "Tredjemann sentralt",
+    switch_play: "Sideskift",
+    direct: "Direkte utspill"
+  };
+  const wrap = document.createElement("details");
+  wrap.className = "match-plan-switcher";
+  const summary = document.createElement("summary");
+  summary.textContent = "Motgrep mot utspill" +
+    (active?.route ? " · " + labels[active.route] : "");
+  wrap.append(summary);
+  const description = document.createElement("p");
+  description.className = "muted-text match-plan-lead";
+  description.textContent = "Prioriter én kjent utvei etter å ha sett den i kampen. " +
+    "Sikring flyttes fra en annen dokumentert korridor, ikke fra en ekstra bonus.";
+  wrap.append(description);
+  if (active?.route) {
+    const current = document.createElement("p");
+    current.className = "matchday-meta";
+    current.textContent = "Gjeldende prioritet: " + labels[active.route] +
+      ". Motstanderen kan velge en annen kjent utvei i neste kampfase.";
+    wrap.append(current);
+  }
+  if (options?.routes?.length) {
+    const buttons = document.createElement("div");
+    buttons.className = "matchday-decision-options";
+    options.routes.forEach((route) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "matchday-decision-button";
+      button.textContent = "Sikre " + labels[route];
+      button.addEventListener("click", () => {
+        const live = state.matchday?.session;
+        if (!live) return;
+        const changed = applyMatchPressCounter(live, route);
+        if (changed === live) return;
+        state.matchday.session = changed;
+        saveMatchdayState();
+        renderApp();
+      });
+      buttons.append(button);
+    });
+    wrap.append(buttons);
+  } else {
+    const note = document.createElement("p");
+    note.className = "matchday-meta";
+    note.textContent = "Et nytt motgrep krever en ny gjennomført pressfase.";
+    wrap.append(note);
+  }
+  parent.append(wrap);
 }
 
 // Hva motstanderen gjorde med kampen. Uten dette ser det ut som om planen din
@@ -11275,7 +11372,8 @@ const MINUTE_LOG_TYPE_LABELS = {
   decision: "Grep",
   plan: "Kampplan",
   opponent: "Motstander",
-  substitution: "Innbytte"
+  substitution: "Innbytte",
+  counter: "Motgrep"
 };
 
 function appendMatchMinuteLog(parent, session) {
@@ -11344,9 +11442,29 @@ function appendMatchMinuteLog(parent, session) {
         move.textContent = `${step.action}${step.outcome === "blocked" ? " – stanset" : ""}`;
         actions.append(move);
       });
+      // The existing minute-log disclosure is the tactical event view.
+      // Show only the compact, sourced engine explanation; do not turn a
+      // missing scenario or a legacy save into a claimed defensive error.
+      const cover = moment.counterplay?.defensiveReply?.coverTimingExplanation;
+      const kinds = ["in_time", "late_task", "late_handoff",
+        "late_recovery", "wrong_corridor", "unknown"];
+      const coverNote = document.createElement("div");
+      if (cover && kinds.includes(cover.kind) &&
+        typeof cover.label === "string" &&
+        typeof cover.description === "string") {
+        coverNote.className = "matchday-defensive-cover";
+        coverNote.dataset.kind = cover.kind;
+        const coverTitle = document.createElement("strong");
+        coverTitle.textContent = `Sikring: ${cover.label}`;
+        const coverDescription = document.createElement("p");
+        coverDescription.textContent = cover.description;
+        coverNote.append(coverTitle, coverDescription);
+      }
       const caution = document.createElement("small");
       caution.textContent = "Koblet til denne eksisterende sjansen, uten ekstra mål eller xG. Ikke faktisk spillertracking.";
-      trace.append(head, explanation, actions, caution);
+      trace.append(head, explanation, actions);
+      if (coverNote.childElementCount) trace.append(coverNote);
+      trace.append(caution);
       item.append(trace);
     }
     list.append(item);
@@ -13085,14 +13203,21 @@ function buildTrainingProgramCard(program, context = {}) {
   summary.textContent = program.summary;
   card.append(summary);
 
-  // Playable Manager Flow Polish v1: kort, lesbar "Passer nå fordi"-etikett i
-  // stedet for et nøytralt avsnitt.
-  if (program.recommendedBecause.length > 0) {
-    const why = document.createElement("p");
-    why.className = "training-program-why";
-    why.textContent = `Passer nå fordi: ${program.recommendedBecause[0]}`;
-    card.append(why);
-  }
+  // Vis bare kontekstpåstander som faktisk finnes i scorerens signalkilder.
+  const sources = new Set(Array.isArray(program.sourceSignals) ? program.sourceSignals : []);
+  const readiness = context.trainingContext?.readiness;
+  const upcoming = context.trainingContext?.opponent?.name;
+  const reasons = [];
+  if (sources.has("opponent") && upcoming) reasons.push(`motstander ${upcoming}`);
+  if (sources.has("fatigueRisk") && Number(readiness?.tired) > 0) reasons.push(`${readiness.tired} slitne spillere`);
+  if (sources.has("formation") || sources.has("formationMatchup")) reasons.push("lagets formasjon og kampplan");
+  if (sources.has("teamFit")) reasons.push("lagets taktiske styrker og svakheter");
+  const why = document.createElement("p");
+  why.className = "training-program-why";
+  why.textContent = reasons.length
+    ? `Foreslått ut fra ${reasons.join(", ")}.`
+    : `Programmets mål: ${program.weekGoal || program.summary}`;
+  card.append(why);
 
   // Forbereder mot: matchup-relevansen mot neste motstander, vist når programmet
   // er foreslått nettopp pga. motstanderen (sourceSignals inneholder "opponent").
@@ -13104,7 +13229,9 @@ function buildTrainingProgramCard(program, context = {}) {
     card.append(prepares);
   }
 
-  // Øktene i uka — kompakt, foldet liste så kortet ikke domineres av detaljene.
+  // Ett automatisk anbefalt treningsopplegg, ikke et øvelsesbibliotek.
+  // Øktene hører til programmets autoritative, beregnede fire økter.
+  const guidedSessions = createContextualTrainingSessions(program, context.trainingContext || {});
   const sessionsDetails = document.createElement("details");
   sessionsDetails.className = "training-program-sessions-details";
   const sessionsSummary = document.createElement("summary");
@@ -13112,9 +13239,16 @@ function buildTrainingProgramCard(program, context = {}) {
   sessionsDetails.append(sessionsSummary);
   const sessions = document.createElement("ul");
   sessions.className = "training-program-sessions";
-  program.sessions.forEach((session) => {
+  program.sessions.forEach((session, index) => {
     const li = document.createElement("li");
     li.textContent = `${session.day}: ${session.title} (${PROGRAM_INTENSITY_LABEL[session.intensity] || session.intensity})`;
+    const recommendation = guidedSessions[index];
+    if (recommendation) {
+      li.dataset.exercise = recommendation.exercise;
+      li.dataset.relevance = recommendation.relevance;
+      li.dataset.load = recommendation.load;
+      li.dataset.basis = recommendation.contextualBasis;
+    }
     sessions.append(li);
   });
   sessionsDetails.append(sessions);
@@ -13181,22 +13315,24 @@ function renderTrainingProgramCompositions(teamFit) {
 
   const opponent = getMiniSeasonNextOpponent();
   const offPitchState = getOffPitchState();
-  const programs = createTrainingProgramCompositions({
+  const tactic = getTactic();
+  const readiness = summarizeTrainingReadiness(getPlayerCondition());
+  const recommendationContext = {
     teamFit,
     opponent,
     formation: getFormation(),
-    tactic: getTactic(),
+    tactic,
     formationMatchup: getFormationMatchupVsOpponent(opponent),
     coachContext: getCoachContext(),
     lastMatchWeaknessMetric: state.matchday?.lastMatch?.exposedWeaknessMetric || null,
-    // Off-pitch Parameters v1: slitasje/skadefare/press kommer nå fra manager-
-    // statens kontekstlag. Restitusjon/skadeforebygging blir dermed situasjons-
-    // bestemt — den må fortjenes av faktisk slitasje, ikke velges som vane.
     offPitchState,
     recentTrainingFocusIds: offPitchState.recentTrainingProgramIds,
     staffIdentity: getStaffIdentitySummary(),
-    limit: 3
-  });
+    // Reelle kampbelastninger inngår nå i prioriteringen av eksisterende
+    // programalternativer. Ingen ny fatigue- eller treningsmotor.
+    ...(readiness.fatigueRisk === null ? {} : { fatigueRisk: readiness.fatigueRisk })
+  };
+  const programs = createTrainingProgramCompositions({ ...recommendationContext, limit: 3 });
 
   if (!Array.isArray(programs) || programs.length === 0) {
     updateWeeklyTrainingProgramStatus(null);
@@ -13213,19 +13349,7 @@ function renderTrainingProgramCompositions(teamFit) {
   let visiblePrograms = programs;
   let selectedProgram = programs.find((program) => program.id === selectedProgramId) || null;
   if (selectedProgramId && !selectedProgram) {
-    const extra = createTrainingProgramCompositions({
-      teamFit,
-      opponent,
-      formation: getFormation(),
-      tactic: getTactic(),
-      formationMatchup: getFormationMatchupVsOpponent(opponent),
-      coachContext: getCoachContext(),
-      lastMatchWeaknessMetric: state.matchday?.lastMatch?.exposedWeaknessMetric || null,
-      offPitchState,
-      recentTrainingFocusIds: offPitchState.recentTrainingProgramIds,
-      staffIdentity: getStaffIdentitySummary(),
-      limit: 8
-    });
+    const extra = createTrainingProgramCompositions({ ...recommendationContext, limit: 8 });
     selectedProgram = (Array.isArray(extra) ? extra : []).find((program) => program.id === selectedProgramId) || null;
     if (selectedProgram) {
       visiblePrograms = [selectedProgram, ...programs.filter((program) => program.id !== selectedProgramId)];
@@ -13238,13 +13362,24 @@ function renderTrainingProgramCompositions(teamFit) {
   visiblePrograms.forEach((program, index) => {
     const sectionLabel = document.createElement("p");
     sectionLabel.className = "training-program-section-label";
-    sectionLabel.textContent = index === 0 ? "Anbefalt nå" : index === 1 ? "Andre trygge valg" : "Dypere treningsprogram / historikk";
+    const recommendedRank = programs.findIndex((candidate) => candidate.id === program.id);
+    sectionLabel.textContent = recommendedRank === 0
+      ? "Anbefalt nå"
+      : program.id === selectedProgramId && recommendedRank < 0
+        ? "Ditt valgte program"
+        : "Alternativ for treningsuka";
     container.append(sectionLabel);
     container.append(
       buildTrainingProgramCard(program, {
         isSelected: program.id === selectedProgramId,
         locked,
-        opponentName: opponent?.name || null
+        opponentName: opponent?.name || null,
+        trainingContext: {
+          tactic,
+          opponent,
+          readiness,
+          selectedFocusId: state.weeklyTrainingFocus?.focusId || null
+        }
       })
     );
   });
@@ -15835,32 +15970,43 @@ function renderPlaceReports() {
   });
 }
 
-// Ett stab-kort: navn, type, hva de kan ansettes som, viktigste ekspertise,
-// og prototype-notat når isPlaceholder er satt.
+// Kortene viser forståelige roller og ett tydelig ansettelsesvalg.
+// Den eksisterende hireStaff()-motoren er fortsatt eneste kilde for lagring.
+const STAFF_TYPE_DISPLAY = Object.freeze({
+  assistant_coach: "Assistenttrener",
+  coach: "Trener",
+  training_coach: "Trener",
+  physical_coach: "Fysisk trener",
+  physio: "Fysioterapeut",
+  physiotherapist: "Fysioterapeut",
+  goalkeeper_coach: "Keepertrener",
+  goalkeeper_trainer: "Keepertrener",
+  former_goalkeeper_goalkeeper_coach: "Keepertrener",
+  head_coach: "Hovedtrener",
+  scout: "Speider",
+  doctor: "Lege"
+});
+
+function staffTypeDisplay(type) {
+  const key = String(type || "").trim();
+  return STAFF_TYPE_DISPLAY[key] || (key ? key.replaceAll("_", " ").replace(/^./, (letter) => letter.toUpperCase()) : "Medarbeider");
+}
+
 function createStaffCard(member) {
   const card = createUnlockCard();
+  card.classList.add("staff-person-card");
   appendUnlockTitle(card, member.name || member.id);
-  appendUnlockMeta(card, `Type: ${member.staffType || "ukjent"}`);
-
-  const canBeHiredAs = Array.isArray(member.canBeHiredAs) ? member.canBeHiredAs : [];
-  if (canBeHiredAs.length) {
-    appendUnlockMeta(card, `Kan ansettes som: ${canBeHiredAs.join(", ")}`);
-  }
-
-  const expertiseIds = Array.isArray(member.expertiseIds) ? member.expertiseIds : [];
-  if (expertiseIds.length) {
-    appendUnlockMeta(card, `Ekspertise: ${expertiseIds.slice(0, 4).join(", ")}`);
-  }
-
+  const types = [member.staffType, ...(Array.isArray(member.canBeHiredAs) ? member.canBeHiredAs : [])]
+    .filter(Boolean).map(staffTypeDisplay);
+  const roles = [...new Set(types)];
+  appendUnlockMeta(card, roles.length ? roles.join(" · ") : "Medarbeider");
   if (member.isPlaceholder) {
     const note = document.createElement("p");
     note.className = "staff-placeholder-note";
-    note.textContent = "Prototypeprofil – krever research.";
+    note.textContent = "Foreløpig profil";
     card.append(note);
   }
-
   appendStaffAction(card, member);
-
   return card;
 }
 
@@ -15902,15 +16048,23 @@ function renderStaffUnlocks() {
     const ul = document.createElement("ul");
     [...identity.strengths, ...identity.gaps].slice(0, 3).forEach((text) => { const li = document.createElement("li"); li.textContent = text; ul.append(li); });
     box.append(ul);
-    identityHost.prepend(box);
+    // Details requires its summary first: keep the assessment inside the fold,
+    // rather than showing a floating panel above the summary on mobile.
+    const summary = identityHost.querySelector(":scope > summary");
+    if (summary) summary.after(box);
+    else identityHost.prepend(box);
   }
 
   const availableList = elements.availableStaffList;
   if (availableList) {
     availableList.innerHTML = "";
-    const available = getUnlockedStaff();
+    const hiredIds = new Set(getHiredStaff().map((member) => String(member.id)));
+    const available = getUnlockedStaff()
+      .filter((member) => !hiredIds.has(String(member.id)))
+      .sort((a, b) => Number(b.starterStaff === true) - Number(a.starterStaff === true)
+        || String(a.name || a.id).localeCompare(String(b.name || b.id), "nb"));
     if (!available.length) {
-      renderUnlockEmpty(availableList, "Ingen tilgjengelig stab ennå. Besøk flere steder.");
+      renderUnlockEmpty(availableList, "Ingen ledige kandidater nå. Engasjerte medarbeidere vises nedenfor.");
     } else {
       available.forEach((member) => availableList.append(createStaffCard(member)));
     }
@@ -16740,6 +16894,8 @@ function renderApp() {
   renderUnlockedPlayers();
   renderPlaceReports();
   renderStaffUnlocks();
+  // Oppdater også rollekapasiteten i samme render som Engasjer-knappen.
+  renderManagerStaffRoster();
   renderExpertiseUnlocks();
   renderTrainingPrograms();
   renderHgTrainingWeek();
@@ -17437,6 +17593,25 @@ function bindGameModeControls() {
     if (!elements.firstTimeAssistant) return;
     elements.firstTimeAssistant.textContent = assistantByStartMode[mode] || assistantByStartMode.league;
   }
+
+  elements.continueSavedGame?.addEventListener("click", () => {
+    const mode = state.modeEnvelope?.activeMode || state.gameStartState?.selectedMode;
+    if (!["league", "national", "scenario", "training"].includes(mode)
+      || !(state.onboarded || getSavedClubName() || state.gameStartState?.activeLeagueSaveId)) return;
+    // Eldre saves kan mangle onboarding-flagget; ved gjenopptakelse markeres
+    // bare dette flagget, uten å endre dataene for sesongen.
+    state.onboarded = true;
+    saveOnboarded();
+    // Fortsett er bare en navigasjon: ikke kall selectGameMode(), reset eller
+    // opprett en ny sesjon. Den hydrerte saven forblir urørt.
+    state.modeChooserOpen = false;
+    showOnboardingModeStep();
+    if (mode === "scenario") activateTab("scenarios");
+    else if (mode === "training") activateTab("hgfmLibrary");
+    else if (mode === "national") activateTab("dashboard");
+    else activateTab("calendar");
+    renderApp();
+  });
 
   elements.modeChoiceCards.forEach((card) => {
     card.addEventListener("mouseenter", () => setStartModeAssistant(card.dataset.startMode));

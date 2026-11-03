@@ -120,3 +120,7 @@ Hvis treningsprogram ennå ikke er valgt, er de fire plassholderøktene ikke int
 V1 er bevisst pedagogisk før den blir mekanisk.
 
 Senere kan vi vurdere om enkelte øvelsesvalg skal påvirke den eksisterende treningsmotoren, men da må påvirkningen gå gjennom dagens treningsdata og belastningsmodell. Vi skal ikke lage en separat «øvelsesscore» eller en ny progresjonsmotor ved siden av treningsuka.
+
+## Avgrensning for aktivt ligaspill (23. oktober 2026)
+
+Dette opprinnelige v1-verkstedet er bevart som eldre kompatibilitetskode, men **skal ikke åpnes fra treningsdagen** i den vanlige managerflyten. Aktiv trening gir nå én situasjonstilpasset øvelse per eksisterende programøkt, med begrunnelse fra taktikk, motstander og spillerbelastning. Manageren bygger ikke øvelser manuelt. Se `docs/MANAGER_TRAINING_DAY_V1.md`.
