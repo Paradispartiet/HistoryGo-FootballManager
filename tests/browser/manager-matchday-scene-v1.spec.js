@@ -512,6 +512,7 @@ test("Kampdagen har kompakte statusvalg og spillbar primærhandling på mobil", 
         secondRowBelow: buttons[2].getBoundingClientRect().top >= buttons[0].getBoundingClientRect().bottom - 1,
         primaryHeight: rect(".matchday-scene-action").height,
         versusHeight: rect(".matchday-scene-versus").height,
+        versusTeamMinHeight: parseFloat(getComputedStyle(root.querySelector(".matchday-scene-team")).minHeight),
         sceneRight: root.getBoundingClientRect().right,
         pageOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
       };
@@ -523,7 +524,9 @@ test("Kampdagen har kompakte statusvalg og spillbar primærhandling på mobil", 
     expect(layout.cardHeights.every((height) => height >= 44), label).toBe(true);
     expect(layout.cardOverflow.every((overflow) => overflow <= 1), label).toBe(true);
     expect(layout.primaryHeight, label).toBeGreaterThanOrEqual(44);
-    expect(layout.versusHeight, label).toBeLessThanOrEqual(150);
+    // Long opponent names/context must wrap; measure compact baseline, not a fixed short text height.
+    expect(layout.versusTeamMinHeight, label).toBeLessThanOrEqual(85);
+    expect(layout.versusHeight, label).toBeLessThanOrEqual(220);
     expect(layout.sceneRight, label).toBeLessThanOrEqual(width + 1);
     expect(layout.pageOverflow, label).toBeLessThanOrEqual(1);
   }
