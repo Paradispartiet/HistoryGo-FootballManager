@@ -297,3 +297,44 @@ test("fasevalg på mobil og sammenligning på iPad beholder 44px handlinger", as
   await compare.click();
   await expect(compare).toHaveAttribute("aria-pressed", "true");
 });
+
+
+test("taktikkens tropp har trygge profilknapper og åpne-tropp-handling på mobil", async ({ page }) => {
+  for (const width of [360, 390, 430, 768]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.locator('[data-fm-view="squad"]').click();
+    await expect(page.locator("#fmTacticsSquad")).toBeVisible();
+    await expect.poll(async () => page.locator("#fmTacticsSquadRows .fm-squad-row").count()).toBe(11);
+
+    const targets = await page.evaluate(() => {
+      const measure = (selector) => {
+        const item = document.querySelector(selector);
+        if (!item) return null;
+        const b = item.getBoundingClientRect();
+        return { width: b.width, height: b.height, right: b.right };
+      };
+      return {
+        roster: measure(".fm-open-roster"),
+        profile: measure("#fmTacticsSquadRows .fm-player-profile"),
+        list: measure("#fmTacticsSquadRows"),
+        row: measure("#fmTacticsSquadRows .fm-squad-row"),
+        overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+      };
+    });
+    expect(targets.roster, "roster action at " + width).not.toBeNull();
+    expect(targets.roster.height, "roster action at " + width).toBeGreaterThanOrEqual(44);
+    expect(targets.profile, "profile button at " + width).not.toBeNull();
+    expect(targets.profile.width, "profile width at " + width).toBeGreaterThanOrEqual(44);
+    expect(targets.profile.height, "profile height at " + width).toBeGreaterThanOrEqual(44);
+    expect(targets.row.height, "compact row at " + width).toBeLessThanOrEqual(56);
+    expect(targets.list.right, "list edge at " + width).toBeLessThanOrEqual(width + 1);
+    expect(targets.overflow, "horizontal overflow at " + width).toBeLessThanOrEqual(1);
+  }
+
+  await page.locator("#fmTacticsSquadRows .fm-player-profile").first().click();
+  await expect(page.locator("#managerPlayerProfileDialog")).toBeVisible();
+  await page.locator(".manager-player-profile-close").click();
+  await expect(page.locator("#managerPlayerProfileDialog")).toBeHidden();
+  await page.locator(".fm-open-roster").click();
+  await expect(page.locator("#managerRosterBody")).toBeVisible();
+});

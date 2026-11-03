@@ -284,7 +284,7 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
 .fm-squad-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
 .fm-open-roster {
   flex: 0 0 auto;
-  min-height: 40px;
+  min-height: 44px;
   padding: 8px 9px;
   border: 1px solid #3e7baf;
   border-radius: 8px;
@@ -298,7 +298,7 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
 .fm-squad-column-head,
 .fm-squad-row {
   display: grid;
-  grid-template-columns: 36px minmax(0, 1fr) minmax(52px, .65fr) 53px 43px;
+  grid-template-columns: 36px minmax(0, 1fr) minmax(52px, .65fr) 53px 48px;
   gap: 5px;
   align-items: center;
 }
@@ -312,8 +312,8 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
 .fm-squad-column-head span:last-child { grid-column: 4; }
 .fm-squad-rows { display: grid; min-width: 0; }
 .fm-squad-row {
-  min-height: 43px;
-  padding: 5px 4px;
+  min-height: 48px;
+  padding: 2px 4px;
   border-bottom: 1px solid rgba(136, 190, 224, .1);
   font-size: .7rem;
 }
@@ -340,7 +340,8 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
 .fm-player-fit[data-tone="misused"], .fm-player-fit[data-tone="risk"] { color: #f6b39c; }
 .fm-player-fit[data-tone="empty"] { color: #a8b9ca; }
 .fm-player-profile {
-  min-height: 34px;
+  min-width: 44px;
+  min-height: 44px;
   padding: 4px 3px;
   border: 1px solid rgba(103, 163, 231, .45);
   border-radius: 6px;
@@ -453,8 +454,9 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
   .fm-tactics-grid > .pitch-stage #lineupSlots,
   .fm-tactics-grid > .fm-phase-panel .fm-phase-pitch { width: min(100%, 440px); aspect-ratio: 4 / 5; min-height: 0; }
   .fm-squad-column-head,
-  .fm-squad-row { grid-template-columns: 34px minmax(0, 1fr) minmax(47px, .65fr) 44px 42px; gap: 3px; }
-  .fm-squad-row { font-size: .7rem; }
+  .fm-squad-row { grid-template-columns: 34px minmax(0, 1fr) minmax(43px, .65fr) 44px 48px; gap: 3px; }
+  .fm-squad-row { font-size: .74rem; }
+  .fm-player-profile { font-size: .66rem; }
   .fm-panel-heading p { font-size: .68rem; }
   .fm-tactics-bench .pitch-bench-head { display: grid; gap: 5px; }
   .fm-tactics-bench .bench-player-card { flex-basis: 150px; }
