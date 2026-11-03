@@ -553,3 +553,35 @@ html[data-manager-office-calendar-v1="active"] manager-next-action #nextActionSt
     gap: 8px;
   }
 }
+
+
+/* v1.0 medium-phone continuity (431–760px).
+   Previously these widths reverted to a tall match hero and placed
+   Manageruka below Season/Inbox; preserve the same decision order as <=430px.
+   League manager shell only: no effects on other modes or persisted state. */
+@media (min-width: 431px) and (max-width: 760px) {
+  html.hgfm-universe-v2[data-manager-compact-dock="mobile"] .fmuv-home-grid {
+    grid-template-areas: "match" "week" "season" "inbox";
+    gap: 9px;
+  }
+  html.hgfm-universe-v2[data-manager-compact-dock="mobile"] .fmuv-match {
+    min-height: 0;
+  }
+  html.hgfm-universe-v2[data-manager-compact-dock="mobile"] .fmuv-match-name {
+    min-height: 0;
+    font-size: 1.28rem;
+    line-height: 1.16;
+  }
+  html.hgfm-universe-v2[data-manager-compact-dock="mobile"] .fmuv-screen {
+    gap: 9px;
+  }
+  html.hgfm-universe-v2[data-manager-compact-dock="mobile"] .fmuv-panel {
+    padding: 11px;
+    gap: 9px;
+    border-radius: 10px;
+  }
+  html.hgfm-universe-v2[data-manager-compact-dock="mobile"] .fmuv-actions > button,
+  html.hgfm-universe-v2[data-manager-compact-dock="mobile"] .fmuv-quick-action {
+    min-height: 44px;
+  }
+}
