@@ -276,3 +276,24 @@ test("stående mobil beholder redigerbar bane uten skrivebeskyttet sammenligning
   await expect(page.locator("#lineupSlots")).toBeVisible();
   await expect(page.locator("#fmAttackPitch")).toBeHidden();
 });
+
+
+test("fasevalg på mobil og sammenligning på iPad beholder 44px handlinger", async ({ page }) => {
+  for (const width of [390, 768]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.locator('[data-fm-view="phase"]').click();
+    await expect(page.locator("#fmPhasePitch")).toBeVisible();
+    const heights = await page.locator(".fm-phase-controls button:visible")
+      .evaluateAll((buttons) => buttons.map((button) => button.getBoundingClientRect().height));
+    expect(heights.length, "visible phase actions at " + width).toBeGreaterThanOrEqual(2);
+    expect(heights.every((height) => height >= 44), "phase touch targets at " + width).toBe(true);
+  }
+
+  await page.setViewportSize({ width: 1024, height: 768 });
+  const compare = page.locator("#fmComparePhases");
+  await expect(compare).toBeVisible();
+  expect(await compare.evaluate((button) => button.getBoundingClientRect().height))
+    .toBeGreaterThanOrEqual(44);
+  await compare.click();
+  await expect(compare).toHaveAttribute("aria-pressed", "true");
+});

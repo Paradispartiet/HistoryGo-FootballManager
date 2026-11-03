@@ -58,7 +58,7 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
 .fm-attack-panel { display: none; }
 .fm-compare-switch {
   justify-self: start;
-  min-height: 42px;
+  min-height: 44px;
   padding: 8px 14px;
   border: 1px solid #398fc0;
   border-radius: 9px;
@@ -204,7 +204,7 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
   background: #08182b;
 }
 .fm-phase-controls button {
-  min-height: 42px;
+  min-height: 44px;
   border: 1px solid transparent;
   border-radius: 8px;
   background: transparent;
