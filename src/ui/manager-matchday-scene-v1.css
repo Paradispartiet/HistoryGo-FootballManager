@@ -425,13 +425,26 @@
     min-width: 0;
   }
 
+  /* Four real status actions use two short rows rather than a tall phone list.
+     Let long Norwegian labels wrap without clipping the actions. */
   .matchday-scene-status-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem;
   }
 
   .matchday-scene-status-card {
-    min-height: 0;
+    min-height: 72px;
+    min-width: 0;
+    padding: 0.65rem;
+    gap: 0.25rem;
   }
+  .matchday-scene-status-card strong { font-size: 0.86rem; }
+  .matchday-scene-status-card small { font-size: 0.7rem; }
+  .matchday-scene-versus .matchday-scene-team,
+  .matchday-scene-versus .matchday-scene-marker {
+    min-height: 5.25rem;
+  }
+  .matchday-scene-priority { padding: 0.7rem; gap: 0.6rem; }
 }
 
 
