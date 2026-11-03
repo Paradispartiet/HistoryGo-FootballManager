@@ -707,3 +707,46 @@
   .manager-player-summary-card h4 { font-size: .72rem; }
   .manager-player-summary-items span { font-size: .71rem; }
 }
+
+/* Separate documented historical observations from modeled game estimates. */
+.manager-roster-sourced-style {
+  color: #f0e3bb;
+  overflow-wrap: anywhere;
+}
+.manager-player-source-evidence {
+  margin: 0 0 .7rem;
+  padding: .7rem .8rem;
+  border: 1px solid rgba(235, 209, 151, .3);
+  background: rgba(235, 209, 151, .07);
+  min-width: 0;
+}
+.manager-player-source-evidence h4 {
+  margin: 0 0 .3rem;
+  font-size: .8rem;
+  color: #f1dfb5;
+}
+.manager-player-source-evidence p {
+  margin: 0 0 .45rem;
+  font-size: .82rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.manager-player-source-evidence .is-missing {
+  color: rgba(255,255,255,.66);
+  margin-bottom: 0;
+}
+.manager-player-source-link {
+  font-size: .76rem;
+  color: #cfe9ff;
+  text-decoration: underline;
+  text-underline-offset: .14rem;
+  overflow-wrap: anywhere;
+}
+.manager-player-source-link:focus-visible {
+  outline: 2px solid #cfe9ff;
+  outline-offset: 3px;
+}
+@media (max-width: 680px) {
+  .manager-player-source-evidence { padding: .65rem; }
+  .manager-player-source-evidence p { font-size: .78rem; }
+}

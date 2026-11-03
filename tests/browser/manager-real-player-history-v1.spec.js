@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { getPlayerClubHistory, getPlayerSummary, createRosterViewModel } from "../../src/ui/manager-player-workspace-v1.js";
+import { getPlayerClubHistory, getPlayerSummary, getPlayerSourcedSummary, createRosterViewModel } from "../../src/ui/manager-player-workspace-v1.js";
 
 test("real-player history helper never invents club identities", () => {
   const clubs = new Map([["lyn", "Lyn"], ["rana", "Rana"]]);
@@ -38,6 +38,24 @@ test("card summary uses only registered traits and openly marks modeled informat
   expect(summary.preferredRoles).toEqual(["Boksspiss"]);
   expect(getPlayerSummary({ id: "unknown", archetypes: [] }).registeredStrengths).toEqual([]);
   expect(getPlayerSummary({ id: "unknown", strengths: [] }).modelTraits).toEqual([]);
+});
+
+
+test("historical playing styles require an individually registered source and preserve P1 priority", () => {
+  const p1 = getPlayerSourcedSummary({ id: "torgeir_borven", sourcePlaceIds: ["skagerak_arena"] });
+  expect(p1?.sourceUrl).toContain("aftenposten.no");
+  expect(p1?.description).toContain("Odd-spiss");
+
+  const p2 = getPlayerSourcedSummary({ id: "erik_mykland", sourcePlaceIds: [] }, {
+    attributeNames: new Map([["dribbling", { name: "Dribling" }]])
+  });
+  expect(p2?.sourceUrl).toBe("https://snl.no/Erik_Mykland");
+  expect(p2?.description).toContain("Dribling");
+
+  const depth = getPlayerSourcedSummary({ id: "eidur_gudjohnsen", sourcePlaceIds: [] });
+  expect(depth?.sourceUrl).toContain("bt.no");
+  expect(getPlayerSourcedSummary({ id: "erik_mykland", sourcePlaceIds: ["skagerak_arena"] })).toBeNull();
+  expect(getPlayerSourcedSummary({ id: "unknown", sourcePlaceIds: [] })).toBeNull();
 });
 
 test.beforeEach(async ({ page }) => {
@@ -94,3 +112,18 @@ test("player details preserve club history and disclose that 1–20 ratings are 
   await expect(dialog.getByText("Registrert klubbhistorikk")).toBeVisible();
   await expect(dialog.getByText(initialHistory)).toHaveCount(2);
 });
+
+test("historical source is linked inside the real player profile and history tab", async ({ page }) => {
+  await page.evaluate(() => {
+    window.dispatchEvent(new CustomEvent("hgfm:open-player-profile", {
+      detail: { playerId: "erik_mykland", allowLocked: true }
+    }));
+  });
+  const dialog = page.locator("#managerPlayerProfileDialog");
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator(".manager-player-summary .manager-player-source-evidence")).toContainText("Dribling");
+  await expect(dialog.locator(".manager-player-summary .manager-player-source-link")).toHaveAttribute("href", "https://snl.no/Erik_Mykland");
+  await dialog.locator(".manager-player-profile-tabs button").filter({ hasText: "Historikk" }).click();
+  await expect(dialog.locator(".manager-player-history-card .manager-player-source-link")).toHaveAttribute("href", "https://snl.no/Erik_Mykland");
+});
+
