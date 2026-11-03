@@ -10301,6 +10301,18 @@ async function openManagerMatchdayTarget(target) {
   const carryProblemToNextWeek = target === "carry_training_problem_next_week";
   if (target === "next_week" || carryProblemToNextWeek) {
     const lastMatch = state.matchday?.lastMatch;
+    // Commit the handoff only once the canonical week transition succeeds.
+    if (carryProblemToNextWeek && !lastMatch?.trainingExerciseHypothesis) return;
+
+    markMatchReportSeen();
+    const currentWeek = Number(state.clubWeekState?.week) || 1;
+    if (state.clubWeekState?.phase === "review" && !getClubWeekMatchdayGate().isBlocked) {
+      await advanceClubWeekPhaseAction();
+    }
+    const rolledToNextWeek = Number(state.clubWeekState?.week) > currentWeek
+      && state.clubWeekState?.phase === "analysis";
+    if (!rolledToNextWeek) return;
+
     if (carryProblemToNextWeek) {
       const hypothesis = lastMatch?.trainingExerciseHypothesis;
       if (!hypothesis) return;
@@ -10320,15 +10332,6 @@ async function openManagerMatchdayTarget(target) {
         try { state.modeEnvelope = persistModeEnvelope(localStorage, state.modeEnvelope); } catch (_) { /* memory-only */ }
       }
     }
-
-    markMatchReportSeen();
-    const currentWeek = Number(state.clubWeekState?.week) || 1;
-    if (state.clubWeekState?.phase === "review" && !getClubWeekMatchdayGate().isBlocked) {
-      await advanceClubWeekPhaseAction();
-    }
-    const rolledToNextWeek = Number(state.clubWeekState?.week) > currentWeek
-      && state.clubWeekState?.phase === "analysis";
-    if (!rolledToNextWeek) return;
 
     // Neste manageruke vises i Kalender; Kontor har nå Innboks som standard.
     activateTab("calendar");
