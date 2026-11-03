@@ -1,6 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const FULL_SEASON_SPEC = /manager-career-full-season-playthrough-v1\.spec\.js/;
+const WEBKIT_TRAINING_SPEC = /manager-training-webkit-mobile\.spec\.js/;
 
 export default defineConfig({
   testDir: "./tests/browser",
@@ -22,7 +23,7 @@ export default defineConfig({
   projects: [
     {
       name: "chromium",
-      testIgnore: FULL_SEASON_SPEC,
+      testIgnore: [FULL_SEASON_SPEC, WEBKIT_TRAINING_SPEC],
       use: { ...devices["Desktop Chrome"] }
     },
     {
@@ -30,6 +31,17 @@ export default defineConfig({
       testMatch: FULL_SEASON_SPEC,
       dependencies: ["chromium"],
       use: { ...devices["Desktop Chrome"] }
+    },
+    // Safari-engine training coverage, separate from the existing tactics WebKit lane.
+    {
+      name: "webkit-training-iphone",
+      testMatch: WEBKIT_TRAINING_SPEC,
+      use: { ...devices["iPhone 13"] }
+    },
+    {
+      name: "webkit-training-ipad",
+      testMatch: WEBKIT_TRAINING_SPEC,
+      use: { ...devices["iPad (gen 7)"] }
     },
     ...(process.env.HGFM_TACTICS_WEBKIT === "1" ? [{
       // Opt-in Safari-engine check; physical iPad Safari sign-off is separate.

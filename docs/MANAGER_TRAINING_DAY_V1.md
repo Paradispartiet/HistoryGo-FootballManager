@@ -32,6 +32,15 @@ Hovedflaten skal vise det manageren trenger for den faktiske treningsdagen:
 
 Den gamle kommandoflaten og den pedagogiske stegvisningen beholdes som underliggende DOM/state-kilder, men skal ikke konkurrere visuelt med treningsdagen.
 
+## Troppstilstand og neste steg (kompakt visning)
+
+- **Navngitt oppfølging:** Den eksisterende `#squadConditionList` er fortsatt sannhetskilden for hvilke spillere som er skadde eller trenger hvile. Treningsdagen viser disse som en sammenleggbar, tilgjengelig liste i troppstilstandskortet. Er det ingen slike spillere, skjules listen uten at vi dikter opp et varsel.
+- **Neste treningsvalg:** Treningsdagen leser `#trainingPlanSteps` og `#trainingChoiceStatus`, som allerede rendres av `football-training-plan.js`. Innboks åpnes via gjeldende planhandling; program, fokus og individuell oppfølging åpnes via de eksisterende Lag-valgdrawerene.
+- **Plan klar:** Når eksisterende ukeplan er klar, viser den kompakte handlingslinjen veien til Kamp. Individuell oppfølging forblir valgfri, også når planen har et uferdig individuelt steg.
+- **Samsvar mellom program og fokus:** Treningsdagen viser den eksisterende meldingen fra `#trainingPlanCoherence`, med samme `data-level` og særskilt synlig varsel ved `sprik`. Det introduserer ingen egen vurdering eller effektberegning.
+- Den globale **«Neste handling»** styrer fortsatt klubbukas progresjon; lokal handlingslinje i treningen introduserer verken ekstra fase, bonus, belastningsberegning, eller lagringsnøkkel.
+- Kilden til navngitt spillerstatus og plansteg beholdes i skjult DOM for kompatibilitet med appens opprinnelige renderere. Bare korte, lesbare presentasjoner vises på treningsdagen.
+
 ## Valg
 
 Alternativer skal ikke fjernes.
