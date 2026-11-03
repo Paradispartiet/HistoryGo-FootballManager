@@ -127,3 +127,52 @@ test("historical source is linked inside the real player profile and history tab
   await expect(dialog.locator(".manager-player-history-card .manager-player-source-link")).toHaveAttribute("href", "https://snl.no/Erik_Mykland");
 });
 
+
+test("mobilprofil er kompakt og har 44px lukkeknapp og faner uten å miste kildehistorikken", async ({ page }) => {
+  await page.evaluate(() => {
+    window.dispatchEvent(new CustomEvent("hgfm:open-player-profile", {
+      detail: { playerId: "erik_mykland", allowLocked: true }
+    }));
+  });
+  const dialog = page.locator("#managerPlayerProfileDialog");
+  await expect(dialog).toBeVisible();
+
+  for (const width of [360, 390, 430, 768]) {
+    await page.setViewportSize({ width, height: 844 });
+    const dimensions = await dialog.evaluate((modal) => {
+      const box = (selector) => modal.querySelector(selector).getBoundingClientRect();
+      const close = box(".manager-player-profile-close");
+      const pitch = box(".manager-player-mini-pitch");
+      const tabs = [...modal.querySelectorAll(".manager-player-profile-tabs button")]
+        .map((button) => button.getBoundingClientRect().height);
+      return {
+        closeWidth: close.width,
+        closeHeight: close.height,
+        pitchWidth: pitch.width,
+        pitchHeight: pitch.height,
+        modalRight: modal.getBoundingClientRect().right,
+        tabHeights: tabs,
+        overflow: modal.scrollWidth - modal.clientWidth
+      };
+    });
+    expect(dimensions.closeWidth, "close width at " + width).toBeGreaterThanOrEqual(44);
+    expect(dimensions.closeHeight, "close height at " + width).toBeGreaterThanOrEqual(44);
+    expect(dimensions.tabHeights.length, "tabs at " + width).toBeGreaterThanOrEqual(2);
+    expect(dimensions.tabHeights.every((height) => height >= 44), "tab targets at " + width).toBe(true);
+    expect(dimensions.modalRight, "modal edge at " + width).toBeLessThanOrEqual(width + 1);
+    expect(dimensions.overflow, "modal overflow at " + width).toBeLessThanOrEqual(1);
+    if (width <= 430) {
+      expect(dimensions.pitchWidth, "compact pitch width at " + width).toBeLessThanOrEqual(181);
+      expect(dimensions.pitchHeight, "compact pitch height at " + width).toBeLessThanOrEqual(281);
+    }
+  }
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(dialog.locator(".manager-player-summary .manager-player-source-link"))
+    .toHaveAttribute("href", "https://snl.no/Erik_Mykland");
+  await dialog.locator(".manager-player-profile-tabs button").filter({ hasText: "Historikk" }).click();
+  await expect(dialog.locator(".manager-player-history-card .manager-player-source-link"))
+    .toHaveAttribute("href", "https://snl.no/Erik_Mykland");
+  await dialog.locator(".manager-player-profile-close").click();
+  await expect(dialog).toBeHidden();
+});
