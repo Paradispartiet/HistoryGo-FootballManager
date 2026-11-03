@@ -313,7 +313,7 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
 .fm-squad-rows { display: grid; min-width: 0; }
 .fm-squad-row {
   min-height: 48px;
-  padding: 5px 4px;
+  padding: 2px 4px;
   border-bottom: 1px solid rgba(136, 190, 224, .1);
   font-size: .7rem;
 }
