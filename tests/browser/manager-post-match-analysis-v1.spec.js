@@ -165,3 +165,49 @@ test("etterkampen har en låst visuell baseline på nettbrett", async ({ page })
     maxDiffPixelRatio: 0.04
   });
 });
+
+test("etterkampens hovedforklaring beholder bredden mens støttekortene samles på mellomstore mobiler", async ({ page }) => {
+  await renderFixture(page, 390, 844);
+  const overview = page.locator(".matchday-post-match-overview");
+  const cards = overview.locator(".matchday-post-match-card");
+  await expect(cards).toHaveCount(3);
+
+  for (const width of [360, 390, 430, 500, 600]) {
+    await page.setViewportSize({ width, height: 844 });
+    const metrics = await overview.evaluate((container) => {
+      const cards = [...container.querySelectorAll(".matchday-post-match-card")];
+      const boxes = cards.map((item) => item.getBoundingClientRect());
+      const style = getComputedStyle(container);
+      return {
+        columns: style.gridTemplateColumns.split(" ").length,
+        firstTop: boxes[0].top,
+        secondTop: boxes[1].top,
+        thirdTop: boxes[2].top,
+        mainFullWidth: Math.abs(boxes[0].width - container.getBoundingClientRect().width) <= 2,
+        sideBySide: Math.abs(boxes[1].top - boxes[2].top) <= 2,
+        cardPadding: parseFloat(getComputedStyle(cards[0]).paddingTop),
+        pageOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+      };
+    });
+    const label = "etterkamp " + width + "px";
+    expect(metrics.cardPadding, label).toBeLessThanOrEqual(12);
+    expect(metrics.pageOverflow, label).toBeLessThanOrEqual(1);
+    expect(metrics.mainFullWidth, label).toBe(true);
+    if (width <= 430) {
+      expect(metrics.columns, label).toBe(1);
+      expect(metrics.secondTop, label).toBeGreaterThan(metrics.firstTop);
+      expect(metrics.thirdTop, label).toBeGreaterThan(metrics.secondTop);
+    } else {
+      expect(metrics.columns, label).toBe(2);
+      expect(metrics.sideBySide, label).toBe(true);
+      expect(metrics.secondTop, label).toBeGreaterThan(metrics.firstTop);
+    }
+  }
+
+  await expect(overview.getByText("Hvorfor kampen endte slik")).toBeVisible();
+  await expect(overview.getByText("Taktisk evaluering")).toBeVisible();
+  await expect(overview.getByText("Trening, belastning og relasjoner")).toBeVisible();
+  await page.locator('.matchday-post-match-primary[data-matchday-target="carry_training_problem_next_week"]').click();
+  await expect.poll(() => page.evaluate(() => window.__postMatchTargets))
+    .toContain("carry_training_problem_next_week");
+});
