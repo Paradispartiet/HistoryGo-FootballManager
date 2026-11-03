@@ -74,6 +74,9 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript((season) => {
+    // Init scripts run on every reload. Seed only the first navigation so
+    // reload tests can verify actual persistence rather than reset the save.
+    if (localStorage.getItem("hgfm.matchdaySceneFixtureSeeded.v1") === "1") return;
     const clubWeekState = {
       week: 1,
       phase: "matchday",
@@ -132,6 +135,7 @@ test.beforeEach(async ({ page }) => {
         national: null
       }
     }));
+    localStorage.setItem("hgfm.matchdaySceneFixtureSeeded.v1", "1");
   }, seededSeason());
   await page.goto("/");
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
@@ -623,4 +627,139 @@ test("v1: mobilflyten Hjem → Taktikk → Kamp → Etterkamp bruker samme lag o
   await expect(scene.locator(".matchday-scene-report")).toBeVisible();
   await expect(scene.locator(".matchday-post-match")).toBeVisible();
   await noOverflow("Etterkamp", 390);
+});
+
+
+test("fase 2: etterkampforslag lagres først ved ny uke, vises kun den uka og velges ikke automatisk", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.evaluate(() => {
+    const lastMatch = {
+      id: "report-to-week2-training",
+      version: 2,
+      outcome: "draw",
+      score: { for: 0, against: 0 },
+      expectedGoals: { for: 1.1, against: 0.9 },
+      opponent: { id: "brann", name: "Brann", style: "høyt press" },
+      formationSnapshot: { name: "4-2-3-1", baseShape: "4-2-3-1" },
+      tacticSnapshot: { name: "Balansert" },
+      playerStats: { goals: [] }, decisions: [],
+      clubConsequences: { effects: {} },
+      playedInClubWeek: 1,
+      trainingFocus: {
+        focusId: "rest_defence", name: "Restforsvar",
+        summary: "Kontringsrommet var for åpent etter balltap."
+      },
+      trainingExerciseHypothesis: {
+        archetypeId: "rest_defence",
+        week: 1,
+        title: "Restforsvar",
+        hypothesis: "Sikringen må stå igjen ved balltap.",
+        watch: "Hvem sikrer midtrommet når backene går fram?"
+      },
+      leagueContext: {
+        fixtureId: "matchday-r1-0", round: 1, homeAway: "home",
+        opponentId: "brann", opponentName: "Brann",
+        ground: "Lerkendal", competitionLabel: "Eliteserien"
+      }
+    };
+    const matchday = { lastMatch, session: null, lastSeenMatchId: null };
+    localStorage.setItem("hgfm.matchday.v1", JSON.stringify(matchday));
+    const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
+    merits.clubWeekState = {
+      ...(merits.clubWeekState || {}), week: 1, phase: "review"
+    };
+    localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify(merits));
+    localStorage.setItem("hgfm.clubWeekState.v1", JSON.stringify(merits.clubWeekState));
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "{}");
+    if (envelope.sessions?.league) {
+      envelope.sessions.league.matchday = matchday;
+      envelope.sessions.league.clubWeekState = merits.clubWeekState;
+      envelope.sessions.league.trainingProblemSuggestion = null;
+      localStorage.setItem("hgfm.modeSessions.v1", JSON.stringify(envelope));
+    }
+  });
+  await page.reload();
+  await openMatchday(page);
+  const scene = page.locator("#matchdayCommand .matchday-scene");
+  await expect(scene).toHaveAttribute("data-phase", "report");
+  const carry = scene.locator('.matchday-post-match-primary[data-matchday-target="carry_training_problem_next_week"]');
+  await expect(carry).toBeVisible();
+
+  await carry.click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  const after = await page.evaluate(() => {
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "{}");
+    const session = envelope.sessions?.league || {};
+    return {
+      week: session.clubWeekState?.week,
+      phase: session.clubWeekState?.phase,
+      suggestion: session.trainingProblemSuggestion,
+      focus: session.weeklyTrainingFocus,
+      program: session.weeklyTrainingProgram
+    };
+  });
+  expect(after.week).toBe(2);
+  expect(after.phase).toBe("analysis");
+  expect(after.suggestion).toMatchObject({
+    sourceMatchId: "report-to-week2-training",
+    sourceWeek: 1,
+    targetWeek: 2,
+    archetypeId: "rest_defence"
+  });
+  expect(after.focus).toBeNull();
+  expect(after.program).toBeNull();
+
+  // Wait until startup has hydrated the saved mode session and rendered the
+  // football controls, not merely until the static training section exists.
+  await page.reload();
+  await expect(page.locator("#formationSelect option").first()).toBeAttached({ timeout: 30000 });
+  const restored = await page.evaluate(() => {
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "{}");
+    const active = envelope.sessions?.[envelope.activeMode];
+    return {
+      activeMode: envelope.activeMode,
+      week: active?.clubWeekState?.week,
+      targetWeek: active?.trainingProblemSuggestion?.targetWeek,
+      sourceMatchId: active?.trainingProblemSuggestion?.sourceMatchId
+    };
+  });
+  expect(restored).toMatchObject({
+    activeMode: "league",
+    week: 2,
+    targetWeek: 2,
+    sourceMatchId: "report-to-week2-training"
+  });
+  await page.locator('.main-nav [data-tab-target="tactics"]').click();
+  await page.locator('.app-subtab[data-tab-target="trening"]').click();
+  await expect(page.locator("#managerTrainingDay")).toBeVisible();
+  const suggestion = page.locator("#trainingDayProblemSuggestion");
+  await expect(suggestion).toBeVisible();
+  await expect(suggestion).toContainText("Overgangsproblemet fra forrige kamp");
+  await expect(suggestion).toContainText("Hvem sikrer midtrommet");
+  await page.locator("#trainingDayChooseSuggestedFocus").click();
+  await expect(page.locator("#managerTeamChoiceDrawer")).toBeVisible();
+  const chosen = await page.evaluate(() => {
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "{}");
+    return envelope.sessions?.league?.weeklyTrainingFocus ?? null;
+  });
+  expect(chosen).toBeNull();
+
+  // An unresolved recommendation must not appear as if it belongs to week 3.
+  await page.evaluate(() => {
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "{}");
+    envelope.sessions.league.clubWeekState = {
+      ...envelope.sessions.league.clubWeekState, week: 3, phase: "analysis"
+    };
+    localStorage.setItem("hgfm.modeSessions.v1", JSON.stringify(envelope));
+    const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
+    merits.clubWeekState = { ...(merits.clubWeekState || {}), week: 3, phase: "analysis" };
+    localStorage.setItem("hgfm.teamMerits.v1", JSON.stringify(merits));
+    localStorage.setItem("hgfm.clubWeekState.v1", JSON.stringify(merits.clubWeekState));
+  });
+  await page.reload();
+  await expect(page.locator("#formationSelect option").first()).toBeAttached({ timeout: 30000 });
+  await page.locator('.main-nav [data-tab-target="tactics"]').click();
+  await page.locator('.app-subtab[data-tab-target="trening"]').click();
+  await expect(page.locator("#managerTrainingDay")).toBeVisible();
+  await expect(page.locator("#trainingDayProblemSuggestion")).toBeHidden();
 });

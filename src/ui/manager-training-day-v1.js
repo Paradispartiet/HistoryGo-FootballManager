@@ -478,7 +478,11 @@ function renderTrainingDay() {
   const load = surface.querySelector("#trainingDayLoad");
   const opponent = surface.querySelector("#trainingDayOpponent");
   const learningState = activeModeLearningState();
-  const suggestion = learningState.trainingProblemSuggestion;
+  const carriedSuggestion = learningState.trainingProblemSuggestion;
+  // A match report suggestion belongs to one specific next week. Never show
+  // last week’s unresolved advice as if it were for the active training day.
+  const suggestion = Number(carriedSuggestion?.targetWeek) === context.week
+    ? carriedSuggestion : null;
 
   if (program) program.textContent = selectedProgramTitle();
   if (focus) focus.textContent = selectedFocus();
