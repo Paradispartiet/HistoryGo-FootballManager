@@ -1,2 +1,51 @@
-.manager-staff-roster-v1{display:grid;gap:1rem;margin:0 0 1.2rem;padding:1rem;border:1px solid rgba(255,255,255,.55);background:#000;color:#fff}
-.manager-staff-roster-v1 .eyebrow,.manager-staff-roster-v1 .muted-text{color:#fff}.staff-roster-head{display:flex;align-items:end;justify-content:space-between;gap:1rem}.staff-roster-head h2{margin:.15rem 0 .35rem}.staff-roster-total{white-space:nowrap;font-size:1.05rem}.staff-role-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7rem}.staff-role-slot{min-width:0;padding:.75rem;border-top:2px solid rgba(255,255,255,.75);background:rgba(255,255,255,.04)}.staff-role-slot-head{display:flex;justify-content:space-between;gap:.5rem}.staff-role-count{font-variant-numeric:tabular-nums}.staff-role-names{margin:.55rem 0 0;padding-left:1.05rem}.staff-role-names li+li{margin-top:.25rem}.staff-role-missing,.staff-roster-status{margin:.55rem 0 0}.manager-staff-roster-v1[data-complete="true"] .staff-roster-status{font-weight:700}@media(max-width:760px){.staff-roster-head{align-items:start;flex-direction:column}.staff-role-grid{grid-template-columns:1fr 1fr}}@media(max-width:430px){.manager-staff-roster-v1{padding:.8rem}.staff-role-grid{grid-template-columns:1fr}.staff-role-slot-head{align-items:baseline}}
+/* Kontor / Stab: narrow-screen workspace, not a long administration page. */
+.staff-workspace-v2{display:grid;gap:12px;min-width:0;max-width:1120px;margin-inline:auto;padding:clamp(10px,2.4vw,22px)}
+.staff-workspace-v2 .panel{min-width:0;margin:0}
+.staff-workspace-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 2px}
+.staff-workspace-header .eyebrow{margin:0 0 4px;color:var(--muted)}
+.staff-workspace-header h2{margin:0;font-size:clamp(1.35rem,3.8vw,1.9rem);line-height:1.15}
+.staff-workspace-header p:last-child{margin:6px 0 0;color:var(--muted);font-size:.91rem;line-height:1.4}
+.staff-workspace-count{flex:0 0 auto;font-size:.85rem;padding:7px 10px;border:1px solid var(--line);border-radius:9px;white-space:nowrap}
+.manager-staff-roster-v1{display:grid;gap:12px;min-width:0;margin:0;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--panel-strong);color:var(--text)}
+.staff-roster-head{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0}
+.staff-roster-head h2{font-size:1.06rem;line-height:1.3;margin:1px 0}
+.staff-roster-head .eyebrow{margin:0;color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em}
+.staff-roster-head .muted-text{margin:4px 0 0;font-size:.85rem;line-height:1.35}
+.staff-roster-total{flex:0 0 auto;white-space:nowrap;font-size:.82rem;font-variant-numeric:tabular-nums;border:1px solid var(--line);padding:6px 8px;border-radius:8px}
+.staff-role-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;min-width:0}
+.staff-role-slot{min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.035)}
+.staff-role-slot-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;font-size:.9rem}
+.staff-role-slot-head strong{min-width:0;overflow-wrap:anywhere}
+.staff-role-count{flex:0 0 auto;color:var(--muted);font-variant-numeric:tabular-nums;font-size:.83rem}
+.staff-role-names{margin:7px 0 0;padding-left:1rem;font-size:.82rem;overflow-wrap:anywhere}
+.staff-role-names li+li{margin-top:4px}
+.staff-role-missing{margin:6px 0 0;font-size:.81rem;color:var(--muted)}
+.staff-roster-status{margin:0;color:var(--muted);font-size:.81rem;line-height:1.4}
+.manager-staff-roster-v1[data-complete="true"] .staff-roster-status{color:var(--text);font-weight:700}
+.staff-recruitment-available{display:grid;gap:12px;padding:14px}
+.staff-recruitment-heading h3{font-size:1.1rem;margin:0 0 4px}
+.staff-recruitment-heading p{font-size:.85rem;line-height:1.4;margin:0}
+.staff-candidate-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;min-width:0}
+.staff-candidate-list .staff-person-card{display:flex;align-items:center;flex-wrap:wrap;gap:5px 10px;min-width:0;padding:12px;background:var(--panel-strong);border:1px solid var(--line);border-radius:10px}
+.staff-person-card .unlock-card-title{flex:1 1 100%;font-size:1rem;line-height:1.3;margin:0;overflow-wrap:anywhere}
+.staff-person-card .unlock-meta{flex:1 1 100%;font-size:.84rem;line-height:1.35;overflow-wrap:anywhere}
+.staff-person-card .unlock-card-action{margin:4px 0 0;padding:9px 14px;min-height:42px;font-size:.89rem;cursor:pointer}
+.staff-person-card .unlock-status{margin:4px 0 0;font-size:.85rem}
+.staff-workspace-fold{padding:0 14px}
+.staff-workspace-fold>summary{cursor:pointer;list-style:revert;padding:14px 2px;font-weight:750}
+.staff-workspace-fold[open]{padding-bottom:14px}
+.staff-workspace-fold .staff-candidate-list{margin-top:8px}
+.staff-operations-count{margin:10px 0;font-size:.88rem}
+.staff-workspace-fold .admin-metrics{margin:0}
+@media(max-width:800px){.staff-role-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){
+  .staff-workspace-v2{gap:10px;padding:10px}
+  .staff-workspace-header{align-items:flex-start}
+  .staff-workspace-header p:last-child{max-width:28ch}
+  .staff-workspace-count{font-size:.77rem}
+  .staff-candidate-list{grid-template-columns:minmax(0,1fr)}
+  .staff-roster-head{align-items:flex-start}
+  .staff-roster-total{font-size:.76rem}
+  .staff-role-slot{padding:9px}
+}
+@media(max-width:350px){.staff-workspace-header{flex-wrap:wrap}.staff-roster-head{flex-wrap:wrap}.staff-role-grid{grid-template-columns:1fr}}

@@ -8019,6 +8019,55 @@ body { grid-template-columns: minmax(0, 1fr); }
 
 .matchday-minute-text { min-width: 0; }
 
+/* Defensive replay evidence stays inside the existing tactical disclosure;
+   one restrained status, no extra card or invented match observation. */
+.matchday-tactical-moment {
+  grid-column: 2 / -1;
+  min-width: 0;
+  margin: 6px 0 2px;
+  border-left: 2px solid var(--line-soft);
+  padding-left: 9px;
+  overflow-wrap: anywhere;
+}
+
+.matchday-tactical-moment > summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.matchday-defensive-cover {
+  min-width: 0;
+  margin: 8px 0;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 2px solid var(--line-soft);
+  border-radius: 0 6px 6px 0;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.matchday-defensive-cover[data-kind="in_time"] {
+  border-left-color: var(--good);
+}
+
+.matchday-defensive-cover[data-kind="late_task"],
+.matchday-defensive-cover[data-kind="late_handoff"],
+.matchday-defensive-cover[data-kind="late_recovery"],
+.matchday-defensive-cover[data-kind="wrong_corridor"] {
+  border-left-color: var(--hg-accent-warning);
+}
+
+.matchday-defensive-cover > strong {
+  font-size: 0.81rem;
+}
+
+.matchday-defensive-cover > p {
+  margin: 4px 0 0;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
 .matchday-minute.is-goal {
   background: rgba(70, 214, 140, 0.12);
   font-weight: 800;

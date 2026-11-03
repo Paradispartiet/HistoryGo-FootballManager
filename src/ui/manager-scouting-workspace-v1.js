@@ -272,6 +272,11 @@ function createRecruitableWorkspace() {
   workspace.id = RECRUITABLE_ID;
   workspace.innerHTML = `
     <header class="scouting-head"><div><p class="eyebrow">Speiding · Min spillerpool</p><h2>Min spillerpool</h2><p class="muted-text">History Go-samlingen avgjør hvem som finnes her. Velg hvilke spillere klubben bruker i troppen; alternativer blir liggende i spillerpoolen.</p></div><strong id="scoutingRecruitableCount">0 spillere</strong></header>
+    <div class="fmuv-recruit-kpis" aria-label="Spillerpoolens status">
+      <article><span>I spillerpoolen</span><strong id="fmuvRecruitTotal">0</strong></article>
+      <article><span>Valgt til troppen</span><strong id="fmuvRecruitSquad">0</strong></article>
+      <article><span>Tilgjengelige valg</span><strong id="fmuvRecruitAvailable">0</strong></article>
+    </div>
     <form id="scoutingRecruitableTools" class="scouting-tools" role="search"><label><span>Søk spiller</span><input id="scoutingRecruitableSearch" type="search" autocomplete="off" placeholder="Navn, rolle eller sted"></label><label><span>Posisjon</span><select id="scoutingRecruitablePosition"><option value="all">Alle posisjoner</option></select></label></form>
     <p id="scoutingRecruitmentFeedback" class="scouting-recruitment-feedback" aria-live="polite"></p>
     <div class="scouting-table-wrap"><table class="scouting-player-table"><thead><tr><th>Spiller</th><th>Posisjon</th><th>Roller</th><th>Samlet fra</th><th>Status</th><th>Handling</th></tr></thead><tbody id="scoutingRecruitableBody"></tbody></table><p id="scoutingRecruitableEmpty" class="scouting-empty" hidden>Ingen spillere i poolen matcher filtrene.</p></div>`;
@@ -404,6 +409,11 @@ function renderRecruitable() {
   const body = workspace.querySelector("#scoutingRecruitableBody");
   const empty = workspace.querySelector("#scoutingRecruitableEmpty");
   if (count) count.textContent = `${rows.length} av ${all.length} spillere`;
+  const chosen = all.filter((row) => row.isInSquad).length;
+  [["fmuvRecruitTotal", all.length], ["fmuvRecruitSquad", chosen], ["fmuvRecruitAvailable", all.length - chosen]].forEach(([id, value]) => {
+    const counter = workspace.querySelector("#" + id);
+    if (counter) counter.textContent = String(value);
+  });
   if (empty) empty.hidden = rows.length > 0;
   if (!body) return;
   const fragment = document.createDocumentFragment();

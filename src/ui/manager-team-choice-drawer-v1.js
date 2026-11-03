@@ -85,12 +85,13 @@ function ensureDrawer() {
 
 function restoreActiveMove() {
   if (!activeMove?.source) return;
-  const { source, parent, nextSibling } = activeMove;
+  const { source, parent, nextSibling, wasHidden } = activeMove;
   source.classList.remove("is-in-team-choice-drawer");
   if (parent?.isConnected) {
     const sibling = nextSibling?.parentElement === parent ? nextSibling : null;
     parent.insertBefore(source, sibling);
   }
+  source.hidden = wasHidden;
   activeMove = null;
 }
 
@@ -116,7 +117,8 @@ export function openManagerTeamChoiceDrawer({ source, title, eyebrow = "Lag · E
   const parent = source.parentElement;
   if (!parent) return false;
 
-  activeMove = { source, parent, nextSibling: source.nextSibling };
+  activeMove = { source, parent, nextSibling: source.nextSibling, wasHidden: source.hidden };
+  source.hidden = false;
   activeTrigger = trigger instanceof HTMLElement ? trigger : document.activeElement instanceof HTMLElement ? document.activeElement : null;
   drawer.querySelector("#managerTeamChoiceDrawerTitle").textContent = title || "Velg alternativ";
   drawer.querySelector("#managerTeamChoiceDrawerEyebrow").textContent = eyebrow;
@@ -269,7 +271,9 @@ function ensureTrainingSelectedState() {
 
   const program = trainingSource("trainingPrograms");
   const focus = trainingSource("weeklyTrainingOptions");
-  const individual = trainingSource("individualTrainingPicker");
+  // Move the *entire* individual panel: selected players, capacity, remove
+  // buttons and new assignments must remain together in the drawer.
+  const individual = trainingSource("individualTrainingStepBody");
   if (!program || !focus || !individual) return;
 
   const state = node("section", "manager-team-selected-state manager-training-selected-state");

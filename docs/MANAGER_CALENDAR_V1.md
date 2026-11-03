@@ -6,7 +6,7 @@ Kalender v1 er nå Kontorets tids- og orkestreringsflate. Den gjør manageruka s
 
 **Club Week er fortsatt sannhetskilden for uke og fase.** Kalenderen leser denne staten og projiserer den på mandag til søndag.
 
-Kalenderen er startflaten i en aktiv ligasave og Kontorets standardflate. Den viser hva som faktisk skjer i arbeidsdagen, og åpner de eksisterende arbeidsflatene der oppgaven hører hjemme.
+Kalenderen er Kontorets tidsflate, tilgjengelig som andre fane etter Innboks i en aktiv ligasave. Den viser hva som faktisk skjer i arbeidsdagen, og åpner de eksisterende arbeidsflatene der oppgaven hører hjemme.
 
 Det betyr:
 
@@ -17,9 +17,9 @@ Det betyr:
 
 ## Kontor etter redesign
 
-I normal managerloop åpner **Kontor** direkte på **Kalender**.
+I normal managerloop åpner **Kontor** direkte på **Innboks**. Innboks er Kontorets første fane, med **Kalender** som andre fane. De kan velges fritt uten automatisk videresending.
 
-Innboks er ikke lenger en parallell Kontor-fane. En melding er en hendelse i managerens dag, for eksempel:
+En melding er fortsatt også en hendelse i managerens dag i Kalender, for eksempel:
 
 ```text
 08:30 · Melding fra fysioterapeut
@@ -152,8 +152,8 @@ Permanent simulering låser:
 
 Browser-vakten låser:
 
-- aktiv ligasave starter direkte i Kalender;
-- separat Innboks-fane er skjult;
+- aktiv ligasave åpner Hjem, og Kontor åpner Innboks;
+- Innboks er første synlige Kontor-fane med lyse kortkanter og hvit tekst;
 - Klubbdrift presenteres som Klubben;
 - Oppstartshjelp er skjult etter oppstart;
 - syv valgbare dager;

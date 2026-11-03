@@ -318,12 +318,21 @@ function ensureNavigation() {
   }
   if (boardSection) boardSection.dataset.tabParent = "dashboard";
 
-  ["progression", "admin"].forEach((target) => {
-    const button = subnav?.querySelector(`.app-subtab[data-tab-target="${target}"]`);
-    if (button) button.classList.add("club-organization-deep-proxy");
-    const section = document.querySelector(`[data-tab-section="${target}"]`);
-    if (section) section.dataset.tabParent = "dashboard";
-  });
+  // Stab er et vanlig og synlig kontorvalg, ikke en skjult dyplenke.
+  const staffButton = subnav?.querySelector('.app-subtab[data-tab-target="admin"]');
+  if (staffButton) {
+    staffButton.dataset.subnavParent = "dashboard";
+    staffButton.classList.remove("club-organization-deep-proxy", "office-subnav-proxy");
+    staffButton.textContent = "Stab";
+    if (boardButton && boardButton.nextElementSibling !== staffButton) boardButton.after(staffButton);
+  }
+  const staffSection = document.querySelector('[data-tab-section="admin"]');
+  if (staffSection) staffSection.dataset.tabParent = "dashboard";
+
+  const progressionButton = subnav?.querySelector('.app-subtab[data-tab-target="progression"]');
+  if (progressionButton) progressionButton.classList.add("club-organization-deep-proxy");
+  const progressionSection = document.querySelector('[data-tab-section="progression"]');
+  if (progressionSection) progressionSection.dataset.tabParent = "dashboard";
 
 }
 
@@ -548,7 +557,9 @@ function openDeepRoom(target, label) {
 
 function handleRoomAction(action) {
   if (action === "admin") {
-    openDeepRoom("admin", "Administrasjon");
+    closeRoom();
+    activateExistingTarget("admin");
+    syncLocation("Kontor · Stab");
     return;
   }
   if (action === "progression") {

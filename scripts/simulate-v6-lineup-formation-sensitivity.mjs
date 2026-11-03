@@ -872,3 +872,155 @@ const cfWindowDraw = (cfTimely.containmentProbability +
 assert.equal(cfTimingTrial(3.0, cfWindowDraw).status, "contained");
 assert.equal(cfTimingTrial(2.0, cfWindowDraw).status, "escaped");
 console.log("OK: real lineup demonstrates only documented specialist recovery timing can gate containment.");
+ 
+// Real formation/player match-fit stays in the existing engine. Only a
+// separately documented in-match action trace supplies elapsed seconds.
+const cfSequence = (finalPassSeconds) => ({
+  basis: "authored_action_sequence", route: "third_man",
+  actions: [
+    { id: "receive", durationSeconds: 0.7 },
+    { id: "layoff", durationSeconds: 0.5 },
+    { id: "third_runner", durationSeconds: 0.7 },
+    { id: "through_pass", durationSeconds: finalPassSeconds }
+  ],
+  defenderResponsesByPlayerId: Object.fromEntries(cfTrackingIds.map(id =>
+    [id, { recognitionDelaySeconds: 0.4, coverMoveSeconds: 2.1 }]))
+});
+const cfSequenceTrial = (finalPassSeconds, triggeredOn = null) => {
+  const sequence = cfSequence(finalPassSeconds);
+  if (triggeredOn) sequence.defenderResponsesByPlayerId =
+    Object.fromEntries(cfTrackingIds.map(id => [id, {
+      recognitionDelaySeconds: 0.4, coverMoveSeconds: 2.1,
+      triggerActionId: triggeredOn
+    }]));
+  return resolveOwnPressAgainstOpponent(kickoff(cfXI, withCfOpponent({
+    tacticalBehaviour: {
+      pressEscapeRoute: "third_man",
+      pressEscapeActionSequence: sequence
+    }
+  })), { pressureRoll: () => 0.99, protectionRoll: () => 0.99 });
+};
+const cfSequenceOnTime = cfSequenceTrial(1.2);
+const cfSequenceTooLate = cfSequenceTrial(0.2);
+assert.equal(cfSequenceOnTime.evidence.routeCoverTiming.basis, "authored_action_sequence");
+assert.equal(cfSequenceOnTime.evidence.routeCoverTiming.status, "in_time");
+assert.equal(cfSequenceTooLate.evidence.routeCoverTiming.status, "late");
+assert.equal(cfSequenceOnTime.probability, cfSequenceTooLate.probability);
+assert.equal(cfSequenceOnTime.evidence.routeCoverFitFloor,
+  cfSequenceTooLate.evidence.routeCoverFitFloor);
+assert.ok(cfSequenceOnTime.containmentProbability > cfSequenceTooLate.containmentProbability);
+const cfRecognitionEarly = cfSequenceTrial(1.2, "receive");
+const cfRecognitionLate = cfSequenceTrial(1.2, "layoff");
+assert.equal(cfRecognitionEarly.evidence.routeCoverTiming.status, "in_time");
+assert.equal(cfRecognitionLate.evidence.routeCoverTiming.status, "late");
+assert.equal(cfRecognitionEarly.probability, cfRecognitionLate.probability);
+assert.ok(cfRecognitionEarly.containmentProbability >
+  cfRecognitionLate.containmentProbability);
+// Real calculated XI continues to own role/formation fit; the new spatial
+// field changes only the documented timing of the second defensive phase.
+const cfSpatialTrial = (distanceMeters, protectionDraw = 0.99) => {
+  const spatial = cfSequence(1.2);
+  spatial.pitchDimensionsMeters = { widthMeters: 68, lengthMeters: 105 };
+  spatial.defenderResponsesByPlayerId = Object.fromEntries(
+    cfTrackingIds.map((id, index) => [id, {
+      recognitionDelaySeconds: 0.4,
+      triggerActionId: "receive",
+      coverMovement: {
+        basis: "authored_pitch_geometry",
+        startMeters: { x: 15, y: 55 },
+        coverMeters: { x: 15 + (index === 0 ? 6 : distanceMeters), y: 55 },
+        averageSpeedMetersPerSecond: 4
+      }
+    }]));
+  return resolveOwnPressAgainstOpponent(kickoff(cfXI, withCfOpponent({
+    tacticalBehaviour: {
+      pressEscapeRoute: "third_man", pressEscapeActionSequence: spatial
+    }
+  })), { pressureRoll: () => 0.99, protectionRoll: () => protectionDraw });
+};
+const cfSpatialClose = cfSpatialTrial(6);
+const cfSpatialFar = cfSpatialTrial(14);
+assert.equal(cfSpatialClose.evidence.routeCoverTiming.status, "in_time");
+assert.equal(cfSpatialFar.evidence.routeCoverTiming.status, "late");
+assert.equal(cfSpatialClose.evidence.routeCoverTiming.movementModel,
+  "authored_pitch_geometry");
+assert.equal(cfSpatialClose.evidence.routeCoverFitFloor,
+  cfSpatialFar.evidence.routeCoverFitFloor);
+assert.equal(cfSpatialClose.probability, cfSpatialFar.probability);
+assert.ok(cfSpatialClose.containmentProbability > cfSpatialFar.containmentProbability);
+const cfSpatialThreshold = (cfSpatialClose.containmentProbability +
+  cfSpatialFar.containmentProbability) / 2;
+assert.equal(cfSpatialTrial(6, cfSpatialThreshold).status, "contained");
+assert.equal(cfSpatialTrial(14, cfSpatialThreshold).status, "escaped");
+
+// Production-fit XI: the same specialist must actually defend a route-aligned
+// centre lane. A central runner and a far-side back are not interchangeable.
+const cfLaneResponse = (inLane) => {
+  const line = cfSequence(1.2);
+  line.pitchDimensionsMeters = { widthMeters: 68, lengthMeters: 105 };
+  line.spatialLane = {
+    basis: "authored_route_lane", route: "third_man",
+    channel: "central_between_lines",
+    coordinateFrame: "defending_goal_y0_right_xmax"
+  };
+  line.defenderResponsesByPlayerId = Object.fromEntries(cfTrackingIds.map(id => [
+    id, {
+      recognitionDelaySeconds: 0.4,
+      coverMovement: {
+        basis: "authored_pitch_geometry",
+        startMeters: { x: 30, y: 55 },
+        coverMeters: { x: inLane ? 36 : 58, y: 55 },
+        averageSpeedMetersPerSecond: 4
+      }
+    }
+  ]));
+  return resolveOwnPressAgainstOpponent(kickoff(cfXI, withCfOpponent({
+    tacticalBehaviour: { pressEscapeRoute: "third_man",
+      pressEscapeActionSequence: line }
+  })), { pressureRoll: () => 0.99, protectionRoll: () => 0.99 });
+};
+const cfLaneAligned = cfLaneResponse(true);
+const cfLaneMiss = cfLaneResponse(false);
+assert.equal(cfLaneAligned.evidence.routeCoverTiming.status, "in_time");
+assert.equal(cfLaneMiss.evidence.routeCoverTiming.status,
+  "wrong_corridor");
+assert.equal(cfLaneMiss.routeCoverAdjustment, 0);
+assert.ok(cfLaneAligned.routeCoverAdjustment > 0);
+assert.equal(cfLaneAligned.probability, cfLaneMiss.probability);
+assert.equal(cfLaneAligned.evidence.routeCoverFitFloor,
+  cfLaneMiss.evidence.routeCoverFitFloor);
+
+// The production XI has a known six + pressing midfielder. Arrival at
+// 1.4 s beats the through-pass trigger (1.9 s), but not the
+// third-runner trigger (1.2 s) within the SAME 3.1 s attacking sequence.
+const cfActionDeadlineTrial = deadlineAction => {
+  const sequence = cfSequence(1.2);
+  sequence.defenderResponsesByPlayerId = Object.fromEntries(
+    cfTrackingIds.map((id, index) => [id, {
+      recognitionDelaySeconds: 0.4,
+      coverMoveSeconds: index === 0 ? 1.0 : 2.1,
+      mustCoverByActionId: index === 0 ? deadlineAction : undefined
+    }]));
+  for (const id of cfTrackingIds.slice(1)) {
+    delete sequence.defenderResponsesByPlayerId[id].mustCoverByActionId;
+  }
+  return resolveOwnPressAgainstOpponent(kickoff(cfXI, withCfOpponent({
+    tacticalBehaviour: {
+      pressEscapeRoute: "third_man", pressEscapeActionSequence: sequence
+    }
+  })), { pressureRoll: () => 0.99, protectionRoll: () => 0.99 });
+};
+const cfBeforePass = cfActionDeadlineTrial("through_pass");
+const cfBeforeRunner = cfActionDeadlineTrial("third_runner");
+assert.equal(cfBeforePass.evidence.routeCoverTiming.status, "in_time");
+assert.equal(cfBeforeRunner.evidence.routeCoverTiming.status, "late");
+assert.equal(cfBeforePass.evidence.routeCoverTiming.deadlineModel,
+  "per_defender_action_start");
+assert.equal(cfBeforePass.probability, cfBeforeRunner.probability);
+assert.ok(cfBeforePass.containmentProbability >
+  cfBeforeRunner.containmentProbability);
+
+console.log("OK: production XI preserves roles and validates central cover lane.");
+
+console.log("OK: production XI consumes authored geometric recovery distance.");
+console.log("OK: production XI consumes a four-action timeline and cue-specific delay.");

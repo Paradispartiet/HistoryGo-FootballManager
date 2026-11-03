@@ -151,6 +151,8 @@ function returnToCalendarDay(context) {
   const office = document.querySelector('.main-nav [role="tab"][data-tab-target="dashboard"]');
   if (!(office instanceof HTMLElement)) return;
   office.click();
+  // Kontor åpner nå Innboks; returlenken må velge Kalender eksplisitt.
+  document.querySelector('.app-subtab[data-tab-target="calendar"]')?.click();
   requestAnimationFrame(() => {
     const day = document.querySelector(`#managerCalendarDays .manager-calendar-day-button[data-day="${context.dayIndex}"]`);
     if (day instanceof HTMLElement) day.click();

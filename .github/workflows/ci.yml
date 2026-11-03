@@ -144,6 +144,12 @@ jobs:
           npm run sim:turnovers-v6
           npm run sim:compact-block-v6
           npm run sim:own-press-v6
+          npm run sim:v7-defensive-matrix
+          npm run sim:v7-opponent-adaptation
+          npm run sim:v7-2-outlet-selection
+          npm run sim:v7-3-phase-counterplay
+          npm run sim:v7-4-manager-counter
+          npm run sim:v7-4-manager-tradeoff
           npm run sim:game-control-v6
           npm run sim:v6-historical-matrix
           npm run sim:real-role-formation-matrix
@@ -215,3 +221,13 @@ jobs:
       - name: Responsive nettleservakter og visuelle differanser
         if: steps.scope.outputs.lane == 'full'
         run: npm run test:browser -- --project=chromium
+
+      # Test the specific iPad tactics interaction in Safari's WebKit engine.
+      # WebKit emulation complements, but cannot replace, a real-device check.
+      - name: Installer WebKit for iPad-taktikk
+        if: steps.scope.outputs.lane == 'full'
+        run: npx playwright install --with-deps webkit
+
+      - name: iPad Safari-motortest av taktikk og Hjem-navigasjon
+        if: steps.scope.outputs.lane == 'full'
+        run: HGFM_TACTICS_WEBKIT=1 npx playwright test tests/browser/manager-tactics-responsive-v1.spec.js tests/browser/manager-portal-landing-ipad-v1.spec.js --project=webkit-ipad-tactics

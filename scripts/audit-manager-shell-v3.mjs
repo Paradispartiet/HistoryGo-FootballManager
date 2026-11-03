@@ -17,6 +17,8 @@ const shellElements = read("src/ui/manager-shell-elements.js");
 const shellView = read("src/ui/manager-shell-view.js");
 const scouting = read("src/ui/manager-scouting-workspace-v1.js");
 const calendar = read("src/ui/manager-calendar-workspace-v1.js");
+const homePortal = read("src/ui/manager-universe-portal-v1.js");
+const portalBrowser = read("tests/browser/manager-portal-landing-ipad-v1.spec.js");
 const workflow = read(".github/workflows/ci.yml");
 const fullSeasonWorkflow = read(".github/workflows/eliteserien-full-season.yml");
 const packageJson = read("package.json");
@@ -35,8 +37,14 @@ check("footeren viser neste kalenderhendelse i normal ligasave", /manager-office
 // Kontor + Kalender er den nye autoritative IA-en for tid.
 check("Kalender lastes fra managerskallet", /manager-calendar-workspace-v1\.js/.test(shellView) && /Kontor · Kalender/.test(calendar));
 check("Kalender ligger under Kontor", /section\.dataset\.tabParent = "dashboard"/.test(calendar) && /button\.dataset\.subnavParent = "dashboard"/.test(calendar));
-check("ligasaven starter direkte i Kalender", /openLeagueCalendarAtStartup/.test(calendar) && /starter direkte i managerkalenderen/.test(calendarBrowser));
-check("Innboks er skjult som parallell Kontor-fane", /inbox\.classList\.add\("office-subnav-proxy"\)/.test(calendar) && /separat Innboks/.test(calendarBrowser));
+check("ligasaven starter i Hjem etter at Kalender har initialisert uka",
+  /openLeagueOfficeAtStartup/.test(calendar)
+  && /hgfm:league-calendar-startup-ready/.test(calendar)
+  && /hgfm:league-calendar-startup-ready/.test(homePortal)
+  && /showSurface\(SECTION_HOME\)/.test(homePortal)
+  && /aktiv ligasave åpner Hjem/.test(calendarBrowser)
+  && /Hjem er naturlig landing/.test(portalBrowser));
+check("Innboks er første Kontor-fane", /inbox\.classList\.remove\("office-subnav-proxy"\)/.test(calendar) && /subnav\.insertBefore\(inbox, calendar\)/.test(calendar) && /Kontor åpner Innboks/.test(calendarBrowser));
 check("Klubbdrift presenteres som Klubben", /board\.textContent = "Klubben"/.test(calendar) && /Klubben/.test(calendarBrowser));
 check("Oppstartshjelp skjules etter oppstart", /officeHelp\.classList\.toggle\("office-subnav-proxy", normalSave\)/.test(calendar) && /officeHelp/.test(calendarBrowser));
 check("Kalenderen lager ingen egen progresjonsmotor", !/advanceClubWeekPhase|advanceWeek|nextPhase|Fortsett uka|Neste fase/.test(calendar));

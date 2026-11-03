@@ -731,10 +731,11 @@ stage("17. Menyen lyver ikke");
   );
   check("Analyse eies av Kamp", /data-tab-section="analyse"[^>]*data-tab-parent="kamp"/.test(html));
   check(
-    "varige klubbflater eies av Klubb",
-    ["historygo", "progression", "admin"].every(
+    "Speiding og klubbutvikling eies av Klubb, mens Stab er en kontorfane",
+    ["historygo", "progression"].every(
       (target) => new RegExp(`data-tab-section="${target}"[^>]*data-tab-parent="board"`).test(html)
-    )
+    ) && /data-tab-section="admin"[^>]*data-tab-parent="dashboard"/.test(html)
+      && /data-subnav-parent="dashboard"[^>]*data-tab-target="admin">Stab<\/button>/.test(html)
   );
   check("Speiding er ikke lenger en egen hovedfane", !navTabs.some((b) => b.target === "historygo"));
   check("Stab er ikke lenger en hovedfane som åpner innboksen", !navTabs.some((b) => b.label === "Stab"));
