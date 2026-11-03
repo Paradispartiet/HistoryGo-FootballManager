@@ -705,7 +705,26 @@ test("fase 2: etterkampforslag lagres først ved ny uke, vises kun den uka og ve
   expect(after.focus).toBeNull();
   expect(after.program).toBeNull();
 
+  // Wait until startup has hydrated the saved mode session and rendered the
+  // football controls, not merely until the static training section exists.
   await page.reload();
+  await expect(page.locator("#formationSelect option").first()).toBeAttached({ timeout: 30000 });
+  const restored = await page.evaluate(() => {
+    const envelope = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1") || "{}");
+    const active = envelope.sessions?.[envelope.activeMode];
+    return {
+      activeMode: envelope.activeMode,
+      week: active?.clubWeekState?.week,
+      targetWeek: active?.trainingProblemSuggestion?.targetWeek,
+      sourceMatchId: active?.trainingProblemSuggestion?.sourceMatchId
+    };
+  });
+  expect(restored).toMatchObject({
+    activeMode: "league",
+    week: 2,
+    targetWeek: 2,
+    sourceMatchId: "report-to-week2-training"
+  });
   await page.locator('.main-nav [data-tab-target="tactics"]').click();
   await page.locator('.app-subtab[data-tab-target="trening"]').click();
   await expect(page.locator("#managerTrainingDay")).toBeVisible();
@@ -734,6 +753,7 @@ test("fase 2: etterkampforslag lagres først ved ny uke, vises kun den uka og ve
     localStorage.setItem("hgfm.clubWeekState.v1", JSON.stringify(merits.clubWeekState));
   });
   await page.reload();
+  await expect(page.locator("#formationSelect option").first()).toBeAttached({ timeout: 30000 });
   await page.locator('.main-nav [data-tab-target="tactics"]').click();
   await page.locator('.app-subtab[data-tab-target="trening"]').click();
   await expect(page.locator("#managerTrainingDay")).toBeVisible();
