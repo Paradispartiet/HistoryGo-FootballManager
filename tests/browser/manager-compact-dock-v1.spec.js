@@ -120,3 +120,58 @@ test("tynn footer på mobil og iPad beholder 44px trykkflater", async ({ page })
   await page.locator("#nextActionPrimary").click();
   await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
 });
+
+
+test("360–430px viser kompakt header og arbeidskort uten å krympe handlingene", async ({ page }) => {
+  for (const width of [360, 390, 430]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.locator("#fmuvOpenHome").click();
+    await expect(page.locator("#fmuvHome")).toBeVisible();
+
+    const layout = await page.evaluate(() => {
+      const rect = (selector) => document.querySelector(selector).getBoundingClientRect();
+      const header = rect("#clubIdentityHeader");
+      const homeButton = rect("#fmuvOpenHome");
+      const inboxButton = rect("#fmuvOpenInbox");
+      const settings = rect("#settingsButton");
+      const match = rect("#fmuvHome .fmuv-match");
+      const week = rect("#fmuvHome .fmuv-week");
+      const season = rect("#fmuvHome .fmuv-season");
+      const headerTitle = document.querySelector("#fmuvHome .fmuv-screen-heading h2");
+      return {
+        headerHeight: header.height,
+        buttonsSameRow: Math.abs(homeButton.top - inboxButton.top) < 3
+          && Math.abs(homeButton.top - settings.top) < 5,
+        buttonHeights: [homeButton.height, inboxButton.height, settings.height],
+        matchMinHeight: parseFloat(getComputedStyle(document.querySelector("#fmuvHome .fmuv-match")).minHeight),
+        matchHeight: match.height,
+        weekBeforeSeason: week.top >= match.bottom - 1 && season.top >= week.bottom - 1,
+        titleSize: parseFloat(getComputedStyle(headerTitle).fontSize),
+        overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+      };
+    });
+
+    expect(layout.headerHeight, `header ${width}px`).toBeLessThanOrEqual(72);
+    expect(layout.buttonsSameRow, `header controls ${width}px`).toBe(true);
+    expect(layout.buttonHeights.every((height) => height >= 44)).toBe(true);
+    expect(layout.matchMinHeight).toBeLessThanOrEqual(1);
+    expect(layout.matchHeight).toBeLessThan(285);
+    expect(layout.weekBeforeSeason).toBe(true);
+    expect(layout.titleSize).toBeGreaterThanOrEqual(18);
+    expect(layout.titleSize).toBeLessThanOrEqual(24);
+    expect(layout.overflow).toBeLessThanOrEqual(1);
+
+    for (const [selector, active] of [
+      ["#fmuvOpenInbox", "#fmuvInbox"],
+      ['.main-nav [data-tab-target="tactics"]', '[data-tab-section="tactics"]'],
+      ['.main-nav [data-tab-target="kamp"]', '[data-tab-section="kamp"]']
+    ]) {
+      await page.locator(selector).click();
+      await expect(page.locator(active)).toBeVisible();
+      const overflow = await page.evaluate(() =>
+        document.documentElement.scrollWidth - document.documentElement.clientWidth
+      );
+      expect(overflow, `${active} at ${width}px`).toBeLessThanOrEqual(1);
+    }
+  }
+});
