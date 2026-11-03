@@ -175,3 +175,56 @@ test("360–430px viser kompakt header og arbeidskort uten å krympe handlingene
     }
   }
 });
+
+
+test("v1: hovedflyt er uten sidelekkasje og har tilgjengelige handlinger på fem skjermbredder", async ({ page }) => {
+  const viewports = [
+    { width: 360, height: 844, dock: "mobile" },
+    { width: 390, height: 844, dock: "mobile" },
+    { width: 430, height: 932, dock: "mobile" },
+    { width: 768, height: 1024, dock: "desktop" },
+    { width: 1194, height: 834, dock: "desktop" }
+  ];
+  const screens = [
+    { label: "Hjem", trigger: "#fmuvOpenHome", target: "#fmuvHome" },
+    { label: "Innboks", trigger: "#fmuvOpenInbox", target: "#fmuvInbox" },
+    { label: "Taktikk", trigger: '.main-nav [data-tab-target="tactics"]', target: '[data-tab-section="tactics"]' },
+    { label: "Kamp", trigger: '.main-nav [data-tab-target="kamp"]', target: '[data-tab-section="kamp"]' }
+  ];
+
+  for (const viewport of viewports) {
+    await page.setViewportSize({ width: viewport.width, height: viewport.height });
+    await expect(page.locator("html")).toHaveAttribute("data-manager-compact-dock", viewport.dock);
+
+    for (const screen of screens) {
+      await page.locator(screen.trigger).click();
+      await expect(page.locator(screen.target)).toBeVisible();
+      await expect(page.locator("#nextActionPrimary")).toBeVisible();
+
+      const metrics = await page.evaluate(() => {
+        const primary = document.querySelector("#nextActionPrimary").getBoundingClientRect();
+        const tabs = [...document.querySelectorAll('.main-nav .nav-tab[data-nav-modes~="league"]')]
+          .filter((tab) => getComputedStyle(tab).display !== "none")
+          .map((tab) => tab.getBoundingClientRect());
+        return {
+          overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+          primaryHeight: primary.height,
+          primaryWidth: primary.width,
+          primaryLeft: primary.left,
+          primaryRight: primary.right,
+          viewportWidth: document.documentElement.clientWidth,
+          tabHeights: tabs.map((tab) => tab.height)
+        };
+      });
+
+      const context = screen.label + " ved " + viewport.width + "px";
+      expect(metrics.overflow, context + " – horisontal scrolling").toBeLessThanOrEqual(1);
+      expect(metrics.primaryHeight, context + " – primærhandling").toBeGreaterThanOrEqual(44);
+      expect(metrics.primaryWidth, context + " – trykkflate").toBeGreaterThanOrEqual(44);
+      expect(metrics.primaryLeft, context + " – venstre kant").toBeGreaterThanOrEqual(-1);
+      expect(metrics.primaryRight, context + " – høyre kant").toBeLessThanOrEqual(metrics.viewportWidth + 1);
+      expect(metrics.tabHeights, context + " – navigasjonsfaner").toHaveLength(5);
+      expect(metrics.tabHeights.every((height) => height >= 44), context + " – fanestørrelse").toBe(true);
+    }
+  }
+});
