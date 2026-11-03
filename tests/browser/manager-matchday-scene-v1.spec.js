@@ -74,6 +74,9 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript((season) => {
+    // Init scripts run on every reload. Seed only the first navigation so
+    // reload tests can verify actual persistence rather than reset the save.
+    if (localStorage.getItem("hgfm.matchdaySceneFixtureSeeded.v1") === "1") return;
     const clubWeekState = {
       week: 1,
       phase: "matchday",
@@ -132,6 +135,7 @@ test.beforeEach(async ({ page }) => {
         national: null
       }
     }));
+    localStorage.setItem("hgfm.matchdaySceneFixtureSeeded.v1", "1");
   }, seededSeason());
   await page.goto("/");
   await expect(page.locator("#formationSelect option").first()).toBeAttached();
