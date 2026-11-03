@@ -445,3 +445,26 @@
 .matchday-post-match-adjustment span { font-size: 0.79rem; color: rgba(255,255,255,0.74); }
 .matchday-post-match-adjustment strong { font-size: 0.95rem; }
 .matchday-post-match-adjustment p { margin: 0; font-size: 0.85rem; line-height: 1.45; }
+
+/* Phase 1: more information per screen without shrinking analytical copy.
+   The primary explanation stays full-width; supporting cards share a row
+   only when there is enough horizontal room for readable Norwegian text. */
+@media (max-width: 640px) {
+  .matchday-post-match { gap: .65rem; }
+  .matchday-post-match-hero { gap: .55rem; }
+  .matchday-post-match-overview { gap: .5rem; }
+  .matchday-post-match-score,
+  .matchday-post-match-hero-copy,
+  .matchday-post-match-card,
+  .matchday-post-match-panel,
+  .matchday-post-match-decision { padding: .7rem; }
+  .matchday-post-match-decision-step { padding: .7rem; }
+}
+@media (min-width: 431px) and (max-width: 640px) {
+  .matchday-post-match-overview {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .matchday-post-match-overview > .matchday-post-match-card.is-primary {
+    grid-column: 1 / -1;
+  }
+}
