@@ -251,6 +251,49 @@ test("mobil Lag samler formasjon og kampplan på én lesbar rad uten å miste va
   await expectNoHorizontalOverflow(page);
 });
 
+test("360–430px bruker en tettere Lag-oppsummering uten å krympe trykkflatene", async ({ page }) => {
+  for (const width of [360, 390, 430]) {
+    await page.setViewportSize({ width, height: 844 });
+    await openTeam(page);
+    const metrics = await page.evaluate(() => {
+      const status = document.querySelector("#squadCompactStatus");
+      const selected = document.querySelector("#teamTacticsSelectedState");
+      const fields = [...selected.querySelectorAll(".manager-team-selected-field")];
+      const actions = fields.map((field) => field.querySelector(".manager-team-selected-action"));
+      const rects = fields.map((field) => field.getBoundingClientRect());
+      return {
+        statusPadding: parseFloat(getComputedStyle(status).paddingTop),
+        statusMargin: parseFloat(getComputedStyle(status).marginBottom),
+        selectedMargin: parseFloat(getComputedStyle(selected).marginBottom),
+        fieldPadding: parseFloat(getComputedStyle(fields[0]).paddingTop),
+        sameRow: Math.abs(rects[0].top - rects[1].top) <= 1,
+        actionHeights: actions.map((action) => action.getBoundingClientRect().height),
+        visibleValues: fields.every((field) => field.querySelector(".manager-team-selected-value")?.textContent.trim()),
+        overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+      };
+    });
+    expect(metrics.statusPadding, "status padding at " + width).toBeLessThanOrEqual(6);
+    expect(metrics.statusMargin, "status gap at " + width).toBeLessThanOrEqual(6);
+    expect(metrics.selectedMargin, "selection bottom margin at " + width).toBeLessThanOrEqual(9);
+    expect(metrics.fieldPadding, "selection padding at " + width).toBeLessThanOrEqual(8);
+    expect(metrics.sameRow, "two-column selection at " + width).toBe(true);
+    expect(metrics.actionHeights.every((height) => height >= 44), "tap targets at " + width).toBe(true);
+    expect(metrics.visibleValues, "selection texts at " + width).toBe(true);
+    expect(metrics.overflow, "horizontal overflow at " + width).toBeLessThanOrEqual(1);
+  }
+
+  // The 320px single-column accessibility fallback from PR #546 stays intact.
+  await page.setViewportSize({ width: 320, height: 720 });
+  const fields = page.locator("#teamTacticsSelectedState .manager-team-selected-field");
+  const positions = await fields.evaluateAll((items) => items.map((item) => {
+    const rect = item.getBoundingClientRect();
+    return { top: rect.top, left: rect.left };
+  }));
+  expect(positions[1].top).toBeGreaterThan(positions[0].top);
+  expect(positions[1].left).toBeCloseTo(positions[0].left, 0);
+  await expectNoHorizontalOverflow(page);
+});
+
 test("Lag, Tropp, Trening, Systemet og valgdrawer har ingen mobil overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await openTeam(page);
