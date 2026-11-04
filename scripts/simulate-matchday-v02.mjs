@@ -386,6 +386,32 @@ check("systemdom finnes", typeof result.formationVerdict === "string" && result.
 check("avgjørende lagdel finnes", typeof result.decisiveUnit === "string" && result.decisiveUnit.length > 0);
 check("råd for neste uke finnes", typeof result.nextWeekAdvice === "string" && result.nextWeekAdvice.length > 0);
 check("History Go-hint finnes", typeof result.historyGoHint === "string" && result.historyGoHint.length > 0);
+check("taktisk profil er ikke presentert som dokumentert kampårsak",
+  /i lagets taktiske profil/.test(result.decisiveUnit)
+  && !/var avgjørende|var lagets største problem/.test(result.decisiveUnit));
+
+// A catalogue weakness can be present even when no tactical event was played.
+// The finished report must not assert an observed effect without such evidence.
+const unobservedRiskSession = createMatchdaySession({
+  teamFit: strongFit, formation: wmFormation, tactic,
+  activeClassifications: [], coachContext: strongCoach,
+  opponent: pickOpponentProfile(1)
+});
+unobservedRiskSession.formationSnapshot = {
+  ...unobservedRiskSession.formationSnapshot,
+  weaknesses: ["Sårbar for raske overganger"]
+};
+const unobservedRiskResult = finalizeMatchdaySession(unobservedRiskSession);
+const unobservedRiskReport = createMatchReport(unobservedRiskResult);
+check("formasjonens katalogsvakhet presenteres som mulig risiko",
+  unobservedRiskResult.analysis.some((line) =>
+    line === "Mulig systemrisiko ved valgt formasjon: Sårbar for raske overganger."));
+check("katalogsvakhet påstås ikke å ha preget en uspilt kamphendelse",
+  !unobservedRiskResult.analysis.some((line) => /Systemsvakhet som preget kampen/.test(line)));
+check("presiseringen følger samme resultat til rapportadapteren",
+  unobservedRiskReport.analysis.some((line) =>
+    line === "Mulig systemrisiko ved valgt formasjon: Sårbar for raske overganger.")
+  && /i lagets taktiske profil/.test(unobservedRiskResult.decisiveUnit));
 
 const report = createMatchReport(result);
 check("createMatchReport tar med v0.2-feltene", report.decisions.length === 3 && Boolean(report.formationVerdict) && Boolean(report.opponentStyle));
