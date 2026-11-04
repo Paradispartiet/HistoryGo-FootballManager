@@ -3,7 +3,8 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { calculateTeamFit } from "../src/football-team-fit-engine.js";
-import { calculateMatchStrength, createMatchdaySession, advanceMatchClock, simulateMatchday } from "../src/football-matchday-engine.js";
+import { calculateMatchStrength, createMatchdaySession, advanceMatchClock, simulateMatchday, finalizeMatchdaySession, createMatchReport } from "../src/football-matchday-engine.js";
+import { createPostMatchAnalysisModel } from "../src/ui/manager-post-match-analysis-v1.js";
 import { evaluatePlanVsOpponent } from "../src/football-match-plan.js";
 import { HISTORICAL_OPPONENT_PROFILES } from "../src/football-historical-opponent-profiles.js";
 import { TACTICAL_SEQUENCES } from "../src/football-tactical-sequences.js";
@@ -162,6 +163,51 @@ const opponent = HISTORICAL_OPPONENT_PROFILES[0];
 const neutral = fit => ({ ...fit, teamScore: 72,
   historicalFormationFit: { historicalScore: 65, historicalBonus: 0, historicalPenalty: 0 },
   relationships: { relationshipScore: 60 } });
+// Phase 3: controlled manager decision -> live match -> post-match display.
+// Use the same eleven synthetic players, formation, tactic and opponent. Only
+// legal roles change; no new engine or made-up historical player claims.
+const coveringRoles = fixture(formation433, highPress, "safe");
+const overlappingRoles = fixture(formation433, highPress, "width");
+assert.deepEqual(
+  coveringRoles.assignments.map(assignment => assignment.player?.id),
+  overlappingRoles.assignments.map(assignment => assignment.player?.id),
+  "role decision must not silently replace the selected eleven"
+);
+assert.ok(overlappingRoles.metrics.widthScore > coveringRoles.metrics.widthScore);
+assert.ok(overlappingRoles.metrics.restDefenseScore < coveringRoles.metrics.restDefenseScore);
+const coveringOutcome = simulateMatchday({
+  teamFit: neutral(coveringRoles), formation: formation433, opponent
+});
+const overlappingOutcome = simulateMatchday({
+  teamFit: neutral(overlappingRoles), formation: formation433, opponent
+});
+assert.ok(overlappingOutcome.expectedGoals.against > coveringOutcome.expectedGoals.against,
+  "overlapping backs must increase modeled concession risk when other strength inputs are fixed");
+
+// The interactive matchday pipeline must carry those same tactical metrics into
+// the saved result, report adapter, and actual post-match presentation model.
+const liveSession = createMatchdaySession({
+  teamFit: overlappingRoles, formation: formation433, tactic: highPress, opponent
+});
+assert.equal(liveSession.teamFitSnapshot.tacticalProfile.restDefenseScore,
+  overlappingRoles.metrics.restDefenseScore);
+assert.equal(liveSession.teamFitSnapshot.tacticalProfile.widthScore,
+  overlappingRoles.metrics.widthScore);
+const finishedMatch = finalizeMatchdaySession(liveSession);
+const finishedReport = createMatchReport(finishedMatch);
+const postMatch = createPostMatchAnalysisModel({
+  lastMatch: finishedMatch, report: finishedReport
+});
+assert.equal(finishedMatch.formationSnapshot.id, formation433.id);
+assert.equal(finishedMatch.tacticSnapshot.id, highPress.id);
+assert.equal(finishedReport.formationName, formation433.name);
+assert.equal(finishedReport.tacticName, highPress.name);
+assert.equal(postMatch.formationVerdict, finishedMatch.formationVerdict);
+assert.equal(postMatch.xgLine, finishedReport.expectedGoalsLine);
+assert.equal(postMatch.exposedWeakness, finishedMatch.exposedWeaknessMetric);
+assert.ok(postMatch.tacticalFactors.length > 0,
+  "after-match view must retain the real engine's tactical explanation");
+
 const pOutcome = simulateMatchday({teamFit: neutral(passer), formation: formation433, opponent});
 const sOutcome = simulateMatchday({teamFit: neutral(stopper), formation: formation433, opponent});
 assert.ok(pOutcome.expectedGoals.for > sOutcome.expectedGoals.for,
