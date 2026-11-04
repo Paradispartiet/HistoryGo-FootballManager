@@ -108,6 +108,11 @@ const win = resultFixture("win");
 const winModel = createPostMatchAnalysisModel(win);
 check("seier gir positiv tone", winModel.outcomeTone === "positive", winModel.outcomeTone);
 check("eldre rapport uten avsparkssnapshot får ingen oppdiktet kampplan", winModel.kickoffPlan === "");
+check("ukjent formasjon fra gammel rapport blir ikke merket som faktisk avspark",
+  createPostMatchAnalysisModel({
+    lastMatch: win.lastMatch,
+    report: { ...win.report, formationName: "Ukjent formasjon", tacticName: "" }
+  }).kickoffPlan === "");
 const kickoffFixture = resultFixture("win");
 kickoffFixture.lastMatch.formationSnapshot = { name: "4-2-3-1" };
 kickoffFixture.lastMatch.tacticSnapshot = { name: "Kontrollert press" };
