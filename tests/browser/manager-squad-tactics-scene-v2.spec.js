@@ -205,6 +205,52 @@ test("valgdraweren returnerer fokus og har ingen alvorlige tilgjengelighetsbrudd
   await expect(opener).toBeFocused();
 });
 
+test("mobil Lag samler formasjon og kampplan på én lesbar rad uten å miste valg", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await openTeam(page);
+  const selected = page.locator("#teamTacticsSelectedState");
+  const fields = selected.locator(".manager-team-selected-field");
+  await expect(fields).toHaveCount(2);
+  const cards = await fields.evaluateAll((items) => items.map((item) => {
+    const rect = item.getBoundingClientRect();
+    return { left: rect.left, top: rect.top, width: rect.width };
+  }));
+  expect(cards[0].top).toBeCloseTo(cards[1].top, 0);
+  expect(cards[0].left).toBeLessThan(cards[1].left);
+  expect(cards.every((item) => item.width >= 120)).toBe(true);
+
+  for (const id of ["teamSelectedFormation", "teamSelectedTactic"]) {
+    const value = page.locator("#" + id);
+    await expect(value).not.toBeEmpty();
+    const readable = await value.evaluate((el) =>
+      getComputedStyle(el).textOverflow === "clip"
+      && el.scrollWidth <= el.clientWidth + 1
+    );
+    expect(readable, id + " must wrap instead of truncating the selection").toBe(true);
+  }
+  for (const id of ["teamChangeFormation", "teamChangeTactic"]) {
+    const action = page.locator("#" + id);
+    const height = await action.evaluate((el) => el.getBoundingClientRect().height);
+    expect(height, id + " must remain finger-friendly").toBeGreaterThanOrEqual(44);
+    await action.click();
+    await expect(page.locator("#managerTeamChoiceDrawer")).toBeVisible();
+    await expect(page.locator("#formationSelect")).toBeVisible();
+    await closeChoiceDrawer(page);
+  }
+  await expectNoHorizontalOverflow(page);
+
+  // At 320 px, preserve the full-width reading order instead of squeezing
+  // two long Norwegian choice labels into unusable narrow columns.
+  await page.setViewportSize({ width: 320, height: 720 });
+  const narrow = await fields.evaluateAll((items) => items.map((item) => {
+    const rect = item.getBoundingClientRect();
+    return { left: rect.left, top: rect.top };
+  }));
+  expect(narrow[1].top).toBeGreaterThan(narrow[0].top);
+  expect(narrow[1].left).toBeCloseTo(narrow[0].left, 0);
+  await expectNoHorizontalOverflow(page);
+});
+
 test("Lag, Tropp, Trening, Systemet og valgdrawer har ingen mobil overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await openTeam(page);
