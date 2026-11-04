@@ -313,3 +313,26 @@ html.has-manager-team-choice-drawer body {
     padding-inline: .35rem;
   }
 }
+
+/* Fase 3: tighten only the summary area on ordinary narrow phones.
+   Keep the pitch itself, player chips and 44px actions at their proven sizes. */
+@media (min-width: 360px) and (max-width: 430px) {
+  [data-tab-section="tactics"] #squadCompactStatus {
+    gap: 4px 9px;
+    margin-bottom: 6px;
+    padding: 6px 10px;
+  }
+
+  #teamTacticsSelectedState {
+    margin: .2rem 0 .55rem;
+  }
+
+  #teamTacticsSelectedState .manager-team-selected-field {
+    gap: .18rem;
+    padding: .5rem .6rem;
+  }
+
+  #teamTacticsSelectedState .manager-team-selected-action {
+    margin-top: .1rem;
+  }
+}
