@@ -214,8 +214,8 @@ export function createPostMatchAnalysisModel({ lastMatch = null, report = null }
   );
   // Show the manager's actual kickoff choices, not an in-match plan switch.
   // Older saves may lack one or both snapshots; never invent missing data.
-  const kickoffFormation = text(lastMatch.formationSnapshot?.name || report.formationName, "");
-  const kickoffTactic = text(lastMatch.tacticSnapshot?.name || report.tacticName, "");
+  const kickoffFormation = text(lastMatch.formationSnapshot?.name, "");
+  const kickoffTactic = text(lastMatch.tacticSnapshot?.name, "");
   const kickoffPlan = [kickoffFormation, kickoffTactic].filter(Boolean).join(" · ");
   const trainingSource = lastMatch.trainingFocus && typeof lastMatch.trainingFocus === "object"
     ? lastMatch.trainingFocus
