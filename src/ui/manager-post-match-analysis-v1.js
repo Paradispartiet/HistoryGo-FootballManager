@@ -212,6 +212,11 @@ export function createPostMatchAnalysisModel({ lastMatch = null, report = null }
     nextWeekSuggestions[0],
     "Bruk kampens læringspunkt når neste treningsuke planlegges."
   );
+  // Show the manager's actual kickoff choices, not an in-match plan switch.
+  // Older saves may lack one or both snapshots; never invent missing data.
+  const kickoffFormation = text(lastMatch.formationSnapshot?.name || report.formationName, "");
+  const kickoffTactic = text(lastMatch.tacticSnapshot?.name || report.tacticName, "");
+  const kickoffPlan = [kickoffFormation, kickoffTactic].filter(Boolean).join(" · ");
   const trainingSource = lastMatch.trainingFocus && typeof lastMatch.trainingFocus === "object"
     ? lastMatch.trainingFocus
     : null;
@@ -264,6 +269,7 @@ export function createPostMatchAnalysisModel({ lastMatch = null, report = null }
     humanFactors,
     learningPoints,
     decisions: decisionReview,
+    kickoffPlan,
     formationVerdict: text(report.formationVerdict, "Ingen egen systemdom er registrert."),
     decisiveUnit: text(report.decisiveUnit, "Ingen enkelt lagdel ble registrert som avgjørende."),
     goals,
@@ -356,7 +362,11 @@ export function renderPostMatchAnalysis(model, onOpenTarget) {
   appendList(why, model.decisiveFactors, "Kampen ble avgjort på små marginer uten én registrert hovedfaktor.");
 
   const tactical = node("article", "matchday-post-match-card");
-  tactical.append(node("span", "", "Taktisk evaluering"), node("strong", "", model.formationVerdict));
+  tactical.append(node("span", "", "Taktisk evaluering"));
+  if (model.kickoffPlan) {
+    tactical.append(node("small", "matchday-post-match-kickoff", `Ved avspark: ${model.kickoffPlan}`));
+  }
+  tactical.append(node("strong", "", model.formationVerdict));
   appendList(tactical, model.tacticalFactors, "Ingen flere taktiske faktorer er registrert.");
 
   const human = node("article", "matchday-post-match-card");
