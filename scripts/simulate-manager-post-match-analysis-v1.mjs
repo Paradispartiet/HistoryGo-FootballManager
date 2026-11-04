@@ -107,6 +107,19 @@ console.log("\nManager Post-match Analysis v1 simulation");
 const win = resultFixture("win");
 const winModel = createPostMatchAnalysisModel(win);
 check("seier gir positiv tone", winModel.outcomeTone === "positive", winModel.outcomeTone);
+check("eldre rapport uten avsparkssnapshot får ingen oppdiktet kampplan", winModel.kickoffPlan === "");
+check("ukjent formasjon fra gammel rapport blir ikke merket som faktisk avspark",
+  createPostMatchAnalysisModel({
+    lastMatch: win.lastMatch,
+    report: { ...win.report, formationName: "Ukjent formasjon", tacticName: "" }
+  }).kickoffPlan === "");
+const kickoffFixture = resultFixture("win");
+kickoffFixture.lastMatch.formationSnapshot = { name: "4-2-3-1" };
+kickoffFixture.lastMatch.tacticSnapshot = { name: "Kontrollert press" };
+kickoffFixture.lastMatch.activePlanSnapshot = { name: "Lavere blokk" };
+const kickoffModel = createPostMatchAnalysisModel(kickoffFixture);
+check("etterkamp viser faktisk avsparkssystem og ikke kampplanbytte",
+  kickoffModel.kickoffPlan === "4-2-3-1 · Kontrollert press");
 check("resultatet vises", winModel.scoreLine === "2–1", winModel.scoreLine);
 check("xG-linjen kommer fra rapporten", winModel.xgLine.includes("1.86"), winModel.xgLine);
 check("forklaringsmotorens overskrift brukes", winModel.headline.includes("presset"), winModel.headline);
