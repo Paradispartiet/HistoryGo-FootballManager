@@ -284,3 +284,32 @@ html.has-manager-team-choice-drawer body {
   .manager-team-choice-footer span { display: none; }
   .manager-team-choice-done { width: 100%; }
 }
+
+/* At ordinary phone widths, the two *current choices* are one concise row.
+   Never compress the single-field lineup/system states or hide tactical data. */
+@media (min-width: 360px) and (max-width: 760px) {
+  .manager-team-tactics-selected {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .manager-team-tactics-selected .manager-team-selected-field {
+    min-width: 0;
+    border-bottom: 0;
+  }
+
+  .manager-team-tactics-selected .manager-team-selected-field:first-child {
+    border-right: 1px solid rgba(255,255,255,.1);
+  }
+
+  .manager-team-tactics-selected .manager-team-selected-value {
+    overflow: visible;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+  }
+
+  .manager-team-tactics-selected .manager-team-selected-action {
+    min-height: 2.75rem;
+    width: 100%;
+    padding-inline: .35rem;
+  }
+}
