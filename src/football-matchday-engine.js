@@ -2799,10 +2799,12 @@ export function finalizeMatchdaySession(session) {
   const decisive = findDecisiveMetric(tp);
   const weakest = findWeakestMetric(tp);
 
+  // A tactical metric is a modelled strength or weakness, not proof that it
+  // decided an individual match. Keep the legacy result key for save readers.
   const decisiveUnit = decisive
     ? decisive.isStrong
-      ? `Sterk ${UNIT_LABELS[decisive.key]} (${decisive.value}) var avgjørende i lagets favør.`
-      : `Svak ${UNIT_LABELS[decisive.key]} (${decisive.value}) var lagets største problem.`
+      ? `Styrke i lagets taktiske profil: ${UNIT_LABELS[decisive.key]} (${decisive.value}).`
+      : `Svakhet i lagets taktiske profil: ${UNIT_LABELS[decisive.key]} (${decisive.value}).`
     : null;
 
   const nextWeekAdvice = weakest ? NEXT_WEEK_ADVICE[weakest.key] : null;
@@ -2852,9 +2854,11 @@ export function finalizeMatchdaySession(session) {
   if (decisiveUnit) {
     analysis.push(decisiveUnit);
   }
+  // Catalogue weaknesses describe potential risks of the selected formation;
+  // without a matching logged event they must never be reported as observed.
   const weaknessHint = asArray(session.formationSnapshot?.weaknesses)[0];
   if (weaknessHint) {
-    analysis.push(`Systemsvakhet som preget kampen: ${weaknessHint}.`);
+    analysis.push(`Mulig systemrisiko ved valgt formasjon: ${weaknessHint}.`);
   }
 
   // Formasjons-matchup: lukk læringssløyfen ved å forklare at matchupen mot
