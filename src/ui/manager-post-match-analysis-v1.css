@@ -131,6 +131,14 @@
   background: rgba(255, 255, 255, 0.055);
 }
 
+.matchday-post-match-kickoff {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.76rem;
+  font-weight: 750;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
 .matchday-post-match-card strong,
 .matchday-post-match-decision strong,
 .matchday-post-match-next strong {
@@ -466,5 +474,28 @@
   }
   .matchday-post-match-overview > .matchday-post-match-card.is-primary {
     grid-column: 1 / -1;
+  }
+}
+
+/* Keep the score and tactical headline in the same mobile scan row, rather
+   than stacking two full-width boxes. Preserve a single column at 320px. */
+@media (min-width: 360px) and (max-width: 640px) {
+  .matchday-post-match-hero {
+    grid-template-columns: minmax(6.2rem, 0.36fr) minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  .matchday-post-match-score {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    justify-items: center;
+    padding: 0.65rem 0.35rem;
+    text-align: center;
+  }
+
+  .matchday-post-match-hero-copy { padding: 0.65rem; }
+  .matchday-post-match-hero-copy h3 {
+    font-size: clamp(1.05rem, 2.5vw, 1.2rem);
+    line-height: 1.2;
   }
 }
