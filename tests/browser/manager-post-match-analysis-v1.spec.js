@@ -16,6 +16,9 @@ function reportFixture() {
     outcome: "win",
     score: { for: 2, against: 1 },
     expectedGoals: { for: 1.86, against: 0.94 },
+    formationSnapshot: { id: "4-2-3-1", name: "4-2-3-1" },
+    tacticSnapshot: { id: "press", name: "Kontrollert press" },
+    activePlanSnapshot: { id: "low_block", name: "Lavere blokk" },
     playerStats: {
       goals: [
         { minute: 24, scorerName: "Ada Angriper", assistName: "Mina Midtbane" },
@@ -119,6 +122,10 @@ test("etterkampen viser resultat, forklaring, managergrep, spillerbidrag og kons
   await expect(page.locator(".matchday-post-match")).toBeVisible();
   await expect(page.locator("#postMatchAnalysisTitle")).toContainText("presset");
   await expect(page.locator(".matchday-post-match-card")).toHaveCount(3);
+  const tacticalCard = page.locator(".matchday-post-match-card").nth(1);
+  await expect(tacticalCard.locator(".matchday-post-match-kickoff"))
+    .toHaveText("Ved avspark: 4-2-3-1 · Kontrollert press");
+  await expect(tacticalCard).not.toContainText("Ved avspark: Lavere blokk");
   await expect(page.locator(".matchday-post-match-decision")).toHaveCount(2);
   await expect(page.locator(".matchday-post-match-decision-step")).toHaveCount(2);
   await expect(page.locator(".matchday-post-match-decision-step").first()).toContainText("Press høyere");
@@ -210,4 +217,30 @@ test("etterkampens hovedforklaring beholder bredden mens støttekortene samles p
   await page.locator('.matchday-post-match-primary[data-matchday-target="carry_training_problem_next_week"]').click();
   await expect.poll(() => page.evaluate(() => window.__postMatchTargets))
     .toContain("carry_training_problem_next_week");
+});
+
+test("etterkampens resultat og hovedforklaring deler mobilrad uten overlapp", async ({ page }) => {
+  await renderFixture(page, 320, 844);
+  for (const width of [320, 360, 390, 430, 600]) {
+    await page.setViewportSize({ width, height: 844 });
+    const metrics = await page.locator(".matchday-post-match-hero").evaluate((hero) => {
+      const score = hero.querySelector(".matchday-post-match-score").getBoundingClientRect();
+      const explanation = hero.querySelector(".matchday-post-match-hero-copy").getBoundingClientRect();
+      return {
+        score: { top: score.top, right: score.right, bottom: score.bottom },
+        explanation: { top: explanation.top, left: explanation.left },
+        pageOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+      };
+    });
+    expect(metrics.pageOverflow, `etterkamp ${width}px`).toBeLessThanOrEqual(1);
+    if (width < 360) {
+      expect(metrics.explanation.top, `etterkamp ${width}px`)
+        .toBeGreaterThanOrEqual(metrics.score.bottom - 1);
+    } else {
+      expect(Math.abs(metrics.score.top - metrics.explanation.top), `etterkamp ${width}px`)
+        .toBeLessThanOrEqual(2);
+      expect(metrics.score.right, `etterkamp ${width}px`)
+        .toBeLessThanOrEqual(metrics.explanation.left + 2);
+    }
+  }
 });
