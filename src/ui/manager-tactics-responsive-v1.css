@@ -465,3 +465,44 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
 @media (prefers-reduced-motion: reduce) {
   .fm-tactics-grid *, .fm-tactics-view-switch * { scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
+
+/* Fase 3: less chrome around the playable pitch on narrow portrait phones.
+   The 4:5 pitch, all 11 player positions and existing chip typography remain
+   untouched; shrinking the pitch itself would crowd dense formations. */
+@media (max-width: 430px) and (orientation: portrait) {
+  .fm-tactics-grid > .pitch-stage {
+    padding: 8px;
+    gap: 7px;
+  }
+
+  .fm-tactics-grid > .pitch-stage .pitch-stage-head {
+    gap: 6px;
+  }
+
+  .fm-tactics-grid > .pitch-stage .pitch-hint {
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+    padding-top: 0;
+  }
+
+  .fm-tactics-grid > .pitch-stage .pitch-hint .shortcut-button {
+    flex: 0 0 auto;
+    min-height: 44px;
+    padding: 6px 8px;
+  }
+
+  .fm-tactics-bench {
+    padding: 9px 10px;
+  }
+
+  .fm-tactics-bench .bench-player-list {
+    gap: 6px;
+    padding: 3px 2px 6px;
+  }
+
+  .fm-tactics-bench .bench-player-card {
+    min-height: 64px;
+    padding: 7px;
+  }
+}
