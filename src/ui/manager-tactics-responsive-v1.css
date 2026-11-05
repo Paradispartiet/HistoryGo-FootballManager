@@ -506,3 +506,17 @@ body:has([data-tab-section="tactics"]:not([hidden])) .site-header {
     padding: 7px;
   }
 }
+
+/* Narrow-phone reserve bench: show more real players without the repetitive
+   decorative "Spillerkort" label. Keep player names, details and tap targets. */
+@media (max-width: 430px) and (orientation: portrait) {
+  .fm-tactics-bench .bench-player-card {
+    flex-basis: clamp(138px, 36vw, 146px);
+    min-height: 64px;
+    gap: 3px;
+  }
+
+  .fm-tactics-bench .bench-player-card::before {
+    content: none;
+  }
+}

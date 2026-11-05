@@ -108,6 +108,54 @@ test("320–430px viser en tettere bane- og benkflate uten å redusere spillebri
   await expect(page.locator('[data-tab-section="system"]')).toBeVisible();
 });
 
+test("reservebenken viser flere kort uten dekorativ etikett på smale mobiler", async ({ page }) => {
+  for (const width of [320, 360, 390, 430, 500]) {
+    await page.setViewportSize({ width, height: 844 });
+    const list = page.locator(".fm-tactics-bench #benchPlayersList");
+    await expect(list).toBeAttached();
+
+    // The reserve bench may legitimately be empty in a newly created save.
+    // In that case, use a disposable display-only card to verify the CSS.
+    const metrics = await list.evaluate((element) => {
+      const existing = element.querySelector(".bench-player-card");
+      const card = existing || document.createElement("button");
+      if (!existing) {
+        card.type = "button";
+        card.className = "bench-player-card";
+        card.innerHTML = "<strong>Testspiller</strong><span>Reserve</span>";
+        element.appendChild(card);
+      }
+      const computed = getComputedStyle(card);
+      const pseudo = getComputedStyle(card, "::before").content;
+      const name = card.querySelector("strong");
+      const result = {
+        label: pseudo,
+        basis: parseFloat(computed.flexBasis),
+        height: card.getBoundingClientRect().height,
+        namePresent: Boolean(name && name.textContent.trim()),
+        listScrollable: getComputedStyle(element).overflowX === "auto",
+        overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+      };
+      if (!existing) card.remove();
+      return result;
+    });
+
+    if (width <= 430) {
+      expect(metrics.label, "decorative label at " + width).toBe("none");
+      expect(metrics.basis, "reserve card width at " + width).toBeGreaterThanOrEqual(138);
+      expect(metrics.basis, "reserve card width at " + width).toBeLessThanOrEqual(146);
+      expect(metrics.height, "reserve tap target at " + width).toBeGreaterThanOrEqual(44);
+    } else {
+      // Above the narrow-phone breakpoint, the prior appearance is preserved.
+      expect(metrics.label, "desktop/medium label at " + width).not.toBe("none");
+      expect(metrics.basis, "prior medium-width card at " + width).toBe(150);
+    }
+    expect(metrics.namePresent, "player name at " + width).toBe(true);
+    expect(metrics.listScrollable, "horizontal reserve list at " + width).toBe(true);
+    expect(metrics.overflow, "no page overflow at " + width).toBeLessThanOrEqual(1);
+  }
+});
+
 test("mobil liggende har taktikkvisning og spillerliste samtidig", async ({ page }) => {
   await page.setViewportSize({ width: 844, height: 390 });
   await expect(page.locator("#lineupSlots")).toBeVisible();
