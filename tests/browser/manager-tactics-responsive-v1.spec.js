@@ -56,6 +56,58 @@ test("mobil stående bruker store faner uten å duplisere den spillbare banen", 
   expect(overflow).toBeLessThanOrEqual(1);
 });
 
+test("320–430px viser en tettere bane- og benkflate uten å redusere spillebrikkene", async ({ page }) => {
+  for (const width of [320, 360, 390, 430]) {
+    await page.setViewportSize({ width, height: 844 });
+    const pitch = page.locator("#lineupSlots");
+    await expect(pitch).toBeVisible();
+    await expect(pitch.locator(".player-chip")).toHaveCount(11);
+    await expect.poll(() => page.locator(".fm-tactics-grid > .pitch-stage").evaluate(
+      (stage) => parseFloat(getComputedStyle(stage).paddingTop)
+    )).toBe(8);
+
+    const m = await page.evaluate(() => {
+      const stage = document.querySelector(".fm-tactics-grid > .pitch-stage");
+      const pitch = stage.querySelector("#lineupSlots");
+      const hint = stage.querySelector(".pitch-hint");
+      const hintButton = hint.querySelector(".shortcut-button");
+      const chips = [...pitch.querySelectorAll(".player-chip")];
+      const bench = document.querySelector(".fm-tactics-bench");
+      const benchCard = bench.querySelector(".bench-player-card");
+      const rect = pitch.getBoundingClientRect();
+      return {
+        stageGap: parseFloat(getComputedStyle(stage).rowGap),
+        pitchRatio: rect.height / rect.width,
+        pitchWidth: rect.width,
+        chipCount: chips.length,
+        chipHeights: chips.map((chip) => chip.getBoundingClientRect().height),
+        chipButtons: chips.every((chip) => chip.tagName === "BUTTON"),
+        hintWrap: getComputedStyle(hint).flexWrap,
+        hintButtonHeight: hintButton.getBoundingClientRect().height,
+        benchPadding: parseFloat(getComputedStyle(bench).paddingTop),
+        benchCardPadding: benchCard ? parseFloat(getComputedStyle(benchCard).paddingTop) : null,
+        overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+      };
+    });
+    expect(m.stageGap, "pitch card gap at " + width).toBeLessThanOrEqual(7);
+    expect(m.pitchRatio, "original 4:5 pitch ratio at " + width).toBeGreaterThan(1.23);
+    expect(m.pitchRatio, "original 4:5 pitch ratio at " + width).toBeLessThan(1.27);
+    expect(m.pitchWidth, "usable width at " + width).toBeGreaterThan(250);
+    expect(m.chipCount).toBe(11);
+    expect(m.chipButtons).toBe(true);
+    expect(m.chipHeights.every((height) => height >= 40), "playable chips at " + width).toBe(true);
+    expect(m.hintWrap).toBe("nowrap");
+    expect(m.hintButtonHeight, "system action at " + width).toBeGreaterThanOrEqual(44);
+    expect(m.benchPadding).toBeLessThanOrEqual(9);
+    if (m.benchCardPadding !== null) {
+      expect(m.benchCardPadding).toBeLessThanOrEqual(7);
+    }
+    expect(m.overflow, "no page overflow at " + width).toBeLessThanOrEqual(1);
+  }
+  await page.locator(".fm-tactics-grid > .pitch-stage .pitch-hint .shortcut-button").click();
+  await expect(page.locator('[data-tab-section="system"]')).toBeVisible();
+});
+
 test("mobil liggende har taktikkvisning og spillerliste samtidig", async ({ page }) => {
   await page.setViewportSize({ width: 844, height: 390 });
   await expect(page.locator("#lineupSlots")).toBeVisible();
