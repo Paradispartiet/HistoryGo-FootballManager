@@ -214,7 +214,8 @@ test("360–430px har lavere profilbane uten å miste full profil eller trygge k
     } else {
       expect(m.width, "medium-width field unchanged").toBeGreaterThanOrEqual(200);
     }
-    expect(m.ratio, "same field proportions at " + width).toBeGreaterThan(1.5);
+    // At 500px the existing 240px field reaches max-height: 360px (ratio exactly 1.5).
+    expect(m.ratio, "same field proportions or existing height cap at " + width).toBeGreaterThanOrEqual(1.5);
     expect(m.ratio, "same field proportions at " + width).toBeLessThan(1.58);
     expect(m.closeWidth, "close width at " + width).toBeGreaterThanOrEqual(44);
     expect(m.closeHeight, "close height at " + width).toBeGreaterThanOrEqual(44);
