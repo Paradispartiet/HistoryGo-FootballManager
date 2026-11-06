@@ -176,3 +176,57 @@ test("mobilprofil er kompakt og har 44px lukkeknapp og faner uten å miste kilde
   await dialog.locator(".manager-player-profile-close").click();
   await expect(dialog).toBeHidden();
 });
+
+test("360–430px har lavere profilbane uten å miste full profil eller trygge knapper", async ({ page }) => {
+  await page.evaluate(() => {
+    window.dispatchEvent(new CustomEvent("hgfm:open-player-profile", {
+      detail: { playerId: "erik_mykland", allowLocked: true }
+    }));
+  });
+  const dialog = page.locator("#managerPlayerProfileDialog");
+  await expect(dialog).toBeVisible();
+
+  for (const width of [320, 360, 390, 430, 500]) {
+    await page.setViewportSize({ width, height: 844 });
+    const m = await dialog.evaluate((modal) => {
+      const pitch = modal.querySelector(".manager-player-mini-pitch").getBoundingClientRect();
+      const close = modal.querySelector(".manager-player-profile-close").getBoundingClientRect();
+      const tabs = [...modal.querySelectorAll(".manager-player-profile-tabs button")]
+        .map((button) => button.getBoundingClientRect());
+      return {
+        width: pitch.width,
+        height: pitch.height,
+        ratio: pitch.height / pitch.width,
+        closeWidth: close.width,
+        closeHeight: close.height,
+        tabs: tabs.map((rect) => rect.height),
+        overflow: modal.scrollWidth - modal.clientWidth,
+        hasSummary: Boolean(modal.querySelector(".manager-player-summary")),
+        hasPositionMarkers: Boolean(modal.querySelector(".manager-player-position-marker"))
+      };
+    });
+    if (width >= 360 && width <= 430) {
+      expect(m.width, "reduced field width at " + width).toBeLessThanOrEqual(161);
+      expect(m.width, "readable field width at " + width).toBeGreaterThanOrEqual(145);
+      expect(m.height, "reduced field height at " + width).toBeLessThanOrEqual(249);
+    } else if (width === 320) {
+      expect(m.width, "320px fallback field width").toBeGreaterThanOrEqual(145);
+    } else {
+      expect(m.width, "medium-width field unchanged").toBeGreaterThanOrEqual(200);
+    }
+    // At 500px the existing 240px field reaches max-height: 360px (ratio exactly 1.5).
+    expect(m.ratio, "same field proportions or existing height cap at " + width).toBeGreaterThanOrEqual(1.5);
+    expect(m.ratio, "same field proportions at " + width).toBeLessThan(1.58);
+    expect(m.closeWidth, "close width at " + width).toBeGreaterThanOrEqual(44);
+    expect(m.closeHeight, "close height at " + width).toBeGreaterThanOrEqual(44);
+    expect(m.tabs.every((height) => height >= 44), "tabs at " + width).toBe(true);
+    expect(m.hasSummary).toBe(true);
+    expect(m.hasPositionMarkers).toBe(true);
+    expect(m.overflow, "no modal overflow at " + width).toBeLessThanOrEqual(1);
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(dialog.locator(".manager-player-summary .manager-player-source-link"))
+    .toHaveAttribute("href", "https://snl.no/Erik_Mykland");
+  await dialog.locator(".manager-player-profile-close").click();
+  await expect(dialog).toBeHidden();
+});

@@ -783,3 +783,13 @@
   .manager-player-profile-left,
   .manager-player-profile-right { gap: .55rem; }
 }
+
+/* Phase 3: recover vertical room in a full-screen player profile.
+   Keep the original field aspect-ratio, position markers and all details.
+   The 320px layout stays unchanged to protect already narrow markers. */
+@media (min-width: 360px) and (max-width: 430px) and (orientation: portrait) {
+  .manager-player-profile-dialog .manager-player-mini-pitch {
+    width: min(41vw, 160px);
+    min-height: 0;
+  }
+}
