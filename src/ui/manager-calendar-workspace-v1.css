@@ -794,7 +794,8 @@ html[data-manager-office-calendar-v1="active"] #nextActionStrip[data-surface="ma
 /* Fase 3 · Kalender på smale, stående telefoner.
    Uke, dato, dag og arbeidsflyt forblir synlige; alle handlinger er minst 44 px. */
 @media (max-width: 430px) and (orientation: portrait) {
-  body[data-manager-area="office"] .manager-calendar-head {
+  /* Outrank the later-loaded visual-identity header padding-top rule. */
+  html body[data-manager-area="office"] .manager-calendar-head {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: start;
