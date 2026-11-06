@@ -554,3 +554,147 @@ body[data-manager-area="office"] .dept-inbox :is(.inbox-choice-button, .inbox-th
   body[data-manager-area="office"] .dept-inbox .inbox-thread-toggle { padding: 16px; }
   body[data-manager-area="office"] .dept-inbox .inbox-thread-body { padding-inline: 16px; }
 }
+
+
+/* Fase 3 · Kontor på stående mobil: mindre kortkrom, full beslutningsflyt.
+   Tekst, fokus-/kødata og 44px-handlinger beholdes; ingen skjult informasjon. */
+@media (max-width: 430px) and (orientation: portrait) {
+  body[data-manager-area="office"] .dept-inbox .inbox-command-layout {
+    gap: 10px;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-command-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    align-items: start;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-command-hero > div:first-child {
+    min-width: 0;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-command-hero .eyebrow {
+    margin-bottom: 2px;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-command-hero h2 {
+    margin: 0 0 5px;
+    font-size: 1.5rem;
+    line-height: 1.05;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-command-hero .dept-hero-lede {
+    font-size: .73rem;
+    line-height: 1.35;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-command-hero .dept-hero-stat {
+    min-width: 0;
+    max-width: 6rem;
+    padding: 7px 8px;
+    border-radius: 10px;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-command-hero .dept-hero-stat strong {
+    font-size: 1.55rem;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-command-hero .dept-hero-stat span {
+    font-size: .62rem;
+    line-height: 1.25;
+  }
+
+  body[data-manager-area="office"] .dept-inbox :is(
+    .manager-surface.inbox-focus-panel,
+    .manager-surface.inbox-briefing-panel,
+    .manager-surface.inbox-queue-panel
+  ) {
+    gap: 10px;
+    padding: 12px;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-focus-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px 10px;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-focus-heading > div {
+    min-width: 0;
+    flex: 1 1 9rem;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-focus-heading h3,
+  body[data-manager-area="office"] .dept-inbox .inbox-queue-heading h3,
+  body[data-manager-area="office"] .dept-inbox .inbox-briefing-panel h3 {
+    font-size: 1.08rem;
+    line-height: 1.2;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-focus-status,
+  body[data-manager-area="office"] .dept-inbox .inbox-queue-heading > span {
+    padding: 5px 8px;
+    font-size: .68rem;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .message-list,
+  body[data-manager-area="office"] .dept-inbox .inbox-thread-card {
+    gap: 8px;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .message-card {
+    padding: 11px 12px;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-thread-toggle {
+    min-height: 44px;
+    gap: 5px;
+    padding: 10px 12px;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-thread-body {
+    gap: 8px;
+    padding: 0 12px 12px;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-focus-list .inbox-thread-body {
+    padding-bottom: 12px;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-inline-stats {
+    gap: 8px;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-inline-stats > div {
+    min-width: 0;
+    padding: 8px;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-inline-stats dd {
+    margin-top: 2px;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-briefing-panel .inbox-signal-status {
+    font-size: .75rem;
+    line-height: 1.35;
+    padding-left: 8px;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-briefing-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-briefing-actions button,
+  body[data-manager-area="office"] .dept-inbox :is(.inbox-choice-button, .inbox-thread-read-button) {
+    min-height: 44px;
+  }
+
+  body[data-manager-area="office"] .dept-inbox .inbox-queue-list .inbox-thread-toggle {
+    min-height: 44px;
+  }
+}

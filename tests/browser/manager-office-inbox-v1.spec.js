@@ -192,3 +192,71 @@ test("Innboks har tynne lyse kortkanter og hvit tekst", async ({ page }) => {
   await page.locator('.app-subtab[data-tab-target="inbox"]').click();
   await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
 });
+
+
+test("320–430px gir tettere Kontor-kort uten å skjule innboks, valg eller navigasjon", async ({ page }) => {
+  for (const width of [320, 390, 430]) {
+    await page.setViewportSize({ width, height: 844 });
+    await openOffice(page);
+    const hero = page.locator(".dept-inbox .inbox-command-hero");
+    const focus = page.locator(".dept-inbox .inbox-focus-panel");
+    const briefing = page.locator(".dept-inbox .inbox-briefing-panel");
+    const actions = briefing.locator(".inbox-briefing-actions button");
+    await expect(hero).toBeVisible();
+    await expect(focus).toBeVisible();
+    await expect(briefing).toBeVisible();
+    await expect(actions).toHaveCount(2);
+    await expect(page.locator("#inboxThreadList .inbox-thread-card, #inboxThreadList .message-card").first()).toBeVisible();
+
+    const metrics = await page.evaluate(() => {
+      const root = document.querySelector(".dept-inbox");
+      const hero = root.querySelector(".inbox-command-hero");
+      const focus = root.querySelector(".inbox-focus-panel");
+      const briefing = root.querySelector(".inbox-briefing-panel");
+      const toggles = [...root.querySelectorAll(".inbox-thread-toggle")];
+      const actions = [...briefing.querySelectorAll(".inbox-briefing-actions button")];
+      const queue = root.querySelector(".inbox-queue-panel");
+      const queueToggle = queue.querySelector(".inbox-thread-toggle");
+      return {
+        heroDisplay: getComputedStyle(hero).display,
+        heroPadding: parseFloat(getComputedStyle(hero).paddingTop),
+        focusPadding: parseFloat(getComputedStyle(focus).paddingTop),
+        focusGap: parseFloat(getComputedStyle(focus).rowGap),
+        briefingPadding: parseFloat(getComputedStyle(briefing).paddingTop),
+        statColumns: getComputedStyle(briefing.querySelector(".inbox-inline-stats")).gridTemplateColumns,
+        metricCount: briefing.querySelectorAll(".inbox-inline-stats > div").length,
+        actionHeights: actions.map((button) => button.getBoundingClientRect().height),
+        actionWidths: actions.map((button) => button.getBoundingClientRect().width),
+        threadButtons: toggles.filter((button) => button.getClientRects().length > 0).map((button) => ({ height: button.getBoundingClientRect().height, label: button.textContent.trim() })),
+        queueMinHeight: queueToggle ? parseFloat(getComputedStyle(queueToggle).minHeight) : null,
+        ledeVisible: hero.querySelector(".dept-hero-lede").getBoundingClientRect().height > 0,
+        overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+      };
+    });
+    expect(metrics.heroDisplay, `header grid at ${width}px`).toBe("grid");
+    // 10–12 px is still substantially tighter than the original 16 px mobile padding.
+    expect(metrics.heroPadding, `header padding at ${width}px`).toBeLessThanOrEqual(12);
+    expect(metrics.focusPadding, `focus padding at ${width}px`).toBeLessThanOrEqual(12);
+    expect(metrics.briefingPadding, `briefing padding at ${width}px`).toBeLessThanOrEqual(12);
+    expect(metrics.focusGap, `focus spacing at ${width}px`).toBeLessThanOrEqual(10);
+    expect(metrics.metricCount).toBe(2);
+    expect(metrics.actionHeights.every((height) => height >= 44), `touch targets at ${width}px`).toBe(true);
+    expect(metrics.actionWidths.every((buttonWidth) => buttonWidth >= 100), `button readability at ${width}px`).toBe(true);
+    expect(metrics.threadButtons.length, `visible threads at ${width}px`).toBeGreaterThan(0);
+    expect(metrics.threadButtons.every((button) => button.height >= 44 && button.label.length > 0)).toBe(true);
+    if (metrics.queueMinHeight !== null) expect(metrics.queueMinHeight).toBeLessThanOrEqual(44);
+    expect(metrics.ledeVisible, `description is not hidden at ${width}px`).toBe(true);
+    expect(metrics.overflow, `no horizontal overflow at ${width}px`).toBeLessThanOrEqual(1);
+
+    // The existing real navigation remains actionable, not just visible.
+    await actions.first().click();
+    await expect(page.locator('[data-tab-section="trening"]')).toBeVisible();
+  }
+
+  await page.setViewportSize({ width: 768, height: 1024 });
+  await openOffice(page);
+  const desktopPadding = await page.locator(".dept-inbox .inbox-focus-panel")
+    .evaluate((node) => parseFloat(getComputedStyle(node).paddingTop));
+  expect(desktopPadding, "tablet layout retains its original room").toBeGreaterThanOrEqual(16);
+  await expectNoHorizontalOverflow(page);
+});
