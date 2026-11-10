@@ -4698,7 +4698,23 @@ function chooseMatchdayDecision(optionId) {
   // (gate-sikkert — kampdag→oppsummering krever nettopp en spilt kamp). Selve
   // uke-rullen skjer fortsatt via «Til managerkontoret».
   if (matchJustFinished) {
-    syncClubWeekPhaseToProgress().catch(console.error);
+    const completedMatchId = state.matchday.lastMatch?.id;
+    syncClubWeekPhaseToProgress().then(() => {
+      requestAnimationFrame(() => {
+        // Wait for the canonical review render. Do not steal focus if the
+        // manager has already opened another tab or started another match.
+        if (state.matchday?.session || state.matchday?.lastMatch?.id !== completedMatchId
+          || document.querySelector('[data-tab-section="kamp"]')?.hidden !== false) return;
+        const heading = elements.matchdayCommand?.querySelector("#postMatchAnalysisTitle");
+        if (!heading) return;
+        heading.tabIndex = -1;
+        heading.focus({ preventScroll: true });
+        heading.scrollIntoView({
+          behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+          block: "center"
+        });
+      });
+    }).catch(console.error);
   }
 }
 
