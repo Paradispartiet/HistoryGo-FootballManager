@@ -698,3 +698,11 @@ body[data-manager-area="office"] .dept-inbox :is(.inbox-choice-button, .inbox-th
     min-height: 44px;
   }
 }
+
+
+/* Underfanene følger samme 44px trykkflatekrav som hovednavigasjonen. */
+@media (max-width: 430px) and (orientation: portrait) {
+  body[data-manager-area] .app-subnav .app-subtab {
+    min-height: 44px;
+  }
+}
