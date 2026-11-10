@@ -548,8 +548,8 @@
 }
 
 .matchday-scene-support > summary {
-  display: flex;
-  align-items: center;
+  /* Keep the native disclosure triangle visible on Safari and Chromium. */
+  display: list-item;
   min-height: 44px;
   padding: 0.75rem 0.9rem;
   color: #f0f5ff;
