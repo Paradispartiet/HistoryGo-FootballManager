@@ -260,3 +260,79 @@ test("320–430px gir tettere Kontor-kort uten å skjule innboks, valg eller nav
   expect(desktopPadding, "tablet layout retains its original room").toBeGreaterThanOrEqual(16);
   await expectNoHorizontalOverflow(page);
 });
+
+
+test("320–430px beholder kompakt Kalender og todelt Stab med synlige valg", async ({ page }) => {
+  for (const width of [320, 390, 430]) {
+    await page.setViewportSize({ width, height: 844 });
+    await openOffice(page);
+    await page.locator('.app-subtab[data-tab-target="calendar"]').click();
+    await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+    await expect(page.locator(".manager-calendar-head")).toBeVisible();
+    await expect(page.locator("#managerCalendarDays .manager-calendar-day-button")).toHaveCount(7);
+
+    const calendar = await page.evaluate(() => {
+      const head = document.querySelector(".manager-calendar-head");
+      const days = [...document.querySelectorAll("#managerCalendarDays .manager-calendar-day-button")];
+      const now = head.querySelector(".manager-calendar-now");
+      return {
+        display: getComputedStyle(head).display,
+        topPadding: parseFloat(getComputedStyle(head).paddingTop),
+        nowVisible: now.getBoundingClientRect().height > 0,
+        dayHeights: days.map((day) => day.getBoundingClientRect().height),
+        overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+      };
+    });
+    expect(calendar.display, `calendar header at ${width}px`).toBe("grid");
+    expect(calendar.topPadding, `calendar header padding at ${width}px`).toBeLessThanOrEqual(12);
+    expect(calendar.nowVisible, `current week visible at ${width}px`).toBe(true);
+    expect(calendar.dayHeights.every((height) => height >= 44), `calendar day touch targets at ${width}px`).toBe(true);
+    expect(calendar.overflow, `calendar horizontal overflow at ${width}px`).toBeLessThanOrEqual(1);
+
+    await page.locator('#managerCalendarDays .manager-calendar-day-button[data-day="1"]').click();
+    await expect(page.locator("#managerCalendarSelectedDay")).toContainText("Mandag");
+    await page.locator('#managerCalendarTimeline [data-event-kind="message"]').first().click();
+    const close = page.locator("#managerCalendarMessageDrawer .manager-calendar-drawer-close");
+    await expect(close).toBeVisible();
+    const closeHeight = await close.evaluate((button) => button.getBoundingClientRect().height);
+    expect(closeHeight, `drawer close touch target at ${width}px`).toBeGreaterThanOrEqual(44);
+    await expectNoHorizontalOverflow(page);
+    await close.click();
+    await expect(page.locator("#managerCalendarMessageDrawer")).toBeHidden();
+
+    await page.locator('.app-subtab[data-tab-target="admin"]').click();
+    await expect(page.locator('[data-tab-section="admin"]')).toBeVisible();
+    await expect(page.locator(".staff-workspace-header")).toBeVisible();
+    await expect(page.locator(".staff-role-grid")).toBeVisible();
+    const staff = await page.evaluate(() => {
+      const header = document.querySelector(".staff-workspace-header");
+      const roles = document.querySelector(".staff-role-grid");
+      const roster = document.querySelector(".manager-staff-roster-v1");
+      const summaries = [...document.querySelectorAll(".staff-workspace-fold > summary")];
+      const actions = [...document.querySelectorAll(".staff-candidate-list .unlock-card-action")];
+      return {
+        headerWrap: getComputedStyle(header).flexWrap,
+        roleColumns: getComputedStyle(roles).gridTemplateColumns.split(" ").length,
+        rosterPadding: parseFloat(getComputedStyle(roster).paddingTop),
+        summaryHeights: summaries.map((summary) => summary.getBoundingClientRect().height),
+        actionHeights: actions.map((button) => button.getBoundingClientRect().height),
+        overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+      };
+    });
+    expect(staff.headerWrap, `staff header wrap at ${width}px`).toBe("nowrap");
+    expect(staff.roleColumns, `two staff roles per row at ${width}px`).toBe(2);
+    expect(staff.rosterPadding, `staff roster padding at ${width}px`).toBeLessThanOrEqual(10);
+    expect(staff.summaryHeights.every((height) => height >= 44), `staff details targets at ${width}px`).toBe(true);
+    expect(staff.actionHeights.every((height) => height >= 44), `recruitment targets at ${width}px`).toBe(true);
+    expect(staff.overflow, `staff horizontal overflow at ${width}px`).toBeLessThanOrEqual(1);
+  }
+
+  await page.setViewportSize({ width: 1024, height: 900 });
+  await openOffice(page);
+  await page.locator('.app-subtab[data-tab-target="admin"]').click();
+  await expect(page.locator('[data-tab-section="admin"]')).toBeVisible();
+  const wideRoles = await page.locator(".staff-role-grid")
+    .evaluate((grid) => getComputedStyle(grid).gridTemplateColumns.split(" ").length);
+  expect(wideRoles, "desktop retains four staff roles per row").toBe(4);
+  await expectNoHorizontalOverflow(page);
+});
