@@ -187,7 +187,7 @@ test("aktuell kampsituasjon kommer før sammenleggbar grepshistorikk på mobil",
   const chosenLabel = await choice.textContent();
   await choice.click();
   await result.getByRole("button", { name: "Hopp til pausen" }).click();
-  await expect(history.locator("summary")).toHaveText("Se tidligere managergrep (1)");
+  await expect(history.locator(":scope > summary")).toHaveText("Se tidligere managergrep (1)");
   const saved = await page.evaluate(() => localStorage.getItem("hgfm.matchday.v1"));
 
   for (const width of [320, 390]) {
@@ -201,7 +201,7 @@ test("aktuell kampsituasjon kommer før sammenleggbar grepshistorikk på mobil",
     }));
     expect(bounds.eventBottom).toBeLessThan(bounds.historyTop);
     expect(bounds.summaryHeight).toBeGreaterThanOrEqual(44);
-    await history.locator("summary").focus();
+    await history.locator(":scope > summary").focus();
     await page.keyboard.press("Enter");
     await expect(history.locator(".matchday-decision-entry")).toBeVisible();
     await expect(history.locator(".matchday-decision-title")).toContainText(chosenLabel);
