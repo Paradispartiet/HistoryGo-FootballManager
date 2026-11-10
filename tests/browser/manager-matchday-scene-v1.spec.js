@@ -180,12 +180,20 @@ test("aktuell kampsituasjon kommer før sammenleggbar grepshistorikk på mobil",
   await prepareAndOpenPreMatch(page);
   await page.locator("#matchdayCommand .matchday-scene-action").click();
   const result = page.locator("#matchdayResult");
+  await result.getByRole("button", { name: "Pause", exact: true }).click();
   const history = result.locator(".matchday-decision-history");
   const latest = result.getByRole("complementary", { name: "Siste managergrep" });
+  const primary = page.locator("#matchdayCommand .matchday-scene-action");
   await expect(history).toHaveCount(0);
   await expect(latest).toHaveCount(0);
+  await expect(primary).toHaveText("Gå til kampbildet");
+  await expect(result.locator(".matchday-event-card .matchday-decision-button").first()).toBeDisabled();
   await result.getByRole("button", { name: "Hopp til pausen" }).click();
   const choice = result.locator(".matchday-event-card .matchday-decision-button").first();
+  await expect(primary).toHaveText("Velg managergrep");
+  await primary.click();
+  await expect(choice).toBeFocused();
+  await expect(choice).toBeInViewport();
   const chosenLabel = await choice.textContent();
   await choice.click();
   await result.getByRole("button", { name: "Hopp til pausen" }).click();
@@ -208,6 +216,9 @@ test("aktuell kampsituasjon kommer før sammenleggbar grepshistorikk på mobil",
     expect(bounds.eventBottom).toBeLessThan(bounds.historyTop);
     expect(bounds.summaryHeight).toBeGreaterThanOrEqual(44);
     await expect(latest).toBeVisible();
+    await primary.click();
+    await expect(choice).toBeFocused();
+    await expect(choice).toBeInViewport();
     await history.locator(":scope > summary").focus();
     await page.keyboard.press("Enter");
     await expect(history.locator(".matchday-decision-entry")).toBeVisible();
@@ -219,6 +230,9 @@ test("aktuell kampsituasjon kommer før sammenleggbar grepshistorikk på mobil",
   await expect(choice).toBeEnabled();
   await page.reload();
   await openMatchday(page);
+  await expect(primary).toHaveText("Velg managergrep");
+  await primary.click();
+  await expect(choice).toBeFocused();
   await expect(latest.locator(".matchday-decision-feedback")).toHaveText(recorded.feedback);
   await choice.click();
   const nextRecorded = await page.evaluate(() =>
