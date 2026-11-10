@@ -1,3 +1,5 @@
+import assert from "node:assert/strict";
+import { visibleMatchLog, visibleMatchScore } from "../src/ui/manager-matchday-presentation.js";
 import { createMatchdaySceneModel } from "../src/ui/manager-matchday-presentation.js";
 
 let failures = 0;
@@ -10,6 +12,23 @@ function check(label, condition, detail = "") {
     console.error(`  FEIL ${label}${detail ? ` (${detail})` : ""}`);
   }
 }
+
+const replay = {
+  phase: "event_1", liveMinute: 0, score: { for: 2, against: 1 },
+  minuteLog: [
+    { minute: 5, scoreAfter: { for: 1, against: 0 } },
+    { minute: 15, scoreAfter: { for: 1, against: 1 } },
+    { minute: 22, scoreAfter: { for: 2, against: 1 } }
+  ]
+};
+const originalReplay = JSON.stringify(replay);
+for (const [minute, score] of [[0, [0, 0]], [4, [0, 0]], [5, [1, 0]], [14, [1, 0]], [15, [1, 1]], [22, [2, 1]]]) {
+  assert.deepEqual(visibleMatchScore({ ...replay, liveMinute: minute }), { for: score[0], against: score[1] });
+  assert.ok(visibleMatchLog({ ...replay, liveMinute: minute }).every((entry) => entry.minute <= minute));
+}
+assert.deepEqual(visibleMatchScore({ phase: "resolved", score: replay.score }), replay.score);
+assert.deepEqual(visibleMatchScore({ outcome: "win", score: replay.score }), replay.score);
+assert.equal(JSON.stringify(replay), originalReplay, "Replayvisningen endrer ikke motorens fasit");
 
 const common = {
   teamName: "Bislett FK",

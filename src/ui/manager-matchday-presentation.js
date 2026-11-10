@@ -1,3 +1,21 @@
+// Presentation only: the engine may already have calculated unseen minutes.
+export function visibleMatchLog(session) {
+  const log = Array.isArray(session?.minuteLog) ? session.minuteLog : [];
+  if (session?.outcome || session?.phase === "resolved") return log;
+  const minute = Number(session?.liveMinute);
+  return Number.isFinite(minute) && minute > 0
+    ? log.filter((entry) => Number(entry.minute) <= minute) : [];
+}
+
+export function visibleMatchScore(session) {
+  const last = [...visibleMatchLog(session)].reverse().find((entry) => entry.scoreAfter);
+  if (last) return { ...last.scoreAfter };
+  if (session?.outcome || session?.phase === "resolved") {
+    return { ...(session.score || { for: 0, against: 0 }) };
+  }
+  return { for: 0, against: 0 };
+}
+
 // ============================================================================
 // Manager Matchday Scene v1 + Post-match analysis v1
 // Visual hierarchy on top of existing state. The match engine, readiness,

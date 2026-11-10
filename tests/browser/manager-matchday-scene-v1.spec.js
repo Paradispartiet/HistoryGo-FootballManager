@@ -912,3 +912,25 @@ test("fase 2: etterkampforslag lagres først ved ny uke, vises kun den uka og ve
   await expect(page.locator("#managerTrainingDay")).toBeVisible();
   await expect(page.locator("#trainingDayProblemSuggestion")).toBeHidden();
 });
+
+test("kampplan og tavle avdekker samme stilling minutt for minutt", async ({ page }) => {
+  await prepareAndOpenPreMatch(page);
+  await page.clock.install({ time: new Date("2026-01-01T12:00:00Z") });
+  await page.clock.pauseAt(new Date("2026-01-01T12:00:01Z"));
+  await page.locator("#matchdayCommand .matchday-scene-action").click();
+  const result = page.locator("#matchdayResult");
+  const score = result.locator(".matchday-score");
+  const plan = result.locator("details.match-plan-switcher > summary").first();
+  await expect(score).toContainText("0 – 0");
+  await expect(plan).toContainText("0–0");
+  await expect(result.locator(".matchday-clock")).toHaveText("0' · Avspark");
+  const session = await page.evaluate(() => JSON.parse(localStorage.getItem("hgfm.matchday.v1")).session);
+  const end = session.timeline.at(-1).range.to;
+  for (let minute = 1; minute <= end; minute += 1) {
+    await page.clock.runFor(130);
+    const latest = session.minuteLog.filter((entry) => entry.minute <= minute && entry.scoreAfter).at(-1);
+    const expected = latest?.scoreAfter || { for: 0, against: 0 };
+    await expect(score).toContainText(`${expected.for} – ${expected.against}`);
+    await expect(plan).toContainText(`${expected.for}–${expected.against}`);
+  }
+});

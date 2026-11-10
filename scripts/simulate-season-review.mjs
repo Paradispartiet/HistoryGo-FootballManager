@@ -62,6 +62,8 @@ console.log("1. Målet");
 
   const etterGull = deriveSeasonTarget({ clubCount: 8, seasonNumber: 4, previousPosition: 1 });
   check("etter gull kan de ikke kreve mer enn gull", etterGull.targetPosition === 1);
+  check("styret ber mesteren forsvare gullet", etterGull.description.includes("forsvarer gullet"));
+  check("andreplassen omtales korrekt", etterAndre.description.includes("nummer to"));
 
   const etterSist = deriveSeasonTarget({ clubCount: 8, seasonNumber: 2, previousPosition: 8 });
   check("forventningen vokser aldri mer enn ett steg", etterSist.targetPosition === 7, `mål=${etterSist.targetPosition}`);

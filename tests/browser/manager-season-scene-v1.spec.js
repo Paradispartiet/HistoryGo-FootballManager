@@ -180,6 +180,7 @@ test("sesongdom flytter canonical styretillit før sesong 2", async ({ page }) =
   await page.reload();
   await page.locator('.main-nav [role="tab"][data-tab-target="statistikk"]').click();
   await expect(page.locator("#startNewLeagueSeasonButton")).toBeVisible();
+  await expect(page.locator("#statsStanding")).toContainText("1. plass");
 
   const before = await page.evaluate(() => {
     const merits = JSON.parse(localStorage.getItem("hgfm.teamMerits.v1") || "{}");
