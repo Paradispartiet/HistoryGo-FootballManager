@@ -10877,6 +10877,29 @@ function renderMatchdaySessionEvent(container, session, eventIndex) {
   appendMatchScoreboard(liveView, session);
   card.append(liveView);
 
+  // Show only the latest recorded choice here. The full review stays folded
+  // below the current event, and no verdict is inferred for older saves.
+  const latestDecision = Array.isArray(session.decisions) ? session.decisions.at(-1) : null;
+  if (typeof latestDecision?.optionLabel === "string" && latestDecision.optionLabel.trim()) {
+    const tone = ["positive", "neutral", "negative"].includes(latestDecision.tone)
+      ? latestDecision.tone : "neutral";
+    const latest = document.createElement("aside");
+    latest.className = `matchday-latest-decision matchday-decision-entry is-${tone}`;
+    latest.setAttribute("aria-label", "Siste managergrep");
+    appendMatchdayMeta(latest, "Siste managergrep");
+    const choice = document.createElement("strong");
+    choice.className = "matchday-decision-title";
+    choice.textContent = latestDecision.optionLabel;
+    latest.append(choice);
+    if (typeof latestDecision.feedback === "string" && latestDecision.feedback.trim()) {
+      const feedback = document.createElement("p");
+      feedback.className = "matchday-decision-feedback";
+      feedback.textContent = latestDecision.feedback;
+      latest.append(feedback);
+    }
+    card.append(latest);
+  }
+
   const event = session.events[eventIndex];
 
   // Har motstanderen justert seg, er det den viktigste nye opplysningen i
