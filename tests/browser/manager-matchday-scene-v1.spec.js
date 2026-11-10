@@ -175,7 +175,8 @@ test("kampforberedelsen går videre til eksisterende avspark", async ({ page }) 
   await expect(page.locator("#matchdayCommand .matchday-scene")).toHaveAttribute("data-phase", "live");
 });
 
-test("aktuell kampsituasjon kommer før sammenleggbar grepshistorikk på mobil", async ({ page }) => {
+test("hel kamp på mobil bevarer grep, rapport og neste manageruke", async ({ page }) => {
+  test.setTimeout(60000);
   await page.setViewportSize({ width: 390, height: 844 });
   await prepareAndOpenPreMatch(page);
   await page.locator("#matchdayCommand .matchday-scene-action").click();
@@ -242,6 +243,57 @@ test("aktuell kampsituasjon kommer før sammenleggbar grepshistorikk på mobil",
   await expect(latest.locator(".matchday-decision-title")).toHaveText(nextRecorded.optionLabel);
   await expect(latest.locator(".matchday-decision-feedback")).toHaveText(nextRecorded.feedback);
   await expect(history.locator(".matchday-decision-entry")).toHaveCount(2);
+
+  // Finish the actual third decision rather than injecting a completed report.
+  await result.getByRole("button", { name: "Hopp til pausen" }).click();
+  await primary.click();
+  await choice.click();
+  const scene = page.locator("#matchdayCommand .matchday-scene");
+  await expect(scene).toHaveAttribute("data-phase", "report");
+  const reportHeading = scene.locator("#postMatchAnalysisTitle");
+  await expect(reportHeading).toBeFocused();
+  await expect(reportHeading).toBeInViewport();
+  await expect(scene.locator(".matchday-post-match-decision-step")).toHaveCount(3);
+  await expect(scene).toContainText("Viking");
+  await expect(scene).toContainText("Runde 2");
+  await expectNoHorizontalOverflow(page);
+
+  const readProgress = () => page.evaluate(() => {
+    const active = JSON.parse(localStorage.getItem("hgfm.modeSessions.v1")).sessions.league;
+    return {
+      matchday: { session: active.matchday.session, lastMatch: active.matchday.lastMatch },
+      week: active.clubWeekState.week,
+      phase: active.clubWeekState.phase,
+      round: active.leagueSeason.currentRound,
+      completed: active.leagueSeason.completedMatchIds
+    };
+  });
+  const finished = await readProgress();
+  expect(finished.matchday.session).toBeNull();
+  expect(finished.matchday.lastMatch.decisions).toHaveLength(3);
+  expect(finished.matchday.lastMatch.leagueContext).toMatchObject({
+    fixtureId: "matchday-r2-0", round: 2, opponentId: "viking"
+  });
+  expect(finished.week).toBe(1);
+  expect(finished.phase).toBe("review");
+  expect(finished.round).toBe(3);
+  expect(new Set(finished.completed).size).toBe(finished.completed.length);
+
+  await page.reload();
+  await openMatchday(page);
+  await expect(scene).toHaveAttribute("data-phase", "report");
+  expect(await readProgress()).toEqual(finished);
+  await scene.locator(".matchday-post-match-primary").click();
+  await expect(page.locator('[data-tab-section="calendar"]')).toBeVisible();
+  const nextWeek = await readProgress();
+  expect(nextWeek.week).toBe(2);
+  expect(nextWeek.phase).toBe("analysis");
+  expect(nextWeek.matchday.lastMatch).toEqual(finished.matchday.lastMatch);
+  expect(nextWeek.round).toBe(finished.round);
+  expect(nextWeek.completed).toEqual(finished.completed);
+  await page.reload();
+  await expect(page.locator("#formationSelect option").first()).toBeAttached();
+  expect(await readProgress()).toEqual(nextWeek);
 });
 
 test("rapportscenen blander ikke forrige motstander med neste fixtures metadata", async ({ page }) => {
