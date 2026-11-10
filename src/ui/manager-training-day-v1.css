@@ -449,3 +449,72 @@
   .training-day-section-head { align-items: start; }
   .training-day-action { font-size: .84rem; }
 }
+
+
+/* Fase 3 · Trening på 320–430px: behold kalenderlenken og ukestatus ved siden
+   av overskriften, og la én handling fortsatt være lett å treffe. */
+@media (max-width: 430px) and (orientation: portrait) {
+  .training-day-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+
+  .training-day-head > div:first-child {
+    min-width: 0;
+  }
+
+  .training-day-calendar-link {
+    min-height: 44px;
+    margin-bottom: 3px;
+    font-size: .68rem;
+  }
+
+  .training-day-head h2 {
+    font-size: 1.45rem;
+    line-height: 1.08;
+    margin: 0 0 4px;
+  }
+
+  .training-day-lede {
+    font-size: .72rem;
+    line-height: 1.35;
+  }
+
+  .training-day-clock {
+    min-width: 0;
+    max-width: 6rem;
+    justify-self: end;
+    justify-items: start;
+    gap: 2px;
+    padding-left: 8px;
+  }
+
+  .training-day-clock span {
+    font-size: .62rem;
+    line-height: 1.25;
+  }
+
+  .training-day-clock strong {
+    font-size: .82rem;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+
+  .training-day-main {
+    padding: 10px 12px;
+  }
+
+  .training-day-session {
+    padding-block: 10px;
+  }
+
+  .training-day-action,
+  .training-day-card button,
+  .training-day-calendar-return,
+  .training-day-next button {
+    min-height: 44px;
+  }
+}

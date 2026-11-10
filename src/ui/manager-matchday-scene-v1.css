@@ -453,3 +453,86 @@
 .matchday-depth .data-inline-list-item {
   color: #f3f6fb;
 }
+
+
+/* Fase 3 · Kampdag på stående 320–430px: status ved siden av kampen,
+   ikke under overskriften; viktige kort og kamphandlingen forblir synlige. */
+@media (max-width: 430px) and (orientation: portrait) {
+  .matchday-scene {
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .matchday-scene-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 8px;
+  }
+
+  .matchday-scene-head > div:first-child {
+    min-width: 0;
+  }
+
+  .matchday-scene-head h2 {
+    margin-top: 2px;
+    font-size: 1.4rem;
+    line-height: 1.1;
+  }
+
+  .matchday-scene-status {
+    justify-self: end;
+    max-width: 7rem;
+    min-height: 44px;
+    padding: 6px 8px;
+    border-radius: 10px;
+    font-size: .67rem;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+
+  .matchday-stage-rail {
+    gap: 4px;
+  }
+
+  .matchday-stage {
+    gap: 3px;
+    padding: 8px 3px;
+  }
+
+  .matchday-stage strong {
+    font-size: .65rem;
+  }
+
+  .matchday-scene-versus {
+    gap: 5px;
+  }
+
+  .matchday-scene-versus .matchday-scene-team,
+  .matchday-scene-versus .matchday-scene-marker {
+    min-height: 4.5rem;
+    padding: 7px;
+  }
+
+  .matchday-scene-marker {
+    min-width: 0;
+    padding-inline: 3px !important;
+  }
+
+  .matchday-scene-status-grid {
+    gap: 6px;
+  }
+
+  .matchday-scene-status-card {
+    min-height: 64px;
+    padding: 8px;
+  }
+
+  .matchday-scene-priority {
+    padding: 10px;
+  }
+
+  .matchday-scene-action {
+    min-height: 44px;
+  }
+}

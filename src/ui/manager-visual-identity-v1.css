@@ -698,3 +698,14 @@ body[data-manager-area="office"] .dept-inbox :is(.inbox-choice-button, .inbox-th
     min-height: 44px;
   }
 }
+
+
+/* Underfanene følger samme 44px trykkflatekrav som hovednavigasjonen.
+   The mobile shell also sets a fixed 40px height, so min-height alone is not
+   sufficient once its later-loaded stylesheet wins the cascade. */
+@media (max-width: 430px) and (orientation: portrait) {
+  body[data-manager-area] nav#appSubnav .app-subtab {
+    min-height: 44px !important;
+    height: auto !important;
+  }
+}
