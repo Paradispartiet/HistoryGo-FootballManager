@@ -4705,7 +4705,7 @@ function chooseMatchdayDecision(optionId) {
         // manager has already opened another tab or started another match.
         if (state.matchday?.session || state.matchday?.lastMatch?.id !== completedMatchId
           || document.querySelector('[data-tab-section="kamp"]')?.hidden !== false) return;
-        const heading = elements.matchdayCommand?.querySelector("#postMatchAnalysisTitle");
+        const heading = elements.matchdayCommand?.querySelector(".matchday-post-match-hero-copy h3");
         if (!heading) return;
         heading.tabIndex = -1;
         heading.focus({ preventScroll: true });
