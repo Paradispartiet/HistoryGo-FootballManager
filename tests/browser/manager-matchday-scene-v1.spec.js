@@ -175,6 +175,43 @@ test("kampforberedelsen går videre til eksisterende avspark", async ({ page }) 
   await expect(page.locator("#matchdayCommand .matchday-scene")).toHaveAttribute("data-phase", "live");
 });
 
+test("aktuell kampsituasjon kommer før sammenleggbar grepshistorikk på mobil", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await prepareAndOpenPreMatch(page);
+  await page.locator("#matchdayCommand .matchday-scene-action").click();
+  const result = page.locator("#matchdayResult");
+  const history = result.locator(".matchday-decision-history");
+  await expect(history).toHaveCount(0);
+  await result.getByRole("button", { name: "Hopp til pausen" }).click();
+  const choice = result.locator(".matchday-event-card .matchday-decision-button").first();
+  const chosenLabel = await choice.textContent();
+  await choice.click();
+  await result.getByRole("button", { name: "Hopp til pausen" }).click();
+  await expect(history.locator("summary")).toHaveText("Se tidligere managergrep (1)");
+  const saved = await page.evaluate(() => localStorage.getItem("hgfm.matchday.v1"));
+
+  for (const width of [320, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    await expect(history).not.toHaveAttribute("open", "");
+    await expect(history.locator(".matchday-decision-entry")).toBeHidden();
+    const bounds = await result.evaluate((root) => ({
+      eventBottom: root.querySelector(".matchday-event-card").getBoundingClientRect().bottom,
+      historyTop: root.querySelector(".matchday-decision-history").getBoundingClientRect().top,
+      summaryHeight: root.querySelector(".matchday-decision-history > summary").getBoundingClientRect().height
+    }));
+    expect(bounds.eventBottom).toBeLessThan(bounds.historyTop);
+    expect(bounds.summaryHeight).toBeGreaterThanOrEqual(44);
+    await history.locator("summary").focus();
+    await page.keyboard.press("Enter");
+    await expect(history.locator(".matchday-decision-entry")).toBeVisible();
+    await expect(history.locator(".matchday-decision-title")).toContainText(chosenLabel);
+    await expectNoHorizontalOverflow(page);
+    await page.keyboard.press("Enter");
+  }
+  expect(await page.evaluate(() => localStorage.getItem("hgfm.matchday.v1"))).toBe(saved);
+  await expect(choice).toBeEnabled();
+});
+
 test("rapportscenen blander ikke forrige motstander med neste fixtures metadata", async ({ page }) => {
   await page.evaluate(() => {
     const lastMatch = {

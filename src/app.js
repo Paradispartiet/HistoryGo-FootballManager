@@ -10877,10 +10877,6 @@ function renderMatchdaySessionEvent(container, session, eventIndex) {
   appendMatchScoreboard(liveView, session);
   card.append(liveView);
 
-  // Tidligere grep med kort konsekvens.
-  appendMatchdayDecisionLog(card, session.decisions, "Grep så langt");
-  appendTacticalPossessionLog(card, session.decisions, "Siste simulerte spillsekvens", { latestOnly: true });
-
   const event = session.events[eventIndex];
 
   // Har motstanderen justert seg, er det den viktigste nye opplysningen i
@@ -10949,6 +10945,21 @@ function renderMatchdaySessionEvent(container, session, eventIndex) {
     ? "Fortsett kampen ved å velge ett managergrep over."
     : "Kampen pågår. Grepet åpner når perioden er spilt — eller hopp til pausen.";
   card.append(continueHint);
+
+  // Keep the current situation and its choices ahead of the growing history.
+  // Reuse the recorded feedback without changing decisions or engine state.
+  if (Array.isArray(session.decisions) && session.decisions.length) {
+    const history = document.createElement("details");
+    history.className = "matchday-decision-history";
+    const summary = document.createElement("summary");
+    summary.textContent = `Se tidligere managergrep (${session.decisions.length})`;
+    const body = document.createElement("div");
+    body.className = "matchday-decision-history-body";
+    appendMatchdayDecisionLog(body, session.decisions, "Grep så langt");
+    appendTacticalPossessionLog(body, session.decisions, "Siste simulerte spillsekvens", { latestOnly: true });
+    history.append(summary, body);
+    card.append(history);
+  }
 
   // Kampplanen kan byttes midt i kampen. Den står under grepene fordi den er
   // det større taktiske valget, ikke et alternativ til hendelsen foran deg.
