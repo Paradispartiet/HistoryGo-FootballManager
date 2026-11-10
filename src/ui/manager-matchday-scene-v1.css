@@ -536,3 +536,56 @@
     min-height: 44px;
   }
 }
+
+
+/* After the final whistle the report comes first. Previous preparation data
+   remains available in a single disclosure rather than four competing cards. */
+.matchday-scene[data-phase="report"] .matchday-scene-support {
+  min-width: 0;
+  border: 1px solid rgba(151, 192, 255, 0.34);
+  border-radius: 0.75rem;
+  background: rgba(37, 70, 119, 0.12);
+}
+
+.matchday-scene-support > summary {
+  /* Keep the native disclosure triangle visible on Safari and Chromium. */
+  display: list-item;
+  min-height: 44px;
+  padding: 0.75rem 0.9rem;
+  color: #f0f5ff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.matchday-scene-support > summary:focus-visible,
+.matchday-scene-decision-jump:focus-visible {
+  outline: 2px solid #c1f7d7;
+  outline-offset: 2px;
+}
+
+.matchday-scene-support-body {
+  display: grid;
+  gap: 0.65rem;
+  min-width: 0;
+  padding: 0 0.75rem 0.75rem;
+}
+
+.matchday-scene-decision-jump {
+  grid-column: 1 / -1;
+  justify-self: start;
+  min-height: 44px;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid rgba(151, 192, 255, 0.75);
+  border-radius: 0.5rem;
+  background: rgba(30, 75, 131, 0.35);
+  color: #fff;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.matchday-scene-decision-jump:hover {
+  background: rgba(38, 94, 165, 0.55);
+}

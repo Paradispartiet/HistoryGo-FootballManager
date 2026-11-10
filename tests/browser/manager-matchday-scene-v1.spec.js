@@ -594,7 +594,10 @@ test("v1: mobilflyten Hjem → Taktikk → Kamp → Etterkamp bruker samme lag o
       opponent: { id: "brann", name: "Brann", style: "høyt press" },
       formationSnapshot: { name: "Modern 4-2-3-1", baseShape: "4-2-3-1" },
       tacticSnapshot: { name: "Balansert" },
-      decisions: [], playerStats: { goals: [] },
+      decisions: [
+        { eventTitle: "Presset mot Brann", optionLabel: "Press høyere", tone: "positive", feedback: "Laget vant ballen høyt." },
+        { eventTitle: "Siste kvarter", optionLabel: "Sikre rommet", tone: "neutral", feedback: "Laget holdt strukturen." }
+      ], playerStats: { goals: [] },
       clubConsequences: { effects: {} },
       playedInClubWeek: 1,
       leagueContext: {
@@ -626,6 +629,31 @@ test("v1: mobilflyten Hjem → Taktikk → Kamp → Etterkamp bruker samme lag o
   await expect(scene).toContainText("Runde 1");
   await expect(scene.locator(".matchday-scene-report")).toBeVisible();
   await expect(scene.locator(".matchday-post-match")).toBeVisible();
+
+  // Report and the recorded choices come before the old preparation cards.
+  const support = scene.locator(".matchday-scene-support");
+  await expect(support).toBeVisible();
+  await expect(support).not.toHaveAttribute("open", "");
+  await expect(support.locator(".matchday-scene-status-card")).toHaveCount(4);
+  const order = await scene.evaluate((root) => ({
+    report: [...root.children].indexOf(root.querySelector(".matchday-scene-report")),
+    analysis: [...root.children].indexOf(root.querySelector(".matchday-post-match")),
+    support: [...root.children].indexOf(root.querySelector(".matchday-scene-support"))
+  }));
+  expect(order.report).toBeLessThan(order.analysis);
+  expect(order.analysis).toBeLessThan(order.support);
+
+  const jump = scene.getByRole("button", { name: "Se managergrep" });
+  await expect(jump).toBeVisible();
+  expect(await jump.evaluate((button) => button.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
+  await jump.click();
+  await expect(scene.locator(".matchday-post-match-decisions .matchday-post-match-section-head")).toBeFocused();
+  await expect(scene.locator(".matchday-post-match-decision-step")).toHaveCount(2);
+
+  await support.locator("summary").click();
+  await expect(support).toHaveAttribute("open", "");
+  await expect(support.locator(".matchday-scene-context-card")).toHaveCount(3);
+  await expect(support.locator(".matchday-scene-status-card").first()).toBeVisible();
   await noOverflow("Etterkamp", 390);
 });
 
