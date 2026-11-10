@@ -294,7 +294,6 @@ export function renderManagerMatchdayCommand(container, model, {
   const signal = node("article", "matchday-scene-context-card");
   signal.append(node("span", "", "Assistentens signal"), node("strong", "", model.signalLabel));
   context.append(plan, training, signal);
-  scene.append(context);
 
   const statusGrid = node("div", "matchday-scene-status-grid");
   model.statusCards.forEach((card) => {
@@ -304,8 +303,6 @@ export function renderManagerMatchdayCommand(container, model, {
     button.append(node("span", "", card.label), node("strong", "", card.value), node("small", "", card.detail));
     statusGrid.append(button);
   });
-  scene.append(statusGrid);
-
   if (model.phase === "report") {
     const report = node("section", "matchday-scene-report");
     report.append(
@@ -316,6 +313,32 @@ export function renderManagerMatchdayCommand(container, model, {
     );
     scene.append(report);
     if (model.postMatch) scene.append(renderPostMatchAnalysis(model.postMatch, onOpenTarget));
+
+    // Keep the engine's recorded decisions one click away. Focus the existing
+    // review rather than duplicating or reinterpreting its verdicts.
+    const decisions = model.postMatch?.decisions;
+    if (decisions?.timeline?.length || decisions?.best || decisions?.worst) {
+      const jump = node("button", "matchday-scene-decision-jump", "Se managergrep");
+      jump.type = "button";
+      jump.addEventListener("click", () => {
+        const heading = scene.querySelector(".matchday-post-match-decisions .matchday-post-match-section-head");
+        if (!heading) return;
+        heading.tabIndex = -1;
+        heading.focus();
+      });
+      report.append(jump);
+    }
+
+    // Preparation data remains available but should not push the actual
+    // result, decisions and next-week actions below four pre-match cards.
+    const support = node("details", "matchday-scene-support");
+    const summary = node("summary", "", "Se kampplan og forberedelser");
+    const supportBody = node("div", "matchday-scene-support-body");
+    supportBody.append(context, statusGrid);
+    support.append(summary, supportBody);
+    scene.append(support);
+  } else {
+    scene.append(context, statusGrid);
   }
 
   container.append(scene);
