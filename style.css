@@ -1111,6 +1111,17 @@ select:focus-visible {
   background: var(--panel-strong);
 }
 
+.matchday-latest-decision {
+  margin: 8px 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.matchday-latest-decision .matchday-meta {
+  margin: 0;
+  font-size: 0.75rem;
+}
+
 .matchday-decision-history > summary {
   box-sizing: border-box;
   min-height: 44px;

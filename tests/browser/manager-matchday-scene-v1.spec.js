@@ -181,7 +181,9 @@ test("aktuell kampsituasjon kommer før sammenleggbar grepshistorikk på mobil",
   await page.locator("#matchdayCommand .matchday-scene-action").click();
   const result = page.locator("#matchdayResult");
   const history = result.locator(".matchday-decision-history");
+  const latest = result.getByRole("complementary", { name: "Siste managergrep" });
   await expect(history).toHaveCount(0);
+  await expect(latest).toHaveCount(0);
   await result.getByRole("button", { name: "Hopp til pausen" }).click();
   const choice = result.locator(".matchday-event-card .matchday-decision-button").first();
   const chosenLabel = await choice.textContent();
@@ -189,6 +191,10 @@ test("aktuell kampsituasjon kommer før sammenleggbar grepshistorikk på mobil",
   await result.getByRole("button", { name: "Hopp til pausen" }).click();
   await expect(history.locator(":scope > summary")).toHaveText("Se tidligere managergrep (1)");
   const saved = await page.evaluate(() => localStorage.getItem("hgfm.matchday.v1"));
+  const recorded = JSON.parse(saved).session.decisions.at(-1);
+  await expect(latest).toHaveCount(1);
+  await expect(latest.locator(".matchday-decision-title")).toHaveText(chosenLabel);
+  await expect(latest.locator(".matchday-decision-feedback")).toHaveText(recorded.feedback);
 
   for (const width of [320, 390]) {
     await page.setViewportSize({ width, height: 844 });
@@ -201,6 +207,7 @@ test("aktuell kampsituasjon kommer før sammenleggbar grepshistorikk på mobil",
     }));
     expect(bounds.eventBottom).toBeLessThan(bounds.historyTop);
     expect(bounds.summaryHeight).toBeGreaterThanOrEqual(44);
+    await expect(latest).toBeVisible();
     await history.locator(":scope > summary").focus();
     await page.keyboard.press("Enter");
     await expect(history.locator(".matchday-decision-entry")).toBeVisible();
@@ -210,6 +217,17 @@ test("aktuell kampsituasjon kommer før sammenleggbar grepshistorikk på mobil",
   }
   expect(await page.evaluate(() => localStorage.getItem("hgfm.matchday.v1"))).toBe(saved);
   await expect(choice).toBeEnabled();
+  await page.reload();
+  await openMatchday(page);
+  await expect(latest.locator(".matchday-decision-feedback")).toHaveText(recorded.feedback);
+  await choice.click();
+  const nextRecorded = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem("hgfm.matchday.v1")).session.decisions.at(-1)
+  );
+  await expect(latest).toHaveCount(1);
+  await expect(latest.locator(".matchday-decision-title")).toHaveText(nextRecorded.optionLabel);
+  await expect(latest.locator(".matchday-decision-feedback")).toHaveText(nextRecorded.feedback);
+  await expect(history.locator(".matchday-decision-entry")).toHaveCount(2);
 });
 
 test("rapportscenen blander ikke forrige motstander med neste fixtures metadata", async ({ page }) => {
