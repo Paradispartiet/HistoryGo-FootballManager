@@ -336,3 +336,71 @@ test("320–430px beholder kompakt Kalender og todelt Stab med synlige valg", as
   expect(wideRoles, "desktop retains four staff roles per row").toBe(4);
   await expectNoHorizontalOverflow(page);
 });
+
+
+test("mobilflyt Kontor → Trening → Oppstilling → Kampdag uten bortgjemte handlinger", async ({ page }) => {
+  for (const width of [320, 390, 430]) {
+    await page.setViewportSize({ width, height: 844 });
+    await openOffice(page);
+    await expectNoHorizontalOverflow(page);
+
+    // The actionable recommendation in the office goes directly to Training.
+    await page.locator("#inboxGoTraining").click();
+    await expect(page.locator('[data-tab-section="trening"]')).toBeVisible();
+    const trainingHead = page.locator(".manager-training-day .training-day-head");
+    await expect(trainingHead).toBeVisible();
+    const trainingMetrics = await trainingHead.evaluate((head) => {
+      const week = head.querySelector(".training-day-clock");
+      const back = head.querySelector(".training-day-calendar-link");
+      return {
+        layout: getComputedStyle(head).display,
+        topPadding: parseFloat(getComputedStyle(head).paddingTop),
+        weekVisible: Boolean(week && week.getBoundingClientRect().height > 0),
+        calendarLinkHeight: back ? back.getBoundingClientRect().height : 0
+      };
+    });
+    expect(trainingMetrics.layout, `training header layout at ${width}px`).toBe("grid");
+    expect(trainingMetrics.topPadding, `training header padding at ${width}px`).toBeLessThanOrEqual(12);
+    expect(trainingMetrics.weekVisible, `training week at ${width}px`).toBe(true);
+    expect(trainingMetrics.calendarLinkHeight, `training calendar target at ${width}px`).toBeGreaterThanOrEqual(44);
+    await expectNoHorizontalOverflow(page);
+
+    // Tactics stays in Lag and must not silently reset the selected mode.
+    const lineupTab = page.locator('.app-subtab[data-tab-target="tactics"]');
+    await expect(lineupTab).toBeVisible();
+    expect(await lineupTab.evaluate((node) => node.getBoundingClientRect().height),
+      `lineup tab target at ${width}px`).toBeGreaterThanOrEqual(44);
+    await lineupTab.click();
+    await expect(page.locator('[data-tab-section="tactics"]')).toBeVisible();
+    await expect(page.locator("#formationSelect option").first()).toBeAttached();
+    await expectNoHorizontalOverflow(page);
+
+    // Kampdag is a direct primary-navigation destination, not an extra modal.
+    const matchTab = page.locator('.main-nav [role="tab"][data-tab-target="kamp"]');
+    await expect(matchTab).toBeVisible();
+    await matchTab.click();
+    await expect(page.locator('[data-tab-section="kamp"]')).toBeVisible();
+    const sceneHead = page.locator(".matchday-scene-head");
+    await expect(sceneHead).toBeVisible();
+    const matchMetrics = await page.evaluate(() => {
+      const head = document.querySelector(".matchday-scene-head");
+      const status = head.querySelector(".matchday-scene-status");
+      const action = document.querySelector(".matchday-scene-action");
+      return {
+        layout: getComputedStyle(head).display,
+        statusVisible: Boolean(status && status.getBoundingClientRect().height > 0),
+        actionHeight: action ? action.getBoundingClientRect().height : null
+      };
+    });
+    expect(matchMetrics.layout, `matchday header layout at ${width}px`).toBe("grid");
+    expect(matchMetrics.statusVisible, `matchday status at ${width}px`).toBe(true);
+    if (matchMetrics.actionHeight !== null) {
+      expect(matchMetrics.actionHeight, `matchday action at ${width}px`).toBeGreaterThanOrEqual(44);
+    }
+    await expectNoHorizontalOverflow(page);
+
+    await openOffice(page);
+    await expect(page.locator('[data-tab-section="inbox"]')).toBeVisible();
+    await expectNoHorizontalOverflow(page);
+  }
+});
