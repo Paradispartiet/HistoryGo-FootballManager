@@ -1174,3 +1174,83 @@ assert.equal(unknownFlank.evidence.opponentFlankAdaptation.status,
 assert.equal(unknownFlank.routeCoverAdjustment, 0,
   "unknown on-pitch evidence must never grant specialist cover for a wide exit");
 console.log("OK: full XI evidence gating, 10-player support, duplicate/invalid saves and no invented weak-flank scouting.");
+// Route-specific specialist choice: a SECOND pressing midfielder is an
+// alternative defender, not another mandatory weak link. Start with the
+// canonical 4-3-3 XI and legal roles calculated by the real team-fit engine.
+// Once that lineup is in the matchday snapshot, change one *non-selected*
+// specialist's match-fit in isolation (controlled snapshot, NOT a historical
+// player-rating claim). The selected defender and terminal risk must hold.
+// Different offensive exits must retain their independently assigned roles.
+const alternatePressXI = enhanceKnownRoleFit(buildFixture("4-3-3", cfTrap, {
+  st: "pressing_forward",
+  lcm: "pressing_midfielder",
+  rcm: "pressing_midfielder"
+}), ["lcm"]);
+const routeAgainst = (setup, routeId) =>
+  kickoff(setup, withCfOpponent({ tacticalBehaviour: {
+    pressEscapeRoute: routeId
+  } }));
+const phaseAtBrokenPress = session =>
+  resolveOwnPressAgainstOpponent(session, {
+    pressureRoll: () => 0.99, protectionRoll: () => 0.99
+  });
+const sameXIThirdMan = routeAgainst(alternatePressXI, "third_man");
+const pressCandidates = sameXIThirdMan.lineupSnapshot.filter(
+  player => player.roleId === "pressing_midfielder");
+assert.equal(pressCandidates.length, 2,
+  "two legal pressing midfielders must be actual calculated XI assignments");
+assert.ok(pressCandidates.every(player =>
+  player.matchFitKnown === true && Number.isFinite(player.matchScore)));
+const expectedPrimary = [...pressCandidates].sort((a, b) =>
+  b.matchScore - a.matchScore ||
+  String(a.playerId).localeCompare(String(b.playerId)))[0];
+const reservePressMidfielder = pressCandidates.find(player =>
+  player.playerId !== expectedPrimary.playerId);
+const thirdManChoice = phaseAtBrokenPress(sameXIThirdMan);
+assert.equal(thirdManChoice.status, "escaped");
+assert.deepEqual(thirdManChoice.counterplay.defensiveReply.evidence.thirdRunnerTrackedBy,
+  [expectedPrimary.playerId],
+  "only the best available pressing midfielder is required to track the runner");
+assert.ok(thirdManChoice.routeCoverAdjustment > 0,
+  "full valid XI must still earn documented third-man cover");
+const lowReserveSession = structuredClone(sameXIThirdMan);
+lowReserveSession.lineupSnapshot.find(player =>
+  player.playerId === reservePressMidfielder.playerId).matchScore = 0;
+const lowReserveThirdMan = phaseAtBrokenPress(lowReserveSession);
+assert.deepEqual(lowReserveThirdMan.counterplay.defensiveReply.evidence.thirdRunnerTrackedBy,
+  [expectedPrimary.playerId],
+  "a weaker second candidate must not replace the verified covering specialist");
+assert.equal(lowReserveThirdMan.evidence.routeCoverFitFloor,
+  thirdManChoice.evidence.routeCoverFitFloor,
+  "an unassigned role alternative must not lower the active cover's weakest link");
+assert.equal(lowReserveThirdMan.routeCoverAdjustment,
+  thirdManChoice.routeCoverAdjustment,
+  "one spare pressing midfielder cannot cancel already established cover");
+assert.equal(lowReserveThirdMan.containmentProbability,
+  thirdManChoice.containmentProbability);
+assert.equal(lowReserveThirdMan.xgDeltaAgainst,
+  thirdManChoice.xgDeltaAgainst,
+  "the same terminal press decision must not pay for an unused specialist");
+const lowPrimarySession = structuredClone(sameXIThirdMan);
+lowPrimarySession.lineupSnapshot.find(player =>
+  player.playerId === expectedPrimary.playerId).matchScore = 0;
+const replacementPhase = phaseAtBrokenPress(lowPrimarySession);
+assert.deepEqual(replacementPhase.counterplay.defensiveReply.evidence.thirdRunnerTrackedBy,
+  [reservePressMidfielder.playerId],
+  "another documented pressing midfielder may take over the same role");
+assert.equal(replacementPhase.counterplay.defensiveReply.evidence.screenedCentralBy.length,
+  1, "the balancing six remains a separate necessary defensive responsibility");
+for (const alternateRoute of ["switch_play", "direct"]) {
+  const intact = routeAgainst(alternatePressXI, alternateRoute);
+  const lowered = structuredClone(intact);
+  lowered.lineupSnapshot.find(player =>
+    player.playerId === reservePressMidfielder.playerId).matchScore = 0;
+  const before = phaseAtBrokenPress(intact);
+  const after = phaseAtBrokenPress(lowered);
+  assert.equal(before.routeCoverAdjustment, after.routeCoverAdjustment,
+    "unrelated pressing midfielder must not alter " + alternateRoute + " cover");
+  assert.deepEqual(before.counterplay.defensiveReply.evidence.supportingPlayerIds,
+    after.counterplay.defensiveReply.evidence.supportingPlayerIds,
+    "route-specific specialist identities must stay intact for " + alternateRoute);
+}
+console.log("OK: canonical two-pressing-midfielder XI selects a single real cover specialist; unused alternative cannot invent route-specific risk.");

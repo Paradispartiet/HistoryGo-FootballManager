@@ -228,6 +228,10 @@ jobs:
       # This supplements Chromium assertions; it is not physical iOS QA.
       - name: Arkiver treningsdagens mobilbilder
         if: ${{ always() && steps.scope.outputs.lane == 'full' }}
+        # Screenshots supplement passing browser assertions; a storage/upload
+        # outage must never skip mandatory WebKit device tests below.
+        continue-on-error: true
+        timeout-minutes: 5
         uses: actions/upload-artifact@v4
         with:
           name: training-day-mobile-screenshots
@@ -249,6 +253,9 @@ jobs:
 
       - name: Arkiver WebKit-bilder fra treningsdagen
         if: ${{ always() && steps.scope.outputs.lane == 'full' }}
+        # Archival can fail independently of actual Safari/WebKit assertions.
+        continue-on-error: true
+        timeout-minutes: 5
         uses: actions/upload-artifact@v4
         with:
           name: training-day-webkit-screenshots
