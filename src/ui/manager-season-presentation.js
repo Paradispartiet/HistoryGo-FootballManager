@@ -92,7 +92,9 @@ export function createSeasonSceneModel({
     round: nextMatch.round,
     opponent: nextMatch.name || nextMatch.club || "Neste motstander",
     venue: nextMatch.homeAway === "home" ? "Hjemme" : "Borte",
-    ground: nextMatch.ground || "",
+    ground: nextMatch.homeAway === "home"
+      ? asArray(season?.clubs).find((club) => club.id === season?.managerClubId)?.ground || ""
+      : nextMatch.ground || "",
     matchId: nextMatch.matchId || ""
   } : scheduled[0] || null;
 

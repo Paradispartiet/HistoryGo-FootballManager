@@ -12,7 +12,7 @@ import { createMatchFlowSnapshot } from "./ui/manager-shell-view.js";
 import { createClubIdentityView, renderClubIdentity } from "./ui/manager-club-identity.js";
 import { getTrainingWorkspaceTarget, syncTrainingWorkspace } from "./ui/training-workspace-view.js";
 import { compactPlayerName, describeTacticalFit } from "./ui/manager-lineup-presentation.js";
-import { createMatchdaySceneModel, renderManagerMatchdayCommand } from "./ui/manager-matchday-presentation.js";
+import { visibleMatchLog, visibleMatchScore, createMatchdaySceneModel, renderManagerMatchdayCommand } from "./ui/manager-matchday-presentation.js";
 import { createSeasonSceneModel, renderSeasonCommand, renderSeasonLeagueOverview } from "./ui/manager-season-presentation.js";
 import { createOfficeSceneModel, renderOfficeCommand } from "./ui/manager-office-presentation.js";
 import { renderManagerStaffRoster } from "./ui/manager-staff-workspace-v1.js";
@@ -11248,30 +11248,32 @@ function renderMatchLive() {
   if (!session || !host) return;
   host.replaceChildren();
   appendMatchScoreboard(host, session);
+  const summary = document.querySelector(".match-plan-switcher > summary");
+  if (summary) {
+    const planId = session.activePlanSnapshot?.id || session.selectedTacticId;
+    const plan = state.tactics.find((entry) => entry.id === planId);
+    summary.textContent = `Kampplan: ${plan?.name || "ikke valgt"} · ${matchPlanStanding(session)}`;
+  }
 }
 
 // Stillingen slik den står i det minuttet som er avdekket.
 function visibleScore(session) {
-  const visible = visibleMinuteLog(session);
-  const last = [...visible].reverse().find((entry) => entry.scoreAfter);
-  if (last) return { ...last.scoreAfter };
-  // Ingenting avdekket ennå: kampen står 0-0 til første hendelse spilles av.
-  const live = Number(session?.liveMinute);
-  if (Number.isFinite(live) && live > 0) return { for: 0, against: 0 };
-  return session?.score || { for: 0, against: 0 };
+  return visibleMatchScore(session);
 }
 
-// Hvilke minutter er avdekket? Er kampen ferdig, vises alt.
 function visibleMinuteLog(session) {
-  const log = Array.isArray(session?.minuteLog) ? session.minuteLog : [];
-  // En FERDIG kamp (`lastMatch`) har ikke klokke: den bærer `outcome`, ikke
-  // `liveMinute`. Uten dette falt hele loggen bort i sluttrapporten, og
-  // overskriften «Kampen minutt for minutt» sto igjen med ingenting under seg.
-  // Avdekkingsregelen gjelder bare mens kampen faktisk spilles av.
-  if (session?.outcome || session?.phase === "resolved") return log;
-  const live = Number(session?.liveMinute);
-  if (!Number.isFinite(live) || live <= 0) return [];
-  return log.filter((entry) => Number(entry.minute) <= live);
+  return visibleMatchLog(session);
+}
+
+function visibleMatchGameState(session) {
+  return readGameState({ ...session, score: visibleScore(session) });
+}
+
+function matchPlanStanding(session) {
+  const gameState = visibleMatchGameState(session);
+  return gameState.scoreKnown
+    ? `${gameState.label} ${gameState.score.for}–${gameState.score.against}`
+    : gameState.label;
 }
 
 // Resultattavla med tidslinje: stillingen nå, og når målene falt.
@@ -11301,7 +11303,7 @@ function appendMatchScoreboard(parent, session) {
     const running = isMatchLiveRunning();
     clock.textContent = live > 0 && live < periodEnd
       ? `${live}' — kampen pågår`
-      : `${live || played.minute}' · ${played.note}`;
+      : live > 0 ? `${live}' · ${played.note}` : "0' · Avspark";
     // Notaten oppsummerer perioden, og skal bare stå når perioden ER sett.
     if (running) clock.dataset.running = "true";
     board.append(clock);
@@ -11544,16 +11546,13 @@ function appendMatchPlanSwitcher(card, session) {
 
   const currentId = session.activePlanSnapshot?.id || session.selectedTacticId || null;
   const currentPlan = plans.find((plan) => plan.id === currentId) || null;
-  const gameState = readGameState(session);
 
   const wrap = document.createElement("details");
   wrap.className = "match-plan-switcher";
   wrap.open = Boolean(state.matchPlanSwitcherOpen);
 
   const summary = document.createElement("summary");
-  const standing = gameState.scoreKnown
-    ? `${gameState.label} ${gameState.score.for}–${gameState.score.against}`
-    : gameState.label;
+  const standing = matchPlanStanding(session);
   summary.textContent = `Kampplan: ${currentPlan?.name || "ikke valgt"} · ${standing}`;
   wrap.append(summary);
 
@@ -11681,7 +11680,7 @@ function appendMatchPlanSwitcher(card, session) {
     }
     const ranked = rankPlansForSituation(plans, {
       currentPlan,
-      gameState: gameState.state,
+      gameState: visibleMatchGameState(session).state,
       opponent: session.opponent,
       tacticalProfile: session.teamFitSnapshot?.tacticalProfile,
       tacticalProfilesByPlan
@@ -11820,7 +11819,7 @@ function appendMatchSubstitutions(card, session) {
 
   // Steg 2: hvem kommer inn på nettopp den plassen?
   if (state.matchSubOutId && onPitch.some((entry) => entry.playerId === state.matchSubOutId)) {
-    const gameState = readGameState(session);
+    const gameState = visibleMatchGameState(session);
     const ranked = rankSubstitutionsForSlot({
       session,
       outPlayerId: state.matchSubOutId,
@@ -14044,7 +14043,7 @@ function renderPlayerStats() {
   // ved siden av tabellen de leses av.
   if (elements.statsStanding) {
     let standing = "Ikke startet";
-    if (isLeagueSeasonActive() && state.leagueSeason) {
+    if (isLeagueModeActive() && state.leagueSeason) {
       const table = createLeagueTable(state.leagueSeason);
       const managerRow = Array.isArray(table) ? table.find((row) => row.isManager) : null;
       if (managerRow) standing = `${managerRow.position}. plass · ${managerRow.points} poeng`;

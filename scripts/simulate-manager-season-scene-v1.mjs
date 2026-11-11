@@ -67,3 +67,8 @@ assert.equal(completed.state, "completed");
 assert.equal(completed.statusLabel, "Sesongen er ferdigspilt");
 
 console.log("Manager Season Scene v1: 18/18 sjekker bestått.");
+
+const homeModel = createSeasonSceneModel({ season, table,
+  nextMatch: { name: "Delta", round: 4, homeAway: "home", ground: "Delta stadion" } });
+assert.equal(homeModel.nextMatch.ground, "Historien stadion");
+assert.equal(model.nextMatch.ground, "Delta stadion");

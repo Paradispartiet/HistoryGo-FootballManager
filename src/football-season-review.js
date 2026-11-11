@@ -86,7 +86,9 @@ export function deriveSeasonTarget({ clubCount = 8, seasonNumber = 1, previousPo
     targetPosition: target,
     label: target === 1 ? "Seriegull" : `Topp ${target}`,
     description: target === 1
-      ? "Dere ble nummer to i fjor. Styret vil ha gullet."
+      ? Number(previousPosition) === 1
+        ? "Dere vant ligaen i fjor. Styret vil at dere forsvarer gullet."
+        : "Dere ble nummer to i fjor. Styret vil ha gullet."
       : `Dere endte på ${previousPosition}. plass i fjor. Styret vil se ett steg opp: topp ${target}.`
   };
 }

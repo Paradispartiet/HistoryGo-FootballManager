@@ -813,7 +813,10 @@ stage("19. Innbytte");
   // strøk hele loggen. Overskrift uten innhold er en blindvei i miniatyr.
   check(
     "minuttloggen vises i sluttrapporten, ikke bare under avspilling",
-    /if \(session\?\.outcome \|\| session\?\.phase === "resolved"\) return log;/.test(app)
+    /return visibleMatchLog\(session\)/.test(app) &&
+    /if \(session\?\.outcome \|\| session\?\.phase === "resolved"\) return log;/.test(
+      readFileSync(join(root, "src/ui/manager-matchday-presentation.js"), "utf8")
+    )
   );
 }
 
