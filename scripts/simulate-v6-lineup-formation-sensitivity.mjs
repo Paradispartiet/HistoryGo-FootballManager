@@ -1024,3 +1024,77 @@ console.log("OK: production XI preserves roles and validates central cover lane.
 
 console.log("OK: production XI consumes authored geometric recovery distance.");
 console.log("OK: production XI consumes a four-action timeline and cue-specific delay.");
+// Deterministic, conditional stage-two sensitivity rather than a claim about
+// real-world frequencies. The identical calculated XI, opposition, match
+// state and failed initial press are held fixed across each protection draw.
+// The only contrast is a supported, documented outlet versus an observed
+// isolation. Only the ONE terminal press phase may change xG against.
+const protectionDraws = Array.from({ length: 101 },
+  (_, index) => (index + 0.5) / 101);
+const routeSensitivityReport = [];
+for (const row of routeMatrix) {
+  const base = buildFixture(row.formation, cfTrap, row.overrides);
+  const setup = enhanceKnownRoleFit(base, row.specialistSlots);
+  for (const routeId of offensiveExits) {
+    const runGrid = (observedIsolation) => {
+      const behaviour = {
+        pressEscapeRoute: routeId,
+        ...(observedIsolation ? { pressEscape: "isolated" } : {})
+      };
+      const reference = routeMatrixPhase(setup, behaviour);
+      let contained = 0, escaped = 0, concededXg = 0;
+      for (const draw of protectionDraws) {
+        const phase = routeMatrixPhase(setup, behaviour, draw);
+        assert.equal(phase.probability, reference.probability,
+          "only the secondary containment draw can change");
+        assert.equal(phase.containmentProbability,
+          reference.containmentProbability,
+          "the model probability is fixed across deterministic draws");
+        assert.equal(phase.xgDeltaFor, 0,
+          "an already broken press cannot claim a second attacking xG reward");
+        if (phase.status === "contained") {
+          contained += 1;
+          assert.equal(phase.xgDeltaAgainst, 0.02,
+            "one contained transition owns one terminal risk");
+        } else {
+          assert.equal(phase.status, "escaped",
+            "initial press is deliberately broken in the entire sensitivity grid");
+          escaped += 1;
+          assert.ok(phase.xgDeltaAgainst > 0.02,
+            "escaped transition exposes more risk than contained transition");
+        }
+        concededXg += phase.xgDeltaAgainst;
+      }
+      assert.equal(contained + escaped, protectionDraws.length);
+      assert.ok(Math.abs(contained / protectionDraws.length -
+        reference.containmentProbability) <= 1 / protectionDraws.length + 0.002,
+        "conditional containment frequency must follow the game's declared probability");
+      return { reference, contained, escaped,
+        meanConcededXg: Number((concededXg / protectionDraws.length).toFixed(4)) };
+    };
+    const covered = runGrid(false);
+    const isolated = runGrid(true);
+    assert.ok(covered.contained >= isolated.contained,
+      "documented route-specific coverage cannot make a broken press less secure");
+    assert.ok(covered.meanConcededXg <= isolated.meanConcededXg,
+      "a supported defensive response must not worsen terminal transition risk");
+    if (!row.supported.includes(routeId)) {
+      assert.equal(covered.reference.routeCoverAdjustment, 0,
+        "unsupported nominal roles cannot be awarded an invented route bonus");
+      assert.equal(covered.contained, isolated.contained,
+        "unsupported formation must have no containment gain");
+    }
+    routeSensitivityReport.push({
+      formation: row.formation, route: routeId,
+      roleSupport: row.supported.includes(routeId),
+      adjustment: covered.reference.routeCoverAdjustment,
+      containedWithCover: covered.contained,
+      containedWithoutCover: isolated.contained,
+      meanXgAgainstWithCover: covered.meanConcededXg,
+      meanXgAgainstWithoutCover: isolated.meanConcededXg
+    });
+  }
+}
+assert.equal(routeSensitivityReport.length, routeMatrix.length * offensiveExits.length);
+console.log("V6 deterministic route-cover sensitivity (101 fixed draws per case): " +
+  JSON.stringify(routeSensitivityReport));
