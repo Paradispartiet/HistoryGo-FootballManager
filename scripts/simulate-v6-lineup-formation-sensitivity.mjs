@@ -1098,3 +1098,79 @@ for (const row of routeMatrix) {
 assert.equal(routeSensitivityReport.length, routeMatrix.length * offensiveExits.length);
 console.log("V6 deterministic route-cover sensitivity (101 fixed draws per case): " +
   JSON.stringify(routeSensitivityReport));
+// v6 evidence gate: the complete ON-PITCH lineup must be documented before
+// a specialist response or a learned weak flank can earn a route advantage.
+// An otherwise irrelevant goalkeeper with unknown fit is not evidence that
+// the other ten players form a fully observed defensive unit.
+const evidenceSession = kickoff(cfXI, withCfOpponent({
+  tacticalBehaviour: { pressEscapeRoute: "third_man" }
+}));
+const evidencePhase = session => resolveOwnPressAgainstOpponent(session, {
+  pressureRoll: () => 0.99, protectionRoll: () => 0.99
+});
+const completeEvidence = evidencePhase(evidenceSession);
+assert.ok(completeEvidence.routeCoverAdjustment > 0,
+  "fully documented canonical XI must retain the specialist response");
+const nonPressPlayer = evidenceSession.lineupSnapshot.find(player =>
+  player.position === "GK");
+assert.ok(nonPressPlayer, "fixture must have a goalkeeper outside the press unit");
+const unknownEvidence = structuredClone(evidenceSession);
+unknownEvidence.lineupSnapshot.find(player =>
+  player.playerId === nonPressPlayer.playerId).matchFitKnown = false;
+const unknownPhase = evidencePhase(unknownEvidence);
+assert.ok(unknownPhase, "other ten known players still permit an initial phase");
+assert.equal(unknownPhase.routeCoverAdjustment, 0,
+  "one unknown member of the starting eleven removes claimed collective cover");
+assert.equal(unknownPhase.counterplay.defensiveReply.roleReadiness, "unknown",
+  "missing evidence must not be described as a verified tactical weakness");
+assert.equal(unknownPhase.probability, completeEvidence.probability,
+  "unrelated missing goalkeeper evidence cannot rewrite initial press probability");
+assert.ok(unknownPhase.containmentProbability <
+  completeEvidence.containmentProbability,
+  "unknown role evidence must not pay the specialist cover term");
+
+// Invalid stored fit and duplicate player identifiers must not turn a partial
+// XI into a "verified" one. No user save migration or model tuning is needed.
+const invalidEvidence = structuredClone(evidenceSession);
+invalidEvidence.lineupSnapshot.find(player =>
+  player.playerId === nonPressPlayer.playerId).matchScore = 101;
+assert.equal(evidencePhase(invalidEvidence).routeCoverAdjustment, 0,
+  "out-of-range player match-fit must be treated as missing evidence");
+const duplicateEvidence = structuredClone(evidenceSession);
+duplicateEvidence.lineupSnapshot.find(player =>
+  player.position === "RW").playerId = nonPressPlayer.playerId;
+assert.equal(evidencePhase(duplicateEvidence).routeCoverAdjustment, 0,
+  "duplicate identity must not count as independent verified cover");
+
+// Ten actual, separately documented players can still form a legal
+// short-handed defensive unit. This tests the evidence threshold only, NOT
+// red-card effects, match-state recalculation or a historical ten-player XI.
+const tenKnownEvidence = structuredClone(evidenceSession);
+tenKnownEvidence.lineupSnapshot = tenKnownEvidence.lineupSnapshot.filter(
+  player => player.position !== "RW");
+assert.equal(tenKnownEvidence.lineupSnapshot.length, 10);
+assert.equal(evidencePhase(tenKnownEvidence).routeCoverAdjustment,
+  completeEvidence.routeCoverAdjustment,
+  "known and distinct ten-player support remains eligible after a dismissal");
+
+// Weak-flank adaptation has the same evidence requirement; do not infer
+// an exploitable side merely because both fullbacks happen to be documented.
+const flankEvidenceSession = kickoff(cfLeftHighXI, withCfOpponent({
+  tacticalBehaviour: {
+    pressEscapeRoute: "switch_play",
+    pressEscapeTargetPolicy: "weakest_verified_flank"
+  }
+}));
+const knownFlank = evidencePhase(flankEvidenceSession);
+assert.equal(knownFlank.evidence.opponentFlankAdaptation.status, "selected",
+  "known asymmetric fullbacks can reveal a verified weaker side");
+const unknownFlankSession = structuredClone(flankEvidenceSession);
+unknownFlankSession.lineupSnapshot.find(player =>
+  player.position === "GK").matchFitKnown = false;
+const unknownFlank = evidencePhase(unknownFlankSession);
+assert.equal(unknownFlank.evidence.opponentFlankAdaptation.status,
+  "insufficient_or_conflicting_evidence",
+  "unknown teammate prevents claiming a verified collective flank weakness");
+assert.equal(unknownFlank.routeCoverAdjustment, 0,
+  "unknown on-pitch evidence must never grant specialist cover for a wide exit");
+console.log("OK: full XI evidence gating, 10-player support, duplicate/invalid saves and no invented weak-flank scouting.");

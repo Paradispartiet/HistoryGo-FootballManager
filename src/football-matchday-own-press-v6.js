@@ -158,7 +158,9 @@ function defensiveReplyForPressExit(route, lineup, profile, outcome, targetFlank
     "balancing_six", "pressing_midfielder", "support_fullback",
     "overlapping_fullback", "ball_playing_centre_back", "wingback"
   ].includes(player.roleId));
-  const sufficientEvidence = known.length >= 10 && knownTacticalRoles &&
+  // One unknown/invalid player in an eleven must not be silently ignored.
+  // Ten fully evidenced players are still valid after a dismissal.
+  const sufficientEvidence = hasVerifiedLineup(all) && knownTacticalRoles &&
     finite(profile?.balanceScore) && finite(profile?.restDefenseScore);
   const roleSupported = route === "third_man"
     ? screeningSix.length > 0 && pressingMidfielder.length > 0
@@ -815,6 +817,19 @@ function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup,
 }
 
 const finite = n => typeof n === "number" && Number.isFinite(n);
+// Roster evidence is complete only if EVERY on-pitch player has a verified
+// valid role fit. A single unknown GK or winger is not proof of a weakness in
+// the opponent's route or of collective defensive cover. Explicit ten-player
+// sides retain eligible evidence; incomplete/corrupt snapshots do not.
+function hasVerifiedLineup(lineup) {
+  return Array.isArray(lineup) && lineup.length >= 10 && lineup.length <= 11 &&
+    lineup.every(player => player?.playerId &&
+      player.matchFitKnown === true &&
+      finite(player.matchScore) && player.matchScore >= 0 &&
+      player.matchScore <= 100 &&
+      typeof player.roleId === "string" && player.roleId.length > 0) &&
+    new Set(lineup.map(player => player.playerId)).size === lineup.length;
+}
 const clamp = (n, low, high) => Math.max(low, Math.min(high, n));
 const round3 = n => Math.round(n * 1000) / 1000;
 
@@ -842,10 +857,7 @@ function distinctSupport(lineup, groups) {
 function selectVerifiedWeakFlank(lineup, profile) {
   if (!Array.isArray(lineup) || !finite(profile?.balanceScore) ||
     !finite(profile?.restDefenseScore)) return null;
-  const known = lineup.filter(player => player?.playerId &&
-    player.matchFitKnown === true && finite(player.matchScore) &&
-    typeof player.roleId === "string" && player.roleId.length);
-  if (known.length < 10) return null;
+  if (!hasVerifiedLineup(lineup)) return null;
   const back = position => {
     const candidates = lineup.filter(player => player?.position === position);
     if (candidates.length !== 1) return null;
