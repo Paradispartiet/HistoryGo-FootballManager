@@ -142,9 +142,19 @@ function defensiveReplyForPressExit(route, lineup, profile, outcome, targetFlank
   const known = all.filter(player => player?.playerId &&
     player.matchFitKnown === true && finite(player.matchScore) &&
     typeof player.roleId === "string" && player.roleId.length);
-  const list = (positions, roles = null) => known.filter(player =>
+  // A route needs one competent defender per tactical responsibility,
+  // not EVERY player who happens to carry the same role label. Using the
+  // weakest of all candidates can wrongly cancel verified cover because of
+  // an unrelated second midfielder or third centre-back. Select the best
+  // role-matched specialist from the actual, documented XI; ties use player
+  // ID for stable replays. Two distinct centre-backs remain mandatory for
+  // direct depth protection. No extra bonus is created by extra specialists.
+  const list = (positions, roles = null, count = 1) => known.filter(player =>
     positions.includes(player.position) &&
-    (!roles || roles.includes(player.roleId))).map(player => player.playerId);
+    (!roles || roles.includes(player.roleId)))
+    .sort((a, b) => b.matchScore - a.matchScore ||
+      String(a.playerId).localeCompare(String(b.playerId)))
+    .slice(0, count).map(player => player.playerId);
   const screeningSix = list(["DM", "CM"], ["balancing_six"]);
   const pressingMidfielder = list(["CM", "DM"], ["pressing_midfielder"]);
   const leftSupport = list(["LB"], ["support_fullback"]);
@@ -153,7 +163,7 @@ function defensiveReplyForPressExit(route, lineup, profile, outcome, targetFlank
     ["left", "right"].includes(targetFlank) ? targetFlank : null;
   const targetSideSupport = documentedFlank === "left" ? leftSupport :
     documentedFlank === "right" ? rightSupport : [...leftSupport, ...rightSupport];
-  const centralBacks = list(["CB"]);
+  const centralBacks = list(["CB"], null, 2);
   const knownTacticalRoles = known.some(player => [
     "balancing_six", "pressing_midfielder", "support_fullback",
     "overlapping_fullback", "ball_playing_centre_back", "wingback"
