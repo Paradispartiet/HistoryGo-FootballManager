@@ -6,13 +6,15 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { calculateTeamFit } from "../src/football-team-fit-engine.js";
 import {
-  calculateMatchStrength, createMatchdaySession, advanceMatchClock
+  calculateMatchStrength, createMatchdaySession, advanceMatchClock,
+  applyMatchPlanChange
 } from "../src/football-matchday-engine.js";
 import { evaluatePlanVsOpponent, scorePlanNow } from "../src/football-match-plan.js";
 import { HISTORICAL_OPPONENT_PROFILES } from "../src/football-historical-opponent-profiles.js";
 import { TACTICAL_SEQUENCES } from "../src/football-tactical-sequences.js";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances } from "../src/football-matchday-own-press-v6.js";
 import { highPressPhaseRoll } from "../src/football-matchday-high-press-v6.js";
+import { resolveAuthoredSequencePeriod, annotateAuthoredSequenceChances } from "../src/football-matchday-sequence-v8.js";
 import { derivePlayerAttributes, normalizeAttributeCatalogue } from "../src/football-player-attributes.js";
 import { applyP2SourceClaimsToPlayer, getP2SourceRecord } from "../src/football-player-source-claims-p2.js";
 
@@ -1858,4 +1860,155 @@ console.log("V7.8 documented counterpress blocks or reroutes one second-ball rel
 console.log("V7.7 verified second-ball release / negative controls / real period ledger PASS");
 
 console.log("V7.6 direct first-duel/second-ball: role evidence, contested cover, legacy saves and single RNG PASS");
+}
+
+{
+// v8.0: Full 18-plan evidence matrix. Only a calculated, role-verified XI
+// and known authored opponent counter can turn the old scalar sequenceEdge
+// into a directional causal phase. Unsupported/unknown remain unclaimed.
+// Control players and opponents here are SYNTHETIC, not observed football.
+const v8PlanIds = new Set();
+const v8Outcomes = { advantage: 0, countered: 0, attack: 0, defend: 0,
+  played: 0, unknown: 0, unsupported: 0 };
+const v8Representative = [];
+let v8TestedPlanSwitch = false;
+for (const plan of plans) {
+  const authored = TACTICAL_SEQUENCES.find(x => x.tacticId === plan.id);
+  assert.ok(authored?.moves?.length === 4, "all 18 have authored four actions");
+  v8PlanIds.add(plan.id);
+  const setups = [
+    buildFixture("4-3-3", plan),
+    buildFixture("4-3-3", plan, attackRoles),
+    buildFixture("3-4-3", plan)
+  ];
+  const fitting = setups.find(setup => Object.entries(authored.requires)
+    .every(([metric, floor]) => setup.strength.tacticalProfile[metric] >= floor));
+  for (const setup of fitting ? [fitting] : [setups[0]]) {
+    for (const countered of [false, true]) {
+      const trigger = authored.opponentCondition;
+      const counter = authored.counterCondition;
+      const synthetic = structuredClone(HISTORICAL_OPPONENT_PROFILES[0]);
+      synthetic.id = "v8-control-" + plan.id + "-" + countered;
+      synthetic.tacticalBehaviour = null;
+      synthetic.styleTraits = { ...synthetic.styleTraits,
+        [trigger.trait]: trigger.min + 2,
+        [counter.trait]: countered ? counter.min + 2 : counter.min - 2
+      };
+      // Top-level known counterpart remains explicit when an authored
+      // profile puts press resistance or structure outside styleTraits.
+      synthetic[counter.trait] = synthetic.styleTraits[counter.trait];
+      const session = kickoff(setup, synthetic);
+      const sequence = session.planMatchup.sequences
+        .find(x => x.id === plan.id);
+      const phase = resolveAuthoredSequencePeriod(session);
+      const hasEligible = fitting &&
+        ["advantage", "countered"].includes(sequence?.status);
+      assert.equal(Boolean(phase), Boolean(hasEligible),
+        "eligible four-step evidence must match phase availability: " + plan.id);
+      if (!phase) {
+        if (sequence?.status === "unknown_counter") v8Outcomes.unknown += 1;
+        else v8Outcomes.unsupported += 1;
+        continue;
+      }
+      v8Outcomes[phase.status] += 1;
+      const resolvedCounter = phase.status === "countered";
+      const attack = ["in_possession", "transition_attack"].includes(authored.phase);
+      v8Outcomes[attack ? "attack" : "defend"] += 1;
+      assert.equal(phase.version, 6);
+      assert.equal(phase.planId, plan.id);
+      assert.equal(phase.steps.length, 4);
+      assert.deepEqual(phase.steps.map(x => x.action), authored.moves);
+      assert.equal(phase.evidence.eventCount, 1);
+      assert.equal(phase.evidence.extraRandomDraws, 0);
+      assert.equal(phase.counterplay.automaticallyExecuted, false);
+      assert.ok(phase.evidence.supportingPlayers.length >= 10);
+      assert.ok(phase.evidence.requirements.length >= 1);
+      assert.equal(phase.xgDeltaFor, attack && !resolvedCounter ? 0.04 : 0,
+        "offensive success may raise own chances, defensive success may NOT");
+      assert.equal(phase.xgDeltaAgainst, resolvedCounter
+        ? attack ? 0.03 : 0.05 : attack ? 0 : -0.04,
+        "attack and defensive risk are independently directed");
+      assert.equal(phase.steps.filter(x => x.result === "countered").length,
+        resolvedCounter ? 1 : 0);
+      assert.deepEqual(phase, resolveAuthoredSequencePeriod(session),
+        "identical match snapshot must replay exactly without a new roll");
+      const persisted = JSON.parse(JSON.stringify(session));
+      assert.deepEqual(resolveAuthoredSequencePeriod(persisted), phase,
+        "save/restore must retain the exact authored phase");
+      delete persisted.causalDirectionalSequenceVersion;
+      assert.equal(resolveAuthoredSequencePeriod(persisted), null,
+        "old saved matches must retain the previous scalar path");
+      if (!v8TestedPlanSwitch) {
+        const nextPlan = plans.find(candidate => candidate.id !== plan.id);
+        const afterSwitch = applyMatchPlanChange(session, nextPlan, {
+          opponent: session.opponent
+        });
+        assert.notEqual(afterSwitch, session,
+          "midmatch manager plan change must be a real saved update");
+        assert.equal(afterSwitch.activePlanSnapshot.id, nextPlan.id);
+        assert.equal(afterSwitch.planMatchup.sequences.every(x =>
+          x.id === nextPlan.id), true,
+          "new plan evaluation cannot reuse the old plan's authored chain");
+        assert.notEqual(resolveAuthoredSequencePeriod(afterSwitch)?.planId, plan.id,
+          "a changed plan must not execute the previous plan's four actions");
+        v8TestedPlanSwitch = true;
+      }
+      const unknownXI = structuredClone(session);
+      unknownXI.lineupSnapshot[0].matchFitKnown = false;
+      assert.equal(resolveAuthoredSequencePeriod(unknownXI), null);
+      const noCounter = structuredClone(session);
+      noCounter.planMatchup.sequences[0].status = "unknown_counter";
+      assert.equal(resolveAuthoredSequencePeriod(noCounter), null);
+      const wrongPlan = structuredClone(session);
+      wrongPlan.planMatchup.sequences[0].moves[0] = "invented move";
+      assert.equal(resolveAuthoredSequencePeriod(wrongPlan), null,
+        "untrusted/stale moves cannot impersonate the canonical four-link sequence");
+      const shots = [
+        { side: "for", quality: 0.12 },
+        { side: "against", quality: 0.08 }
+      ];
+      const annotated = annotateAuthoredSequenceChances(shots, phase);
+      assert.equal(annotated.length, 2);
+      assert.ok(annotated.filter(x => x.tacticalMoment).length <= 1,
+        "at most one actual existing chance can be attributed");
+      if (phase.side) assert.equal(
+        annotated.find(x => x.side === phase.side).tacticalMoment.xgDelta,
+        phase.side === "for" ? phase.xgDeltaFor : phase.xgDeltaAgainst);
+      else assert.deepEqual(annotated, shots,
+        "a successful defensive block must not invent a shot to annotate");
+      assert.deepEqual(annotateAuthoredSequenceChances([], phase), []);
+      // The specialized v6 mechanisms must retain first right of refusal.
+      // If none is available in the chosen control scenario, production
+      // must apply this same directional phase with ONE terminal xG charge.
+      const period = advanceMatchClock(session).timeline[0];
+      if (period.tacticalPhase?.situation === "authored_four_step_sequence") {
+        v8Outcomes.played += 1;
+        assert.equal(period.tacticalXg, undefined);
+        assert.equal(period.tacticalPhase.planId, plan.id);
+        assert.equal(period.tacticalPhase.status, phase.status);
+        for (const side of ["for", "against"]) {
+          const ledger = Number((period.expectedGoals[side] -
+            period.baselineExpectedGoals[side]).toFixed(2));
+          assert.equal(ledger, period.tacticalPhase[
+            side === "for" ? "xgDeltaFor" : "xgDeltaAgainst"
+          ], "the one real period ledger owns the directional delta");
+        }
+      } else assert.notEqual(period.tacticalPhase?.situation,
+        "authored_four_step_sequence");
+      v8Representative.push({ plan: plan.id, status: phase.status,
+        side: phase.side, phase: authored.phase,
+        xgFor: phase.xgDeltaFor, xgAgainst: phase.xgDeltaAgainst });
+    }
+  }
+}
+assert.equal(v8PlanIds.size, 18);
+assert.ok(v8TestedPlanSwitch, "real plan-switch eligibility has been tested");
+assert.ok(v8Outcomes.advantage > 0 && v8Outcomes.countered > 0,
+  "the synthetic 18-plan contrast must exercise both supported outcomes");
+assert.ok(v8Outcomes.attack > 0 && v8Outcomes.defend > 0,
+  "offensive and defensive chains must both receive directed consequences");
+assert.ok(v8Outcomes.played > 0,
+  "at least one real match period must use the fallback while specialties remain first");
+console.log("V8.0 18-plan authored sequence matrix, defensive/offensive xG, legacy and replay PASS " +
+  JSON.stringify({ count: v8Outcomes, examples: v8Representative.slice(0, 8) }));
 }

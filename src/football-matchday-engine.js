@@ -9,6 +9,7 @@ import { resolveTurnoverTransition } from "./football-matchday-turnover-v6.js";
 import { resolveCompactBlockAttack, annotateCompactBlockChances } from "./football-matchday-compact-block-v6.js";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances, getManagerPressCounterOptions } from "./football-matchday-own-press-v6.js";
 import { resolveGameControlPhase, annotateGameControlChances } from "./football-matchday-control-v6.js";
+import { resolveAuthoredSequencePeriod, annotateAuthoredSequenceChances } from "./football-matchday-sequence-v8.js";
 import {
   applyOpponentAdjustment,
   createPlanChange,
@@ -1832,6 +1833,10 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     // replace only the existing v7.5 route-specific xG price. Old saves,
     // missing role evidence and other routes retain previous behaviour.
     causalRouteFinishVersion: 1,
+    // v8.0: only new matches can resolve a supported canonical four-step
+    // sequence as a directional period event, when specialised v6 phases do
+    // not apply. Old saved matches keep their scalar matchup projection.
+    causalDirectionalSequenceVersion: 1,
     // Four remaining plans opt in only on new match sessions.
     causalGameControlVersion: 1,
     sourcedSubstitutionVersion: 2,
@@ -2236,9 +2241,17 @@ export function advanceMatchClock(session) {
   });
   // The terminal outcome REPLACES the preliminary risk from the build-up
   // loss; it is never added on top. A completed build-up has no transition.
+  // v8.0 is a FALLBACK on the same clock, never a competing simulation.
+  // An executed specialist phase owns all xG attribution. If none fires,
+  // use the canonical authored chain only when XI and counter evidence exist.
+  // Unknown / unsupported patterns retain the prior neutral/fallback path.
+  const authoredSequencePhase = !buildUpPhase && !compactPhase &&
+    !pressingPhase && !controlPhase && !ineligibleReactivePlan(session)
+    ? resolveAuthoredSequencePeriod(session) : null;
   const phase = transition ? {
     ...buildUpPhase, transition, xgDeltaAgainst: transition.xgDeltaAgainst
-  } : buildUpPhase || compactPhase || pressingPhase || controlPhase;
+  } : buildUpPhase || compactPhase || pressingPhase || controlPhase ||
+    authoredSequencePhase;
   const rate = currentExpectedGoalRate(session);
   const share = 1 / totalSegments;
   const staticEdge = periodPlanMatchupEdge(session);
@@ -2290,7 +2303,9 @@ export function advanceMatchClock(session) {
     ? annotateCompactBlockChances(generatedChances, tacticalPhase)
     : tacticalPhase?.situation === "our_press_vs_opponent_build_up"
       ? annotateOwnPressChances(generatedChances, tacticalPhase)
-      : tacticalPhase?.situation === "game_control_and_release"
+      : tacticalPhase?.situation === "authored_four_step_sequence"
+        ? annotateAuthoredSequenceChances(generatedChances, tacticalPhase)
+        : tacticalPhase?.situation === "game_control_and_release"
         ? annotateGameControlChances(generatedChances, tacticalPhase)
         : tacticalPhase
           ? annotateHighPressBuildUpChances(generatedChances, tacticalPhase)
