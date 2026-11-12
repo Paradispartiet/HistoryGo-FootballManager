@@ -1748,7 +1748,12 @@ for (const [route, action, expectedOffset] of terminalCases) {
   const unsupportedAction = routeQualityPhase(route, { pressExitFinish: {
     ...scenario, action: "unverified_skill"
   } });
-  for (const unchanged of [unknown, mismatch, unsupportedAction]) {
+  const inheritedActions = ["constructor", "__proto__", "toString"].map(
+    action => routeQualityPhase(route, { pressExitFinish: {
+      ...scenario, action
+    } }));
+  for (const unchanged of [unknown, mismatch, unsupportedAction,
+    ...inheritedActions]) {
     assert.equal(unchanged.evidence.terminalFinish, undefined,
       "unknown/contradictory/scenario-only input must be neutral");
     assert.equal(unchanged.xgDeltaAgainst, baseline.xgDeltaAgainst);
