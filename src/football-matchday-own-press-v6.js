@@ -899,7 +899,13 @@ function documentedTerminalFinish(session, route, escapeEvidence,
     !counterplay?.pathwayId || counterplay.pathwayId !== route ||
     !hasVerifiedLineup(session.lineupSnapshot)) return null;
   const authored = session.opponent?.tacticalBehaviour?.pressExitFinish;
-  const named = PRESS_EXIT_FINISH[route]?.[authored?.action];
+  // Authored action IDs are untrusted: never inherit prototype properties
+  // (e.g. "constructor" or "__proto__") as fake finishing mechanisms.
+  const options = Object.prototype.hasOwnProperty.call(PRESS_EXIT_FINISH, route)
+    ? PRESS_EXIT_FINISH[route] : null;
+  const named = options && typeof authored?.action === "string" &&
+    Object.prototype.hasOwnProperty.call(options, authored.action)
+    ? options[authored.action] : null;
   const defence = counterplay.defensiveReply;
   if (!named || authored?.basis !== "authored_scenario" ||
     authored.evidence !== "supported" || authored.route !== route ||
