@@ -887,6 +887,71 @@ function secondBallReleaseFor(session, directSecondBall) {
     basis: "known_lineup_roles_and_calculated_team_metrics",
     xgDeltaFor: 0
   };
+  // v7.8: an explicitly authored and SUPPORTED counterpress can challenge
+  // the central release. It changes the outcome of THIS SAME ball, not the
+  // first-ball roll, opponent xG or an independent chance. Without positive
+  // scenario evidence the v7.7 release remains untouched.
+  const counter = session.causalSecondBallCounterpressVersion === 1
+    ? session.opponent?.tacticalBehaviour?.secondBallCounterpress : null;
+  const counterSupported = counter?.basis === "authored_scenario" &&
+    counter?.evidence === "supported" &&
+    counter?.mechanism === "screen_central_connector";
+  if (counterSupported) {
+    const counterplay = {
+      mechanism: "screen_central_connector",
+      status: "simulated_supported",
+      basis: "authored_scenario_not_observed"
+    };
+    // A central link can be screened, but only a VERIFIED flank advantage
+    // justifies switching the next pass. No tracking positions are inferred.
+    // Ties are unknown: never arbitrarily declare a weak defensive flank.
+    const wideOptions = [
+      { flank: "left", back: choose("LB", ["support_fullback"]),
+        winger: choose("LW", ["wide_dribbler", "inverted_winger"]) },
+      { flank: "right", back: choose("RB", ["support_fullback"]),
+        winger: choose("RW", ["wide_dribbler", "inverted_winger"]) }
+    ].filter(option => option.back && option.winger)
+      .map(option => ({ ...option,
+        fitFloor: Math.min(option.back.matchScore, option.winger.matchScore) }))
+      .sort((a, b) => b.fitFloor - a.fitFloor ||
+        a.flank.localeCompare(b.flank));
+    const eligibleWideReply = finite(profile.widthScore) &&
+      profile.widthScore >= 50 && wideOptions.length &&
+      (wideOptions.length === 1 ||
+        wideOptions[0].fitFloor - wideOptions[1].fitFloor >= 5)
+      ? wideOptions[0] : null;
+    if (!eligibleWideReply) return {
+      status: "blocked_by_counterpress", xgDeltaFor: 0,
+      basis: "simulated_counterplay_not_observed",
+      counterplay, eventCount: 1,
+      steps: [
+        { action: "Sekseren sikrer andreballen", playerId: six.playerId,
+          roleId: six.roleId, result: "completed" },
+        { action: "Motpresset skjermer den sentrale støttepasningen",
+          result: "blocked" },
+        { action: "Ingen verifisert alternativ kantforbindelse",
+          result: "not_verified" }
+      ],
+      reason: "central_link_blocked_wide_reply_unverified"
+    };
+    const { back, winger, flank } = eligibleWideReply;
+    return {
+      status: "wide_reply", basis: "simulated_verified_wide_reply_not_observed",
+      // REPLACES the +0.02 central release, never stacks on top of it.
+      xgDeltaFor: 0.01, eventCount: 1, counterplay,
+      selectedFlank: flank,
+      steps: [
+        { action: "Sekseren sikrer andreballen", playerId: six.playerId,
+          roleId: six.roleId },
+        { action: "Backen tilbyr en alternativ støttepasning",
+          playerId: back.playerId, roleId: back.roleId },
+        { action: "Kantspilleren tar imot og fører angrepet videre",
+          playerId: winger.playerId, roleId: winger.roleId }
+      ],
+      knownMetrics: { buildUpScore: profile.buildUpScore,
+        depthScore: profile.depthScore, widthScore: profile.widthScore }
+    };
+  }
   // A single documented chain earns one small modelled attacking effect.
   // It does not roll a shot, select a scorer or create an independent chance.
   return {
@@ -1328,7 +1393,8 @@ export function resolveOwnPressAgainstOpponent(session, {
   // documented attacking roles. The existing period rate consumes the
   // resulting xG once; no new generator and no additional random roll.
   const secondBallRelease = secondBallReleaseFor(session, directSecondBall);
-  const releasedAttack = secondBallRelease?.status === "released";
+  const releasedAttack = ["released", "wide_reply"].includes(
+    secondBallRelease?.status);
   const chanceSide = regained || releasedAttack ? "for" :
     outcome === "escaped" ? "against" : null;
   // This REPLACES the route-neutral terminal risk; the existing phase still
@@ -1401,8 +1467,12 @@ export function resolveOwnPressAgainstOpponent(session, {
             : " I simuleringen vinner motstanderen både førsteballen og andreballen."
         : "") +
       (releasedAttack
-        ? " I simuleringen sikrer sekseren andreballen, midtbanen frigjør støttepasningen og spissen angriper rommet."
-        : ""),
+        ? secondBallRelease.status === "wide_reply"
+          ? " I simuleringen skjermer motpresset den sentrale veien, men en verifisert back og kantspiller åpner en bredere utvei."
+          : " I simuleringen sikrer sekseren andreballen, midtbanen frigjør støttepasningen og spissen angriper rommet."
+        : secondBallRelease?.status === "blocked_by_counterpress"
+          ? " I simuleringen stopper motpresset støttepasningen, og ingen alternativ utvei er verifisert."
+          : ""),
     steps,
     counterplay: counterplay && directSecondBall
       ? { ...counterplay, directSecondBall } : counterplay,
@@ -1446,7 +1516,8 @@ export function annotateOwnPressChances(chances, phase) {
   if (!Array.isArray(chances) || !phase || !phase.side) return chances;
   const chosen = chances.findIndex(chance => chance.side === phase.side);
   if (chosen < 0) return chances;
-  const released = phase.evidence?.secondBallRelease?.status === "released";
+  const released = ["released", "wide_reply"].includes(
+    phase.evidence?.secondBallRelease?.status);
   const won = phase.status === "regain" || released;
   return chances.map((chance, i) => i !== chosen ? chance : {
     ...chance,
