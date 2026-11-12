@@ -1200,19 +1200,60 @@ export function resolveOwnPressAgainstOpponent(session, {
   const cover = selectedCover
     ? { ...baseCover, adjustment: selectedCover.coverAdjustment }
     : baseCover;
+  // v7.6: a direct ball can be won in the first duel OR recovered as a
+  // second ball. The existing protection roll resolves both stages: never
+  // create another random draw or another xG event. The already earned
+  // specialist cover term is split into first-duel and second-ball protection.
+  // An explicitly AUTHORED coordinated opponent support contests HALF of
+  // that term (game heuristic, not a claim of observed opponent skills).
+  // Unknown scouting/roles and pre-v7.6 saves are completely unchanged.
+  const directReply = counter === "direct" && documentedEscape
+    ? defensiveReplyForPressExit(counter, session.lineupSnapshot,
+      profile, "preflight", targetFlank) : null;
+  const traceDirectSecondBall = session.causalDirectSecondBallVersion === 1 &&
+    counter === "direct" && documentedEscape &&
+    directReply?.roleReadiness === "supported_by_roles";
+  const coordinatedSecondBall = traceDirectSecondBall &&
+    shape?.directSecondBall?.basis === "authored_scenario" &&
+    shape.directSecondBall.opponentSupport === "coordinated";
+  const contestedCover = coordinatedSecondBall
+    ? round3(cover.adjustment / 2) : 0;
+  const appliedCover = contestedCover
+    ? { ...cover, adjustment: round3(cover.adjustment - contestedCover) }
+    : cover;
+  const firstBallContainment = clamp(
+    0.48 + (restDefense - 65) * 0.005 +
+      (balance - 65) * 0.002 +
+      (avgFit - 65) * 0.001 -
+      (threat - 70) * 0.004, 0.12, 0.88
+  );
   const containment = clamp(
     0.48 + (restDefense - 65) * 0.005 +
       (balance - 65) * 0.002 +
       (avgFit - 65) * 0.001 -
       (threat - 70) * 0.004 +
-      cover.adjustment, 0.12, 0.88
+      appliedCover.adjustment, 0.12, 0.88
   );
   const protection = regained ? null : Number(protectionRoll());
   if (!regained && !finite(protection)) return null;
   const contained = !regained && clamp(protection, 0, 0.999999999) < containment;
   const outcome = regained ? "regain" : contained ? "contained" : "escaped";
+  const directSecondBall = traceDirectSecondBall && !regained ? {
+    basis: "simulated_game_heuristic_not_observed",
+    opponentSupport: coordinatedSecondBall ? "authored_coordinated" : "unknown",
+    firstBall: protection < firstBallContainment
+      ? "defender_won" : "opponent_won",
+    secondBall: protection < firstBallContainment
+      ? "not_required" : contained ? "defender_recovered" : "opponent_retained",
+    firstBallContainmentProbability: round3(firstBallContainment),
+    originalSpecialistCover: round3(cover.adjustment),
+    appliedSpecialistCover: round3(appliedCover.adjustment),
+    // This is a redistribution of existing defensive cover, not a second award.
+    opponentSupportContestation: contestedCover,
+    eventCount: 1
+  } : null;
   const originalCounterplay = counterplayForPressExit(counter, escapeEvidence,
-    outcome, session.lineupSnapshot, profile, cover, targetFlank, adaptiveChoice,
+    outcome, session.lineupSnapshot, profile, appliedCover, targetFlank, adaptiveChoice,
     routeChoice?.flankChoice ? "weakest_verified_cover" : "weakest_verified_flank");
   const phaseContinuity = routeChoice &&
     session.causalOpponentSequenceVersion === 1
@@ -1258,7 +1299,7 @@ export function resolveOwnPressAgainstOpponent(session, {
     planId: id, route, status: outcome, side: chanceSide,
     probability: round3(pressProbability),
     containmentProbability: round3(containment),
-    routeCoverAdjustment: round3(cover.adjustment),
+    routeCoverAdjustment: round3(appliedCover.adjustment),
     xgDeltaFor: regained ? config.xgFor : 0,
     // The terminal outcome owns this single risk; no separate bonus for
     // stage two or for each player in the pressing unit.
@@ -1291,8 +1332,17 @@ export function resolveOwnPressAgainstOpponent(session, {
             ? "tredjemann" : routeChoice.redistribution.prioritisedRoute === "switch_play"
               ? "sideskift" : "direkte utspill") +
           ", på bekostning av dekning i en annen kjent korridor."
+        : "") +
+      (directSecondBall
+        ? directSecondBall.firstBall === "defender_won"
+          ? " I simuleringen kontrollerer forsvaret førsteballen fra det direkte oppspillet."
+          : directSecondBall.secondBall === "defender_recovered"
+            ? " I simuleringen taper forsvaret førsteballen, men sikrer andreballen."
+            : " I simuleringen vinner motstanderen både førsteballen og andreballen."
         : ""),
-    steps, counterplay,
+    steps,
+    counterplay: counterplay && directSecondBall
+      ? { ...counterplay, directSecondBall } : counterplay,
     evidence: {
       opponentTrigger: config.opponentMetric, opponentValue: scenario,
       pressResistance: resistance, transitionThreat: threat,
@@ -1307,6 +1357,7 @@ export function resolveOwnPressAgainstOpponent(session, {
       } : {}),
       opponentEscapeEvidence: escapeEvidence || "unknown",
       resolvedEscapePathway: counterplay?.pathwayId || "unknown",
+      ...(directSecondBall ? { directSecondBall } : {}),
       ...(pricedRoute ? { terminalChanceQuality: {
         basis: "bounded_game_heuristic_not_observed",
         route: pricedRoute,
