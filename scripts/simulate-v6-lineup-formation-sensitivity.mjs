@@ -6,7 +6,8 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { calculateTeamFit } from "../src/football-team-fit-engine.js";
 import {
-  calculateMatchStrength, createMatchdaySession, advanceMatchClock
+  calculateMatchStrength, createMatchdaySession, advanceMatchClock,
+  applyMatchPlanChange
 } from "../src/football-matchday-engine.js";
 import { evaluatePlanVsOpponent, scorePlanNow } from "../src/football-match-plan.js";
 import { HISTORICAL_OPPONENT_PROFILES } from "../src/football-historical-opponent-profiles.js";
@@ -1870,6 +1871,7 @@ const v8PlanIds = new Set();
 const v8Outcomes = { advantage: 0, countered: 0, attack: 0, defend: 0,
   played: 0, unknown: 0, unsupported: 0 };
 const v8Representative = [];
+let v8TestedPlanSwitch = false;
 for (const plan of plans) {
   const authored = TACTICAL_SEQUENCES.find(x => x.tacticId === plan.id);
   assert.ok(authored?.moves?.length === 4, "all 18 have authored four actions");
@@ -1936,6 +1938,21 @@ for (const plan of plans) {
       delete persisted.causalDirectionalSequenceVersion;
       assert.equal(resolveAuthoredSequencePeriod(persisted), null,
         "old saved matches must retain the previous scalar path");
+      if (!v8TestedPlanSwitch) {
+        const nextPlan = plans.find(candidate => candidate.id !== plan.id);
+        const afterSwitch = applyMatchPlanChange(session, nextPlan, {
+          opponent: session.opponent
+        });
+        assert.notEqual(afterSwitch, session,
+          "midmatch manager plan change must be a real saved update");
+        assert.equal(afterSwitch.activePlanSnapshot.id, nextPlan.id);
+        assert.equal(afterSwitch.planMatchup.sequences.every(x =>
+          x.id === nextPlan.id), true,
+          "new plan evaluation cannot reuse the old plan's authored chain");
+        assert.notEqual(resolveAuthoredSequencePeriod(afterSwitch)?.planId, plan.id,
+          "a changed plan must not execute the previous plan's four actions");
+        v8TestedPlanSwitch = true;
+      }
       const unknownXI = structuredClone(session);
       unknownXI.lineupSnapshot[0].matchFitKnown = false;
       assert.equal(resolveAuthoredSequencePeriod(unknownXI), null);
@@ -1985,6 +2002,7 @@ for (const plan of plans) {
   }
 }
 assert.equal(v8PlanIds.size, 18);
+assert.ok(v8TestedPlanSwitch, "real plan-switch eligibility has been tested");
 assert.ok(v8Outcomes.advantage > 0 && v8Outcomes.countered > 0,
   "the synthetic 18-plan contrast must exercise both supported outcomes");
 assert.ok(v8Outcomes.attack > 0 && v8Outcomes.defend > 0,
