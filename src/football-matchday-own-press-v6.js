@@ -853,6 +853,59 @@ function hasVerifiedLineup(lineup) {
       typeof player.roleId === "string" && player.roleId.length > 0) &&
     new Set(lineup.map(player => player.playerId)).size === lineup.length;
 }
+// v7.7: after ONE confirmed second-ball recovery, a verified 6 -> connector ->
+// forward chain can turn possession into an attack through the EXISTING
+// period xG/chance ledger. This is a bounded game assumption (not tracking).
+// Distinct, role-matched players and both team metrics must be known. Missing
+// evidence NEVER implies a weak opponent or grants an attacking benefit.
+function secondBallReleaseFor(session, directSecondBall) {
+  if (session?.causalSecondBallReleaseVersion !== 1 ||
+    directSecondBall?.secondBall !== "defender_recovered") return null;
+  const lineup = session.lineupSnapshot;
+  const profile = session.teamFitSnapshot?.tacticalProfile;
+  const sufficientEvidence = hasVerifiedLineup(lineup) &&
+    finite(profile?.buildUpScore) && finite(profile?.depthScore);
+  if (!sufficientEvidence) return {
+    status: "unknown", reason: "insufficient_lineup_or_team_metrics",
+    basis: "no_inferred_player_skills", xgDeltaFor: 0
+  };
+  const choose = (position, roleIds) => lineup
+    .filter(p => p.position === position && roleIds.includes(p.roleId) &&
+      p.matchFitKnown === true && finite(p.matchScore) &&
+      p.matchScore >= 60)
+    .sort((a, b) => b.matchScore - a.matchScore ||
+      String(a.playerId).localeCompare(String(b.playerId)))[0];
+  const six = choose("DM", ["balancing_six"]);
+  const connector = choose("CM", ["deep_playmaker", "pressing_midfielder"]);
+  const runner = choose("ST", ["channel_runner", "pressing_forward"]);
+  // Declared GAME thresholds: a strong enough build-up link (55) and
+  // at least neutral depth support (50); not an empirical calibration.
+  if (!six || !connector || !runner ||
+    profile.buildUpScore < 55 || profile.depthScore < 50) return {
+    status: "unverified_support",
+    reason: "missing_verified_link_or_team_metric",
+    basis: "known_lineup_roles_and_calculated_team_metrics",
+    xgDeltaFor: 0
+  };
+  // A single documented chain earns one small modelled attacking effect.
+  // It does not roll a shot, select a scorer or create an independent chance.
+  return {
+    status: "released", basis: "simulated_role_chain_not_observed",
+    xgDeltaFor: 0.02,
+    steps: [
+      { action: "Sekseren sikrer nedfallsrommet", playerId: six.playerId,
+        roleId: six.roleId },
+      { action: "Midtbanen gir neste støttepasning", playerId: connector.playerId,
+        roleId: connector.roleId },
+      { action: "Spissen angriper rommet foran", playerId: runner.playerId,
+        roleId: runner.roleId }
+    ],
+    knownMetrics: { buildUpScore: profile.buildUpScore,
+      depthScore: profile.depthScore },
+    eventCount: 1
+  };
+}
+
 const clamp = (n, low, high) => Math.max(low, Math.min(high, n));
 const round3 = n => Math.round(n * 1000) / 1000;
 
@@ -1271,7 +1324,13 @@ export function resolveOwnPressAgainstOpponent(session, {
   const counterplay = originalCounterplay && routeChoice ? {
     ...originalCounterplay, opponentRouteAdaptation: routeAdaptation
   } : originalCounterplay;
-  const chanceSide = regained ? "for" : outcome === "escaped" ? "against" : null;
+  // A recovered direct second ball may be released by three DIFFERENT,
+  // documented attacking roles. The existing period rate consumes the
+  // resulting xG once; no new generator and no additional random roll.
+  const secondBallRelease = secondBallReleaseFor(session, directSecondBall);
+  const releasedAttack = secondBallRelease?.status === "released";
+  const chanceSide = regained || releasedAttack ? "for" :
+    outcome === "escaped" ? "against" : null;
   // This REPLACES the route-neutral terminal risk; the existing phase still
   // pays exactly one xG delta before chance generation. Older saved matches,
   // isolated/unknown routes, regains and contained escapes are unchanged.
@@ -1300,7 +1359,8 @@ export function resolveOwnPressAgainstOpponent(session, {
     probability: round3(pressProbability),
     containmentProbability: round3(containment),
     routeCoverAdjustment: round3(appliedCover.adjustment),
-    xgDeltaFor: regained ? config.xgFor : 0,
+    xgDeltaFor: regained ? config.xgFor :
+      releasedAttack ? secondBallRelease.xgDeltaFor : 0,
     // The terminal outcome owns this single risk; no separate bonus for
     // stage two or for each player in the pressing unit.
     xgDeltaAgainst: terminalConcededXg,
@@ -1339,6 +1399,9 @@ export function resolveOwnPressAgainstOpponent(session, {
           : directSecondBall.secondBall === "defender_recovered"
             ? " I simuleringen taper forsvaret førsteballen, men sikrer andreballen."
             : " I simuleringen vinner motstanderen både førsteballen og andreballen."
+        : "") +
+      (releasedAttack
+        ? " I simuleringen sikrer sekseren andreballen, midtbanen frigjør støttepasningen og spissen angriper rommet."
         : ""),
     steps,
     counterplay: counterplay && directSecondBall
@@ -1358,6 +1421,7 @@ export function resolveOwnPressAgainstOpponent(session, {
       opponentEscapeEvidence: escapeEvidence || "unknown",
       resolvedEscapePathway: counterplay?.pathwayId || "unknown",
       ...(directSecondBall ? { directSecondBall } : {}),
+      ...(secondBallRelease ? { secondBallRelease } : {}),
       ...(pricedRoute ? { terminalChanceQuality: {
         basis: "bounded_game_heuristic_not_observed",
         route: pricedRoute,
@@ -1382,19 +1446,24 @@ export function annotateOwnPressChances(chances, phase) {
   if (!Array.isArray(chances) || !phase || !phase.side) return chances;
   const chosen = chances.findIndex(chance => chance.side === phase.side);
   if (chosen < 0) return chances;
-  const won = phase.status === "regain";
+  const released = phase.evidence?.secondBallRelease?.status === "released";
+  const won = phase.status === "regain" || released;
   return chances.map((chance, i) => i !== chosen ? chance : {
     ...chance,
     tacticalMoment: {
-      kind: won ? "press_regain" : "press_broken",
-      label: won ? "Kollektiv gjenvinning" : "Motstander spiller av press",
+      kind: released ? "second_ball_release" :
+        won ? "press_regain" : "press_broken",
+      label: released ? "Andreball til angrep" :
+        won ? "Kollektiv gjenvinning" : "Motstander spiller av press",
       description: phase.cause,
       planId: phase.planId, planTitle: "Kollektivt press og motspill",
       status: won ? "advantage" : "countered", side: phase.side,
       keyAction: phase.steps.find(step => step.result === "failed")?.action ||
         phase.steps[phase.steps.length - 1]?.action,
       cause: phase.cause, steps: phase.steps, counterplay: phase.counterplay || null,
-      observed: false, basis: "simulated_before_chances_v6",
+      ...(released ? { secondBallRelease: phase.evidence.secondBallRelease } : {}),
+      observed: false, basis: released
+        ? "simulated_second_ball_role_link_v7_7" : "simulated_before_chances_v6",
       xgDelta: won ? phase.xgDeltaFor : phase.xgDeltaAgainst
     }
   });
