@@ -775,7 +775,7 @@ function explainDefensiveCoverTiming(timing) {
   };
 }
 
-function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup, profile, cover, targetFlank, adaptiveChoice = null) {
+function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup, profile, cover, targetFlank, adaptiveChoice = null, adaptationPolicy = "weakest_verified_flank") {
   // An explicit observation of isolation overrides an older authored route.
   // A generic 'supported' observation with no named route must not invent one.
   if (escapeEvidence !== "supported" ||
@@ -791,7 +791,9 @@ function counterplayForPressExit(opponentRoute, escapeEvidence, outcome, lineup,
     ...(adaptiveChoice ? {
       simulatedTargetFlank: targetFlank,
       opponentAdaptation: {
-        policy: "weakest_verified_flank",
+        // A flank inferred while choosing an outlet belongs to the
+        // multi-route policy, not the independent weak-flank policy.
+        policy: adaptationPolicy,
         selectedFlank: targetFlank,
         reason: adaptiveChoice.reason,
         basis: adaptiveChoice.basis
@@ -1199,7 +1201,8 @@ export function resolveOwnPressAgainstOpponent(session, {
   const contained = !regained && clamp(protection, 0, 0.999999999) < containment;
   const outcome = regained ? "regain" : contained ? "contained" : "escaped";
   const originalCounterplay = counterplayForPressExit(counter, escapeEvidence,
-    outcome, session.lineupSnapshot, profile, cover, targetFlank, adaptiveChoice);
+    outcome, session.lineupSnapshot, profile, cover, targetFlank, adaptiveChoice,
+    routeChoice?.flankChoice ? "weakest_verified_cover" : "weakest_verified_flank");
   const phaseContinuity = routeChoice &&
     session.causalOpponentSequenceVersion === 1
     ? opponentPhaseContinuity(session, routeChoice, outcome) : null;

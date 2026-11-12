@@ -97,7 +97,32 @@ assert.equal(wide.counterplay.simulatedTargetFlank, "left");
 assert.equal(wide.evidence.documentedTargetFlank, null);
 assert.equal(wide.routeCoverAdjustment, 0);
 assert.equal(wide.counterplay.opponentRouteAdaptation.selectedRoute, "switch_play");
-checks += 6;
+// A weak flank inferred WHILE choosing the weakest available route belongs to
+// that multi-route decision, not to a separate weak-flank scouting rule.
+// Both policies may choose the same nominal side, but their provenance differs
+// and must remain faithful in the saved tactical replay.
+assert.equal(wide.counterplay.opponentAdaptation.policy,
+  "weakest_verified_cover");
+const standaloneFlank = phase(exposedLeft, {
+  pressEscape: "supported",
+  pressEscapeRoute: "switch_play",
+  pressEscapeTargetPolicy: "weakest_verified_flank"
+});
+assert.equal(standaloneFlank.counterplay.opponentAdaptation.policy,
+  "weakest_verified_flank");
+assert.equal(standaloneFlank.counterplay.opponentAdaptation.selectedFlank, "left");
+assert.equal(wide.counterplay.opponentAdaptation.selectedFlank,
+  standaloneFlank.counterplay.opponentAdaptation.selectedFlank);
+assert.equal(wide.probability, standaloneFlank.probability,
+  "the provenance label never changes stage-one press probability");
+assert.equal(wide.containmentProbability, standaloneFlank.containmentProbability,
+  "identical actual flank and roles must keep one containment probability");
+assert.equal(wide.xgDeltaAgainst, standaloneFlank.xgDeltaAgainst,
+  "provenance metadata must never create a new xG event");
+assert.equal(phase(JSON.parse(JSON.stringify(exposedLeft)), widePolicy)
+  .counterplay.opponentAdaptation.policy, "weakest_verified_cover",
+  "the same documented lineup and policy must replay the same choice");
+checks += 14;
 
 // Exact same XI and rolls: choosing between authored routes can alter only
 // the SINGLE existing cover gate, never grant a second xG line.
