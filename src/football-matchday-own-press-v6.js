@@ -858,6 +858,75 @@ function hasVerifiedLineup(lineup) {
 // period xG/chance ledger. This is a bounded game assumption (not tracking).
 // Distinct, role-matched players and both team metrics must be known. Missing
 // evidence NEVER implies a weak opponent or grants an attacking benefit.
+// v7.9: route-specific terminal continuations keep ONE broken-press ball
+// and change the EXISTING conceded-chance price. The attacker continuation
+// is explicit authored scenario data, never inferred from a real opponent.
+const PRESS_EXIT_FINISH = Object.freeze({
+  third_man: Object.freeze({
+    runner_connected: Object.freeze({
+      offset: 0.02,
+      finalAction: "Tredjemann mottar gjennomspillet mellom leddene",
+      explanation: "I simuleringen finner tredjemann gjennomspillet, slik at sluttfasen blir farligere."
+    }),
+    runner_screened: Object.freeze({
+      offset: 0,
+      finalAction: "Dekningen skyver tredjemann ut av sentralt avslutningsrom",
+      explanation: "I simuleringen skyves tredjemann ut av sentralt avslutningsrom, selv om presset ble brutt."
+    })
+  }),
+  switch_play: Object.freeze({
+    cross_arrival: Object.freeze({
+      offset: 0.01,
+      finalAction: "Innlegget når en på forhånd beskrevet mottaker i boksen",
+      explanation: "I simuleringen finner innlegget en dokumentert mottaker i boksen."
+    }),
+    cross_screened: Object.freeze({
+      offset: -0.02,
+      finalAction: "Back og bakre sikring skjermer mottaksrommet i boksen",
+      explanation: "I simuleringen er innleggsrommet skjermet, så avslutningen blir mindre farlig."
+    })
+  })
+});
+
+// Four decisions are an ACCOUNT of the single existing escape, not new
+// possession rolls. Both the exact route and continuation need explicit,
+// supported authorship; checked defensive roles must be present to name a
+// tactical reply. Missing opponent tracking or an unknown XI changes nothing.
+function documentedTerminalFinish(session, route, escapeEvidence,
+  outcome, counterplay) {
+  if (session?.causalRouteFinishVersion !== 1 ||
+    outcome !== "escaped" || escapeEvidence !== "supported" ||
+    !counterplay?.pathwayId || counterplay.pathwayId !== route ||
+    !hasVerifiedLineup(session.lineupSnapshot)) return null;
+  const authored = session.opponent?.tacticalBehaviour?.pressExitFinish;
+  // Authored action IDs are untrusted: never inherit prototype properties
+  // (e.g. "constructor" or "__proto__") as fake finishing mechanisms.
+  const options = Object.prototype.hasOwnProperty.call(PRESS_EXIT_FINISH, route)
+    ? PRESS_EXIT_FINISH[route] : null;
+  const named = options && typeof authored?.action === "string" &&
+    Object.prototype.hasOwnProperty.call(options, authored.action)
+    ? options[authored.action] : null;
+  const defence = counterplay.defensiveReply;
+  if (!named || authored?.basis !== "authored_scenario" ||
+    authored.evidence !== "supported" || authored.route !== route ||
+    defence?.roleReadiness !== "supported_by_roles" ||
+    !Array.isArray(defence.evidence?.supportingPlayerIds) ||
+    !defence.evidence.supportingPlayerIds.length) return null;
+  const firstThree = PRESS_EXIT_PATHWAYS[route].actions.slice(0, 3);
+  return {
+    status: "authored_terminal_action", route, action: authored.action,
+    basis: "supported_authored_scenario_and_verified_defensive_roles_not_observed",
+    previousRouteOffsetXg: PRESS_EXIT_TERMINAL_XG_OFFSET[route],
+    routeOffsetXg: named.offset,
+    defensiveReplyId: defence.id,
+    verifiedDefenderIds: [...new Set(defence.evidence.supportingPlayerIds)],
+    steps: [...firstThree.map(action => ({ action, result: "simulated" })),
+      { action: named.finalAction, result: "simulated" }],
+    explanation: named.explanation,
+    eventCount: 1
+  };
+}
+
 function secondBallReleaseFor(session, directSecondBall) {
   if (session?.causalSecondBallReleaseVersion !== 1 ||
     directSecondBall?.secondBall !== "defender_recovered") return null;
@@ -1406,8 +1475,13 @@ export function resolveOwnPressAgainstOpponent(session, {
     counterplay?.pathwayId && Object.prototype.hasOwnProperty.call(
       PRESS_EXIT_TERMINAL_XG_OFFSET, counterplay.pathwayId)
     ? counterplay.pathwayId : null;
+  const terminalFinish = pricedRoute
+    ? documentedTerminalFinish(session, pricedRoute, escapeEvidence,
+      outcome, counterplay) : null;
+  // Replace the v7.5 route price; NEVER add another shot, bonus or roll.
   const routeXgOffset = pricedRoute
-    ? PRESS_EXIT_TERMINAL_XG_OFFSET[pricedRoute] : 0;
+    ? terminalFinish?.routeOffsetXg ?? PRESS_EXIT_TERMINAL_XG_OFFSET[pricedRoute]
+    : 0;
   const terminalConcededXg = outcome === "regain" ? -0.01 :
     outcome === "contained" ? 0.02 :
       round3(baseEscapeXg + routeXgOffset);
@@ -1472,7 +1546,8 @@ export function resolveOwnPressAgainstOpponent(session, {
           : " I simuleringen sikrer sekseren andreballen, midtbanen frigjør støttepasningen og spissen angriper rommet."
         : secondBallRelease?.status === "blocked_by_counterpress"
           ? " I simuleringen stopper motpresset støttepasningen, og ingen alternativ utvei er verifisert."
-          : ""),
+          : "") +
+      (terminalFinish ? " " + terminalFinish.explanation : ""),
     steps,
     counterplay: counterplay && directSecondBall
       ? { ...counterplay, directSecondBall } : counterplay,
@@ -1492,11 +1567,14 @@ export function resolveOwnPressAgainstOpponent(session, {
       resolvedEscapePathway: counterplay?.pathwayId || "unknown",
       ...(directSecondBall ? { directSecondBall } : {}),
       ...(secondBallRelease ? { secondBallRelease } : {}),
+      ...(terminalFinish ? { terminalFinish } : {}),
       ...(pricedRoute ? { terminalChanceQuality: {
         basis: "bounded_game_heuristic_not_observed",
         route: pricedRoute,
         baseXgAgainst: baseEscapeXg,
         routeOffsetXg: routeXgOffset,
+        ...(terminalFinish ? { terminalAction: terminalFinish.action,
+          previousRouteOffsetXg: terminalFinish.previousRouteOffsetXg } : {}),
         terminalXgAgainst: terminalConcededXg,
         eventCount: 1
       } } : {}),

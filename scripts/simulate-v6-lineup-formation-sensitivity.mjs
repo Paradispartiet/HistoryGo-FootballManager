@@ -1281,7 +1281,9 @@ const routeQualitySession = (route, options = {}) => {
       ...(options.directSecondBall
         ? { directSecondBall: options.directSecondBall } : {}),
       ...(options.secondBallCounterpress
-        ? { secondBallCounterpress: options.secondBallCounterpress } : {})
+        ? { secondBallCounterpress: options.secondBallCounterpress } : {}),
+      ...(options.pressExitFinish
+        ? { pressExitFinish: options.pressExitFinish } : {})
     }
   }));
   if (options.legacy) {
@@ -1688,6 +1690,169 @@ assert.equal(widePeriod.tacticalPhase.xgDeltaFor, 0.01);
 assert.equal(Number((widePeriod.expectedGoals.for -
   widePeriod.baselineExpectedGoals.for).toFixed(2)), 0.01);
 assert.equal(widePeriod.tacticalXg, undefined);
+// v7.9: a supported terminal third-man runner or box arrival alters the
+// PRICE OF ONE existing escaped chance; no new RNG or independent xG event.
+// The exact scenario (including screened variants) is authored, not derived
+// from historic opponent abilities or imagined movement coordinates.
+const terminalCases = [
+  ["third_man", "runner_connected", 0.02],
+  ["third_man", "runner_screened", 0],
+  ["switch_play", "cross_arrival", 0.01],
+  ["switch_play", "cross_screened", -0.02]
+];
+const finishScenario = (route, action) => ({
+  basis: "authored_scenario", evidence: "supported", route, action
+});
+assert.equal(routeQualitySession("third_man").causalRouteFinishVersion, 1);
+for (const [route, action, expectedOffset] of terminalCases) {
+  const scenario = finishScenario(route, action);
+  let pressureCalls = 0;
+  let protectionCalls = 0;
+  const session = routeQualitySession(route, { pressExitFinish: scenario });
+  const changed = resolveOwnPressAgainstOpponent(session, {
+    pressureRoll: () => { pressureCalls++; return 0.99; },
+    protectionRoll: () => { protectionCalls++; return 0.99; }
+  });
+  const baseline = routeQualityPhase(route);
+  assert.equal(changed.status, "escaped");
+  assert.equal(changed.xgDeltaFor, baseline.xgDeltaFor);
+  assert.equal(changed.probability, baseline.probability,
+    "terminal finishing action may not alter the first press");
+  assert.equal(changed.containmentProbability, baseline.containmentProbability,
+    "terminal finishing action may not alter rest-defence containment");
+  assert.equal(changed.routeCoverAdjustment, baseline.routeCoverAdjustment);
+  assert.deepEqual([pressureCalls, protectionCalls], [1, 1],
+    "one press and one existing protection draw");
+  assert.equal(changed.evidence.terminalFinish?.status, "authored_terminal_action");
+  assert.equal(changed.evidence.terminalFinish.route, route);
+  assert.equal(changed.evidence.terminalFinish.action, action);
+  assert.equal(changed.evidence.terminalFinish.steps.length, 4);
+  assert.equal(changed.evidence.terminalFinish.eventCount, 1);
+  assert.ok(changed.evidence.terminalFinish.verifiedDefenderIds.length > 0,
+    "must cite known defensive specialists, not hidden opponent tracking");
+  assert.equal(changed.evidence.terminalChanceQuality.routeOffsetXg, expectedOffset);
+  assert.equal(changed.evidence.terminalChanceQuality.eventCount, 1);
+  assert.equal(changed.xgDeltaAgainst,
+    Number((baseline.evidence.terminalChanceQuality.baseXgAgainst +
+      expectedOffset).toFixed(3)),
+    "replace the one named terminal chance quality, not stack another bonus");
+  assert.deepEqual(changed, resolveOwnPressAgainstOpponent(session, {
+    pressureRoll: () => 0.99, protectionRoll: () => 0.99
+  }), "same XI, authored action and draws must be replayable");
+  const unknown = routeQualityPhase(route, { pressExitFinish: {
+    ...scenario, evidence: "unknown"
+  } });
+  const mismatch = routeQualityPhase(route, { pressExitFinish: {
+    ...scenario, route: route === "third_man" ? "switch_play" : "third_man"
+  } });
+  const unsupportedAction = routeQualityPhase(route, { pressExitFinish: {
+    ...scenario, action: "unverified_skill"
+  } });
+  const inheritedActions = ["constructor", "__proto__", "toString"].map(
+    action => routeQualityPhase(route, { pressExitFinish: {
+      ...scenario, action
+    } }));
+  for (const unchanged of [unknown, mismatch, unsupportedAction,
+    ...inheritedActions]) {
+    assert.equal(unchanged.evidence.terminalFinish, undefined,
+      "unknown/contradictory/scenario-only input must be neutral");
+    assert.equal(unchanged.xgDeltaAgainst, baseline.xgDeltaAgainst);
+  }
+  const stale = routeQualitySession(route, { pressExitFinish: scenario });
+  delete stale.causalRouteFinishVersion;
+  const oldPhase = resolveOwnPressAgainstOpponent(stale, {
+    pressureRoll: () => 0.99, protectionRoll: () => 0.99
+  });
+  assert.equal(oldPhase.evidence.terminalFinish, undefined);
+  assert.equal(oldPhase.xgDeltaAgainst, baseline.xgDeltaAgainst,
+    "pre-v7.9 saved matches retain the original route price");
+  const incomplete = routeQualitySession(route, { pressExitFinish: scenario });
+  incomplete.lineupSnapshot.find(p => p.position === "GK").matchFitKnown = false;
+  const missingPhase = resolveOwnPressAgainstOpponent(incomplete, {
+    pressureRoll: () => 0.99, protectionRoll: () => 0.99
+  });
+  assert.equal(missingPhase.evidence.terminalFinish, undefined);
+  assert.equal(missingPhase.xgDeltaAgainst, baseline.xgDeltaAgainst);
+  for (const otherOutcome of [
+    { pressureRoll: () => 0, protectionRoll: () => {
+      throw Error("won first press cannot roll a second time");
+    } },
+    { pressureRoll: () => 0.99, protectionRoll: () => 0 }
+  ]) {
+    const early = resolveOwnPressAgainstOpponent(session, otherOutcome);
+    assert.equal(early.evidence.terminalFinish, undefined);
+    assert.equal(early.evidence.terminalChanceQuality, undefined);
+  }
+  // Actual PERIOD: select a deterministic seed whose normal draws result in
+  // an escaped press, then verify the regular xG ledger owns the price once.
+  let period = null;
+  for (let i = 0; i < 3500; i++) {
+    const candidate = routeQualitySession(route, { pressExitFinish: scenario });
+    candidate.id = "v7-9-" + route + "-" + action + "-" + i;
+    const phase = resolveOwnPressAgainstOpponent(candidate, {
+      pressureRoll: () => highPressPhaseRoll(candidate, "0:own-pressure"),
+      protectionRoll: () => highPressPhaseRoll(candidate, "0:press-protection")
+    });
+    if (phase?.evidence.terminalFinish?.action !== action) continue;
+    period = advanceMatchClock(candidate).timeline[0];
+    assert.equal(period.tacticalPhase.evidence.terminalFinish.action, action);
+    assert.equal(period.tacticalPhase.evidence.terminalChanceQuality.eventCount, 1);
+    break;
+  }
+  assert.ok(period, "documented terminal case must be reachable by seeded play");
+  assert.equal(period.tacticalPhase.xgDeltaAgainst,
+    Number((period.expectedGoals.against -
+      period.baselineExpectedGoals.against).toFixed(2)));
+  assert.equal(period.tacticalPhase.xgDeltaAgainst, changed.xgDeltaAgainst);
+  assert.equal(period.tacticalXg, undefined);
+}
+// The entire set of EIGHTEEN canonical plans must be neutral outside the
+// phase actually eligible to price this specific broken-press route. This is
+// a cross-plan non-interference audit, not a claim that all plans have
+// event-level attacks yet.
+const all18FinishPlanIds = new Set();
+for (const plan of plans) {
+  all18FinishPlanIds.add(plan.id);
+  const setup = buildFixture("4-3-3", plan, {
+    st: "pressing_forward", lcm: "pressing_midfielder"
+  });
+  for (const route of ["third_man", "switch_play"]) {
+    const scenario = finishScenario(route,
+      route === "third_man" ? "runner_connected" : "cross_arrival");
+    const opponentInput = withCfOpponent({ tacticalBehaviour: {
+      pressEscapeRoute: route, pressExitFinish: scenario
+    } });
+    const modified = kickoff(setup, opponentInput);
+    const neutral = structuredClone(modified);
+    neutral.opponent.tacticalBehaviour = { pressEscapeRoute: route };
+    const resolve = session => resolveOwnPressAgainstOpponent(session, {
+      pressureRoll: () => 0.99, protectionRoll: () => 0.99
+    });
+    const prior = resolve(neutral);
+    const next = resolve(modified);
+    assert.equal(Boolean(prior), Boolean(next), plan.id + "/" + route);
+    if (!next) continue;
+    assert.equal(next.status, prior.status);
+    assert.equal(next.probability, prior.probability);
+    assert.equal(next.containmentProbability, prior.containmentProbability);
+    assert.equal(next.xgDeltaFor, prior.xgDeltaFor);
+    if (!next.evidence.terminalFinish)
+      assert.equal(next.xgDeltaAgainst, prior.xgDeltaAgainst,
+        "unqualified plans/roles must not receive a finish price");
+    else {
+      assert.equal(next.evidence.terminalFinish.route, route);
+      assert.equal(next.evidence.terminalChanceQuality.eventCount, 1);
+      assert.ok(next.xgDeltaAgainst !== prior.xgDeltaAgainst);
+    }
+  }
+}
+assert.equal(all18FinishPlanIds.size, 18);
+assert.equal(routeQualityPhase("direct", {
+  pressExitFinish: finishScenario("third_man", "runner_connected")
+}).evidence.terminalFinish, undefined,
+"direct first-ball and second-ball remain independent of terminal cross model");
+console.log("V7.9 named runner/cross endings, legacy, four steps, one xG and 18-plan neutrality PASS");
+
 console.log("V7.8 documented counterpress blocks or reroutes one second-ball release PASS");
 
 console.log("V7.7 verified second-ball release / negative controls / real period ledger PASS");
