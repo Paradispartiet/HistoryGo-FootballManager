@@ -11,7 +11,8 @@ import {
 import { evaluatePlanVsOpponent, scorePlanNow } from "../src/football-match-plan.js";
 import { HISTORICAL_OPPONENT_PROFILES } from "../src/football-historical-opponent-profiles.js";
 import { TACTICAL_SEQUENCES } from "../src/football-tactical-sequences.js";
-import { resolveOwnPressAgainstOpponent } from "../src/football-matchday-own-press-v6.js";
+import { resolveOwnPressAgainstOpponent, annotateOwnPressChances } from "../src/football-matchday-own-press-v6.js";
+import { highPressPhaseRoll } from "../src/football-matchday-high-press-v6.js";
 import { derivePlayerAttributes, normalizeAttributeCatalogue } from "../src/football-player-attributes.js";
 import { applyP2SourceClaimsToPlayer, getP2SourceRecord } from "../src/football-player-source-claims-p2.js";
 
@@ -1053,8 +1054,9 @@ for (const row of routeMatrix) {
         assert.equal(phase.containmentProbability,
           reference.containmentProbability,
           "the model probability is fixed across deterministic draws");
-        assert.equal(phase.xgDeltaFor, 0,
-          "an already broken press cannot claim a second attacking xG reward");
+        assert.equal(phase.xgDeltaFor,
+          phase.evidence.secondBallRelease?.status === "released" ? 0.02 : 0,
+          "only a verified second-ball recovery may earn one attacking release; no double credit");
         if (phase.status === "contained") {
           contained += 1;
           assert.equal(phase.xgDeltaAgainst, 0.02,
@@ -1462,5 +1464,98 @@ const singleDraw = resolveOwnPressAgainstOpponent(routeQualitySession(
 assert.equal(protectionDraws, 1, "first/second ball reuses one protection roll");
 assert.equal(singleDraw.status, reboundLoss.status);
 assert.equal(singleDraw.evidence.directSecondBall.eventCount, 1);
+// v7.7: the same single possession can start OUR attack only after a
+// genuine simulated second-ball recovery and three verified, DISTINCT
+// roles. The existing period xG/chance generator owns the effect once.
+assert.equal(routeQualitySession("direct").causalSecondBallReleaseVersion, 1);
+assert.equal(reboundWin.evidence.secondBallRelease?.status, "released",
+  "known six/connector/forward should link a won second ball");
+assert.equal(reboundWin.side, "for");
+assert.equal(reboundWin.xgDeltaFor, 0.02);
+assert.equal(reboundWin.xgDeltaAgainst, 0.02,
+  "original contained-risk ledger must not be silently rewritten");
+const linked = reboundWin.evidence.secondBallRelease;
+assert.equal(linked.eventCount, 1);
+assert.equal(linked.steps.length, 3);
+assert.equal(new Set(linked.steps.map(step => step.playerId)).size, 3);
+assert.ok(linked.steps.every(step => step.roleId && step.playerId),
+  "every release stage must show actual documented player roles");
+assert.equal(reboundWin.counterplay.directSecondBall.eventCount, 1);
+assert.equal(reboundLoss.evidence.secondBallRelease, undefined);
+assert.equal(reboundLoss.xgDeltaFor, 0);
+assert.equal(firstDuelWin.evidence.secondBallRelease, undefined,
+  "first-ball interception is not a subsequent second-ball release");
+assert.equal(firstDuelWin.xgDeltaFor, 0);
+assert.equal(routeQualityPhase("third_man").evidence.secondBallRelease, undefined);
+assert.equal(routeQualityPhase("switch_play").evidence.secondBallRelease, undefined);
+assert.equal(unknownSecondBallPhase.evidence.secondBallRelease, undefined);
+const legacyRelease = routeQualitySession("direct");
+delete legacyRelease.causalSecondBallReleaseVersion;
+const oldReleasePhase = resolveOwnPressAgainstOpponent(legacyRelease, {
+  pressureRoll: () => 0.99, protectionRoll: () => contestDraw
+});
+assert.equal(oldReleasePhase.evidence.directSecondBall.secondBall,
+  "defender_recovered");
+assert.equal(oldReleasePhase.evidence.secondBallRelease, undefined);
+assert.equal(oldReleasePhase.side, null);
+assert.equal(oldReleasePhase.xgDeltaFor, 0);
+assert.equal(oldReleasePhase.xgDeltaAgainst, reboundWin.xgDeltaAgainst);
+
+const missingForward = kickoff(buildFixture("4-3-3", cfTrap, {
+  st: "target_striker", lcm: "pressing_midfielder"
+}), withCfOpponent({ tacticalBehaviour: { pressEscapeRoute: "direct" } }));
+const unsupportedRelease = resolveOwnPressAgainstOpponent(missingForward, {
+  pressureRoll: () => 0.99, protectionRoll: () => 0.42
+});
+if (unsupportedRelease.evidence.directSecondBall?.secondBall === "defender_recovered") {
+  assert.equal(unsupportedRelease.evidence.secondBallRelease?.status,
+    "unverified_support");
+  assert.equal(unsupportedRelease.xgDeltaFor, 0);
+}
+const noForward = routeQualitySession("direct");
+noForward.lineupSnapshot.find(p => p.position === "ST").roleId = "target_striker";
+const noForwardPhase = resolveOwnPressAgainstOpponent(noForward, {
+  pressureRoll: () => 0.99, protectionRoll: () => contestDraw
+});
+assert.equal(noForwardPhase.evidence.directSecondBall?.secondBall, "defender_recovered");
+assert.equal(noForwardPhase.evidence.secondBallRelease?.status, "unverified_support");
+assert.equal(noForwardPhase.xgDeltaFor, 0);
+assert.equal(noForwardPhase.side, null);
+const annotated = annotateOwnPressChances([
+  { side: "for", minute: 52, quality: 0.09 },
+  { side: "against", minute: 57, quality: 0.08 }
+], reboundWin);
+assert.equal(annotated.length, 2);
+assert.equal(annotated.filter(chance => chance.tacticalMoment).length, 1,
+  "the rebound may annotate but not invent a separate shot");
+assert.equal(annotated[0].tacticalMoment.kind, "second_ball_release");
+assert.equal(annotated[0].tacticalMoment.xgDelta, 0.02);
+assert.deepEqual(annotateOwnPressChances([], reboundWin), []);
+
+// Real match session: find a reproducible seed whose one fixed press roll
+// fails, whose one protection roll wins the second ball, and verify the
+// production PERIOD ledger, not just the phase helper.
+let playedSecondBall = null;
+for (let index = 0; index < 3500; index += 1) {
+  const testSession = routeQualitySession("direct");
+  testSession.id = "second-ball-release-v7-7-" + index;
+  const phase = resolveOwnPressAgainstOpponent(testSession, {
+    pressureRoll: () => highPressPhaseRoll(testSession, "0:own-pressure"),
+    protectionRoll: () => highPressPhaseRoll(testSession, "0:press-protection")
+  });
+  if (phase?.evidence.secondBallRelease?.status !== "released") continue;
+  playedSecondBall = advanceMatchClock(testSession).timeline[0];
+  assert.equal(playedSecondBall.tacticalPhase?.evidence?.secondBallRelease?.status,
+    "released", "the actual period must preserve the causal release");
+  break;
+}
+assert.ok(playedSecondBall, "a known XI should produce a deterministic won rebound seed");
+assert.equal(playedSecondBall.tacticalPhase.xgDeltaFor, 0.02);
+assert.equal(Number((playedSecondBall.expectedGoals.for -
+  playedSecondBall.baselineExpectedGoals.for).toFixed(2)), 0.02,
+  "period xG ledger owns one offensive release and no duplicated plan edge");
+assert.equal(playedSecondBall.tacticalXg, undefined);
+console.log("V7.7 verified second-ball release / negative controls / real period ledger PASS");
+
 console.log("V7.6 direct first-duel/second-ball: role evidence, contested cover, legacy saves and single RNG PASS");
 }
