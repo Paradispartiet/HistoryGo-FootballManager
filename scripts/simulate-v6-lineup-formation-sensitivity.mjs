@@ -1438,11 +1438,11 @@ const unknownEleven = routeQualitySession("direct", {
   directSecondBall: coordinatedSupport
 });
 unknownEleven.lineupSnapshot.find(p => p.position === "GK").matchFitKnown = false;
-const unknownPhase = resolveOwnPressAgainstOpponent(unknownEleven, {
+const unknownSecondBallPhase = resolveOwnPressAgainstOpponent(unknownEleven, {
   pressureRoll: () => 0.99, protectionRoll: () => contestDraw
 });
-assert.equal(unknownPhase.evidence.directSecondBall, undefined);
-assert.equal(unknownPhase.routeCoverAdjustment, 0,
+assert.equal(unknownSecondBallPhase.evidence.directSecondBall, undefined);
+assert.equal(unknownSecondBallPhase.routeCoverAdjustment, 0,
   "incomplete known XI cannot award, contest or explain specialist second-ball cover");
 const wonPress = resolveOwnPressAgainstOpponent(routeQualitySession("direct", {
   directSecondBall: coordinatedSupport
