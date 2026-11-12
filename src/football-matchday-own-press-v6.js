@@ -878,8 +878,10 @@ function secondBallReleaseFor(session, directSecondBall) {
   const six = choose("DM", ["balancing_six"]);
   const connector = choose("CM", ["deep_playmaker", "pressing_midfielder"]);
   const runner = choose("ST", ["channel_runner", "pressing_forward"]);
+  // Declared GAME thresholds: a strong enough build-up link (55) and
+  // at least neutral depth support (50); not an empirical calibration.
   if (!six || !connector || !runner ||
-    profile.buildUpScore < 55 || profile.depthScore < 55) return {
+    profile.buildUpScore < 55 || profile.depthScore < 50) return {
     status: "unverified_support",
     reason: "missing_verified_link_or_team_metric",
     basis: "known_lineup_roles_and_calculated_team_metrics",
