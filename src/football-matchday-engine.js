@@ -1820,6 +1820,10 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     // duel and second ball. Explicit authored support may contest an
     // existing specialist cover term; old saves retain v7.5 behaviour.
     causalDirectSecondBallVersion: 1,
+    // v7.7: only NEW matches can convert verified second-ball recovery
+    // into one bounded offensive phase contribution through known roles.
+    // Older saves have no release flag and preserve earlier xG.
+    causalSecondBallReleaseVersion: 1,
     // Four remaining plans opt in only on new match sessions.
     causalGameControlVersion: 1,
     sourcedSubstitutionVersion: 2,
