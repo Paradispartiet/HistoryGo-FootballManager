@@ -1275,10 +1275,15 @@ const routeQualitySession = (route, options = {}) => {
   const actor = kickoff(cfXI, withCfOpponent({
     tacticalBehaviour: route === null ? null : {
       pressEscapeRoute: route, ...(options.isolated
-        ? { pressEscape: "isolated" } : {})
+        ? { pressEscape: "isolated" } : {}),
+      ...(options.directSecondBall
+        ? { directSecondBall: options.directSecondBall } : {})
     }
   }));
-  if (options.legacy) delete actor.causalRouteChanceQualityVersion;
+  if (options.legacy) {
+    delete actor.causalRouteChanceQualityVersion;
+    delete actor.causalDirectSecondBallVersion;
+  }
   return actor;
 };
 const routeQualityPhase = (route, options = {}, draw = 0.99) =>
@@ -1349,3 +1354,113 @@ for (const [outlet, delta] of [
 }
 console.log("V7.5 documented terminal route quality, legacy guard and one-xG ledger: " +
   JSON.stringify(qualitySummary));
+
+
+{
+// v7.6: a direct first ball and its rebound are not two random draws or
+// separately generated chances. A documented defender XI and explicit
+// authored opponent support can CONTEST existing specialist cover once.
+// These are authored simulation premises, not inferred player skills.
+const originalDirect = routeQualityPhase("direct");
+const secondBallBase = originalDirect.evidence.directSecondBall;
+assert.equal(routeQualitySession("direct").causalDirectSecondBallVersion, 1);
+assert.equal(secondBallBase?.basis, "simulated_game_heuristic_not_observed");
+assert.equal(secondBallBase.opponentSupport, "unknown");
+assert.equal(secondBallBase.firstBall, "opponent_won");
+assert.equal(secondBallBase.secondBall, "opponent_retained");
+assert.equal(secondBallBase.eventCount, 1);
+assert.ok(originalDirect.routeCoverAdjustment > 0,
+  "canonical XI has documented centre-backs and balancing six");
+assert.equal(originalDirect.containmentProbability,
+  routeQualityPhase("direct", {
+    directSecondBall: { basis: "unverified", opponentSupport: "coordinated" }
+  }).containmentProbability,
+  "unknown authored basis cannot create opponent strengths");
+
+const coordinatedSupport = {
+  basis: "authored_scenario", opponentSupport: "coordinated"
+};
+const contestedDirect = routeQualityPhase("direct", {
+  directSecondBall: coordinatedSupport
+});
+assert.ok(contestedDirect.containmentProbability <
+  originalDirect.containmentProbability,
+  "authored second-ball coordination contests existing specialist cover");
+assert.ok(contestedDirect.routeCoverAdjustment >= 0);
+assert.ok(contestedDirect.routeCoverAdjustment <
+  originalDirect.routeCoverAdjustment);
+assert.equal(contestedDirect.probability, originalDirect.probability,
+  "first press remains unchanged");
+assert.equal(contestedDirect.evidence.directSecondBall.opponentSupport,
+  "authored_coordinated");
+assert.equal(contestedDirect.xgDeltaAgainst, originalDirect.xgDeltaAgainst,
+  "same escaped terminal phase has no additional xG event");
+assert.equal(contestedDirect.evidence.terminalChanceQuality.eventCount, 1);
+
+const firstDuelWin = routeQualityPhase("direct", {}, 0);
+assert.equal(firstDuelWin.status, "contained");
+assert.equal(firstDuelWin.evidence.directSecondBall.firstBall, "defender_won");
+assert.equal(firstDuelWin.evidence.directSecondBall.secondBall, "not_required");
+const contestDraw = (originalDirect.containmentProbability +
+  contestedDirect.containmentProbability) / 2;
+const reboundWin = routeQualityPhase("direct", {}, contestDraw);
+const reboundLoss = routeQualityPhase("direct", {
+  directSecondBall: coordinatedSupport
+}, contestDraw);
+assert.equal(reboundWin.status, "contained",
+  "known complementary cover wins the ball after losing first duel");
+assert.equal(reboundWin.evidence.directSecondBall.firstBall, "opponent_won");
+assert.equal(reboundWin.evidence.directSecondBall.secondBall,
+  "defender_recovered");
+assert.equal(reboundLoss.status, "escaped",
+  "explicit coordinated second-ball support defeats the same protection draw");
+assert.equal(reboundLoss.evidence.directSecondBall.secondBall,
+  "opponent_retained");
+assert.equal(reboundWin.xgDeltaAgainst, 0.02);
+assert.equal(reboundLoss.xgDeltaAgainst, originalDirect.xgDeltaAgainst);
+assert.ok(reboundLoss.xgDeltaAgainst > reboundWin.xgDeltaAgainst);
+assert.deepEqual(reboundLoss, routeQualityPhase("direct", {
+  directSecondBall: coordinatedSupport
+}, contestDraw), "identical seed and XI must replay the same single-ball chain");
+
+const legacySecondBall = routeQualityPhase("direct", {
+  legacy: true, directSecondBall: coordinatedSupport
+}, contestDraw);
+assert.equal(legacySecondBall.evidence.directSecondBall, undefined);
+assert.equal(legacySecondBall.containmentProbability,
+  originalDirect.containmentProbability);
+assert.equal(legacySecondBall.status, reboundWin.status,
+  "older saved matches cannot acquire a new second-ball contest");
+assert.equal(routeQualityPhase("direct", {
+  isolated: true, directSecondBall: coordinatedSupport
+}).evidence.directSecondBall, undefined,
+  "stale route label cannot override observed isolation");
+const unknownEleven = routeQualitySession("direct", {
+  directSecondBall: coordinatedSupport
+});
+unknownEleven.lineupSnapshot.find(p => p.position === "GK").matchFitKnown = false;
+const unknownSecondBallPhase = resolveOwnPressAgainstOpponent(unknownEleven, {
+  pressureRoll: () => 0.99, protectionRoll: () => contestDraw
+});
+assert.equal(unknownSecondBallPhase.evidence.directSecondBall, undefined);
+assert.equal(unknownSecondBallPhase.routeCoverAdjustment, 0,
+  "incomplete known XI cannot award, contest or explain specialist second-ball cover");
+const wonPress = resolveOwnPressAgainstOpponent(routeQualitySession("direct", {
+  directSecondBall: coordinatedSupport
+}), { pressureRoll: () => 0, protectionRoll: () => {
+  throw Error("a won press cannot consume a second-ball draw");
+} });
+assert.equal(wonPress.status, "regain");
+assert.equal(wonPress.evidence.directSecondBall, undefined);
+let protectionDraws = 0;
+const singleDraw = resolveOwnPressAgainstOpponent(routeQualitySession(
+  "direct", { directSecondBall: coordinatedSupport }
+), {
+  pressureRoll: () => 0.99,
+  protectionRoll: () => { protectionDraws += 1; return contestDraw; }
+});
+assert.equal(protectionDraws, 1, "first/second ball reuses one protection roll");
+assert.equal(singleDraw.status, reboundLoss.status);
+assert.equal(singleDraw.evidence.directSecondBall.eventCount, 1);
+console.log("V7.6 direct first-duel/second-ball: role evidence, contested cover, legacy saves and single RNG PASS");
+}
