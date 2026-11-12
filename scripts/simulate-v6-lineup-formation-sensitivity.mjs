@@ -1909,6 +1909,7 @@ for (const plan of plans) {
         continue;
       }
       v8Outcomes[phase.status] += 1;
+      const resolvedCounter = phase.status === "countered";
       const attack = ["in_possession", "transition_attack"].includes(authored.phase);
       v8Outcomes[attack ? "attack" : "defend"] += 1;
       assert.equal(phase.version, 6);
@@ -1920,13 +1921,13 @@ for (const plan of plans) {
       assert.equal(phase.counterplay.automaticallyExecuted, false);
       assert.ok(phase.evidence.supportingPlayers.length >= 10);
       assert.ok(phase.evidence.requirements.length >= 1);
-      assert.equal(phase.xgDeltaFor, attack && !countered ? 0.04 : 0,
+      assert.equal(phase.xgDeltaFor, attack && !resolvedCounter ? 0.04 : 0,
         "offensive success may raise own chances, defensive success may NOT");
-      assert.equal(phase.xgDeltaAgainst, countered
+      assert.equal(phase.xgDeltaAgainst, resolvedCounter
         ? attack ? 0.03 : 0.05 : attack ? 0 : -0.04,
         "attack and defensive risk are independently directed");
       assert.equal(phase.steps.filter(x => x.result === "countered").length,
-        countered ? 1 : 0);
+        resolvedCounter ? 1 : 0);
       assert.deepEqual(phase, resolveAuthoredSequencePeriod(session),
         "identical match snapshot must replay exactly without a new roll");
       const persisted = JSON.parse(JSON.stringify(session));
