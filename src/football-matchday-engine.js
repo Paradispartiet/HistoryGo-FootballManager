@@ -1812,6 +1812,10 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     // v7.4: the manager can deliberately reallocate verified route cover
     // after watching a completed, played press sequence.
     causalManagerPressCounterVersion: 1,
+    // v7.5: once a documented press escape passes our rest defence, price
+    // the SINGLE resulting chance by its named route. Existing saves stay
+    // route-neutral; unknown outlets cannot acquire inferred chance quality.
+    causalRouteChanceQualityVersion: 1,
     // Four remaining plans opt in only on new match sessions.
     causalGameControlVersion: 1,
     sourcedSubstitutionVersion: 2,
