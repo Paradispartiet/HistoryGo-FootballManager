@@ -1816,6 +1816,10 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     // the SINGLE resulting chance by its named route. Existing saves stay
     // route-neutral; unknown outlets cannot acquire inferred chance quality.
     causalRouteChanceQualityVersion: 1,
+    // v7.6: direct outlets reuse the SAME protection draw for the first
+    // duel and second ball. Explicit authored support may contest an
+    // existing specialist cover term; old saves retain v7.5 behaviour.
+    causalDirectSecondBallVersion: 1,
     // Four remaining plans opt in only on new match sessions.
     causalGameControlVersion: 1,
     sourcedSubstitutionVersion: 2,
