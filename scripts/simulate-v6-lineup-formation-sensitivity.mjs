@@ -1356,6 +1356,7 @@ console.log("V7.5 documented terminal route quality, legacy guard and one-xG led
   JSON.stringify(qualitySummary));
 
 
+{
 // v7.6: a direct first ball and its rebound are not two random draws or
 // separately generated chances. A documented defender XI and explicit
 // authored opponent support can CONTEST existing specialist cover once.
@@ -1462,3 +1463,4 @@ assert.equal(protectionDraws, 1, "first/second ball reuses one protection roll")
 assert.equal(singleDraw.status, reboundLoss.status);
 assert.equal(singleDraw.evidence.directSecondBall.eventCount, 1);
 console.log("V7.6 direct first-duel/second-ball: role evidence, contested cover, legacy saves and single RNG PASS");
+}
