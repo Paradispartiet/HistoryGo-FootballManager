@@ -1468,6 +1468,14 @@ assert.equal(singleDraw.evidence.directSecondBall.eventCount, 1);
 // genuine simulated second-ball recovery and three verified, DISTINCT
 // roles. The existing period xG/chance generator owns the effect once.
 assert.equal(routeQualitySession("direct").causalSecondBallReleaseVersion, 1);
+const v77Fixture = routeQualitySession("direct");
+console.log("v7.7 role and team metrics diagnostic: " + JSON.stringify({
+  buildUpScore: v77Fixture.teamFitSnapshot.tacticalProfile.buildUpScore,
+  depthScore: v77Fixture.teamFitSnapshot.tacticalProfile.depthScore,
+  threeLinks: v77Fixture.lineupSnapshot
+    .filter(p => ["DM", "CM", "ST"].includes(p.position))
+    .map(p => ({ roleId: p.roleId, position: p.position, matchScore: p.matchScore }))
+}));
 assert.equal(reboundWin.evidence.secondBallRelease?.status, "released",
   "known six/connector/forward should link a won second ball");
 assert.equal(reboundWin.side, "for");
