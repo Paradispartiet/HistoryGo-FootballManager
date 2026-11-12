@@ -1824,6 +1824,10 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     // into one bounded offensive phase contribution through known roles.
     // Older saves have no release flag and preserve earlier xG.
     causalSecondBallReleaseVersion: 1,
+    // v7.8: verified, explicitly authored opponent counterpress can stop
+    // the central rebound release or route it through known wide support.
+    // Older saved matches keep the original central-release calculation.
+    causalSecondBallCounterpressVersion: 1,
     // Four remaining plans opt in only on new match sessions.
     causalGameControlVersion: 1,
     sourcedSubstitutionVersion: 2,

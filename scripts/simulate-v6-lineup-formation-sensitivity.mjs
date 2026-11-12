@@ -1279,7 +1279,9 @@ const routeQualitySession = (route, options = {}) => {
       pressEscapeRoute: route, ...(options.isolated
         ? { pressEscape: "isolated" } : {}),
       ...(options.directSecondBall
-        ? { directSecondBall: options.directSecondBall } : {})
+        ? { directSecondBall: options.directSecondBall } : {}),
+      ...(options.secondBallCounterpress
+        ? { secondBallCounterpress: options.secondBallCounterpress } : {})
     }
   }));
   if (options.legacy) {
@@ -1563,6 +1565,131 @@ assert.equal(Number((playedSecondBall.expectedGoals.for -
   playedSecondBall.baselineExpectedGoals.for).toFixed(2)), 0.02,
   "period xG ledger owns one offensive release and no duplicated plan edge");
 assert.equal(playedSecondBall.tacticalXg, undefined);
+// v7.8 – explicit opponent counterpress may BREAK the central link.
+// Verified flank roles offer a *replacement* wide response, never a stacked
+// xG bonus. Opponent actions and countermeasures here are authored fixtures,
+// not claims about real historical tracking or measured probabilities.
+const documentedCounterpress = {
+  basis: "authored_scenario",
+  evidence: "supported",
+  mechanism: "screen_central_connector"
+};
+assert.equal(routeQualitySession("direct").causalSecondBallCounterpressVersion, 1);
+const insufficientWidth = routeQualitySession("direct", {
+  secondBallCounterpress: documentedCounterpress
+});
+// Isolate a documented tactical weakness in a controlled scenario; no
+// historical player attributes or inferred opposition skills are created.
+insufficientWidth.teamFitSnapshot.tacticalProfile.widthScore = 40;
+const brokenLink = resolveOwnPressAgainstOpponent(insufficientWidth, {
+  pressureRoll: () => 0.99, protectionRoll: () => contestDraw
+});
+assert.equal(brokenLink.evidence.directSecondBall.secondBall,
+  "defender_recovered");
+assert.equal(brokenLink.evidence.secondBallRelease.status,
+  "blocked_by_counterpress");
+assert.equal(brokenLink.evidence.secondBallRelease.eventCount, 1);
+assert.equal(brokenLink.evidence.secondBallRelease.counterplay.mechanism,
+  "screen_central_connector");
+assert.equal(brokenLink.xgDeltaFor, 0);
+assert.equal(brokenLink.xgDeltaAgainst, reboundWin.xgDeltaAgainst,
+  "counterpress changes only the release, not the already decided defence");
+assert.equal(brokenLink.side, null);
+assert.deepEqual(annotateOwnPressChances([{ side: "for", quality: 0.1 }],
+  brokenLink), [{ side: "for", quality: 0.1 }],
+  "blocked release may not annotate an unrelated chance");
+
+const unknownCounterpress = routeQualityPhase("direct", {
+  secondBallCounterpress: { basis: "authored_scenario",
+    evidence: "unknown", mechanism: "screen_central_connector" }
+}, contestDraw);
+assert.equal(unknownCounterpress.evidence.secondBallRelease.status,
+  "released", "unknown counterpress may not invent a supported block");
+assert.equal(unknownCounterpress.xgDeltaFor, 0.02);
+const unverifiedMechanism = routeQualityPhase("direct", {
+  secondBallCounterpress: { basis: "authored_scenario",
+    evidence: "supported", mechanism: "unknown" }
+}, contestDraw);
+assert.equal(unverifiedMechanism.xgDeltaFor, reboundWin.xgDeltaFor);
+
+const oldCounterpressSession = routeQualitySession("direct", {
+  secondBallCounterpress: documentedCounterpress
+});
+delete oldCounterpressSession.causalSecondBallCounterpressVersion;
+const oldCounterpress = resolveOwnPressAgainstOpponent(oldCounterpressSession, {
+  pressureRoll: () => 0.99, protectionRoll: () => contestDraw
+});
+assert.equal(oldCounterpress.evidence.secondBallRelease.status, "released");
+assert.equal(oldCounterpress.xgDeltaFor, 0.02,
+  "old saved v7.7 matches must ignore the new counterpress mechanism");
+
+const wideReplySetup = buildFixture("4-3-3", cfTrap, {
+  st: "pressing_forward", lcm: "pressing_midfielder",
+  rb: "overlapping_fullback"
+});
+const wideOpponent = withCfOpponent({ tacticalBehaviour: {
+  pressEscapeRoute: "direct",
+  secondBallCounterpress: documentedCounterpress
+} });
+const wideReleaseSession = kickoff(wideReplySetup, wideOpponent);
+const wideProbe = resolveOwnPressAgainstOpponent(wideReleaseSession, {
+  pressureRoll: () => 0.99, protectionRoll: () => 0.99
+});
+assert.ok(wideProbe?.evidence.directSecondBall);
+assert.ok(wideReleaseSession.teamFitSnapshot.tacticalProfile.widthScore >= 50,
+  "canonical role-built side must have adequate calculated width for a real reply");
+assert.ok(wideProbe.routeCoverAdjustment > 0);
+const wideFirstBall = wideProbe.evidence.directSecondBall.firstBallContainmentProbability;
+const wideDraw = (wideFirstBall + wideProbe.containmentProbability) / 2;
+assert.ok(wideDraw > wideFirstBall && wideDraw < wideProbe.containmentProbability);
+let wideProtectionRolls = 0;
+const wideReply = resolveOwnPressAgainstOpponent(wideReleaseSession, {
+  pressureRoll: () => 0.99,
+  protectionRoll: () => { wideProtectionRolls++; return wideDraw; }
+});
+assert.equal(wideProtectionRolls, 1, "counterpress and wide response share one original protection roll");
+assert.equal(wideReply.evidence.directSecondBall.secondBall, "defender_recovered");
+assert.equal(wideReply.evidence.secondBallRelease.status, "wide_reply");
+assert.equal(wideReply.evidence.secondBallRelease.selectedFlank, "left");
+assert.equal(wideReply.evidence.secondBallRelease.eventCount, 1);
+assert.equal(wideReply.evidence.secondBallRelease.steps.length, 3);
+assert.equal(new Set(wideReply.evidence.secondBallRelease.steps.map(s => s.playerId)).size, 3);
+assert.equal(wideReply.xgDeltaFor, 0.01,
+  "the wide reply REPLACES the old +0.02 central release, never stacks");
+assert.equal(wideReply.side, "for");
+assert.equal(wideReply.xgDeltaAgainst, 0.02);
+assert.deepEqual(wideReply, resolveOwnPressAgainstOpponent(wideReleaseSession, {
+  pressureRoll: () => 0.99, protectionRoll: () => wideDraw
+}), "identical XI, opponent, and draw reproduce the same selected flank");
+const wideAnnotated = annotateOwnPressChances([{ side: "for", quality: 0.07 }],
+  wideReply);
+assert.equal(wideAnnotated[0].tacticalMoment.kind, "second_ball_release");
+assert.equal(wideAnnotated[0].tacticalMoment.xgDelta, 0.01);
+assert.equal(wideAnnotated[0].tacticalMoment.secondBallRelease.selectedFlank, "left");
+
+// Check the unchanged production period owns the terminal effect exactly once.
+let widePeriod = null;
+for (let idx = 0; idx < 3500; idx += 1) {
+  const candidate = kickoff(wideReplySetup, wideOpponent);
+  candidate.id = "v7-8-wide-reply-" + idx;
+  const phase = resolveOwnPressAgainstOpponent(candidate, {
+    pressureRoll: () => highPressPhaseRoll(candidate, "0:own-pressure"),
+    protectionRoll: () => highPressPhaseRoll(candidate, "0:press-protection")
+  });
+  if (phase?.evidence.secondBallRelease?.status !== "wide_reply") continue;
+  const playedPeriod = advanceMatchClock(candidate).timeline[0];
+  assert.equal(playedPeriod.tacticalPhase?.evidence?.secondBallRelease?.status,
+    "wide_reply");
+  widePeriod = playedPeriod;
+  break;
+}
+assert.ok(widePeriod, "a real canonical XI should execute a reproducible wide-reply seed");
+assert.equal(widePeriod.tacticalPhase.xgDeltaFor, 0.01);
+assert.equal(Number((widePeriod.expectedGoals.for -
+  widePeriod.baselineExpectedGoals.for).toFixed(2)), 0.01);
+assert.equal(widePeriod.tacticalXg, undefined);
+console.log("V7.8 documented counterpress blocks or reroutes one second-ball release PASS");
+
 console.log("V7.7 verified second-ball release / negative controls / real period ledger PASS");
 
 console.log("V7.6 direct first-duel/second-ball: role evidence, contested cover, legacy saves and single RNG PASS");
