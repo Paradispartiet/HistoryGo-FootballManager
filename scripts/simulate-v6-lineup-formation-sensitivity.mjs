@@ -445,9 +445,9 @@ assert.deepEqual(cfSwitch.forcedBreak.counterplay.defensiveReply.evidence
 assert.notDeepEqual(cfThirdMan.forcedBreak.counterplay.actions,
   cfSwitch.forcedBreak.counterplay.actions,
   "same XI and random draw must yield distinct third-man and far-side causal explanations");
-assert.equal(cfThirdMan.forcedBreak.xgDeltaAgainst,
+assert.ok(cfThirdMan.forcedBreak.xgDeltaAgainst >
   cfSwitch.forcedBreak.xgDeltaAgainst,
-  "distinct route explanations must not invent separate uncalibrated xG credits");
+  "documented central penetration must price one higher-quality terminal chance than a wide switch");
 // These authored offensive routes currently share one probability penalty;
 // do not claim that the engine already distinguishes their spatial mechanics.
 assert.equal(cfThirdMan.forcedBreak.probability,
@@ -563,9 +563,9 @@ assert.equal(cfSwitch.forcedBreak.counterplay.advancedFullbacks.length, 0);
 assert.ok(cfHighSwitch.forcedBreak.containmentProbability <
   cfSwitch.forcedBreak.containmentProbability,
   "far-side role exposure must flow through the actual calculated rest-defence metric");
-assert.equal(cfHighSwitch.forcedBreak.xgDeltaAgainst,
-  cfHighBacks.forcedBreak.xgDeltaAgainst,
-  "same calculated rest defence determines xG risk; no free stacking from a route label");
+assert.equal(Number((cfHighSwitch.forcedBreak.xgDeltaAgainst -
+  cfHighBacks.forcedBreak.xgDeltaAgainst).toFixed(3)), -0.01,
+  "the wide outlet changes the existing terminal chance quality, not rest-defence metrics");
 const changedMidRolesXI = buildFixture("4-3-3", cfTrap, {
   st: "pressing_forward"
 });
@@ -755,8 +755,10 @@ for (const row of routeMatrix) {
         "route specialization may affect stage-two containment exactly once");
       assert.equal(named.counterplay.defensiveReply.containmentAdjustment,
         named.routeCoverAdjustment);
-      assert.equal(named.xgDeltaAgainst, isolated.xgDeltaAgainst,
-        "route metadata must not pay a second xG event");
+      assert.equal(Number((named.xgDeltaAgainst -
+        isolated.xgDeltaAgainst).toFixed(3)),
+        { third_man: 0.01, direct: 0, switch_play: -0.01 }[exit],
+        "a verified route replaces one terminal chance quality, never creates a second event");
       if (expected) {
         const midpoint = (named.containmentProbability +
           isolated.containmentProbability) / 2;
@@ -777,8 +779,8 @@ for (const row of routeMatrix) {
     }
     assert.equal(new Set(outcomes.map(p => p.probability)).size, 1,
       "three named offensive exits use same initial press chance");
-    assert.equal(new Set(outcomes.map(p => p.xgDeltaAgainst)).size, 1,
-      "one XI cannot receive invented route-specific xG charges");
+    assert.equal(new Set(outcomes.map(p => p.xgDeltaAgainst)).size, 3,
+      "three distinct verified outlets must yield three distinct terminal chance qualities");
     byVariant.push(outcomes);
   }
   for (let i = 0; i < offensiveExits.length; i++) {
@@ -1043,6 +1045,7 @@ for (const row of routeMatrix) {
       };
       const reference = routeMatrixPhase(setup, behaviour);
       let contained = 0, escaped = 0, concededXg = 0;
+      let normalizedConcededXg = 0;
       for (const draw of protectionDraws) {
         const phase = routeMatrixPhase(setup, behaviour, draw);
         assert.equal(phase.probability, reference.probability,
@@ -1064,20 +1067,29 @@ for (const row of routeMatrix) {
             "escaped transition exposes more risk than contained transition");
         }
         concededXg += phase.xgDeltaAgainst;
+        // Separate the routed attack's terminal SHOT QUALITY from how
+        // effectively the defending XI contained that attack. Comparing
+        // raw xG of a named central run against an isolated/unknown
+        // outlet would falsely attribute a stronger chance to the cover.
+        normalizedConcededXg += phase.xgDeltaAgainst -
+          (phase.evidence.terminalChanceQuality?.routeOffsetXg || 0);
       }
       assert.equal(contained + escaped, protectionDraws.length);
       assert.ok(Math.abs(contained / protectionDraws.length -
         reference.containmentProbability) <= 1 / protectionDraws.length + 0.002,
         "conditional containment frequency must follow the game's declared probability");
       return { reference, contained, escaped,
-        meanConcededXg: Number((concededXg / protectionDraws.length).toFixed(4)) };
+        meanConcededXg: Number((concededXg / protectionDraws.length).toFixed(4)),
+        normalizedMeanXgAgainst: Number((normalizedConcededXg /
+          protectionDraws.length).toFixed(4)) };
     };
     const covered = runGrid(false);
     const isolated = runGrid(true);
     assert.ok(covered.contained >= isolated.contained,
       "documented route-specific coverage cannot make a broken press less secure");
-    assert.ok(covered.meanConcededXg <= isolated.meanConcededXg,
-      "a supported defensive response must not worsen terminal transition risk");
+    assert.ok(covered.normalizedMeanXgAgainst <=
+      isolated.normalizedMeanXgAgainst + 0.0001,
+      "after controlling for route shot quality, specialist cover must not worsen terminal risk");
     if (!row.supported.includes(routeId)) {
       assert.equal(covered.reference.routeCoverAdjustment, 0,
         "unsupported nominal roles cannot be awarded an invented route bonus");
@@ -1254,3 +1266,86 @@ for (const alternateRoute of ["switch_play", "direct"]) {
     "route-specific specialist identities must stay intact for " + alternateRoute);
 }
 console.log("OK: canonical two-pressing-midfielder XI selects a single real cover specialist; unused alternative cannot invent route-specific risk.");
+// v7.5: ONE terminal chance changes quality based on a DOCUMENTED route,
+// not because a role bonus or static plan edge was paid a second time.
+// The new-match opt-in is added by the actual production session factory;
+// older saves, unknown outlets, a recovered press and contained breaks are
+// unchanged. This is a bounded game heuristic, not observed shot-quality data.
+const routeQualitySession = (route, options = {}) => {
+  const actor = kickoff(cfXI, withCfOpponent({
+    tacticalBehaviour: route === null ? null : {
+      pressEscapeRoute: route, ...(options.isolated
+        ? { pressEscape: "isolated" } : {})
+    }
+  }));
+  if (options.legacy) delete actor.causalRouteChanceQualityVersion;
+  return actor;
+};
+const routeQualityPhase = (route, options = {}, draw = 0.99) =>
+  resolveOwnPressAgainstOpponent(routeQualitySession(route, options), {
+    pressureRoll: () => 0.99, protectionRoll: () => draw
+  });
+const routeQualityNoOutlet = routeQualityPhase(null);
+const routeQualityBase = routeQualityNoOutlet.xgDeltaAgainst;
+assert.equal(routeQualitySession("third_man").causalRouteChanceQualityVersion, 1,
+  "the real new-session factory must opt in");
+const qualitySummary = {};
+for (const [outlet, delta] of [
+  ["third_man", 0.01], ["direct", 0], ["switch_play", -0.01]
+]) {
+  const newPhase = routeQualityPhase(outlet);
+  const oldPhase = routeQualityPhase(outlet, { legacy: true });
+  const unsupported = routeQualityPhase(outlet, { isolated: true });
+  assert.equal(newPhase.status, "escaped");
+  assert.equal(oldPhase.status, "escaped");
+  assert.equal(newPhase.probability, oldPhase.probability);
+  assert.equal(newPhase.containmentProbability, oldPhase.containmentProbability);
+  assert.equal(newPhase.routeCoverAdjustment, oldPhase.routeCoverAdjustment);
+  assert.equal(newPhase.xgDeltaAgainst,
+    Number((routeQualityBase + delta).toFixed(3)),
+    "one named terminal route replaces, not stacks, xG quality");
+  assert.equal(oldPhase.xgDeltaAgainst, routeQualityBase,
+    "old saves must retain the original route-neutral xG");
+  assert.equal(unsupported.xgDeltaAgainst, routeQualityBase,
+    "an isolated or unsupported outlet cannot earn fabricated shot quality");
+  assert.equal(oldPhase.evidence.terminalChanceQuality, undefined);
+  assert.equal(unsupported.evidence.terminalChanceQuality, undefined);
+  assert.equal(newPhase.evidence.terminalChanceQuality?.eventCount, 1);
+  assert.equal(newPhase.evidence.terminalChanceQuality?.route, outlet);
+  assert.equal(newPhase.evidence.terminalChanceQuality?.routeOffsetXg, delta);
+  assert.equal(newPhase.xgDeltaFor, 0);
+  const recovered = resolveOwnPressAgainstOpponent(
+    routeQualitySession(outlet), {
+      pressureRoll: () => 0, protectionRoll: () => 0.99
+    });
+  const stopped = routeQualityPhase(outlet, {}, 0);
+  assert.equal(recovered.status, "regain");
+  assert.equal(recovered.xgDeltaAgainst, -0.01);
+  assert.equal(stopped.status, "contained");
+  assert.equal(stopped.xgDeltaAgainst, 0.02);
+  assert.equal(recovered.evidence.terminalChanceQuality, undefined);
+  assert.equal(stopped.evidence.terminalChanceQuality, undefined);
+  assert.deepEqual(routeQualityPhase(outlet), newPhase,
+    "deterministic route-quality replay must not add RNG");
+  qualitySummary[outlet] = { terminalXgAgainst: newPhase.xgDeltaAgainst,
+    legacyXgAgainst: oldPhase.xgDeltaAgainst };
+}
+assert.equal(routeQualityNoOutlet.evidence.terminalChanceQuality, undefined);
+assert.equal(routeQualityNoOutlet.xgDeltaAgainst, routeQualityBase);
+// Verify the production period consumes its phase delta once: the same
+// session and draw can be replayed without a duplicate xG charge.
+for (const [outlet, delta] of [
+  ["third_man", 0.01], ["switch_play", -0.01]
+]) {
+  const result = cfTrial("new_terminal_quality_" + outlet,
+    withCfOpponent({ tacticalBehaviour: { pressEscapeRoute: outlet } }));
+  const baseline = result.period.baselineExpectedGoals.against;
+  const actual = result.period.expectedGoals.against;
+  assert.equal(Number((actual - baseline).toFixed(2)),
+    result.period.tacticalPhase.xgDeltaAgainst,
+    "period ledger must own only the single route-priced phase consequence");
+  assert.equal(result.forcedBreak.xgDeltaAgainst,
+    Number((routeQualityBase + delta).toFixed(3)));
+}
+console.log("V7.5 documented terminal route quality, legacy guard and one-xG ledger: " +
+  JSON.stringify(qualitySummary));
