@@ -54,6 +54,17 @@ const ROUTES = Object.freeze({
 // prevents or completes the outlet, without awarding a second xG event.
 // Third-player: first pass, lay-off, blind-side run, through pass (FIFA).
 // Switch: attract pressure, release, weak-side receiver, exploit far flank (FIFA).
+// Declared GAME heuristics for the quality of ONE completed post-press
+// attack, not historical observations, player skills, or extra chances.
+// Central third-man penetration is marginally more dangerous than a direct
+// outlet; a wide switch is marginally less direct. Apply ONLY to the terminal
+// conceded-xG event, when this named route is explicitly supported, and
+// ONLY in new matches opting in to the versioned mechanic.
+const PRESS_EXIT_TERMINAL_XG_OFFSET = Object.freeze({
+  third_man: 0.01,
+  direct: 0,
+  switch_play: -0.01
+});
 const PRESS_EXIT_PATHWAYS = Object.freeze({
   third_man: Object.freeze({
     label: "Tredjemann gjennom midtbanen",
@@ -1220,6 +1231,20 @@ export function resolveOwnPressAgainstOpponent(session, {
     ...originalCounterplay, opponentRouteAdaptation: routeAdaptation
   } : originalCounterplay;
   const chanceSide = regained ? "for" : outcome === "escaped" ? "against" : null;
+  // This REPLACES the route-neutral terminal risk; the existing phase still
+  // pays exactly one xG delta before chance generation. Older saved matches,
+  // isolated/unknown routes, regains and contained escapes are unchanged.
+  const baseEscapeXg = restDefense >= 70 ? 0.06 : 0.12;
+  const pricedRoute = session.causalRouteChanceQualityVersion === 1 &&
+    outcome === "escaped" && escapeEvidence === "supported" &&
+    counterplay?.pathwayId && Object.prototype.hasOwnProperty.call(
+      PRESS_EXIT_TERMINAL_XG_OFFSET, counterplay.pathwayId)
+    ? counterplay.pathwayId : null;
+  const routeXgOffset = pricedRoute
+    ? PRESS_EXIT_TERMINAL_XG_OFFSET[pricedRoute] : 0;
+  const terminalConcededXg = outcome === "regain" ? -0.01 :
+    outcome === "contained" ? 0.02 :
+      round3(baseEscapeXg + routeXgOffset);
   const steps = config.steps.map((action, i) => ({
     action,
     result: regained ? "completed" :
@@ -1237,8 +1262,7 @@ export function resolveOwnPressAgainstOpponent(session, {
     xgDeltaFor: regained ? config.xgFor : 0,
     // The terminal outcome owns this single risk; no separate bonus for
     // stage two or for each player in the pressing unit.
-    xgDeltaAgainst: regained ? -0.01 : contained ? 0.02 :
-      restDefense >= 70 ? 0.06 : 0.12,
+    xgDeltaAgainst: terminalConcededXg,
     cause: regained ? config.regain :
       (contained
         ? counterplay?.containedCause ||
@@ -1283,6 +1307,14 @@ export function resolveOwnPressAgainstOpponent(session, {
       } : {}),
       opponentEscapeEvidence: escapeEvidence || "unknown",
       resolvedEscapePathway: counterplay?.pathwayId || "unknown",
+      ...(pricedRoute ? { terminalChanceQuality: {
+        basis: "bounded_game_heuristic_not_observed",
+        route: pricedRoute,
+        baseXgAgainst: baseEscapeXg,
+        routeOffsetXg: routeXgOffset,
+        terminalXgAgainst: terminalConcededXg,
+        eventCount: 1
+      } } : {}),
       routeCoverFitFloor: cover.weakestCoverFit,
       routeCoverTiming: cover.timing,
       support: players.map(p => ({
