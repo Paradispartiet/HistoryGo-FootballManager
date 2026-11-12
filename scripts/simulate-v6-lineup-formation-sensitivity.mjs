@@ -1045,6 +1045,7 @@ for (const row of routeMatrix) {
       };
       const reference = routeMatrixPhase(setup, behaviour);
       let contained = 0, escaped = 0, concededXg = 0;
+      let normalizedConcededXg = 0;
       for (const draw of protectionDraws) {
         const phase = routeMatrixPhase(setup, behaviour, draw);
         assert.equal(phase.probability, reference.probability,
@@ -1066,20 +1067,29 @@ for (const row of routeMatrix) {
             "escaped transition exposes more risk than contained transition");
         }
         concededXg += phase.xgDeltaAgainst;
+        // Separate the routed attack's terminal SHOT QUALITY from how
+        // effectively the defending XI contained that attack. Comparing
+        // raw xG of a named central run against an isolated/unknown
+        // outlet would falsely attribute a stronger chance to the cover.
+        normalizedConcededXg += phase.xgDeltaAgainst -
+          (phase.evidence.terminalChanceQuality?.routeOffsetXg || 0);
       }
       assert.equal(contained + escaped, protectionDraws.length);
       assert.ok(Math.abs(contained / protectionDraws.length -
         reference.containmentProbability) <= 1 / protectionDraws.length + 0.002,
         "conditional containment frequency must follow the game's declared probability");
       return { reference, contained, escaped,
-        meanConcededXg: Number((concededXg / protectionDraws.length).toFixed(4)) };
+        meanConcededXg: Number((concededXg / protectionDraws.length).toFixed(4)),
+        normalizedMeanXgAgainst: Number((normalizedConcededXg /
+          protectionDraws.length).toFixed(4)) };
     };
     const covered = runGrid(false);
     const isolated = runGrid(true);
     assert.ok(covered.contained >= isolated.contained,
       "documented route-specific coverage cannot make a broken press less secure");
-    assert.ok(covered.meanConcededXg <= isolated.meanConcededXg,
-      "a supported defensive response must not worsen terminal transition risk");
+    assert.ok(covered.normalizedMeanXgAgainst <=
+      isolated.normalizedMeanXgAgainst + 0.0001,
+      "after controlling for route shot quality, specialist cover must not worsen terminal risk");
     if (!row.supported.includes(routeId)) {
       assert.equal(covered.reference.routeCoverAdjustment, 0,
         "unsupported nominal roles cannot be awarded an invented route bonus");
