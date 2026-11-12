@@ -891,7 +891,7 @@ function secondBallReleaseFor(session, directSecondBall) {
     status: "released", basis: "simulated_role_chain_not_observed",
     xgDeltaFor: 0.02,
     steps: [
-      { action: "Seksere sikrer nedfallsrommet", playerId: six.playerId,
+      { action: "Sekseren sikrer nedfallsrommet", playerId: six.playerId,
         roleId: six.roleId },
       { action: "Midtbanen gir neste støttepasning", playerId: connector.playerId,
         roleId: connector.roleId },
