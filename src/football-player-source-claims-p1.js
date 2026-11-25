@@ -990,6 +990,15 @@ const documented = [
     source: "https://ffksupporter.net/nyheter/1911-1-plass-fredrikstad-fk/"
   },
   {
+    playerId: "stian_stray_molde",
+    placeId: "fredrikstad_stadion",
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Venstreback med presis venstrefot og godt pasningsspill.",
+    strengths: ["simple_passing"],
+    claim: "Fredrikstad fremhever Stray Moldes presise venstrefot og gode pasningsspill i klubbens signeringsomtale.",
+    source: "https://www.fredrikstadfk.no/nyheter/stian-stray-molde-klar-for-ffk"
+  },
+  {
     playerId: "havar_jenssen",
     placeId: "fredrikstad_stadion",
     evidenceKind: "period_appraisal",
