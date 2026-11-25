@@ -990,6 +990,15 @@ const documented = [
     source: "https://ffksupporter.net/nyheter/1911-1-plass-fredrikstad-fk/"
   },
   {
+    playerId: "ludvig_begby",
+    placeId: "fredrikstad_stadion",
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Løpssterk venstreback som kan bli med framover ofte.",
+    strengths: ["stamina"],
+    claim: "Fredrikstad beskriver Begby som løpssterk og forklarer hvorfor han passer i Per-Mathias Høgmos opplegg med offensive backer som blir med framover ofte.",
+    source: "https://www.fredrikstadfk.no/nyheter/begby-forlenger-med-2-nye-ar"
+  },
+  {
     playerId: "brandur_hendriksson",
     placeId: "fredrikstad_stadion",
     evidenceKind: "direct_appraisal",
