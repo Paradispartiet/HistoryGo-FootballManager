@@ -621,6 +621,14 @@ const documented = [
     "sourceKind": "club"
   },
   {
+    "playerId": "mads_nielsen",
+    "clubId": "fredrikstad",
+    "strengths": ["leadership"],
+    "claim": "Fredrikstad-trener Bjørn Johansen begrunner videreføringen av kapteinteamet med spillernes lederegenskaper og omtaler Nielsen og Mæland som «viktige ledere» for treningskulturen.",
+    "source": "https://www.fredrikstadfk.no/nyheter/arets-kapteinteam",
+    "sourceKind": "club"
+  },
+  {
     "playerId": "haitam_aleesami",
     "clubId": "fredrikstad",
     "strengths": ["pace", "dribbling"],
