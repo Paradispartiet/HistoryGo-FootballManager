@@ -621,6 +621,17 @@ const documented = [
     "sourceKind": "club"
   },
   {
+    "playerId": "morten_bjorlo",
+    "clubId": "fredrikstad",
+    "strengths": [
+      "game_reading",
+      "duels"
+    ],
+    "claim": "Fredrikstads fotballdirektør Joacim Heier sier at Bjørlo tilfører «et klokt fotballhode, gode ferdigheter på ball og duellstyrke».",
+    "source": "https://www.fredrikstadfk.no/nyheter/bjorlo-til-ffk",
+    "sourceKind": "club"
+  },
+  {
     "playerId": "simen_brenne",
     "clubId": "stromsgodset",
     "strengths": [
