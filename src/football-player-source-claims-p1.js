@@ -990,6 +990,16 @@ const documented = [
     source: "https://ffksupporter.net/nyheter/1911-1-plass-fredrikstad-fk/"
   },
   {
+    playerId: "havar_jenssen",
+    placeId: "fredrikstad_stadion",
+    evidenceKind: "period_appraisal",
+    playingStyle: "Keeper med raske reflekser ved avslutninger fra kort hold.",
+    strengths: ["reflexes"],
+    claim: "Fredrikstads tilbakeblikk på Jenssens første 127 kamper fremhever reaksjonsevnen hans over flere sesonger. Klubbens referat mot Raufoss viser en konkret reaksjonsredning fra kloss hold.",
+    source: "https://www.fredrikstadfk.no/nyheter/flest-kamper-av-dagens-ffkere",
+    supportingSources: ["https://www.fredrikstadfk.no/nyheter/utrolig-havar-jenssen-sikret-uavgjort"]
+  },
+  {
     playerId: "maxwell_woledzi",
     placeId: "fredrikstad_stadion",
     evidenceKind: "period_appraisal",
