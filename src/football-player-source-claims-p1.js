@@ -990,6 +990,24 @@ const documented = [
     source: "https://ffksupporter.net/nyheter/1911-1-plass-fredrikstad-fk/"
   },
   {
+    playerId: "patrik_gerrbrand",
+    placeId: "fredrikstad_stadion",
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Pasningsdyktig stopper med god spilleforståelse og fart til stopper å være.",
+    strengths: ["game_reading", "simple_passing", "pace"],
+    claim: "I FFKsupporters spillerbiografi beskriver Gerrbrand selv spilleforståelse, pasningsspill og relativ fart som styrkene sine på stopperplass.",
+    source: "https://ffksupporter.net/spillere/patrik_gerrbrand/"
+  },
+  {
+    playerId: "espen_engebretsen",
+    placeId: "fredrikstad_stadion",
+    evidenceKind: "historical_appraisal",
+    playingStyle: "Midtbanespiller og kaptein som samlet laget over flere sesonger.",
+    strengths: ["leadership"],
+    claim: "FFKsupporters spillerbiografi beskriver Engebretsens langvarige kapteinsrolle og betydningen han hadde som samlingspunkt for spillere og trener.",
+    source: "https://ffksupporter.net/spillere/espen_engebretsen/"
+  },
+  {
     playerId: "mihaly_toth",
     placeId: "fredrikstad_stadion",
     evidenceKind: "editorial_appraisal",
