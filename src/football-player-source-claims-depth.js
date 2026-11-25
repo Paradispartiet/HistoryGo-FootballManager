@@ -621,6 +621,14 @@ const documented = [
     "sourceKind": "club"
   },
   {
+    "playerId": "joachim_thomassen",
+    "clubId": "fredrikstad",
+    "strengths": ["game_reading", "stamina"],
+    "claim": "G19-landslagssjef Øivind Nilsen beskriver Thomassen med «god spilleforståelse, stor løpskapasitet og god teknikk» i spillerbiografien hos FFKsupporter.",
+    "source": "https://ffksupporter.net/spillere/joachim_thomassen/",
+    "sourceKind": "press"
+  },
+  {
     "playerId": "mads_nielsen",
     "clubId": "fredrikstad",
     "strengths": ["leadership"],
