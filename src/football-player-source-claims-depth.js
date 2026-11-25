@@ -621,6 +621,14 @@ const documented = [
     "sourceKind": "club"
   },
   {
+    "playerId": "sondre_sorlokk",
+    "clubId": "fredrikstad",
+    "strengths": ["pace", "finishing", "heading"],
+    "claim": "Joacim Heier fremhever Sørløkks fart og beskriver ham som «en god avslutter med begge bein og på hodet».",
+    "source": "https://www.fredrikstadfk.no/nyheter/sondre-sorlokk-til-ffk",
+    "sourceKind": "club"
+  },
+  {
     "playerId": "morten_bjorlo",
     "clubId": "fredrikstad",
     "strengths": [
