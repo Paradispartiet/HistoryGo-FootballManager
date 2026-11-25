@@ -1008,6 +1008,16 @@ const documented = [
     source: "https://www.fredrikstadfk.no/nyheter/magnusson-klar-for-ffk"
   },
   {
+    playerId: "brandur_hendriksson",
+    placeId: "fredrikstad_stadion",
+    evidenceKind: "season_statistics",
+    playingStyle: "Kreativ midtbanespiller med presis høyrefot og direkte frispark som spesialitet.",
+    strengths: ["set_pieces"],
+    claim: "Det færøyske fotballforbundet dokumenterer fire direkte frisparksmål tidlig i samme sesong. Fredrikstads signeringsomtale fremhever den presise høyrefoten hans.",
+    source: "https://www.fsf.fo/brandur-i-serflokki/",
+    supportingSources: ["https://www.fredrikstadfk.no/nyheter/brandur-hendriksson-er-klar-for-ffk"]
+  },
+  {
     playerId: "daniel_eid",
     placeId: "fredrikstad_stadion",
     evidenceKind: "period_appraisal",
