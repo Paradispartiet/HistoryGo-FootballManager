@@ -621,6 +621,29 @@ const documented = [
     "sourceKind": "club"
   },
   {
+    "playerId": "sondre_sorlokk",
+    "clubId": "fredrikstad",
+    "strengths": [
+      "pace",
+      "finishing",
+      "heading"
+    ],
+    "claim": "Joacim Heier fremhever Sørløkks fart og sier at han er «en god avslutter med begge bein og på hodet».",
+    "source": "https://www.fredrikstadfk.no/nyheter/sondre-sorlokk-til-ffk",
+    "sourceKind": "club"
+  },
+  {
+    "playerId": "henrik_kjelsrud_johansen",
+    "clubId": "fredrikstad",
+    "strengths": [
+      "work_rate",
+      "heading"
+    ],
+    "claim": "Kjetil Rekdal beskriver Kjelsrud Johansen som en «hardtarbeidende og hodesterk spiss» ved signeringen for Vålerenga, etter spillerens første periode i Fredrikstad.",
+    "source": "https://www.aftenbladet.no/sport/i/yvL96R/odd-spiss-klar-for-vaalerenga",
+    "sourceKind": "press"
+  },
+  {
     "playerId": "morten_bjorlo",
     "clubId": "fredrikstad",
     "strengths": [
