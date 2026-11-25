@@ -990,6 +990,15 @@ const documented = [
     source: "https://ffksupporter.net/nyheter/1911-1-plass-fredrikstad-fk/"
   },
   {
+    playerId: "brandur_hendriksson",
+    placeId: "fredrikstad_stadion",
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Kreativ, sjanseskapende midtbanespiller med presis høyrefot.",
+    strengths: ["vision"],
+    claim: "Fredrikstads Joacim Heier beskriver Hendriksson som en kreativ og skapende midtbanespiller med presis høyrefot som ofte bidrar med målgivende pasninger.",
+    source: "https://www.fredrikstadfk.no/nyheter/brandur-hendriksson-er-klar-for-ffk"
+  },
+  {
     playerId: "stian_stray_molde",
     placeId: "fredrikstad_stadion",
     evidenceKind: "direct_appraisal",
