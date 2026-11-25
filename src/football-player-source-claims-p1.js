@@ -990,6 +990,15 @@ const documented = [
     source: "https://ffksupporter.net/nyheter/1911-1-plass-fredrikstad-fk/"
   },
   {
+    playerId: "mihaly_toth",
+    placeId: "fredrikstad_stadion",
+    evidenceKind: "editorial_appraisal",
+    playingStyle: "Møtende spiss som holder i ballen og involverer kantene.",
+    strengths: ["hold_up_play", "combination_play"],
+    claim: "FFKsupporters sesongvurdering fra 2007 beskriver Tóth som en møtende spiss som holder godt på ballen, flikker videre og involverer kantspillerne.",
+    source: "https://ffksupporter.net/nyheter/1176-det-aarnaer-sae-i-fredrikstad/"
+  },
+  {
     playerId: "ludvig_begby",
     placeId: "fredrikstad_stadion",
     evidenceKind: "direct_appraisal",
