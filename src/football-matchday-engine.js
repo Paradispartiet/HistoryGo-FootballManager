@@ -1829,6 +1829,8 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     // the central rebound release or route it through known wide support.
     // Older saved matches keep the original central-release calculation.
     causalSecondBallCounterpressVersion: 1,
+    // New matches may lose a newly won ball to a sourced immediate counterpress.
+    causalRegainCounterpressVersion: 1,
     // v7.9: explicitly authored terminal third-man/box continuations
     // replace only the existing v7.5 route-specific xG price. Old saves,
     // missing role evidence and other routes retain previous behaviour.

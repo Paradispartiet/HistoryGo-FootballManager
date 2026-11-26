@@ -1383,4 +1383,49 @@ try{
   }
 }finally{Math.random=savedRandom;}
 
+// Brann's ball-near counterpress is a continuation of the SAME recovery.
+const brannProfile = leagueProfiles.find(p=>p.clubId==="brann");
+const brannOpponent = {...brannProfile,id:brannProfile.clubId,strength:72};
+const brannSession = session("counter_press_recovery",{
+  opponent:brannOpponent,causalRegainCounterpressVersion:1
+});
+const brannRetained=resolve(brannSession,0.3,0.99);
+const brannLost=resolve(brannSession,0.6,0.99);
+assert.equal(brannRetained.status,"regain");
+assert.equal(brannRetained.probability,0.659);
+assert.equal(brannRetained.evidence.regainCounterpress.conditionalReleaseProbability,0.693);
+assert.equal(brannRetained.evidence.regainCounterpress.retainedRegainProbability,0.457);
+assert.equal(brannRetained.xgDeltaFor,0.08);
+assert.equal(brannLost.status,"regain_lost");
+assert.equal(brannLost.side,null);
+assert.equal(brannLost.xgDeltaFor,0);
+assert.equal(brannLost.xgDeltaAgainst,0);
+assert.equal(brannLost.evidence.regainCounterpress.extraRandomDraws,0);
+assert.equal(brannLost.evidence.regainCounterpress.eventCount,1);
+assert.equal(resolve(brannSession,0.99,0.99).status,"escaped");
+assert.equal(resolve({...brannSession,causalRegainCounterpressVersion:undefined},0.6,0.99).status,"regain");
+assert.equal(resolve({...brannSession,opponent:{...brannOpponent,tacticalBehaviour:{}}},0.6,0.99).status,"regain");
+assert.equal(resolve({...brannSession,teamFitSnapshot:{tacticalProfile:{...brannSession.teamFitSnapshot.tacticalProfile,buildUpScore:undefined}}},0.6,0.99).status,"regain");
+const brannChances=[{side:"for",quality:0.08},{side:"against",quality:0.07}];
+assert.equal(annotateOwnPressChances(brannChances,brannLost),brannChances);
+assert.equal(annotateOwnPressChances([],brannRetained).length,0);
+let brannSeed;
+for(let i=0;i<3000;i++){
+  const candidate={...brannSession,id:"brann-regain-counterpress-"+i};
+  if(resolve(candidate,highPressPhaseRoll(candidate,"0:own-pressure"),0.99)?.status==="regain_lost"){brannSeed=candidate;break;}
+}
+assert.ok(brannSeed);
+const brannRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(brannSeed),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.status,"regain_lost");
+  assert.equal(period.tacticalPhase.xgDeltaFor,0);
+  assert.equal(period.tacticalPhase.xgDeltaAgainst,0);
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.equal(played.minuteLog.filter(c=>c.tacticalMoment).length,0);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(brannSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
+}finally{Math.random=brannRandom;}
+
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");

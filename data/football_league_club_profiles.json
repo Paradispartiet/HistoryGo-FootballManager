@@ -181,7 +181,8 @@
       "styleBasis": "tradisjon",
       "tacticalBehaviour": {
         "pressCoordination": "collective",
-        "passingLaneCover": "central"
+        "passingLaneCover": "central",
+        "counterpressAfterLoss": "ball_near_collective"
       },
       "tacticalBehaviourEvidence": {
         "era": "2024",
