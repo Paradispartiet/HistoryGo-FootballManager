@@ -435,3 +435,68 @@ export function annotateOpponentZonalShiftChances(chances,phase){
     ? {...c,tacticalMoment:{...c.tacticalMoment,kind:"zonal_shift_beaten",label:"Soneforsvar spilt av",basis:"simulated_zonal_shift"}}
     :c);
 }
+
+// Bengtsson-era rehearsed longer passing and coordinated movement. The
+// particular reception and support gates are a generic game hypothesis,
+// not a documented target player, flank, pass length or press escape.
+export function resolveOpponentRehearsedOutlet(session,{rng=Math.random}={}){
+  if(session?.causalOpponentRehearsedOutletVersion!==1 ||
+      session.opponent?.tacticalBehaviour?.attackingRunPattern!=="rehearsed_longer_pass_support" ||
+      !verifiedMatchLineup(session.lineupSnapshot))return null;
+  const plan=session.activePlanSnapshot||session.tacticSnapshot;
+  const line=plan?.defensiveLine;
+  if(!plan?.id||!Object.prototype.hasOwnProperty.call(BREAKTHROUGH_LINE_EXPOSURE,line))return null;
+  const {balanceScore,restDefenseScore}=session.teamFitSnapshot?.tacticalProfile||{};
+  if(![balanceScore,restDefenseScore].every(v=>finite(v)&&v>=0&&v<=100))return null;
+  const best=(positions,count=1)=>session.lineupSnapshot.filter(p=>positions.includes(p.position))
+    .sort((a,b)=>b.matchScore-a.matchScore||a.playerId.localeCompare(b.playerId)).slice(0,count);
+  const backs=best(["CB"],2),centre=best(["DM","CM"]),left=best(["LB","LWB"]),right=best(["RB","RWB"]);
+  if(backs.length!==2||!centre.length||!left.length||!right.length)return null;
+  const receivingCover=backs,followingCover=[...centre,...left,...right];
+  const avg=ps=>ps.reduce((sum,p)=>sum+p.matchScore,0)/ps.length;
+  const floor=ps=>Math.min(...ps.map(p=>p.matchScore));
+  const clamp=v=>Math.max(0.12,Math.min(0.82,v));
+  const reception=clamp(0.54+BREAKTHROUGH_LINE_EXPOSURE[line]/2-
+    (avg(receivingCover)-65)*0.004-(floor(receivingCover)-65)*0.001-(balanceScore-65)*0.002);
+  const continuation=clamp(0.50-(avg(followingCover)-65)*0.003-
+    (floor(followingCover)-65)*0.001-(restDefenseScore-65)*0.004);
+  const draw=rng();
+  if(!finite(draw))return null;
+  const roll=Math.max(0,Math.min(0.999999999,draw));
+  const received=roll<reception,breakthrough=received&&roll<reception*continuation;
+  const status=breakthrough?"breakthrough":received?"support_contained":"reception_contained";
+  const actions=["Motstanderen søker et innøvd lengre oppspill",
+    "Fremre mottaker forsøker å kontrollere ballen mot stopperleddet",
+    "Støttespillere forsøker å følge opp i timede bevegelser",
+    "Vår midtbane og sidesikring forsøker å stenge videre angrep"];
+  return {version:6,situation:"opponent_rehearsed_outlet",planId:plan.id,
+    route:"rehearsed_longer_pass_support",status,side:breakthrough?"against":null,
+    probability:Math.round(reception*continuation*1000)/1000,xgDeltaFor:0,
+    xgDeltaAgainst:breakthrough?0.06:-0.03,
+    cause:breakthrough?"Det lengre oppspillet kontrolleres, og støtteløpene åpner et videre angrepsrom.":
+      received?"Mottakeren kontrollerer oppspillet, men vår sikring stanser den neste bevegelsen.":
+      "Stopperleddet kontrollerer mottaksrommet og hindrer at oppspillet blir et angrep.",
+    steps:actions.map((action,index)=>({action,order:index+1,result:breakthrough?"simulated_available":
+      !received?(index===0?"simulated_available":index===1?"countered":"not_reached"):
+      index===3?"countered":"simulated_available"})),
+    counterplay:{status:breakthrough?"not_triggered":"simulated_counter",
+      counter:"Hold stopperdybden og steng støttespillernes videre pasning",
+      nextManagerResponse:"Sikre mottaksrommet med stopperne; behold midtbanestøtte og dekning på begge sider.",
+      automaticallyExecuted:false},
+    evidence:{basis:"sourced_general_principle_generic_game_hypothesis_not_observed",
+      opponentPattern:"rehearsed_longer_pass_support",targetFlank:null,defensiveLine:line,
+      receptionProbability:Math.round(reception*1000)/1000,
+      conditionalContinuationProbability:Math.round(continuation*1000)/1000,
+      receivingCover:receivingCover.map(p=>p.playerId),followingCover:followingCover.map(p=>p.playerId),
+      supportingPlayers:[...receivingCover,...followingCover].map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
+      eventCount:1,randomDraws:1}};
+}
+export function annotateOpponentRehearsedOutletChances(chances,phase){
+  if(!Array.isArray(chances)||phase?.situation!=="opponent_rehearsed_outlet"||phase.side!=="against")return chances;
+  const i=chances.findIndex(c=>c.side==="against");
+  if(i<0)return chances;
+  const annotated=annotateOpponentRunChances(chances,phase);
+  return annotated.map((c,index)=>index===i?{...c,tacticalMoment:{...c.tacticalMoment,
+    kind:"opponent_rehearsed_outlet",label:"Innøvd lengre oppspill",
+    basis:"simulated_rehearsed_outlet",keyAction:phase.steps[2].action}}:c);
+}
