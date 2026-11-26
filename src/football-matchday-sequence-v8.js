@@ -500,3 +500,70 @@ export function annotateOpponentRehearsedOutletChances(chances,phase){
     kind:"opponent_rehearsed_outlet",label:"Innøvd lengre oppspill",
     basis:"simulated_rehearsed_outlet",keyAction:phase.steps[2].action}}:c);
 }
+
+// LSK's direct-play tradition: first contact and control of the loose ball
+// are distinct. The four outcomes are gameplay hypotheses, not tracking data.
+export function resolveOpponentDirectSecondBall(session,{rng=Math.random}={}){
+  if(session?.causalOpponentDirectSecondBallVersion!==1 ||
+      session.opponent?.tacticalBehaviour?.attackingRunPattern!=="direct_duel_second_ball" ||
+      !verifiedMatchLineup(session.lineupSnapshot))return null;
+  const plan=session.activePlanSnapshot||session.tacticSnapshot;
+  if(!plan?.id)return null;
+  const {balanceScore,restDefenseScore}=session.teamFitSnapshot?.tacticalProfile||{};
+  if(![balanceScore,restDefenseScore].every(v=>finite(v)&&v>=0&&v<=100))return null;
+  const best=(positions,count)=>session.lineupSnapshot.filter(p=>positions.includes(p.position))
+    .sort((a,b)=>b.matchScore-a.matchScore||a.playerId.localeCompare(b.playerId)).slice(0,count);
+  const backs=best(["CB"],2),screen=best(["DM","CM"],2);
+  if(backs.length!==2||!screen.length)return null;
+  const avg=ps=>ps.reduce((sum,p)=>sum+p.matchScore,0)/ps.length;
+  const floor=ps=>Math.min(...ps.map(p=>p.matchScore));
+  const clamp=v=>Math.max(0.12,Math.min(0.82,v));
+  // Positional match fit is a proxy, not a measured aerial-duel attribute.
+  const first=clamp(0.54-(avg(backs)-65)*0.004-(floor(backs)-65)*0.001-(balanceScore-65)*0.002);
+  const cover=(avg(screen)-65)*0.003+(floor(screen)-65)*0.001+(restDefenseScore-65)*0.004;
+  const afterWon=clamp(0.62-cover),afterLost=clamp(0.38-cover);
+  const draw=rng();
+  if(!finite(draw))return null;
+  const roll=Math.max(0,Math.min(0.999999999,draw));
+  const firstWon=roll<first;
+  const secondWon=firstWon?roll<first*afterWon:roll<first+(1-first)*afterLost;
+  const status=firstWon?(secondWon?"duel_and_second_ball":"second_ball_contained"):
+    (secondWon?"second_ball_recovered":"both_contained");
+  const cause={
+    duel_and_second_ball:"Motstanderen vinner første duell og sikrer nedfallet til videre angrep.",
+    second_ball_contained:"Motstanderen vinner første duell, men vår midtbane tar kontroll på andreballen.",
+    second_ball_recovered:"Våre stoppere vinner første duell, men motstanderen samler den løse ballen.",
+    both_contained:"Våre stoppere og midtbane vinner både første duell og andreballen."
+  }[status];
+  const actions=["Motstanderen spiller direkte framover","Første duell avgjøres",
+    "Lagene konkurrerer om andreballen","Nedfallet sikres eller brukes til videre angrep"];
+  const rounded=v=>Math.round(v*1000)/1000;
+  return {version:6,situation:"opponent_direct_second_ball",planId:plan.id,
+    route:"direct_duel_second_ball",status,side:secondWon?"against":null,
+    probability:rounded(first*afterWon+(1-first)*afterLost),xgDeltaFor:0,
+    xgDeltaAgainst:secondWon?(firstWon?0.07:0.04):-0.03,cause,
+    steps:actions.map((action,index)=>({action,order:index+1,result:index===0?"simulated_available":
+      index===1?(firstWon?"simulated_available":"countered"):
+      index===2?(secondWon?"simulated_available":"countered"):
+      secondWon?"simulated_available":"not_reached"})),
+    counterplay:{status:secondWon?"not_triggered":"simulated_counter",
+      counter:"Vinn første duell og behold sentral sikring rundt nedfallet",
+      nextManagerResponse:"Sikre både stopperduellen og andreballrommet med sentral midtbanestøtte.",
+      automaticallyExecuted:false},
+    evidence:{basis:"sourced_direct_play_generic_second_ball_hypothesis_not_observed",
+      opponentPattern:"direct_duel_second_ball",targetFlank:null,
+      firstDuelProbability:rounded(first),secondBallAfterWonDuelProbability:rounded(afterWon),
+      secondBallAfterLostDuelProbability:rounded(afterLost),firstDuelWonByOpponent:firstWon,
+      secondBallWonByOpponent:secondWon,duelCover:backs.map(p=>p.playerId),
+      secondBallCover:screen.map(p=>p.playerId),
+      supportingPlayers:[...backs,...screen].map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
+      eventCount:1,randomDraws:1}};
+}
+export function annotateOpponentDirectSecondBallChances(chances,phase){
+  if(!Array.isArray(chances)||phase?.situation!=="opponent_direct_second_ball"||phase.side!=="against")return chances;
+  const i=chances.findIndex(c=>c.side==="against");
+  if(i<0)return chances;
+  return annotateOpponentRunChances(chances,phase).map((c,index)=>index===i?
+    {...c,tacticalMoment:{...c.tacticalMoment,kind:"opponent_direct_second_ball",
+      label:"Direkte spill og andreball",basis:"simulated_direct_second_ball",keyAction:phase.steps[2].action}}:c);
+}
