@@ -427,9 +427,11 @@ export function resolveOpponentZonalShift(session,{rng=Math.random}={}) {
   };
 }
 export function annotateOpponentZonalShiftChances(chances,phase){
-  if(phase?.situation!=="opponent_zonal_shift"||phase.status!=="advantage")return chances;
+  if(!Array.isArray(chances)||phase?.situation!=="opponent_zonal_shift"||phase.status!=="advantage")return chances;
+  const index=chances.findIndex(c=>c.side==="for");
+  if(index<0)return chances;
   const annotated=annotateAuthoredSequenceChances(chances,phase);
-  return annotated.map(c=>c.tacticalMoment?.basis==="simulated_directional_sequence_v8"&&c.tacticalMoment?.planId===phase.planId
+  return annotated.map((c,i)=>i===index
     ? {...c,tacticalMoment:{...c.tacticalMoment,kind:"zonal_shift_beaten",label:"Soneforsvar spilt av",basis:"simulated_zonal_shift"}}
     :c);
 }
