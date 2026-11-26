@@ -1,4 +1,5 @@
 import { resolvePressEscapeEvidence } from "./football-live-tactical-exchange.js";
+import { opponentPressWorkload } from "./football-matchday-high-press-v6.js";
 
 // Kampmotor v6: own collective pressing versus an opponent's build-up.
 // The outcome of ONE linked chain is priced before period chance generation.
@@ -1310,7 +1311,8 @@ function resolveRegainCounterpress(session, shape, profile, pressResult, pressPr
   if (![buildUp,balance].every(v=>finite(v)&&v>=0&&v<=100) ||
       !support || !support.every(p=>p.matchScore>=0&&p.matchScore<=100)) return null;
   const avg = support.reduce((sum,p)=>sum+p.matchScore,0)/support.length;
-  const releaseProbability = clamp(0.62 + (buildUp-65)*0.004 +
+  const workload = opponentPressWorkload(session);
+  const releaseProbability = clamp((workload?.adjustment || 0) + 0.62 + (buildUp-65)*0.004 +
     (balance-65)*0.003 + (avg-65)*0.003,0.12,0.88);
   const conditionalRoll = clamp(pressResult,0,0.999999999)/pressProbability;
   const retained = conditionalRoll < releaseProbability;
@@ -1321,6 +1323,7 @@ function resolveRegainCounterpress(session, shape, profile, pressResult, pressPr
     conditionalReleaseProbability: round3(releaseProbability),
     retainedRegainProbability: round3(pressProbability*releaseProbability),
     extraRandomDraws: 0, eventCount: 1,
+    ...(workload ? { opponentPressWorkload: workload } : {}),
     support: support.map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
     steps: [
       { action:"Vi vinner ballen", result:"completed" },
