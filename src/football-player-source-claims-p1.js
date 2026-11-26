@@ -990,6 +990,16 @@ const documented = [
     source: "https://ffksupporter.net/nyheter/1911-1-plass-fredrikstad-fk/"
   },
   {
+    playerId: "simen_rafn",
+    placeId: "fredrikstad_stadion",
+    evidenceKind: "direct_appraisal",
+    playingStyle: "Hurtig, hardtarbeidende høyreback som også kan spille på kanten.",
+    strengths: ["pace", "work_rate"],
+    claim: "Ved signeringen for Lillestrøm fremhevet Arne Erlandsen farten til Rafn og viste til prestasjonene hans i Fredrikstad i 2015. Rafn beskrev seg selv som hurtig og hardtarbeidende.",
+    source: "https://www.lsk.no/nyheter/simen-rafn-signerte-for-lsk",
+    supportingSources: ["https://ffksupporter.net/spillere/bors/4634/"]
+  },
+  {
     playerId: "patrik_gerrbrand",
     placeId: "fredrikstad_stadion",
     evidenceKind: "direct_appraisal",
