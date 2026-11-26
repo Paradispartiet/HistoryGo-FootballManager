@@ -120,7 +120,7 @@ const DEFENSIVE = new Set(["GK", "CB", "LB", "RB", "DM"]);
 //
 // 4 × 11 = 44 utregninger. Billig, og det gjør at UI-et kan vise «hva skjer om
 // jeg setter ham der» før du bestemmer deg — ikke bare etterpå.
-export function createBenchSnapshot({ benchPlayers, teamFit, tactic, roles = [] } = {}) {
+export function createBenchSnapshot({ benchPlayers, teamFit, tactic, roles = [], freshnessByPlayerId } = {}) {
   const assignments = asArray(teamFit?.assignments).filter((assignment) => assignment?.player?.id && assignment.slot);
 
   return asArray(benchPlayers)
@@ -146,6 +146,7 @@ export function createBenchSnapshot({ benchPlayers, teamFit, tactic, roles = [] 
         playerId: str(player.id),
         name: str(player.name) || str(player.id),
         naturalPositions: asArray(player.naturalPositions).map((position) => str(position).toUpperCase()),
+        ...(freshnessByPlayerId ? { startFreshness: clamp(num(freshnessByPlayerId[str(player.id)], 100), 0, 100) } : {}),
         sourcedRecoverySkills: sourcedRecoverySkillsForPlayer(player),
         sourcedDefensiveReactionSkills: sourcedDefensiveReactionSkillsForPlayer(player),
         fitBySlot
@@ -175,7 +176,7 @@ export function substitutionsRemaining(session) {
 // Hvor sliten er den som går av? Vi bruker minuttene han faktisk har spilt i
 // DENNE kampen — ingen ny, skjult spillertilstand mellom kamper. Under 55
 // minutter er det ingen friskhetsgevinst i å bytte ham; etter 90 er den full.
-function tirednessOf(entry, minute) {
+export function tirednessOf(entry, minute) {
   const playedFrom = num(entry?.onFrom, 0);
   const played = Math.max(0, num(minute, 0) - playedFrom);
   // Kom han sliten inn i kampen, er han tom tidligere. Friskhet 100 = full
@@ -323,6 +324,7 @@ export function applySubstitution(session, { outPlayerId, inPlayerId, minute = 0
   const evaluation = evaluateSubstitution({ session, outPlayerId, inPlayerId, minute, gameState });
   if (!evaluation) return session;
 
+  const incoming = asArray(session.benchSnapshot).find(entry => entry.playerId === evaluation.inPlayerId);
   const lineupSnapshot = asArray(session.lineupSnapshot).map((entry) =>
     entry.playerId !== outPlayerId
       ? entry
@@ -343,6 +345,8 @@ export function applySubstitution(session, { outPlayerId, inPlayerId, minute = 0
               ?.sourcedDefensiveReactionSkills || []
           ],
           sourcedMetricBonuses: { ...evaluation.sourcedMetricBonusesAfter },
+          // Den som kommer inn har egen friskhet, aldri den utbyttede spillerens.
+          startFreshness: Number.isFinite(incoming?.startFreshness) ? incoming.startFreshness : undefined,
           // Den som kommer inn har spilt fra dette minuttet — ikke fra avspark.
           onFrom: num(minute),
           cameOnAsSub: true
