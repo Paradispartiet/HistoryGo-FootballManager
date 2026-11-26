@@ -69,12 +69,13 @@
       "styleBasis": "tradisjon",
       "tacticalBehaviour": {
         "pressCoordination": "collective",
-        "passingLaneCover": "central"
+        "passingLaneCover": "central",
+        "highPressEscapeRoute": "direct"
       },
       "tacticalBehaviourEvidence": {
         "era": "1994–1999",
-        "scope": "Historisk stilmodell basert på Eggens forsvarspostulater, ikke målt pasningsdekning ved avspark. Senere analyse fra 2017 er kun støtte for kontinuitet i klubbtradisjonen.",
-        "interpretation": "Eggens postulater beskriver aggressivt førsteforsvarerpress, raske sikringsbevegelser og et samlet lag med kantene trukket inn når motstander angriper sentralt. Dette modelleres som kollektivt press med sentral dekning, ikke som en universell regel for alle kampsituasjoner.",
+        "scope": "Historisk stilmodell basert på Eggens forsvarspostulater, ikke målt pasningsdekning ved avspark. Senere analyse fra 2017 er kun støtte for kontinuitet i klubbtradisjonen. Angrepsdelen modellerer direkte utspill mot Milans press 4. desember 1996, ikke alle RBKs oppspill eller en observert rutevalgpolicy.",
+        "interpretation": "Eggens postulater beskriver aggressivt førsteforsvarerpress, raske sikringsbevegelser og et samlet lag med kantene trukket inn når motstander angriper sentralt. Dette modelleres som kollektivt press med sentral dekning, ikke som en universell regel for alle kampsituasjoner. Mot Milan på San Siro tilpasset Eggen oppbyggingen ved å spille lengre over pressleddet. Analysen av 1995-sesongen viser også at lange oppspill var et tilgjengelig alternativ, men ikke nødvendigvis mot høyt press i de beskrevne situasjonene. Derfor aktiveres kun det eksisterende faseavgrensede direkte utspillet; tredjemann, spillvending, timing og bestemt avslutning tilordnes ikke på dette grunnlaget.",
         "sources": [
           {
             "title": "Nils Arne Eggen og fokus på fotballferdigheter",
@@ -87,6 +88,18 @@
             "publisher": "Eurosport",
             "url": "https://www.eurosport.no/fotball/eliteserien/2017/analysen_sto6180797/story.shtml",
             "locator": "Må omstille tidlig – toppress med spiss og kanter, kompakte bakre ledd og vern av mellomrommet i 2017."
+          },
+          {
+            "title": "Pauseprat: Da Rosenborg slo ut AC Milan",
+            "publisher": "Boks te boks / Tarjei Smågesjø",
+            "url": "https://smgesj.substack.com/p/pauseprat-da-rosenborg-slo-ut-ac",
+            "locator": "25.07.2025, avsnittet om Eggens forklaring etter borteseieren: lengre pasninger over Milans press."
+          },
+          {
+            "title": "Rosenborg 1995: Masse mål, faglige debatter, pragmatisk stil og tidenes beste lag?",
+            "publisher": "Boks te boks / Tarjei Smågesjø",
+            "url": "https://smgesj.substack.com/p/rosenborg-1995",
+            "locator": "09.02.2026, Taktikken: lange oppspill mot Soltvedt og fra Stensaas mot Løken. Supplerende eksempel fra samme forfatter, ikke uavhengig bekreftelse eller dokumentasjon av samme pressfase."
           }
         ]
       },
