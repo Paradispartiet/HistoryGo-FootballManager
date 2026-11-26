@@ -629,8 +629,9 @@ export function annotateOpponentDirectSecondBallChances(chances,phase){
 // Only the existing scripted set-piece event can trigger this phase.
 // Away scenario explicitly starts after a clearance; never replay its first duel.
 export function resolveOpponentSetPiece(session,{rng=Math.random}={}){
+  const pattern=session?.opponent?.tacticalBehaviour?.setPiecePattern;
   if(session?.causalOpponentSetPieceVersion!==1 ||
-      session.opponent?.tacticalBehaviour?.setPiecePattern!=="historical_delivery_box_duel" ||
+      !["historical_delivery_box_duel","historical_set_piece_focus"].includes(pattern) ||
       !verifiedMatchLineup(session.lineupSnapshot))return null;
   const segment=Array.isArray(session.timeline)?session.timeline.length:0;
   const eventId=session.events?.[segment]?.id;
@@ -662,14 +663,14 @@ export function resolveOpponentSetPiece(session,{rng=Math.random}={}){
   const results=afterClearance?["simulated_available",second?"simulated_available":"countered",second?"simulated_available":"not_reached"]:
     ["simulated_available",first?"simulated_available":"countered",first?"not_reached":second?"simulated_available":"countered",(first||second)?"simulated_available":"not_reached"];
   const rounded=v=>Math.round(v*1000)/1000;
-  return {version:6,situation:"opponent_set_piece",planId,route:"historical_delivery_box_duel",status,
+  return {version:6,situation:"opponent_set_piece",planId,route:pattern,status,
     side:first||second?"against":null,probability:rounded(afterClearance?recovery:delivery+(1-delivery)*recovery),
     xgDeltaFor:0,xgDeltaAgainst:first?0.08:second?0.04:-0.03,cause,
     steps:actions.map((action,index)=>({action,order:index+1,result:results[index]})),
     counterplay:{status:first||second?"not_triggered":"simulated_counter",
       counter:"Beskytt boksen og nedfallsrommet",nextManagerResponse:"Behold stopperdekning og sentral sikring etter klarering.",
       automaticallyExecuted:false},
-    evidence:{basis:"sourced_set_piece_tradition_scripted_scenario_not_observed",eventId,afterClearance,
+    evidence:{basis:"sourced_set_piece_tradition_scripted_scenario_not_observed",opponentPattern:pattern,eventId,afterClearance,
       firstContactProbability:afterClearance?null:rounded(delivery),conditionalRecoveryProbability:rounded(recovery),
       targetFlank:null,boxCover:[...backs,...keeper].map(p=>p.playerId),secondBallCover:screen.map(p=>p.playerId),
       supportingPlayers:[...backs,...keeper,...screen].map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
