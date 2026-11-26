@@ -278,11 +278,43 @@ Kilder:
 - [Eurosport, Ranheim-analyse 2019](https://www.eurosport.no/fotball/eliteserien/2019/joacims-ranheim-analyse_sto7171681/story.shtml): Maalens spillidé.
 - [Ranheim, Taktikkhjørnet – Ranheim på bedringens vei?](https://www.ranheimfotball.no/nyheter/taktikkhjornet-ranheim-pa-bedringens-vei): 2023-eksempler på defensiv overgang, ikke dokumentasjon av 2017–2019-lavblokk.
 
-Status: 14 av 22 undersøkt. Hødds spesifikke dekning er merget i #592;
-Åsanes sentraldekning er implementert i utkast #594. De øvrige tolv
-undersøkte profilene beholder ukjent spesifikk dekning. Åtte gjenstår:
-Notodden, Brattvåg, Lysekloster, Hønefoss, Follo, Tromsdalen, Rana og
-Junkeren. Ingen nye motorfelt eller tall endres i denne dokumentasjons-PR-en.
+### Fjerde bolk
+
+| Klubb | Kildegrunnlag | Beslutning |
+|---|---|---|
+| Notodden | Start 2019 og VG Live 2021 beskriver kompakt forsvar; BT 2012 bekrefter vanskelig å bryte ned | Ingen konkret sentral, bred eller boksdekning fastslått |
+| Brattvåg | Trenernes presentasjon hos Herd 10.03.2026 beskriver offensivt overtall, lav risiko og omstillinger; Arendal beskriver smale angrepskombinasjoner | Offensiv smalhet er ikke defensiv sentraldekning; ingen nye felt |
+| Lysekloster | Kjelsås 2024 og Arendal 2026 beskriver lavt forsvar, sistnevnte også kontringsintensjon | Ingen konkret dekning fastslått |
+| Hønefoss | Rekdal beskriver lavt og kompakt Hønefoss i treningskamp februar 2012; Molde-kamp 2010 bekrefter lavt forsvar | Ingen bestemt dekning eller fast 5-3-2 dokumentert |
+| Follo | Rosenborgs referat fra cupsemifinalen 2010 og intervju etter finalen dokumenterer cupløpet | Ingen bestemt dekning fastslått |
+| Tromsdalen | NFFs cupkampregistrering fra 2012 bekrefter kamp, ikke taktisk romdekning | Ingen relevant detaljkilde funnet i denne gjennomgangen |
+| Rana | Strindheims spiller og trener beskriver skifte fra høyt press til lav blokk i andre omgang 11.10.2025 | Konkret faseskifte, men ingen spesifikk romdekning |
+| Junkeren | Skeids kampreferat 2024 beskriver kompakt forsvar og vanskelige gjennombrudd | Ingen spesifikk romdekning dokumentert |
+
+Kilder:
+- [Start, Vi må bare si unnskyld](https://www.ikstart.no/nyheter/vi-ma-bare-si-unnskyld): Notodden 2019.
+- [VG Live, Notodden–Mjøndalen, NM 2021](https://vglive.vg.no/kamp/notodden-mj%C3%B8ndalen/509452/rapport): kompakt forsvar på egen halvdel.
+- [BT, Standal reddet Hødd](https://www.bt.no/sport/i/op67GK/standal-reddet-hoedd): kompakt Notodden 2012.
+- [Herd, Brattvåg la frem sin spillmodell og treningsprosess](https://herd.no/brattvag-la-frem-sin-spillmodell-og-treningsprosess/b/631/): trenerpresentasjon 10.03.2026.
+- [Arendal, Tøff bortekamp på søndag](https://www.arendalfotball.no/nyheter/toff-bortekamp-pa-sondag): Brattvågs smale offensive kombinasjoner.
+- [Kjelsås, Cupexit mot Lysekloster](https://fotball.kjelsaas.no/next/blog/post/232229/cupexit-mot-lysekloster?ispage=true): 2024, forsvar av ledelse etter pause.
+- [Arendal, En viktig seier på en dårlig dag](https://www.arendalfotball.no/nyheter/en-viktig-seier-pa-en-darlig-dag): Lysekloster 2026.
+- [Stavanger Aftenblad, Rekdal: Grei gjennomkjøring](https://www.aftenbladet.no/sport/i/p6059j/rekdal-grei-gjennomkjoering): Hønefoss 17.02.2012.
+- [Stavanger Aftenblad, Frustrerende å spille mot 10 forsvarsspillere](https://www.aftenbladet.no/sport/i/wEMJL5/frustrerende-aa-spille-mot-10-forsvarsspillere): Hønefoss 02.05.2010.
+- [Rosenborg, Rosenborg slått ut av NM](https://www.rbk.no/nyheter/rosenborg-slatt-ut-av-nm): Follo 2010.
+- [Stavanger Aftenblad, Vi går ikke i kjelleren](https://www.aftenbladet.no/sport/i/VRykr1/vi-gaar-ikke-i-kjelleren): Follo etter cupfinalen 2010.
+- [NFF, Tromsø–Tromsdalen 20.06.2012](https://www.fotball.no/fotballdata/kamp/?fiksId=5640254): kampdata, ikke taktisk belegg.
+- [Strindheim, Bittert tap i nord](https://strindheimtoppfotball.no/a-lag-herrer/bittert-tap-i-nord): referat publisert 13.10.2025, spillerens og trenerens beskrivelser.
+- [Skeid, To scoringer og tre poeng i Bodø](https://www.skeid.no/nyheter/to-scoringer-og-tre-poeng-i-bodo): Junkeren 2024.
+
+**Sluttstatus første gjennomgang: 22 av 22 undersøkt.** Hødds brede og
+sentrale dekning er merget i #592. Åsanes sentraldekning er implementert
+i #594 (CI pågår ved dokumentasjonstidspunktet). De øvrige 20 beholder
+ukjent spesifikk dekning. Ingen av de 22 har dokumentert boksdekning i
+denne gjennomgangen. Dette er manglende kildegrunnlag, ikke fravær av
+forsvarsferdigheter. Ingen nye motorfelt eller tall endres i denne
+dokumentasjons-PR-en. Neste avgrensede dataarbeid er pressEscape:
+konkrete, kildebelagte utspill mot eget høypress.
 
 ## Vakten
 
