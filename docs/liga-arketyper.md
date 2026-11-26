@@ -151,6 +151,72 @@ Målt over en hel sesong: **15 ulike spillestiler**, hver møtt hjemme og borte,
 matchupStyles-sett — ulikt navn er ikke nok, det er fingeravtrykket motorene
 leser som må være unikt.
 
+## Kildekontroll: høyt press og pasningsdekning (2026-11-26)
+
+Kampmotorens v6-pressfase kan bruke kollektivt press og sentral eller bred
+pasningsdekning. Pressintensitet, soneforsvar, mann-mann-press og dekning
+av en bestemt pasningslinje er ulike observasjoner. Ukjent dekning skal
+forbli nøytral; den er ikke bevis på en åpen pasningslinje. Kildene
+beskriver historiske spillestiler, ikke målinger ved avspark.
+
+Av 60 ligaprofiler er det 12 som oppfyller eksisterende pressfasevilkår
+(har high_press-token, eller eksplisitt intensitet >= 70 og høy linje >= 62).
+I utkastkjeden har Brann (2024), Rosenborg (1994–1999) og Strømsgodset
+(2011–2014) kildebelagt kollektivt/sentralt mønster i profilene.
+
+| Klubb | Kildestatus | Beslutning |
+|---|---|---|
+| Start | Gullperioden 1978–1980 bekreftet, presis pressretning ikke funnet | Ingen nye motorfelt |
+| KFUM | Moesgaards 2025-utgave: høyt mann-mann-press, kompakt 5-4-1 i lav blokk | Ingen sentral/bred dekning avledet; ulike presshøyder må holdes adskilt |
+| Vålerenga | Bengtssons 1983–1984-utgave: soneforsvar, ballførerpress, disiplin | Ingen bestemt dekning avledet; bohemprofilen bør senere skille epokene tydeligere |
+
+### Kilder og avgrensninger
+
+- [Starts klubbhistorie 1975–1984](https://www.ikstart.no/start-historien/historie-fra-1905/Om-IKStart-i-perioden-1975-1984):
+  13 baklengsmål i 22 seriekamper i 1978; 52–26 i 1980. Resultatene
+  sier ikke hvordan presset var organisert.
+- [RBKweb, trenerens KFUM-vurdering i 2025](https://www.rbkweb.no/vis/17939):
+  Alfred Johansson skiller høyt mann-mann-press fra kompakt lav 5-4-1.
+  Ingen bestemt pasningsretning oppgitt.
+- [Journalen, Slik vil Kåffa holde plassen](https://journalen.oslomet.no/nb/2024/01/slik-vil-kaffa-holde-plassen):
+  Johannes Moesgaard beskriver overgangen fra 4-3-3 til 3-4-3 i 2023.
+  Formasjonsvalget alene beviser ikke pasningsdekning.
+- [Vålerengas klubbhistorie](https://www.vif-fotball.no/om-klubben/var-stolte-histore-ny):
+  Bengtssons soneforsvar, ballførerpress og disiplin beskrives som et
+  brudd med tidligere fotball.
+- [Store norske leksikon, Vålerenga Fotball](https://snl.no/V%C3%A5lerenga_Fotball):
+  bekrefter gullene i 1983 og 1984 under Bengtsson og den systematiske
+  spilltradisjonen hos etterfølgeren. Ingen bestemt pasningsretning.
+
+### Gjennomgang av de siste seks pressprofilene
+
+| Klubb | Kildestatus | Beslutning |
+|---|---|---|
+| Sogndal | Klubbens spillkonsept i 2016: høyt press og gjenvinning | Dekning ukjent |
+| Strømmen | Trenerintervju 2026: intensitet, defensiv soliditet, hurtige kontringer; endrede pressdetaljer | Dekning ukjent |
+| Sandviken | Gjenpublisert kampreferat mot Sotra: press og gjenvinning på midtbanen; svakere kilde, ikke fastlagt høypressmønster | Dekning ukjent |
+| Bjarg | PlayIQ 2026: høyt mann-mann-press, gjenvinning; direkte treneruttalelser og pasningsdata | Dekning ukjent; mann-mann-prinsipp gir ikke i seg selv sentral eller bred dekning |
+| Grorud | Treneruttalelser 2023 og 2025: gjenvinning i høyt press, dokumentert gjenvinning nær motstanderens boks mot Stjørdals-Blink | Dekning ukjent |
+| Lørenskog | Seniorfotballens sportsplan: høyt press for å vinne ball, lavt press for å beskytte mål | Dekning ukjent; treningsmål er ikke observasjon av fast kampmønster |
+
+Kildene:
+
+- [Sogndal Fotball, God jul frå Sogndal Fotball, 25.12.2016](https://www.sogndalfotball.no/nyheiter/god-jul-fra-sogndal-fotball): klubbens leder beskriver spillkonsept og intensitet.
+- [Vårt Strømmen, sesongstart 2026](https://vartstrommen.no/strommen-if-fotball-sesongstart-i-obos-ligaen-april-2026/): Jens Wedeborg beskriver intensitet, defensiv soliditet og kontringer; ikke pressretning.
+- [IL Sandviken herrer, gjenpubliserte klubbinnlegg](https://www.findglocal.com/NO/Bergen/1577245285884792/IL-Sandviken-herrer): kampreferat mot Sotra. Sekundær gjenpublisering; ikke brukt til motoreffekt.
+- [PlayIQ, Bjarg: A Football Fairytale in the Making?](https://www.playiq.no/insights/bjarg-a-football-fairytale-in-the-making): 2026, treneruttalelser og beskrivelse av mann-mann-press. Motstandernes pasningstreff var 73 %, 7,1 prosentpoeng lavere enn i øvrige kamper. Analyseleverandøren samarbeider med klubben; dette er ikke en uavhengig evaluering eller en måling av bestemte pasningsrom.
+- [Grorud IL, Abel Tjomsland er vår nye nummer 8, 23.12.2023](https://www.grorud-il.no/nyheter/abel-tjomsland-er-var-nye-nummer-8): trenerens beskrivelse av spillerens gjenvinningsferdigheter.
+- [Akers Avis Groruddalen, Tap i Trondheim](https://groruddalen.no/sport/tap-i-trondheim-en-skuffa-gjeng-som-satt-pa-flyplassen/): treneren beskriver en konkret høy gjenvinning og overgangsmuligheter i 2025.
+- [Lørenskog IF, Spillfasene i LIF](https://lorenskogif.no/klubben/sportsplan-1/seniorfotball/spilldelene-i-lif): seniorplanens to pressfaser og periodisering.
+
+**Sluttstatus for første kildegjennomgang:** 12 av 12 aktuelle profiler
+undersøkt, tre med aktivert sentral dekning i utkastkjeden, ni uten
+tilstrekkelig belegg for sentral eller bred dekning. Dette er ikke en
+påstand om at de ni lagene mangler pasningsdekning i virkeligheten.
+Neste kildebehov er konkret videoanalyse av pasningsrom, eller en
+trenerbeskrivelse av pressretning i den relevante perioden. Ingen ny
+mekanikk eller endring i sannsynligheter følger av dokumentasjonen alene.
+
 ## Vakten
 
 `sim:league-season` går gjennom en **hel sesong** og krever:
