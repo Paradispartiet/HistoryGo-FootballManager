@@ -362,3 +362,76 @@ export function resolveOpponentSwitchCrossSequence(session, { rng = Math.random 
       eventCount:1,randomDraws:1}
   };
 }
+
+// Bengtsson-era zonal defending: pressure, cover and collective shifting.
+// This is an attacking possession against a sourced defensive pattern, not
+// a claim about press height, a permanently covered lane or observed positions.
+const ZONAL_WIDTH_PLANS = new Set(["wide_fast_433","positional_overloads","crossing_box_presence","overlap_channels"]);
+export function resolveOpponentZonalShift(session,{rng=Math.random}={}) {
+  if(session?.causalOpponentZonalShiftVersion!==1 ||
+      session.opponent?.tacticalBehaviour?.defensivePattern!=="zonal_pressure_cover_shift" ||
+      session.opponent?.tacticalBehaviour?.pressCoordination!=="collective" ||
+      !verifiedMatchLineup(session.lineupSnapshot)) return null;
+  const planId=session.activePlanSnapshot?.id || session.tacticSnapshot?.id || session.selectedTacticId;
+  if(!ZONAL_WIDTH_PLANS.has(planId)) return null;
+  const {buildUpScore,widthScore,depthScore,balanceScore}=session.teamFitSnapshot?.tacticalProfile||{};
+  if(![buildUpScore,widthScore,depthScore,balanceScore].every(v=>finite(v)&&v>=0&&v<=100))return null;
+  const best=positions=>session.lineupSnapshot.filter(p=>positions.includes(p.position))
+    .sort((a,b)=>b.matchScore-a.matchScore||a.playerId.localeCompare(b.playerId))[0];
+  const pivot=best(["DM","CM"]),left=best(["LW","LM","LB","LWB"]),right=best(["RW","RM","RB","RWB"]),runner=best(["ST","AM"]);
+  if(!pivot||!left||!right||!runner)return null;
+  const circulation=[pivot,left,right],penetration=[left,right,runner];
+  const avg=ps=>ps.reduce((sum,p)=>sum+p.matchScore,0)/ps.length;
+  const floor=ps=>Math.min(...ps.map(p=>p.matchScore));
+  const clamp=v=>Math.max(0.12,Math.min(0.88,v));
+  // Two linked gates on one draw. The first prices our ability to move the
+  // ball around pressure; the second prices timing against the shifting cover.
+  const circulationProbability=clamp(0.58+(buildUpScore-65)*0.004+
+    (balanceScore-65)*0.002+(avg(circulation)-65)*0.003+(floor(circulation)-65)*0.001);
+  const penetrationProbability=clamp(0.48+(widthScore-65)*0.004+
+    (depthScore-65)*0.004+(avg(penetration)-65)*0.003+(floor(penetration)-65)*0.001);
+  const draw=rng();
+  if(!finite(draw))return null;
+  const roll=Math.max(0,Math.min(0.999999999,draw));
+  const circulated=roll<circulationProbability;
+  const advantage=circulated&&roll<circulationProbability*penetrationProbability;
+  const stop=advantage?null:circulated?"shift_cover":"ball_pressure";
+  const actions=[
+    "Motstanderens nærmeste spiller presser ballføreren",
+    "Vi forsøker å frigjøre støttepasning via midtbanen og bredden",
+    "Motstanderens øvrige ledd sikrer og sideforskyver samlet",
+    "Vi forsøker å utnytte et nytt rom med et timet løp"
+  ];
+  return {
+    version:6,situation:"opponent_zonal_shift",planId,route:"zonal_pressure_cover_shift",
+    status:advantage?"advantage":"countered",side:advantage?"for":null,
+    probability:Math.round(circulationProbability*penetrationProbability*1000)/1000,
+    xgDeltaFor:advantage?0.06:-0.03,xgDeltaAgainst:0,
+    cause:advantage?"Ballflytting og timet løp åpner et angrepsrom før soneforsvaret rekker å forskyve seg."
+      :stop==="ball_pressure"?"Ballførerpress og sikring hindrer den første støttepasningen."
+      :"Ballflyttingen lykkes, men kollektiv sideforskyvning og sikring stenger neste angrepsrom.",
+    steps:actions.map((action,index)=>({action,order:index+1,result:
+      advantage?"simulated_available":stop==="ball_pressure"?(index===0?"simulated_available":index===1?"countered":"not_reached"):
+      index===3?"countered":"simulated_available"})),
+    counterplay:{status:advantage?"not_triggered":"simulated_counter",
+      counter:"Press på ballfører, sikring og kollektiv sideforskyvning",
+      nextManagerResponse:"Bruk støttepasningen, flytt ballen i bredden og time løpet før neste forskyvning.",
+      automaticallyExecuted:false},
+    evidence:{basis:"sourced_zonal_pattern_bounded_game_heuristic_not_observed",opponentPattern:"zonal_pressure_cover_shift",
+      targetFlank:null,stop,buildUpScore,widthScore,depthScore,balanceScore,
+      circulationProbability:Math.round(circulationProbability*1000)/1000,
+      conditionalPenetrationProbability:Math.round(penetrationProbability*1000)/1000,
+      circulationSupport:circulation.map(p=>p.playerId),penetrationSupport:penetration.map(p=>p.playerId),
+      supportingPlayers:[pivot,left,right,runner].map(({playerId,roleId,position,matchScore})=>({playerId,roleId,position,matchScore})),
+      eventCount:1,randomDraws:1}
+  };
+}
+export function annotateOpponentZonalShiftChances(chances,phase){
+  if(!Array.isArray(chances)||phase?.situation!=="opponent_zonal_shift"||phase.status!=="advantage")return chances;
+  const index=chances.findIndex(c=>c.side==="for");
+  if(index<0)return chances;
+  const annotated=annotateAuthoredSequenceChances(chances,phase);
+  return annotated.map((c,i)=>i===index
+    ? {...c,tacticalMoment:{...c.tacticalMoment,kind:"zonal_shift_beaten",label:"Soneforsvar spilt av",basis:"simulated_zonal_shift"}}
+    :c);
+}

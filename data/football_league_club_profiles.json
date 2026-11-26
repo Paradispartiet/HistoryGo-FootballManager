@@ -275,7 +275,8 @@
       "styleBasis": "tradisjon",
       "shortLabel": "bohemtradisjon · organisert soneforsvar",
       "tacticalBehaviour": {
-        "pressCoordination": "collective"
+        "pressCoordination": "collective",
+        "defensivePattern": "zonal_pressure_cover_shift"
       },
       "tacticalBehaviourEvidence": {
         "era": "1983–1984",
