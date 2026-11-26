@@ -1565,6 +1565,7 @@ export function resolveOwnPressAgainstOpponent(session, {
       ? { ...counterplay, directSecondBall } : counterplay,
     evidence: {
       opponentTrigger: config.opponentMetric, opponentValue: scenario,
+      ...(scopedDirect ? { opponentTriggerBasis: "documented_direct_high_press_escape" } : {}),
       pressResistance: resistance, transitionThreat: threat,
       opponentEscapeRoute: shape?.pressEscapeRoute || "unknown",
       ...(routePolicyRequested ? { opponentRouteAdaptation: routeAdaptation } : {}),
