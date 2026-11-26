@@ -253,7 +253,7 @@
       "tacticalSchool": "Moderne ballbesittelse med halvrom og høye backer",
       "era": "2011–",
       "style": "Organisert ballbesittelse som venter på øyeblikket og går fort når det kommer",
-      "historicalNote": "Molde er den mest gjennomorganiserte klubben i norsk toppfotball i moderne tid: lite risiko tidlig, middels blokk med variert presshøyde, og et angrepsspill der kantene går innover og backene høyt og bredt slik at halvrommene åpner seg. Tålmodig med ballen, presis i sonene, brutalt rask når åpningen kommer.",
+      "historicalNote": "Molde er den mest gjennomorganiserte klubben i norsk toppfotball i moderne tid: lite risiko tidlig, middels blokk med variert presshøyde, og et angrepsspill der kantene går innover og backene høyt og bredt slik at halvrommene åpner seg. Tålmodig med ballen, presis i sonene, brutalt rask når åpningen kommer. Formasjonsbeskrivelsen representerer den tidligere fasen med fire forsvarere; Erling Moe la om til tre midtstoppere i 2022. Den dokumenterte spillvendingen mot press er hentet fra denne senere fasen.",
       "inPossessionShape": "4-3-3 som blir 4-2-2-2 — kanter innover, backer høyt og bredt",
       "outOfPossessionShape": "4-1-4-1 i middels blokk",
       "defensiveBlock": "Middels blokk med variert presshøyde",
@@ -311,7 +311,29 @@
         "En lav og tålmodig blokk er ubehagelig for dem."
       ],
       "styleBasis": "tradisjon",
-      "shortLabel": "kontrollert ballbesittelse i halvrommene"
+      "shortLabel": "kontrollert ballbesittelse i halvrommene",
+      "tacticalBehaviour": {
+        "pressEscapeRoute": "switch_play"
+      },
+      "tacticalBehaviourEvidence": {
+        "era": "2022",
+        "scope": "Cupfinalen mot Bodø/Glimt 1. mai 2022, i Moldes periode med tre midtstoppere. Modell av tilgjengelig spillvending i oppbygging mot konsentrert press, ikke en fast rute i alle kamper eller etter hvert balltap.",
+        "interpretation": "Molde holdt ballen på en side, brukte en dyp støttepasning og vendte mot en bred vingback. I finalen ble Linnes frigjort på høyresiden før han fant Eikrem. Motoren modellerer spillvending, uten å fastsette flanke, timing eller avslutning. Kilden beskriver det smale presset; presshøyde er ikke målt.",
+        "sources": [
+          {
+            "title": "Sommer med taktikk: Molde-fotball!",
+            "publisher": "Tarjei Smågesjø",
+            "url": "https://smgesj.substack.com/p/sommer-med-taktikk-molde-fotball",
+            "locator": "Cupfinalen 2022, avsnittene om Glimts smale 4-3-3-press og vending mot vingback."
+          },
+          {
+            "title": "Her er suverene Moldes gullformel: – Det var mange som stusset",
+            "publisher": "Aftenposten / VG",
+            "url": "https://www.aftenposten.no/sport/i/zEElR5/her-er-suverene-moldes-gullformel-det-var-mange-som-stusset",
+            "locator": "Trenerintervju 2022: overgang fra fire til tre midtstoppere og cupfinale i 3-5-2."
+          }
+        ]
+      }
     },
     {
       "clubId": "viking",
@@ -597,6 +619,33 @@
         "De vil at du skal prøve gjennom midten. Ikke gjør det.",
         "Har du ikke kanter som tør, får du ballen uten å komme noen vei."
       ],
+      "tacticalBehaviour": {
+        "pressEscape": "supported",
+        "pressEscapeCandidateRoutes": [
+          "third_man",
+          "switch_play"
+        ],
+        "pressEscapeRoutePolicy": "weakest_verified_cover"
+      },
+      "tacticalBehaviourEvidence": {
+        "era": "2024",
+        "scope": "Kjetil Knutsens oppbyggingsprinsipper i 2020–2024-profilen. Kildene beskriver tilgjengelige utveier i oppbygging, ikke en målt rutevalgpolicy eller et bestemt mønster etter hvert balltap.",
+        "interpretation": "Indreløpere brukes som mellomledd for å finne sekseren bak første pressledd; motsatt back brukes til å vende spillet ut av trange rom. Begge rutene inngår som tilgjengelige modellerte valg. Motorens eksisterende weakest_verified_cover-policy er en spillhypotese, ikke dokumentert scouting av motstanderen eller historisk valgfrekvens. Ukjent eller tilnærmet lik forsvarsdekning gir ingen navngitt utvei. Ingen bestemt flanke, timing, avslutning eller direkte utspill er lagt til.",
+        "sources": [
+          {
+            "title": "Kjetil Knutsen – Bodø/Glimt – Tactical Analysis",
+            "publisher": "The Football Analyst",
+            "url": "https://the-footballanalyst.com/kjetil-knutsen-bodo-glimt-tactical-analysis/",
+            "locator": "Finding the Number-Six; The Far-Side Fullback; Finding the Pockets. Tredjemannskombinasjoner bak første pressledd og vending til motsatt back."
+          },
+          {
+            "title": "Kjetil Knutsen’s FK Bodø/Glimt build-up play",
+            "publisher": "Diego Puig – Football Analysis & Coaching",
+            "url": "https://diegopuigcoach.com/en-tactical-analysis/",
+            "locator": "Analysis 02, Build-up structure; Key behaviours; Progression and risks. Udattert støtte for begge oppbyggingsruter."
+          }
+        ]
+      },
       "shortLabel": "ballbesittelse og rotasjoner, smal blokk uten ball"
     },
     {
