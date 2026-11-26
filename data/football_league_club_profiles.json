@@ -410,7 +410,7 @@
       "outOfPossessionShape": "Kompakt middels blokk (eksisterende spillmodell, ikke historisk fastslått)",
       "defensiveBlock": "Middels blokk (spillmodell)",
       "buildUpStyle": "Kortpasningsspill og innøvde bevegelser; direkte utspill mot høyt press dokumentert separat i 2023",
-      "attackingStyle": "Backoverlappinger og samspill på kanten",
+      "attackingStyle": "Backoverlappinger og kortpasningskombinasjoner med støttebevegelser",
       "tempo": "Veksler mellom kontroll og gjennombrudd (spillmodell)",
       "riskLevel": "low",
       "baseStyleId": "direct_counter_opponent",
@@ -458,17 +458,19 @@
       ],
       "managerHints": [
         "La kantspilleren følge den offensive backens løp; ikke la egen back stå alene.",
-        "Hold stopperne og en sentral spiller igjen til å forsvare boksen."
+        "Hold stopperne og en sentral spiller igjen til å forsvare boksen.",
+        "Steng både støttepasningen og rommet bak første pressledd med ulike spillere."
       ],
       "styleBasis": "tradisjon",
       "tacticalBehaviour": {
         "highPressEscapeRoute": "direct",
-        "attackingRunPattern": "rehearsed_fullback_overlap"
+        "attackingRunPattern": "rehearsed_fullback_overlap",
+        "shortCombinationPattern": "rehearsed_short_pass_support"
       },
       "tacticalBehaviourEvidence": {
         "era": "2023",
         "scope": "To adskilte kildeperioder i en simulert klubbtradisjon. Ingen fast historisk 5-3-2, flanke eller navngitt spiller antas.",
-        "interpretation": "Viking brukte lave backer og pasninger bak for å lokke fram presset, før keeper eller stopper slo mot spissen. Kantene og indreløperne posisjonerte seg for å vinne andreballen. Dette støtter et direkte utspill i høypressfasen, ikke økt kort oppbyggingsspill eller oppdiktet timing. Ingen påstand om spesifikk avslutning eller fast suksessrate. Historisk angrep: Refvik beskriver Schou-Andreassens overlappende backer som legger inn; SNL dokumenterer øving på bevegelsesmønstre, og Viking omtaler den tidligere kortpasningsstilen. Den todelte overlapp- og boksfasen er en generell spillhypotese, ikke en dokumentert detaljrute eller målt frekvens. Eksisterende numeriske traits, baseStyleId og matchup-tokens beholdes som spillmodell, ikke historisk belegg.",
+        "interpretation": "Viking brukte lave backer og pasninger bak for å lokke fram presset, før keeper eller stopper slo mot spissen. Kantene og indreløperne posisjonerte seg for å vinne andreballen. Dette støtter et direkte utspill i høypressfasen, ikke økt kort oppbyggingsspill eller oppdiktet timing. Ingen påstand om spesifikk avslutning eller fast suksessrate. Historisk angrep: Refvik beskriver Schou-Andreassens overlappende backer som legger inn; SNL dokumenterer øving på bevegelsesmønstre, og Viking omtaler den tidligere kortpasningsstilen. Den todelte overlapp- og boksfasen er en generell spillhypotese, ikke en dokumentert detaljrute eller målt frekvens. Eksisterende numeriske traits, baseStyleId og matchup-tokens beholdes som spillmodell, ikke historisk belegg. Kortpasningsspillet og innøvde bevegelsesmønstre støtter en anonym sentral kombinasjonsvariant som spillhypotese. Tredjemannssekvensen, 40 % modellvekt og alle sannsynligheter er ikke historisk dokumenterte kampmålinger. Ingen bestemt motstanderspiller antas.",
         "sources": [
           {
             "title": "Taktisk analyse: Viking – Rosenborg 2-0",
@@ -503,7 +505,8 @@
         ],
         "eraByPattern": {
           "highPressEscapeRoute": "2023",
-          "attackingRunPattern": "1971–1975"
+          "attackingRunPattern": "1971–1975",
+          "shortCombinationPattern": "1971–1975"
         }
       },
       "shortLabel": "samhandling, kortpasning og offensive backer"
