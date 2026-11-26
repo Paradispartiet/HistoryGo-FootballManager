@@ -864,24 +864,40 @@ export function resolveOpponentThreeSpaceCombination(session,{rng=Math.random}={
   const localRoll=opened?(pulled?roll/(create*displacement):
     (roll/create-displacement)/(1-displacement)):0;
   const activeLate=pulled?displacedLate:late;
-  const depthWon=opened&&localRoll<depth;
-  const lateWon=opened&&!depthWon&&localRoll<depth+(1-depth)*activeLate;
+  // A central support striker may receive but still be denied the next
+  // pass by renewed pressure. If the pass is intercepted, no downstream
+  // run is credited. Keep wide displacement and central release exclusive.
+  const pairingEnabled=session.causalOpponentSupportStrikerVersion===1&&
+    session.opponent.tacticalBehaviour.centralCreationPattern==="support_striker_through_ball"&&
+    sourceSpace==="between_lines";
+  const release=pairingEnabled?clamp(0.68-(first.matchScore-65)*0.004-
+    (balanceScore-65)*0.002-(first.roleId==="pressing_midfielder"?0.06:0)):1;
+  const released=opened&&localRoll<release;
+  const runRoll=released?localRoll/release:0;
+  const depthWon=released&&runRoll<depth;
+  const lateWon=released&&!depthWon&&runRoll<depth+(1-depth)*activeLate;
   const success=depthWon||lateWon;
-  const totalProbability=create*(depth+(1-depth)*((1-displacement)*late+displacement*displacedLate));
-  const status=depthWon?"depth_breakthrough":lateWon?"late_runner_breakthrough":opened?"both_runs_contained":"creation_contained";
-  const actions=["Kreative motspillere søker siderom og mellomrom",dribbleEnabled?
+  const totalProbability=create*release*(depth+(1-depth)*((1-displacement)*late+displacement*displacedLate));
+  const status=depthWon?"depth_breakthrough":lateWon?"late_runner_breakthrough":
+    released?"both_runs_contained":opened?"through_ball_contained":"creation_contained";
+  const actions=["Kreative motspillere søker siderom og mellomrom",pairingEnabled?
+    "Støttespissen søker mottak i mellomrommet":dribbleEnabled?
     (pulled?"Driblingen trekker den sentrale sikringen mot kanten":"Dribleren utfordrer kanten mens sentral sikring holder sonen"):"Første mottak forsøker å åpne pasningsvinduet",
+    ...(pairingEnabled?["Støttespissen forsøker gjennomspillet under fornyet press"]:[]),
     "Spissen søker et timet gjennombrudd bak stopperne","Et separat midtbaneløp utfordrer sikringen hvis første pasning avverges"];
+  const results=["simulated_available",opened?"simulated_available":"countered",
+    ...(pairingEnabled?[!opened?"not_reached":released?"simulated_available":"countered"]:[]),
+    !released?"not_reached":depthWon?"simulated_available":"countered",
+    !released||depthWon?"not_reached":lateWon?"simulated_available":"countered"];
   return {version:6,situation:"opponent_three_space_combination",planId:plan.id,route:"three_space_combination",status,
     side:success?"against":null,probability:round(totalProbability),xgDeltaFor:0,
-    xgDeltaAgainst:depthWon?0.07:lateWon?0.05:opened?-0.02:-0.03,
-    cause:depthWon?"Kreativ mottaker åpner et pasningsvindu og et timet løp truer bakrommet.":
+    xgDeltaAgainst:depthWon?0.07:lateWon?0.05:released?-0.02:-0.03,
+    cause:depthWon?(pairingEnabled?"Støttespissen finner gjennomspillet til spissmakkerens timede bakromsløp.":"Kreativ mottaker åpner et pasningsvindu og et timet løp truer bakrommet."):
       lateWon?(pulled?"Driblingen trekker sikringen ut, og et sent midtbaneløp utnytter rommet som åpnes.":"Stopperne stenger første bakromsløp, men et sent midtbaneløp utnytter rommet foran dem."):
-      opened?"Stopperne stenger bakrommet og en separat midtbanespiller følger det sene løpet.":
+      released?"Stopperne stenger bakrommet og en separat midtbanespiller følger det sene løpet.":
+      opened?"Støttespissen mottar ballen, men fornyet press avverger gjennomspillet.":
       "Kant- og sentraldekningen stenger det første kreative mottaket.",
-    steps:actions.map((action,i)=>({action,order:i+1,result:i===0?"simulated_available":
-      i===1?(opened?"simulated_available":"countered"):!opened?"not_reached":
-      i===2?(depthWon?"simulated_available":"countered"):depthWon?"not_reached":lateWon?"simulated_available":"countered"})),
+    steps:actions.map((action,i)=>({action,order:i+1,result:results[i]})),
     counterplay:{status:success?"not_triggered":"simulated_counter",
       counter:"Behold tre adskilte sikringsoppgaver",
       nextManagerResponse:"Press mottakeren uten å trekke stopperne ut, og behold en egen midtbanespiller til det sene løpet.",
@@ -893,6 +909,8 @@ export function resolveOpponentThreeSpaceCombination(session,{rng=Math.random}={
       ...(dribbleEnabled?{wideCreationPattern:"dribble_draw_cover",conditionalDisplacementProbability:round(displacement),
         conditionalLateRunnerIfDisplaced:round(displacedLate),centralCoverDisplaced:pulled,
         displacedCoverId:pulled?cover.playerId:null}:{}),
+      ...(pairingEnabled?{centralCreationPattern:"support_striker_through_ball",conditionalReleaseProbability:round(release),
+        supportStrikerReceived:opened,throughBallReleased:released,renewedPresserId:first.playerId}:{}),
       firstPresserId:first.playerId,lateRunnerCoverId:cover.playerId,dedicatedCover:dedicated,depthCover:backs.map(p=>p.playerId),
       supportingPlayers:[...left,...right,...lw,...rw,first,cover,...backs].map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
       eventCount:1,randomDraws:1}};
@@ -902,5 +920,5 @@ export function annotateOpponentThreeSpaceChances(chances,phase){
   const i=chances.findIndex(c=>c.side==="against");if(i<0)return chances;
   return annotateOpponentRunChances(chances,phase).map((c,index)=>index===i?
     {...c,tacticalMoment:{...c.tacticalMoment,kind:"opponent_three_space_combination",label:"Gjennombrudd i tre rom",
-      basis:"simulated_three_space_combination",keyAction:phase.steps[phase.status==="late_runner_breakthrough"?3:2].action}}:c);
+      basis:"simulated_three_space_combination",keyAction:phase.steps[phase.status==="late_runner_breakthrough"?phase.steps.length-1:phase.steps.length-2].action}}:c);
 }
