@@ -1530,22 +1530,21 @@
       "styleBasis": "tradisjon",
       "tacticalSchool": "Cuplag i en liten by",
       "era": "2012",
-      "style": "Kompakt og disiplinert, med én plan: overleve til kampen kan vinnes i én situasjon",
-      "historicalNote": "Cupgullet i 2012 er klubbens storhetstid og hele identiteten: Hødd slo seg gjennom mot større klubber ved å være vanskeligere å slå enn troppen tilsa, og ta den ene sjansen som kom.",
-      "inPossessionShape": "5-3-2 med to spisser i bakrom",
-      "outOfPossessionShape": "5-3-2 i lav blokk",
-      "defensiveBlock": "Lav blokk",
-      "buildUpStyle": "Enkelt ut, så framover",
-      "attackingStyle": "Hurtige omstillinger",
+      "style": "Offensivt utgangspunkt, men i cupfinalen en kompakt, fleksibel lav blokk som stenger rom",
+      "historicalNote": "Cupgullet i 2012 er klubbens storhetstid. Lars Arne Nilsen beskrev en offensiv spillfilosofi, og Hødd stod høyt mot Haugesund og Brann. I finalen mot Tromsø åpnet de i 4-2-3-1/4-4-1-1, før de senket laget og flyttet Sandal ned i en midtbanefemmer. Ligamodellens lave blokk er inspirert av denne konkrete finalefasen, ikke en påstand om fast spillestil i hele 2012.",
+      "inPossessionShape": "4-2-3-1 med Sandal i mellomrom og Sellin i bakrom",
+      "outOfPossessionShape": "4-4-1-1 som i cupfinalen ble til en lav 4-5-1",
+      "defensiveBlock": "Lav blokk i den modellerte cupfinalefasen",
+      "buildUpStyle": "Forsøker å holde ballen i laget, også etter gjenvinning",
+      "attackingStyle": "Kombinasjoner gjennom mellomrom og mulige overganger",
       "tempo": "Jevnt",
       "riskLevel": "low",
       "baseStyleId": "low_block_opponent",
       "matchupStyles": [
         "deep_low_block",
-        "compact_532",
         "direct_counter"
       ],
-      "shortLabel": "lav blokk og én sjanse",
+      "shortLabel": "kompakt lav blokk fra cupfinalen",
       "pressResistance": 59,
       "defensiveStructure": 90,
       "transitionThreat": 74,
@@ -1562,33 +1561,62 @@
         "intensity": 63
       },
       "strengths": [
-        "du får ballen. Spørsmålet er om du har bredde nok til å bruke den",
-        "stilen er tydelig: kompakt og disiplinert, med én plan: overleve til kampen kan vinnes i én situasjon"
+        "midtbanefemmeren forskyver samlet for å stoppe overtall på kant",
+        "to sentrale midtbanespillere skjermer rom foran stopperne"
       ],
       "weaknesses": [
-        "utsiden av blokken",
-        "siderommene utenfor de tre stopperne"
+        "hurtig variasjon av angrepsside før blokken rekker å forskyve",
+        "farlige balltap på egen halvdel"
       ],
       "vulnerableZones": [
-        "utsiden av blokken",
-        "sonen foran blokken når de ikke har ballen"
+        "rom som oppstår på motsatt side ved rask vending",
+        "egen halvdel ved balltap i oppbyggingen"
       ],
       "dangerZones": [
-        "egen boks på dødball",
-        "bakrommet ditt i det de vinner ballen"
+        "mellomrommet når Sandal får vende opp",
+        "bakrommet når Sellin kan true"
       ],
       "keyBattles": [
-        "din bredde mot deres smale blokk",
-        "ditt restforsvar mot omstillingene"
+        "dine breddeangrep mot deres forskyvning",
+        "ditt oppspill mot deres sentrale skjerming"
       ],
       "pressurePoints": [
-        "bruk hele banens bredde",
-        "dra vingbacken ut og angrip rommet han forlot"
+        "varier angrepsside før blokken rekker å flytte seg",
+        "press ballfører etter at Hødd vinner ballen"
       ],
       "managerHints": [
-        "Du får ballen. Spørsmålet er om du har bredde nok til å bruke den.",
-        "Ett uforsiktig balltap høyt oppe, og kampen er borte."
-      ]
+        "Ikke gjenta samme kantangrep når blokken har tilpasset seg. Veksle angrepsside.",
+        "Sikre oppbyggingen og vær klar til gjenvinning."
+      ],
+      "tacticalBehaviour": {
+        "wideCover": "collective",
+        "centralCover": "collective"
+      },
+      "tacticalBehaviourEvidence": {
+        "era": "2012",
+        "scope": "Modell av den lave forsvarsfasen i cupfinalen 25. november 2012; ikke hele kampen eller hele sesongen.",
+        "interpretation": "Sandal gikk ned til venstre for Aursnes og Nilsen, slik at Aursnes kunne forskyve mot høyre, Nilsen skjerme sentralt og Klock tette rommet mot Latifu. Dette støtter kollektiv bredde- og sentraldekning i den lave blokken. Innleggs- og boksdekning forblir ukjent; analysen beskriver også utligning etter innlegg. Modellens eksisterende tall er beholdt som spillheuristikk.",
+        "sources": [
+          {
+            "title": "Hødd 1-1 Tromsø: Nilsen justerte egen høyreside og vant på straffer",
+            "publisher": "Fotballanalyse / Harald Riisnæs",
+            "url": "https://fotballanalyse.wordpress.com/2012/11/25/hodd-1-1-tromso-nilsen-justerte-egen-hoyreside-og-vant-pa-straffer/",
+            "locator": "Lars Arne Nilsen med mottrekk; Konklusjon"
+          },
+          {
+            "title": "Slik forklarer han cupsuksessen",
+            "publisher": "Stavanger Aftenblad / Sunnmørsposten",
+            "url": "https://www.aftenbladet.no/sport/i/0EeVbA/slik-forklarer-han-cupsuksessen",
+            "locator": "Trenerintervju 29. september 2012: offensiv filosofi og høyt press mot Brann og Haugesund"
+          },
+          {
+            "title": "Hødd vant cupfinalen",
+            "publisher": "Stavanger Aftenblad",
+            "url": "https://www.aftenbladet.no/sport/i/21RBQl/hoedd-vant-cupfinalen",
+            "locator": "Kampreferat: kompakt, hardtarbeidende forsvar"
+          }
+        ]
+      }
     },
     {
       "clubId": "haugesund",
