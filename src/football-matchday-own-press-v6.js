@@ -1298,6 +1298,39 @@ function opponentPhaseContinuity(session, choice, outcome) {
   };
 }
 
+// A documented ball-near counterpress can challenge a newly won ball.
+ // Split the existing regain interval into retained and lost outcomes, rather
+ // than creating a second possession, random draw or xG event.
+function resolveRegainCounterpress(session, shape, profile, pressResult, pressProbability) {
+  if (session.causalRegainCounterpressVersion !== 1 ||
+      shape?.counterpressAfterLoss !== "ball_near_collective") return null;
+  const buildUp = profile?.buildUpScore, balance = profile?.balanceScore;
+  const support = distinctSupport(session.lineupSnapshot,
+    [["DM", "CM"], ["LB", "RB", "WB", "LW", "RW"], ["ST", "AM"]]);
+  if (![buildUp,balance].every(v=>finite(v)&&v>=0&&v<=100) ||
+      !support || !support.every(p=>p.matchScore>=0&&p.matchScore<=100)) return null;
+  const avg = support.reduce((sum,p)=>sum+p.matchScore,0)/support.length;
+  const releaseProbability = clamp(0.62 + (buildUp-65)*0.004 +
+    (balance-65)*0.003 + (avg-65)*0.003,0.12,0.88);
+  const conditionalRoll = clamp(pressResult,0,0.999999999)/pressProbability;
+  const retained = conditionalRoll < releaseProbability;
+  return {
+    status: retained ? "released" : "regain_lost",
+    mechanism: "ball_near_collective",
+    basis: "sourced_pattern_bounded_game_heuristic_not_observed",
+    conditionalReleaseProbability: round3(releaseProbability),
+    retainedRegainProbability: round3(pressProbability*releaseProbability),
+    extraRandomDraws: 0, eventCount: 1,
+    support: support.map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
+    steps: [
+      { action:"Vi vinner ballen", result:"completed" },
+      { action:"Motstanderen presser ballvinneren og begrenser støttepasningene", result:"simulated_available" },
+      { action:"Sentralt støtteledd, bredde og fremre mottaker tilbyr utvei", result:retained?"completed":"blocked" },
+      { action:retained?"Vi beholder ballen og kan angripe":"Motstanderen vinner ballen tilbake", result:"completed" }
+    ]
+  };
+}
+
 export function resolveOwnPressAgainstOpponent(session, {
   pressureRoll = Math.random,
   protectionRoll = Math.random
@@ -1436,7 +1469,10 @@ export function resolveOwnPressAgainstOpponent(session, {
   const protection = regained ? null : Number(protectionRoll());
   if (!regained && !finite(protection)) return null;
   const contained = !regained && clamp(protection, 0, 0.999999999) < containment;
-  const outcome = regained ? "regain" : contained ? "contained" : "escaped";
+  const regainCounterpress = regained
+    ? resolveRegainCounterpress(session, shape, profile, pressResult, pressProbability) : null;
+  const regainLost = regainCounterpress?.status === "regain_lost";
+  const outcome = regainLost ? "regain_lost" : regained ? "regain" : contained ? "contained" : "escaped";
   const directSecondBall = traceDirectSecondBall && !regained ? {
     basis: "simulated_game_heuristic_not_observed",
     opponentSupport: coordinatedSecondBall ? "authored_coordinated" : "unknown",
@@ -1476,7 +1512,7 @@ export function resolveOwnPressAgainstOpponent(session, {
   const secondBallRelease = secondBallReleaseFor(session, directSecondBall);
   const releasedAttack = ["released", "wide_reply"].includes(
     secondBallRelease?.status);
-  const chanceSide = regained || releasedAttack ? "for" :
+  const chanceSide = (regained && !regainLost) || releasedAttack ? "for" :
     outcome === "escaped" ? "against" : null;
   // This REPLACES the route-neutral terminal risk; the existing phase still
   // pays exactly one xG delta before chance generation. Older saved matches,
@@ -1494,7 +1530,7 @@ export function resolveOwnPressAgainstOpponent(session, {
   const routeXgOffset = pricedRoute
     ? terminalFinish?.routeOffsetXg ?? PRESS_EXIT_TERMINAL_XG_OFFSET[pricedRoute]
     : 0;
-  const terminalConcededXg = outcome === "regain" ? -0.01 :
+  const terminalConcededXg = regainLost ? 0 : outcome === "regain" ? -0.01 :
     outcome === "contained" ? 0.02 :
       round3(baseEscapeXg + routeXgOffset);
   const steps = config.steps.map((action, i) => ({
@@ -1511,12 +1547,13 @@ export function resolveOwnPressAgainstOpponent(session, {
     probability: round3(pressProbability),
     containmentProbability: round3(containment),
     routeCoverAdjustment: round3(appliedCover.adjustment),
-    xgDeltaFor: regained ? config.xgFor :
+    xgDeltaFor: regainLost ? 0 : regained ? config.xgFor :
       releasedAttack ? secondBallRelease.xgDeltaFor : 0,
     // The terminal outcome owns this single risk; no separate bonus for
     // stage two or for each player in the pressing unit.
     xgDeltaAgainst: terminalConcededXg,
-    cause: regained ? config.regain :
+    cause: regainLost ? config.regain + " Motstanderens ballnære gjenvinningspress tar ballen tilbake før vi kan etablere angrep." :
+      regained ? config.regain + (regainCounterpress ? " Vi finner støtte og spiller oss fri fra motpresset." : "") :
       (contained
         ? counterplay?.containedCause ||
           "Motstanderen spiller seg ut av første press, men restforsvaret stanser overgangen."
@@ -1560,7 +1597,7 @@ export function resolveOwnPressAgainstOpponent(session, {
           ? " I simuleringen stopper motpresset støttepasningen, og ingen alternativ utvei er verifisert."
           : "") +
       (terminalFinish ? " " + terminalFinish.explanation : ""),
-    steps,
+    steps: regainCounterpress ? [...steps, ...regainCounterpress.steps.slice(1)] : steps,
     counterplay: counterplay && directSecondBall
       ? { ...counterplay, directSecondBall } : counterplay,
     evidence: {
@@ -1580,6 +1617,7 @@ export function resolveOwnPressAgainstOpponent(session, {
       resolvedEscapePathway: counterplay?.pathwayId || "unknown",
       ...(directSecondBall ? { directSecondBall } : {}),
       ...(secondBallRelease ? { secondBallRelease } : {}),
+      ...(regainCounterpress ? { regainCounterpress } : {}),
       ...(terminalFinish ? { terminalFinish } : {}),
       ...(pricedRoute ? { terminalChanceQuality: {
         basis: "bounded_game_heuristic_not_observed",
