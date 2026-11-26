@@ -990,6 +990,16 @@ const documented = [
     source: "https://ffksupporter.net/nyheter/1911-1-plass-fredrikstad-fk/"
   },
   {
+    playerId: "jan_erik_olsen",
+    placeId: "fredrikstad_stadion",
+    evidenceKind: "period_appraisal",
+    playingStyle: "Keeper som viste sterk skuddstopping både for Fredrikstad og Kvik.",
+    strengths: ["shot_stopping"],
+    claim: "Demokraten 1. oktober 1984, side 18, beskriver to gode skuddredninger for Fredrikstad. Halden Arbeiderblad 27. april 1987, side 21, fremhever to redninger fra kort hold for Kvik. Referatene dokumenterer samme ferdighet i to ulike kamper.",
+    source: "https://www.nb.no/items/a24f98bad9e67d9d797a6d51922ea3de",
+    supportingSources: ["https://www.nb.no/items/d99ce7eb3c0687de09ada431625fe40e"]
+  },
+  {
     playerId: "lars_sorlie",
     placeId: "fredrikstad_stadion",
     evidenceKind: "period_appraisal",
