@@ -990,6 +990,16 @@ const documented = [
     source: "https://ffksupporter.net/nyheter/1911-1-plass-fredrikstad-fk/"
   },
   {
+    playerId: "lars_sorlie",
+    placeId: "fredrikstad_stadion",
+    evidenceKind: "period_appraisal",
+    playingStyle: "Forsvarsspiller med stor arbeidsinnsats.",
+    strengths: ["work_rate"],
+    claim: "Sarpen 13. oktober 1982, side 8, omtaler innsatsen på backplass mot Jugoslavia U som typisk for Sørlie. Demokraten 27. september 1982, side 16, vurderer ham som FFK-spilleren som trolig løp mest mot Mjøndalen.",
+    source: "https://www.nb.no/items/2a6593ea16b62cc50450fd593b7d2eed",
+    supportingSources: ["https://www.nb.no/items/882ae9f7d27ca1a3404fe469a0edefef"]
+  },
+  {
     playerId: "jan_erik_audsen",
     placeId: "fredrikstad_stadion",
     evidenceKind: "editorial_appraisal",
