@@ -509,7 +509,7 @@ function resolveAnonymousCreativeAttack({plan,backs,screen,balanceScore,restDefe
   const clamp=v=>Math.max(0.12,Math.min(0.82,v));
   const rounded=v=>Math.round(v*1000)/1000;
   const avg=ps=>ps.reduce((sum,p)=>sum+p.matchScore,0)/ps.length;
-  const presser=screen.slice().sort((a,b)=>b.matchScore-a.matchScore||a.playerId.localeCompare(b.playerId))[0];
+  const presser=screen.slice().sort((a,b)=>Number(b.roleId==="pressing_midfielder")-Number(a.roleId==="pressing_midfielder")||b.matchScore-a.matchScore||a.playerId.localeCompare(b.playerId))[0];
   const cover=screen.find(p=>p.playerId!==presser.playerId&&["balancing_six","holding_midfielder"].includes(p.roleId));
   const coveringUnit=cover?[...backs,cover]:backs;
   // First engagement and remaining central cover are separate. A second
