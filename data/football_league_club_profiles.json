@@ -1577,16 +1577,18 @@
       "managerHints": [
         "Ikke jag kreatøren med hele laget; behold stoppernes dybde.",
         "Stans sene midtbaneløp også når første bakromspasning avverges.",
-        "La kantstøtten hjelpe backen, men behold en sentral sikringsspiller til løpene som driblingen åpner."
+        "La kantstøtten hjelpe backen, men behold en sentral sikringsspiller til løpene som driblingen åpner.",
+        "Ved mottak i mellomrommet: press pasningsspilleren på nytt uten å oppgi stoppernes dybde eller den sene løpsdekningen."
       ],
       "tacticalBehaviour": {
         "attackingRunPattern": "three_space_combination",
-        "wideCreationPattern": "dribble_draw_cover"
+        "wideCreationPattern": "dribble_draw_cover",
+        "centralCreationPattern": "support_striker_through_ball"
       },
       "tacticalBehaviourEvidence": {
         "era": "2008",
         "scope": "Historisk klubbtradisjon fra Jönssons gullag; ingen oppdiktet motstanderellever, fast flanke eller sekvens.",
-        "interpretation": "Samtidige analyser beskriver trussel i tre rom, Gunnarssons pasningsspill, Nannskogs timing, Alanzinhos bevegelighet og Anderssons løp. Kampreferat dokumenterer blant annet avlegg fra Nannskog til Andersson og pasning fra Alanzinho til Andersson. Den generiske sekvensen, valget av svakt dekket rom og sannsynlighetene er spillhypoteser, ikke historiske målinger. Eksisterende numeriske traits beholdes som spillmodell. Nannskog beskrev i 2012 Alanzinhos rolle som spilleren som kunne passere motstanderen og skape rom. Den modellerte driblingen kan trekke sentral sikring mot kanten, men bare ved en entydig valgt og verifisert svak side. Rollebaserte sannsynligheter og den betingede forskyvningen er spillhypoteser, ikke observert sporing eller historiske målinger.",
+        "interpretation": "Samtidige analyser beskriver trussel i tre rom, Gunnarssons pasningsspill, Nannskogs timing, Alanzinhos bevegelighet og Anderssons løp. Kampreferat dokumenterer blant annet avlegg fra Nannskog til Andersson og pasning fra Alanzinho til Andersson. Den generiske sekvensen, valget av svakt dekket rom og sannsynlighetene er spillhypoteser, ikke historiske målinger. Eksisterende numeriske traits beholdes som spillmodell. Nannskog beskrev i 2012 Alanzinhos rolle som spilleren som kunne passere motstanderen og skape rom. Den modellerte driblingen kan trekke sentral sikring mot kanten, men bare ved en entydig valgt og verifisert svak side. Rollebaserte sannsynligheter og den betingede forskyvningen er spillhypoteser, ikke observert sporing eller historiske målinger. Samtidige kilder beskriver Gunnarssons støttearbeid og gjennomspill til Nannskogs timede bakromsløp. En separat betinget pasningsfase etter mottak i mellomrommet modellerer muligheten for gjenvunnet press på ballfører. Ingen fast historisk avleggssekvens, pasningsfrekvens eller navngitt motstanderellever antas.",
         "sources": [
           {
             "title": "Martin er for sentral",
@@ -1629,6 +1631,24 @@
             "publisher": "Stavanger Aftenblad",
             "url": "https://www.aftenbladet.no/sport/i/rAp858/nannskog-ikke-gaa-i-fjoraars-fella",
             "locator": "26. mai 2008: dribling fra venstrekanten forbi flere forsvarere; enkeltkamp, ikke fast flanke."
+          },
+          {
+            "title": "Han skal ta Nannskog på farten",
+            "publisher": "Stavanger Aftenblad",
+            "url": "https://www.aftenbladet.no/lokalt/i/0rVag/han-skal-ta-nannskog-paa-farten",
+            "locator": "20. oktober 2007: Nannskog beskriver bakromsløpene og Gunnarssons presise pasninger."
+          },
+          {
+            "title": "Stabæk fortsetter å imponere",
+            "publisher": "Dagsavisen",
+            "url": "https://www.dagsavisen.no/sport/stabaek-fortsetter-a-imponere/4240508",
+            "locator": "1. juni 2008: Gunnarsson spiller fri en bakromsløpende Nannskog mot Fredrikstad."
+          },
+          {
+            "title": "Stylish Stabæk delight Norway's neutrals",
+            "publisher": "UEFA",
+            "url": "https://www.uefa.com/news-media/news/01cd-0f84dd311b77-d0895467f445-1000--stylish-stab%C3%A6k-delight-norway-s-neutrals/",
+            "locator": "2008: Nannskogs eksplosive hurtighet og Gunnarssons støttearbeid."
           }
         ]
       }
