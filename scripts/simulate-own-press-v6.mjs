@@ -1519,4 +1519,58 @@ try{
   assert.equal(advanceMatchClock({...godsetSeed,causalOpponentSwitchCrossVersion:undefined}).timeline[0].tacticalPhase,undefined);
 }finally{Math.random=godsetRandom;}
 
+// A contained cross can release a counter only with actual supporting roles.
+const crossRecoveryLineup=glimtLineup.map(p=>p.position==="ST"?{...p,roleId:"channel_runner"}:p);
+const crossRecoveryFixture={...godsetFixture,causalOpponentCrossRecoveryVersion:1,
+  lineupSnapshot:crossRecoveryLineup,tacticSnapshot:{id:"wide_fast_433",defensiveLine:"medium",tempo:"fast"}};
+const crossRelease=(draw,changes={})=>resolveOpponentSwitchCrossSequence({...crossRecoveryFixture,...changes},{rng:()=>draw});
+const crossReleased=crossRelease(0.3),crossHeld=crossRelease(0.4);
+assert.equal(crossReleased.status,"counterattack");
+assert.equal(crossReleased.side,"for");
+assert.equal(crossReleased.probability,0.195);
+assert.equal(crossReleased.xgDeltaFor,0.06);
+assert.equal(crossReleased.xgDeltaAgainst,-0.02);
+assert.equal(crossReleased.evidence.crossRecovery.conditionalReleaseProbability,0.53);
+assert.equal(crossReleased.evidence.crossRecovery.unconditionalCounterProbability,0.138);
+assert.equal(crossReleased.evidence.crossRecovery.extraRandomDraws,0);
+assert.equal(crossReleased.evidence.eventCount,1);
+assert.equal(crossReleased.evidence.randomDraws,1);
+assert.equal(crossRelease(0.1).status,"breakthrough");
+assert.equal(crossRelease(0.1).evidence.crossRecovery,undefined);
+assert.equal(crossRelease(0.6).status,"wide_contained");
+assert.equal(crossRelease(0.6).evidence.crossRecovery,undefined);
+assert.equal(crossHeld.status,"box_contained");
+assert.equal(crossHeld.xgDeltaFor,0);
+assert.equal(crossRelease(0.3,{causalOpponentCrossRecoveryVersion:undefined}).status,"box_contained");
+assert.equal(crossRelease(0.3,{tacticSnapshot:{...crossRecoveryFixture.tacticSnapshot,tempo:"controlled"}}).status,"box_contained");
+assert.equal(crossRelease(0.3,{opponent:{...godsetOpponent,tacticalBehaviour:{...godsetOpponent.tacticalBehaviour,crossRecoveryExposure:undefined}}}).status,"box_contained");
+assert.equal(crossRelease(0.3,{lineupSnapshot:crossRecoveryLineup.map(p=>p.position==="ST"?{...p,roleId:"box_striker"}:p)}).status,"box_contained");
+assert.equal(crossRelease(0.3,{lineupSnapshot:crossRecoveryLineup.map(p=>p.position==="ST"?{...p,matchScore:55}:p)}).evidence.crossRecovery.conditionalReleaseProbability,0.49);
+const crossAnnotated=annotateOpponentRunChances([{side:"against"},{side:"for"},{side:"for"}],crossReleased);
+assert.equal(crossAnnotated.filter(c=>c.tacticalMoment).length,1);
+assert.equal(crossAnnotated[1].tacticalMoment.kind,"cross_recovery_counterattack");
+assert.equal(crossAnnotated[1].tacticalMoment.xgDelta,0.06);
+assert.equal(annotateOpponentRunChances([],crossReleased).length,0);
+let crossRecoverySeed;
+for(let i=0;i<3000;i++){
+  const s={...crossRecoveryFixture,id:"godset-cross-recovery-"+i};
+  if(crossRelease(highPressPhaseRoll(s,"0:opponent-switch-cross")).status==="counterattack"){crossRecoverySeed=s;break;}
+}
+assert.ok(crossRecoverySeed);
+const crossRecoveryRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(crossRecoverySeed),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.status,"counterattack");
+  assert.equal(period.tacticalPhase.situation,"opponent_switch_cross");
+  assert.equal(period.tacticalXg,undefined);
+  for(const side of ["for","against"]){
+    assert.equal(Math.round((period.expectedGoals[side]-period.baselineExpectedGoals[side])*100)/100,period.tacticalPhase[side==="for"?"xgDeltaFor":"xgDeltaAgainst"]);
+  }
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.ok(played.minuteLog.filter(c=>c.tacticalMoment).length<=1);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(crossRecoverySeed))).timeline[0].tacticalPhase,period.tacticalPhase);
+  assert.equal(advanceMatchClock({...crossRecoverySeed,causalOpponentCrossRecoveryVersion:undefined}).timeline[0].tacticalPhase.status,"box_contained");
+}finally{Math.random=crossRecoveryRandom;}
+
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
