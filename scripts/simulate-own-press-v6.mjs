@@ -1,6 +1,6 @@
 // Deterministic causal pressing: high press, mid-block trap, counterpress and escapes.
 import assert from "node:assert/strict";
-import { resolveOpponentRunSequence, annotateOpponentRunChances } from "../src/football-matchday-sequence-v8.js";
+import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances } from "../src/football-matchday-sequence-v8.js";
 import { readFileSync } from "node:fs";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances }
   from "../src/football-matchday-own-press-v6.js";
@@ -1465,5 +1465,58 @@ try{
     assert.equal(Math.round((period.expectedGoals.for-period.baselineExpectedGoals.for)*100)/100,period.tacticalPhase.xgDeltaFor);
   }
 }finally{Math.random=workloadRandom;}
+
+// Godset's switch-to-cross attack: distinct wide and box gates, one roll.
+const godsetOpponent = {...leagueProfiles.find(p=>p.clubId==="stromsgodset"),id:"stromsgodset",strength:72};
+const godsetFixture = session("wide_fast_433",{
+  causalOpponentSwitchCrossVersion:1,opponent:godsetOpponent,
+  lineupSnapshot:glimtLineup,tacticSnapshot:{id:"wide_fast_433",defensiveLine:"medium"}
+});
+const godsetCross = (draw,changes={})=>resolveOpponentSwitchCrossSequence({...godsetFixture,...changes},{rng:()=>draw});
+const godsetChance=godsetCross(0.1),godsetBox=godsetCross(0.3),godsetWide=godsetCross(0.6);
+assert.equal(godsetChance.status,"breakthrough");
+assert.equal(godsetBox.status,"box_contained");
+assert.equal(godsetWide.status,"wide_contained");
+assert.equal(godsetChance.probability,0.195);
+assert.equal(godsetChance.evidence.crossProbability,0.456);
+assert.equal(godsetChance.evidence.conditionalBoxProbability,0.428);
+assert.equal(godsetChance.xgDeltaAgainst,0.07);
+assert.equal(godsetBox.xgDeltaAgainst,-0.02);
+assert.equal(godsetWide.xgDeltaAgainst,-0.03);
+assert.equal(godsetChance.evidence.eventCount,1);
+assert.equal(godsetChance.evidence.randomDraws,1);
+assert.equal(godsetChance.evidence.targetFlank,null);
+const godsetWeakWide=godsetCross(0.1,{lineupSnapshot:glimtLineup.map(p=>["LB","RB"].includes(p.position)?{...p,matchScore:55}:p)});
+const godsetWeakBox=godsetCross(0.1,{lineupSnapshot:glimtLineup.map(p=>p.position==="CB"?{...p,matchScore:55}:p)});
+assert.equal(godsetWeakWide.evidence.crossProbability,0.536);
+assert.equal(godsetWeakWide.evidence.conditionalBoxProbability,0.428);
+assert.equal(godsetWeakBox.evidence.crossProbability,0.456);
+assert.equal(godsetWeakBox.evidence.conditionalBoxProbability,0.508);
+assert.equal(godsetCross(0.1,{causalOpponentSwitchCrossVersion:undefined}),null);
+assert.equal(godsetCross(0.1,{lineupSnapshot:glimtLineup.filter(p=>p.position!=="LB")}),null);
+assert.equal(godsetCross(0.1,{opponent:{...godsetOpponent,tacticalBehaviour:{}}}),null);
+assert.equal(godsetCross(NaN),null);
+assert.equal(annotateOpponentRunChances([{side:"against"},{side:"against"}],godsetChance).filter(c=>c.tacticalMoment).length,1);
+assert.equal(annotateOpponentRunChances([{side:"against"}],godsetBox)[0].tacticalMoment,undefined);
+assert.equal(annotateOpponentRunChances([],godsetChance).length,0);
+let godsetSeed;
+for(let i=0;i<3000;i++){
+  const s={...godsetFixture,id:"godset-cross-"+i};
+  if(godsetCross(highPressPhaseRoll(s,"0:opponent-switch-cross")).status==="breakthrough"){godsetSeed=s;break;}
+}
+assert.ok(godsetSeed);
+const godsetRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(godsetSeed),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"opponent_switch_cross");
+  assert.equal(period.tacticalPhase.status,"breakthrough");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,period.tacticalPhase.xgDeltaAgainst);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.ok(played.minuteLog.filter(c=>c.tacticalMoment).length<=1);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(godsetSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
+  assert.equal(advanceMatchClock({...godsetSeed,causalOpponentSwitchCrossVersion:undefined}).timeline[0].tacticalPhase,undefined);
+}finally{Math.random=godsetRandom;}
 
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
