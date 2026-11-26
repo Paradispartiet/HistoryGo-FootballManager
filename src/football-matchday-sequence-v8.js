@@ -767,7 +767,8 @@ export function resolveOpponentFullbackOverlap(session,{rng=Math.random}={}){
     ?vikingShortCombinationUnits(session.lineupSnapshot,backs,balanceScore,restDefenseScore):null;
   // Only when both alternatives have verified defending units. One draw
   // chooses the route and its outcome; 40% is a gameplay assumption.
-  const shortWeight=shortUnits?0.4:0;
+  const preference=session.causalOpponentAttackAdaptationVersion===1?session.opponentAttackRoutePreference:null;
+  const shortWeight=shortUnits?(preference==="short_combination"?0.7:preference==="fullback_overlap"?0.15:0.4):0;
   if(shortUnits&&rawRoll<shortWeight)return resolveVikingShortCombination(planId,shortUnits,rawRoll/shortWeight,shortWeight);
   const roll=(rawRoll-shortWeight)/(1-shortWeight);
   const available=roll<overlap,success=available&&roll<overlap*finish;
