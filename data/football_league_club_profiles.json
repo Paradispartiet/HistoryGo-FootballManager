@@ -214,15 +214,15 @@
     {
       "clubId": "valerenga",
       "styleName": "Bohemene",
-      "tacticalSchool": "Offensivt spill båret av personligheter",
-      "era": "1965–1984",
-      "style": "Offensivt og dynamisk — midtbanen dras med i angrepene og trykket på motstanderen er konstant",
-      "historicalNote": "Vålerenga fikk kallenavnet «Bohemene» for de fargerike spillertypene og den offensive spillestilen: farlige angrep og konstant press på motstanderen. Angrepet går gjennom midtbanen, ikke utenom den, og hurtig ballsirkulasjon skal skape rommene. Klubben er tuftet på Oslos østkant, og viljen er aldri langt unna — men tradisjonen er offensiv fotball, ikke kynisk fotball.",
-      "inPossessionShape": "4-4-2 der begge indreløpere går med i angrepet",
-      "outOfPossessionShape": "4-4-2 med to spisser som setter trykket",
-      "defensiveBlock": "Middels til høy blokk",
-      "buildUpStyle": "Hurtig ballsirkulasjon gjennom midtbanen",
-      "attackingStyle": "Mange spillere framover, løp i bakrom og individuelle avgjørelser",
+      "tacticalSchool": "Bohemtradisjon og Bengtssons organiserte 4-4-2",
+      "era": "1965 · 1980–1981 · Bengtsson 1983–1984",
+      "style": "Teknisk og kreativ bohemtradisjon; i 1983–1984 mer strukturert soneforsvar, press på ballfører og innøvde oppspill",
+      "historicalNote": "Bohemene tok seriegull i 1965 med Anton Ploderer som trener. Leif Eriksen ledet et fornyet lag til cupgull i 1980 og seriegull i 1981. Gunder Bengtsson vant serien i 1983 og 1984 med en annerledes filosofi: soneforsvar, press, sikring og sideforskyvning, samt innøvde oppspill og bevegelser. Klubbens 4-4-2 er dokumentert i seriepremieren mot Viking 1. mai 1983, ikke som fast formasjon for hele bohemperioden. De eldre numeriske spillverdiene og matchup-tokens er foreløpig beholdt som eksisterende spillmodell, ikke historiske målinger av Bengtssons lag.",
+      "inPossessionShape": "4-4-2 under Bengtsson i dokumentert kamp i 1983; tidligere bohemers formasjon ikke fastslått",
+      "outOfPossessionShape": "Bengtssons soneforsvar med press, sikring og sideforskyvning; eksakt presshøyde ikke fastslått",
+      "defensiveBlock": "Organisert soneforsvar (1983–1984); blokkens høyde ikke dokumentert",
+      "buildUpStyle": "Bengtsson: innøvde oppspill og lengre pasninger; tidligere bohemer: improvisasjon",
+      "attackingStyle": "Innøvde bevegelser og timing under Bengtsson, teknisk kreativitet i bohemperioden",
       "tempo": "Høyt",
       "riskLevel": "high",
       "baseStyleId": "high_press_opponent",
@@ -247,35 +247,67 @@
         "intensity": 76
       },
       "strengths": [
-        "to spisser setter trykket og en midtbane som følger med opp",
-        "enkeltspillere som avgjør uten at systemet må gjøre jobben først"
+        "teknisk kreativitet og samspill i bohemperioden",
+        "organisert press, sikring og sideforskyvning under Bengtsson"
       ],
       "weaknesses": [
-        "mange framover betyr få igjen",
-        "strukturen er underordnet initiativet"
+        "Bengtsson påpekte for store avstander i seriepremieren 1983; ikke en målt generell svakhet",
+        "tidligere bohemlag kunne variere betydelig i prestasjon"
       ],
       "vulnerableZones": [
-        "restforsvaret når indreløperne er høye",
-        "siderommene bak backene"
+        "mulige rom mellom leddene hvis laget strekkes; situasjonsbetinget"
       ],
       "dangerZones": [
-        "mellomrommet foran stopperne dine",
-        "bakrommet på hurtige vendinger"
+        "innøvde oppspill og bevegelser; ingen fast angrepskorridor dokumentert"
       ],
       "keyBattles": [
-        "din sekser mot deres to indreløpere",
-        "ditt restforsvar mot omstillingene"
+        "ballfører mot press og sikring",
+        "vår evne til å spille gjennom eller rundt soneforsvaret"
       ],
       "pressurePoints": [
-        "vinn ballen når midtbanen deres er høy",
-        "flytt spillet dit spissene nettopp jaget fra"
+        "undersøk avstanden mellom leddene",
+        "unngå å anta at organisert soneforsvar alltid gir samme pasningsrom"
       ],
       "managerHints": [
-        "Tør du holde ballen, gir de deg rommet bakover.",
-        "Stopper du ballsirkulasjonen deres, stopper hele laget."
+        "Flytt ballen for å utfordre sideforskyvningen.",
+        "Se etter rom mellom leddene når laget strekkes; ikke anta en fast svak flanke."
       ],
       "styleBasis": "tradisjon",
-      "shortLabel": "bohemene · offensivt trykk"
+      "shortLabel": "bohemtradisjon · organisert soneforsvar",
+      "tacticalBehaviour": {
+        "pressCoordination": "collective"
+      },
+      "tacticalBehaviourEvidence": {
+        "era": "1983–1984",
+        "scope": "Bengtssons organiserte soneforsvar, ikke bohemlaget i 1965, presshøyde ved avspark, bestemt pasningskorridor eller moderne VIF.",
+        "interpretation": "Klubbhistorien beskriver innøvd press på ballfører, sikring og sideforskyvning; dette støtter kollektiv koordinasjon, ikke fast sentral eller bred pasningsdekning. Aftenpostens samtidige kampreferat oppgir 4-4-2 mot Viking 1. mai 1983 og gjengir Bengtssons kommentar om for store avstander i den kampen. Retrospektiv omtale beskriver lengre pasninger, men ikke et bestemt direkte utspill mot høypress. Ingen pressEscapeRoute, passingLaneCover, presshøyde eller nye tall utledes. Eksisterende matchup-tokens og numeriske traits er eldre spillmodellantakelser, ikke bekreftet av kildene.",
+        "sources": [
+          {
+            "title": "Dette er Vålerenga!",
+            "publisher": "Vålerenga Fotball",
+            "url": "https://www.vif-fotball.no/historie/var-stolte-histore",
+            "locator": "1980–1985 Vålerengas gullalder: Eriksen og Bengtssons press, sikring, sideforskyvning og faste oppspill."
+          },
+          {
+            "title": "Vår stolte historie: Dette er Vålerenga!",
+            "publisher": "Vålerenga Fotball",
+            "url": "https://www.vif-fotball.no/om-klubben/var-stolte-histore-ny",
+            "locator": "Bohemperioden, seriegullet 1965 under Anton Ploderer."
+          },
+          {
+            "title": "«Detta ække Vålenga»",
+            "publisher": "Aftenposten",
+            "url": "https://www.aftenposten.no/oslo/i/opAB0/detta-aekke-vaalenga",
+            "locator": "Kontrasten mellom bohemenes improvisasjon og Bengtssons rette linjer, flate firere og lengre pasninger."
+          },
+          {
+            "title": "Målles kamp som huskes / Fornøyd med «premiéren»",
+            "publisher": "Aftenposten, 2. mai 1983",
+            "url": "https://img6.custompublish.com/getfile.php/1999983.1276.recyxxxsdd/Aftenposten%2B02.05.1983.pdf?return=www.sjaanjo.no",
+            "locator": "Sportsbilaget, Viking–Vålerengen 0–0, lagoppstilling 4-4-2 og trenerens kommentar. Tilgjengelig som maskinlest avisarkiv; sidebildet kunne ikke kontrolleres."
+          }
+        ]
+      }
     },
     {
       "clubId": "molde",
