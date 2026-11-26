@@ -1,5 +1,6 @@
 // Deterministic tests: attack compact low blocks before event / xG generation.
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { resolveCompactBlockAttack, annotateCompactBlockChances }
   from "../src/football-matchday-compact-block-v6.js";
 import { resolveHighPressBuildUp, highPressPhaseRoll }
@@ -74,6 +75,31 @@ const protectedLane = resolve(session("wide_fast_433", {
 assert.ok(protectedLane.probability < normal.probability,
   "documented collective cover should defeat some wide combinations");
 assert.equal(protectedLane.evidence.cover, "collective");
+
+// Real league profile: Hødd's documented 2012 cup-final low-block phase.
+const leagueProfiles = JSON.parse(readFileSync(new URL("../data/football_league_club_profiles.json", import.meta.url), "utf8")).profiles;
+const hodd = leagueProfiles.find(p => p.clubId === "hodd");
+assert.ok(hodd?.tacticalBehaviourEvidence?.sources?.length >= 2);
+assert.equal(hodd.outOfPossessionShape.includes("4-5-1"), true);
+assert.equal(hodd.matchupStyles.includes("compact_532"), false);
+const hoddOpponent = { ...hodd, id: hodd.clubId, strength: 72 };
+const { tacticalBehaviour: _hoddCover, ...unknownHodd } = hoddOpponent;
+for (const plan of ["wide_fast_433", "target_man_focus"]) {
+  const known = resolve(session(plan, { opponent: hoddOpponent }), 0.42);
+  const unknown = resolve(session(plan, { opponent: unknownHodd }), 0.42);
+  assert.equal(unknown.probability, 0.514);
+  assert.equal(known.probability, 0.334);
+  assert.equal(unknown.status, "breakthrough");
+  assert.equal(known.status, "repelled");
+  assert.equal(known.evidence.cover, "collective");
+  assert.equal(known.xgDeltaFor, 0);
+  assert.equal(known.xgDeltaAgainst, 0, "sound rest defence protects against the counter");
+  assert.equal(resolve(session(plan, { opponent: hoddOpponent }), 0.01).status, "breakthrough");
+}
+const knownBox = resolve(session("crossing_box_presence", { opponent: hoddOpponent }), 0.42);
+const unknownBox = resolve(session("crossing_box_presence", { opponent: unknownHodd }), 0.42);
+assert.equal(knownBox.evidence.cover, "unknown");
+assert.equal(knownBox.probability, unknownBox.probability, "wide/central cover must not infer box cover");
 
 const poor = resolve(session("wide_fast_433", {
   lineupSnapshot: lineup.map((p) => ["RW", "LW", "LB", "RB", "CB", "DM"].includes(p.position)
