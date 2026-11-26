@@ -377,6 +377,28 @@
         "De venter på ditt ene feilsteg — hold restforsvaret."
       ],
       "styleBasis": "tradisjon",
+      "tacticalBehaviour": {
+        "highPressEscapeRoute": "direct"
+      },
+      "tacticalBehaviourEvidence": {
+        "era": "2023",
+        "scope": "Viking–Rosenborg 2–0 i NM, mars 2023. Modell av direkte utspill mot høyt press, ikke generell påstand om alle Viking-lag eller en fast oppspillsstrategi.",
+        "interpretation": "Viking brukte lave backer og pasninger bak for å lokke fram presset, før keeper eller stopper slo mot spissen. Kantene og indreløperne posisjonerte seg for å vinne andreballen. Dette støtter et direkte utspill i høypressfasen, ikke økt kort oppbyggingsspill eller oppdiktet timing. Ingen påstand om spesifikk avslutning eller fast suksessrate.",
+        "sources": [
+          {
+            "title": "Taktisk analyse: Viking – Rosenborg 2-0",
+            "publisher": "Fotballdykket / Anders Romsøy Johansson",
+            "url": "https://fotballdykket.wordpress.com/2023/03/15/taktisk-analyse-viking-rosenborg-2-0/",
+            "locator": "Kontrollerte kaoset: lav backposisjon, direkte utspill mot D’Agostino og strukturen rundt andreballen."
+          },
+          {
+            "title": "Viking FK Tactics 2023/2024 – The Key Tactical Points That See Them Top Of The Eliteserien",
+            "publisher": "Total Football Analysis / Alejandro Paz",
+            "url": "https://totalfootballanalysis.com/article/viking-fk-the-key-tactical-points-that-see-them-top-of-the-eliteserien-scout-report-tactical-analysis",
+            "locator": "Dynamics to occupy half-spaces: automatismer mot høyt press; ikke belegg for at direkte utspill er eneste rute."
+          }
+        ]
+      },
       "shortLabel": "korte avstander, direkte når ballen vinnes"
     },
     {
