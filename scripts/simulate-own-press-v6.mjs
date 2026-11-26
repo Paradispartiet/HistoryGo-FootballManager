@@ -2087,4 +2087,38 @@ try{
   assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(stabakSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
 }finally{Math.random=stabakRandom;}
 
+// A wide dribble can displace central cover without extra shots or draws.
+const stabakDribbleFixture={...stabakFixture,causalOpponentDribbleDisplacementVersion:1,
+  lineupSnapshot:glimtLineup.map(p=>p.position==="LW"?{...p,matchScore:55}:p)};
+const stabakDribble=(roll,changes={})=>resolveOpponentThreeSpaceCombination({...stabakDribbleFixture,...changes},{rng:()=>roll});
+const dribblePull=stabakDribble(0.02);
+assert.equal(dribblePull.evidence.centralCoverDisplaced,true);
+assert.equal(dribblePull.evidence.displacedCoverId,dribblePull.evidence.lateRunnerCoverId);
+assert.equal(dribblePull.evidence.targetFlank,"left");
+assert.ok(dribblePull.evidence.conditionalLateRunnerIfDisplaced>dribblePull.evidence.conditionalLateRunnerProbability);
+assert.equal(dribblePull.evidence.conditionalDepthProbability,stabakWide.evidence.conditionalDepthProbability);
+const dribbleUndedicated=stabakDribble(0.02,{lineupSnapshot:stabakDribbleFixture.lineupSnapshot.map(p=>p.position==="DM"?{...p,roleId:"deep_playmaker"}:p)});
+assert.ok(dribbleUndedicated.evidence.conditionalDisplacementProbability>dribblePull.evidence.conditionalDisplacementProbability);
+const dribbleHeld=stabakDribble(0.35);
+assert.equal(dribbleHeld.evidence.centralCoverDisplaced,false);
+assert.equal(dribbleHeld.evidence.displacedCoverId,null);
+const dribbleContained=stabakDribble(0.99);
+assert.equal(dribbleContained.status,"creation_contained");
+assert.equal(dribbleContained.evidence.centralCoverDisplaced,false);
+assert.equal(stabakDribble(0.02,{lineupSnapshot:glimtLineup}).evidence.wideCreationPattern,undefined);
+assert.deepEqual(stabakDribble(0.1,{causalOpponentDribbleDisplacementVersion:undefined}),stabakWide);
+let stabakDribbleDraws=0;
+resolveOpponentThreeSpaceCombination(stabakDribbleFixture,{rng:()=>{stabakDribbleDraws++;return 0.02;}});
+assert.equal(stabakDribbleDraws,1);
+let displacedLateSeen=false;
+for(let n=0;n<1000;n++){
+  const phase=stabakDribble(n/1000);
+  if(phase.status==="late_runner_breakthrough"&&phase.evidence.centralCoverDisplaced){
+    displacedLateSeen=true;assert.equal(phase.xgDeltaAgainst,0.05);
+    assert.equal(annotateOpponentThreeSpaceChances(lskChances,phase).filter(c=>c.tacticalMoment).length,1);
+  }
+}
+assert.ok(displacedLateSeen);
+assert.deepEqual(resolveOpponentThreeSpaceCombination(JSON.parse(JSON.stringify(stabakDribbleFixture)),{rng:()=>0.02}),dribblePull);
+
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
