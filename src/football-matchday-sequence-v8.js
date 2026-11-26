@@ -3,6 +3,7 @@
 // Do not add a second motor, RNG, chance or static sequenceEdge modifier.
 // This is a bounded deterministic gameplay hypothesis, NOT tracking data.
 import { TACTICAL_SEQUENCES } from "./football-tactical-sequences.js";
+import { tirednessOf } from "./football-substitutions.js";
 
 const finite = x => typeof x === "number" && Number.isFinite(x);
 const ATTACK = new Set(["in_possession", "transition_attack"]);
@@ -136,7 +137,39 @@ const COORDINATED_RUNS = Object.freeze([
   "Den offensive backen gir bredde og overlapp; flere løp truer boksen"
 ]);
 
-export function resolveOpponentRunSequence(session, { rng = Math.random } = {}) {
+// Reuse the substitution engine's freshness/minutes curve. Only actual played
+// periods count towards the opponent's collective workload. This is a bounded
+// gameplay model of repeated attempts, not measured opponent fitness.
+function opponentRunFatigue(session, support, minute) {
+  if (session.causalOpponentRunFatigueVersion !== 1 ||
+      !finite(minute) || minute < 0 || minute > 90) return null;
+  const verified = support.every(p => finite(p.startFreshness) &&
+    p.startFreshness >= 0 && p.startFreshness <= 100 &&
+    finite(p.onFrom) && p.onFrom >= 0 && p.onFrom <= minute);
+  const tiredness = verified
+    ? support.map(p => ({ playerId: p.playerId, minutes: minute - p.onFrom,
+        startFreshness: p.startFreshness, tiredness: tirednessOf(p, minute) }))
+    : [];
+  const defendingFatigue = verified
+    ? tiredness.reduce((sum, p) => sum + p.tiredness, 0) / tiredness.length * 0.12
+    : 0;
+  const previous = Array.isArray(session.timeline) ? session.timeline : [];
+  let opponentRunLoad = 0;
+  for (const period of previous) {
+    const phase = period?.tacticalPhase;
+    if (!finite(period?.range?.to) || period.range.to > minute ||
+        phase?.situation !== "opponent_coordinated_runs" ||
+        phase.evidence?.opponentPattern !== "coordinated_433_breakthrough") continue;
+    if (phase.status === "breakthrough") opponentRunLoad += 0.02;
+    else if (phase.status === "contained") opponentRunLoad += 0.01;
+  }
+  opponentRunLoad = Math.min(0.06, opponentRunLoad);
+  return { minute, defendingEvidence: verified ? "known" : "unknown",
+    defendingFatigue, opponentRunLoad, supportingPlayers: tiredness,
+    basis: "simulated_repeat_workload_and_existing_match_tiredness" };
+}
+
+export function resolveOpponentRunSequence(session, { rng = Math.random, minute } = {}) {
   if (session?.causalOpponentRunVersion !== 1 ||
       session.opponent?.tacticalBehaviour?.attackingRunPattern !== "coordinated_433_breakthrough" ||
       !verifiedMatchLineup(session.lineupSnapshot)) return null;
@@ -158,8 +191,10 @@ export function resolveOpponentRunSequence(session, { rng = Math.random } = {}) 
   const floor = Math.min(...support.map(p => p.matchScore));
   // Bounded game heuristic, not an empirical rate. One draw for the complete
   // combination, no individual opponent skill or additional formation penalty.
+  const fatigue = opponentRunFatigue(session, support, minute);
   const probability = Math.max(0.12, Math.min(0.82,
-    0.50 + BREAKTHROUGH_LINE_EXPOSURE[line] -
+    0.50 + BREAKTHROUGH_LINE_EXPOSURE[line] +
+    (fatigue?.defendingFatigue || 0) - (fatigue?.opponentRunLoad || 0) -
     (avg - 65) * 0.004 - (floor - 65) * 0.001 -
     (Math.min(...metrics) - 65) * 0.003));
   const draw = rng();
@@ -190,6 +225,7 @@ export function resolveOpponentRunSequence(session, { rng = Math.random } = {}) 
       balanceScore: metrics[0], restDefenseScore: metrics[1], weakestCoverFit: floor,
       supportingPlayers: support.map(({playerId, roleId, position, matchScore}) =>
         ({playerId, roleId, position, matchScore})),
+      ...(fatigue ? { fatigue } : {}),
       eventCount: 1, randomDraws: 1 }
   };
 }
