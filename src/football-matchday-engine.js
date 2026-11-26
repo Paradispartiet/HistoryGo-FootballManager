@@ -9,7 +9,7 @@ import { resolveTurnoverTransition } from "./football-matchday-turnover-v6.js";
 import { resolveCompactBlockAttack, annotateCompactBlockChances } from "./football-matchday-compact-block-v6.js";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances, getManagerPressCounterOptions } from "./football-matchday-own-press-v6.js";
 import { resolveGameControlPhase, annotateGameControlChances } from "./football-matchday-control-v6.js";
-import { resolveAuthoredSequencePeriod, annotateAuthoredSequenceChances, resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances } from "./football-matchday-sequence-v8.js";
+import { resolveAuthoredSequencePeriod, annotateAuthoredSequenceChances, resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances } from "./football-matchday-sequence-v8.js";
 import {
   applyOpponentAdjustment,
   createPlanChange,
@@ -1846,6 +1846,7 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     // New matches can resolve a sourced switch-to-cross attack pattern.
     causalOpponentSwitchCrossVersion: 1,
     causalOpponentZonalShiftVersion: 1,
+    causalOpponentRehearsedOutletVersion: 1,
     // New matches can release a counterattack after a sourced cross exposure.
     causalOpponentCrossRecoveryVersion: 1,
     // In-match fatigue uses the current match clock and existing freshness model.
@@ -2277,6 +2278,8 @@ export function advanceMatchClock(session) {
         rng: () => highPressPhaseRoll(session, played + ":opponent-switch-cross")
       }) || resolveOpponentZonalShift(session, {
         rng: () => highPressPhaseRoll(session, played + ":opponent-zonal-shift")
+      }) || resolveOpponentRehearsedOutlet(session, {
+        rng: () => highPressPhaseRoll(session, played + ":opponent-rehearsed-outlet")
       }) : null;
   const phase = transition ? {
     ...buildUpPhase, transition, xgDeltaAgainst: transition.xgDeltaAgainst
@@ -2333,6 +2336,8 @@ export function advanceMatchClock(session) {
     ? annotateCompactBlockChances(generatedChances, tacticalPhase)
     : tacticalPhase?.situation === "our_press_vs_opponent_build_up"
       ? annotateOwnPressChances(generatedChances, tacticalPhase)
+      : tacticalPhase?.situation === "opponent_rehearsed_outlet"
+        ? annotateOpponentRehearsedOutletChances(generatedChances, tacticalPhase)
       : tacticalPhase?.situation === "opponent_zonal_shift"
         ? annotateOpponentZonalShiftChances(generatedChances, tacticalPhase)
       : ["opponent_coordinated_runs", "opponent_switch_cross"].includes(tacticalPhase?.situation)
