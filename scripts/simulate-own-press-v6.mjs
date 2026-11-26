@@ -1342,4 +1342,45 @@ try{
   assert.equal(specialised.timeline[0].tacticalPhase.situation,"our_press_vs_opponent_build_up","specialist phase retains priority");
 }finally{Math.random=runRandom;}
 
+// Late-match fatigue: use the same tiredness curve as substitutions.
+const fatigueLineup = glimtLineup.map(p => ({...p,startFreshness:100,onFrom:0}));
+const fatigueFixture = {...runFixture,causalOpponentRunFatigueVersion:1,lineupSnapshot:fatigueLineup,timeline:[]};
+const fatigueRun = (minute,changes={}) => resolveOpponentRunSequence({...fatigueFixture,...changes},{minute,rng:()=>0.6});
+const runPeriod = (status,to) => ({range:{to},tacticalPhase:{situation:"opponent_coordinated_runs",status,evidence:{opponentPattern:"coordinated_433_breakthrough"}}});
+assert.equal(fatigueRun(0).probability,0.552);
+assert.equal(fatigueRun(68).probability,0.597);
+const tiredRun = fatigueRun(68,{lineupSnapshot:fatigueLineup.map(p=>({...p,startFreshness:40}))});
+assert.equal(tiredRun.probability,0.669);
+assert.equal(tiredRun.status,"breakthrough");
+const repeatRun = fatigueRun(68,{timeline:[runPeriod("breakthrough",23),runPeriod("contained",45)]});
+assert.equal(repeatRun.probability,0.567);
+assert.equal(repeatRun.status,"contained");
+assert.equal(repeatRun.evidence.fatigue.opponentRunLoad,0.03);
+const freshSubs = fatigueRun(68,{lineupSnapshot:fatigueLineup.map(p=>p.position==="CB"?{...p,playerId:p.playerId+"-sub",onFrom:65}:p)});
+assert.equal(freshSubs.probability,0.579);
+assert.equal(fatigueRun(68,{lineupSnapshot:fatigueLineup.map(p=>({...p,startFreshness:undefined}))}).probability,0.552);
+assert.equal(fatigueRun(68,{causalOpponentRunFatigueVersion:undefined}).probability,0.552);
+assert.equal(fatigueRun(68,{timeline:[runPeriod("breakthrough",90)]}).probability,0.597);
+assert.equal(fatigueRun(90,{timeline:Array.from({length:8},(_,i)=>runPeriod("breakthrough",10+i*10))}).evidence.fatigue.opponentRunLoad,0.06);
+assert.equal(tiredRun.xgDeltaAgainst,0.06);
+assert.equal(repeatRun.xgDeltaAgainst,-0.03);
+assert.equal(tiredRun.evidence.randomDraws,1);
+// Real clock integration: the first played period starts at zero; the
+// subsequent period uses its real start and only completed timeline entries.
+let fatigueClock={...fatigueFixture,id:"eggen-fatigue-clock",events:[{},{},{}]};
+const savedRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  for(let i=0;i<4;i++){
+    fatigueClock=advanceMatchClock(fatigueClock);
+    const period=fatigueClock.timeline[i];
+    assert.equal(period.tacticalPhase.situation,"opponent_coordinated_runs");
+    assert.equal(period.tacticalPhase.evidence.fatigue.minute,period.range.from-1);
+    assert.equal(period.tacticalPhase.evidence.eventCount,1);
+    assert.equal(period.tacticalXg,undefined);
+    assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,
+      period.tacticalPhase.xgDeltaAgainst);
+  }
+}finally{Math.random=savedRandom;}
+
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
