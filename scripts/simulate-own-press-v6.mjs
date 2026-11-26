@@ -1,6 +1,6 @@
 // Deterministic causal pressing: high press, mid-block trap, counterpress and escapes.
 import assert from "node:assert/strict";
-import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances } from "../src/football-matchday-sequence-v8.js";
+import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances } from "../src/football-matchday-sequence-v8.js";
 import { readFileSync } from "node:fs";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances }
   from "../src/football-matchday-own-press-v6.js";
@@ -1685,5 +1685,61 @@ try{
   const zonal=advanceMatchClock({...outletSeed,causalOpponentZonalShiftVersion:1,selectedTacticId:"wide_fast_433",tacticSnapshot:{id:"wide_fast_433",defensiveLine:"medium"}});
   assert.equal(zonal.timeline[0].tacticalPhase.situation,"opponent_zonal_shift");
 }finally{Math.random=outletRandom;}
+
+// LSK: a clearance is not the same as control of the loose ball.
+const lskProfile=leagueProfiles.find(p=>p.clubId==="lillestrom");
+assert.equal(lskProfile.tacticalBehaviour.attackingRunPattern,"direct_duel_second_ball");
+assert.equal(lskProfile.tacticalBehaviour.pressEscapeRoute,undefined);
+const lskFixture=session("midfield_press_trap",{causalOpponentDirectSecondBallVersion:1,
+  opponent:{...lskProfile,id:"lillestrom",strength:72},lineupSnapshot:glimtLineup,
+  tacticSnapshot:{id:"midfield_press_trap",defensiveLine:"medium"}});
+const lskRun=(draw,changes={})=>resolveOpponentDirectSecondBall({...lskFixture,...changes},{rng:()=>draw});
+const lskBoth=lskRun(0.1),lskFirst=lskRun(0.3),lskSecond=lskRun(0.55),lskNeither=lskRun(0.8);
+assert.deepEqual([lskBoth,lskFirst,lskSecond,lskNeither].map(p=>p.status),
+  ["duel_and_second_ball","second_ball_contained","second_ball_recovered","both_contained"]);
+assert.deepEqual([lskBoth,lskFirst,lskSecond,lskNeither].map(p=>p.xgDeltaAgainst),[0.07,-0.03,0.04,-0.03]);
+assert.equal(lskBoth.evidence.firstDuelProbability,0.472);
+assert.equal(lskBoth.evidence.secondBallAfterWonDuelProbability,0.556);
+assert.equal(lskBoth.evidence.secondBallAfterLostDuelProbability,0.316);
+assert.equal(lskBoth.probability,0.429);
+assert.equal(lskSecond.evidence.firstDuelWonByOpponent,false);
+assert.equal(lskSecond.evidence.secondBallWonByOpponent,true);
+const lskWeakBacks=lskRun(0.1,{lineupSnapshot:glimtLineup.map(p=>p.position==="CB"?{...p,matchScore:55}:p)});
+const lskWeakScreen=lskRun(0.1,{lineupSnapshot:glimtLineup.map(p=>["DM","CM"].includes(p.position)?{...p,matchScore:55}:p)});
+assert.ok(lskWeakBacks.evidence.firstDuelProbability>lskBoth.evidence.firstDuelProbability);
+assert.equal(lskWeakBacks.evidence.secondBallAfterLostDuelProbability,lskBoth.evidence.secondBallAfterLostDuelProbability);
+assert.equal(lskWeakScreen.evidence.firstDuelProbability,lskBoth.evidence.firstDuelProbability);
+assert.ok(lskWeakScreen.evidence.secondBallAfterLostDuelProbability>lskBoth.evidence.secondBallAfterLostDuelProbability);
+assert.equal(lskRun(0.1,{causalOpponentDirectSecondBallVersion:undefined}),null);
+assert.equal(lskRun(0.1,{opponent:{...lskFixture.opponent,tacticalBehaviour:{}}}),null);
+assert.equal(lskRun(0.1,{lineupSnapshot:glimtLineup.filter(p=>p.position!=="DM"&&p.position!=="CM")}),null);
+assert.equal(lskRun(NaN),null);
+let lskDraws=0;
+resolveOpponentDirectSecondBall(lskFixture,{rng:()=>{lskDraws++;return 0.55;}});
+assert.equal(lskDraws,1);
+const lskChances=[{side:"for"},{side:"against"},{side:"against"}];
+assert.equal(annotateOpponentDirectSecondBallChances(lskChances,lskSecond).filter(c=>c.tacticalMoment).length,1);
+assert.equal(annotateOpponentDirectSecondBallChances(lskChances,lskSecond)[1].tacticalMoment.kind,"opponent_direct_second_ball");
+assert.equal(annotateOpponentDirectSecondBallChances(lskChances,lskFirst),lskChances);
+assert.deepEqual(annotateOpponentDirectSecondBallChances([],lskBoth),[]);
+let lskSeed;
+for(let i=0;i<3000;i++){
+  const s={...lskFixture,id:"lsk-direct-"+i};
+  if(lskRun(highPressPhaseRoll(s,"0:opponent-direct-second-ball")).status==="second_ball_recovered"){lskSeed=s;break;}
+}
+assert.ok(lskSeed);
+const lskRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(lskSeed),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"opponent_direct_second_ball");
+  assert.equal(period.tacticalPhase.status,"second_ball_recovered");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,period.tacticalPhase.xgDeltaAgainst);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.ok(played.minuteLog.filter(c=>c.tacticalMoment).length<=1);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(lskSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
+  assert.equal(advanceMatchClock({...lskSeed,causalOpponentDirectSecondBallVersion:undefined}).timeline[0].tacticalPhase,undefined);
+}finally{Math.random=lskRandom;}
 
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
