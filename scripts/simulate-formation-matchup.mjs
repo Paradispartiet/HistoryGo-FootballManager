@@ -202,6 +202,26 @@ for (const k of knowledgeData.knowledge) {
   check(after.score - before.score === expected, "RBK: unrelated matchup changed " + k.formationId);
 }
 
+// Horneland's Brann: documented build-up and ball-side overloads change
+// the existing formation calculation, without inventing a press escape.
+const brannLeague = loadJson("data/football_league_club_profiles.json").profiles.find(p => p.clubId === "brann");
+const brannAdded = ["build_from_back","wide_overload"];
+const brannBefore = brannLeague.matchupStyles.filter(token => !brannAdded.includes(token));
+check(brannAdded.every(token=>brannLeague.matchupStyles.includes(token)), "Brann: build-up and overload missing");
+check(brannLeague.tacticalBehaviour.pressCoordination==="collective" &&
+  brannLeague.tacticalBehaviour.passingLaneCover==="central", "Brann: previous pressing evidence lost");
+check(brannLeague.tacticalBehaviour.pressEscapeRoute===undefined &&
+  brannLeague.tacticalBehaviour.highPressEscapeRoute===undefined, "Brann: no invented escape");
+for(const k of knowledgeData.knowledge){
+  const before=evaluateFormationMatchupVsOpponent(k,brannBefore,"Brann");
+  const after=evaluateFormationMatchupVsOpponent(k,brannLeague.matchupStyles,"Brann");
+  const expected=brannAdded.reduce((sum,token)=>sum+Number(k.strongAgainst.includes(token))-Number(k.weakAgainst.includes(token)),0);
+  check(after.score-before.score===expected,"Brann: unexpected matchup effect "+k.formationId);
+  for(const token of brannAdded.filter(token=>k.weakAgainst.includes(token))){
+    check(after.risks.some(r=>r.token===token),"Brann: missing risk "+token+" "+k.formationId);
+  }
+}
+
 // Rapport: lean-matrise (din formasjon i rad, motstander i kolonne).
 const sym = { favourable: "+", balanced: "·", risky: "-" };
 const ids = entries.map((e) => e.formationId);
