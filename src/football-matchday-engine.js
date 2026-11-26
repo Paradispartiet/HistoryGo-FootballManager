@@ -9,7 +9,7 @@ import { resolveTurnoverTransition } from "./football-matchday-turnover-v6.js";
 import { resolveCompactBlockAttack, annotateCompactBlockChances } from "./football-matchday-compact-block-v6.js";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances, getManagerPressCounterOptions } from "./football-matchday-own-press-v6.js";
 import { resolveGameControlPhase, annotateGameControlChances } from "./football-matchday-control-v6.js";
-import { resolveAuthoredSequencePeriod, annotateAuthoredSequenceChances, resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances, annotateOpponentCreativeAttackChances, resolveOpponentFullbackOverlap, annotateOpponentFullbackOverlapChances, annotateOpponentShortCombinationChances } from "./football-matchday-sequence-v8.js";
+import { resolveAuthoredSequencePeriod, annotateAuthoredSequenceChances, resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances, annotateOpponentCreativeAttackChances, resolveOpponentFullbackOverlap, annotateOpponentFullbackOverlapChances, annotateOpponentShortCombinationChances, resolveOpponentThreeSpaceCombination, annotateOpponentThreeSpaceChances } from "./football-matchday-sequence-v8.js";
 import {
   applyOpponentAdjustment,
   createPlanChange,
@@ -1870,6 +1870,7 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     causalOpponentFullbackOverlapVersion: 1,
     causalOpponentShortCombinationVersion: 1,
     causalOpponentAttackAdaptationVersion: 1,
+    causalOpponentThreeSpaceVersion: 1,
     // New matches can release a counterattack after a sourced cross exposure.
     causalOpponentCrossRecoveryVersion: 1,
     // In-match fatigue uses the current match clock and existing freshness model.
@@ -2306,6 +2307,8 @@ export function advanceMatchClock(session) {
         rng: () => highPressPhaseRoll(session, played + ":opponent-zonal-shift")
       }) || resolveOpponentRehearsedOutlet(session, {
         rng: () => highPressPhaseRoll(session, played + ":opponent-rehearsed-outlet")
+      }) || resolveOpponentThreeSpaceCombination(session, {
+        rng: () => highPressPhaseRoll(session, played + ":opponent-three-space")
       }) || resolveOpponentFullbackOverlap(session, {
         rng: () => highPressPhaseRoll(session, played + ":opponent-fullback-overlap")
       }) || resolveOpponentDirectSecondBall(session, {
@@ -2368,6 +2371,8 @@ export function advanceMatchClock(session) {
       ? annotateOwnPressChances(generatedChances, tacticalPhase)
       : tacticalPhase?.situation === "opponent_set_piece"
         ? annotateOpponentSetPieceChances(generatedChances, tacticalPhase)
+      : tacticalPhase?.situation === "opponent_three_space_combination"
+        ? annotateOpponentThreeSpaceChances(generatedChances, tacticalPhase)
       : tacticalPhase?.situation === "opponent_short_combination"
         ? annotateOpponentShortCombinationChances(generatedChances, tacticalPhase)
       : tacticalPhase?.situation === "opponent_fullback_overlap"
