@@ -1204,4 +1204,36 @@ try {
 } finally {
   Math.random = oldRandom;
 }
+// Real league profile: two sourced Glimt outlets, simulated route selection.
+const glimtProfile = JSON.parse(readFileSync(new URL("../data/football_league_club_profiles.json", import.meta.url), "utf8")).profiles.find(p => p.clubId === "bodo_glimt");
+assert.deepEqual(glimtProfile.tacticalBehaviour.pressEscapeCandidateRoutes, ["third_man", "switch_play"]);
+const glimtOpponent = { ...glimtProfile, id: glimtProfile.clubId, strength: 72 };
+const { tacticalBehaviour: _glimtOutlets, ...unknownGlimt } = glimtOpponent;
+const glimtLineup = ["GK","CB","CB","DM","CM","AM","ST","LW","RW","LB","RB"].map((position,i) => ({
+  position, playerId: "glimt-test-" + i, matchScore: 75, matchFitKnown: true,
+  roleId: ({DM:"balancing_six",CM:"pressing_midfielder",CB:"ball_playing_centre_back",LB:"support_fullback",RB:"support_fullback"})[position] || "role_" + position
+}));
+const glimtWeakWide = glimtLineup.map(p => p.position === "LB" ? { ...p, roleId:"overlapping_fullback" } : p);
+const glimtWeakCenter = glimtLineup.map(p => p.position === "CM" ? { ...p, roleId:"deep_playmaker" } : p.position === "LB" ? { ...p, matchScore:70 } : p);
+const glimtRun = (lineupSnapshot, changes = {}, pressure = 0.99, protection = 0.99) =>
+  resolve(session("high_press_343", {
+    opponent: glimtOpponent, lineupSnapshot, causalOpponentRouteAdaptationVersion: 1,
+    causalOpponentSequenceVersion: 1, ...changes
+  }), pressure, protection);
+const glimtWide = glimtRun(glimtWeakWide);
+const glimtCenter = glimtRun(glimtWeakCenter);
+assert.equal(glimtWide.counterplay.pathwayId, "switch_play");
+assert.equal(glimtWide.evidence.opponentRouteAdaptation.candidates.find(p => p.route === "switch_play").targetFlank, "left");
+assert.equal(glimtCenter.counterplay.pathwayId, "third_man");
+assert.equal(glimtWide.probability, 0.405);
+assert.equal(glimtCenter.probability, glimtWide.probability);
+assert.equal(glimtWide.xgDeltaAgainst, 0.06);
+assert.equal(glimtCenter.xgDeltaAgainst, 0.06);
+assert.equal(glimtRun(glimtLineup).evidence.opponentRouteAdaptation.status, "insufficient_or_conflicting_evidence");
+assert.equal(glimtRun(glimtLineup).counterplay, null);
+assert.equal(glimtRun(glimtWeakWide, {opponent:unknownGlimt}).probability, 0.555);
+assert.equal(glimtRun(glimtWeakWide, {causalOpponentRouteAdaptationVersion:undefined}).counterplay, null);
+assert.equal(glimtRun(glimtWeakWide, {}, 0, 0.99).xgDeltaFor, 0.11);
+assert.equal(glimtRun(glimtWeakWide, {}, 0.99, 0).xgDeltaAgainst, 0.02);
+
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
