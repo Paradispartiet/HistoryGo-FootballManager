@@ -2121,4 +2121,36 @@ for(let n=0;n<1000;n++){
 assert.ok(displacedLateSeen);
 assert.deepEqual(resolveOpponentThreeSpaceCombination(JSON.parse(JSON.stringify(stabakDribbleFixture)),{rng:()=>0.02}),dribblePull);
 
+// Separate the support striker's reception from the through-ball release.
+const stabakPairFixture={...stabakFixture,causalOpponentSupportStrikerVersion:1,
+  causalOpponentDribbleDisplacementVersion:1,
+  lineupSnapshot:glimtLineup.map(p=>p.position==="CM"?{...p,matchScore:55}:p)};
+const stabakPair=(roll,changes={})=>resolveOpponentThreeSpaceCombination({...stabakPairFixture,...changes},{rng:()=>roll});
+const pairDepth=stabakPair(0.1),pairLate=stabakPair(0.22),pairBoth=stabakPair(0.3),
+  pairBlocked=stabakPair(0.5),pairNoReceive=stabakPair(0.9);
+assert.deepEqual([pairDepth,pairLate,pairBoth,pairBlocked,pairNoReceive].map(p=>p.status),
+  ["depth_breakthrough","late_runner_breakthrough","both_runs_contained","through_ball_contained","creation_contained"]);
+assert.equal(pairDepth.evidence.centralCreationPattern,"support_striker_through_ball");
+assert.equal(pairDepth.evidence.opponentPlayerId,null);
+assert.equal(pairBlocked.evidence.supportStrikerReceived,true);
+assert.equal(pairBlocked.evidence.throughBallReleased,false);
+assert.equal(pairBlocked.xgDeltaAgainst,-0.03);
+assert.deepEqual(pairBlocked.steps.slice(2).map(p=>p.result),["countered","not_reached","not_reached"]);
+assert.equal(pairNoReceive.evidence.supportStrikerReceived,false);
+assert.equal(pairDepth.evidence.conditionalDepthProbability,stabakMiddle.evidence.conditionalDepthProbability);
+assert.equal(pairDepth.evidence.conditionalLateRunnerProbability,stabakMiddle.evidence.conditionalLateRunnerProbability);
+assert.ok(pairDepth.probability<stabakMiddle.probability);
+const pairLessPress=stabakPair(0.1,{teamFitSnapshot:{...stabakPairFixture.teamFitSnapshot,tacticalProfile:{...stabakPairFixture.teamFitSnapshot.tacticalProfile,balanceScore:50}}});
+assert.ok(pairLessPress.evidence.conditionalReleaseProbability>pairDepth.evidence.conditionalReleaseProbability);
+assert.equal(stabakPair(0.1,{lineupSnapshot:glimtLineup}).evidence.centralCreationPattern,undefined);
+assert.equal(stabakPair(0.1,{lineupSnapshot:stabakDribbleFixture.lineupSnapshot}).evidence.centralCreationPattern,undefined);
+assert.deepEqual(stabakPair(0.1,{causalOpponentSupportStrikerVersion:undefined}),stabakMiddle);
+let pairDraws=0;resolveOpponentThreeSpaceCombination(stabakPairFixture,{rng:()=>{pairDraws++;return 0.1;}});
+assert.equal(pairDraws,1);
+const pairLateChances=annotateOpponentThreeSpaceChances(lskChances,pairLate);
+assert.equal(pairLateChances.filter(c=>c.tacticalMoment).length,1);
+assert.equal(pairLateChances.find(c=>c.tacticalMoment).tacticalMoment.keyAction,pairLate.steps.at(-1).action);
+assert.equal(annotateOpponentThreeSpaceChances(lskChances,pairBlocked),lskChances);
+assert.deepEqual(resolveOpponentThreeSpaceCombination(JSON.parse(JSON.stringify(stabakPairFixture)),{rng:()=>0.22}),pairLate);
+
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
