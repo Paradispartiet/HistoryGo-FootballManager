@@ -151,6 +151,48 @@ Målt over en hel sesong: **15 ulike spillestiler**, hver møtt hjemme og borte,
 matchupStyles-sett — ulikt navn er ikke nok, det er fingeravtrykket motorene
 leser som må være unikt.
 
+## Kildekontroll: høyt press og pasningsdekning (2026-11-26)
+
+Kampmotorens v6-pressfase kan bruke kollektivt press og sentral eller bred
+pasningsdekning. Pressintensitet, soneforsvar, mann-mann-press og dekning
+av en bestemt pasningslinje er ulike observasjoner. Ukjent dekning skal
+forbli nøytral; den er ikke bevis på en åpen pasningslinje. Kildene
+beskriver historiske spillestiler, ikke målinger ved avspark.
+
+Av 60 ligaprofiler er det 12 som oppfyller eksisterende pressfasevilkår
+(har high_press-token, eller eksplisitt intensitet >= 70 og høy linje >= 62).
+I utkastkjeden har Brann (2024), Rosenborg (1994–1999) og Strømsgodset
+(2011–2014) kildebelagt kollektivt/sentralt mønster i profilene.
+
+| Klubb | Kildestatus | Beslutning |
+|---|---|---|
+| Start | Gullperioden 1978–1980 bekreftet, presis pressretning ikke funnet | Ingen nye motorfelt |
+| KFUM | Moesgaards 2025-utgave: høyt mann-mann-press, kompakt 5-4-1 i lav blokk | Ingen sentral/bred dekning avledet; ulike presshøyder må holdes adskilt |
+| Vålerenga | Bengtssons 1983–1984-utgave: soneforsvar, ballførerpress, disiplin | Ingen bestemt dekning avledet; bohemprofilen bør senere skille epokene tydeligere |
+
+### Kilder og avgrensninger
+
+- [Starts klubbhistorie 1975–1984](https://www.ikstart.no/start-historien/historie-fra-1905/Om-IKStart-i-perioden-1975-1984):
+  13 baklengsmål i 22 seriekamper i 1978; 52–26 i 1980. Resultatene
+  sier ikke hvordan presset var organisert.
+- [RBKweb, trenerens KFUM-vurdering i 2025](https://www.rbkweb.no/vis/17939):
+  Alfred Johansson skiller høyt mann-mann-press fra kompakt lav 5-4-1.
+  Ingen bestemt pasningsretning oppgitt.
+- [Journalen, Slik vil Kåffa holde plassen](https://journalen.oslomet.no/nb/2024/01/slik-vil-kaffa-holde-plassen):
+  Johannes Moesgaard beskriver overgangen fra 4-3-3 til 3-4-3 i 2023.
+  Formasjonsvalget alene beviser ikke pasningsdekning.
+- [Vålerengas klubbhistorie](https://www.vif-fotball.no/om-klubben/var-stolte-histore-ny):
+  Bengtssons soneforsvar, ballførerpress og disiplin beskrives som et
+  brudd med tidligere fotball.
+- [Store norske leksikon, Vålerenga Fotball](https://snl.no/V%C3%A5lerenga_Fotball):
+  bekrefter gullene i 1983 og 1984 under Bengtsson og den systematiske
+  spilltradisjonen hos etterfølgeren. Ingen bestemt pasningsretning.
+
+De øvrige seks pressprofilene som gjenstår å undersøke: Sogndal, Strømmen,
+Sandviken, Bjarg, Grorud og Lørenskog. Start, KFUM og Vålerenga krever
+mer presis dokumentasjon før dekning kan aktiveres. Ingen ny mekanikk
+eller endring i sannsynligheter er nødvendig for denne kildekontrollen.
+
 ## Vakten
 
 `sim:league-season` går gjennom en **hel sesong** og krever:
