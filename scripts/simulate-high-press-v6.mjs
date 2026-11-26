@@ -137,6 +137,29 @@ assert.equal(
   resolveHighPressBuildUp(session({ ...widePlan, opponent: rbkOpponent }), { rng: () => 0.42 }).probability,
   resolveHighPressBuildUp(session({ ...widePlan, opponent: unknownRbk }), { rng: () => 0.42 }).probability
 );
+const godset = leagueProfiles.find(profile => profile.clubId === "stromsgodset");
+assert.equal(godset.tacticalBehaviourEvidence?.era, "2011–2014");
+assert.ok(godset.tacticalBehaviourEvidence?.sources?.length >= 2);
+const godsetOpponent = { ...godset, id: godset.clubId, name: "Strømsgodset", strength: 74 };
+const { tacticalBehaviour: _godsetCover, ...unknownGodset } = godsetOpponent;
+const godsetKnown = resolveHighPressBuildUp(session({ opponent: godsetOpponent }), { rng: () => 0.42 });
+const godsetUnknown = resolveHighPressBuildUp(session({ opponent: unknownGodset }), { rng: () => 0.42 });
+assert.equal(godsetKnown.evidence.laneCover, "central");
+assert.equal(godsetKnown.evidence.coordination, "collective");
+assert.equal(godsetUnknown.evidence.laneCover, "unknown");
+assert.equal(godsetUnknown.probability, 0.546);
+assert.equal(godsetKnown.probability, 0.346);
+assert.equal(godsetUnknown.status, "breakthrough");
+assert.equal(godsetKnown.status, "turnover");
+assert.equal(godsetKnown.xgDeltaAgainst, 0.04);
+assert.equal(godsetKnown.xgDeltaFor, 0);
+assert.equal(godsetUnknown.xgDeltaFor, 0.12);
+assert.equal(resolveHighPressBuildUp(session({ opponent: godsetOpponent }), { rng: () => 0.01 }).status, "breakthrough");
+assert.ok(brannKnown.probability < godsetKnown.probability && godsetKnown.probability < rbkKnown.probability);
+assert.equal(
+  resolveHighPressBuildUp(session({ ...widePlan, opponent: godsetOpponent }), { rng: () => 0.42 }).probability,
+  resolveHighPressBuildUp(session({ ...widePlan, opponent: unknownGodset }), { rng: () => 0.42 }).probability
+);
 const undocumented = leagueProfiles.find(profile => profile.clubId === "valerenga" && !profile.tacticalBehaviour);
 if (undocumented) {
   const phase = resolveHighPressBuildUp(session({ opponent: { ...undocumented, id: undocumented.clubId } }), { rng: () => 0.42 });

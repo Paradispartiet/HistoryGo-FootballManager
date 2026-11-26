@@ -1192,6 +1192,29 @@
         "high_press",
         "fast_runners_in_behind"
       ],
+      "tacticalBehaviour": {
+        "pressCoordination": "collective",
+        "passingLaneCover": "central"
+      },
+      "tacticalBehaviourEvidence": {
+        "era": "2011–2014",
+        "scope": "Historisk stilmodell for Deilas Strømsgodset i den aktive høypressfasen, ikke målt dekning ved avspark, konstant presshøyde eller påstand om dagens tropp.",
+        "interpretation": "Samtidig analyse beskriver samlet press med varierende presshøyde og gjenvinning høyt i banen. Tidligere analysesjef Jørn Kvamme og Jonas Moen Rye beskriver senere Deilas prinsipp om å lede motstanderens spill utenfor den sentrale blokken. Samlet begrunner dette kollektivt press med sentral dekning som en spillmodell, uten å anta samme pressmønster i alle kampsituasjoner.",
+        "sources": [
+          {
+            "title": "Hvorfor leder Tromsø og Strømsgodset Tippeligaen?",
+            "publisher": "Fotballanalyse / Harald Riisnæs",
+            "url": "https://fotballanalyse.wordpress.com/2011/05/31/hvorfor-leder-tromso-og-stromsgodset-tippeligaen/",
+            "locator": "Strømsgodset og Oppsummering: variabel presshøyde, samlet press og høy gjenvinning."
+          },
+          {
+            "title": "Analysen: Deila gjør lurt i å kaste filosofien mot Rosenborg",
+            "publisher": "Eurosport",
+            "url": "https://www.eurosport.no/fotball/eliteserien/2017/analysen_sto6180797/story.shtml",
+            "locator": "Viktig å være mentalt påskrudd: tilbakeblikk på Strømsgodsets prinsipp om å lede spillet utenfor sentral blokk."
+          }
+        ]
+      },
       "shortLabel": "offensivt 4-3-3 i høyt tempo",
       "pressResistance": 69,
       "defensiveStructure": 55,
