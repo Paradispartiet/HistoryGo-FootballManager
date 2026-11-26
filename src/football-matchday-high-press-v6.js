@@ -96,6 +96,39 @@ export function highPressPhaseRoll(session, periodIndex) {
   return (hash >>> 0) / 4294967296;
 }
 
+// Count only completed, identifiable press phases from this match. This is
+// collective simulated workload, not measured running distance or fitness.
+// A high press or immediate counterpress is one effort per played period.
+export function opponentPressWorkload(session) {
+  if (session?.causalOpponentPressWorkloadVersion !== 1 ||
+      session.opponent?.tacticalBehaviour?.counterpressAfterLoss !== "ball_near_collective" ||
+      session.opponent?.tacticalBehaviour?.pressCoordination !== "collective") return null;
+  const timeline = Array.isArray(session.timeline) ? session.timeline : [];
+  const seen = new Set();
+  let highPress = 0, counterpress = 0;
+  for (const period of timeline) {
+    if (!Number.isInteger(period?.segment) || period.segment < 0 ||
+        period.segment >= timeline.length || seen.has(period.segment) ||
+        !finite(period.range?.to) || period.range.to < 1 || period.range.to > 90 ||
+        !finite(period.expectedGoals?.for) || !finite(period.expectedGoals?.against)) continue;
+    const phase = period.tacticalPhase;
+    if (phase?.situation === "high_press_vs_build_up" &&
+        ["breakthrough", "turnover"].includes(phase.status) &&
+        phase.evidence?.coordination === "collective") {
+      highPress++;
+    } else if (phase?.situation === "our_press_vs_opponent_build_up" &&
+        phase.evidence?.regainCounterpress?.mechanism === "ball_near_collective" &&
+        ((phase.status === "regain" && phase.evidence.regainCounterpress.status === "released") ||
+         (phase.status === "regain_lost" && phase.evidence.regainCounterpress.status === "regain_lost"))) {
+      counterpress++;
+    } else continue;
+    seen.add(period.segment);
+  }
+  const adjustment = Math.min(0.08, (highPress + counterpress) * 0.02);
+  return { highPress, counterpress, adjustment,
+    basis: "completed_simulated_collective_press_periods_not_measured_fitness" };
+}
+
 export function resolveHighPressBuildUp(session, { rng = Math.random } = {}) {
   if (!session || typeof session !== "object") return null;
   const route = selectedRoute(session);
@@ -118,8 +151,9 @@ export function resolveHighPressBuildUp(session, { rng = Math.random } = {}) {
   const coveredLane = shape?.pressCoordination === "collective" &&
     ((route.name === "third_man" && shape.passingLaneCover === "central") ||
      (route.name === "switch_play" && shape.passingLaneCover === "wide"));
+  const workload = opponentPressWorkload(session);
   const probability = clamp(
-    0.48 + (avgFit - 65) * 0.004 + (axis - 65) * 0.003
+    (workload?.adjustment || 0) + 0.48 + (avgFit - 65) * 0.004 + (axis - 65) * 0.003
       + (weakestFit - 60) * 0.0015 - (pressure - 70) * 0.003
       - (coveredLane ? 0.2 : 0),
     0.12, 0.82
@@ -158,6 +192,7 @@ export function resolveHighPressBuildUp(session, { rng = Math.random } = {}) {
       pressIntensity: pressure,
       laneCover: shape?.passingLaneCover || "unknown",
       coordination: shape?.pressCoordination || "unknown",
+      ...(workload ? { opponentPressWorkload: workload } : {}),
       support: players.map((player) => ({
         playerId: player.playerId, position: player.position, roleId: player.roleId,
         matchScore: player.matchScore
