@@ -228,8 +228,9 @@ export function annotateCompactBlockChances(chances, phase) {
   return chances.map((chance, i) => i !== index ? chance : {
     ...chance,
     tacticalMoment: {
-      kind: counter ? "counter_window" : "block_break",
-      label: counter ? "Kontringsrom etter brutt angrep" : "Lav blokk brutt",
+      kind: phase.route === "sourced_creative_breakthrough" ? "sourced_creative_breakthrough" : counter ? "counter_window" : "block_break",
+      label: phase.route === "sourced_creative_breakthrough" ? "Individuelt gjennombrudd" : counter ? "Kontringsrom etter brutt angrep" : "Lav blokk brutt",
+      ...(phase.route === "sourced_creative_breakthrough" ? { creatorId: phase.evidence.creatorId, creatorName: phase.evidence.creatorName } : {}),
       description: phase.cause,
       planId: phase.planId, planTitle: "Angrep mot kompakt lav blokk",
       status: counter ? "countered" : "advantage", side: phase.side,
