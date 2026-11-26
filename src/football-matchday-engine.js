@@ -9,7 +9,7 @@ import { resolveTurnoverTransition } from "./football-matchday-turnover-v6.js";
 import { resolveCompactBlockAttack, annotateCompactBlockChances } from "./football-matchday-compact-block-v6.js";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances, getManagerPressCounterOptions } from "./football-matchday-own-press-v6.js";
 import { resolveGameControlPhase, annotateGameControlChances } from "./football-matchday-control-v6.js";
-import { resolveAuthoredSequencePeriod, annotateAuthoredSequenceChances, resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances } from "./football-matchday-sequence-v8.js";
+import { resolveAuthoredSequencePeriod, annotateAuthoredSequenceChances, resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances } from "./football-matchday-sequence-v8.js";
 import {
   applyOpponentAdjustment,
   createPlanChange,
@@ -1848,6 +1848,7 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     causalOpponentZonalShiftVersion: 1,
     causalOpponentRehearsedOutletVersion: 1,
     causalOpponentDirectSecondBallVersion: 1,
+    causalOpponentSetPieceVersion: 1,
     // New matches can release a counterattack after a sourced cross exposure.
     causalOpponentCrossRecoveryVersion: 1,
     // In-match fatigue uses the current match clock and existing freshness model.
@@ -2235,15 +2236,17 @@ export function advanceMatchClock(session) {
   // While v6 owns this situation, remove the old static plan-edge projection
   // for this period; otherwise the same tactical advantage is paid twice.
   // Sessions without sufficient role/opponent evidence retain the v5 path.
-  const buildUpPhase = resolveHighPressBuildUp(session, { rng: () => highPressPhaseRoll(session, played) });
+  // A scheduled, sourced dead-ball scenario owns this period before open-play phases.
+  const setPiecePhase = resolveOpponentSetPiece(session, { rng: () => highPressPhaseRoll(session, played + ":opponent-set-piece") });
+  const buildUpPhase = !setPiecePhase ? resolveHighPressBuildUp(session, { rng: () => highPressPhaseRoll(session, played) }) : null;
   // Mutually exclusive phase per period: opponent press vs compact low block.
   // Existing saves never acquire the new low-block model on restore.
-  const compactPhase = !buildUpPhase
+  const compactPhase = !setPiecePhase && !buildUpPhase
     ? resolveCompactBlockAttack(session, { rng: () => highPressPhaseRoll(session, played + ":compact-block") })
     : null;
   // Different plan ids: attacking phases and defensive press are exclusive.
   // A known escape and our actual pressing unit decide BEFORE any shot roll.
-  const pressingPhase = !buildUpPhase && !compactPhase
+  const pressingPhase = !setPiecePhase && !buildUpPhase && !compactPhase
     ? resolveOwnPressAgainstOpponent(session, {
         pressureRoll: () => highPressPhaseRoll(session, played + ":own-pressure"),
         protectionRoll: () => highPressPhaseRoll(session, played + ":press-protection")
@@ -2251,7 +2254,7 @@ export function advanceMatchClock(session) {
     : null;
   // Four previously unsupported plans are resolved using their OWN linked
   // defensive-control/release chain; earlier v6 phases take priority.
-  const controlPhase = !buildUpPhase && !compactPhase && !pressingPhase
+  const controlPhase = !setPiecePhase && !buildUpPhase && !compactPhase && !pressingPhase
     ? resolveGameControlPhase(session, {
         rng: () => highPressPhaseRoll(session, played + ":game-control")
       })
@@ -2266,11 +2269,11 @@ export function advanceMatchClock(session) {
   // An executed specialist phase owns all xG attribution. If none fires,
   // use the canonical authored chain only when XI and counter evidence exist.
   // Unknown / unsupported patterns retain the prior neutral/fallback path.
-  const authoredSequencePhase = !buildUpPhase && !compactPhase &&
+  const authoredSequencePhase = !setPiecePhase && !buildUpPhase && !compactPhase &&
     !pressingPhase && !controlPhase && !ineligibleReactivePlan(session)
     ? resolveAuthoredSequencePeriod(session) : null;
   // Opponent off-ball patterns are a fallback, never added to another phase.
-  const opponentRunPhase = !buildUpPhase && !compactPhase && !pressingPhase &&
+  const opponentRunPhase = !setPiecePhase && !buildUpPhase && !compactPhase && !pressingPhase &&
     !controlPhase && !authoredSequencePhase && !ineligibleReactivePlan(session)
     ? resolveOpponentRunSequence(session, {
         minute: segmentRange(played, totalSegments).from - 1,
@@ -2286,7 +2289,7 @@ export function advanceMatchClock(session) {
       }) : null;
   const phase = transition ? {
     ...buildUpPhase, transition, xgDeltaAgainst: transition.xgDeltaAgainst
-  } : buildUpPhase || compactPhase || pressingPhase || controlPhase ||
+  } : setPiecePhase || buildUpPhase || compactPhase || pressingPhase || controlPhase ||
     authoredSequencePhase || opponentRunPhase;
   const rate = currentExpectedGoalRate(session);
   const share = 1 / totalSegments;
@@ -2339,6 +2342,8 @@ export function advanceMatchClock(session) {
     ? annotateCompactBlockChances(generatedChances, tacticalPhase)
     : tacticalPhase?.situation === "our_press_vs_opponent_build_up"
       ? annotateOwnPressChances(generatedChances, tacticalPhase)
+      : tacticalPhase?.situation === "opponent_set_piece"
+        ? annotateOpponentSetPieceChances(generatedChances, tacticalPhase)
       : tacticalPhase?.situation === "opponent_direct_second_ball"
         ? annotateOpponentDirectSecondBallChances(generatedChances, tacticalPhase)
       : tacticalPhase?.situation === "opponent_rehearsed_outlet"
