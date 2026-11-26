@@ -503,6 +503,53 @@ export function annotateOpponentRehearsedOutletChances(chances,phase){
 
 // LSK's direct-play tradition: first contact and control of the loose ball
 // are distinct. The four outcomes are gameplay hypotheses, not tracking data.
+// This represents an anonymous opponent in a historical-style simulation.
+// No opponent XI, player rating, measured dribble success or named player.
+function resolveAnonymousCreativeAttack({plan,backs,screen,balanceScore,restDefenseScore,roll,creativeWeight}){
+  const clamp=v=>Math.max(0.12,Math.min(0.82,v));
+  const rounded=v=>Math.round(v*1000)/1000;
+  const avg=ps=>ps.reduce((sum,p)=>sum+p.matchScore,0)/ps.length;
+  const presser=screen.slice().sort((a,b)=>b.matchScore-a.matchScore||a.playerId.localeCompare(b.playerId))[0];
+  const cover=screen.find(p=>p.playerId!==presser.playerId&&["balancing_six","holding_midfielder"].includes(p.roleId));
+  const coveringUnit=cover?[...backs,cover]:backs;
+  // First engagement and remaining central cover are separate. A second
+  // dedicated screen can protect the passing lane without double-counting
+  // the first presser. Match fit is a bounded proxy, not a tackling rating.
+  const dribble=clamp(0.55-(presser.matchScore-65)*0.005-(balanceScore-65)*0.002);
+  const release=clamp(0.53-(avg(coveringUnit)-65)*0.004-(restDefenseScore-65)*0.003-(cover?0.08:0));
+  const passed=roll<dribble,success=passed&&roll<dribble*release;
+  const status=success?"creative_breakthrough":passed?"release_contained":"dribble_contained";
+  const cause=success?"En kreativ motspiller passerer første forsvarer og finner rom for videre spill.":
+    passed?"Første forsvarer passeres, men gjenværende sentral sikring stenger videre pasning.":
+    "Vår første forsvarer stanser den individuelle utfordringen.";
+  const actions=["En motspiller søker ballen mellom leddene","Første forsvarer utfordres individuelt",
+    "Gjenværende sikring forsøker å stenge neste pasningsrom","Motstanderen forsøker å spille videre"];
+  return {version:6,situation:"opponent_creative_attack",planId:plan.id,route:"historical_individual_creativity",
+    status,side:success?"against":null,probability:rounded(dribble*release),
+    xgDeltaFor:0,xgDeltaAgainst:success?0.07:-0.03,cause,
+    steps:actions.map((action,i)=>({action,order:i+1,result:i===0||success||(passed&&i===1)?"simulated_available":
+      !passed&&i>1?"not_reached":i===3?"not_reached":"countered"})),
+    counterplay:{status:success?"not_triggered":"simulated_counter",
+      counter:"Press med én spiller og behold sentral sikring bak ham",
+      nextManagerResponse:"Bruk en egen balanserende sekser ved siden av den første presspilleren; unngå at begge går i samme duell.",
+      automaticallyExecuted:false},
+    evidence:{basis:"sourced_historical_creativity_anonymous_game_hypothesis_not_observed",
+      selectedPattern:"historical_individual_creativity",creativeAlternativeWeight:creativeWeight,
+      opponentPlayerId:null,targetFlank:null,dribbleProbability:rounded(dribble),
+      conditionalReleaseProbability:rounded(release),firstDefenderId:presser.playerId,
+      dedicatedCoverId:cover?.playerId||null,coveringPlayers:coveringUnit.map(p=>p.playerId),
+      supportingPlayers:[presser,...coveringUnit].map(({playerId,roleId,position,matchScore})=>({playerId,roleId,position,matchScore})),
+      eventCount:1,randomDraws:1}};
+}
+export function annotateOpponentCreativeAttackChances(chances,phase){
+  if(!Array.isArray(chances)||phase?.situation!=="opponent_creative_attack"||phase.side!=="against")return chances;
+  const i=chances.findIndex(c=>c.side==="against");
+  if(i<0)return chances;
+  return annotateOpponentRunChances(chances,phase).map((c,index)=>index===i?
+    {...c,tacticalMoment:{...c.tacticalMoment,kind:"opponent_creative_attack",
+      label:"Individuelt gjennombrudd imot",basis:"simulated_anonymous_creativity",keyAction:phase.steps[1].action}}:c);
+}
+
 export function resolveOpponentDirectSecondBall(session,{rng=Math.random}={}){
   if(session?.causalOpponentDirectSecondBallVersion!==1 ||
       session.opponent?.tacticalBehaviour?.attackingRunPattern!=="direct_duel_second_ball" ||
@@ -524,7 +571,17 @@ export function resolveOpponentDirectSecondBall(session,{rng=Math.random}={}){
   const afterWon=clamp(0.62-cover),afterLost=clamp(0.38-cover);
   const draw=rng();
   if(!finite(draw))return null;
-  const roll=Math.max(0,Math.min(0.999999999,draw));
+  const rawRoll=Math.max(0,Math.min(0.999999999,draw));
+  const creativeEnabled=session.causalOpponentCreativeAlternativeVersion===1 &&
+    session.opponent.tacticalBehaviour.creativePattern==="historical_individual_creativity";
+  // One uniform draw selects the alternative AND resolves its conditional gates.
+  // The 25% weight is an explicit gameplay choice, not observed LSK frequency.
+  const creativeWeight=creativeEnabled?0.25:0;
+  if(creativeEnabled&&rawRoll<creativeWeight){
+    return resolveAnonymousCreativeAttack({plan,backs,screen,balanceScore,restDefenseScore,
+      roll:rawRoll/creativeWeight,creativeWeight});
+  }
+  const roll=(rawRoll-creativeWeight)/(1-creativeWeight);
   const firstWon=roll<first;
   const secondWon=firstWon?roll<first*afterWon:roll<first+(1-first)*afterLost;
   const status=firstWon?(secondWon?"duel_and_second_ball":"second_ball_contained"):
@@ -557,6 +614,7 @@ export function resolveOpponentDirectSecondBall(session,{rng=Math.random}={}){
       secondBallWonByOpponent:secondWon,duelCover:backs.map(p=>p.playerId),
       secondBallCover:screen.map(p=>p.playerId),
       supportingPlayers:[...backs,...screen].map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
+      ...(creativeEnabled?{creativeAlternativeWeight:creativeWeight,selectedPattern:"direct_duel_second_ball"}:{}),
       eventCount:1,randomDraws:1}};
 }
 export function annotateOpponentDirectSecondBallChances(chances,phase){
