@@ -990,6 +990,15 @@ const documented = [
     source: "https://ffksupporter.net/nyheter/1911-1-plass-fredrikstad-fk/"
   },
   {
+    playerId: "jan_erik_audsen",
+    placeId: "fredrikstad_stadion",
+    evidenceKind: "editorial_appraisal",
+    playingStyle: "Spiller med målteft som også bidro defensivt.",
+    strengths: ["finishing"],
+    claim: "Fredriksstad Blad 11. august 1981, side 7, fremhever Audsens uvanlige målteft i en individuell vurdering av formen hans etter kampen mot Start.",
+    source: "https://www.nb.no/items/50d17c880081c0f74bb00acff64eb962"
+  },
+  {
     playerId: "simen_rafn",
     placeId: "fredrikstad_stadion",
     evidenceKind: "direct_appraisal",
