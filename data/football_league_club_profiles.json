@@ -116,21 +116,23 @@
       "clubId": "brann",
       "styleName": "Fotballrepublikken",
       "tacticalSchool": "Høyt press i 4-3-3 med Stadion i ryggen",
-      "era": "1961–1963 · og pressutgaven fra 2022",
-      "style": "Intenst 4-3-3 som presser høyt, tvinger deg langt og går rett fram når ballen vinnes",
-      "historicalNote": "Storhetstiden var seriegullene i 1961/62 og 1963 under Oddvar Hansen, båret av Roald «Kniksen» Jensen foran 15 000 på Stadion — Brann har alltid vært klubben der publikum og enkeltspilleren avgjør. Den moderne utgaven har satt system på det samme trykket: aggressivt høypress i 4-3-3, backene sendt høyt opp i pressleddet, og en klar plan om å tvinge motstanderen til å slå langt i midten, der Brann har tre sterke sentrale å møte ballen med.",
-      "inPossessionShape": "4-3-3 med høye backer",
+      "era": "1961–1963 · Horneland 2022–2024",
+      "style": "Intensiv 4-3-3 med høyt press, ballnære overtall, variert oppbygging og rask gjenvinning",
+      "historicalNote": "Storhetstiden var seriegullene i 1961/62 og 1963 under Oddvar Hansen, båret av Roald «Kniksen» Jensen foran 15 000 på Stadion — Brann har alltid vært klubben der publikum og enkeltspilleren avgjør. Den moderne utgaven har satt system på det samme trykket: aggressivt høypress i 4-3-3, backene sendt høyt opp i pressleddet, og en klar plan om å tvinge motstanderen til å slå langt i midten, der Brann har tre sterke sentrale å møte ballen med. Under Horneland i 2022–2024 var Brann også et ballspillende lag. Oppbyggingen kunne skifte fra fire til tre bak, med sekseren som forbindelsesledd og en back høyt i bredden. Ballnære overtall gjorde både korte kombinasjoner og umiddelbart gjenvinningspress mulig.",
+      "inPossessionShape": "4-3-3 med asymmetrisk bakre treer i frispillingen og ballnære overtall",
       "outOfPossessionShape": "4-3-3 som presser høyt og mannsorientert",
       "defensiveBlock": "Høy blokk",
-      "buildUpStyle": "Kort bakfra, men uten tålmodighet — fort vertikalt",
-      "attackingStyle": "Vertikale angrep rett etter gjenvinning",
+      "buildUpStyle": "Kort via stopperne og sekseren, med bred back; også lengre oppspill mot kant og støtte til andreball",
+      "attackingStyle": "Hurtige kombinasjoner gjennom midten, breddeovertall og vertikale angrep etter gjenvinning",
       "tempo": "Svært høyt",
       "riskLevel": "high",
       "baseStyleId": "high_press_opponent",
       "matchupStyles": [
         "high_press",
         "aggressive_man_press",
-        "fast_transition"
+        "fast_transition",
+        "build_from_back",
+        "wide_overload"
       ],
       "pressResistance": 56,
       "defensiveStructure": 52,
@@ -149,7 +151,8 @@
       },
       "strengths": [
         "presset starter hos spissen og slutter hos backen — hele laget er med",
-        "gjenvinner høyt og er i boksen din før du rekker å stå"
+        "gjenvinner høyt og er i boksen din før du rekker å stå",
+        "ballnære overtall gir korte støtteavstander både med ball og ved balltap"
       ],
       "weaknesses": [
         "rommet bak den høye linja er alltid åpent",
@@ -182,24 +185,30 @@
       },
       "tacticalBehaviourEvidence": {
         "era": "2024",
-        "scope": "Historisk stilmodell for høyt press mot motstanderens oppbygging, ikke observert avspark eller påstand om dagens tropp.",
-        "interpretation": "Kantene presser smalt, spissen dekker ankeret, og midtbanen og bakre ledd flytter samlet for å begrense sentrale pasningslinjer. Spillet modellerer dette som kollektivt press og sentral dekning; sannsynligheten er en spillmodell, ikke kampstatistikk.",
+        "scope": "Historisk stilmodell for høyt press mot motstanderens oppbygging, ikke observert avspark eller påstand om dagens tropp. Angrepsidentiteten gjelder Hornelands første Brann-periode 2022–2024.",
+        "interpretation": "Kantene presser smalt, spissen dekker ankeret, og midtbanen og bakre ledd flytter samlet for å begrense sentrale pasningslinjer. Spillet modellerer dette som kollektivt press og sentral dekning; sannsynligheten er en spillmodell, ikke kampstatistikk. Mot Sandefjord 16. mai 2024 ble en bakre treer og sekseren brukt i frispillingen; Sandefjords kompakte press begrenset den sentrale ruten. Riley Roberts beskriver i tillegg lange utspark mot kant, ballnære overtall og raskt gjenvinningspress. Dette støtter eksisterende build_from_back og wide_overload-tokens, men ikke et fast vellykket utspill mot høyt press eller spesifikk sentral skjerming etter en tapt andreball. Ingen nye pressEscape- eller secondBallCounterpress-felt tilordnes.",
         "sources": [
           {
             "title": "16. Mai-feber i Bergen by – En taktisk analyse av Brann",
             "publisher": "Studentradioen i Bergen",
             "url": "https://srib.no/2024/06/12/16-mai-feber-i-bergen-by-en-taktisk-analyse-av-brann/",
-            "locator": "Brann i presspillet – kampen mot Sandefjord"
+            "locator": "Brann med ball i laget og Brann i presspillet – Sandefjord 16. mai 2024"
           },
           {
             "title": "Eirik Horneland Tactics At SK Brann – What Young Coaches Can Learn From His Pressing Principles",
             "publisher": "Total Football Analysis",
             "url": "https://totalfootballanalysis.com/article/eirik-horneland-brann-pressing-2024-tactical-analysis-tactics",
             "locator": "Figure 11 – press mot stopper, spiss dekker anker, sekser dekker sentrale pasninger"
+          },
+          {
+            "title": "Eirik Horneland — The most exciting manager you’ve never heard of.",
+            "publisher": "Riley Roberts / Medium",
+            "url": "https://medium.com/@robertsriley18/eirik-horneland-the-most-exciting-manager-youve-never-heard-of-22c38a51d842",
+            "locator": "Build-up; In possession; Counter-pressing – direkte utspill mot kant, støtte rundt andreball, ballnære overtall mot Rosenborg og gjenvinning."
           }
         ]
       },
-      "shortLabel": "høyt press og vertikale angrep"
+      "shortLabel": "høyt press · ballnære overtall og vertikalt spill"
     },
     {
       "clubId": "valerenga",
