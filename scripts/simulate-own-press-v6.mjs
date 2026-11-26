@@ -1,6 +1,6 @@
 // Deterministic causal pressing: high press, mid-block trap, counterpress and escapes.
 import assert from "node:assert/strict";
-import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances } from "../src/football-matchday-sequence-v8.js";
+import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances } from "../src/football-matchday-sequence-v8.js";
 import { readFileSync } from "node:fs";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances }
   from "../src/football-matchday-own-press-v6.js";
@@ -1572,5 +1572,61 @@ try{
   assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(crossRecoverySeed))).timeline[0].tacticalPhase,period.tacticalPhase);
   assert.equal(advanceMatchClock({...crossRecoverySeed,causalOpponentCrossRecoveryVersion:undefined}).timeline[0].tacticalPhase.status,"box_contained");
 }finally{Math.random=crossRecoveryRandom;}
+
+// Bengtsson's zonal pressure, cover and shifting: one linked possession.
+const vifOpponent={...leagueProfiles.find(p=>p.clubId==="valerenga"),id:"valerenga",strength:72};
+const vifFixture=session("wide_fast_433",{causalOpponentZonalShiftVersion:1,opponent:vifOpponent,lineupSnapshot:glimtLineup,tacticSnapshot:{id:"wide_fast_433"}});
+const vifRun=(draw,changes={})=>resolveOpponentZonalShift({...vifFixture,...changes},{rng:()=>draw});
+const vifSuccess=vifRun(0.2),vifShift=vifRun(0.5),vifPressure=vifRun(0.8);
+assert.equal(vifSuccess.status,"advantage");
+assert.equal(vifSuccess.probability,0.366);
+assert.equal(vifSuccess.evidence.circulationProbability,0.654);
+assert.equal(vifSuccess.evidence.conditionalPenetrationProbability,0.56);
+assert.equal(vifShift.evidence.stop,"shift_cover");
+assert.equal(vifPressure.evidence.stop,"ball_pressure");
+assert.equal(vifSuccess.xgDeltaFor,0.06);
+assert.equal(vifShift.xgDeltaFor,-0.03);
+assert.equal(vifPressure.xgDeltaFor,-0.03);
+assert.ok([vifSuccess,vifShift,vifPressure].every(p=>p.xgDeltaAgainst===0));
+assert.equal(vifShift.side,null);
+assert.equal(vifPressure.side,null);
+assert.equal(vifSuccess.evidence.eventCount,1);
+assert.equal(vifSuccess.evidence.randomDraws,1);
+assert.equal(vifSuccess.evidence.targetFlank,null);
+const vifWeak=vifRun(0.2,{lineupSnapshot:glimtLineup.map(p=>["LW","RW","LB","RB"].includes(p.position)?{...p,matchScore:55}:p)});
+assert.equal(vifWeak.probability,0.297);
+const vifShallow=vifRun(0.2,{teamFitSnapshot:{tacticalProfile:{...vifFixture.teamFitSnapshot.tacticalProfile,depthScore:51}}});
+assert.equal(vifShallow.evidence.circulationProbability,0.654);
+assert.equal(vifShallow.evidence.conditionalPenetrationProbability,0.48);
+assert.equal(vifRun(0.2,{causalOpponentZonalShiftVersion:undefined}),null);
+assert.equal(vifRun(0.2,{opponent:{...vifOpponent,tacticalBehaviour:{pressCoordination:"collective"}}}),null);
+assert.equal(vifRun(0.2,{lineupSnapshot:glimtLineup.filter(p=>!["LB","LW"].includes(p.position))}),null);
+assert.equal(vifRun(0.2,{tacticSnapshot:{id:"high_press_343"}}),null);
+assert.equal(vifRun(NaN),null);
+const vifChances=[{side:"against"},{side:"for"},{side:"for"}];
+const vifAnnotated=annotateOpponentZonalShiftChances(vifChances,vifSuccess);
+assert.equal(vifAnnotated.filter(c=>c.tacticalMoment).length,1);
+assert.equal(vifAnnotated[1].tacticalMoment.kind,"zonal_shift_beaten");
+assert.equal(annotateOpponentZonalShiftChances(vifChances,vifShift),vifChances);
+assert.equal(annotateOpponentZonalShiftChances([],vifSuccess).length,0);
+let vifSeed;
+for(let i=0;i<3000;i++){
+  const s={...vifFixture,id:"vif-zonal-shift-"+i};
+  if(vifRun(highPressPhaseRoll(s,"0:opponent-zonal-shift")).status==="advantage"){vifSeed=s;break;}
+}
+assert.ok(vifSeed);
+const vifRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(vifSeed),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"opponent_zonal_shift");
+  assert.equal(period.tacticalPhase.status,"advantage");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.for-period.baselineExpectedGoals.for)*100)/100,period.tacticalPhase.xgDeltaFor);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.ok(played.minuteLog.filter(c=>c.tacticalMoment).length<=1);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(vifSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
+  assert.equal(advanceMatchClock({...vifSeed,causalOpponentZonalShiftVersion:undefined}).timeline[0].tacticalPhase,undefined);
+}finally{Math.random=vifRandom;}
 
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
