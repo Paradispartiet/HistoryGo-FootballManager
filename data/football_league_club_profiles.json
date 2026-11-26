@@ -21,7 +21,8 @@
       "matchupStyles": [
         "possession_positional",
         "wide_overload",
-        "high_press"
+        "high_press",
+        "fast_runners_in_behind"
       ],
       "pressResistance": 70,
       "defensiveStructure": 58,
