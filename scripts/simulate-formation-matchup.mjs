@@ -222,6 +222,22 @@ for(const k of knowledgeData.knowledge){
   }
 }
 
+// Deila's Godset: the documented central switch to early wide delivery is
+// an attacking pattern, not proof of a particular escape from high press.
+const godsetLeague=loadJson("data/football_league_club_profiles.json").profiles.find(p=>p.clubId==="stromsgodset");
+const godsetBefore=godsetLeague.matchupStyles.filter(t=>t!=="switching_play");
+check(godsetLeague.matchupStyles.includes("switching_play"),"Godset: documented switch missing");
+check(godsetLeague.historicalNote.includes("Einar Larsen i 1970"),"Godset: historic coach incorrect");
+check(godsetLeague.tacticalBehaviour.pressCoordination==="collective" && godsetLeague.tacticalBehaviour.passingLaneCover==="central","Godset: original press evidence missing");
+check(godsetLeague.tacticalBehaviour.pressEscapeRoute===undefined && godsetLeague.tacticalBehaviour.highPressEscapeRoute===undefined,"Godset: do not conflate scoring patterns with high-press escapes");
+for(const k of knowledgeData.knowledge){
+  const before=evaluateFormationMatchupVsOpponent(k,godsetBefore,"Strømsgodset");
+  const after=evaluateFormationMatchupVsOpponent(k,godsetLeague.matchupStyles,"Strømsgodset");
+  const expected=Number(k.strongAgainst.includes("switching_play"))-Number(k.weakAgainst.includes("switching_play"));
+  check(after.score-before.score===expected,"Godset: unexpected matchup "+k.formationId);
+  if(k.weakAgainst.includes("switching_play"))check(after.risks.some(r=>r.token==="switching_play"),"Godset: missing switch risk "+k.formationId);
+}
+
 // Rapport: lean-matrise (din formasjon i rad, motstander i kolonne).
 const sym = { favourable: "+", balanced: "·", risky: "-" };
 const ids = entries.map((e) => e.formationId);

@@ -1276,22 +1276,23 @@
       "clubId": "stromsgodset",
       "styleName": "Godset-fotball",
       "styleBasis": "tradisjon",
-      "tacticalSchool": "Eggen-skolen i Drammen",
-      "era": "1970 · og 2013",
-      "style": "Offensivt 4-3-3 i høyt tempo — angrip med mange, alltid framover",
-      "historicalNote": "Begge seriegullene tilhører samme skole. Nils Arne Eggen selv sto for 1970-gullet; Ronny Deila, som tok 2013-gullet, har sagt at det meste han kan om fotball kom fra Eggen og Rosenborgs storhetstid. Godset er den andre greina på godfot-treet: samme offensive 4-3-3, men spilt i høyere tempo og med yngre bein.",
-      "inPossessionShape": "4-3-3 med brede kanter og høye backer",
-      "outOfPossessionShape": "4-5-1 som gjenvinner høyt",
-      "defensiveBlock": "Høy blokk",
-      "buildUpStyle": "Enkelt ut, så framover",
-      "attackingStyle": "Hurtige omstillinger",
+      "tacticalSchool": "Deilas offensive, relasjonelle fotball",
+      "era": "1970 · Deila 2008–2014 (stilmodell 2011–2014)",
+      "style": "Fremoverrettet kombinasjonsspill i høyt tempo, hurtige vendinger og tidlige innlegg med mange løp inn i boksen",
+      "historicalNote": "Strømsgodset vant serie og cup under Einar Larsen i 1970. Ronny Deila ledet klubben til cupgull i 2010 og seriegull i 2013. Den moderne stilmodellen bygger på Deilas offensive fotball, med hurtig lengderetning, få berøringer, spillvendinger og kollektiv gjenvinning. 4-3-3 var utgangspunkt, med variasjoner til 4-2-3-1 og defensivt 4-1-4-1.",
+      "inPossessionShape": "4-3-3 / 4-2-3-1 med bredde og sentral vendingsspiller",
+      "outOfPossessionShape": "4-3-3 eller 4-1-4-1, med variabel presshøyde",
+      "defensiveBlock": "Variabel blokk, perioder med høyt press",
+      "buildUpStyle": "Fremoverrettet kombinasjonsspill og hurtig spillvending fra midtbanen",
+      "attackingStyle": "Sentralt vendingsledd frigjør kant, tidlig innlegg og samtidige boksløp; også hurtige omstillinger",
       "tempo": "Høyt",
       "riskLevel": "high",
       "baseStyleId": "high_press_opponent",
       "matchupStyles": [
         "wide_overload",
         "high_press",
-        "fast_runners_in_behind"
+        "fast_runners_in_behind",
+        "switching_play"
       ],
       "tacticalBehaviour": {
         "pressCoordination": "collective",
@@ -1299,8 +1300,8 @@
       },
       "tacticalBehaviourEvidence": {
         "era": "2011–2014",
-        "scope": "Historisk stilmodell for Deilas Strømsgodset i den aktive høypressfasen, ikke målt dekning ved avspark, konstant presshøyde eller påstand om dagens tropp.",
-        "interpretation": "Samtidig analyse beskriver samlet press med varierende presshøyde og gjenvinning høyt i banen. Tidligere analysesjef Jørn Kvamme og Jonas Moen Rye beskriver senere Deilas prinsipp om å lede motstanderens spill utenfor den sentrale blokken. Samlet begrunner dette kollektivt press med sentral dekning som en spillmodell, uten å anta samme pressmønster i alle kampsituasjoner.",
+        "scope": "Historisk stilmodell for Deilas Strømsgodset i den aktive høypressfasen, ikke målt dekning ved avspark, konstant presshøyde eller påstand om dagens tropp. Angrepsdelen bygger på analyse av 2013-lagets scoringer og en samtidig analyse fra 2011.",
+        "interpretation": "Samtidig analyse beskriver samlet press med varierende presshøyde og gjenvinning høyt i banen. Tidligere analysesjef Jørn Kvamme og Jonas Moen Rye beskriver senere Deilas prinsipp om å lede motstanderens spill utenfor den sentrale blokken. Samlet begrunner dette kollektivt press med sentral dekning som en spillmodell, uten å anta samme pressmønster i alle kampsituasjoner. Jacobsen definerer tredjespiller som tredje siste spiller på ballen før mål, ikke nødvendigvis en klassisk tredjemannskombinasjon. Studien beskriver hurtige vendinger fra midtbanen mot kant og tidlige innlegg; Riisnæs beskriver fire til fem spillere inn i boksen ved innlegg, med økt kontringsrisiko. Dette begrunner switching_play i formasjonsberegningen, men ikke et bestemt utspill mot høyt press, en bestemt flanke eller en målt suksessrate.",
         "sources": [
           {
             "title": "Hvorfor leder Tromsø og Strømsgodset Tippeligaen?",
@@ -1313,10 +1314,28 @@
             "publisher": "Eurosport",
             "url": "https://www.eurosport.no/fotball/eliteserien/2017/analysen_sto6180797/story.shtml",
             "locator": "Viktig å være mentalt påskrudd: tilbakeblikk på Strømsgodsets prinsipp om å lede spillet utenfor sentral blokk."
+          },
+          {
+            "title": "Hva skjer før scoring",
+            "publisher": "Per Inge Jacobsen / NFF, UEFA A-lisens 2013/2014",
+            "url": "https://www.fotball.no/globalassets/trener/uefa-a-oppgaver/uefa-a-2014-oppgave-per-inge-jacobsen.pdf",
+            "locator": "Kapittel 5.4, side 21, figur 6; vendingsspilleren, kant og tidlig innlegg."
+          },
+          {
+            "title": "Ronny Deila – 50!",
+            "publisher": "Strømsgodset",
+            "url": "https://www.godset.no/nyheter/ronny-deila--50",
+            "locator": "Klubbens tilbakeblikk på fremoverrettet spill, høy intensitet og gullåret."
+          },
+          {
+            "title": "50 år siden seriegullet",
+            "publisher": "Strømsgodset",
+            "url": "https://www.godset.no/nyheter/50-ar-siden-seriegullet",
+            "locator": "Einar Larsen var trener i 1970."
           }
         ]
       },
-      "shortLabel": "offensivt 4-3-3 i høyt tempo",
+      "shortLabel": "hurtig spillvending · tidlig innlegg og boksløp",
       "pressResistance": 69,
       "defensiveStructure": 55,
       "transitionThreat": 72,
@@ -1333,12 +1352,12 @@
         "intensity": 75
       },
       "strengths": [
-        "vinner du førsteballen i boksen, dør angrepene deres",
-        "stilen er tydelig: offensivt 4-3-3 i høyt tempo"
+        "hurtig spillvending setter opp kantspillere til innlegg",
+        "flere samtidige løp inn i boksen og kollektiv gjenvinning"
       ],
       "weaknesses": [
-        "midten når begge kanter er høye",
-        "bakrommet bak den høye linja"
+        "risiko for kontring når flere spillere angriper boksen",
+        "bakrommet når presset er høyt"
       ],
       "vulnerableZones": [
         "midten når begge kanter er høye",
@@ -1357,8 +1376,8 @@
         "finn den frie mannen bak første pressledd"
       ],
       "managerHints": [
-        "Vinner du førsteballen i boksen, dør angrepene deres.",
-        "Står du høyt, har de akkurat spillerne til å straffe det."
+        "Sikre motsatt kant før Godsets vendingsspiller mottar ballen.",
+        "Hold dekning i boksen, men vær klar til å angripe rommet etter et brutt innlegg."
       ]
     },
     {
