@@ -1,6 +1,6 @@
 // Deterministic causal pressing: high press, mid-block trap, counterpress and escapes.
 import assert from "node:assert/strict";
-import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances } from "../src/football-matchday-sequence-v8.js";
+import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances } from "../src/football-matchday-sequence-v8.js";
 import { readFileSync } from "node:fs";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances }
   from "../src/football-matchday-own-press-v6.js";
@@ -1741,5 +1741,44 @@ try{
   assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(lskSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
   assert.equal(advanceMatchClock({...lskSeed,causalOpponentDirectSecondBallVersion:undefined}).timeline[0].tacticalPhase,undefined);
 }finally{Math.random=lskRandom;}
+
+// Only the existing scheduled dead-ball situation replaces the open-play phase.
+const lskDeadFixture={...lskFixture,causalOpponentSetPieceVersion:1,events:[{id:"opp_set_piece_threat"}]};
+const lskDead=(draw,changes={})=>resolveOpponentSetPiece({...lskDeadFixture,...changes},{rng:()=>draw});
+const lskDeadFirst=lskDead(0.1),lskDeadSecond=lskDead(0.6),lskDeadStop=lskDead(0.95);
+assert.deepEqual([lskDeadFirst,lskDeadSecond,lskDeadStop].map(p=>p.status),
+  ["first_contact_threat","second_ball_threat","contained"]);
+assert.deepEqual([lskDeadFirst,lskDeadSecond,lskDeadStop].map(p=>p.xgDeltaAgainst),[0.08,0.04,-0.03]);
+const lskAwayDead=lskDead(0.1,{events:[{id:"opp_set_piece_second_ball"}]});
+assert.equal(lskAwayDead.status,"second_ball_threat");
+assert.equal(lskAwayDead.evidence.firstContactProbability,null);
+assert.equal(lskAwayDead.evidence.afterClearance,true);
+assert.equal(lskDead(0.1,{events:[]}),null);
+assert.equal(lskDead(0.1,{timeline:[{}]}),null);
+assert.equal(lskDead(0.1,{causalOpponentSetPieceVersion:undefined}),null);
+assert.equal(lskDead(0.1,{opponent:{...lskFixture.opponent,tacticalBehaviour:{}}}),null);
+assert.equal(lskDead(0.1,{lineupSnapshot:glimtLineup.filter(p=>p.position!=="GK")}),null);
+assert.equal(lskDead(NaN),null);
+const weakDeadBacks=lskDead(0.1,{lineupSnapshot:glimtLineup.map(p=>p.position==="CB"?{...p,matchScore:55}:p)});
+const weakDeadScreen=lskDead(0.1,{lineupSnapshot:glimtLineup.map(p=>["DM","CM"].includes(p.position)?{...p,matchScore:55}:p)});
+assert.ok(weakDeadBacks.evidence.firstContactProbability>lskDeadFirst.evidence.firstContactProbability);
+assert.equal(weakDeadBacks.evidence.conditionalRecoveryProbability,lskDeadFirst.evidence.conditionalRecoveryProbability);
+assert.equal(weakDeadScreen.evidence.firstContactProbability,lskDeadFirst.evidence.firstContactProbability);
+assert.ok(weakDeadScreen.evidence.conditionalRecoveryProbability>lskDeadFirst.evidence.conditionalRecoveryProbability);
+assert.equal(annotateOpponentSetPieceChances(lskChances,lskDeadFirst).filter(c=>c.tacticalMoment).length,1);
+assert.equal(annotateOpponentSetPieceChances(lskChances,lskDeadStop),lskChances);
+const deadRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(lskDeadFixture),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"opponent_set_piece");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,period.tacticalPhase.xgDeltaAgainst);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.ok(played.minuteLog.filter(c=>c.tacticalMoment).length<=1);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(lskDeadFixture))).timeline[0].tacticalPhase,period.tacticalPhase);
+  assert.notEqual(advanceMatchClock(played).timeline[1].tacticalPhase?.situation,"opponent_set_piece");
+  assert.equal(advanceMatchClock({...lskDeadFixture,causalOpponentSetPieceVersion:undefined}).timeline[0].tacticalPhase.situation,"opponent_direct_second_ball");
+}finally{Math.random=deadRandom;}
 
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
