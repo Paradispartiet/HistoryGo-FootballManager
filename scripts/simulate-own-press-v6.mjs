@@ -5,7 +5,7 @@ import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotat
 import { readFileSync } from "node:fs";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances }
   from "../src/football-matchday-own-press-v6.js";
-import { advanceMatchClock, finalizeMatchdaySession }
+import { advanceMatchClock, finalizeMatchdaySession, generateMatchdayEvents }
   from "../src/football-matchday-engine.js";
 import { highPressPhaseRoll, resolveHighPressBuildUp, opponentPressWorkload }
   from "../src/football-matchday-high-press-v6.js";
@@ -1957,5 +1957,47 @@ try{
   assert.equal(played.minuteLog.length,period.chances);
   assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(vikingShortSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
 }finally{Math.random=vikingShortRandom;}
+
+// Knapp's dead-ball focus uses the existing event slot and resolver.
+const knappHome=[],knappAway=[];
+for(let n=0;n<100;n++){
+  for(const homeAway of ["home","away"]){
+    const opp={...vikingProfile,id:"viking",homeAway,matchId:"viking-"+n+"-"+homeAway};
+    const generated=generateMatchdayEvents({opponent:opp,tacticalProfile:vikingShortFixture.teamFitSnapshot.tacticalProfile});
+    assert.equal(generated.length,3);
+    assert.equal(new Set(generated.map(e=>e.id)).size,3);
+    assert.deepEqual(generateMatchdayEvents({opponent:opp,tacticalProfile:vikingShortFixture.teamFitSnapshot.tacticalProfile}),generated);
+    (homeAway==="home"?knappHome:knappAway).push({opp,generated});
+  }
+}
+const knappHomeDead=knappHome.find(x=>x.generated[1].id==="opp_set_piece_threat");
+const knappAwayDead=knappAway.find(x=>x.generated[1].id==="opp_set_piece_second_ball");
+assert.ok(knappHomeDead&&knappAwayDead);
+assert.ok(knappHome.some(x=>x.generated[1].id!=="opp_set_piece_threat"));
+assert.ok(knappAway.some(x=>x.generated[1].id!=="opp_set_piece_second_ball"));
+assert.equal(knappHomeDead.generated[1].title,"Dødball mot boksen");
+assert.equal(vikingProfile.tacticalBehaviourEvidence.eraByPattern.setPiecePattern,"1978–1981");
+const knappFixture={...vikingShortFixture,causalOpponentSetPieceVersion:1,events:[knappHomeDead.generated[1]]};
+const knappFirst=resolveOpponentSetPiece(knappFixture,{rng:()=>0.1});
+assert.equal(knappFirst.route,"historical_set_piece_focus");
+assert.equal(knappFirst.evidence.opponentPattern,"historical_set_piece_focus");
+assert.equal(knappFirst.status,"first_contact_threat");
+assert.equal(knappFirst.xgDeltaAgainst,lskDeadFirst.xgDeltaAgainst);
+assert.equal(resolveOpponentSetPiece({...knappFixture,events:[]},{rng:()=>0.1}),null);
+assert.equal(resolveOpponentSetPiece({...knappFixture,causalOpponentSetPieceVersion:undefined},{rng:()=>0.1}),null);
+const knappSecond=resolveOpponentSetPiece({...knappFixture,events:[knappAwayDead.generated[1]]},{rng:()=>0.1});
+assert.equal(knappSecond.status,"second_ball_threat");
+assert.equal(knappSecond.evidence.firstContactProbability,null);
+const knappOriginalRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(knappFixture),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"opponent_set_piece");
+  assert.equal(period.tacticalPhase.route,"historical_set_piece_focus");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,period.tacticalPhase.xgDeltaAgainst);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.notEqual(advanceMatchClock(played).timeline[1].tacticalPhase?.situation,"opponent_set_piece");
+}finally{Math.random=knappOriginalRandom;}
 
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
