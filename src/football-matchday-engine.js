@@ -1845,6 +1845,8 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     causalOpponentRunVersion: 1,
     // New matches can resolve a sourced switch-to-cross attack pattern.
     causalOpponentSwitchCrossVersion: 1,
+    // New matches can release a counterattack after a sourced cross exposure.
+    causalOpponentCrossRecoveryVersion: 1,
     // In-match fatigue uses the current match clock and existing freshness model.
     causalOpponentRunFatigueVersion: 1,
     // Four remaining plans opt in only on new match sessions.
