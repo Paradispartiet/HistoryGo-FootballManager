@@ -1309,6 +1309,19 @@ export function resolveOwnPressAgainstOpponent(session, {
   if (!entry) return null;
   const [route, config] = entry;
   const opponent = session.opponent;
+  const originalShape = opponent?.tacticalBehaviour;
+  // A specifically sourced DIRECT outlet against high press is not evidence
+  // of short build-up. Permit that phase without inflating shortBuildUp.
+  // Keep this field scoped to front_press; existing live/explicit escape
+  // observations take precedence and legacy profiles stay unchanged.
+  const scopedDirect = route === "front_press" &&
+    originalShape?.highPressEscapeRoute === "direct" &&
+    originalShape?.pressEscape == null &&
+    originalShape?.pressEscapeRoute == null &&
+    originalShape?.pressEscapeCandidateRoutes == null;
+  const shape = scopedDirect
+    ? { ...originalShape, pressEscapeRoute: "direct" }
+    : originalShape;
   const scenario = opponent?.styleTraits?.[config.opponentMetric] ??
     (config.opponentMetric === "transitionThreat" ? opponent?.transitionThreat : null);
   const resistance = opponent?.pressResistance;
@@ -1319,13 +1332,12 @@ export function resolveOwnPressAgainstOpponent(session, {
   const balance = profile?.balanceScore;
   const players = distinctSupport(session.lineupSnapshot, config.positions);
   // Do not mistake missing opposition scouting/role fit for a weakness.
-  if (!finite(scenario) || scenario < config.opponentMin ||
+  if (!finite(scenario) || (scenario < config.opponentMin && !scopedDirect) ||
     !finite(resistance) || !finite(threat) || !finite(restDefense) ||
     !finite(balance) || !metrics.every(finite) || !players) return null;
 
   const avgFit = players.reduce((sum, p) => sum + p.matchScore, 0) / players.length;
   const weakestFit = Math.min(...players.map(p => p.matchScore));
-  const shape = opponent?.tacticalBehaviour;
   const routePolicyRequested = session.causalOpponentRouteAdaptationVersion === 1 &&
     shape?.pressEscapeRoutePolicy === "weakest_verified_cover" &&
     !Object.prototype.hasOwnProperty.call(shape, "pressEscapeRoute") &&
@@ -1340,7 +1352,7 @@ export function resolveOwnPressAgainstOpponent(session, {
   // Both a known authored outlet and simulated live pressEscape describe
   // one documented route through the press. "isolated" is stronger direct
   // evidence than an older route label; unknown data awards no free bypass.
-  const escapeEvidence = resolvePressEscapeEvidence(opponent?.tacticalBehaviour);
+  const escapeEvidence = resolvePressEscapeEvidence(shape);
   // Input convention: target flank is expressed from OUR defending viewpoint.
   // No guess from a route label or lineup when the destination is unknown.
   const targetFlankInput = opponent?.tacticalBehaviour?.pressEscapeTargetFlank;
