@@ -1,5 +1,6 @@
 // Focused deterministic regression for matchday v6's first playable situation.
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { resolveHighPressBuildUp, annotateHighPressBuildUpChances }
   from "../src/football-matchday-high-press-v6.js";
 import { advanceMatchClock, finalizeMatchdaySession }
@@ -83,6 +84,41 @@ const covered = resolveHighPressBuildUp(session({ opponent: {
 assert.ok(covered.probability < better.probability);
 assert.equal(covered.evidence.laneCover, "central");
 
+// A real league profile, not an invented opponent: the source-backed 2024
+// Brann style is passed through by the app's league opponent snapshot.
+const leagueProfiles = JSON.parse(readFileSync(
+  new URL("../data/football_league_club_profiles.json", import.meta.url), "utf8"
+)).profiles;
+const brann = leagueProfiles.find(profile => profile.clubId === "brann");
+assert.ok(brann, "Brann league profile must exist");
+assert.equal(brann.tacticalBehaviourEvidence?.era, "2024");
+assert.ok(brann.tacticalBehaviourEvidence?.sources?.length >= 2);
+const brannOpponent = { ...brann, id: brann.clubId, name: "Brann", strength: 74 };
+const { tacticalBehaviour: _cover, ...unknownBrann } = brannOpponent;
+const brannKnown = resolveHighPressBuildUp(session({ opponent: brannOpponent }), { rng: () => 0.42 });
+const brannUnknown = resolveHighPressBuildUp(session({ opponent: unknownBrann }), { rng: () => 0.42 });
+assert.equal(brannUnknown.evidence.laneCover, "unknown");
+assert.equal(brannKnown.evidence.laneCover, "central");
+assert.equal(brannKnown.evidence.coordination, "collective");
+assert.equal(brannUnknown.probability, 0.525);
+assert.equal(brannKnown.probability, 0.325);
+assert.equal(brannUnknown.status, "breakthrough");
+assert.equal(brannKnown.status, "turnover");
+assert.equal(brannUnknown.xgDeltaFor, 0.12);
+assert.equal(brannKnown.xgDeltaFor, 0);
+assert.equal(brannKnown.xgDeltaAgainst, 0.04);
+assert.equal(brannKnown.steps[2].result, "blocked");
+assert.equal(resolveHighPressBuildUp(session({ opponent: brannOpponent }), { rng: () => 0.01 }).status, "breakthrough",
+  "central coverage reduces probability but does not make success impossible");
+const widePlan = { selectedTacticId: "switching_play", tacticSnapshot: { id: "switching_play" } };
+const wideKnown = resolveHighPressBuildUp(session({ ...widePlan, opponent: brannOpponent }), { rng: () => 0.42 });
+const wideUnknown = resolveHighPressBuildUp(session({ ...widePlan, opponent: unknownBrann }), { rng: () => 0.42 });
+assert.equal(wideKnown.probability, wideUnknown.probability,
+  "central coverage must not penalize the wide route or grant a bonus");
+const rosenborg = leagueProfiles.find(profile => profile.clubId === "rosenborg");
+const rosenborgPhase = resolveHighPressBuildUp(session({ opponent: { ...rosenborg, id: rosenborg.clubId } }), { rng: () => 0.42 });
+if (!rosenborg.tacticalBehaviour) assert.equal(rosenborgPhase.evidence.laneCover, "unknown");
+
 const missing = session({ lineupSnapshot: lineup.map((entry) =>
   entry.position === "DM" || entry.position === "CM" ? { ...entry, matchFitKnown: false } : entry
 ) });
@@ -121,6 +157,16 @@ try {
   assert.equal(advanced.score.for, advanced.minuteLog.filter(x => x.type === "goal" && x.side === "for").length);
   assert.equal(advanced.score.against, advanced.minuteLog.filter(x => x.type === "goal" && x.side === "against").length);
   assert.equal(advanceMatchClock(advanced), advanced, "completed clock is idempotent");
+
+  // Same random draw and same XI: only the sourced league cover changes.
+  Math.random = () => 0.42;
+  const brannPeriodKnown = advanceMatchClock(session({ opponent: brannOpponent })).timeline[0];
+  const brannPeriodUnknown = advanceMatchClock(session({ opponent: unknownBrann })).timeline[0];
+  assert.equal(brannPeriodKnown.tacticalPhase.status, "turnover");
+  assert.equal(brannPeriodUnknown.tacticalPhase.status, "breakthrough");
+  assert.equal(brannPeriodKnown.tacticalPhase.xgDeltaFor, 0);
+  assert.equal(brannPeriodUnknown.tacticalPhase.xgDeltaFor, 0.12);
+  assert.equal(brannPeriodKnown.tacticalPhase.xgDeltaAgainst, 0.04);
 
   Math.random = () => 0.99;
   const failed = advanceMatchClock(session());
