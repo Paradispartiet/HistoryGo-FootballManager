@@ -56,7 +56,7 @@ for nivåene og opp-/nedrykket. Alle 16 har profil.
 | Molde | Romsdalsk struktur | tålmodig posisjonsspill i halvrommene som går fort i det du glipper |
 | Lillestrøm | Åråsen-kynisme | langt fram mot targetspissen, krig om andreballen, dødballer |
 | Brann | Fotballrepublikken | aggressivt høypress i 4-3-3, vertikalt rett etter gjenvinning |
-| Vålerenga | Bohemene | offensivt og dynamisk, midtbanen med i angrepet, konstant trykk |
+| Vålerenga | Bohemene | bohemtradisjonen på 1960-tallet og Bengtssons organiserte soneforsvar 1983–1984 er skilt historisk; eldre motorverdier beholdt |
 | Viking | Siddis-disiplin | 5-3-2 med korte avstander mellom leddene, direkte når ballen vinnes |
 | Tromsø | Nordlyset | 3-5-2, rolig oppbygging med tre stoppere, bredde fra vingbackene |
 
@@ -168,7 +168,7 @@ I utkastkjeden har Brann (2024), Rosenborg (1994–1999) og Strømsgodset
 |---|---|---|
 | Start | Gullperioden 1978–1980 bekreftet, presis pressretning ikke funnet | Ingen nye motorfelt |
 | KFUM | Moesgaards 2025-utgave: høyt mann-mann-press, kompakt 5-4-1 i lav blokk | Ingen sentral/bred dekning avledet; ulike presshøyder må holdes adskilt |
-| Vålerenga | Bengtssons 1983–1984-utgave: soneforsvar, ballførerpress, disiplin | Ingen bestemt dekning avledet; bohemprofilen bør senere skille epokene tydeligere |
+| Vålerenga | Bengtsson 1983–1984: innøvd soneforsvar, press, sikring og sideforskyvning | Kollektiv koordinasjon dokumentert; spesifikk pasningsdekning og utspill fortsatt ukjent |
 
 ### Kilder og avgrensninger
 
