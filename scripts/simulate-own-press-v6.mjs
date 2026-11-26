@@ -1258,4 +1258,28 @@ assert.equal(moldeRun(moldeOpponent, "high_press_343", 0, 0.99).xgDeltaFor, 0.11
 assert.equal(moldeRun(moldeOpponent, "midfield_press_trap").counterplay.pathwayId, "switch_play");
 assert.equal(moldeRun(moldeOpponent, "counter_press_recovery"), null);
 
+// Rosenborg 1996: direct outlet against Milan's pressure, not a generic transition route.
+const rbkProfile = leagueProfiles.find(p => p.clubId === "rosenborg");
+assert.equal(rbkProfile.tacticalBehaviour.highPressEscapeRoute, "direct");
+assert.equal(rbkProfile.tacticalBehaviour.pressCoordination, "collective");
+assert.equal(rbkProfile.tacticalBehaviour.passingLaneCover, "central");
+const rbkOpponent = { ...rbkProfile, id: rbkProfile.clubId, strength: 72 };
+const { highPressEscapeRoute: _rbkOutlet, ...rbkDefensiveBehaviour } = rbkOpponent.tacticalBehaviour;
+const rbkUnknownOutlet = { ...rbkOpponent, tacticalBehaviour: rbkDefensiveBehaviour };
+const rbkRun = (opponent, plan = "high_press_343", pressure = 0.99, protection = 0.99) =>
+  resolve(session(plan, { opponent, lineupSnapshot: glimtLineup }), pressure, protection);
+const rbkEscaped = rbkRun(rbkOpponent);
+assert.equal(rbkEscaped.status, "escaped");
+assert.equal(rbkEscaped.counterplay.pathwayId, "direct");
+assert.equal(rbkEscaped.evidence.opponentTriggerBasis, "documented_direct_high_press_escape");
+assert.equal(rbkEscaped.probability, 0.453);
+assert.equal(rbkRun(rbkUnknownOutlet).probability, 0.603);
+assert.equal(rbkEscaped.containmentProbability, 0.609);
+assert.equal(rbkEscaped.xgDeltaAgainst, 0.06);
+assert.equal(rbkRun(rbkOpponent, "high_press_343", 0.99, 0).xgDeltaAgainst, 0.02);
+assert.equal(rbkRun(rbkOpponent, "high_press_343", 0, 0.99).xgDeltaFor, 0.11);
+assert.deepEqual(rbkRun(rbkOpponent, "midfield_press_trap"), rbkRun(rbkUnknownOutlet, "midfield_press_trap"));
+assert.equal(rbkRun(rbkOpponent, "counter_press_recovery"), null);
+assert.equal(rbkRun({...rbkOpponent, tacticalBehaviour:{...rbkOpponent.tacticalBehaviour,pressEscape:"isolated"}}).counterplay, null);
+
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
