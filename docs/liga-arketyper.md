@@ -151,6 +151,72 @@ Målt over en hel sesong: **15 ulike spillestiler**, hver møtt hjemme og borte,
 matchupStyles-sett — ulikt navn er ikke nok, det er fingeravtrykket motorene
 leser som må være unikt.
 
+## Kildekontroll: høyt press og pasningsdekning (2026-11-26)
+
+Kampmotorens v6-pressfase kan bruke kollektivt press og sentral eller bred
+pasningsdekning. Pressintensitet, soneforsvar, mann-mann-press og dekning
+av en bestemt pasningslinje er ulike observasjoner. Ukjent dekning skal
+forbli nøytral; den er ikke bevis på en åpen pasningslinje. Kildene
+beskriver historiske spillestiler, ikke målinger ved avspark.
+
+Av 60 ligaprofiler er det 12 som oppfyller eksisterende pressfasevilkår
+(har high_press-token, eller eksplisitt intensitet >= 70 og høy linje >= 62).
+I utkastkjeden har Brann (2024), Rosenborg (1994–1999) og Strømsgodset
+(2011–2014) kildebelagt kollektivt/sentralt mønster i profilene.
+
+| Klubb | Kildestatus | Beslutning |
+|---|---|---|
+| Start | Gullperioden 1978–1980 bekreftet, presis pressretning ikke funnet | Ingen nye motorfelt |
+| KFUM | Moesgaards 2025-utgave: høyt mann-mann-press, kompakt 5-4-1 i lav blokk | Ingen sentral/bred dekning avledet; ulike presshøyder må holdes adskilt |
+| Vålerenga | Bengtssons 1983–1984-utgave: soneforsvar, ballførerpress, disiplin | Ingen bestemt dekning avledet; bohemprofilen bør senere skille epokene tydeligere |
+
+### Kilder og avgrensninger
+
+- [Starts klubbhistorie 1975–1984](https://www.ikstart.no/start-historien/historie-fra-1905/Om-IKStart-i-perioden-1975-1984):
+  13 baklengsmål i 22 seriekamper i 1978; 52–26 i 1980. Resultatene
+  sier ikke hvordan presset var organisert.
+- [RBKweb, trenerens KFUM-vurdering i 2025](https://www.rbkweb.no/vis/17939):
+  Alfred Johansson skiller høyt mann-mann-press fra kompakt lav 5-4-1.
+  Ingen bestemt pasningsretning oppgitt.
+- [Journalen, Slik vil Kåffa holde plassen](https://journalen.oslomet.no/nb/2024/01/slik-vil-kaffa-holde-plassen):
+  Johannes Moesgaard beskriver overgangen fra 4-3-3 til 3-4-3 i 2023.
+  Formasjonsvalget alene beviser ikke pasningsdekning.
+- [Vålerengas klubbhistorie](https://www.vif-fotball.no/om-klubben/var-stolte-histore-ny):
+  Bengtssons soneforsvar, ballførerpress og disiplin beskrives som et
+  brudd med tidligere fotball.
+- [Store norske leksikon, Vålerenga Fotball](https://snl.no/V%C3%A5lerenga_Fotball):
+  bekrefter gullene i 1983 og 1984 under Bengtsson og den systematiske
+  spilltradisjonen hos etterfølgeren. Ingen bestemt pasningsretning.
+
+### Gjennomgang av de siste seks pressprofilene
+
+| Klubb | Kildestatus | Beslutning |
+|---|---|---|
+| Sogndal | Klubbens spillkonsept i 2016: høyt press og gjenvinning | Dekning ukjent |
+| Strømmen | Trenerintervju 2026: intensitet, defensiv soliditet, hurtige kontringer; endrede pressdetaljer | Dekning ukjent |
+| Sandviken | Gjenpublisert kampreferat mot Sotra: press og gjenvinning på midtbanen; svakere kilde, ikke fastlagt høypressmønster | Dekning ukjent |
+| Bjarg | PlayIQ 2026: høyt mann-mann-press, gjenvinning; direkte treneruttalelser og pasningsdata | Dekning ukjent; mann-mann-prinsipp gir ikke i seg selv sentral eller bred dekning |
+| Grorud | Treneruttalelser 2023 og 2025: gjenvinning i høyt press, dokumentert gjenvinning nær motstanderens boks mot Stjørdals-Blink | Dekning ukjent |
+| Lørenskog | Seniorfotballens sportsplan: høyt press for å vinne ball, lavt press for å beskytte mål | Dekning ukjent; treningsmål er ikke observasjon av fast kampmønster |
+
+Kildene:
+
+- [Sogndal Fotball, God jul frå Sogndal Fotball, 25.12.2016](https://www.sogndalfotball.no/nyheiter/god-jul-fra-sogndal-fotball): klubbens leder beskriver spillkonsept og intensitet.
+- [Vårt Strømmen, sesongstart 2026](https://vartstrommen.no/strommen-if-fotball-sesongstart-i-obos-ligaen-april-2026/): Jens Wedeborg beskriver intensitet, defensiv soliditet og kontringer; ikke pressretning.
+- [IL Sandviken herrer, gjenpubliserte klubbinnlegg](https://www.findglocal.com/NO/Bergen/1577245285884792/IL-Sandviken-herrer): kampreferat mot Sotra. Sekundær gjenpublisering; ikke brukt til motoreffekt.
+- [PlayIQ, Bjarg: A Football Fairytale in the Making?](https://www.playiq.no/insights/bjarg-a-football-fairytale-in-the-making): 2026, treneruttalelser og beskrivelse av mann-mann-press. Motstandernes pasningstreff var 73 %, 7,1 prosentpoeng lavere enn i øvrige kamper. Analyseleverandøren samarbeider med klubben; dette er ikke en uavhengig evaluering eller en måling av bestemte pasningsrom.
+- [Grorud IL, Abel Tjomsland er vår nye nummer 8, 23.12.2023](https://www.grorud-il.no/nyheter/abel-tjomsland-er-var-nye-nummer-8): trenerens beskrivelse av spillerens gjenvinningsferdigheter.
+- [Akers Avis Groruddalen, Tap i Trondheim](https://groruddalen.no/sport/tap-i-trondheim-en-skuffa-gjeng-som-satt-pa-flyplassen/): treneren beskriver en konkret høy gjenvinning og overgangsmuligheter i 2025.
+- [Lørenskog IF, Spillfasene i LIF](https://lorenskogif.no/klubben/sportsplan-1/seniorfotball/spilldelene-i-lif): seniorplanens to pressfaser og periodisering.
+
+**Sluttstatus for første kildegjennomgang:** 12 av 12 aktuelle profiler
+undersøkt, tre med aktivert sentral dekning i utkastkjeden, ni uten
+tilstrekkelig belegg for sentral eller bred dekning. Dette er ikke en
+påstand om at de ni lagene mangler pasningsdekning i virkeligheten.
+Neste kildebehov er konkret videoanalyse av pasningsrom, eller en
+trenerbeskrivelse av pressretning i den relevante perioden. Ingen ny
+mekanikk eller endring i sannsynligheter følger av dokumentasjonen alene.
+
 ## Kildekontroll: kompakt forsvar
 
 Motorens lavblokkfase krever kompaktitet >= 72 og forsvarslinje <= 55.
@@ -179,9 +245,26 @@ ikke kollektiv dekning av et bestemt angrepsrom.
 - [Sarpsborg 08, før Dynamo Kyiv 10.02.2018](https://www.sarpsborg08.no/nyheter/for-dynamo-kiev-utvik-fra-start): trenerens plan for sentral midtbane og forskyvning.
 - [Sarpsborg 08, Rubin Kazan 21.02.2017](https://www.sarpsborg08.no/nyheter/god-gjennomkjoring-mot-rubin-kazan): lagoppstilling med bakre firer.
 
-Status: fem av 22 undersøkt, én med spesifikk dekning i utkastkjeden.
-Neste kandidater er Jerv, Kongsvinger, Mjøndalen og Raufoss.
-Ingen motorendringer eller nye tall følger av denne dokumentasjonen.
+### Andre bolk
+
+| Klubb | Kildegrunnlag | Beslutning |
+|---|---|---|
+| Jerv | Sandstø 2026: senket kantene for bedre sentral kontroll og lå samlet lavere mot slutten mot Bjarg. | Konkret spor, men ikke belegg for samme dekning i 2022-profilen. |
+| Kongsvinger | Klubbhistorien bekrefter sølvåret 1992. | Ingen spesifikk romdekning dokumentert i profilens periode. |
+| Mjøndalen | Eurosport 2020: godt organisert i lavt press i 2019, tidvis svært dypt, varierende formasjoner. | Ingen spesifikk dekning aktivert. |
+| Raufoss | Sandnes Ulf 2020: endret presshøyde og mer kompakt etter pause. | Ingen spesifikk dekning aktivert. |
+| Åsane | Klubbens kampreferat mot Kongsvinger i 2026: kompakt og tidvis lavt forsvar som stengte sentrale åpninger. | Konkret sentraldekning i en navngitt kamp; kandidat for kildebelagt modell innenfor profilens åpne periode 2015–. |
+
+Kilder:
+- [Jerv, Dro i land sterk seier mot Bjarg på hjemmebane, 10.05.2026](https://www.fkjerv.no/nyheter/dro-i-land-sterk-seier-mot-bjarg-pa-hjemmebane): trenerens forklaring på kantjustering og sentral kontroll.
+- [Kongsvinger, 17 år i toppen](https://www.kil.no/om-klubben/lagetfradedypeskoger/17-ar-i-toppen): sølvsesongen 1992.
+- [Eurosport, tabelltips 2020](https://www.eurosport.no/fotball/eliteserien/2020/her-er-eurosports-tabelltips-molde-ned-fra-tronen-og-odd-i-nedrykksstrid_sto7776226/story.shtml): Mjøndalen, treneravsnittet.
+- [Sandnes Ulf, Viktig seier mot Raufoss, 28.08.2020](https://www.sandnesulf.no/nyheter/viktig-seier-mot-raufoss): endring i presshøyde og kompaktitet.
+- [Åsane, Ledet til pause, men måtte reise tomhendt hjem](https://www.asanefotball.no/nyheter/ledet-til-pause-men-matte-reise-tomhendt-hjem): første omgang mot Kongsvinger, lavt forsvar og sentral romdekning.
+
+Status: ti av 22 undersøkt. Hødds spesifikke dekning er merget i #592.
+Åsane er en konkret kandidat til videre datatillegg. Ingen motorendringer
+eller nye tall følger av denne dokumentasjonen.
 
 ## Vakten
 
