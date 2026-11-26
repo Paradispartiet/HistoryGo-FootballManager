@@ -1903,6 +1903,22 @@
         "build_from_back",
         "narrow_442"
       ],
+      "tacticalBehaviour": {
+        "centralCover": "collective"
+      },
+      "tacticalBehaviourEvidence": {
+        "era": "2026",
+        "scope": "Spillmodell av Åsanes lave forsvarsfase før pause mot Kongsvinger, dokumentert 1. juni 2026. Én kamp, ikke en målt sesongtendens eller fast formasjon.",
+        "interpretation": "Kampreferatet beskriver et kompakt lag som i perioder lå lavt og begrenset sentrale åpninger. Dette støtter kollektiv sentraldekning i den modellerte fasen, men ikke bredde- eller boksdekning. Forsvaret holdt ikke hele kampen; Kongsvinger vant 3–1.",
+        "sources": [
+          {
+            "title": "Ledet til pause, men måtte reise tomhendt hjem",
+            "publisher": "Åsane Fotball",
+            "url": "https://www.asanefotball.no/nyheter/ledet-til-pause-men-matte-reise-tomhendt-hjem",
+            "locator": "Publisert 01.06.2026, avsnittene Rossi sendte Åsane foran og Kongsvinger slo tilbake."
+          }
+        ]
+      },
       "shortLabel": "tålmodig blokk, kort oppbygging",
       "pressResistance": 74,
       "defensiveStructure": 83,
