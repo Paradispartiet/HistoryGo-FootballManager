@@ -1,5 +1,6 @@
 // Deterministic causal pressing: high press, mid-block trap, counterpress and escapes.
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances }
   from "../src/football-matchday-own-press-v6.js";
 import { advanceMatchClock, finalizeMatchdaySession }
@@ -55,6 +56,45 @@ for (const [plan, route] of Object.entries(routes)) {
   assert.ok(phase.xgDeltaFor > 0);
   assert.equal(phase.xgDeltaAgainst, -0.01);
 }
+// Viking's scoped direct outlet is a documented high-press response, not
+// evidence that the club generally builds short.
+const leagueProfiles = JSON.parse(readFileSync(new URL("../data/football_league_club_profiles.json", import.meta.url), "utf8")).profiles;
+const viking = leagueProfiles.find(p => p.clubId === "viking");
+assert.equal(viking.styleTraits.shortBuildUp, 56);
+assert.equal(viking.tacticalBehaviourEvidence?.era, "2023");
+const vikingOpponent = { ...viking, id: viking.clubId, strength: 72 };
+const { tacticalBehaviour: _vikingEscape, ...unknownViking } = vikingOpponent;
+const vikingSession = session("high_press_343", { opponent: vikingOpponent });
+assert.equal(resolve(session("high_press_343", { opponent: unknownViking }), 0.99, 0.99), null);
+const vikingEscaped = resolve(vikingSession, 0.99, 0.99);
+assert.equal(vikingEscaped.status, "escaped");
+assert.equal(vikingEscaped.probability, 0.477);
+assert.equal(vikingEscaped.containmentProbability, 0.57);
+assert.equal(vikingEscaped.evidence.opponentTriggerBasis, "documented_direct_high_press_escape");
+assert.equal(vikingEscaped.counterplay.pathwayId, "direct");
+assert.equal(vikingEscaped.xgDeltaAgainst, 0.06);
+const vikingContained = resolve(vikingSession, 0.99, 0);
+assert.equal(vikingContained.status, "contained");
+assert.equal(vikingContained.xgDeltaAgainst, 0.02);
+const vikingRegain = resolve(vikingSession, 0, 0.99);
+assert.equal(vikingRegain.status, "regain");
+assert.equal(vikingRegain.xgDeltaFor, 0.11);
+assert.equal(resolve({ ...vikingSession, causalPressingVersion: undefined }, 0, 0), null);
+assert.equal(resolve(session("high_press_343", {
+  opponent: { ...vikingOpponent, tacticalBehaviour: { ...vikingOpponent.tacticalBehaviour, pressEscape: "isolated" } }
+}), 0.99, 0.99), null);
+for (const plan of ["midfield_press_trap", "counter_press_recovery"]) {
+  // Eligible control fixture: the scoped field must not leak into other phases.
+  const traits = { ...vikingOpponent.styleTraits, possessionControl: 75, transitionThreat: 75 };
+  const known = resolve(session(plan, { opponent: { ...vikingOpponent, styleTraits: traits } }), 0.99, 0.99);
+  const unknown = resolve(session(plan, { opponent: { ...unknownViking, styleTraits: traits } }), 0.99, 0.99);
+  assert.ok(known && unknown);
+  assert.deepEqual(known, unknown);
+}
+assert.equal(resolve(session("high_press_343", {
+  opponent: { ...vikingOpponent, styleTraits: { ...vikingOpponent.styleTraits, shortBuildUp: undefined } }
+}), 0, 0), null, "the scoped route cannot fabricate a missing metric");
+
 const base = resolve(session(), 0.4, 0.4);
 const counter = resolve(session("high_press_343", {
   opponent: { ...opponent, tacticalBehaviour: { pressEscapeRoute: "third_man" } }
