@@ -1236,4 +1236,26 @@ assert.equal(glimtRun(glimtWeakWide, {causalOpponentRouteAdaptationVersion:undef
 assert.equal(glimtRun(glimtWeakWide, {}, 0, 0.99).xgDeltaFor, 0.11);
 assert.equal(glimtRun(glimtWeakWide, {}, 0.99, 0).xgDeltaAgainst, 0.02);
 
+// Molde 2022: switching to the far-side wingback against concentrated press.
+const moldeProfile = leagueProfiles.find(p => p.clubId === "molde");
+assert.equal(moldeProfile.tacticalBehaviour.pressEscapeRoute, "switch_play");
+assert.equal(moldeProfile.tacticalBehaviourEvidence.era, "2022");
+const moldeOpponent = { ...moldeProfile, id: moldeProfile.clubId, strength: 72 };
+const { tacticalBehaviour: _moldeEscape, ...unknownMolde } = moldeOpponent;
+const moldeRun = (opponent, plan = "high_press_343", pressure = 0.99, protection = 0.99) =>
+  resolve(session(plan, { opponent, lineupSnapshot: glimtLineup }), pressure, protection);
+const moldeEscaped = moldeRun(moldeOpponent);
+assert.equal(moldeEscaped.status, "escaped");
+assert.equal(moldeEscaped.counterplay.pathwayId, "switch_play");
+assert.equal(moldeEscaped.counterplay.documentedTargetFlank, null);
+assert.equal(moldeEscaped.probability, 0.437);
+assert.equal(moldeRun(unknownMolde).probability, 0.587);
+assert.equal(moldeEscaped.containmentProbability, 0.593);
+assert.equal(moldeEscaped.xgDeltaAgainst, 0.06);
+assert.equal(moldeRun(moldeOpponent, "high_press_343", 0.99, 0).status, "contained");
+assert.equal(moldeRun(moldeOpponent, "high_press_343", 0.99, 0).xgDeltaAgainst, 0.02);
+assert.equal(moldeRun(moldeOpponent, "high_press_343", 0, 0.99).xgDeltaFor, 0.11);
+assert.equal(moldeRun(moldeOpponent, "midfield_press_trap").counterplay.pathwayId, "switch_play");
+assert.equal(moldeRun(moldeOpponent, "counter_press_recovery"), null);
+
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
