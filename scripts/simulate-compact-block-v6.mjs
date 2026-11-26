@@ -101,6 +101,29 @@ const unknownBox = resolve(session("crossing_box_presence", { opponent: unknownH
 assert.equal(knownBox.evidence.cover, "unknown");
 assert.equal(knownBox.probability, unknownBox.probability, "wide/central cover must not infer box cover");
 
+// Åsane's documented low block against Kongsvinger, June 2026.
+const asane = leagueProfiles.find(p => p.clubId === "asane");
+assert.equal(asane?.tacticalBehaviourEvidence?.era, "2026");
+assert.ok(asane.tacticalBehaviourEvidence.sources.length >= 1);
+const asaneOpponent = { ...asane, id: asane.clubId, strength: 72 };
+const { tacticalBehaviour: _asaneCover, ...unknownAsane } = asaneOpponent;
+const asaneCentral = resolve(session("target_man_focus", { opponent: asaneOpponent }), 0.42);
+const asaneUnknown = resolve(session("target_man_focus", { opponent: unknownAsane }), 0.42);
+assert.equal(asaneUnknown.probability, 0.549);
+assert.equal(asaneCentral.probability, 0.369);
+assert.equal(asaneUnknown.status, "breakthrough");
+assert.equal(asaneCentral.status, "repelled");
+assert.equal(asaneCentral.evidence.cover, "collective");
+assert.equal(asaneCentral.xgDeltaFor, 0);
+assert.equal(asaneCentral.xgDeltaAgainst, 0);
+assert.equal(resolve(session("target_man_focus", { opponent: asaneOpponent }), 0.01).status, "breakthrough");
+for (const plan of ["wide_fast_433", "crossing_box_presence"]) {
+  const known = resolve(session(plan, { opponent: asaneOpponent }), 0.42);
+  const unknown = resolve(session(plan, { opponent: unknownAsane }), 0.42);
+  assert.equal(known.evidence.cover, "unknown");
+  assert.equal(known.probability, unknown.probability);
+}
+
 const poor = resolve(session("wide_fast_433", {
   lineupSnapshot: lineup.map((p) => ["RW", "LW", "LB", "RB", "CB", "DM"].includes(p.position)
     ? { ...p, matchScore: 40 } : p)
