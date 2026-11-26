@@ -394,6 +394,23 @@ console.log("\n10. Planbytte og innbytte bruker samme taktiske grunnlag");
     session.lineupSnapshot[9].sourcedDefensiveReactionSkills.includes("pace"));
 }
 
+// A substitute must bring his own condition and actual minutes, not inherit
+// the outgoing player's fatigue.
+{
+  const incomingId=benchPlayers[0].id, outgoingId=startXI[0].id;
+  const snapshot=createBenchSnapshot({benchPlayers,teamFit,tactic,roles,
+    freshnessByPlayerId:{[incomingId]:86}});
+  const session=baseSession({
+    lineupSnapshot:createLineupSnapshot(teamFit,{freshnessByPlayerId:{[outgoingId]:31}}),
+    benchSnapshot:snapshot
+  });
+  const after=applySubstitution(session,{outPlayerId:outgoingId,inPlayerId:incomingId,minute:62});
+  const incoming=after.lineupSnapshot.find(p=>p.playerId===incomingId);
+  check("innbytterens egen friskhet er bevart",incoming?.startFreshness===86);
+  check("innbytterens spilletid starter ved byttet",incoming?.onFrom===62);
+  check("utgående spiller beholder opprinnelig friskhet",session.lineupSnapshot[0].startFreshness===31);
+}
+
 console.log(`\n${passed}/${passed + failed} sjekker bestått.`);
 if (failed > 0) {
   console.error(`\n✗ Innbytte feilet: ${failed} sjekk(er).`);
