@@ -67,6 +67,29 @@
         "Vinner du ballen når backene er oppe, ligger rommet der."
       ],
       "styleBasis": "tradisjon",
+      "tacticalBehaviour": {
+        "pressCoordination": "collective",
+        "passingLaneCover": "central"
+      },
+      "tacticalBehaviourEvidence": {
+        "era": "1994–1999",
+        "scope": "Historisk stilmodell basert på Eggens forsvarspostulater, ikke målt pasningsdekning ved avspark. Senere analyse fra 2017 er kun støtte for kontinuitet i klubbtradisjonen.",
+        "interpretation": "Eggens postulater beskriver aggressivt førsteforsvarerpress, raske sikringsbevegelser og et samlet lag med kantene trukket inn når motstander angriper sentralt. Dette modelleres som kollektivt press med sentral dekning, ikke som en universell regel for alle kampsituasjoner.",
+        "sources": [
+          {
+            "title": "Nils Arne Eggen og fokus på fotballferdigheter",
+            "publisher": "Fotballtreneren",
+            "url": "https://fotballtreneren.no/2022/08/10/nils-arne-eggen-og-fokus-pa-fotballferdigheter/",
+            "locator": "Rosenborg-postulatene: forsvar generelt, motstander angriper sentralt og midtspissens rolle; gjengir Godfoten (Eggen 1999, s. 256–262)."
+          },
+          {
+            "title": "Analysen: Deila gjør lurt i å kaste filosofien mot Rosenborg",
+            "publisher": "Eurosport",
+            "url": "https://www.eurosport.no/fotball/eliteserien/2017/analysen_sto6180797/story.shtml",
+            "locator": "Må omstille tidlig – toppress med spiss og kanter, kompakte bakre ledd og vern av mellomrommet i 2017."
+          }
+        ]
+      },
       "shortLabel": "godfoten · bredt 4-3-3"
     },
     {

@@ -116,8 +116,32 @@ const wideUnknown = resolveHighPressBuildUp(session({ ...widePlan, opponent: unk
 assert.equal(wideKnown.probability, wideUnknown.probability,
   "central coverage must not penalize the wide route or grant a bonus");
 const rosenborg = leagueProfiles.find(profile => profile.clubId === "rosenborg");
-const rosenborgPhase = resolveHighPressBuildUp(session({ opponent: { ...rosenborg, id: rosenborg.clubId } }), { rng: () => 0.42 });
-if (!rosenborg.tacticalBehaviour) assert.equal(rosenborgPhase.evidence.laneCover, "unknown");
+assert.equal(rosenborg.tacticalBehaviourEvidence?.era, "1994–1999");
+const rbkOpponent = { ...rosenborg, id: rosenborg.clubId, name: "Rosenborg", strength: 74 };
+const { tacticalBehaviour: _rbkCover, ...unknownRbk } = rbkOpponent;
+const rbkKnown = resolveHighPressBuildUp(session({ opponent: rbkOpponent }), { rng: () => 0.42 });
+const rbkUnknown = resolveHighPressBuildUp(session({ opponent: unknownRbk }), { rng: () => 0.42 });
+assert.equal(rbkKnown.evidence.laneCover, "central");
+assert.equal(rbkKnown.evidence.coordination, "collective");
+assert.equal(rbkUnknown.evidence.laneCover, "unknown");
+assert.equal(rbkUnknown.probability, 0.585);
+assert.equal(rbkKnown.probability, 0.385);
+assert.equal(rbkUnknown.status, "breakthrough");
+assert.equal(rbkKnown.status, "turnover");
+assert.equal(rbkKnown.xgDeltaAgainst, 0.04);
+assert.equal(rbkKnown.xgDeltaFor, 0);
+assert.equal(rbkUnknown.xgDeltaFor, 0.12);
+assert.equal(resolveHighPressBuildUp(session({ opponent: rbkOpponent }), { rng: () => 0.01 }).status, "breakthrough");
+assert.ok(rbkKnown.probability > brannKnown.probability, "different club pressure remains meaningful");
+assert.equal(
+  resolveHighPressBuildUp(session({ ...widePlan, opponent: rbkOpponent }), { rng: () => 0.42 }).probability,
+  resolveHighPressBuildUp(session({ ...widePlan, opponent: unknownRbk }), { rng: () => 0.42 }).probability
+);
+const undocumented = leagueProfiles.find(profile => profile.clubId === "valerenga" && !profile.tacticalBehaviour);
+if (undocumented) {
+  const phase = resolveHighPressBuildUp(session({ opponent: { ...undocumented, id: undocumented.clubId } }), { rng: () => 0.42 });
+  assert.equal(phase.evidence.laneCover, "unknown");
+}
 
 const missing = session({ lineupSnapshot: lineup.map((entry) =>
   entry.position === "DM" || entry.position === "CM" ? { ...entry, matchFitKnown: false } : entry
