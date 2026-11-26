@@ -1,5 +1,6 @@
 // Deterministic causal pressing: high press, mid-block trap, counterpress and escapes.
 import assert from "node:assert/strict";
+import { resolveOpponentRunSequence, annotateOpponentRunChances } from "../src/football-matchday-sequence-v8.js";
 import { readFileSync } from "node:fs";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances }
   from "../src/football-matchday-own-press-v6.js";
@@ -1282,5 +1283,63 @@ assert.equal(rbkEscaped.probability, 0.453);
 assert.equal(rbkEscaped.containmentProbability, 0.609);
 assert.equal(rbkEscaped.xgDeltaAgainst, 0.06);
 assert.deepEqual(rbkRun(milanScenario, "midfield_press_trap"), rbkRun(rbkOpponent, "midfield_press_trap"));
+
+// Sourced opponent runs: a single causal period, not an automatic press escape.
+const runFixture = session("wide_fast_433", {
+  causalOpponentRunVersion: 1,
+  opponent: rbkOpponent, lineupSnapshot: glimtLineup,
+  tacticSnapshot: {id:"wide_fast_433",defensiveLine:"high"},
+  planMatchup:{edge:1.5}
+});
+const runSequence = (changes = {}, draw = 0.43) =>
+  resolveOpponentRunSequence({...runFixture,...changes},{rng:()=>draw});
+const highRun = runSequence();
+const lowRun = runSequence({activePlanSnapshot:{id:"wide_fast_433",defensiveLine:"low"}});
+assert.equal(highRun.status,"breakthrough");
+assert.equal(lowRun.status,"contained");
+assert.equal(highRun.probability,0.552);
+assert.equal(lowRun.probability,0.312);
+assert.equal(highRun.xgDeltaAgainst,0.06);
+assert.equal(lowRun.xgDeltaAgainst,-0.03);
+assert.equal(highRun.evidence.eventCount,1);
+assert.equal(highRun.evidence.randomDraws,1);
+assert.equal(highRun.steps.length,4);
+assert.equal(new Set(highRun.evidence.supportingPlayers.map(p=>p.playerId)).size,5);
+assert.equal(runSequence({causalOpponentRunVersion:undefined}),null);
+assert.equal(runSequence({opponent:{...rbkOpponent,tacticalBehaviour:{}}}),null);
+assert.equal(runSequence({tacticSnapshot:{id:"wide_fast_433"}}),null);
+assert.equal(runSequence({lineupSnapshot:glimtLineup.map(p=>p.position==="LB"?{...p,matchFitKnown:false}:p)}),null);
+assert.ok(runSequence({lineupSnapshot:glimtLineup.map(p=>p.position==="CB"?{...p,matchScore:55}:p)}).probability>highRun.probability);
+assert.equal(annotateOpponentRunChances([],highRun).length,0);
+const runChances=[{side:"against"},{side:"against"},{side:"for"}];
+assert.equal(annotateOpponentRunChances(runChances,highRun).filter(c=>c.tacticalMoment).length,1);
+assert.equal(annotateOpponentRunChances(runChances,lowRun),runChances);
+let runSeed;
+for(let i=0;i<3000;i++){
+  const s={...runFixture,id:"eggen-runs-"+i};
+  const draw=highPressPhaseRoll(s,"0:opponent-runs");
+  if(draw>=lowRun.probability&&draw<highRun.probability){runSeed=s;break;}
+}
+assert.ok(runSeed,"same deterministic roll separates high and low line");
+const runRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  for(const [s,status] of [[runSeed,"breakthrough"],[{...runSeed,activePlanSnapshot:{id:"wide_fast_433",defensiveLine:"low"}},"contained"]]){
+    const played=advanceMatchClock(s),period=played.timeline[0];
+    assert.equal(period.tacticalPhase.situation,"opponent_coordinated_runs");
+    assert.equal(period.tacticalPhase.status,status);
+    assert.equal(period.tacticalXg,undefined,"no duplicate plan-edge contribution");
+    for(const side of ["for","against"]){
+      assert.equal(Math.round((period.expectedGoals[side]-period.baselineExpectedGoals[side])*100)/100,
+        period.tacticalPhase[side==="for"?"xgDeltaFor":"xgDeltaAgainst"]);
+    }
+    assert.equal(played.minuteLog.length,period.chances);
+    assert.ok(played.minuteLog.filter(c=>c.tacticalMoment).length<=1);
+    assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(s))).timeline[0].tacticalPhase,period.tacticalPhase);
+  }
+  assert.equal(advanceMatchClock({...runSeed,causalOpponentRunVersion:undefined}).timeline[0].tacticalPhase,undefined);
+  const specialised=advanceMatchClock({...runSeed,selectedTacticId:"high_press_343",tacticSnapshot:{id:"high_press_343",defensiveLine:"high"}});
+  assert.equal(specialised.timeline[0].tacticalPhase.situation,"our_press_vs_opponent_build_up","specialist phase retains priority");
+}finally{Math.random=runRandom;}
 
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
