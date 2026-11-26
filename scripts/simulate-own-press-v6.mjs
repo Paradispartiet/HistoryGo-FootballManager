@@ -1,7 +1,7 @@
 import { resolveSourcedCreativeBreakthrough, resolveCompactBlockAttack, annotateCompactBlockChances } from "../src/football-matchday-compact-block-v6.js";
 // Deterministic causal pressing: high press, mid-block trap, counterpress and escapes.
 import assert from "node:assert/strict";
-import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances, annotateOpponentCreativeAttackChances } from "../src/football-matchday-sequence-v8.js";
+import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances, annotateOpponentCreativeAttackChances, resolveOpponentFullbackOverlap, annotateOpponentFullbackOverlapChances } from "../src/football-matchday-sequence-v8.js";
 import { readFileSync } from "node:fs";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances }
   from "../src/football-matchday-own-press-v6.js";
@@ -1869,5 +1869,48 @@ try{
   assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(lskCreativeSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
   assert.equal(advanceMatchClock({...lskCreativeSeed,causalOpponentSetPieceVersion:1,events:[{id:"opp_set_piece_threat"}]}).timeline[0].tacticalPhase.situation,"opponent_set_piece");
 }finally{Math.random=lskCreativeRandom;}
+
+// Viking: equal flank cover stays anonymous; wide and central gates are separate.
+const vikingProfile=JSON.parse(readFileSync(new URL("../data/football_league_club_profiles.json",import.meta.url),"utf8")).profiles.find(p=>p.clubId==="viking");
+const vikingOverlapFixture=session("midfield_press_trap",{causalOpponentFullbackOverlapVersion:1,
+  opponent:{...vikingProfile,id:"viking",strength:72},lineupSnapshot:glimtLineup,
+  tacticSnapshot:{id:"midfield_press_trap",defensiveLine:"medium"}});
+const vikingOverlap=(roll,changes={})=>resolveOpponentFullbackOverlap({...vikingOverlapFixture,...changes},{rng:()=>roll});
+const vikingSuccess=vikingOverlap(0.1),vikingBox=vikingOverlap(0.3),vikingWide=vikingOverlap(0.9);
+assert.deepEqual([vikingSuccess.status,vikingBox.status,vikingWide.status],["overlap_breakthrough","box_contained","overlap_contained"]);
+assert.deepEqual([vikingSuccess.xgDeltaAgainst,vikingBox.xgDeltaAgainst,vikingWide.xgDeltaAgainst],[0.07,-0.02,-0.03]);
+assert.equal(vikingSuccess.evidence.targetFlank,null);
+assert.equal(vikingSuccess.evidence.opponentPlayerId,null);
+const vikingLeft=vikingOverlap(0.1,{lineupSnapshot:glimtLineup.map(p=>p.position==="LW"?{...p,matchScore:55}:p)});
+assert.equal(vikingLeft.evidence.targetFlank,"left");
+assert.ok(vikingLeft.evidence.overlapProbability>vikingSuccess.evidence.overlapProbability);
+assert.equal(vikingLeft.evidence.conditionalBoxProbability,vikingSuccess.evidence.conditionalBoxProbability);
+const vikingWeakBox=vikingOverlap(0.1,{lineupSnapshot:glimtLineup.map(p=>p.position==="CB"?{...p,matchScore:55}:p)});
+assert.equal(vikingWeakBox.evidence.overlapProbability,vikingSuccess.evidence.overlapProbability);
+assert.ok(vikingWeakBox.evidence.conditionalBoxProbability>vikingSuccess.evidence.conditionalBoxProbability);
+assert.equal(vikingOverlap(0.1,{lineupSnapshot:glimtLineup.filter(p=>p.position!=="LW")}),null);
+assert.equal(vikingOverlap(0.1,{causalOpponentFullbackOverlapVersion:undefined}),null);
+assert.equal(vikingOverlap(0.1,{opponent:{...vikingOverlapFixture.opponent,tacticalBehaviour:{}}}),null);
+assert.equal(vikingOverlap(NaN),null);
+let vikingDraws=0;resolveOpponentFullbackOverlap(vikingOverlapFixture,{rng:()=>{vikingDraws++;return 0.1;}});
+assert.equal(vikingDraws,1);
+assert.equal(annotateOpponentFullbackOverlapChances(lskChances,vikingSuccess).filter(c=>c.tacticalMoment).length,1);
+assert.equal(annotateOpponentFullbackOverlapChances(lskChances,vikingWide),lskChances);
+let vikingOverlapSeed;
+for(let i=0;i<3000;i++){
+  const s={...vikingOverlapFixture,id:"viking-overlap-"+i};
+  if(vikingOverlap(highPressPhaseRoll(s,"0:opponent-fullback-overlap")).status==="overlap_breakthrough"){vikingOverlapSeed=s;break;}
+}
+assert.ok(vikingOverlapSeed);
+const vikingOverlapRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(vikingOverlapSeed),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"opponent_fullback_overlap");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,period.tacticalPhase.xgDeltaAgainst);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(vikingOverlapSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
+}finally{Math.random=vikingOverlapRandom;}
 
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
