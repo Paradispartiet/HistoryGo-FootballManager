@@ -1,3 +1,4 @@
+import { resolveSourcedCreativeBreakthrough } from "../src/football-matchday-compact-block-v6.js";
 // Deterministic causal pressing: high press, mid-block trap, counterpress and escapes.
 import assert from "node:assert/strict";
 import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances } from "../src/football-matchday-sequence-v8.js";
@@ -1780,5 +1781,26 @@ try{
   assert.notEqual(advanceMatchClock(played).timeline[1].tacticalPhase?.situation,"opponent_set_piece");
   assert.equal(advanceMatchClock({...lskDeadFixture,causalOpponentSetPieceVersion:undefined}).timeline[0].tacticalPhase.situation,"opponent_direct_second_ball");
 }finally{Math.random=deadRandom;}
+
+// Directly sourced dribbling + vision in a suitable current role unlock a
+// conditional creative route, not an automatic goal or universal club buff.
+const creativeXI=glimtLineup.map(p=>p.position==="AM"?{...p,roleId:"free_creator",name:"Kreatør",sourcedCreativeSkills:["dribbling","vision"]}:p);
+const creativeFixture=session("central_possession_4231",{causalSourcedCreativeBreakthroughVersion:1,
+  lineupSnapshot:creativeXI,tacticSnapshot:{id:"central_possession_4231"},
+  opponent:{...lskFixture.opponent,styleTraits:{defensiveCompactness:78,highLine:45}}});
+const creativeBlock={compactness:78,line:45};
+const creativeRun=(draw,changes={})=>resolveSourcedCreativeBreakthrough({...creativeFixture,...changes},creativeBlock,{rng:()=>draw});
+const creativeGood=creativeRun(0.1),creativeStop=creativeRun(0.4),creativeBlocked=creativeRun(0.8);
+assert.deepEqual([creativeGood.status,creativeStop.status,creativeBlocked.status],["breakthrough","release_contained","dribble_contained"]);
+assert.equal(creativeGood.xgDeltaFor,0.09);
+assert.equal(creativeStop.xgDeltaFor,0);
+assert.equal(creativeGood.evidence.creatorId,creativeXI.find(p=>p.position==="AM").playerId);
+assert.notEqual(creativeGood.evidence.receiverId,creativeGood.evidence.creatorId);
+assert.equal(creativeGood.evidence.randomDraws,1);
+assert.equal(creativeRun(0.1,{causalSourcedCreativeBreakthroughVersion:undefined}),null);
+assert.equal(creativeRun(0.1,{lineupSnapshot:creativeXI.map(p=>({...p,sourcedCreativeSkills:[]}))}),null);
+assert.equal(creativeRun(0.1,{lineupSnapshot:creativeXI.map(p=>p.position==="AM"?{...p,sourcedCreativeSkills:["vision"]}:p)}),null);
+assert.equal(creativeRun(0.1,{lineupSnapshot:creativeXI.map(p=>p.position==="AM"?{...p,roleId:"pressing_midfielder"}:p)}),null);
+assert.equal(creativeRun(NaN),null);
 
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
