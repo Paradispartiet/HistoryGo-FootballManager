@@ -552,12 +552,13 @@
       "shortLabel": "langball, dueller og andreballer",
       "tacticalBehaviour": {
         "attackingRunPattern": "direct_duel_second_ball",
-        "setPiecePattern": "historical_delivery_box_duel"
+        "setPiecePattern": "historical_delivery_box_duel",
+        "creativePattern": "historical_individual_creativity"
       },
       "tacticalBehaviourEvidence": {
         "era": "1975–1989",
         "scope": "Historisk klubbtradisjon, ikke dagens LSK eller en fast oppspillsrute i alle kamper.",
-        "interpretation": "Retrospektive kilder beskriver direkte oppspill og duellspill i LSK-tradisjonen, og dødballspesialisten Tom Lund. NFF dokumenterer ulike formasjoner i cupfinaler. Andreballens to betingede sannsynligheter er en generisk spillhypotese, ikke historiske målinger eller dokumentert fast angrepsrute. Ingen pressEscapeRoute, passingLaneCover, navngitt mottaker eller fast flanke utledes. Eldre numeriske traits og matchup-tokens er uendrede spillmodellantakelser. Hooleys dødballtradisjon i slutten av 1970-årene er belagt: Lund slo frispark og cornere mot sterke hodespillere. Den generiske dødballfasen bruker kun eksisterende planlagte dødballsituasjoner; ingen historisk treffprosent, fast løp, spilleridentitet eller dødballfrekvens antas.",
+        "interpretation": "Retrospektive kilder beskriver direkte oppspill og duellspill i LSK-tradisjonen, og dødballspesialisten Tom Lund. NFF dokumenterer ulike formasjoner i cupfinaler. Andreballens to betingede sannsynligheter er en generisk spillhypotese, ikke historiske målinger eller dokumentert fast angrepsrute. Ingen pressEscapeRoute, passingLaneCover, navngitt mottaker eller fast flanke utledes. Eldre numeriske traits og matchup-tokens er uendrede spillmodellantakelser. Hooleys dødballtradisjon i slutten av 1970-årene er belagt: Lund slo frispark og cornere mot sterke hodespillere. Den generiske dødballfasen bruker kun eksisterende planlagte dødballsituasjoner; ingen historisk treffprosent, fast løp, spilleridentitet eller dødballfrekvens antas. Lunds dribling og overblikk gir belegg for individuell kreativitet i deler av gullperioden, ikke for en bestemt angriper i den simulerte elleveren. En anonym kreativ angrepsvariant er et alternativ til direkte oppspill i spillmodellen; valgandel, pasningssekvens og sannsynligheter er ikke historiske målinger.",
         "sources": [
           {
             "title": "Et flott lag for Ullevaal",
@@ -590,10 +591,22 @@
             "locator": "Gullperioden 1975–1989."
           },
           {
-            "title": "BLOGG: Når ballen er død",
+            "title": "LSK, elendige på dødballer",
             "publisher": "Aftenposten",
-            "url": "https://www.aftenposten.no/sport/meninger/i/9vqeGE/blogg-naar-ballen-er-doed",
+            "url": "https://www.aftenposten.no/sport/meninger/i/vQ3Ag4/lsk-elendige-paa-doedballer",
             "locator": "Retrospektiv omtale av Hooley, Lunds frispark og cornere og sterke hodespillere."
+          },
+          {
+            "title": "En hyllest til Tom Lund",
+            "publisher": "Stavanger Aftenblad",
+            "url": "https://www.aftenbladet.no/sport/i/L0ygnJ/en-hyllest-til-tom-lund",
+            "locator": "Retrospektiv beskrivelse av Lunds driblinger forbi flere motstandere."
+          },
+          {
+            "title": "Tusen takk for alt, \"Tommy\"",
+            "publisher": "Lillestrøm Sportsklubb",
+            "url": "https://www.lsk.no/nyheter/tusen-takk-for-alt-tommy",
+            "locator": "Klubbens omtale av teknikk og overblikk."
           }
         ]
       }
