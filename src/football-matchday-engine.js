@@ -9,7 +9,7 @@ import { resolveTurnoverTransition } from "./football-matchday-turnover-v6.js";
 import { resolveCompactBlockAttack, annotateCompactBlockChances } from "./football-matchday-compact-block-v6.js";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances, getManagerPressCounterOptions } from "./football-matchday-own-press-v6.js";
 import { resolveGameControlPhase, annotateGameControlChances } from "./football-matchday-control-v6.js";
-import { resolveAuthoredSequencePeriod, annotateAuthoredSequenceChances, resolveOpponentRunSequence, annotateOpponentRunChances } from "./football-matchday-sequence-v8.js";
+import { resolveAuthoredSequencePeriod, annotateAuthoredSequenceChances, resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances } from "./football-matchday-sequence-v8.js";
 import {
   applyOpponentAdjustment,
   createPlanChange,
@@ -1843,6 +1843,8 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     causalDirectionalSequenceVersion: 1,
     // Only new matches can resolve a sourced opponent off-ball run pattern.
     causalOpponentRunVersion: 1,
+    // New matches can resolve a sourced switch-to-cross attack pattern.
+    causalOpponentSwitchCrossVersion: 1,
     // In-match fatigue uses the current match clock and existing freshness model.
     causalOpponentRunFatigueVersion: 1,
     // Four remaining plans opt in only on new match sessions.
@@ -2268,6 +2270,8 @@ export function advanceMatchClock(session) {
     ? resolveOpponentRunSequence(session, {
         minute: segmentRange(played, totalSegments).from - 1,
         rng: () => highPressPhaseRoll(session, played + ":opponent-runs")
+      }) || resolveOpponentSwitchCrossSequence(session, {
+        rng: () => highPressPhaseRoll(session, played + ":opponent-switch-cross")
       }) : null;
   const phase = transition ? {
     ...buildUpPhase, transition, xgDeltaAgainst: transition.xgDeltaAgainst
@@ -2324,7 +2328,7 @@ export function advanceMatchClock(session) {
     ? annotateCompactBlockChances(generatedChances, tacticalPhase)
     : tacticalPhase?.situation === "our_press_vs_opponent_build_up"
       ? annotateOwnPressChances(generatedChances, tacticalPhase)
-      : tacticalPhase?.situation === "opponent_coordinated_runs"
+      : ["opponent_coordinated_runs", "opponent_switch_cross"].includes(tacticalPhase?.situation)
         ? annotateOpponentRunChances(generatedChances, tacticalPhase)
       : tacticalPhase?.situation === "authored_four_step_sequence"
         ? annotateAuthoredSequenceChances(generatedChances, tacticalPhase)

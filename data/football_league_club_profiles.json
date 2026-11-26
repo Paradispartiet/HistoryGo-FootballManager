@@ -1296,7 +1296,8 @@
       ],
       "tacticalBehaviour": {
         "pressCoordination": "collective",
-        "passingLaneCover": "central"
+        "passingLaneCover": "central",
+        "attackingRunPattern": "central_switch_early_cross"
       },
       "tacticalBehaviourEvidence": {
         "era": "2011–2014",
