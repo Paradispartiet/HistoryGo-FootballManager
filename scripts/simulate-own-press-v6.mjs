@@ -6,7 +6,7 @@ import { resolveOwnPressAgainstOpponent, annotateOwnPressChances }
   from "../src/football-matchday-own-press-v6.js";
 import { advanceMatchClock, finalizeMatchdaySession }
   from "../src/football-matchday-engine.js";
-import { highPressPhaseRoll }
+import { highPressPhaseRoll, resolveHighPressBuildUp, opponentPressWorkload }
   from "../src/football-matchday-high-press-v6.js";
 import { sourcedDefensiveReactionSkillsForPlayer, createLineupSnapshot }
   from "../src/football-player-stats.js";
@@ -1427,5 +1427,43 @@ try{
   assert.equal(played.minuteLog.filter(c=>c.tacticalMoment).length,0);
   assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(brannSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
 }finally{Math.random=brannRandom;}
+
+// Collective workload: count only completed press actions.
+const workloadFixture={...brannSession,causalOpponentPressWorkloadVersion:1};
+const workloadPeriod=(segment,tacticalPhase)=>({segment,range:{to:(segment+1)*15},expectedGoals:{for:0.2,against:0.2},tacticalPhase});
+const workloadFirst=resolve(workloadFixture,0.47,0.99);
+const workloadBuild=s=>resolveHighPressBuildUp({...s,selectedTacticId:"patient_build_up",tacticSnapshot:{id:"patient_build_up"}},{rng:()=>0.35});
+const workloadHigh=workloadBuild(workloadFixture);
+const workloadHistory=[workloadPeriod(0,workloadFirst),workloadPeriod(1,workloadHigh),workloadPeriod(2,workloadFirst)];
+const workloadLater=resolve({...workloadFixture,timeline:workloadHistory},0.47,0.99);
+const workloadLaterHigh=workloadBuild({...workloadFixture,timeline:workloadHistory});
+assert.equal(workloadFirst.status,"regain_lost");
+assert.equal(workloadLater.status,"regain");
+assert.equal(workloadLater.xgDeltaFor,0.08);
+assert.equal(workloadLater.evidence.regainCounterpress.conditionalReleaseProbability,0.753);
+assert.equal(workloadLater.evidence.regainCounterpress.retainedRegainProbability,0.496);
+assert.equal(workloadLater.evidence.regainCounterpress.opponentPressWorkload.adjustment,0.06);
+assert.equal(workloadHigh.status,"turnover");
+assert.equal(workloadLaterHigh.status,"breakthrough");
+assert.ok(Math.abs(workloadLaterHigh.probability-workloadHigh.probability-0.06)<=0.0011);
+assert.equal(resolve({...workloadFixture,timeline:workloadHistory,causalOpponentPressWorkloadVersion:undefined},0.47,0.99).status,"regain_lost");
+assert.equal(opponentPressWorkload({...workloadFixture,timeline:[workloadPeriod(0,workloadFirst),workloadPeriod(0,workloadFirst)]}).adjustment,0.02);
+assert.equal(opponentPressWorkload({...workloadFixture,timeline:[workloadPeriod(0,{situation:"game_control_and_release",status:"controlled"})]}).adjustment,0);
+assert.equal(opponentPressWorkload({...workloadFixture,timeline:Array.from({length:6},(_,i)=>workloadPeriod(i,workloadFirst))}).adjustment,0.08);
+assert.equal(opponentPressWorkload({...workloadFixture,opponent:{...brannOpponent,tacticalBehaviour:{}}}),null);
+let workloadClock={...workloadFixture,id:"brann-workload-clock",events:[{},{},{}]};
+const workloadRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  for(let i=0;i<4;i++){
+    const prior=opponentPressWorkload(workloadClock);
+    workloadClock=advanceMatchClock(workloadClock);
+    const period=workloadClock.timeline[i];
+    const continuation=period.tacticalPhase?.evidence?.regainCounterpress;
+    if(continuation) assert.deepEqual(continuation.opponentPressWorkload,prior);
+    assert.equal(period.tacticalXg,undefined);
+    assert.equal(Math.round((period.expectedGoals.for-period.baselineExpectedGoals.for)*100)/100,period.tacticalPhase.xgDeltaFor);
+  }
+}finally{Math.random=workloadRandom;}
 
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
