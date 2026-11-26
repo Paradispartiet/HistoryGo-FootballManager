@@ -1,4 +1,4 @@
-import { createLineupSnapshot, attributeGoal, createMatchPlayerStats, sourcedRecoverySkillsForPlayer, sourcedDefensiveReactionSkillsForPlayer } from "./football-player-stats.js";
+import { createLineupSnapshot, attributeGoal, createMatchPlayerStats, sourcedRecoverySkillsForPlayer, sourcedDefensiveReactionSkillsForPlayer, sourcedCreativeSkillsForPlayer } from "./football-player-stats.js";
 import { applySubstitution, aggregateSourcedMetricBonuses, createBenchSnapshot, playedPlayersFor, sourcedMetricBonusesForAssignment } from "./football-substitutions.js";
 import { evaluateTrainingDecisionSupport } from "./football-training-week.js";
 import { buildMatchExplanation } from "./football-match-explanation-engine.js";
@@ -1849,6 +1849,7 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     causalOpponentRehearsedOutletVersion: 1,
     causalOpponentDirectSecondBallVersion: 1,
     causalOpponentSetPieceVersion: 1,
+    causalSourcedCreativeBreakthroughVersion: 1,
     // New matches can release a counterattack after a sourced cross exposure.
     causalOpponentCrossRecoveryVersion: 1,
     // In-match fatigue uses the current match clock and existing freshness model.
@@ -2032,6 +2033,7 @@ export function applyMatchPlanChange(session, nextPlan, { opponent, currentTeamF
         ...entry,
         sourcedRecoverySkills: sourcedRecoverySkillsForPlayer(assignments[i].player),
         sourcedDefensiveReactionSkills: sourcedDefensiveReactionSkillsForPlayer(assignments[i].player),
+        sourcedCreativeSkills: sourcedCreativeSkillsForPlayer(assignments[i].player),
         sourcedMetricBonuses: sourcedMetricBonusesForAssignment(assignments[i], nextPlan)
       }));
       const activeBonuses = aggregateSourcedMetricBonuses(updatedLineup);
