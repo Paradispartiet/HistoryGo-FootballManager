@@ -151,6 +151,38 @@ Målt over en hel sesong: **15 ulike spillestiler**, hver møtt hjemme og borte,
 matchupStyles-sett — ulikt navn er ikke nok, det er fingeravtrykket motorene
 leser som må være unikt.
 
+## Kildekontroll: kompakt forsvar
+
+Motorens lavblokkfase krever kompaktitet >= 72 og forsvarslinje <= 55.
+22 av 60 eksisterende ligaprofiler oppfyller dette. Tre uavhengige
+dekningsfelt kan brukes: centralCover, wideCover og boxCover.
+En formasjon, lav presshøyde eller defensiv soliditet alene beviser
+ikke kollektiv dekning av et bestemt angrepsrom.
+
+| Klubb | Kildegrunnlag | Beslutning |
+|---|---|---|
+| Hødd | Cupfinalen 2012, samtidig analyse av forskyvning i 4-5-1 | Sentral og bred kollektiv dekning aktivert i #592; boksdekning ukjent |
+| Kristiansund | Michelsen 2017–2022: kollektiv bakre firer og organisert midtbane i 2019, variabel presshøyde i 2020, kompakt lag mot Start i 2020 | Ingen spesifikk dekning aktivert; 4-4-2 er ikke dokumentert som fast formasjon |
+| Aalesund | Rekdal 2011: to dype midtbanespillere i 4-2-1-3 mot Brann, en femte forsvarer satt inn sent mot Start | Sentral sikring i eget angrep er ikke det samme som sentral dekning i etablert lav blokk; ingen nye felt |
+| Viking | Analyse av 2023/24 beskriver samordnede høypressfeller og gode automatismer mot høyt press | Ikke belegg for lavblokkdekning. Relevant ved senere arbeid med pressEscape |
+| Sarpsborg 08 | Bakke i 2018 ønsket to sentrale midtbanespillere med kapasitet til å dekke rom og forskyve mot Dynamo Kyiv; i 2017 stilte laget med bakre firer mot Rubin Kazan | Plan før kamp er ikke observert lavblokkdekning. Ingen nye felt. Fast 5-3-2 bør undersøkes |
+
+### Kilder
+
+- [Kristiansund, Eurosport 2019 – vurdering av KBK og Michelsen](https://www.eurosport.no/fotball/eliteserien/2019/joacims-analyse-her-er-dommen-over-kbk-og-taktiker-michelsen_sto7384144/story.shtml): forsvars- og midtbaneleddenes kollektive struktur.
+- [Eurosport 2020 – tabelltips](https://www.eurosport.no/fotball/eliteserien/2020/her-er-eurosports-tabelltips-molde-ned-fra-tronen-og-odd-i-nedrykksstrid_sto7776226/story.shtml): høyt og lavt press, direkte etter gjenvinning.
+- [Start, kampreferat 2020](https://www.ikstart.no/start-historien/sesongoversikter/sesongen-2020/runde-13-2020-kristiansund-start-3-2): kompakt KBK-lag og overgang etter sentralt balltap.
+- [Kristiansund, Seier mot Sandefjord](https://www.kristiansundbk.no/nyheter/seier-mot-sandefjord): Michelsen om defensivt fundament; 3-5-2 i denne treningskampen.
+- [Fotballanalyse 2011 – Brann 1–2 Aalesund](https://fotballanalyse.wordpress.com/2011/11/06/brann-1-2-aalesund-rekdal-og-barrantes-pa-internasjonalt-niva/): to dype midtbanespillere, kantpress og restforsvar i 4-2-1-3.
+- [Stavanger Aftenblad, Rekdal etter Start–AaFK 2011](https://www.aftenbladet.no/sport/i/ng5bbd/rekdal-kvittet-oss-med-noe-daukjoett): sen overgang til fem forsvarere.
+- [Total Football Analysis, Viking 2023/24](https://totalfootballanalysis.com/article/viking-fk-the-key-tactical-points-that-see-them-top-of-the-eliteserien-scout-report-tactical-analysis): avsnittene om høyt press og oppbygging mot press. Ikke en lavblokkanalyse.
+- [Sarpsborg 08, før Dynamo Kyiv 10.02.2018](https://www.sarpsborg08.no/nyheter/for-dynamo-kiev-utvik-fra-start): trenerens plan for sentral midtbane og forskyvning.
+- [Sarpsborg 08, Rubin Kazan 21.02.2017](https://www.sarpsborg08.no/nyheter/god-gjennomkjoring-mot-rubin-kazan): lagoppstilling med bakre firer.
+
+Status: fem av 22 undersøkt, én med spesifikk dekning i utkastkjeden.
+Neste kandidater er Jerv, Kongsvinger, Mjøndalen og Raufoss.
+Ingen motorendringer eller nye tall følger av denne dokumentasjonen.
+
 ## Vakten
 
 `sim:league-season` går gjennom en **hel sesong** og krever:
