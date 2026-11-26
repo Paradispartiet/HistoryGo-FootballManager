@@ -848,17 +848,35 @@ export function resolveOpponentThreeSpaceCombination(session,{rng=Math.random}={
   const late=clamp(0.48-(cover.matchScore-65)*0.006-(restDefenseScore-65)*0.004-(dedicated?0.07:0));
   const draw=rng();if(!finite(draw))return null;
   const roll=Math.max(0,Math.min(0.999999999,draw));
-  const opened=roll<create,depthWon=opened&&roll<create*depth;
-  const lateWon=opened&&!depthWon&&roll<create*(depth+(1-depth)*late);
+  const opened=roll<create;
+  // Within the existing wide-opening interval, a second partition models
+  // central cover being drawn out by a dribble. No extra draw, shot or
+  // assumed opposing player. A dedicated screen resists leaving its zone.
+  const dribbleEnabled=session.causalOpponentDribbleDisplacementVersion===1&&
+    session.opponent.tacticalBehaviour.wideCreationPattern==="dribble_draw_cover"&&
+    sourceSpace==="wide"&&flank!==null;
+  const displacement=dribbleEnabled?clamp(0.50-(cover.matchScore-65)*0.005-
+    (balanceScore-65)*0.003-(dedicated?0.15:0)):0;
+  const pulled=dribbleEnabled&&opened&&roll<create*displacement;
+  const displacedLate=dribbleEnabled?clamp(late+0.12):late;
+  // Rescale only after the first gate. Conditional depth is unchanged;
+  // only the late-run window expands if central cover leaves its zone.
+  const localRoll=opened?(pulled?roll/(create*displacement):
+    (roll/create-displacement)/(1-displacement)):0;
+  const activeLate=pulled?displacedLate:late;
+  const depthWon=opened&&localRoll<depth;
+  const lateWon=opened&&!depthWon&&localRoll<depth+(1-depth)*activeLate;
   const success=depthWon||lateWon;
+  const totalProbability=create*(depth+(1-depth)*((1-displacement)*late+displacement*displacedLate));
   const status=depthWon?"depth_breakthrough":lateWon?"late_runner_breakthrough":opened?"both_runs_contained":"creation_contained";
-  const actions=["Kreative motspillere søker siderom og mellomrom","Første mottak forsøker å åpne pasningsvinduet",
+  const actions=["Kreative motspillere søker siderom og mellomrom",dribbleEnabled?
+    (pulled?"Driblingen trekker den sentrale sikringen mot kanten":"Dribleren utfordrer kanten mens sentral sikring holder sonen"):"Første mottak forsøker å åpne pasningsvinduet",
     "Spissen søker et timet gjennombrudd bak stopperne","Et separat midtbaneløp utfordrer sikringen hvis første pasning avverges"];
   return {version:6,situation:"opponent_three_space_combination",planId:plan.id,route:"three_space_combination",status,
-    side:success?"against":null,probability:round(create*(depth+(1-depth)*late)),xgDeltaFor:0,
+    side:success?"against":null,probability:round(totalProbability),xgDeltaFor:0,
     xgDeltaAgainst:depthWon?0.07:lateWon?0.05:opened?-0.02:-0.03,
     cause:depthWon?"Kreativ mottaker åpner et pasningsvindu og et timet løp truer bakrommet.":
-      lateWon?"Stopperne stenger første bakromsløp, men et sent midtbaneløp utnytter rommet foran dem.":
+      lateWon?(pulled?"Driblingen trekker sikringen ut, og et sent midtbaneløp utnytter rommet som åpnes.":"Stopperne stenger første bakromsløp, men et sent midtbaneløp utnytter rommet foran dem."):
       opened?"Stopperne stenger bakrommet og en separat midtbanespiller følger det sene løpet.":
       "Kant- og sentraldekningen stenger det første kreative mottaket.",
     steps:actions.map((action,i)=>({action,order:i+1,result:i===0?"simulated_available":
@@ -872,6 +890,9 @@ export function resolveOpponentThreeSpaceCombination(session,{rng=Math.random}={
       opponentPattern:"three_space_combination",opponentPlayerId:null,sourceSpace,targetFlank:flank,
       sideOpeningProbability:round(sideGate),betweenLinesOpeningProbability:round(middleGate),creationProbability:round(create),
       conditionalDepthProbability:round(depth),conditionalLateRunnerProbability:round(late),
+      ...(dribbleEnabled?{wideCreationPattern:"dribble_draw_cover",conditionalDisplacementProbability:round(displacement),
+        conditionalLateRunnerIfDisplaced:round(displacedLate),centralCoverDisplaced:pulled,
+        displacedCoverId:pulled?cover.playerId:null}:{}),
       firstPresserId:first.playerId,lateRunnerCoverId:cover.playerId,dedicatedCover:dedicated,depthCover:backs.map(p=>p.playerId),
       supportingPlayers:[...left,...right,...lw,...rw,first,cover,...backs].map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
       eventCount:1,randomDraws:1}};
