@@ -217,6 +217,105 @@ Neste kildebehov er konkret videoanalyse av pasningsrom, eller en
 trenerbeskrivelse av pressretning i den relevante perioden. Ingen ny
 mekanikk eller endring i sannsynligheter følger av dokumentasjonen alene.
 
+## Kildekontroll: kompakt forsvar
+
+Motorens lavblokkfase krever kompaktitet >= 72 og forsvarslinje <= 55.
+22 av 60 eksisterende ligaprofiler oppfyller dette. Tre uavhengige
+dekningsfelt kan brukes: centralCover, wideCover og boxCover.
+En formasjon, lav presshøyde eller defensiv soliditet alene beviser
+ikke kollektiv dekning av et bestemt angrepsrom.
+
+| Klubb | Kildegrunnlag | Beslutning |
+|---|---|---|
+| Hødd | Cupfinalen 2012, samtidig analyse av forskyvning i 4-5-1 | Sentral og bred kollektiv dekning aktivert i #592; boksdekning ukjent |
+| Kristiansund | Michelsen 2017–2022: kollektiv bakre firer og organisert midtbane i 2019, variabel presshøyde i 2020, kompakt lag mot Start i 2020 | Ingen spesifikk dekning aktivert; 4-4-2 er ikke dokumentert som fast formasjon |
+| Aalesund | Rekdal 2011: to dype midtbanespillere i 4-2-1-3 mot Brann, en femte forsvarer satt inn sent mot Start | Sentral sikring i eget angrep er ikke det samme som sentral dekning i etablert lav blokk; ingen nye felt |
+| Viking | Analyse av 2023/24 beskriver samordnede høypressfeller og gode automatismer mot høyt press | Ikke belegg for lavblokkdekning. Relevant ved senere arbeid med pressEscape |
+| Sarpsborg 08 | Bakke i 2018 ønsket to sentrale midtbanespillere med kapasitet til å dekke rom og forskyve mot Dynamo Kyiv; i 2017 stilte laget med bakre firer mot Rubin Kazan | Plan før kamp er ikke observert lavblokkdekning. Ingen nye felt. Fast 5-3-2 bør undersøkes |
+
+### Kilder
+
+- [Kristiansund, Eurosport 2019 – vurdering av KBK og Michelsen](https://www.eurosport.no/fotball/eliteserien/2019/joacims-analyse-her-er-dommen-over-kbk-og-taktiker-michelsen_sto7384144/story.shtml): forsvars- og midtbaneleddenes kollektive struktur.
+- [Eurosport 2020 – tabelltips](https://www.eurosport.no/fotball/eliteserien/2020/her-er-eurosports-tabelltips-molde-ned-fra-tronen-og-odd-i-nedrykksstrid_sto7776226/story.shtml): høyt og lavt press, direkte etter gjenvinning.
+- [Start, kampreferat 2020](https://www.ikstart.no/start-historien/sesongoversikter/sesongen-2020/runde-13-2020-kristiansund-start-3-2): kompakt KBK-lag og overgang etter sentralt balltap.
+- [Kristiansund, Seier mot Sandefjord](https://www.kristiansundbk.no/nyheter/seier-mot-sandefjord): Michelsen om defensivt fundament; 3-5-2 i denne treningskampen.
+- [Fotballanalyse 2011 – Brann 1–2 Aalesund](https://fotballanalyse.wordpress.com/2011/11/06/brann-1-2-aalesund-rekdal-og-barrantes-pa-internasjonalt-niva/): to dype midtbanespillere, kantpress og restforsvar i 4-2-1-3.
+- [Stavanger Aftenblad, Rekdal etter Start–AaFK 2011](https://www.aftenbladet.no/sport/i/ng5bbd/rekdal-kvittet-oss-med-noe-daukjoett): sen overgang til fem forsvarere.
+- [Total Football Analysis, Viking 2023/24](https://totalfootballanalysis.com/article/viking-fk-the-key-tactical-points-that-see-them-top-of-the-eliteserien-scout-report-tactical-analysis): avsnittene om høyt press og oppbygging mot press. Ikke en lavblokkanalyse.
+- [Sarpsborg 08, før Dynamo Kyiv 10.02.2018](https://www.sarpsborg08.no/nyheter/for-dynamo-kiev-utvik-fra-start): trenerens plan for sentral midtbane og forskyvning.
+- [Sarpsborg 08, Rubin Kazan 21.02.2017](https://www.sarpsborg08.no/nyheter/god-gjennomkjoring-mot-rubin-kazan): lagoppstilling med bakre firer.
+
+### Andre bolk
+
+| Klubb | Kildegrunnlag | Beslutning |
+|---|---|---|
+| Jerv | Sandstø 2026: senket kantene for bedre sentral kontroll og lå samlet lavere mot slutten mot Bjarg. | Konkret spor, men ikke belegg for samme dekning i 2022-profilen. |
+| Kongsvinger | Klubbhistorien bekrefter sølvåret 1992. | Ingen spesifikk romdekning dokumentert i profilens periode. |
+| Mjøndalen | Eurosport 2020: godt organisert i lavt press i 2019, tidvis svært dypt, varierende formasjoner. | Ingen spesifikk dekning aktivert. |
+| Raufoss | Sandnes Ulf 2020: endret presshøyde og mer kompakt etter pause. | Ingen spesifikk dekning aktivert. |
+| Åsane | Klubbens kampreferat mot Kongsvinger i 2026: kompakt og tidvis lavt forsvar som stengte sentrale åpninger. | Konkret sentraldekning i en navngitt kamp; kandidat for kildebelagt modell innenfor profilens åpne periode 2015–. |
+
+Kilder:
+- [Jerv, Dro i land sterk seier mot Bjarg på hjemmebane, 10.05.2026](https://www.fkjerv.no/nyheter/dro-i-land-sterk-seier-mot-bjarg-pa-hjemmebane): trenerens forklaring på kantjustering og sentral kontroll.
+- [Kongsvinger, 17 år i toppen](https://www.kil.no/om-klubben/lagetfradedypeskoger/17-ar-i-toppen): sølvsesongen 1992.
+- [Eurosport, tabelltips 2020](https://www.eurosport.no/fotball/eliteserien/2020/her-er-eurosports-tabelltips-molde-ned-fra-tronen-og-odd-i-nedrykksstrid_sto7776226/story.shtml): Mjøndalen, treneravsnittet.
+- [Sandnes Ulf, Viktig seier mot Raufoss, 28.08.2020](https://www.sandnesulf.no/nyheter/viktig-seier-mot-raufoss): endring i presshøyde og kompaktitet.
+- [Åsane, Ledet til pause, men måtte reise tomhendt hjem](https://www.asanefotball.no/nyheter/ledet-til-pause-men-matte-reise-tomhendt-hjem): første omgang mot Kongsvinger, lavt forsvar og sentral romdekning.
+
+### Tredje bolk
+
+| Klubb | Kildegrunnlag | Beslutning |
+|---|---|---|
+| Moss | Gullspillernes tilbakeblikk bekrefter Eggens innøvde 4-3-3 i 1986–1987. | Eksakt 5-3-2 uten ball er ikke dokumentert; ingen spesifikk lavblokkdekning. |
+| Bryne | Klubbhistorien bekrefter storhetstiden og cupgullet 1987. | Ingen spesifikk dekning i relevant periode. |
+| Haugesund | VG-lupen 2018 beskriver 4-4-2 som tradisjonelt system, men Horneland varierte formasjonen. | Ingen bestemt kollektiv romdekning fastslått. |
+| Ranheim | 2019-analyse bekrefter Maalens tydelige spillidé; klubbens videobaserte taktikkhjørne 2023 beskriver sentrale pasningslinjer ved defensive overganger. | Senere epoke og annen fase enn etablert lav blokk; ingen nye felt. |
+
+Kilder:
+- [Bergens Tidende, Moss-heltene om Eggen](https://www.bt.no/sport/i/y4y9je/moss-heltene-om-eggen-snudde-byen-paa-hodet): Bachke om 4-3-3-drillingen.
+- [Bryne FK, Historie](https://www.brynefk.no/om-stadion/om-klubben/historie): storhetstid og cupgull.
+- [VG-lupen 2018, Haugesund](https://www.vg.no/spesial/2018/vglupen/?plassering=14): tradisjonell 4-4-2, men variasjon under Horneland.
+- [Eurosport, Ranheim-analyse 2019](https://www.eurosport.no/fotball/eliteserien/2019/joacims-ranheim-analyse_sto7171681/story.shtml): Maalens spillidé.
+- [Ranheim, Taktikkhjørnet – Ranheim på bedringens vei?](https://www.ranheimfotball.no/nyheter/taktikkhjornet-ranheim-pa-bedringens-vei): 2023-eksempler på defensiv overgang, ikke dokumentasjon av 2017–2019-lavblokk.
+
+### Fjerde bolk
+
+| Klubb | Kildegrunnlag | Beslutning |
+|---|---|---|
+| Notodden | Start 2019 og VG Live 2021 beskriver kompakt forsvar; BT 2012 bekrefter vanskelig å bryte ned | Ingen konkret sentral, bred eller boksdekning fastslått |
+| Brattvåg | Trenernes presentasjon hos Herd 10.03.2026 beskriver offensivt overtall, lav risiko og omstillinger; Arendal beskriver smale angrepskombinasjoner | Offensiv smalhet er ikke defensiv sentraldekning; ingen nye felt |
+| Lysekloster | Kjelsås 2024 og Arendal 2026 beskriver lavt forsvar, sistnevnte også kontringsintensjon | Ingen konkret dekning fastslått |
+| Hønefoss | Rekdal beskriver lavt og kompakt Hønefoss i treningskamp februar 2012; Molde-kamp 2010 bekrefter lavt forsvar | Ingen bestemt dekning eller fast 5-3-2 dokumentert |
+| Follo | Rosenborgs referat fra cupsemifinalen 2010 og intervju etter finalen dokumenterer cupløpet | Ingen bestemt dekning fastslått |
+| Tromsdalen | NFFs cupkampregistrering fra 2012 bekrefter kamp, ikke taktisk romdekning | Ingen relevant detaljkilde funnet i denne gjennomgangen |
+| Rana | Strindheims spiller og trener beskriver skifte fra høyt press til lav blokk i andre omgang 11.10.2025 | Konkret faseskifte, men ingen spesifikk romdekning |
+| Junkeren | Skeids kampreferat 2024 beskriver kompakt forsvar og vanskelige gjennombrudd | Ingen spesifikk romdekning dokumentert |
+
+Kilder:
+- [Start, Vi må bare si unnskyld](https://www.ikstart.no/nyheter/vi-ma-bare-si-unnskyld): Notodden 2019.
+- [VG Live, Notodden–Mjøndalen, NM 2021](https://vglive.vg.no/kamp/notodden-mj%C3%B8ndalen/509452/rapport): kompakt forsvar på egen halvdel.
+- [BT, Standal reddet Hødd](https://www.bt.no/sport/i/op67GK/standal-reddet-hoedd): kompakt Notodden 2012.
+- [Herd, Brattvåg la frem sin spillmodell og treningsprosess](https://herd.no/brattvag-la-frem-sin-spillmodell-og-treningsprosess/b/631/): trenerpresentasjon 10.03.2026.
+- [Arendal, Tøff bortekamp på søndag](https://www.arendalfotball.no/nyheter/toff-bortekamp-pa-sondag): Brattvågs smale offensive kombinasjoner.
+- [Kjelsås, Cupexit mot Lysekloster](https://fotball.kjelsaas.no/next/blog/post/232229/cupexit-mot-lysekloster?ispage=true): 2024, forsvar av ledelse etter pause.
+- [Arendal, En viktig seier på en dårlig dag](https://www.arendalfotball.no/nyheter/en-viktig-seier-pa-en-darlig-dag): Lysekloster 2026.
+- [Stavanger Aftenblad, Rekdal: Grei gjennomkjøring](https://www.aftenbladet.no/sport/i/p6059j/rekdal-grei-gjennomkjoering): Hønefoss 17.02.2012.
+- [Stavanger Aftenblad, Frustrerende å spille mot 10 forsvarsspillere](https://www.aftenbladet.no/sport/i/wEMJL5/frustrerende-aa-spille-mot-10-forsvarsspillere): Hønefoss 02.05.2010.
+- [Rosenborg, Rosenborg slått ut av NM](https://www.rbk.no/nyheter/rosenborg-slatt-ut-av-nm): Follo 2010.
+- [Stavanger Aftenblad, Vi går ikke i kjelleren](https://www.aftenbladet.no/sport/i/VRykr1/vi-gaar-ikke-i-kjelleren): Follo etter cupfinalen 2010.
+- [NFF, Tromsø–Tromsdalen 20.06.2012](https://www.fotball.no/fotballdata/kamp/?fiksId=5640254): kampdata, ikke taktisk belegg.
+- [Strindheim, Bittert tap i nord](https://strindheimtoppfotball.no/a-lag-herrer/bittert-tap-i-nord): referat publisert 13.10.2025, spillerens og trenerens beskrivelser.
+- [Skeid, To scoringer og tre poeng i Bodø](https://www.skeid.no/nyheter/to-scoringer-og-tre-poeng-i-bodo): Junkeren 2024.
+
+**Sluttstatus første gjennomgang: 22 av 22 undersøkt.** Hødds brede og
+sentrale dekning er merget i #592. Åsanes sentraldekning er implementert
+i #594 (CI pågår ved dokumentasjonstidspunktet). De øvrige 20 beholder
+ukjent spesifikk dekning. Ingen av de 22 har dokumentert boksdekning i
+denne gjennomgangen. Dette er manglende kildegrunnlag, ikke fravær av
+forsvarsferdigheter. Ingen nye motorfelt eller tall endres i denne
+dokumentasjons-PR-en. Neste avgrensede dataarbeid er pressEscape:
+konkrete, kildebelagte utspill mot eget høypress.
+
 ## Vakten
 
 `sim:league-season` går gjennom en **hel sesong** og krever:
