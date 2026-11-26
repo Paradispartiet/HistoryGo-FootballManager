@@ -1,7 +1,7 @@
 import { resolveSourcedCreativeBreakthrough, resolveCompactBlockAttack, annotateCompactBlockChances } from "../src/football-matchday-compact-block-v6.js";
 // Deterministic causal pressing: high press, mid-block trap, counterpress and escapes.
 import assert from "node:assert/strict";
-import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances } from "../src/football-matchday-sequence-v8.js";
+import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances, annotateOpponentCreativeAttackChances } from "../src/football-matchday-sequence-v8.js";
 import { readFileSync } from "node:fs";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances }
   from "../src/football-matchday-own-press-v6.js";
@@ -1825,5 +1825,49 @@ try{
   assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(creativeSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
 }finally{Math.random=creativeRandom;}
 
+
+// Anonymous historical-style opponent creativity shares the direct-play draw.
+const lskCreativeFixture={...lskFixture,causalOpponentCreativeAlternativeVersion:1};
+const lskCreative=(roll,changes={})=>resolveOpponentDirectSecondBall({...lskCreativeFixture,...changes},{rng:()=>roll});
+const lskCreativeSuccess=lskCreative(0.01),lskCreativeRelease=lskCreative(0.1),lskCreativeStop=lskCreative(0.2);
+assert.deepEqual([lskCreativeSuccess.status,lskCreativeRelease.status,lskCreativeStop.status],
+  ["creative_breakthrough","release_contained","dribble_contained"]);
+assert.deepEqual([lskCreativeSuccess.xgDeltaAgainst,lskCreativeRelease.xgDeltaAgainst,lskCreativeStop.xgDeltaAgainst],[0.07,-0.03,-0.03]);
+assert.equal(lskCreativeSuccess.evidence.opponentPlayerId,null);
+assert.equal(lskCreativeSuccess.evidence.creativeAlternativeWeight,0.25);
+assert.equal(lskCreativeSuccess.evidence.randomDraws,1);
+assert.equal(lskCreative(0.25).situation,"opponent_direct_second_ball");
+assert.equal(lskCreative(0.01,{causalOpponentCreativeAlternativeVersion:undefined}).situation,"opponent_direct_second_ball");
+assert.equal(lskCreative(0.01,{opponent:{...lskFixture.opponent,tacticalBehaviour:{attackingRunPattern:"direct_duel_second_ball"}}}).situation,"opponent_direct_second_ball");
+let actualCreativeDraws=0;
+resolveOpponentDirectSecondBall(lskCreativeFixture,{rng:()=>{actualCreativeDraws++;return 0.01;}});
+assert.equal(actualCreativeDraws,1);
+const lskCreativeNoCover=lskCreative(0.01,{lineupSnapshot:glimtLineup.map(p=>["CM","DM"].includes(p.position)?{...p,roleId:"pressing_midfielder"}:p)});
+assert.ok(lskCreativeSuccess.evidence.dedicatedCoverId);
+assert.equal(lskCreativeNoCover.evidence.dedicatedCoverId,null);
+assert.equal(lskCreativeSuccess.evidence.dribbleProbability,lskCreativeNoCover.evidence.dribbleProbability);
+assert.ok(lskCreativeSuccess.evidence.conditionalReleaseProbability<lskCreativeNoCover.evidence.conditionalReleaseProbability);
+const lskCreativeWeakPress=lskCreative(0.01,{lineupSnapshot:glimtLineup.map(p=>["CM","DM"].includes(p.position)?{...p,matchScore:55}:p)});
+assert.ok(lskCreativeWeakPress.evidence.dribbleProbability>lskCreativeSuccess.evidence.dribbleProbability);
+assert.equal(annotateOpponentCreativeAttackChances(lskChances,lskCreativeSuccess).filter(c=>c.tacticalMoment).length,1);
+assert.equal(annotateOpponentCreativeAttackChances(lskChances,lskCreativeStop),lskChances);
+let lskCreativeSeed;
+for(let i=0;i<3000;i++){
+  const s={...lskCreativeFixture,id:"lsk-creative-"+i};
+  if(lskCreative(highPressPhaseRoll(s,"0:opponent-direct-second-ball")).status==="creative_breakthrough"){lskCreativeSeed=s;break;}
+}
+assert.ok(lskCreativeSeed);
+const lskCreativeRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(lskCreativeSeed),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"opponent_creative_attack");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,period.tacticalPhase.xgDeltaAgainst);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.ok(played.minuteLog.filter(c=>c.tacticalMoment).length<=1);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(lskCreativeSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
+  assert.equal(advanceMatchClock({...lskCreativeSeed,causalOpponentSetPieceVersion:1,events:[{id:"opp_set_piece_threat"}]}).timeline[0].tacticalPhase.situation,"opponent_set_piece");
+}finally{Math.random=lskCreativeRandom;}
 
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
