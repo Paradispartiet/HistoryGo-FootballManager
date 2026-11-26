@@ -231,17 +231,18 @@ export function resolveOpponentRunSequence(session, { rng = Math.random, minute 
 }
 
 export function annotateOpponentRunChances(chances, phase) {
-  if (!Array.isArray(chances) || phase?.side !== "against") return chances;
-  const at = chances.findIndex(c => c.side === "against");
+  const counterattack = phase?.situation === "opponent_switch_cross" && phase?.status === "counterattack" && phase?.side === "for";
+  if (!Array.isArray(chances) || (phase?.side !== "against" && !counterattack)) return chances;
+  const at = chances.findIndex(c => c.side === phase.side);
   if (at < 0) return chances;
   return chances.map((c, i) => i !== at ? c : {
     ...c, tacticalMoment: {
-      kind: phase.situation === "opponent_switch_cross" ? "opponent_switch_cross" : "opponent_coordinated_runs",
-      label: phase.situation === "opponent_switch_cross" ? "Spillvending og tidlig innlegg" : "Samordnet gjennombruddsløp",
-      description: phase.cause, planId: phase.planId, status: "countered",
-      side: "against", keyAction: phase.steps[phase.situation === "opponent_switch_cross" ? 2 : 1].action, cause: phase.cause,
+      kind: counterattack ? "cross_recovery_counterattack" : phase.situation === "opponent_switch_cross" ? "opponent_switch_cross" : "opponent_coordinated_runs",
+      label: counterattack ? "Kontring etter brutt innlegg" : phase.situation === "opponent_switch_cross" ? "Spillvending og tidlig innlegg" : "Samordnet gjennombruddsløp",
+      description: phase.cause, planId: phase.planId, status: counterattack ? "advantage" : "countered",
+      side: phase.side, keyAction: counterattack ? phase.steps.at(-1).action : phase.steps[phase.situation === "opponent_switch_cross" ? 2 : 1].action, cause: phase.cause,
       steps: phase.steps, counterplay: phase.counterplay, observed: false,
-      basis: "simulated_opponent_run_sequence", xgDelta: phase.xgDeltaAgainst
+      basis: "simulated_opponent_run_sequence", xgDelta: counterattack ? phase.xgDeltaFor : phase.xgDeltaAgainst
     }
   });
 }
@@ -250,6 +251,48 @@ export function annotateOpponentRunChances(chances, phase) {
 // Resolve both linked gates with ONE roll; no invented target flank, opposing
 // players, shot, or historical success rates. Only verified nominal defending
 // roles and team metrics feed these bounded game heuristics.
+// Controlling an early cross need not mean possession is retained. Resolve
+// the potential counterattack inside the existing box-contained interval of
+// the same draw. No extra opponent weakness, shot or tracking data inferred.
+function crossRecoveryRelease(session, profile, backs, centre, lineup, roll, crossProbability, boxProbability) {
+  if (session.causalOpponentCrossRecoveryVersion !== 1 ||
+      session.opponent?.tacticalBehaviour?.crossRecoveryExposure !== "committed_box_runs") return null;
+  const plan = session.activePlanSnapshot || session.tacticSnapshot;
+  if (!["fast","direct_when_possible"].includes(plan?.tempo)) return null;
+  const {buildUpScore,depthScore} = profile || {};
+  if (![buildUpScore,depthScore].every(v=>finite(v)&&v>=0&&v<=100)) return null;
+  // Require known complementary outlet roles. A clearance alone is not
+  // evidence of a counterattack, and formation names alone are insufficient.
+  const distributor = centre[0];
+  if (!["balancing_six","deep_playmaker","box_to_box"].includes(distributor.roleId)) return null;
+  const runner = lineup.filter(p => p.position === "ST" &&
+      ["channel_runner","advanced_forward"].includes(p.roleId))
+    .sort((a,b)=>b.matchScore-a.matchScore||a.playerId.localeCompare(b.playerId))[0];
+  const first = backs[0];
+  if (!runner || new Set([first.playerId,distributor.playerId,runner.playerId]).size!==3) return null;
+  const support = [first,distributor,runner];
+  const avg = support.reduce((sum,p)=>sum+p.matchScore,0)/support.length;
+  const floor = Math.min(...support.map(p=>p.matchScore));
+  const probability = Math.max(0.12,Math.min(0.82,
+    0.45+(buildUpScore-65)*0.004+(depthScore-65)*0.004+(avg-65)*0.003+(floor-65)*0.001));
+  const intervalStart = crossProbability*boxProbability;
+  const intervalWidth = crossProbability*(1-boxProbability);
+  const released = (roll-intervalStart)/intervalWidth < probability;
+  return {
+    status: released?"counterattack":"no_release",
+    basis:"sourced_exposure_bounded_game_heuristic_not_observed",
+    conditionalReleaseProbability:Math.round(probability*1000)/1000,
+    unconditionalCounterProbability:Math.round(intervalWidth*probability*1000)/1000,
+    eventCount:1,extraRandomDraws:0,
+    support:support.map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
+    steps:[
+      {action:"Stopperen bryter innlegget og forsøker kontrollert gjenvinning",result:released?"completed":"simulated_available"},
+      {action:"Midtbanestøtten søker en tidlig fremoverpasning",result:released?"completed":"blocked"},
+      {action:"Bakromsspissen angriper rommet bak de fremrykkede spillerne",result:released?"simulated_available":"not_reached"}
+    ]
+  };
+}
+
 export function resolveOpponentSwitchCrossSequence(session, { rng = Math.random } = {}) {
   if (session?.causalOpponentSwitchCrossVersion !== 1 ||
       session.opponent?.tacticalBehaviour?.attackingRunPattern !== "central_switch_early_cross" ||
@@ -278,7 +321,10 @@ export function resolveOpponentSwitchCrossSequence(session, { rng = Math.random 
   const roll = Math.max(0,Math.min(0.999999999,draw));
   const crossAvailable = roll < crossProbability;
   const chanceWindow = crossAvailable && roll < crossProbability*boxProbability;
-  const status = !crossAvailable ? "wide_contained" : chanceWindow ? "breakthrough" : "box_contained";
+  const recovery = crossAvailable && !chanceWindow
+    ? crossRecoveryRelease(session,profile,backs,centre,lineup,roll,crossProbability,boxProbability) : null;
+  const counterattack = recovery?.status === "counterattack";
+  const status = !crossAvailable ? "wide_contained" : chanceWindow ? "breakthrough" : counterattack ? "counterattack" : "box_contained";
   const actions = [
     "Sentralt vendingsledd søker ledig bredde",
     "Kantspilleren forsøker å komme fri før innlegget",
@@ -289,17 +335,18 @@ export function resolveOpponentSwitchCrossSequence(session, { rng = Math.random 
   return {
     version:6, situation:"opponent_switch_cross",
     planId, route:"central_switch_early_cross", status,
-    side:chanceWindow?"against":null,
+    side:chanceWindow?"against":counterattack?"for":null,
     probability:Math.round(crossProbability*boxProbability*1000)/1000,
-    xgDeltaFor:0, xgDeltaAgainst:chanceWindow?0.07:status==="wide_contained"?-0.03:-0.02,
-    cause:status==="wide_contained"
+    xgDeltaFor:counterattack?0.06:0, xgDeltaAgainst:chanceWindow?0.07:status==="wide_contained"?-0.03:-0.02,
+    cause:counterattack?"Innlegget brytes, og kontrollert gjenvinning frigjør en fremoverpasning til bakromsspissen før motstanderen organiserer seg.":status==="wide_contained"
       ?"Kantforsvaret stenger innleggsvinduet etter spillvendingen."
       :status==="box_contained"
         ?"Innlegget kommer frem til boksen, men stopperne og midtbanestøtten kontrollerer avslutningsrommet."
         :"Spillvendingen frigjør kanten, og samtidige boksløp åpner et avslutningsvindu.",
-    steps:actions.map((action,index)=>({action,order:index+1,
+    steps:[...actions.map((action,index)=>({action,order:index+1,
       result:status==="wide_contained"?(index===0?"simulated_available":index===1?"countered":"not_reached"):
-        status==="box_contained"?(index===3?"countered":"simulated_available"):"simulated_available"})),
+        ["box_contained","counterattack"].includes(status)?(index===3?"countered":"simulated_available"):"simulated_available"})),
+      ...(recovery?.steps || []).map((step,i)=>({...step,order:actions.length+i+1}))],
     counterplay:{status:chanceWindow?"not_triggered":"simulated_counter",
       counter:"Sikre begge kanter og behold stopper- og midtbanedekning i boksen",
       nextManagerResponse:"Forskyv mot kanten tidlig, men la stopperne og sekseren sikre innløpene.",
@@ -311,6 +358,7 @@ export function resolveOpponentSwitchCrossSequence(session, { rng = Math.random 
       widthScore,balanceScore,restDefenseScore,
       wideSupport:wideUnit.map(p=>p.playerId),boxSupport:boxUnit.map(p=>p.playerId),
       supportingPlayers:support.map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
+      ...(recovery?{crossRecovery:recovery}:{}),
       eventCount:1,randomDraws:1}
   };
 }
