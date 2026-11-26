@@ -1,4 +1,4 @@
-import { resolveSourcedCreativeBreakthrough } from "../src/football-matchday-compact-block-v6.js";
+import { resolveSourcedCreativeBreakthrough, resolveCompactBlockAttack, annotateCompactBlockChances } from "../src/football-matchday-compact-block-v6.js";
 // Deterministic causal pressing: high press, mid-block trap, counterpress and escapes.
 import assert from "node:assert/strict";
 import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances } from "../src/football-matchday-sequence-v8.js";
@@ -9,7 +9,7 @@ import { advanceMatchClock, finalizeMatchdaySession }
   from "../src/football-matchday-engine.js";
 import { highPressPhaseRoll, resolveHighPressBuildUp, opponentPressWorkload }
   from "../src/football-matchday-high-press-v6.js";
-import { sourcedDefensiveReactionSkillsForPlayer, createLineupSnapshot }
+import { sourcedDefensiveReactionSkillsForPlayer, sourcedCreativeSkillsForPlayer, createLineupSnapshot }
   from "../src/football-player-stats.js";
 
 const lineup = ["GK", "CB", "DM", "CM", "AM", "ST", "LW", "RW", "LB", "RB"].map((position, i) => ({
@@ -1802,5 +1802,28 @@ assert.equal(creativeRun(0.1,{lineupSnapshot:creativeXI.map(p=>({...p,sourcedCre
 assert.equal(creativeRun(0.1,{lineupSnapshot:creativeXI.map(p=>p.position==="AM"?{...p,sourcedCreativeSkills:["vision"]}:p)}),null);
 assert.equal(creativeRun(0.1,{lineupSnapshot:creativeXI.map(p=>p.position==="AM"?{...p,roleId:"pressing_midfielder"}:p)}),null);
 assert.equal(creativeRun(NaN),null);
+assert.deepEqual(sourcedCreativeSkillsForPlayer({strengths:["vision","dribbling"],attributes:{provenance:{vision:"belagt",dribbling:"utledet"}}}),["vision"]);
+assert.equal(resolveCompactBlockAttack(creativeFixture,{rng:()=>0.1}).route,"sourced_creative_breakthrough");
+assert.equal(resolveCompactBlockAttack({...creativeFixture,causalSourcedCreativeBreakthroughVersion:undefined},{rng:()=>0.1}).route,"wall_pass");
+const creativeMoment=annotateCompactBlockChances([{side:"for"},{side:"for"}],creativeGood);
+assert.equal(creativeMoment.filter(c=>c.tacticalMoment).length,1);
+assert.equal(creativeMoment[0].tacticalMoment.creatorId,creativeGood.evidence.creatorId);
+let creativeSeed;
+for(let i=0;i<3000;i++){
+  const s={...creativeFixture,id:"creator-"+i};
+  if(creativeRun(highPressPhaseRoll(s,"0:compact-block")).status==="breakthrough"){creativeSeed=s;break;}
+}
+assert.ok(creativeSeed);
+const creativeRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(creativeSeed),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.route,"sourced_creative_breakthrough");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.for-period.baselineExpectedGoals.for)*100)/100,period.tacticalPhase.xgDeltaFor);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(creativeSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
+}finally{Math.random=creativeRandom;}
+
 
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
