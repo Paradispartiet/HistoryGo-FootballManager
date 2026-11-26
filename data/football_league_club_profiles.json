@@ -466,7 +466,7 @@
         "attackingRunPattern": "rehearsed_fullback_overlap"
       },
       "tacticalBehaviourEvidence": {
-        "era": "1971–1975 (angrep); 2023 (pressutspill)",
+        "era": "2023",
         "scope": "To adskilte kildeperioder i en simulert klubbtradisjon. Ingen fast historisk 5-3-2, flanke eller navngitt spiller antas.",
         "interpretation": "Viking brukte lave backer og pasninger bak for å lokke fram presset, før keeper eller stopper slo mot spissen. Kantene og indreløperne posisjonerte seg for å vinne andreballen. Dette støtter et direkte utspill i høypressfasen, ikke økt kort oppbyggingsspill eller oppdiktet timing. Ingen påstand om spesifikk avslutning eller fast suksessrate. Historisk angrep: Refvik beskriver Schou-Andreassens overlappende backer som legger inn; SNL dokumenterer øving på bevegelsesmønstre, og Viking omtaler den tidligere kortpasningsstilen. Den todelte overlapp- og boksfasen er en generell spillhypotese, ikke en dokumentert detaljrute eller målt frekvens. Eksisterende numeriske traits, baseStyleId og matchup-tokens beholdes som spillmodell, ikke historisk belegg.",
         "sources": [
@@ -500,7 +500,11 @@
             "url": "https://www.vikingfotball.no/nyheter/da-viking-fikk-besok-av-keegan",
             "locator": "Fire ulike gulltrenere 1972–75; Tony Knapp gjorde kortpasningsspillet mer variert."
           }
-        ]
+        ],
+        "eraByPattern": {
+          "highPressEscapeRoute": "2023",
+          "attackingRunPattern": "1971–1975"
+        }
       },
       "shortLabel": "samhandling, kortpasning og offensive backer"
     },
