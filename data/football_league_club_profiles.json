@@ -489,17 +489,17 @@
     },
     {
       "clubId": "lillestrom",
-      "styleName": "Åråsen-kynisme",
-      "tacticalSchool": "Langt fram, dueller og andreballer",
+      "styleName": "Åråsen-tradisjonen",
+      "tacticalSchool": "Direkte spill, dueller og dødballer",
       "era": "1976–1989",
-      "style": "Kynisk og direkte — langt fram mot en targetspiss, og så krig om andreballen",
-      "historicalNote": "Storhetstiden er seriegullene i 1976, 1977, 1986 og 1989. LSK vant dem på å gjøre kampen fysisk og lite pen: langt fram, dueller over hele banen, dødballer, og full vilje til å bryte rytmen når det passer dem.",
-      "inPossessionShape": "4-4-2 med langt framspill mot targetspissen",
-      "outOfPossessionShape": "4-4-2 i smal middels blokk",
+      "style": "Direkte fotball og duellkraft kombinert med individuell kreativitet",
+      "historicalNote": "Gullperioden 1975–1989 omfatter fire serie- og fire cupmesterskap. Direkte spill og dødballer er sentrale deler av klubbtradisjonen; Tom Lunds teknikk, overblikk, gjennombrudd og dødballer viser at den ikke kan reduseres til fysisk spill.",
+      "inPossessionShape": "Varierende formasjon; 4-3-3 og 4-4-2 dokumentert i cupfinaler",
+      "outOfPossessionShape": "Middels blokk (spillmodell, ikke historisk fastlagt)",
       "defensiveBlock": "Middels blokk",
-      "buildUpStyle": "Hopper over midtbanen — langt fram og krig om nedfallet",
-      "attackingStyle": "Andreballer, dødballer og direkte innlegg",
-      "tempo": "Brutt opp med vilje",
+      "buildUpStyle": "Direkte framspill er ett av virkemidlene",
+      "attackingStyle": "Dueller og oppfølging av nedfall, dødballer og individuell kreativitet",
+      "tempo": "Direkte når muligheten oppstår",
       "riskLevel": "low",
       "baseStyleId": "physical_set_piece_opponent",
       "matchupStyles": [
@@ -523,35 +523,73 @@
         "intensity": 72
       },
       "strengths": [
-        "eier lufta og andreballene rundt targetspissen",
-        "dødballer i mengde, og de er farlige på hver eneste"
+        "direkte spill kan skape duell- og nedfallssituasjoner",
+        "historisk dødballtradisjon og teknisk kvalitet"
       ],
       "weaknesses": [
-        "gir fra seg ballen og skaper lite når langballen ikke fester",
-        "få løsninger hvis du vinner førsteballen"
+        "kan miste kontrollen dersom motstanderen både vinner duellen og sikrer nedfallet"
       ],
       "vulnerableZones": [
-        "bakrommet når langballen er slått og de er høye",
-        "siderommene utenfor den smale blokken"
+        "rom rundt nedfallsområdet dersom oppfølgingen svikter (spillmodell)"
       ],
       "dangerZones": [
-        "nedfallssonen rundt targetspissen",
-        "egen boks på hver dødball"
+        "nedfallsrommet etter direkte oppspill",
+        "egen boks ved motstanderens dødball"
       ],
       "keyBattles": [
-        "dine stoppere mot targetspissen i lufta",
-        "din sekser på andreballene"
+        "stoppernes første duell",
+        "sentral midtbane rundt andreballen"
       ],
       "pressurePoints": [
-        "vinn førsteballen, så har de ingen plan B",
-        "gi dem færrest mulig dødballer"
+        "sikre nedfallsrommet også når første duell vinnes",
+        "unngå unødvendige dødballer"
       ],
       "managerHints": [
-        "Har du ikke en stopper som eier lufta, taper du denne kampen i nedfallssonen.",
-        "De vil at kampen skal bli stygg og oppstykket. Ikke bli med på det."
+        "Vinn første duell, men behold sikring rundt nedfallet.",
+        "Ikke reduser Lillestrøm til langballer: teknisk kvalitet og dødballer er også del av historien."
       ],
       "styleBasis": "tradisjon",
-      "shortLabel": "langball, dueller og andreballer"
+      "shortLabel": "langball, dueller og andreballer",
+      "tacticalBehaviour": {
+        "attackingRunPattern": "direct_duel_second_ball"
+      },
+      "tacticalBehaviourEvidence": {
+        "era": "1975–1989",
+        "scope": "Historisk klubbtradisjon, ikke dagens LSK eller en fast oppspillsrute i alle kamper.",
+        "interpretation": "Retrospektive kilder beskriver direkte oppspill og duellspill i LSK-tradisjonen, og dødballspesialisten Tom Lund. NFF dokumenterer ulike formasjoner i cupfinaler. Andreballens to betingede sannsynligheter er en generisk spillhypotese, ikke historiske målinger eller dokumentert fast angrepsrute. Ingen pressEscapeRoute, passingLaneCover, navngitt mottaker eller fast flanke utledes. Eldre numeriske traits og matchup-tokens er uendrede spillmodellantakelser.",
+        "sources": [
+          {
+            "title": "Et flott lag for Ullevaal",
+            "publisher": "Dagbladet",
+            "url": "https://www.dagbladet.no/sport/et-flott-lag-for-ullevaal/66135741",
+            "locator": "Retrospektiv omtale av duellspill, tradisjonelle lange oppspill og stusser."
+          },
+          {
+            "title": "Nordlie og LSK er i rute",
+            "publisher": "Stavanger Aftenblad",
+            "url": "https://www.aftenbladet.no/sport/i/70lGA9/nordlie-og-lsk-er-i-rute",
+            "locator": "Dødballtradisjon fra storhetstiden på 1970- og 1980-tallet."
+          },
+          {
+            "title": "Tom Lund",
+            "publisher": "Store norske leksikon",
+            "url": "https://snl.no/Tom_Lund",
+            "locator": "Gjennombrudd, steg og presise frispark."
+          },
+          {
+            "title": "Lillestrøms cuphistorie",
+            "publisher": "Norges Fotballforbund",
+            "url": "https://www.fotball.no/turneringer/nm-menn/2025/lillestroms-cuphistorie/",
+            "locator": "Historiske lagoppstillinger med 4-3-3 og 4-4-2."
+          },
+          {
+            "title": "Lillestrøm Sportsklubb",
+            "publisher": "Store norske leksikon",
+            "url": "https://snl.no/Lillestr%C3%B8m_Sportsklubb",
+            "locator": "Gullperioden 1975–1989."
+          }
+        ]
+      }
     },
     {
       "clubId": "tromso",
