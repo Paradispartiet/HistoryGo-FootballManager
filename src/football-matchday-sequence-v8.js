@@ -236,11 +236,81 @@ export function annotateOpponentRunChances(chances, phase) {
   if (at < 0) return chances;
   return chances.map((c, i) => i !== at ? c : {
     ...c, tacticalMoment: {
-      kind: "opponent_coordinated_runs", label: "Samordnet gjennombruddsløp",
+      kind: phase.situation === "opponent_switch_cross" ? "opponent_switch_cross" : "opponent_coordinated_runs",
+      label: phase.situation === "opponent_switch_cross" ? "Spillvending og tidlig innlegg" : "Samordnet gjennombruddsløp",
       description: phase.cause, planId: phase.planId, status: "countered",
-      side: "against", keyAction: phase.steps[1].action, cause: phase.cause,
+      side: "against", keyAction: phase.steps[phase.situation === "opponent_switch_cross" ? 2 : 1].action, cause: phase.cause,
       steps: phase.steps, counterplay: phase.counterplay, observed: false,
       basis: "simulated_opponent_run_sequence", xgDelta: phase.xgDeltaAgainst
     }
   });
+}
+
+// A central switch to an early cross is distinct from a through-ball run.
+// Resolve both linked gates with ONE roll; no invented target flank, opposing
+// players, shot, or historical success rates. Only verified nominal defending
+// roles and team metrics feed these bounded game heuristics.
+export function resolveOpponentSwitchCrossSequence(session, { rng = Math.random } = {}) {
+  if (session?.causalOpponentSwitchCrossVersion !== 1 ||
+      session.opponent?.tacticalBehaviour?.attackingRunPattern !== "central_switch_early_cross" ||
+      !verifiedMatchLineup(session.lineupSnapshot)) return null;
+  const planId = session.activePlanSnapshot?.id || session.tacticSnapshot?.id || session.selectedTacticId;
+  if (!planId) return null;
+  const profile = session.teamFitSnapshot?.tacticalProfile;
+  const { widthScore, balanceScore, restDefenseScore } = profile || {};
+  if (![widthScore, balanceScore, restDefenseScore].every(v => finite(v) && v >= 0 && v <= 100)) return null;
+  const lineup = session.lineupSnapshot;
+  const best = (positions, count = 1) => lineup.filter(p => positions.includes(p.position))
+    .sort((a,b) => b.matchScore - a.matchScore || a.playerId.localeCompare(b.playerId)).slice(0,count);
+  const left = best(["LB","LWB"]), right = best(["RB","RWB"]);
+  const centre = best(["DM","CM"]), backs = best(["CB"],2);
+  if (!left.length || !right.length || !centre.length || backs.length !== 2) return null;
+  const wideUnit = [...left,...right,...centre], boxUnit = [...backs,...centre];
+  const average = ps => ps.reduce((n,p)=>n+p.matchScore,0)/ps.length;
+  const floor = ps => Math.min(...ps.map(p=>p.matchScore));
+  const clamp = v => Math.max(0.12,Math.min(0.82,v));
+  const crossProbability = clamp(0.54 - (widthScore-65)*0.004 -
+    (balanceScore-65)*0.002 - (average(wideUnit)-65)*0.003 - (floor(wideUnit)-65)*0.002);
+  const boxProbability = clamp(0.52 - (restDefenseScore-65)*0.004 -
+    (balanceScore-65)*0.002 - (average(boxUnit)-65)*0.003 - (floor(boxUnit)-65)*0.002);
+  const draw = rng();
+  if (!finite(draw)) return null;
+  const roll = Math.max(0,Math.min(0.999999999,draw));
+  const crossAvailable = roll < crossProbability;
+  const chanceWindow = crossAvailable && roll < crossProbability*boxProbability;
+  const status = !crossAvailable ? "wide_contained" : chanceWindow ? "breakthrough" : "box_contained";
+  const actions = [
+    "Sentralt vendingsledd søker ledig bredde",
+    "Kantspilleren forsøker å komme fri før innlegget",
+    "Tidlig innlegg søker samtidige løp inn i boksen",
+    "Stopperne og midtbanedekningen møter løpene ved avslutningsrommet"
+  ];
+  const support = [...new Map([...wideUnit,...boxUnit].map(p=>[p.playerId,p])).values()];
+  return {
+    version:6, situation:"opponent_switch_cross",
+    planId, route:"central_switch_early_cross", status,
+    side:chanceWindow?"against":null,
+    probability:Math.round(crossProbability*boxProbability*1000)/1000,
+    xgDeltaFor:0, xgDeltaAgainst:chanceWindow?0.07:status==="wide_contained"?-0.03:-0.02,
+    cause:status==="wide_contained"
+      ?"Kantforsvaret stenger innleggsvinduet etter spillvendingen."
+      :status==="box_contained"
+        ?"Innlegget kommer frem til boksen, men stopperne og midtbanestøtten kontrollerer avslutningsrommet."
+        :"Spillvendingen frigjør kanten, og samtidige boksløp åpner et avslutningsvindu.",
+    steps:actions.map((action,index)=>({action,order:index+1,
+      result:status==="wide_contained"?(index===0?"simulated_available":index===1?"countered":"not_reached"):
+        status==="box_contained"?(index===3?"countered":"simulated_available"):"simulated_available"})),
+    counterplay:{status:chanceWindow?"not_triggered":"simulated_counter",
+      counter:"Sikre begge kanter og behold stopper- og midtbanedekning i boksen",
+      nextManagerResponse:"Forskyv mot kanten tidlig, men la stopperne og sekseren sikre innløpene.",
+      automaticallyExecuted:false},
+    evidence:{basis:"sourced_opponent_pattern_bounded_game_heuristic_not_observed",
+      opponentPattern:"central_switch_early_cross",targetFlank:null,
+      crossProbability:Math.round(crossProbability*1000)/1000,
+      conditionalBoxProbability:Math.round(boxProbability*1000)/1000,
+      widthScore,balanceScore,restDefenseScore,
+      wideSupport:wideUnit.map(p=>p.playerId),boxSupport:boxUnit.map(p=>p.playerId),
+      supportingPlayers:support.map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
+      eventCount:1,randomDraws:1}
+  };
 }
