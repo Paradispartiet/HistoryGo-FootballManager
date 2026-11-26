@@ -629,8 +629,9 @@ export function annotateOpponentDirectSecondBallChances(chances,phase){
 // Only the existing scripted set-piece event can trigger this phase.
 // Away scenario explicitly starts after a clearance; never replay its first duel.
 export function resolveOpponentSetPiece(session,{rng=Math.random}={}){
+  const pattern=session?.opponent?.tacticalBehaviour?.setPiecePattern;
   if(session?.causalOpponentSetPieceVersion!==1 ||
-      session.opponent?.tacticalBehaviour?.setPiecePattern!=="historical_delivery_box_duel" ||
+      !["historical_delivery_box_duel","historical_set_piece_focus"].includes(pattern) ||
       !verifiedMatchLineup(session.lineupSnapshot))return null;
   const segment=Array.isArray(session.timeline)?session.timeline.length:0;
   const eventId=session.events?.[segment]?.id;
@@ -662,14 +663,14 @@ export function resolveOpponentSetPiece(session,{rng=Math.random}={}){
   const results=afterClearance?["simulated_available",second?"simulated_available":"countered",second?"simulated_available":"not_reached"]:
     ["simulated_available",first?"simulated_available":"countered",first?"not_reached":second?"simulated_available":"countered",(first||second)?"simulated_available":"not_reached"];
   const rounded=v=>Math.round(v*1000)/1000;
-  return {version:6,situation:"opponent_set_piece",planId,route:"historical_delivery_box_duel",status,
+  return {version:6,situation:"opponent_set_piece",planId,route:pattern,status,
     side:first||second?"against":null,probability:rounded(afterClearance?recovery:delivery+(1-delivery)*recovery),
     xgDeltaFor:0,xgDeltaAgainst:first?0.08:second?0.04:-0.03,cause,
     steps:actions.map((action,index)=>({action,order:index+1,result:results[index]})),
     counterplay:{status:first||second?"not_triggered":"simulated_counter",
       counter:"Beskytt boksen og nedfallsrommet",nextManagerResponse:"Behold stopperdekning og sentral sikring etter klarering.",
       automaticallyExecuted:false},
-    evidence:{basis:"sourced_set_piece_tradition_scripted_scenario_not_observed",eventId,afterClearance,
+    evidence:{basis:"sourced_set_piece_tradition_scripted_scenario_not_observed",opponentPattern:pattern,eventId,afterClearance,
       firstContactProbability:afterClearance?null:rounded(delivery),conditionalRecoveryProbability:rounded(recovery),
       targetFlank:null,boxCover:[...backs,...keeper].map(p=>p.playerId),secondBallCover:screen.map(p=>p.playerId),
       supportingPlayers:[...backs,...keeper,...screen].map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
@@ -682,4 +683,130 @@ export function annotateOpponentSetPieceChances(chances,phase){
   return annotateOpponentRunChances(chances,phase).map((c,index)=>index===i?
     {...c,tacticalMoment:{...c.tacticalMoment,kind:"opponent_set_piece",label:"Dødball og nedfall",
       basis:"simulated_set_piece_scenario",keyAction:phase.steps[1].action}}:c);
+}
+
+// Generic short-pass alternative to Viking's overlap, not a documented
+// historical sequence or named opponent XI. Separate first press and cover.
+function vikingShortCombinationUnits(lineup,backs,balanceScore,restDefenseScore){
+  const mids=lineup.filter(p=>["DM","CM"].includes(p.position));
+  const order=(a,b)=>b.matchScore-a.matchScore||a.playerId.localeCompare(b.playerId);
+  const first=mids.slice().sort((a,b)=>Number(b.roleId==="pressing_midfielder")-Number(a.roleId==="pressing_midfielder")||order(a,b))[0];
+  if(!first)return null;
+  const cover=mids.filter(p=>p.playerId!==first.playerId)
+    .sort((a,b)=>Number(["balancing_six","holding_midfielder"].includes(b.roleId))-Number(["balancing_six","holding_midfielder"].includes(a.roleId))||order(a,b))[0];
+  if(!cover)return null;
+  const dedicated=["balancing_six","holding_midfielder"].includes(cover.roleId);
+  const clamp=v=>Math.max(0.12,Math.min(0.82,v));
+  const centre=[cover,...backs],centreFit=centre.reduce((sum,p)=>sum+p.matchScore,0)/centre.length;
+  const firstGate=clamp(0.57-(first.matchScore-65)*0.005-(balanceScore-65)*0.003);
+  const nextGate=clamp(0.54-(centreFit-65)*0.004-(restDefenseScore-65)*0.004-(dedicated?0.07:0));
+  return {first,cover,centre,dedicated,firstGate,nextGate};
+}
+function resolveVikingShortCombination(planId,units,roll,weight){
+  const {first,cover,centre,dedicated,firstGate,nextGate}=units;
+  const passed=roll<firstGate,success=passed&&roll<firstGate*nextGate;
+  const status=success?"combination_breakthrough":passed?"third_man_contained":"support_pass_contained";
+  const rounded=v=>Math.round(v*1000)/1000;
+  const actions=["En motspiller møter ballen og tilbyr kort pasning","Første pressledd utfordres av støttepasningen",
+    "En tredje spiller søker rommet bak pressleddet","Den gjenværende sikringen prøver å stenge gjennomspillet"];
+  return {version:6,situation:"opponent_short_combination",planId,route:"rehearsed_short_pass_support",status,
+    side:success?"against":null,probability:rounded(firstGate*nextGate),xgDeltaFor:0,
+    xgDeltaAgainst:success?0.07:passed?-0.02:-0.03,
+    cause:success?"Støttepasningen flytter første pressledd, og en tredje motspiller finner rom bak det.":
+      passed?"Første pressledd passeres, men den gjenværende midtbanen og stopperne stenger gjennomspillet.":
+      "Første presspiller stanser støttepasningen før kombinasjonen utvikles.",
+    steps:actions.map((action,i)=>({action,order:i+1,result:i===0||success||(passed&&i<3)?"simulated_available":
+      !passed&&i>1?"not_reached":"countered"})),
+    counterplay:{status:success?"not_triggered":"simulated_counter",
+      counter:"Fordel press og sikring mellom to sentrale spillere",
+      nextManagerResponse:"La én midtbanespiller presse støttepasningen, mens en annen skjermer rommet bak.",
+      automaticallyExecuted:false},
+    evidence:{basis:"sourced_short_pass_principle_generic_game_hypothesis_not_observed",
+      opponentPattern:"rehearsed_short_pass_support",opponentPlayerId:null,targetFlank:null,
+      shortCombinationWeight:weight,selectedPattern:"rehearsed_short_pass_support",
+      supportPassProbability:rounded(firstGate),conditionalThirdManProbability:rounded(nextGate),
+      firstPresserId:first.playerId,centralCoverId:cover.playerId,dedicatedCover:dedicated,
+      coveringPlayers:centre.map(p=>p.playerId),
+      supportingPlayers:[first,...centre].map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
+      eventCount:1,randomDraws:1}};
+}
+
+// Schou-era offensive fullbacks: a sourced general principle, not an observed
+// flank, exact combination, opponent XI or measured historical probability.
+export function resolveOpponentFullbackOverlap(session,{rng=Math.random}={}){
+  if(session?.causalOpponentFullbackOverlapVersion!==1||
+      session.opponent?.tacticalBehaviour?.attackingRunPattern!=="rehearsed_fullback_overlap"||
+      !verifiedMatchLineup(session.lineupSnapshot))return null;
+  const planId=session.activePlanSnapshot?.id||session.tacticSnapshot?.id||session.selectedTacticId;
+  if(!planId)return null;
+  const {balanceScore,restDefenseScore}=session.teamFitSnapshot?.tacticalProfile||{};
+  if(![balanceScore,restDefenseScore].every(v=>finite(v)&&v>=0&&v<=100))return null;
+  const best=(positions,count=1)=>session.lineupSnapshot.filter(p=>positions.includes(p.position))
+    .sort((a,b)=>b.matchScore-a.matchScore||a.playerId.localeCompare(b.playerId)).slice(0,count);
+  const left=best(["LB","LWB"]),right=best(["RB","RWB"]);
+  const leftSupport=best(["LW","LM"]),rightSupport=best(["RW","RM"]);
+  const backs=best(["CB"],2),screen=best(["DM","CM"]);
+  if(!left.length||!right.length||!leftSupport.length||!rightSupport.length||backs.length!==2||!screen.length)return null;
+  const clamp=v=>Math.max(0.12,Math.min(0.82,v));
+  const rounded=v=>Math.round(v*1000)/1000;
+  const cover=(back,support)=>0.6*back.matchScore+0.4*support.matchScore;
+  const leftCover=cover(left[0],leftSupport[0]),rightCover=cover(right[0],rightSupport[0]);
+  // Weakest side is a game-model vulnerability, not observed scouting or an
+  // inferred historical flank. Equal sides remain anonymous.
+  const flank=leftCover+2<rightCover?"left":rightCover+2<leftCover?"right":null;
+  const wideCover=flank==="left"?leftCover:flank==="right"?rightCover:(leftCover+rightCover)/2;
+  const wide=flank==="left"?[...left,...leftSupport]:flank==="right"?[...right,...rightSupport]:[...left,...leftSupport,...right,...rightSupport];
+  const box=[...backs,...screen];
+  const boxFit=box.reduce((sum,p)=>sum+p.matchScore,0)/box.length;
+  const overlap=clamp(0.58-(wideCover-65)*0.006-(balanceScore-65)*0.002);
+  const finish=clamp(0.51-(boxFit-65)*0.004-(restDefenseScore-65)*0.004);
+  const draw=rng();if(!finite(draw))return null;
+  const rawRoll=Math.max(0,Math.min(0.999999999,draw));
+  const shortUnits=session.causalOpponentShortCombinationVersion===1&&
+    session.opponent.tacticalBehaviour.shortCombinationPattern==="rehearsed_short_pass_support"
+    ?vikingShortCombinationUnits(session.lineupSnapshot,backs,balanceScore,restDefenseScore):null;
+  // Only when both alternatives have verified defending units. One draw
+  // chooses the route and its outcome; 40% is a gameplay assumption.
+  const preference=session.causalOpponentAttackAdaptationVersion===1?session.opponentAttackRoutePreference:null;
+  const shortWeight=shortUnits?(preference==="short_combination"?0.7:preference==="fullback_overlap"?0.15:0.4):0;
+  if(shortUnits&&rawRoll<shortWeight)return resolveVikingShortCombination(planId,shortUnits,rawRoll/shortWeight,shortWeight);
+  const roll=(rawRoll-shortWeight)/(1-shortWeight);
+  const available=roll<overlap,success=available&&roll<overlap*finish;
+  const status=success?"overlap_breakthrough":available?"box_contained":"overlap_contained";
+  const actions=["Kantspilleren binder første forsvarer","Backen forsøker å overlappe på utsiden",
+    "Overlappingen søker et innleggsvindu","Stopperne og sentral sikring konkurrerer om avslutningsrommet"];
+  return {version:6,situation:"opponent_fullback_overlap",planId,route:"rehearsed_fullback_overlap",
+    status,side:success?"against":null,probability:rounded(overlap*finish),
+    xgDeltaFor:0,xgDeltaAgainst:success?0.07:available?-0.02:-0.03,
+    cause:success?"Kant og overlappende back skaper innleggsrom, og motstanderen finner et avslutningsvindu.":
+      available?"Overlappingen kommer frem, men stopperne og sentral sikring kontrollerer boksen.":
+      "Kantstøtten og backen fordeler dekningen og stanser overlappingen.",
+    steps:actions.map((action,i)=>({action,order:i+1,result:i===0||success||(available&&i<3)?"simulated_available":
+      !available&&i>1?"not_reached":"countered"})),
+    counterplay:{status:success?"not_triggered":"simulated_counter",
+      counter:"Fordel kantdekning og behold sentral sikring",
+      nextManagerResponse:"La kantstøtten følge overlappende back, og behold stoppere og sentral sikring i boksen.",
+      automaticallyExecuted:false},
+    evidence:{basis:"sourced_overlap_principle_generic_game_hypothesis_not_observed",opponentPattern:"rehearsed_fullback_overlap",
+      opponentPlayerId:null,targetFlank:flank,flankSelectionBasis:"simulated_weakest_verified_wide_unit",
+      leftCover:rounded(leftCover),rightCover:rounded(rightCover),overlapProbability:rounded(overlap),
+      conditionalBoxProbability:rounded(finish),wideSupport:wide.map(p=>p.playerId),boxSupport:box.map(p=>p.playerId),
+      supportingPlayers:[...wide,...box].map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
+      ...(shortUnits?{shortCombinationWeight:shortWeight,selectedPattern:"rehearsed_fullback_overlap"}:{}),
+      eventCount:1,randomDraws:1}};
+}
+export function annotateOpponentFullbackOverlapChances(chances,phase){
+  if(!Array.isArray(chances)||phase?.situation!=="opponent_fullback_overlap"||phase.side!=="against")return chances;
+  const i=chances.findIndex(c=>c.side==="against");if(i<0)return chances;
+  return annotateOpponentRunChances(chances,phase).map((c,index)=>index===i?
+    {...c,tacticalMoment:{...c.tacticalMoment,kind:"opponent_fullback_overlap",label:"Offensiv backoverlapping",
+      basis:"simulated_fullback_overlap",keyAction:phase.steps[1].action}}:c);
+}
+
+export function annotateOpponentShortCombinationChances(chances,phase){
+  if(!Array.isArray(chances)||phase?.situation!=="opponent_short_combination"||phase.side!=="against")return chances;
+  const i=chances.findIndex(c=>c.side==="against");if(i<0)return chances;
+  return annotateOpponentRunChances(chances,phase).map((c,index)=>index===i?
+    {...c,tacticalMoment:{...c.tacticalMoment,kind:"opponent_short_combination",label:"Kortpasningskombinasjon",
+      basis:"simulated_rehearsed_short_pass",keyAction:phase.steps[2].action}}:c);
 }

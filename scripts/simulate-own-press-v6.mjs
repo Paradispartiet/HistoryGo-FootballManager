@@ -1,11 +1,11 @@
 import { resolveSourcedCreativeBreakthrough, resolveCompactBlockAttack, annotateCompactBlockChances } from "../src/football-matchday-compact-block-v6.js";
 // Deterministic causal pressing: high press, mid-block trap, counterpress and escapes.
 import assert from "node:assert/strict";
-import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances, annotateOpponentCreativeAttackChances } from "../src/football-matchday-sequence-v8.js";
+import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances, annotateOpponentCreativeAttackChances, resolveOpponentFullbackOverlap, annotateOpponentFullbackOverlapChances, annotateOpponentShortCombinationChances } from "../src/football-matchday-sequence-v8.js";
 import { readFileSync } from "node:fs";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances }
   from "../src/football-matchday-own-press-v6.js";
-import { advanceMatchClock, finalizeMatchdaySession }
+import { advanceMatchClock, finalizeMatchdaySession, generateMatchdayEvents, applyOpponentAdaptation }
   from "../src/football-matchday-engine.js";
 import { highPressPhaseRoll, resolveHighPressBuildUp, opponentPressWorkload }
   from "../src/football-matchday-high-press-v6.js";
@@ -64,6 +64,9 @@ const leagueProfiles = JSON.parse(readFileSync(new URL("../data/football_league_
 const viking = leagueProfiles.find(p => p.clubId === "viking");
 assert.equal(viking.styleTraits.shortBuildUp, 56);
 assert.equal(viking.tacticalBehaviourEvidence?.era, "2023");
+assert.equal(viking.tacticalBehaviourEvidence?.eraByPattern?.highPressEscapeRoute,"2023");
+assert.equal(viking.tacticalBehaviourEvidence?.eraByPattern?.attackingRunPattern,"1971–1975");
+assert.equal(viking.tacticalBehaviourEvidence?.eraByPattern?.shortCombinationPattern,"1971–1975");
 const vikingOpponent = { ...viking, id: viking.clubId, strength: 72 };
 const { tacticalBehaviour: _vikingEscape, ...unknownViking } = vikingOpponent;
 const vikingSession = session("high_press_343", { opponent: vikingOpponent });
@@ -1869,5 +1872,170 @@ try{
   assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(lskCreativeSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
   assert.equal(advanceMatchClock({...lskCreativeSeed,causalOpponentSetPieceVersion:1,events:[{id:"opp_set_piece_threat"}]}).timeline[0].tacticalPhase.situation,"opponent_set_piece");
 }finally{Math.random=lskCreativeRandom;}
+
+// Viking: equal flank cover stays anonymous; wide and central gates are separate.
+const vikingProfile=JSON.parse(readFileSync(new URL("../data/football_league_club_profiles.json",import.meta.url),"utf8")).profiles.find(p=>p.clubId==="viking");
+const vikingOverlapFixture=session("midfield_press_trap",{causalOpponentFullbackOverlapVersion:1,
+  opponent:{...vikingProfile,id:"viking",strength:72},lineupSnapshot:glimtLineup,
+  tacticSnapshot:{id:"midfield_press_trap",defensiveLine:"medium"}});
+const vikingOverlap=(roll,changes={})=>resolveOpponentFullbackOverlap({...vikingOverlapFixture,...changes},{rng:()=>roll});
+const vikingSuccess=vikingOverlap(0.1),vikingBox=vikingOverlap(0.3),vikingWide=vikingOverlap(0.9);
+assert.deepEqual([vikingSuccess.status,vikingBox.status,vikingWide.status],["overlap_breakthrough","box_contained","overlap_contained"]);
+assert.deepEqual([vikingSuccess.xgDeltaAgainst,vikingBox.xgDeltaAgainst,vikingWide.xgDeltaAgainst],[0.07,-0.02,-0.03]);
+assert.equal(vikingSuccess.evidence.targetFlank,null);
+assert.equal(vikingSuccess.evidence.opponentPlayerId,null);
+const vikingLeft=vikingOverlap(0.1,{lineupSnapshot:glimtLineup.map(p=>p.position==="LW"?{...p,matchScore:55}:p)});
+assert.equal(vikingLeft.evidence.targetFlank,"left");
+assert.ok(vikingLeft.evidence.overlapProbability>vikingSuccess.evidence.overlapProbability);
+assert.equal(vikingLeft.evidence.conditionalBoxProbability,vikingSuccess.evidence.conditionalBoxProbability);
+const vikingWeakBox=vikingOverlap(0.1,{lineupSnapshot:glimtLineup.map(p=>p.position==="CB"?{...p,matchScore:55}:p)});
+assert.equal(vikingWeakBox.evidence.overlapProbability,vikingSuccess.evidence.overlapProbability);
+assert.ok(vikingWeakBox.evidence.conditionalBoxProbability>vikingSuccess.evidence.conditionalBoxProbability);
+assert.equal(vikingOverlap(0.1,{lineupSnapshot:glimtLineup.filter(p=>p.position!=="LW")}),null);
+assert.equal(vikingOverlap(0.1,{causalOpponentFullbackOverlapVersion:undefined}),null);
+assert.equal(vikingOverlap(0.1,{opponent:{...vikingOverlapFixture.opponent,tacticalBehaviour:{}}}),null);
+assert.equal(vikingOverlap(NaN),null);
+let vikingDraws=0;resolveOpponentFullbackOverlap(vikingOverlapFixture,{rng:()=>{vikingDraws++;return 0.1;}});
+assert.equal(vikingDraws,1);
+assert.equal(annotateOpponentFullbackOverlapChances(lskChances,vikingSuccess).filter(c=>c.tacticalMoment).length,1);
+assert.equal(annotateOpponentFullbackOverlapChances(lskChances,vikingWide),lskChances);
+let vikingOverlapSeed;
+for(let i=0;i<3000;i++){
+  const s={...vikingOverlapFixture,id:"viking-overlap-"+i};
+  if(vikingOverlap(highPressPhaseRoll(s,"0:opponent-fullback-overlap")).status==="overlap_breakthrough"){vikingOverlapSeed=s;break;}
+}
+assert.ok(vikingOverlapSeed);
+const vikingOverlapRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(vikingOverlapSeed),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"opponent_fullback_overlap");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,period.tacticalPhase.xgDeltaAgainst);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(vikingOverlapSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
+}finally{Math.random=vikingOverlapRandom;}
+
+// Viking short-pass alternative uses the same period draw as overlap.
+const vikingShortFixture={...vikingOverlapFixture,causalOpponentShortCombinationVersion:1};
+const vikingShort=(draw,changes={})=>resolveOpponentFullbackOverlap({...vikingShortFixture,...changes},{rng:()=>draw});
+const shortWin=vikingShort(0.02),shortRelease=vikingShort(0.14),shortStop=vikingShort(0.36);
+assert.deepEqual([shortWin.status,shortRelease.status,shortStop.status],
+  ["combination_breakthrough","third_man_contained","support_pass_contained"]);
+assert.deepEqual([shortWin.xgDeltaAgainst,shortRelease.xgDeltaAgainst,shortStop.xgDeltaAgainst],[0.07,-0.02,-0.03]);
+assert.equal(shortWin.evidence.opponentPlayerId,null);
+assert.equal(shortWin.evidence.shortCombinationWeight,0.4);
+assert.notEqual(shortWin.evidence.firstPresserId,shortWin.evidence.centralCoverId);
+assert.equal(shortWin.evidence.dedicatedCover,true);
+assert.equal(vikingShort(0.4).situation,"opponent_fullback_overlap");
+assert.equal(vikingShort(0.02,{causalOpponentShortCombinationVersion:undefined}).situation,"opponent_fullback_overlap");
+assert.equal(vikingShort(0.02,{opponent:{...vikingShortFixture.opponent,tacticalBehaviour:{attackingRunPattern:"rehearsed_fullback_overlap"}}}).situation,"opponent_fullback_overlap");
+assert.equal(vikingShort(0.02,{lineupSnapshot:glimtLineup.filter(p=>p.position!=="DM")}).situation,"opponent_fullback_overlap");
+let shortDraws=0;resolveOpponentFullbackOverlap(vikingShortFixture,{rng:()=>{shortDraws++;return 0.02;}});
+assert.equal(shortDraws,1);
+const weakFirst=vikingShort(0.02,{lineupSnapshot:glimtLineup.map(p=>p.position==="CM"?{...p,matchScore:55}:p)});
+assert.ok(weakFirst.evidence.supportPassProbability>shortWin.evidence.supportPassProbability);
+assert.equal(weakFirst.evidence.conditionalThirdManProbability,shortWin.evidence.conditionalThirdManProbability);
+const weakScreen=vikingShort(0.02,{lineupSnapshot:glimtLineup.map(p=>p.position==="DM"?{...p,roleId:"deep_playmaker"}:p)});
+assert.equal(weakScreen.evidence.supportPassProbability,shortWin.evidence.supportPassProbability);
+assert.ok(weakScreen.evidence.conditionalThirdManProbability>shortWin.evidence.conditionalThirdManProbability);
+assert.equal(annotateOpponentShortCombinationChances(lskChances,shortWin).filter(c=>c.tacticalMoment).length,1);
+assert.equal(annotateOpponentShortCombinationChances(lskChances,shortStop),lskChances);
+let vikingShortSeed;
+for(let i=0;i<3000;i++){
+  const s={...vikingShortFixture,id:"viking-short-"+i};
+  if(vikingShort(highPressPhaseRoll(s,"0:opponent-fullback-overlap")).status==="combination_breakthrough"){vikingShortSeed=s;break;}
+}
+assert.ok(vikingShortSeed);
+const vikingShortRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(vikingShortSeed),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"opponent_short_combination");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,period.tacticalPhase.xgDeltaAgainst);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(vikingShortSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
+}finally{Math.random=vikingShortRandom;}
+
+// Knapp's dead-ball focus uses the existing event slot and resolver.
+const knappHome=[],knappAway=[];
+for(let n=0;n<100;n++){
+  for(const homeAway of ["home","away"]){
+    const opp={...vikingProfile,id:"viking",homeAway,matchId:"viking-"+n+"-"+homeAway};
+    const generated=generateMatchdayEvents({opponent:opp,tacticalProfile:vikingShortFixture.teamFitSnapshot.tacticalProfile});
+    assert.equal(generated.length,3);
+    assert.equal(new Set(generated.map(e=>e.id)).size,3);
+    assert.deepEqual(generateMatchdayEvents({opponent:opp,tacticalProfile:vikingShortFixture.teamFitSnapshot.tacticalProfile}),generated);
+    (homeAway==="home"?knappHome:knappAway).push({opp,generated});
+  }
+}
+const knappHomeDead=knappHome.find(x=>x.generated[1].id==="opp_set_piece_threat");
+const knappAwayDead=knappAway.find(x=>x.generated[1].id==="opp_set_piece_second_ball");
+assert.ok(knappHomeDead&&knappAwayDead);
+assert.ok(knappHome.some(x=>x.generated[1].id!=="opp_set_piece_threat"));
+assert.ok(knappAway.some(x=>x.generated[1].id!=="opp_set_piece_second_ball"));
+assert.equal(knappHomeDead.generated[1].title,"Dødball mot boksen");
+assert.equal(vikingProfile.tacticalBehaviourEvidence.eraByPattern.setPiecePattern,"1978–1981");
+const knappFixture={...vikingShortFixture,causalOpponentSetPieceVersion:1,events:[knappHomeDead.generated[1]]};
+const knappFirst=resolveOpponentSetPiece(knappFixture,{rng:()=>0.1});
+assert.equal(knappFirst.route,"historical_set_piece_focus");
+assert.equal(knappFirst.evidence.opponentPattern,"historical_set_piece_focus");
+assert.equal(knappFirst.status,"first_contact_threat");
+assert.equal(knappFirst.xgDeltaAgainst,lskDeadFirst.xgDeltaAgainst);
+assert.equal(resolveOpponentSetPiece({...knappFixture,events:[]},{rng:()=>0.1}),null);
+assert.equal(resolveOpponentSetPiece({...knappFixture,causalOpponentSetPieceVersion:undefined},{rng:()=>0.1}),null);
+const knappSecond=resolveOpponentSetPiece({...knappFixture,events:[knappAwayDead.generated[1]]},{rng:()=>0.1});
+assert.equal(knappSecond.status,"second_ball_threat");
+assert.equal(knappSecond.evidence.firstContactProbability,null);
+const knappOriginalRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(knappFixture),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"opponent_set_piece");
+  assert.equal(period.tacticalPhase.route,"historical_set_piece_focus");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,period.tacticalPhase.xgDeltaAgainst);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.notEqual(advanceMatchClock(played).timeline[1].tacticalPhase?.situation,"opponent_set_piece");
+}finally{Math.random=knappOriginalRandom;}
+
+// Live route adaptation: two consecutive failures, remaining time, one
+// tactical reaction, no additional xG or fabricated player repositioning.
+const flexibleFixture={...vikingShortFixture,causalOpponentAttackAdaptationVersion:1,
+  events:knappHomeDead.generated,phase:"event_2",score:{for:0,against:0},
+  timeline:[{tacticalPhase:vikingWide},{tacticalPhase:vikingBox}],opponentAdjustments:[]};
+const flexibleBefore=JSON.stringify(flexibleFixture);
+const varied=applyOpponentAdaptation(flexibleFixture);
+assert.equal(JSON.stringify(flexibleFixture),flexibleBefore);
+assert.equal(varied.opponentAttackRoutePreference,"short_combination");
+assert.equal(varied.opponentAdjustments.at(-1).id,"vary_attack_route");
+assert.equal(varied.opponentAdjustments.at(-1).observedPeriods,2);
+assert.equal(varied.timeline,flexibleFixture.timeline);
+assert.equal(varied.opponent,flexibleFixture.opponent);
+assert.equal(varied.planMatchup,flexibleFixture.planMatchup);
+assert.equal(applyOpponentAdaptation(varied),varied);
+assert.equal(resolveOpponentFullbackOverlap(varied,{rng:()=>0.5}).route,"rehearsed_short_pass_support");
+assert.equal(resolveOpponentFullbackOverlap(flexibleFixture,{rng:()=>0.5}).route,"rehearsed_fullback_overlap");
+const variedWide=applyOpponentAdaptation({...flexibleFixture,timeline:[{tacticalPhase:shortStop},{tacticalPhase:shortRelease}]});
+assert.equal(variedWide.opponentAttackRoutePreference,"fullback_overlap");
+assert.equal(resolveOpponentFullbackOverlap(variedWide,{rng:()=>0.2}).route,"rehearsed_fullback_overlap");
+for(const invalid of [
+  {...flexibleFixture,causalOpponentAttackAdaptationVersion:undefined},
+  {...flexibleFixture,timeline:[{tacticalPhase:vikingWide}]},
+  {...flexibleFixture,timeline:[{tacticalPhase:vikingWide},{tacticalPhase:shortStop}]},
+  {...flexibleFixture,timeline:[{tacticalPhase:vikingWide},{tacticalPhase:vikingSuccess}]},
+  {...flexibleFixture,events:[]},
+  {...flexibleFixture,opponent:{...flexibleFixture.opponent,tacticalBehaviour:{attackingRunPattern:"rehearsed_fullback_overlap"}}}
+])assert.equal(applyOpponentAdaptation(invalid),invalid);
+const scoreAdjusted=applyOpponentAdaptation({...flexibleFixture,score:{for:1,against:0}});
+assert.equal(scoreAdjusted.opponentAdjustments.at(-1).id,"push_up");
+assert.equal(scoreAdjusted.opponent.tacticalBehaviour.attackingRunPattern,"rehearsed_fullback_overlap");
+assert.equal(scoreAdjusted.opponent.tacticalBehaviour.shortCombinationPattern,"rehearsed_short_pass_support");
+assert.equal(scoreAdjusted.opponent.tacticalBehaviour.setPiecePattern,"historical_set_piece_focus");
+assert.equal(scoreAdjusted.opponentAttackRoutePreference,undefined);
+assert.ok(resolveOpponentFullbackOverlap(scoreAdjusted,{rng:()=>0.1}));
+assert.deepEqual(resolveOpponentFullbackOverlap(JSON.parse(JSON.stringify(varied)),{rng:()=>0.5}),
+  resolveOpponentFullbackOverlap(varied,{rng:()=>0.5}));
 
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
