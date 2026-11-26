@@ -122,3 +122,89 @@ export function annotateAuthoredSequenceChances(chances, phase) {
     }
   } : chance);
 }
+
+// Sourced opponent movement patterns, independent of a press-escape route.
+// An explicitly selected defensive line and known defending unit are required.
+// This is a simulated possession, not reconstructed tracking or opponent XI.
+const BREAKTHROUGH_LINE_EXPOSURE = Object.freeze({
+  low: -0.12, medium_low: -0.06, medium: 0, medium_high: 0.06, high: 0.12
+});
+const COORDINATED_RUNS = Object.freeze([
+  "Midtspissen møter ballen og forsøker å trekke en stopper ut",
+  "Gjennombruddsspissen starter motsatt bevegelse inn i bakrommet",
+  "Indreløperen følger opp i rommet som åpnes",
+  "Den offensive backen gir bredde og overlapp; flere løp truer boksen"
+]);
+
+export function resolveOpponentRunSequence(session, { rng = Math.random } = {}) {
+  if (session?.causalOpponentRunVersion !== 1 ||
+      session.opponent?.tacticalBehaviour?.attackingRunPattern !== "coordinated_433_breakthrough" ||
+      !verifiedMatchLineup(session.lineupSnapshot)) return null;
+  const plan = session.activePlanSnapshot || session.tacticSnapshot;
+  const line = plan?.defensiveLine;
+  if (!plan?.id || !Object.prototype.hasOwnProperty.call(BREAKTHROUGH_LINE_EXPOSURE, line)) return null;
+  const profile = session.teamFitSnapshot?.tacticalProfile;
+  const metrics = [profile?.balanceScore, profile?.restDefenseScore];
+  if (!metrics.every(v => finite(v) && v >= 0 && v <= 100)) return null;
+  const lineup = session.lineupSnapshot;
+  const best = (positions, count = 1) => lineup.filter(p => positions.includes(p.position))
+    .sort((a, b) => b.matchScore - a.matchScore || a.playerId.localeCompare(b.playerId)).slice(0, count);
+  const centreBacks = best(["CB"], 2), screen = best(["DM", "CM"]);
+  const left = best(["LB", "LWB"]), right = best(["RB", "RWB"]);
+  // No target flank is documented: verify both sides or leave the phase unknown.
+  if (centreBacks.length !== 2 || !screen.length || !left.length || !right.length) return null;
+  const support = [...centreBacks, ...screen, ...left, ...right];
+  const avg = support.reduce((sum, p) => sum + p.matchScore, 0) / support.length;
+  const floor = Math.min(...support.map(p => p.matchScore));
+  // Bounded game heuristic, not an empirical rate. One draw for the complete
+  // combination, no individual opponent skill or additional formation penalty.
+  const probability = Math.max(0.12, Math.min(0.82,
+    0.50 + BREAKTHROUGH_LINE_EXPOSURE[line] -
+    (avg - 65) * 0.004 - (floor - 65) * 0.001 -
+    (Math.min(...metrics) - 65) * 0.003));
+  const draw = rng();
+  if (!finite(draw)) return null;
+  const breakthrough = Math.max(0, Math.min(0.999999999, draw)) < probability;
+  return {
+    version: 6, situation: "opponent_coordinated_runs",
+    planId: plan.id, route: "coordinated_433_breakthrough",
+    status: breakthrough ? "breakthrough" : "contained",
+    side: breakthrough ? "against" : null,
+    probability: Math.round(probability * 1000) / 1000,
+    xgDeltaFor: 0, xgDeltaAgainst: breakthrough ? 0.06 : -0.03,
+    cause: breakthrough
+      ? "Motstanderens motsatte bevegelser og støtte åpner et gjennombruddsvindu bak eller mellom forsvarsleddene."
+      : "Stopperne holder dybden, midtbanen skjermer avlegget og backene sikrer løpsrommet.",
+    steps: COORDINATED_RUNS.map((action, index) => ({
+      action, order: index + 1,
+      result: breakthrough || index === 0 ? "simulated_available" :
+        index === 1 ? "countered" : "not_reached"
+    })),
+    counterplay: { status: breakthrough ? "not_triggered" : "simulated_counter",
+      counter: "Hold stopperdybde, skjerm avlegget og følg indreløpet",
+      nextManagerResponse: "Vurder lavere forsvarslinje og støtte fra sekseren; sikre begge kanter.",
+      automaticallyExecuted: false },
+    evidence: { basis: "sourced_opponent_pattern_bounded_game_heuristic_not_observed",
+      opponentPattern: "coordinated_433_breakthrough", defensiveLine: line,
+      lineExposure: BREAKTHROUGH_LINE_EXPOSURE[line],
+      balanceScore: metrics[0], restDefenseScore: metrics[1], weakestCoverFit: floor,
+      supportingPlayers: support.map(({playerId, roleId, position, matchScore}) =>
+        ({playerId, roleId, position, matchScore})),
+      eventCount: 1, randomDraws: 1 }
+  };
+}
+
+export function annotateOpponentRunChances(chances, phase) {
+  if (!Array.isArray(chances) || phase?.side !== "against") return chances;
+  const at = chances.findIndex(c => c.side === "against");
+  if (at < 0) return chances;
+  return chances.map((c, i) => i !== at ? c : {
+    ...c, tacticalMoment: {
+      kind: "opponent_coordinated_runs", label: "Samordnet gjennombruddsløp",
+      description: phase.cause, planId: phase.planId, status: "countered",
+      side: "against", keyAction: phase.steps[1].action, cause: phase.cause,
+      steps: phase.steps, counterplay: phase.counterplay, observed: false,
+      basis: "simulated_opponent_run_sequence", xgDelta: phase.xgDeltaAgainst
+    }
+  });
+}

@@ -8,20 +8,21 @@
       "styleName": "Godfoten",
       "tacticalSchool": "Trønderfotball · Eggens samhandlingslære",
       "era": "1988–2002",
-      "style": "Offensivt 4-3-3 der kantene bryter gjennom og alt hviler på relasjoner",
-      "historicalNote": "Etter Nils Arne Eggens møte med Rinus Michels ble Rosenborg synonymt med 4-3-3. Kantspillerne er de som bryter gjennom, backene går høyt og hurtig, og godfotteorien sier at laget er mer enn summen av spillerne: du blir god av å gjøre andre gode. Angrepene kommer fort og med mange spillere.",
-      "inPossessionShape": "4-3-3 med høye backer og brede kanter",
+      "style": "Offensivt, gjennombruddshissig 4-3-3 med hurtige kombinasjoner og samordnede løp uten ball",
+      "historicalNote": "Etter møtet med Rinus Michels rendyrket Nils Arne Eggen en offensiv 4-3-3. Godfotfilosofien bygger på at spillernes komplementære ferdigheter og innøvde samhandling gjør hverandre gode. Møtende midtspiss, motsatte løp fra gjennombruddsspissene, indreløpere i fart og offensive backer skaper gjennombrudd. Førstebevegelsen utløser andre- og tredjebevegelser; flere spillere angriper boksen samtidig. Lengre oppspill mot Milans press i desember 1996 var en situasjonsbestemt tilpasning innenfor denne filosofien, ikke lagets faste oppspillsrute.",
+      "inPossessionShape": "4-3-3 med offensive backer, brede gjennombruddsspisser og løpssterke indreløpere",
       "outOfPossessionShape": "4-5-1 som gjenvinner høyt",
       "defensiveBlock": "Middels til høy blokk",
-      "buildUpStyle": "Korte pasninger gjennom midtbanetrekanten, tidlig ut på kant",
-      "attackingStyle": "Bredde, innlegg og mange spillere inn i boksen",
+      "buildUpStyle": "Fremoverrettet frispilling og tidlig gjennombrudd via midtbanetrekanten eller kant; direkte utspill som kampavhengig alternativ",
+      "attackingStyle": "Motsatte bevegelser, løp i bakrom, overlapp, andre- og tredjebevegelser og mange spillere i boksen",
       "tempo": "Høyt",
       "riskLevel": "medium",
       "baseStyleId": "possession_opponent",
       "matchupStyles": [
         "possession_positional",
         "wide_overload",
-        "high_press"
+        "high_press",
+        "fast_runners_in_behind"
       ],
       "pressResistance": 70,
       "defensiveStructure": 58,
@@ -39,8 +40,8 @@
         "intensity": 66
       },
       "strengths": [
-        "kantene holder banen bred og trekker forsvaret fra hverandre",
-        "samhandlingen gjør at tredjemann alltid er tilgjengelig"
+        "samordnede løp uten ball skaper rom og pasningsalternativer",
+        "møtende spiss og gjennombruddsspisser kombinerer med indreløpere og offensive backer"
       ],
       "weaknesses": [
         "høye backer gir rom bak sidene",
@@ -69,28 +70,47 @@
       "styleBasis": "tradisjon",
       "tacticalBehaviour": {
         "pressCoordination": "collective",
-        "passingLaneCover": "central"
+        "passingLaneCover": "central",
+        "attackingRunPattern": "coordinated_433_breakthrough"
       },
       "tacticalBehaviourEvidence": {
         "era": "1994–1999",
-        "scope": "Historisk stilmodell basert på Eggens forsvarspostulater, ikke målt pasningsdekning ved avspark. Senere analyse fra 2017 er kun støtte for kontinuitet i klubbtradisjonen.",
-        "interpretation": "Eggens postulater beskriver aggressivt førsteforsvarerpress, raske sikringsbevegelser og et samlet lag med kantene trukket inn når motstander angriper sentralt. Dette modelleres som kollektivt press med sentral dekning, ikke som en universell regel for alle kampsituasjoner.",
+        "scope": "Historisk stilmodell basert på Eggens spillepostulater fra 1994–1999, ikke målt pasningsdekning ved avspark. Senere analyse fra 2017 er kun støtte for kontinuitet. Angrepsidentiteten bygger på Eggens postulater; Milan 1996 dokumenterer en alternativ kampplan.",
+        "interpretation": "Eggens forsvarspostulater støtter kollektivt press og sentral dekning. Angrepspostulatene prioriterer gjennombrudd og samordnede første-, andre- og tredjebevegelser; Carlsens begrensede kamputvalg underbygger aktiv løping uten ball, uten å gi grunnlag for nye ferdighetstall. Rekdal skiller Eggens mer gjennombrudds- og kontringsorienterte fotball fra Glimts mer ballbesittende stil. Direkte oppspill mot Milan 1996 beholdes som dokumentert alternativ, men aktiveres ikke som fast liga-utspill. En konkret situasjonsstyrt rutevalgmodell må dokumenteres og testes separat.",
         "sources": [
           {
             "title": "Nils Arne Eggen og fokus på fotballferdigheter",
             "publisher": "Fotballtreneren",
             "url": "https://fotballtreneren.no/2022/08/10/nils-arne-eggen-og-fokus-pa-fotballferdigheter/",
-            "locator": "Rosenborg-postulatene: forsvar generelt, motstander angriper sentralt og midtspissens rolle; gjengir Godfoten (Eggen 1999, s. 256–262)."
+            "locator": "Rosenborg-postulatene: forsvar generelt, motstander angriper sentralt og midtspissens rolle; gjengir Godfoten (Eggen 1999, s. 256–262). Angrep mot etablert forsvar, innlegg, fysiske ferdigheter og analysen av løp i bakrom og andrebevegelser."
           },
           {
             "title": "Analysen: Deila gjør lurt i å kaste filosofien mot Rosenborg",
             "publisher": "Eurosport",
             "url": "https://www.eurosport.no/fotball/eliteserien/2017/analysen_sto6180797/story.shtml",
             "locator": "Må omstille tidlig – toppress med spiss og kanter, kompakte bakre ledd og vern av mellomrommet i 2017."
+          },
+          {
+            "title": "Pauseprat: Da Rosenborg slo ut AC Milan",
+            "publisher": "Boks te boks / Tarjei Smågesjø",
+            "url": "https://smgesj.substack.com/p/pauseprat-da-rosenborg-slo-ut-ac",
+            "locator": "25.07.2025, avsnittet om Eggens forklaring etter borteseieren: lengre pasninger over Milans press."
+          },
+          {
+            "title": "Rosenborg 1995: Masse mål, faglige debatter, pragmatisk stil og tidenes beste lag?",
+            "publisher": "Boks te boks / Tarjei Smågesjø",
+            "url": "https://smgesj.substack.com/p/rosenborg-1995",
+            "locator": "09.02.2026, Taktikken: lange oppspill mot Soltvedt og fra Stensaas mot Løken. Supplerende eksempel fra samme forfatter, ikke uavhengig bekreftelse eller dokumentasjon av samme pressfase."
+          },
+          {
+            "title": "Peker på forskjeller mellom Knutsens og Eggens 4-3-3: – Ingen blåkopi",
+            "publisher": "Eurosport",
+            "url": "https://www.eurosport.no/fotball/eliteserien/2020/peker-pa-forskjeller-mellom-knutsens-og-eggens-4-3-3-ingen-blakopi_sto8545226/story.shtml",
+            "locator": "Kjetil Rekdals sammenligning av ballbesittelse, kontringer, vending og frispilling med stopper."
           }
         ]
       },
-      "shortLabel": "godfoten · bredt 4-3-3"
+      "shortLabel": "godfoten · offensivt 4-3-3 og gjennombruddsløp"
     },
     {
       "clubId": "brann",
