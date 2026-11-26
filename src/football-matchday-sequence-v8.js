@@ -683,3 +683,65 @@ export function annotateOpponentSetPieceChances(chances,phase){
     {...c,tacticalMoment:{...c.tacticalMoment,kind:"opponent_set_piece",label:"Dødball og nedfall",
       basis:"simulated_set_piece_scenario",keyAction:phase.steps[1].action}}:c);
 }
+
+// Schou-era offensive fullbacks: a sourced general principle, not an observed
+// flank, exact combination, opponent XI or measured historical probability.
+export function resolveOpponentFullbackOverlap(session,{rng=Math.random}={}){
+  if(session?.causalOpponentFullbackOverlapVersion!==1||
+      session.opponent?.tacticalBehaviour?.attackingRunPattern!=="rehearsed_fullback_overlap"||
+      !verifiedMatchLineup(session.lineupSnapshot))return null;
+  const planId=session.activePlanSnapshot?.id||session.tacticSnapshot?.id||session.selectedTacticId;
+  if(!planId)return null;
+  const {balanceScore,restDefenseScore}=session.teamFitSnapshot?.tacticalProfile||{};
+  if(![balanceScore,restDefenseScore].every(v=>finite(v)&&v>=0&&v<=100))return null;
+  const best=(positions,count=1)=>session.lineupSnapshot.filter(p=>positions.includes(p.position))
+    .sort((a,b)=>b.matchScore-a.matchScore||a.playerId.localeCompare(b.playerId)).slice(0,count);
+  const left=best(["LB","LWB"]),right=best(["RB","RWB"]);
+  const leftSupport=best(["LW","LM"]),rightSupport=best(["RW","RM"]);
+  const backs=best(["CB"],2),screen=best(["DM","CM"]);
+  if(!left.length||!right.length||!leftSupport.length||!rightSupport.length||backs.length!==2||!screen.length)return null;
+  const clamp=v=>Math.max(0.12,Math.min(0.82,v));
+  const rounded=v=>Math.round(v*1000)/1000;
+  const cover=(back,support)=>0.6*back.matchScore+0.4*support.matchScore;
+  const leftCover=cover(left[0],leftSupport[0]),rightCover=cover(right[0],rightSupport[0]);
+  // Weakest side is a game-model vulnerability, not observed scouting or an
+  // inferred historical flank. Equal sides remain anonymous.
+  const flank=leftCover+2<rightCover?"left":rightCover+2<leftCover?"right":null;
+  const wideCover=flank==="left"?leftCover:flank==="right"?rightCover:(leftCover+rightCover)/2;
+  const wide=flank==="left"?[...left,...leftSupport]:flank==="right"?[...right,...rightSupport]:[...left,...leftSupport,...right,...rightSupport];
+  const box=[...backs,...screen];
+  const boxFit=box.reduce((sum,p)=>sum+p.matchScore,0)/box.length;
+  const overlap=clamp(0.58-(wideCover-65)*0.006-(balanceScore-65)*0.002);
+  const finish=clamp(0.51-(boxFit-65)*0.004-(restDefenseScore-65)*0.004);
+  const draw=rng();if(!finite(draw))return null;
+  const roll=Math.max(0,Math.min(0.999999999,draw));
+  const available=roll<overlap,success=available&&roll<overlap*finish;
+  const status=success?"overlap_breakthrough":available?"box_contained":"overlap_contained";
+  const actions=["Kantspilleren binder første forsvarer","Backen forsøker å overlappe på utsiden",
+    "Overlappingen søker et innleggsvindu","Stopperne og sentral sikring konkurrerer om avslutningsrommet"];
+  return {version:6,situation:"opponent_fullback_overlap",planId,route:"rehearsed_fullback_overlap",
+    status,side:success?"against":null,probability:rounded(overlap*finish),
+    xgDeltaFor:0,xgDeltaAgainst:success?0.07:available?-0.02:-0.03,
+    cause:success?"Kant og overlappende back skaper innleggsrom, og motstanderen finner et avslutningsvindu.":
+      available?"Overlappingen kommer frem, men stopperne og sentral sikring kontrollerer boksen.":
+      "Kantstøtten og backen fordeler dekningen og stanser overlappingen.",
+    steps:actions.map((action,i)=>({action,order:i+1,result:i===0||success||(available&&i<3)?"simulated_available":
+      !available&&i>1?"not_reached":"countered"})),
+    counterplay:{status:success?"not_triggered":"simulated_counter",
+      counter:"Fordel kantdekning og behold sentral sikring",
+      nextManagerResponse:"La kantstøtten følge overlappende back, og behold stoppere og sentral sikring i boksen.",
+      automaticallyExecuted:false},
+    evidence:{basis:"sourced_overlap_principle_generic_game_hypothesis_not_observed",opponentPattern:"rehearsed_fullback_overlap",
+      opponentPlayerId:null,targetFlank:flank,flankSelectionBasis:"simulated_weakest_verified_wide_unit",
+      leftCover:rounded(leftCover),rightCover:rounded(rightCover),overlapProbability:rounded(overlap),
+      conditionalBoxProbability:rounded(finish),wideSupport:wide.map(p=>p.playerId),boxSupport:box.map(p=>p.playerId),
+      supportingPlayers:[...wide,...box].map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
+      eventCount:1,randomDraws:1}};
+}
+export function annotateOpponentFullbackOverlapChances(chances,phase){
+  if(!Array.isArray(chances)||phase?.situation!=="opponent_fullback_overlap"||phase.side!=="against")return chances;
+  const i=chances.findIndex(c=>c.side==="against");if(i<0)return chances;
+  return annotateOpponentRunChances(chances,phase).map((c,index)=>index===i?
+    {...c,tacticalMoment:{...c.tacticalMoment,kind:"opponent_fullback_overlap",label:"Offensiv backoverlapping",
+      basis:"simulated_fullback_overlap",keyAction:phase.steps[1].action}}:c);
+}
