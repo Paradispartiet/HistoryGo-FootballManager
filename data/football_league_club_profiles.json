@@ -551,12 +551,13 @@
       "styleBasis": "tradisjon",
       "shortLabel": "langball, dueller og andreballer",
       "tacticalBehaviour": {
-        "attackingRunPattern": "direct_duel_second_ball"
+        "attackingRunPattern": "direct_duel_second_ball",
+        "setPiecePattern": "historical_delivery_box_duel"
       },
       "tacticalBehaviourEvidence": {
         "era": "1975–1989",
         "scope": "Historisk klubbtradisjon, ikke dagens LSK eller en fast oppspillsrute i alle kamper.",
-        "interpretation": "Retrospektive kilder beskriver direkte oppspill og duellspill i LSK-tradisjonen, og dødballspesialisten Tom Lund. NFF dokumenterer ulike formasjoner i cupfinaler. Andreballens to betingede sannsynligheter er en generisk spillhypotese, ikke historiske målinger eller dokumentert fast angrepsrute. Ingen pressEscapeRoute, passingLaneCover, navngitt mottaker eller fast flanke utledes. Eldre numeriske traits og matchup-tokens er uendrede spillmodellantakelser.",
+        "interpretation": "Retrospektive kilder beskriver direkte oppspill og duellspill i LSK-tradisjonen, og dødballspesialisten Tom Lund. NFF dokumenterer ulike formasjoner i cupfinaler. Andreballens to betingede sannsynligheter er en generisk spillhypotese, ikke historiske målinger eller dokumentert fast angrepsrute. Ingen pressEscapeRoute, passingLaneCover, navngitt mottaker eller fast flanke utledes. Eldre numeriske traits og matchup-tokens er uendrede spillmodellantakelser. Hooleys dødballtradisjon i slutten av 1970-årene er belagt: Lund slo frispark og cornere mot sterke hodespillere. Den generiske dødballfasen bruker kun eksisterende planlagte dødballsituasjoner; ingen historisk treffprosent, fast løp, spilleridentitet eller dødballfrekvens antas.",
         "sources": [
           {
             "title": "Et flott lag for Ullevaal",
@@ -587,6 +588,12 @@
             "publisher": "Store norske leksikon",
             "url": "https://snl.no/Lillestr%C3%B8m_Sportsklubb",
             "locator": "Gullperioden 1975–1989."
+          },
+          {
+            "title": "BLOGG: Når ballen er død",
+            "publisher": "Aftenposten",
+            "url": "https://www.aftenposten.no/sport/meninger/i/9vqeGE/blogg-naar-ballen-er-doed",
+            "locator": "Retrospektiv omtale av Hooley, Lunds frispark og cornere og sterke hodespillere."
           }
         ]
       }
