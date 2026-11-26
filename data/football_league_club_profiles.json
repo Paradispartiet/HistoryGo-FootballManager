@@ -575,6 +575,33 @@
         "De vil at du skal prøve gjennom midten. Ikke gjør det.",
         "Har du ikke kanter som tør, får du ballen uten å komme noen vei."
       ],
+      "tacticalBehaviour": {
+        "pressEscape": "supported",
+        "pressEscapeCandidateRoutes": [
+          "third_man",
+          "switch_play"
+        ],
+        "pressEscapeRoutePolicy": "weakest_verified_cover"
+      },
+      "tacticalBehaviourEvidence": {
+        "era": "2024",
+        "scope": "Kjetil Knutsens oppbyggingsprinsipper i 2020–2024-profilen. Kildene beskriver tilgjengelige utveier i oppbygging, ikke en målt rutevalgpolicy eller et bestemt mønster etter hvert balltap.",
+        "interpretation": "Indreløpere brukes som mellomledd for å finne sekseren bak første pressledd; motsatt back brukes til å vende spillet ut av trange rom. Begge rutene inngår som tilgjengelige modellerte valg. Motorens eksisterende weakest_verified_cover-policy er en spillhypotese, ikke dokumentert scouting av motstanderen eller historisk valgfrekvens. Ukjent eller tilnærmet lik forsvarsdekning gir ingen navngitt utvei. Ingen bestemt flanke, timing, avslutning eller direkte utspill er lagt til.",
+        "sources": [
+          {
+            "title": "Kjetil Knutsen – Bodø/Glimt – Tactical Analysis",
+            "publisher": "The Football Analyst",
+            "url": "https://the-footballanalyst.com/kjetil-knutsen-bodo-glimt-tactical-analysis/",
+            "locator": "Finding the Number-Six; The Far-Side Fullback; Finding the Pockets. Tredjemannskombinasjoner bak første pressledd og vending til motsatt back."
+          },
+          {
+            "title": "Kjetil Knutsen’s FK Bodø/Glimt build-up play",
+            "publisher": "Diego Puig – Football Analysis & Coaching",
+            "url": "https://diegopuigcoach.com/en-tactical-analysis/",
+            "locator": "Analysis 02, Build-up structure; Key behaviours; Progression and risks. Udattert støtte for begge oppbyggingsruter."
+          }
+        ]
+      },
       "shortLabel": "ballbesittelse og rotasjoner, smal blokk uten ball"
     },
     {
