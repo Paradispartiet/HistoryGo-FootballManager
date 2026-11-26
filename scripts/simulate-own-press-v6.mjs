@@ -5,7 +5,7 @@ import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotat
 import { readFileSync } from "node:fs";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances }
   from "../src/football-matchday-own-press-v6.js";
-import { advanceMatchClock, finalizeMatchdaySession, generateMatchdayEvents }
+import { advanceMatchClock, finalizeMatchdaySession, generateMatchdayEvents, applyOpponentAdaptation }
   from "../src/football-matchday-engine.js";
 import { highPressPhaseRoll, resolveHighPressBuildUp, opponentPressWorkload }
   from "../src/football-matchday-high-press-v6.js";
@@ -1999,5 +1999,43 @@ try{
   assert.equal(played.minuteLog.length,period.chances);
   assert.notEqual(advanceMatchClock(played).timeline[1].tacticalPhase?.situation,"opponent_set_piece");
 }finally{Math.random=knappOriginalRandom;}
+
+// Live route adaptation: two consecutive failures, remaining time, one
+// tactical reaction, no additional xG or fabricated player repositioning.
+const flexibleFixture={...vikingShortFixture,causalOpponentAttackAdaptationVersion:1,
+  events:knappHomeDead.generated,phase:"event_2",score:{for:0,against:0},
+  timeline:[{tacticalPhase:vikingWide},{tacticalPhase:vikingBox}],opponentAdjustments:[]};
+const flexibleBefore=JSON.stringify(flexibleFixture);
+const varied=applyOpponentAdaptation(flexibleFixture);
+assert.equal(JSON.stringify(flexibleFixture),flexibleBefore);
+assert.equal(varied.opponentAttackRoutePreference,"short_combination");
+assert.equal(varied.opponentAdjustments.at(-1).id,"vary_attack_route");
+assert.equal(varied.opponentAdjustments.at(-1).observedPeriods,2);
+assert.equal(varied.timeline,flexibleFixture.timeline);
+assert.equal(varied.opponent,flexibleFixture.opponent);
+assert.equal(varied.planMatchup,flexibleFixture.planMatchup);
+assert.equal(applyOpponentAdaptation(varied),varied);
+assert.equal(resolveOpponentFullbackOverlap(varied,{rng:()=>0.5}).route,"rehearsed_short_pass_support");
+assert.equal(resolveOpponentFullbackOverlap(flexibleFixture,{rng:()=>0.5}).route,"rehearsed_fullback_overlap");
+const variedWide=applyOpponentAdaptation({...flexibleFixture,timeline:[{tacticalPhase:shortStop},{tacticalPhase:shortRelease}]});
+assert.equal(variedWide.opponentAttackRoutePreference,"fullback_overlap");
+assert.equal(resolveOpponentFullbackOverlap(variedWide,{rng:()=>0.2}).route,"rehearsed_fullback_overlap");
+for(const invalid of [
+  {...flexibleFixture,causalOpponentAttackAdaptationVersion:undefined},
+  {...flexibleFixture,timeline:[{tacticalPhase:vikingWide}]},
+  {...flexibleFixture,timeline:[{tacticalPhase:vikingWide},{tacticalPhase:shortStop}]},
+  {...flexibleFixture,timeline:[{tacticalPhase:vikingWide},{tacticalPhase:vikingSuccess}]},
+  {...flexibleFixture,events:[]},
+  {...flexibleFixture,opponent:{...flexibleFixture.opponent,tacticalBehaviour:{attackingRunPattern:"rehearsed_fullback_overlap"}}}
+])assert.equal(applyOpponentAdaptation(invalid),invalid);
+const scoreAdjusted=applyOpponentAdaptation({...flexibleFixture,score:{for:1,against:0}});
+assert.equal(scoreAdjusted.opponentAdjustments.at(-1).id,"push_up");
+assert.equal(scoreAdjusted.opponent.tacticalBehaviour.attackingRunPattern,"rehearsed_fullback_overlap");
+assert.equal(scoreAdjusted.opponent.tacticalBehaviour.shortCombinationPattern,"rehearsed_short_pass_support");
+assert.equal(scoreAdjusted.opponent.tacticalBehaviour.setPiecePattern,"historical_set_piece_focus");
+assert.equal(scoreAdjusted.opponentAttackRoutePreference,undefined);
+assert.ok(resolveOpponentFullbackOverlap(scoreAdjusted,{rng:()=>0.1}));
+assert.deepEqual(resolveOpponentFullbackOverlap(JSON.parse(JSON.stringify(varied)),{rng:()=>0.5}),
+  resolveOpponentFullbackOverlap(varied,{rng:()=>0.5}));
 
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
