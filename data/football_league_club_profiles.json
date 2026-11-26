@@ -133,6 +133,29 @@
         "Kommer du gjennom presset én gang, ligger halve banen åpen."
       ],
       "styleBasis": "tradisjon",
+      "tacticalBehaviour": {
+        "pressCoordination": "collective",
+        "passingLaneCover": "central"
+      },
+      "tacticalBehaviourEvidence": {
+        "era": "2024",
+        "scope": "Historisk stilmodell for høyt press mot motstanderens oppbygging, ikke observert avspark eller påstand om dagens tropp.",
+        "interpretation": "Kantene presser smalt, spissen dekker ankeret, og midtbanen og bakre ledd flytter samlet for å begrense sentrale pasningslinjer. Spillet modellerer dette som kollektivt press og sentral dekning; sannsynligheten er en spillmodell, ikke kampstatistikk.",
+        "sources": [
+          {
+            "title": "16. Mai-feber i Bergen by – En taktisk analyse av Brann",
+            "publisher": "Studentradioen i Bergen",
+            "url": "https://srib.no/2024/06/12/16-mai-feber-i-bergen-by-en-taktisk-analyse-av-brann/",
+            "locator": "Brann i presspillet – kampen mot Sandefjord"
+          },
+          {
+            "title": "Eirik Horneland Tactics At SK Brann – What Young Coaches Can Learn From His Pressing Principles",
+            "publisher": "Total Football Analysis",
+            "url": "https://totalfootballanalysis.com/article/eirik-horneland-brann-pressing-2024-tactical-analysis-tactics",
+            "locator": "Figure 11 – press mot stopper, spiss dekker anker, sekser dekker sentrale pasninger"
+          }
+        ]
+      },
       "shortLabel": "høyt press og vertikale angrep"
     },
     {
