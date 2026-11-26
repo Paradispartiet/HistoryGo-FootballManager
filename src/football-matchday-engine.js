@@ -1482,8 +1482,24 @@ export function generateMatchdayEvents({ formation, tacticalProfile, opponent, o
   // Historiske stil-motstandere har egne id-er; de peker på en generisk
   // stil-familie via baseStyleId for å gjenbruke hendelsesbiblioteket.
   const opponentStyle = opponent?.baseStyleId || opponent?.id;
-  const opponentEvent = (opponent?.homeAway === "away" && OPPONENT_AWAY_EVENTS[opponentStyle])
+  const defaultOpponentEvent = (opponent?.homeAway === "away" && OPPONENT_AWAY_EVENTS[opponentStyle])
     || OPPONENT_EVENTS[opponent?.id] || OPPONENT_EVENTS[opponentStyle] || null;
+  // A documented set-piece focus can replace, not add to, the normal
+  // opponent scenario. Fixture selection is a game assumption, not a rate
+  // of historical corners/free kicks; no extra events or historical formation.
+  const useSetPieceAlternative = hasFixtureContext &&
+    opponent?.tacticalBehaviour?.setPiecePattern === "historical_set_piece_focus" &&
+    stableVariationScore(variationKey + ":set-piece-focus") < 0.5;
+  const alternativeSetPiece = opponent?.homeAway === "away"
+    ? OPPONENT_AWAY_EVENTS.physical_set_piece_opponent
+    : OPPONENT_EVENTS.physical_set_piece_opponent;
+  const opponentEvent = useSetPieceAlternative
+    ? { ...alternativeSetPiece,
+        ...(opponent?.homeAway !== "away" ? {
+          title:"Dødball mot boksen",
+          text:"Motstanderen får en dødball nær boksen. Sikre første kontakt og rommet etter en eventuell klarering."
+        } : {}) }
+    : defaultOpponentEvent;
 
   const picked = [familyPicked[0], opponentEvent, familyPicked[1]].filter(Boolean).slice(0, 3);
 
