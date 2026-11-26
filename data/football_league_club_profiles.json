@@ -70,7 +70,8 @@
       "styleBasis": "tradisjon",
       "tacticalBehaviour": {
         "pressCoordination": "collective",
-        "passingLaneCover": "central"
+        "passingLaneCover": "central",
+        "attackingRunPattern": "coordinated_433_breakthrough"
       },
       "tacticalBehaviourEvidence": {
         "era": "1994–1999",
