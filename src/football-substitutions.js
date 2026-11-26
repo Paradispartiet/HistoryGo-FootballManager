@@ -21,7 +21,7 @@
 
 import { calculatePlayerMatchFit } from "./football-fit-engine.js";
 import { sourcedTeamSkillTendencies } from "./football-team-fit-engine.js";
-import { sourcedRecoverySkillsForPlayer, sourcedDefensiveReactionSkillsForPlayer } from "./football-player-stats.js";
+import { sourcedRecoverySkillsForPlayer, sourcedDefensiveReactionSkillsForPlayer, sourcedCreativeSkillsForPlayer } from "./football-player-stats.js";
 
 // Fire på benken, tre bytter. Du kan ikke bruke alle — valget skal koste noe.
 export const MAX_SUBSTITUTIONS = 3;
@@ -149,6 +149,7 @@ export function createBenchSnapshot({ benchPlayers, teamFit, tactic, roles = [],
         ...(freshnessByPlayerId ? { startFreshness: clamp(num(freshnessByPlayerId[str(player.id)], 100), 0, 100) } : {}),
         sourcedRecoverySkills: sourcedRecoverySkillsForPlayer(player),
         sourcedDefensiveReactionSkills: sourcedDefensiveReactionSkillsForPlayer(player),
+        sourcedCreativeSkills: sourcedCreativeSkillsForPlayer(player),
         fitBySlot
       };
     });
@@ -344,6 +345,7 @@ export function applySubstitution(session, { outPlayerId, inPlayerId, minute = 0
               .find((bench) => bench.playerId === evaluation.inPlayerId)
               ?.sourcedDefensiveReactionSkills || []
           ],
+          sourcedCreativeSkills: [...asArray(incoming?.sourcedCreativeSkills)],
           sourcedMetricBonuses: { ...evaluation.sourcedMetricBonusesAfter },
           // Den som kommer inn har egen friskhet, aldri den utbyttede spillerens.
           startFreshness: Number.isFinite(incoming?.startFreshness) ? incoming.startFreshness : undefined,
