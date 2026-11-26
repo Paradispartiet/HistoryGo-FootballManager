@@ -1576,15 +1576,17 @@
       ],
       "managerHints": [
         "Ikke jag kreatøren med hele laget; behold stoppernes dybde.",
-        "Stans sene midtbaneløp også når første bakromspasning avverges."
+        "Stans sene midtbaneløp også når første bakromspasning avverges.",
+        "La kantstøtten hjelpe backen, men behold en sentral sikringsspiller til løpene som driblingen åpner."
       ],
       "tacticalBehaviour": {
-        "attackingRunPattern": "three_space_combination"
+        "attackingRunPattern": "three_space_combination",
+        "wideCreationPattern": "dribble_draw_cover"
       },
       "tacticalBehaviourEvidence": {
         "era": "2008",
         "scope": "Historisk klubbtradisjon fra Jönssons gullag; ingen oppdiktet motstanderellever, fast flanke eller sekvens.",
-        "interpretation": "Samtidige analyser beskriver trussel i tre rom, Gunnarssons pasningsspill, Nannskogs timing, Alanzinhos bevegelighet og Anderssons løp. Kampreferat dokumenterer blant annet avlegg fra Nannskog til Andersson og pasning fra Alanzinho til Andersson. Den generiske sekvensen, valget av svakt dekket rom og sannsynlighetene er spillhypoteser, ikke historiske målinger. Eksisterende numeriske traits beholdes som spillmodell.",
+        "interpretation": "Samtidige analyser beskriver trussel i tre rom, Gunnarssons pasningsspill, Nannskogs timing, Alanzinhos bevegelighet og Anderssons løp. Kampreferat dokumenterer blant annet avlegg fra Nannskog til Andersson og pasning fra Alanzinho til Andersson. Den generiske sekvensen, valget av svakt dekket rom og sannsynlighetene er spillhypoteser, ikke historiske målinger. Eksisterende numeriske traits beholdes som spillmodell. Nannskog beskrev i 2012 Alanzinhos rolle som spilleren som kunne passere motstanderen og skape rom. Den modellerte driblingen kan trekke sentral sikring mot kanten, men bare ved en entydig valgt og verifisert svak side. Rollebaserte sannsynligheter og den betingede forskyvningen er spillhypoteser, ikke observert sporing eller historiske målinger.",
         "sources": [
           {
             "title": "Martin er for sentral",
@@ -1615,6 +1617,18 @@
             "publisher": "Dagbladet",
             "url": "https://www.dagbladet.no/sport/naturlig-a-snakke-om-gull/66508298",
             "locator": "10. august 2008: 4-4-2 og Alanzinhos pasning til Andersson."
+          },
+          {
+            "title": "Nannskog: – Jönsson vil ha andre spillertyper",
+            "publisher": "Stavanger Aftenblad",
+            "url": "https://www.aftenbladet.no/sport/i/oRdqEK/nannskog-ndash-jonsson-vil-ha-andre-spillertyper",
+            "locator": "Nannskog beskriver Alanzinho som spilleren som kunne slå ut motstanderen og skape rom."
+          },
+          {
+            "title": "Nannskog: Ikke gå i fjorårs-fella",
+            "publisher": "Stavanger Aftenblad",
+            "url": "https://www.aftenbladet.no/sport/i/rAp858/nannskog-ikke-gaa-i-fjoraars-fella",
+            "locator": "26. mai 2008: dribling fra venstrekanten forbi flere forsvarere; enkeltkamp, ikke fast flanke."
           }
         ]
       }
