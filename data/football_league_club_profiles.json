@@ -403,14 +403,14 @@
       "clubId": "viking",
       "styleName": "Schouens samhandling",
       "tacticalSchool": "Innøvde bevegelser, kortpasninger og offensive backer",
-      "era": "1971–1975 · separat pressutspill fra 2023",
+      "era": "1971–1981 · separat pressutspill fra 2023",
       "style": "Relasjonelt angrepsspill med offensive backer; direkte utspill er et separat moderne kampalternativ",
-      "historicalNote": "Kjell Schou-Andreassen innførte daglig trening, detaljer og øving på kampsituasjoner i 1971. Viking tok gull med ham i 1972, deretter med Sverre Andersen, Stuart Williams og Olav Nilsen i 1973–1975. Tidligere spiller Isak-Arne Refvik beskriver innføringen av backoverlappinger. Klubbhistorien beskriver kortpasningsstilen som Tony Knapp senere gjorde mer variert. Schou-Andreassen vant også gull i 1982 og inspirerte Eggen.",
+      "historicalNote": "Kjell Schou-Andreassen innførte daglig trening, detaljer og øving på kampsituasjoner i 1971. Viking tok gull med ham i 1972, deretter med Sverre Andersen, Stuart Williams og Olav Nilsen i 1973–1975. Tidligere spiller Isak-Arne Refvik beskriver innføringen av backoverlappinger. Klubbhistorien beskriver kortpasningsstilen som Tony Knapp senere gjorde mer variert. Schou-Andreassen vant også gull i 1982 og inspirerte Eggen. Tony Knapp (1978–1981) gjorde kortpasningsstilen mer variert, prioriterte dødballer og endret spillerposisjoner under kamp. Viking vant serien og cupen i 1979.",
       "inPossessionShape": "Offensive backer og samordnede bevegelser; fast formasjon ikke dokumentert her",
       "outOfPossessionShape": "Kompakt middels blokk (eksisterende spillmodell, ikke historisk fastslått)",
       "defensiveBlock": "Middels blokk (spillmodell)",
       "buildUpStyle": "Kortpasningsspill og innøvde bevegelser; direkte utspill mot høyt press dokumentert separat i 2023",
-      "attackingStyle": "Backoverlappinger og kortpasningskombinasjoner med støttebevegelser",
+      "attackingStyle": "Backoverlappinger, kortpasningskombinasjoner og dødballer",
       "tempo": "Veksler mellom kontroll og gjennombrudd (spillmodell)",
       "riskLevel": "low",
       "baseStyleId": "direct_counter_opponent",
@@ -436,7 +436,8 @@
       },
       "strengths": [
         "relasjonelle ferdigheter og innøvde bevegelsesmønstre",
-        "overlappende backer kan skape innleggsvindu"
+        "overlappende backer kan skape innleggsvindu",
+        "Knapp-periodens dokumenterte prioritering av dødballer"
       ],
       "weaknesses": [
         "overlapp kan avverges ved koordinert kant- og boksdekning (spillmodell)"
@@ -459,18 +460,20 @@
       "managerHints": [
         "La kantspilleren følge den offensive backens løp; ikke la egen back stå alene.",
         "Hold stopperne og en sentral spiller igjen til å forsvare boksen.",
-        "Steng både støttepasningen og rommet bak første pressledd med ulike spillere."
+        "Steng både støttepasningen og rommet bak første pressledd med ulike spillere.",
+        "Behold boksdekning og sentral sikring også ved dødball."
       ],
       "styleBasis": "tradisjon",
       "tacticalBehaviour": {
         "highPressEscapeRoute": "direct",
         "attackingRunPattern": "rehearsed_fullback_overlap",
-        "shortCombinationPattern": "rehearsed_short_pass_support"
+        "shortCombinationPattern": "rehearsed_short_pass_support",
+        "setPiecePattern": "historical_set_piece_focus"
       },
       "tacticalBehaviourEvidence": {
         "era": "2023",
-        "scope": "To adskilte kildeperioder i en simulert klubbtradisjon. Ingen fast historisk 5-3-2, flanke eller navngitt spiller antas.",
-        "interpretation": "Viking brukte lave backer og pasninger bak for å lokke fram presset, før keeper eller stopper slo mot spissen. Kantene og indreløperne posisjonerte seg for å vinne andreballen. Dette støtter et direkte utspill i høypressfasen, ikke økt kort oppbyggingsspill eller oppdiktet timing. Ingen påstand om spesifikk avslutning eller fast suksessrate. Historisk angrep: Refvik beskriver Schou-Andreassens overlappende backer som legger inn; SNL dokumenterer øving på bevegelsesmønstre, og Viking omtaler den tidligere kortpasningsstilen. Den todelte overlapp- og boksfasen er en generell spillhypotese, ikke en dokumentert detaljrute eller målt frekvens. Eksisterende numeriske traits, baseStyleId og matchup-tokens beholdes som spillmodell, ikke historisk belegg. Kortpasningsspillet og innøvde bevegelsesmønstre støtter en anonym sentral kombinasjonsvariant som spillhypotese. Tredjemannssekvensen, 40 % modellvekt og alle sannsynligheter er ikke historisk dokumenterte kampmålinger. Ingen bestemt motstanderspiller antas.",
+        "scope": "Tre adskilte kildeperioder i en simulert klubbtradisjon. Ingen fast historisk 5-3-2, flanke eller navngitt spiller antas.",
+        "interpretation": "Viking brukte lave backer og pasninger bak for å lokke fram presset, før keeper eller stopper slo mot spissen. Kantene og indreløperne posisjonerte seg for å vinne andreballen. Dette støtter et direkte utspill i høypressfasen, ikke økt kort oppbyggingsspill eller oppdiktet timing. Ingen påstand om spesifikk avslutning eller fast suksessrate. Historisk angrep: Refvik beskriver Schou-Andreassens overlappende backer som legger inn; SNL dokumenterer øving på bevegelsesmønstre, og Viking omtaler den tidligere kortpasningsstilen. Den todelte overlapp- og boksfasen er en generell spillhypotese, ikke en dokumentert detaljrute eller målt frekvens. Eksisterende numeriske traits, baseStyleId og matchup-tokens beholdes som spillmodell, ikke historisk belegg. Kortpasningsspillet og innøvde bevegelsesmønstre støtter en anonym sentral kombinasjonsvariant som spillhypotese. Tredjemannssekvensen, 40 % modellvekt og alle sannsynligheter er ikke historisk dokumenterte kampmålinger. Ingen bestemt motstanderspiller antas. Knapp-perioden: klubbens historikk dokumenterer dødballprioritering, mer variert spill og konkrete posisjonsbytter i Hamburg-kampen 18. mai 1978. Dette belegger dødballfokus, ikke fast innleggstype, luftduellrate eller en generell frekvens. Den eksisterende dødballfasen brukes som avgrenset simulert scenario; i ligakamper erstatter den enkelte eksisterende motstanderhendelser, ikke en ekstra hendelse. Ingen automatisk historisk posisjonsendring innføres uten en motstanderellever.",
         "sources": [
           {
             "title": "Taktisk analyse: Viking – Rosenborg 2-0",
@@ -500,13 +503,26 @@
             "title": "Da Viking fikk besøk av Keegan",
             "publisher": "Viking FK",
             "url": "https://www.vikingfotball.no/nyheter/da-viking-fikk-besok-av-keegan",
-            "locator": "Fire ulike gulltrenere 1972–75; Tony Knapp gjorde kortpasningsspillet mer variert."
+            "locator": "Klubbhistorikk: Knapps mer varierte kortpasningsstil, dødballfokus og konkrete posisjonsbytter mot Hamburg i 1978."
+          },
+          {
+            "title": "Da Viking tok gull, gull og gull!",
+            "publisher": "Viking FK",
+            "url": "https://www.vikingfotball.no/nyheter/da-viking-tok-gull-gull-og-gull",
+            "locator": "1979: serie- og cupgull; forsvarernes bidrag til scoringene. Ikke belegg for en bestemt dødballvariant."
+          },
+          {
+            "title": "Tony Knapp er død",
+            "publisher": "Viking FK",
+            "url": "https://www.vikingfotball.no/nyheter/tony-knapp-er-dod",
+            "locator": "Trenerperioden 1978–1981."
           }
         ],
         "eraByPattern": {
           "highPressEscapeRoute": "2023",
           "attackingRunPattern": "1971–1975",
-          "shortCombinationPattern": "1971–1975"
+          "shortCombinationPattern": "1971–1975",
+          "setPiecePattern": "1978–1981"
         }
       },
       "shortLabel": "samhandling, kortpasning og offensive backer"
