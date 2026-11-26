@@ -179,6 +179,29 @@ check(Math.abs(strFav.finalStrength - strNeu.finalStrength) <= 5 && Math.abs(str
   "nudge for stor – matchup skal kun gi en liten tendens (<=5)");
 check(strNeu.modifiers.matchupTendency === 0, "noytral matchup skal gi 0 tendens");
 
+// Real league identity: Eggen's breakthrough runs must affect an existing
+// formation matchup, not simply appear in the historical description.
+const rbkLeague = loadJson("data/football_league_club_profiles.json").profiles.find(p => p.clubId === "rosenborg");
+const rbkTokens = rbkLeague.matchupStyles;
+check(rbkTokens.includes("fast_runners_in_behind"), "RBK: breakthrough runs missing");
+const rbkBefore = rbkTokens.filter(token => token !== "fast_runners_in_behind");
+const modern433 = knowledgeData.knowledge.find(k => k.formationId === "modern_433");
+const low541 = knowledgeData.knowledge.find(k => k.formationId === "low_block_541");
+const rbkMatch = (k, tokens) => evaluateFormationMatchupVsOpponent(k, tokens, "Rosenborg");
+const rbkModernBefore = rbkMatch(modern433, rbkBefore);
+const rbkModernAfter = rbkMatch(modern433, rbkTokens);
+check(rbkModernAfter.score === rbkModernBefore.score - 1, "RBK: vulnerable 4-3-3 must recognize breakthrough runs");
+check(rbkModernAfter.risks.some(r => r.token === "fast_runners_in_behind"), "RBK: risk not explained");
+check(rbkModernAfter.suggestions.some(s => s.includes("bakrommet")), "RBK: missing depth protection suggestion");
+const rbkStrength = matchup => calculateMatchStrength({teamFit:nudgeTeamFit,formation:{id:"modern_433"},formationMatchup:matchup});
+check(rbkStrength(rbkModernAfter).modifiers.matchupTendency === rbkStrength(rbkModernBefore).modifiers.matchupTendency - 1.5, "RBK: risk must affect existing match strength once");
+check(rbkMatch(low541, rbkBefore).score === rbkMatch(low541, rbkTokens).score, "RBK: no blanket penalty against low block");
+for (const k of knowledgeData.knowledge) {
+  const before = rbkMatch(k, rbkBefore), after = rbkMatch(k, rbkTokens);
+  const expected = Number(k.strongAgainst.includes("fast_runners_in_behind")) - Number(k.weakAgainst.includes("fast_runners_in_behind"));
+  check(after.score - before.score === expected, "RBK: unrelated matchup changed " + k.formationId);
+}
+
 // Rapport: lean-matrise (din formasjon i rad, motstander i kolonne).
 const sym = { favourable: "+", balanced: "·", risky: "-" };
 const ids = entries.map((e) => e.formationId);
