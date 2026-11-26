@@ -1,6 +1,7 @@
+import { resolveSourcedCreativeBreakthrough, resolveCompactBlockAttack, annotateCompactBlockChances } from "../src/football-matchday-compact-block-v6.js";
 // Deterministic causal pressing: high press, mid-block trap, counterpress and escapes.
 import assert from "node:assert/strict";
-import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances } from "../src/football-matchday-sequence-v8.js";
+import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances, annotateOpponentCreativeAttackChances } from "../src/football-matchday-sequence-v8.js";
 import { readFileSync } from "node:fs";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances }
   from "../src/football-matchday-own-press-v6.js";
@@ -8,7 +9,7 @@ import { advanceMatchClock, finalizeMatchdaySession }
   from "../src/football-matchday-engine.js";
 import { highPressPhaseRoll, resolveHighPressBuildUp, opponentPressWorkload }
   from "../src/football-matchday-high-press-v6.js";
-import { sourcedDefensiveReactionSkillsForPlayer, createLineupSnapshot }
+import { sourcedDefensiveReactionSkillsForPlayer, sourcedCreativeSkillsForPlayer, createLineupSnapshot }
   from "../src/football-player-stats.js";
 
 const lineup = ["GK", "CB", "DM", "CM", "AM", "ST", "LW", "RW", "LB", "RB"].map((position, i) => ({
@@ -1628,5 +1629,245 @@ try{
   assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(vifSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
   assert.equal(advanceMatchClock({...vifSeed,causalOpponentZonalShiftVersion:undefined}).timeline[0].tacticalPhase,undefined);
 }finally{Math.random=vifRandom;}
+
+// Bengtsson's longer-pass principle: reception and support are linked.
+const vifOutletFixture=session("midfield_press_trap",{causalOpponentRehearsedOutletVersion:1,
+  opponent:vifOpponent,lineupSnapshot:glimtLineup,tacticSnapshot:{id:"midfield_press_trap",defensiveLine:"medium"}});
+const vifOutlet=(draw,changes={})=>resolveOpponentRehearsedOutlet({...vifOutletFixture,...changes},{rng:()=>draw});
+const outletSuccess=vifOutlet(0.1),outletSupport=vifOutlet(0.3),outletReception=vifOutlet(0.6);
+assert.equal(outletSuccess.status,"breakthrough");
+assert.equal(outletSupport.status,"support_contained");
+assert.equal(outletReception.status,"reception_contained");
+assert.equal(outletSuccess.probability,0.206);
+assert.equal(outletSuccess.evidence.receptionProbability,0.472);
+assert.equal(outletSuccess.evidence.conditionalContinuationProbability,0.436);
+assert.equal(outletSuccess.xgDeltaAgainst,0.06);
+assert.equal(outletSupport.xgDeltaAgainst,-0.03);
+assert.equal(outletReception.xgDeltaAgainst,-0.03);
+assert.equal(outletSuccess.evidence.targetFlank,null);
+assert.equal(outletSuccess.evidence.randomDraws,1);
+assert.equal(vifOutlet(0.1,{tacticSnapshot:{id:"high_press_343",defensiveLine:"high"}}).probability,0.232);
+assert.equal(vifOutlet(0.1,{tacticSnapshot:{id:"low_block_transition_541",defensiveLine:"low"}}).probability,0.18);
+const outletWeakCB=vifOutlet(0.1,{lineupSnapshot:glimtLineup.map(p=>p.position==="CB"?{...p,matchScore:55}:p)});
+const outletWeakSupport=vifOutlet(0.1,{lineupSnapshot:glimtLineup.map(p=>["DM","CM","LB","RB"].includes(p.position)?{...p,matchScore:55}:p)});
+assert.equal(outletWeakCB.evidence.receptionProbability,0.572);
+assert.equal(outletWeakCB.evidence.conditionalContinuationProbability,0.436);
+assert.equal(outletWeakSupport.evidence.receptionProbability,0.472);
+assert.equal(outletWeakSupport.evidence.conditionalContinuationProbability,0.516);
+assert.equal(vifOutlet(0.1,{causalOpponentRehearsedOutletVersion:undefined}),null);
+assert.equal(vifOutlet(0.1,{opponent:{...vifOpponent,tacticalBehaviour:{}}}),null);
+assert.equal(vifOutlet(0.1,{lineupSnapshot:glimtLineup.filter(p=>p.position!=="LB")}),null);
+assert.equal(vifOutlet(0.1,{tacticSnapshot:{id:"midfield_press_trap"}}),null);
+assert.equal(vifOutlet(NaN),null);
+const outletChances=[{side:"for"},{side:"against"},{side:"against"}];
+const outletAnnotated=annotateOpponentRehearsedOutletChances(outletChances,outletSuccess);
+assert.equal(outletAnnotated.filter(c=>c.tacticalMoment).length,1);
+assert.equal(outletAnnotated[1].tacticalMoment.kind,"opponent_rehearsed_outlet");
+assert.equal(annotateOpponentRehearsedOutletChances(outletChances,outletSupport),outletChances);
+assert.equal(annotateOpponentRehearsedOutletChances([],outletSuccess).length,0);
+let outletSeed;
+for(let i=0;i<3000;i++){
+  const s={...vifOutletFixture,id:"vif-outlet-"+i};
+  if(vifOutlet(highPressPhaseRoll(s,"0:opponent-rehearsed-outlet")).status==="breakthrough"){outletSeed=s;break;}
+}
+assert.ok(outletSeed);
+const outletRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(outletSeed),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"opponent_rehearsed_outlet");
+  assert.equal(period.tacticalPhase.status,"breakthrough");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,period.tacticalPhase.xgDeltaAgainst);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.ok(played.minuteLog.filter(c=>c.tacticalMoment).length<=1);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(outletSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
+  assert.equal(advanceMatchClock({...outletSeed,causalOpponentRehearsedOutletVersion:undefined}).timeline[0].tacticalPhase,undefined);
+  const zonal=advanceMatchClock({...outletSeed,causalOpponentZonalShiftVersion:1,selectedTacticId:"wide_fast_433",tacticSnapshot:{id:"wide_fast_433",defensiveLine:"medium"}});
+  assert.equal(zonal.timeline[0].tacticalPhase.situation,"opponent_zonal_shift");
+}finally{Math.random=outletRandom;}
+
+// LSK: a clearance is not the same as control of the loose ball.
+const lskProfile=leagueProfiles.find(p=>p.clubId==="lillestrom");
+assert.equal(lskProfile.tacticalBehaviour.attackingRunPattern,"direct_duel_second_ball");
+assert.equal(lskProfile.tacticalBehaviour.pressEscapeRoute,undefined);
+const lskFixture=session("midfield_press_trap",{causalOpponentDirectSecondBallVersion:1,
+  opponent:{...lskProfile,id:"lillestrom",strength:72},lineupSnapshot:glimtLineup,
+  tacticSnapshot:{id:"midfield_press_trap",defensiveLine:"medium"}});
+const lskRun=(draw,changes={})=>resolveOpponentDirectSecondBall({...lskFixture,...changes},{rng:()=>draw});
+const lskBoth=lskRun(0.1),lskFirst=lskRun(0.3),lskSecond=lskRun(0.55),lskNeither=lskRun(0.8);
+assert.deepEqual([lskBoth,lskFirst,lskSecond,lskNeither].map(p=>p.status),
+  ["duel_and_second_ball","second_ball_contained","second_ball_recovered","both_contained"]);
+assert.deepEqual([lskBoth,lskFirst,lskSecond,lskNeither].map(p=>p.xgDeltaAgainst),[0.07,-0.03,0.04,-0.03]);
+assert.equal(lskBoth.evidence.firstDuelProbability,0.472);
+assert.equal(lskBoth.evidence.secondBallAfterWonDuelProbability,0.556);
+assert.equal(lskBoth.evidence.secondBallAfterLostDuelProbability,0.316);
+assert.equal(lskBoth.probability,0.429);
+assert.equal(lskSecond.evidence.firstDuelWonByOpponent,false);
+assert.equal(lskSecond.evidence.secondBallWonByOpponent,true);
+const lskWeakBacks=lskRun(0.1,{lineupSnapshot:glimtLineup.map(p=>p.position==="CB"?{...p,matchScore:55}:p)});
+const lskWeakScreen=lskRun(0.1,{lineupSnapshot:glimtLineup.map(p=>["DM","CM"].includes(p.position)?{...p,matchScore:55}:p)});
+assert.ok(lskWeakBacks.evidence.firstDuelProbability>lskBoth.evidence.firstDuelProbability);
+assert.equal(lskWeakBacks.evidence.secondBallAfterLostDuelProbability,lskBoth.evidence.secondBallAfterLostDuelProbability);
+assert.equal(lskWeakScreen.evidence.firstDuelProbability,lskBoth.evidence.firstDuelProbability);
+assert.ok(lskWeakScreen.evidence.secondBallAfterLostDuelProbability>lskBoth.evidence.secondBallAfterLostDuelProbability);
+assert.equal(lskRun(0.1,{causalOpponentDirectSecondBallVersion:undefined}),null);
+assert.equal(lskRun(0.1,{opponent:{...lskFixture.opponent,tacticalBehaviour:{}}}),null);
+assert.equal(lskRun(0.1,{lineupSnapshot:glimtLineup.filter(p=>p.position!=="DM"&&p.position!=="CM")}),null);
+assert.equal(lskRun(NaN),null);
+let lskDraws=0;
+resolveOpponentDirectSecondBall(lskFixture,{rng:()=>{lskDraws++;return 0.55;}});
+assert.equal(lskDraws,1);
+const lskChances=[{side:"for"},{side:"against"},{side:"against"}];
+assert.equal(annotateOpponentDirectSecondBallChances(lskChances,lskSecond).filter(c=>c.tacticalMoment).length,1);
+assert.equal(annotateOpponentDirectSecondBallChances(lskChances,lskSecond)[1].tacticalMoment.kind,"opponent_direct_second_ball");
+assert.equal(annotateOpponentDirectSecondBallChances(lskChances,lskFirst),lskChances);
+assert.deepEqual(annotateOpponentDirectSecondBallChances([],lskBoth),[]);
+let lskSeed;
+for(let i=0;i<3000;i++){
+  const s={...lskFixture,id:"lsk-direct-"+i};
+  if(lskRun(highPressPhaseRoll(s,"0:opponent-direct-second-ball")).status==="second_ball_recovered"){lskSeed=s;break;}
+}
+assert.ok(lskSeed);
+const lskRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(lskSeed),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"opponent_direct_second_ball");
+  assert.equal(period.tacticalPhase.status,"second_ball_recovered");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,period.tacticalPhase.xgDeltaAgainst);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.ok(played.minuteLog.filter(c=>c.tacticalMoment).length<=1);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(lskSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
+  assert.equal(advanceMatchClock({...lskSeed,causalOpponentDirectSecondBallVersion:undefined}).timeline[0].tacticalPhase,undefined);
+}finally{Math.random=lskRandom;}
+
+// Only the existing scheduled dead-ball situation replaces the open-play phase.
+const lskDeadFixture={...lskFixture,causalOpponentSetPieceVersion:1,events:[{id:"opp_set_piece_threat"}]};
+const lskDead=(draw,changes={})=>resolveOpponentSetPiece({...lskDeadFixture,...changes},{rng:()=>draw});
+const lskDeadFirst=lskDead(0.1),lskDeadSecond=lskDead(0.6),lskDeadStop=lskDead(0.95);
+assert.deepEqual([lskDeadFirst,lskDeadSecond,lskDeadStop].map(p=>p.status),
+  ["first_contact_threat","second_ball_threat","contained"]);
+assert.deepEqual([lskDeadFirst,lskDeadSecond,lskDeadStop].map(p=>p.xgDeltaAgainst),[0.08,0.04,-0.03]);
+const lskAwayDead=lskDead(0.1,{events:[{id:"opp_set_piece_second_ball"}]});
+assert.equal(lskAwayDead.status,"second_ball_threat");
+assert.equal(lskAwayDead.evidence.firstContactProbability,null);
+assert.equal(lskAwayDead.evidence.afterClearance,true);
+assert.equal(lskDead(0.1,{events:[]}),null);
+assert.equal(lskDead(0.1,{timeline:[{}]}),null);
+assert.equal(lskDead(0.1,{causalOpponentSetPieceVersion:undefined}),null);
+assert.equal(lskDead(0.1,{opponent:{...lskFixture.opponent,tacticalBehaviour:{}}}),null);
+assert.equal(lskDead(0.1,{lineupSnapshot:glimtLineup.filter(p=>p.position!=="GK")}),null);
+assert.equal(lskDead(NaN),null);
+const weakDeadBacks=lskDead(0.1,{lineupSnapshot:glimtLineup.map(p=>p.position==="CB"?{...p,matchScore:55}:p)});
+const weakDeadScreen=lskDead(0.1,{lineupSnapshot:glimtLineup.map(p=>["DM","CM"].includes(p.position)?{...p,matchScore:55}:p)});
+assert.ok(weakDeadBacks.evidence.firstContactProbability>lskDeadFirst.evidence.firstContactProbability);
+assert.equal(weakDeadBacks.evidence.conditionalRecoveryProbability,lskDeadFirst.evidence.conditionalRecoveryProbability);
+assert.equal(weakDeadScreen.evidence.firstContactProbability,lskDeadFirst.evidence.firstContactProbability);
+assert.ok(weakDeadScreen.evidence.conditionalRecoveryProbability>lskDeadFirst.evidence.conditionalRecoveryProbability);
+assert.equal(annotateOpponentSetPieceChances(lskChances,lskDeadFirst).filter(c=>c.tacticalMoment).length,1);
+assert.equal(annotateOpponentSetPieceChances(lskChances,lskDeadStop),lskChances);
+const deadRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(lskDeadFixture),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"opponent_set_piece");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,period.tacticalPhase.xgDeltaAgainst);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.ok(played.minuteLog.filter(c=>c.tacticalMoment).length<=1);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(lskDeadFixture))).timeline[0].tacticalPhase,period.tacticalPhase);
+  assert.notEqual(advanceMatchClock(played).timeline[1].tacticalPhase?.situation,"opponent_set_piece");
+  assert.equal(advanceMatchClock({...lskDeadFixture,causalOpponentSetPieceVersion:undefined}).timeline[0].tacticalPhase.situation,"opponent_direct_second_ball");
+}finally{Math.random=deadRandom;}
+
+// Directly sourced dribbling + vision in a suitable current role unlock a
+// conditional creative route, not an automatic goal or universal club buff.
+const creativeXI=glimtLineup.map(p=>p.position==="AM"?{...p,roleId:"free_creator",name:"Kreatør",sourcedCreativeSkills:["dribbling","vision"]}:p);
+const creativeFixture=session("central_possession_4231",{causalSourcedCreativeBreakthroughVersion:1,
+  lineupSnapshot:creativeXI,tacticSnapshot:{id:"central_possession_4231"},
+  opponent:{...lskFixture.opponent,styleTraits:{defensiveCompactness:78,highLine:45}}});
+const creativeBlock={compactness:78,line:45};
+const creativeRun=(draw,changes={})=>resolveSourcedCreativeBreakthrough({...creativeFixture,...changes},creativeBlock,{rng:()=>draw});
+const creativeGood=creativeRun(0.1),creativeStop=creativeRun(0.4),creativeBlocked=creativeRun(0.8);
+assert.deepEqual([creativeGood.status,creativeStop.status,creativeBlocked.status],["breakthrough","release_contained","dribble_contained"]);
+assert.equal(creativeGood.xgDeltaFor,0.09);
+assert.equal(creativeStop.xgDeltaFor,0);
+assert.equal(creativeGood.evidence.creatorId,creativeXI.find(p=>p.position==="AM").playerId);
+assert.notEqual(creativeGood.evidence.receiverId,creativeGood.evidence.creatorId);
+assert.equal(creativeGood.evidence.randomDraws,1);
+assert.equal(creativeRun(0.1,{causalSourcedCreativeBreakthroughVersion:undefined}),null);
+assert.equal(creativeRun(0.1,{lineupSnapshot:creativeXI.map(p=>({...p,sourcedCreativeSkills:[]}))}),null);
+assert.equal(creativeRun(0.1,{lineupSnapshot:creativeXI.map(p=>p.position==="AM"?{...p,sourcedCreativeSkills:["vision"]}:p)}),null);
+assert.equal(creativeRun(0.1,{lineupSnapshot:creativeXI.map(p=>p.position==="AM"?{...p,roleId:"pressing_midfielder"}:p)}),null);
+assert.equal(creativeRun(NaN),null);
+assert.deepEqual(sourcedCreativeSkillsForPlayer({strengths:["vision","dribbling"],attributes:{provenance:{vision:"belagt",dribbling:"utledet"}}}),["vision"]);
+assert.equal(resolveCompactBlockAttack(creativeFixture,{rng:()=>0.1}).route,"sourced_creative_breakthrough");
+assert.equal(resolveCompactBlockAttack({...creativeFixture,causalSourcedCreativeBreakthroughVersion:undefined},{rng:()=>0.1}).route,"wall_pass");
+const creativeMoment=annotateCompactBlockChances([{side:"for"},{side:"for"}],creativeGood);
+assert.equal(creativeMoment.filter(c=>c.tacticalMoment).length,1);
+assert.equal(creativeMoment[0].tacticalMoment.creatorId,creativeGood.evidence.creatorId);
+let creativeSeed;
+for(let i=0;i<3000;i++){
+  const s={...creativeFixture,id:"creator-"+i};
+  if(creativeRun(highPressPhaseRoll(s,"0:compact-block")).status==="breakthrough"){creativeSeed=s;break;}
+}
+assert.ok(creativeSeed);
+const creativeRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(creativeSeed),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.route,"sourced_creative_breakthrough");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.for-period.baselineExpectedGoals.for)*100)/100,period.tacticalPhase.xgDeltaFor);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(creativeSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
+}finally{Math.random=creativeRandom;}
+
+
+// Anonymous historical-style opponent creativity shares the direct-play draw.
+const lskCreativeFixture={...lskFixture,causalOpponentCreativeAlternativeVersion:1};
+const lskCreative=(roll,changes={})=>resolveOpponentDirectSecondBall({...lskCreativeFixture,...changes},{rng:()=>roll});
+const lskCreativeSuccess=lskCreative(0.01),lskCreativeRelease=lskCreative(0.1),lskCreativeStop=lskCreative(0.2);
+assert.deepEqual([lskCreativeSuccess.status,lskCreativeRelease.status,lskCreativeStop.status],
+  ["creative_breakthrough","release_contained","dribble_contained"]);
+assert.deepEqual([lskCreativeSuccess.xgDeltaAgainst,lskCreativeRelease.xgDeltaAgainst,lskCreativeStop.xgDeltaAgainst],[0.07,-0.03,-0.03]);
+assert.equal(lskCreativeSuccess.evidence.opponentPlayerId,null);
+assert.equal(lskCreativeSuccess.evidence.creativeAlternativeWeight,0.25);
+assert.equal(lskCreativeSuccess.evidence.randomDraws,1);
+assert.equal(lskCreative(0.25).situation,"opponent_direct_second_ball");
+assert.equal(lskCreative(0.01,{causalOpponentCreativeAlternativeVersion:undefined}).situation,"opponent_direct_second_ball");
+assert.equal(lskCreative(0.01,{opponent:{...lskFixture.opponent,tacticalBehaviour:{attackingRunPattern:"direct_duel_second_ball"}}}).situation,"opponent_direct_second_ball");
+let actualCreativeDraws=0;
+resolveOpponentDirectSecondBall(lskCreativeFixture,{rng:()=>{actualCreativeDraws++;return 0.01;}});
+assert.equal(actualCreativeDraws,1);
+const lskCreativeNoCover=lskCreative(0.01,{lineupSnapshot:glimtLineup.map(p=>["CM","DM"].includes(p.position)?{...p,roleId:"pressing_midfielder"}:p)});
+assert.ok(lskCreativeSuccess.evidence.dedicatedCoverId);
+assert.equal(lskCreativeNoCover.evidence.dedicatedCoverId,null);
+assert.equal(lskCreativeSuccess.evidence.dribbleProbability,lskCreativeNoCover.evidence.dribbleProbability);
+assert.ok(lskCreativeSuccess.evidence.conditionalReleaseProbability<lskCreativeNoCover.evidence.conditionalReleaseProbability);
+const lskCreativeWeakPress=lskCreative(0.01,{lineupSnapshot:glimtLineup.map(p=>["CM","DM"].includes(p.position)?{...p,matchScore:55}:p)});
+assert.ok(lskCreativeWeakPress.evidence.dribbleProbability>lskCreativeSuccess.evidence.dribbleProbability);
+assert.equal(annotateOpponentCreativeAttackChances(lskChances,lskCreativeSuccess).filter(c=>c.tacticalMoment).length,1);
+assert.equal(annotateOpponentCreativeAttackChances(lskChances,lskCreativeStop),lskChances);
+let lskCreativeSeed;
+for(let i=0;i<3000;i++){
+  const s={...lskCreativeFixture,id:"lsk-creative-"+i};
+  if(lskCreative(highPressPhaseRoll(s,"0:opponent-direct-second-ball")).status==="creative_breakthrough"){lskCreativeSeed=s;break;}
+}
+assert.ok(lskCreativeSeed);
+const lskCreativeRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(lskCreativeSeed),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"opponent_creative_attack");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,period.tacticalPhase.xgDeltaAgainst);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.ok(played.minuteLog.filter(c=>c.tacticalMoment).length<=1);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(lskCreativeSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
+  assert.equal(advanceMatchClock({...lskCreativeSeed,causalOpponentSetPieceVersion:1,events:[{id:"opp_set_piece_threat"}]}).timeline[0].tacticalPhase.situation,"opponent_set_piece");
+}finally{Math.random=lskCreativeRandom;}
 
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");

@@ -2539,8 +2539,8 @@ const existingSupplements = [
   {
     playerId: "tom_lund",
     placeId: "araasen_stadion",
-    strengths: ["vision"],
-    claim: "Lillestrøm's memorial profile describes Lund as a player with rare technique and overview; only the directly mappable overview claim is retained as vision.",
+    strengths: ["vision", "dribbling"],
+    claim: "Lillestrøm's memorial profile describes Lund's rare technique and overview (vision). The 2013 Aftenbladet retrospective explicitly describes him dribbling past two or three opponents at a time (dribbling): https://www.aftenbladet.no/sport/i/L0ygnJ/en-hyllest-til-tom-lund. No measured success rate, final-pass precision or acceleration rating follows.",
     source: "https://www.lsk.no/nyheter/tusen-takk-for-alt-tommy"
   },
   {

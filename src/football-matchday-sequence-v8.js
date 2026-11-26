@@ -435,3 +435,251 @@ export function annotateOpponentZonalShiftChances(chances,phase){
     ? {...c,tacticalMoment:{...c.tacticalMoment,kind:"zonal_shift_beaten",label:"Soneforsvar spilt av",basis:"simulated_zonal_shift"}}
     :c);
 }
+
+// Bengtsson-era rehearsed longer passing and coordinated movement. The
+// particular reception and support gates are a generic game hypothesis,
+// not a documented target player, flank, pass length or press escape.
+export function resolveOpponentRehearsedOutlet(session,{rng=Math.random}={}){
+  if(session?.causalOpponentRehearsedOutletVersion!==1 ||
+      session.opponent?.tacticalBehaviour?.attackingRunPattern!=="rehearsed_longer_pass_support" ||
+      !verifiedMatchLineup(session.lineupSnapshot))return null;
+  const plan=session.activePlanSnapshot||session.tacticSnapshot;
+  const line=plan?.defensiveLine;
+  if(!plan?.id||!Object.prototype.hasOwnProperty.call(BREAKTHROUGH_LINE_EXPOSURE,line))return null;
+  const {balanceScore,restDefenseScore}=session.teamFitSnapshot?.tacticalProfile||{};
+  if(![balanceScore,restDefenseScore].every(v=>finite(v)&&v>=0&&v<=100))return null;
+  const best=(positions,count=1)=>session.lineupSnapshot.filter(p=>positions.includes(p.position))
+    .sort((a,b)=>b.matchScore-a.matchScore||a.playerId.localeCompare(b.playerId)).slice(0,count);
+  const backs=best(["CB"],2),centre=best(["DM","CM"]),left=best(["LB","LWB"]),right=best(["RB","RWB"]);
+  if(backs.length!==2||!centre.length||!left.length||!right.length)return null;
+  const receivingCover=backs,followingCover=[...centre,...left,...right];
+  const avg=ps=>ps.reduce((sum,p)=>sum+p.matchScore,0)/ps.length;
+  const floor=ps=>Math.min(...ps.map(p=>p.matchScore));
+  const clamp=v=>Math.max(0.12,Math.min(0.82,v));
+  const reception=clamp(0.54+BREAKTHROUGH_LINE_EXPOSURE[line]/2-
+    (avg(receivingCover)-65)*0.004-(floor(receivingCover)-65)*0.001-(balanceScore-65)*0.002);
+  const continuation=clamp(0.50-(avg(followingCover)-65)*0.003-
+    (floor(followingCover)-65)*0.001-(restDefenseScore-65)*0.004);
+  const draw=rng();
+  if(!finite(draw))return null;
+  const roll=Math.max(0,Math.min(0.999999999,draw));
+  const received=roll<reception,breakthrough=received&&roll<reception*continuation;
+  const status=breakthrough?"breakthrough":received?"support_contained":"reception_contained";
+  const actions=["Motstanderen søker et innøvd lengre oppspill",
+    "Fremre mottaker forsøker å kontrollere ballen mot stopperleddet",
+    "Støttespillere forsøker å følge opp i timede bevegelser",
+    "Vår midtbane og sidesikring forsøker å stenge videre angrep"];
+  return {version:6,situation:"opponent_rehearsed_outlet",planId:plan.id,
+    route:"rehearsed_longer_pass_support",status,side:breakthrough?"against":null,
+    probability:Math.round(reception*continuation*1000)/1000,xgDeltaFor:0,
+    xgDeltaAgainst:breakthrough?0.06:-0.03,
+    cause:breakthrough?"Det lengre oppspillet kontrolleres, og støtteløpene åpner et videre angrepsrom.":
+      received?"Mottakeren kontrollerer oppspillet, men vår sikring stanser den neste bevegelsen.":
+      "Stopperleddet kontrollerer mottaksrommet og hindrer at oppspillet blir et angrep.",
+    steps:actions.map((action,index)=>({action,order:index+1,result:breakthrough?"simulated_available":
+      !received?(index===0?"simulated_available":index===1?"countered":"not_reached"):
+      index===3?"countered":"simulated_available"})),
+    counterplay:{status:breakthrough?"not_triggered":"simulated_counter",
+      counter:"Hold stopperdybden og steng støttespillernes videre pasning",
+      nextManagerResponse:"Sikre mottaksrommet med stopperne; behold midtbanestøtte og dekning på begge sider.",
+      automaticallyExecuted:false},
+    evidence:{basis:"sourced_general_principle_generic_game_hypothesis_not_observed",
+      opponentPattern:"rehearsed_longer_pass_support",targetFlank:null,defensiveLine:line,
+      receptionProbability:Math.round(reception*1000)/1000,
+      conditionalContinuationProbability:Math.round(continuation*1000)/1000,
+      receivingCover:receivingCover.map(p=>p.playerId),followingCover:followingCover.map(p=>p.playerId),
+      supportingPlayers:[...receivingCover,...followingCover].map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
+      eventCount:1,randomDraws:1}};
+}
+export function annotateOpponentRehearsedOutletChances(chances,phase){
+  if(!Array.isArray(chances)||phase?.situation!=="opponent_rehearsed_outlet"||phase.side!=="against")return chances;
+  const i=chances.findIndex(c=>c.side==="against");
+  if(i<0)return chances;
+  const annotated=annotateOpponentRunChances(chances,phase);
+  return annotated.map((c,index)=>index===i?{...c,tacticalMoment:{...c.tacticalMoment,
+    kind:"opponent_rehearsed_outlet",label:"Innøvd lengre oppspill",
+    basis:"simulated_rehearsed_outlet",keyAction:phase.steps[2].action}}:c);
+}
+
+// LSK's direct-play tradition: first contact and control of the loose ball
+// are distinct. The four outcomes are gameplay hypotheses, not tracking data.
+// This represents an anonymous opponent in a historical-style simulation.
+// No opponent XI, player rating, measured dribble success or named player.
+function resolveAnonymousCreativeAttack({plan,backs,screen,balanceScore,restDefenseScore,roll,creativeWeight}){
+  const clamp=v=>Math.max(0.12,Math.min(0.82,v));
+  const rounded=v=>Math.round(v*1000)/1000;
+  const avg=ps=>ps.reduce((sum,p)=>sum+p.matchScore,0)/ps.length;
+  const presser=screen.slice().sort((a,b)=>Number(b.roleId==="pressing_midfielder")-Number(a.roleId==="pressing_midfielder")||b.matchScore-a.matchScore||a.playerId.localeCompare(b.playerId))[0];
+  const cover=screen.find(p=>p.playerId!==presser.playerId&&["balancing_six","holding_midfielder"].includes(p.roleId));
+  const coveringUnit=cover?[...backs,cover]:backs;
+  // First engagement and remaining central cover are separate. A second
+  // dedicated screen can protect the passing lane without double-counting
+  // the first presser. Match fit is a bounded proxy, not a tackling rating.
+  const dribble=clamp(0.55-(presser.matchScore-65)*0.005-(balanceScore-65)*0.002);
+  const release=clamp(0.53-(avg(coveringUnit)-65)*0.004-(restDefenseScore-65)*0.003-(cover?0.08:0));
+  const passed=roll<dribble,success=passed&&roll<dribble*release;
+  const status=success?"creative_breakthrough":passed?"release_contained":"dribble_contained";
+  const cause=success?"En kreativ motspiller passerer første forsvarer og finner rom for videre spill.":
+    passed?"Første forsvarer passeres, men gjenværende sentral sikring stenger videre pasning.":
+    "Vår første forsvarer stanser den individuelle utfordringen.";
+  const actions=["En motspiller søker ballen mellom leddene","Første forsvarer utfordres individuelt",
+    "Gjenværende sikring forsøker å stenge neste pasningsrom","Motstanderen forsøker å spille videre"];
+  return {version:6,situation:"opponent_creative_attack",planId:plan.id,route:"historical_individual_creativity",
+    status,side:success?"against":null,probability:rounded(dribble*release),
+    xgDeltaFor:0,xgDeltaAgainst:success?0.07:-0.03,cause,
+    steps:actions.map((action,i)=>({action,order:i+1,result:i===0||success||(passed&&i===1)?"simulated_available":
+      !passed&&i>1?"not_reached":i===3?"not_reached":"countered"})),
+    counterplay:{status:success?"not_triggered":"simulated_counter",
+      counter:"Press med én spiller og behold sentral sikring bak ham",
+      nextManagerResponse:"Bruk en egen balanserende sekser ved siden av den første presspilleren; unngå at begge går i samme duell.",
+      automaticallyExecuted:false},
+    evidence:{basis:"sourced_historical_creativity_anonymous_game_hypothesis_not_observed",
+      selectedPattern:"historical_individual_creativity",creativeAlternativeWeight:creativeWeight,
+      opponentPlayerId:null,targetFlank:null,dribbleProbability:rounded(dribble),
+      conditionalReleaseProbability:rounded(release),firstDefenderId:presser.playerId,
+      dedicatedCoverId:cover?.playerId||null,coveringPlayers:coveringUnit.map(p=>p.playerId),
+      supportingPlayers:[presser,...coveringUnit].map(({playerId,roleId,position,matchScore})=>({playerId,roleId,position,matchScore})),
+      eventCount:1,randomDraws:1}};
+}
+export function annotateOpponentCreativeAttackChances(chances,phase){
+  if(!Array.isArray(chances)||phase?.situation!=="opponent_creative_attack"||phase.side!=="against")return chances;
+  const i=chances.findIndex(c=>c.side==="against");
+  if(i<0)return chances;
+  return annotateOpponentRunChances(chances,phase).map((c,index)=>index===i?
+    {...c,tacticalMoment:{...c.tacticalMoment,kind:"opponent_creative_attack",
+      label:"Individuelt gjennombrudd imot",basis:"simulated_anonymous_creativity",keyAction:phase.steps[1].action}}:c);
+}
+
+export function resolveOpponentDirectSecondBall(session,{rng=Math.random}={}){
+  if(session?.causalOpponentDirectSecondBallVersion!==1 ||
+      session.opponent?.tacticalBehaviour?.attackingRunPattern!=="direct_duel_second_ball" ||
+      !verifiedMatchLineup(session.lineupSnapshot))return null;
+  const plan=session.activePlanSnapshot||session.tacticSnapshot;
+  if(!plan?.id)return null;
+  const {balanceScore,restDefenseScore}=session.teamFitSnapshot?.tacticalProfile||{};
+  if(![balanceScore,restDefenseScore].every(v=>finite(v)&&v>=0&&v<=100))return null;
+  const best=(positions,count)=>session.lineupSnapshot.filter(p=>positions.includes(p.position))
+    .sort((a,b)=>b.matchScore-a.matchScore||a.playerId.localeCompare(b.playerId)).slice(0,count);
+  const backs=best(["CB"],2),screen=best(["DM","CM"],2);
+  if(backs.length!==2||!screen.length)return null;
+  const avg=ps=>ps.reduce((sum,p)=>sum+p.matchScore,0)/ps.length;
+  const floor=ps=>Math.min(...ps.map(p=>p.matchScore));
+  const clamp=v=>Math.max(0.12,Math.min(0.82,v));
+  // Positional match fit is a proxy, not a measured aerial-duel attribute.
+  const first=clamp(0.54-(avg(backs)-65)*0.004-(floor(backs)-65)*0.001-(balanceScore-65)*0.002);
+  const cover=(avg(screen)-65)*0.003+(floor(screen)-65)*0.001+(restDefenseScore-65)*0.004;
+  const afterWon=clamp(0.62-cover),afterLost=clamp(0.38-cover);
+  const draw=rng();
+  if(!finite(draw))return null;
+  const rawRoll=Math.max(0,Math.min(0.999999999,draw));
+  const creativeEnabled=session.causalOpponentCreativeAlternativeVersion===1 &&
+    session.opponent.tacticalBehaviour.creativePattern==="historical_individual_creativity";
+  // One uniform draw selects the alternative AND resolves its conditional gates.
+  // The 25% weight is an explicit gameplay choice, not observed LSK frequency.
+  const creativeWeight=creativeEnabled?0.25:0;
+  if(creativeEnabled&&rawRoll<creativeWeight){
+    return resolveAnonymousCreativeAttack({plan,backs,screen,balanceScore,restDefenseScore,
+      roll:rawRoll/creativeWeight,creativeWeight});
+  }
+  const roll=(rawRoll-creativeWeight)/(1-creativeWeight);
+  const firstWon=roll<first;
+  const secondWon=firstWon?roll<first*afterWon:roll<first+(1-first)*afterLost;
+  const status=firstWon?(secondWon?"duel_and_second_ball":"second_ball_contained"):
+    (secondWon?"second_ball_recovered":"both_contained");
+  const cause={
+    duel_and_second_ball:"Motstanderen vinner første duell og sikrer nedfallet til videre angrep.",
+    second_ball_contained:"Motstanderen vinner første duell, men vår midtbane tar kontroll på andreballen.",
+    second_ball_recovered:"Våre stoppere vinner første duell, men motstanderen samler den løse ballen.",
+    both_contained:"Våre stoppere og midtbane vinner både første duell og andreballen."
+  }[status];
+  const actions=["Motstanderen spiller direkte framover","Første duell avgjøres",
+    "Lagene konkurrerer om andreballen","Nedfallet sikres eller brukes til videre angrep"];
+  const rounded=v=>Math.round(v*1000)/1000;
+  return {version:6,situation:"opponent_direct_second_ball",planId:plan.id,
+    route:"direct_duel_second_ball",status,side:secondWon?"against":null,
+    probability:rounded(first*afterWon+(1-first)*afterLost),xgDeltaFor:0,
+    xgDeltaAgainst:secondWon?(firstWon?0.07:0.04):-0.03,cause,
+    steps:actions.map((action,index)=>({action,order:index+1,result:index===0?"simulated_available":
+      index===1?(firstWon?"simulated_available":"countered"):
+      index===2?(secondWon?"simulated_available":"countered"):
+      secondWon?"simulated_available":"not_reached"})),
+    counterplay:{status:secondWon?"not_triggered":"simulated_counter",
+      counter:"Vinn første duell og behold sentral sikring rundt nedfallet",
+      nextManagerResponse:"Sikre både stopperduellen og andreballrommet med sentral midtbanestøtte.",
+      automaticallyExecuted:false},
+    evidence:{basis:"sourced_direct_play_generic_second_ball_hypothesis_not_observed",
+      opponentPattern:"direct_duel_second_ball",targetFlank:null,
+      firstDuelProbability:rounded(first),secondBallAfterWonDuelProbability:rounded(afterWon),
+      secondBallAfterLostDuelProbability:rounded(afterLost),firstDuelWonByOpponent:firstWon,
+      secondBallWonByOpponent:secondWon,duelCover:backs.map(p=>p.playerId),
+      secondBallCover:screen.map(p=>p.playerId),
+      supportingPlayers:[...backs,...screen].map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
+      ...(creativeEnabled?{creativeAlternativeWeight:creativeWeight,selectedPattern:"direct_duel_second_ball"}:{}),
+      eventCount:1,randomDraws:1}};
+}
+export function annotateOpponentDirectSecondBallChances(chances,phase){
+  if(!Array.isArray(chances)||phase?.situation!=="opponent_direct_second_ball"||phase.side!=="against")return chances;
+  const i=chances.findIndex(c=>c.side==="against");
+  if(i<0)return chances;
+  return annotateOpponentRunChances(chances,phase).map((c,index)=>index===i?
+    {...c,tacticalMoment:{...c.tacticalMoment,kind:"opponent_direct_second_ball",
+      label:"Direkte spill og andreball",basis:"simulated_direct_second_ball",keyAction:phase.steps[2].action}}:c);
+}
+
+// Only the existing scripted set-piece event can trigger this phase.
+// Away scenario explicitly starts after a clearance; never replay its first duel.
+export function resolveOpponentSetPiece(session,{rng=Math.random}={}){
+  if(session?.causalOpponentSetPieceVersion!==1 ||
+      session.opponent?.tacticalBehaviour?.setPiecePattern!=="historical_delivery_box_duel" ||
+      !verifiedMatchLineup(session.lineupSnapshot))return null;
+  const segment=Array.isArray(session.timeline)?session.timeline.length:0;
+  const eventId=session.events?.[segment]?.id;
+  if(!["opp_set_piece_threat","opp_set_piece_second_ball"].includes(eventId))return null;
+  const afterClearance=eventId==="opp_set_piece_second_ball";
+  const planId=session.activePlanSnapshot?.id||session.tacticSnapshot?.id||session.selectedTacticId;
+  if(!planId)return null;
+  const {balanceScore,restDefenseScore}=session.teamFitSnapshot?.tacticalProfile||{};
+  if(![balanceScore,restDefenseScore].every(v=>finite(v)&&v>=0&&v<=100))return null;
+  const best=(positions,count)=>session.lineupSnapshot.filter(p=>positions.includes(p.position))
+    .sort((a,b)=>b.matchScore-a.matchScore||a.playerId.localeCompare(b.playerId)).slice(0,count);
+  const backs=best(["CB"],2),keeper=best(["GK"],1),screen=best(["DM","CM"],2);
+  if(backs.length!==2||keeper.length!==1||!screen.length)return null;
+  const avg=ps=>ps.reduce((sum,p)=>sum+p.matchScore,0)/ps.length;
+  const clamp=v=>Math.max(0.12,Math.min(0.82,v));
+  const delivery=clamp(0.52-(avg(backs)-65)*0.004-(keeper[0].matchScore-65)*0.002-(balanceScore-65)*0.002);
+  const recovery=clamp(0.44-(avg(screen)-65)*0.004-(restDefenseScore-65)*0.004);
+  const draw=rng();
+  if(!finite(draw))return null;
+  const roll=Math.max(0,Math.min(0.999999999,draw));
+  const first=!afterClearance&&roll<delivery;
+  const second=!first&&(afterClearance?roll<recovery:roll<delivery+(1-delivery)*recovery);
+  const status=first?"first_contact_threat":second?"second_ball_threat":"contained";
+  const cause=first?"Motstanderen når først fram til dødballen i boksen.":
+    second?"Motstanderen tar nedfallet etter klareringen og opprettholder angrepet.":
+    "Vårt forsvar sikrer klareringen og nedfallsrommet.";
+  const actions=afterClearance?["Dødballen er allerede klarert","Lagene konkurrerer om nedfallet","Nedfallet kontrolleres eller avverges"]:
+    ["Motstanderen slår en dødball mot boksen","Første kontakt avgjøres","Ved klarering konkurrerer lagene om nedfallet","Angrepet fortsetter eller avverges"];
+  const results=afterClearance?["simulated_available",second?"simulated_available":"countered",second?"simulated_available":"not_reached"]:
+    ["simulated_available",first?"simulated_available":"countered",first?"not_reached":second?"simulated_available":"countered",(first||second)?"simulated_available":"not_reached"];
+  const rounded=v=>Math.round(v*1000)/1000;
+  return {version:6,situation:"opponent_set_piece",planId,route:"historical_delivery_box_duel",status,
+    side:first||second?"against":null,probability:rounded(afterClearance?recovery:delivery+(1-delivery)*recovery),
+    xgDeltaFor:0,xgDeltaAgainst:first?0.08:second?0.04:-0.03,cause,
+    steps:actions.map((action,index)=>({action,order:index+1,result:results[index]})),
+    counterplay:{status:first||second?"not_triggered":"simulated_counter",
+      counter:"Beskytt boksen og nedfallsrommet",nextManagerResponse:"Behold stopperdekning og sentral sikring etter klarering.",
+      automaticallyExecuted:false},
+    evidence:{basis:"sourced_set_piece_tradition_scripted_scenario_not_observed",eventId,afterClearance,
+      firstContactProbability:afterClearance?null:rounded(delivery),conditionalRecoveryProbability:rounded(recovery),
+      targetFlank:null,boxCover:[...backs,...keeper].map(p=>p.playerId),secondBallCover:screen.map(p=>p.playerId),
+      supportingPlayers:[...backs,...keeper,...screen].map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
+      eventCount:1,randomDraws:1}};
+}
+export function annotateOpponentSetPieceChances(chances,phase){
+  if(!Array.isArray(chances)||phase?.situation!=="opponent_set_piece"||phase.side!=="against")return chances;
+  const i=chances.findIndex(c=>c.side==="against");
+  if(i<0)return chances;
+  return annotateOpponentRunChances(chances,phase).map((c,index)=>index===i?
+    {...c,tacticalMoment:{...c.tacticalMoment,kind:"opponent_set_piece",label:"Dødball og nedfall",
+      basis:"simulated_set_piece_scenario",keyAction:phase.steps[1].action}}:c);
+}

@@ -143,6 +143,14 @@ export function sourcedRecoverySkillsForPlayer(player) {
     RECOVERY_CUE_SKILLS.has(skill) && provenance[skill] === "belagt"))].sort();
 }
 
+// Only direct source claims may open the creative route, not derived skills.
+export function sourcedCreativeSkillsForPlayer(player) {
+  const strengths = Array.isArray(player?.strengths) ? player.strengths : [];
+  const provenance = player?.attributes?.provenance || {};
+  return [...new Set(strengths.filter(skill =>
+    ["dribbling", "vision"].includes(skill) && provenance[skill] === "belagt"))].sort();
+}
+
 export function createLineupSnapshot(teamFit, { freshnessByPlayerId = {} } = {}) {
   const assignments = Array.isArray(teamFit?.assignments) ? teamFit.assignments : [];
   return assignments
@@ -158,6 +166,7 @@ export function createLineupSnapshot(teamFit, { freshnessByPlayerId = {} } = {})
       roleName: str(assignment.role?.name),
       sourcedRecoverySkills: sourcedRecoverySkillsForPlayer(assignment.player),
       sourcedDefensiveReactionSkills: sourcedDefensiveReactionSkillsForPlayer(assignment.player),
+      sourcedCreativeSkills: sourcedCreativeSkillsForPlayer(assignment.player),
       // Fra hvilket minutt spilleren har vært på banen. Startellever: 0.
       onFrom: 0,
       // Friskheten han STARTET kampen med. En som allerede var sliten før
