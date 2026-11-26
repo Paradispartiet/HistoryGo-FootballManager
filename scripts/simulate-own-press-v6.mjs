@@ -1,7 +1,7 @@
 import { resolveSourcedCreativeBreakthrough, resolveCompactBlockAttack, annotateCompactBlockChances } from "../src/football-matchday-compact-block-v6.js";
 // Deterministic causal pressing: high press, mid-block trap, counterpress and escapes.
 import assert from "node:assert/strict";
-import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances, annotateOpponentCreativeAttackChances, resolveOpponentFullbackOverlap, annotateOpponentFullbackOverlapChances } from "../src/football-matchday-sequence-v8.js";
+import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances, annotateOpponentCreativeAttackChances, resolveOpponentFullbackOverlap, annotateOpponentFullbackOverlapChances, annotateOpponentShortCombinationChances } from "../src/football-matchday-sequence-v8.js";
 import { readFileSync } from "node:fs";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances }
   from "../src/football-matchday-own-press-v6.js";
@@ -64,6 +64,9 @@ const leagueProfiles = JSON.parse(readFileSync(new URL("../data/football_league_
 const viking = leagueProfiles.find(p => p.clubId === "viking");
 assert.equal(viking.styleTraits.shortBuildUp, 56);
 assert.equal(viking.tacticalBehaviourEvidence?.era, "2023");
+assert.equal(viking.tacticalBehaviourEvidence?.eraByPattern?.highPressEscapeRoute,"2023");
+assert.equal(viking.tacticalBehaviourEvidence?.eraByPattern?.attackingRunPattern,"1971–1975");
+assert.equal(viking.tacticalBehaviourEvidence?.eraByPattern?.shortCombinationPattern,"1971–1975");
 const vikingOpponent = { ...viking, id: viking.clubId, strength: 72 };
 const { tacticalBehaviour: _vikingEscape, ...unknownViking } = vikingOpponent;
 const vikingSession = session("high_press_343", { opponent: vikingOpponent });
@@ -1912,5 +1915,47 @@ try{
   assert.equal(played.minuteLog.length,period.chances);
   assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(vikingOverlapSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
 }finally{Math.random=vikingOverlapRandom;}
+
+// Viking short-pass alternative uses the same period draw as overlap.
+const vikingShortFixture={...vikingOverlapFixture,causalOpponentShortCombinationVersion:1};
+const vikingShort=(draw,changes={})=>resolveOpponentFullbackOverlap({...vikingShortFixture,...changes},{rng:()=>draw});
+const shortWin=vikingShort(0.02),shortRelease=vikingShort(0.14),shortStop=vikingShort(0.36);
+assert.deepEqual([shortWin.status,shortRelease.status,shortStop.status],
+  ["combination_breakthrough","third_man_contained","support_pass_contained"]);
+assert.deepEqual([shortWin.xgDeltaAgainst,shortRelease.xgDeltaAgainst,shortStop.xgDeltaAgainst],[0.07,-0.02,-0.03]);
+assert.equal(shortWin.evidence.opponentPlayerId,null);
+assert.equal(shortWin.evidence.shortCombinationWeight,0.4);
+assert.notEqual(shortWin.evidence.firstPresserId,shortWin.evidence.centralCoverId);
+assert.equal(shortWin.evidence.dedicatedCover,true);
+assert.equal(vikingShort(0.4).situation,"opponent_fullback_overlap");
+assert.equal(vikingShort(0.02,{causalOpponentShortCombinationVersion:undefined}).situation,"opponent_fullback_overlap");
+assert.equal(vikingShort(0.02,{opponent:{...vikingShortFixture.opponent,tacticalBehaviour:{attackingRunPattern:"rehearsed_fullback_overlap"}}}).situation,"opponent_fullback_overlap");
+assert.equal(vikingShort(0.02,{lineupSnapshot:glimtLineup.filter(p=>p.position!=="DM")}).situation,"opponent_fullback_overlap");
+let shortDraws=0;resolveOpponentFullbackOverlap(vikingShortFixture,{rng:()=>{shortDraws++;return 0.02;}});
+assert.equal(shortDraws,1);
+const weakFirst=vikingShort(0.02,{lineupSnapshot:glimtLineup.map(p=>p.position==="CM"?{...p,matchScore:55}:p)});
+assert.ok(weakFirst.evidence.supportPassProbability>shortWin.evidence.supportPassProbability);
+assert.equal(weakFirst.evidence.conditionalThirdManProbability,shortWin.evidence.conditionalThirdManProbability);
+const weakScreen=vikingShort(0.02,{lineupSnapshot:glimtLineup.map(p=>p.position==="DM"?{...p,roleId:"deep_playmaker"}:p)});
+assert.equal(weakScreen.evidence.supportPassProbability,shortWin.evidence.supportPassProbability);
+assert.ok(weakScreen.evidence.conditionalThirdManProbability>shortWin.evidence.conditionalThirdManProbability);
+assert.equal(annotateOpponentShortCombinationChances(lskChances,shortWin).filter(c=>c.tacticalMoment).length,1);
+assert.equal(annotateOpponentShortCombinationChances(lskChances,shortStop),lskChances);
+let vikingShortSeed;
+for(let i=0;i<3000;i++){
+  const s={...vikingShortFixture,id:"viking-short-"+i};
+  if(vikingShort(highPressPhaseRoll(s,"0:opponent-fullback-overlap")).status==="combination_breakthrough"){vikingShortSeed=s;break;}
+}
+assert.ok(vikingShortSeed);
+const vikingShortRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(vikingShortSeed),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"opponent_short_combination");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,period.tacticalPhase.xgDeltaAgainst);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(vikingShortSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
+}finally{Math.random=vikingShortRandom;}
 
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
