@@ -1516,18 +1516,18 @@
     },
     {
       "clubId": "stabak",
-      "styleName": "Nadderud-fotballen",
+      "styleName": "Jönssons tre rom",
       "styleBasis": "tradisjon",
-      "tacticalSchool": "Teknisk angrepsfotball",
-      "era": "1995–2008",
-      "style": "Landets peneste fotball, spilt av et lag som heller taper pent enn vinner stygt",
-      "historicalNote": "Seriegullet i 2008 under Jan Jönsson kom med det som ble regnet som den peneste fotballen i Norge. Stabæk har aldri vunnet noe på å være vanskelig å slå — klubben har vunnet, og tapt, på å spille.",
-      "inPossessionShape": "4-3-3 med teknikere i alle ledd",
-      "outOfPossessionShape": "4-4-2 i middels blokk",
+      "tacticalSchool": "Teknisk 4-4-2 med samtidige romtrusler",
+      "era": "2005–2009 (særlig 2008)",
+      "style": "Hurtige kombinasjoner, individuell kreativitet og samtidige løp i siderom, mellomrom og bakrom",
+      "historicalNote": "Jan Jönssons gullag i 2008 brukte 4-4-2 med bevegelige offensive spillere. Gunnarsson knyttet sammen angrepet i mellomrommet, Nannskog timet løp i bakrom, Alanzinho utfordret i siderom og Andersson kom med timede løp fra midtbanen. Farneruds blikk og pasninger bidro til variasjon. Kildene beskriver samtidige trusler, ikke en fast sekvens eller bestemt motstanderellever.",
+      "inPossessionShape": "4-4-2 med bevegelige spisser, kreative kanter og midtbaneløp",
+      "outOfPossessionShape": "4-4-2 i middels blokk (spillmodell)",
       "defensiveBlock": "Middels blokk",
-      "buildUpStyle": "Kort bakfra, gjennom leddene",
-      "attackingStyle": "Tålmodig oppspill til rommet åpner seg",
-      "tempo": "Jevnt",
+      "buildUpStyle": "Kombinasjoner gjennom og rundt motstanderens ledd",
+      "attackingStyle": "Samtidig trussel i mellomrom, siderom og bakrom",
+      "tempo": "Høyt tempo og presisjon i angrep",
       "riskLevel": "medium",
       "baseStyleId": "possession_opponent",
       "matchupStyles": [
@@ -1535,7 +1535,7 @@
         "wide_overload",
         "fast_runners_in_behind"
       ],
-      "shortLabel": "teknisk angrepsfotball med bredde",
+      "shortLabel": "tre rom, timing og kreativitet",
       "pressResistance": 76,
       "defensiveStructure": 62,
       "transitionThreat": 65,
@@ -1552,33 +1552,106 @@
         "intensity": 64
       },
       "strengths": [
-        "bryter du formen for å ta ballen, har de allerede vunnet",
-        "stilen er tydelig: landets peneste fotball, spilt av et lag som heller taper pent enn vinner stygt"
+        "samtidig trussel i flere rom",
+        "timede løp og kreativitet i kombinasjon"
       ],
       "weaknesses": [
-        "omstillingen etter eget balltap",
-        "midten når begge kanter er høye"
+        "kan avverges dersom første mottak, dybde og sentrale løp dekkes separat (spillmodell)"
       ],
       "vulnerableZones": [
-        "omstillingen etter eget balltap",
-        "de har lite mellom leddene når løpene ikke går"
+        "rom etter eget balltap (eksisterende spillhypotese)"
       ],
       "dangerZones": [
-        "mellomrommet mellom ledd",
-        "begge felt for innlegg"
+        "siderom",
+        "mellomrom",
+        "bakrom og sene løp i boksen"
       ],
       "keyBattles": [
-        "din midtbane mot deres tålmodighet",
-        "dine stoppere mot fart i bakrom"
+        "kantdekning og sentralt press mot kreativ mottaker",
+        "stoppernes dybde og separat midtbanesikring"
       ],
       "pressurePoints": [
-        "hold formen, ikke jag ballen",
-        "doble opp på kant før innlegget"
+        "press mottakeren uten å ofre dybdesikringen",
+        "behold en egen midtbanespiller til sene løp"
       ],
       "managerHints": [
-        "Bryter du formen for å ta ballen, har de allerede vunnet.",
-        "Står du høyt, har de akkurat spillerne til å straffe det."
-      ]
+        "Ikke jag kreatøren med hele laget; behold stoppernes dybde.",
+        "Stans sene midtbaneløp også når første bakromspasning avverges.",
+        "La kantstøtten hjelpe backen, men behold en sentral sikringsspiller til løpene som driblingen åpner.",
+        "Ved mottak i mellomrommet: press pasningsspilleren på nytt uten å oppgi stoppernes dybde eller den sene løpsdekningen."
+      ],
+      "tacticalBehaviour": {
+        "attackingRunPattern": "three_space_combination",
+        "wideCreationPattern": "dribble_draw_cover",
+        "centralCreationPattern": "support_striker_through_ball"
+      },
+      "tacticalBehaviourEvidence": {
+        "era": "2008",
+        "scope": "Historisk klubbtradisjon fra Jönssons gullag; ingen oppdiktet motstanderellever, fast flanke eller sekvens.",
+        "interpretation": "Samtidige analyser beskriver trussel i tre rom, Gunnarssons pasningsspill, Nannskogs timing, Alanzinhos bevegelighet og Anderssons løp. Kampreferat dokumenterer blant annet avlegg fra Nannskog til Andersson og pasning fra Alanzinho til Andersson. Den generiske sekvensen, valget av svakt dekket rom og sannsynlighetene er spillhypoteser, ikke historiske målinger. Eksisterende numeriske traits beholdes som spillmodell. Nannskog beskrev i 2012 Alanzinhos rolle som spilleren som kunne passere motstanderen og skape rom. Den modellerte driblingen kan trekke sentral sikring mot kanten, men bare ved en entydig valgt og verifisert svak side. Rollebaserte sannsynligheter og den betingede forskyvningen er spillhypoteser, ikke observert sporing eller historiske målinger. Samtidige kilder beskriver Gunnarssons støttearbeid og gjennomspill til Nannskogs timede bakromsløp. En separat betinget pasningsfase etter mottak i mellomrommet modellerer muligheten for gjenvunnet press på ballfører. Ingen fast historisk avleggssekvens, pasningsfrekvens eller navngitt motstanderellever antas.",
+        "sources": [
+          {
+            "title": "Martin er for sentral",
+            "publisher": "Aftenposten",
+            "url": "https://www.aftenposten.no/sport/fotball/i/kJ8zrA/martin-er-for-sentral",
+            "locator": "7. november 2008: Nannskogs vinkel og timing, Gunnarssons pasninger, Alanzinhos bevegelser og Anderssons løp."
+          },
+          {
+            "title": "Disse må stoppes",
+            "publisher": "Stavanger Aftenblad",
+            "url": "https://www.aftenbladet.no/sport/i/y315ka/disse-maa-stoppes",
+            "locator": "Samtidig trussel i bakrom, mellomrom og siderom, tempo og presisjon."
+          },
+          {
+            "title": "Forsvarerne bør grue seg til framtida",
+            "publisher": "Dagbladet",
+            "url": "https://www.dagbladet.no/sport/forsvarerne-bor-grue-seg-til-framtida/66459563",
+            "locator": "7. april 2008: Nannskogs avlegg til Andersson og lagoppstilling."
+          },
+          {
+            "title": "Stabæk kjenner gull-lukta",
+            "publisher": "Dagbladet",
+            "url": "https://www.dagbladet.no/sport/stabaek-kjenner-gull-lukta/66524573",
+            "locator": "29. september 2008: 4-4-2 og Anderssons posisjonering i boksen."
+          },
+          {
+            "title": "Naturlig å snakke om gull",
+            "publisher": "Dagbladet",
+            "url": "https://www.dagbladet.no/sport/naturlig-a-snakke-om-gull/66508298",
+            "locator": "10. august 2008: 4-4-2 og Alanzinhos pasning til Andersson."
+          },
+          {
+            "title": "Nannskog: – Jönsson vil ha andre spillertyper",
+            "publisher": "Stavanger Aftenblad",
+            "url": "https://www.aftenbladet.no/sport/i/oRdqEK/nannskog-ndash-jonsson-vil-ha-andre-spillertyper",
+            "locator": "Nannskog beskriver Alanzinho som spilleren som kunne slå ut motstanderen og skape rom."
+          },
+          {
+            "title": "Nannskog: Ikke gå i fjorårs-fella",
+            "publisher": "Stavanger Aftenblad",
+            "url": "https://www.aftenbladet.no/sport/i/rAp858/nannskog-ikke-gaa-i-fjoraars-fella",
+            "locator": "26. mai 2008: dribling fra venstrekanten forbi flere forsvarere; enkeltkamp, ikke fast flanke."
+          },
+          {
+            "title": "Han skal ta Nannskog på farten",
+            "publisher": "Stavanger Aftenblad",
+            "url": "https://www.aftenbladet.no/lokalt/i/0rVag/han-skal-ta-nannskog-paa-farten",
+            "locator": "20. oktober 2007: Nannskog beskriver bakromsløpene og Gunnarssons presise pasninger."
+          },
+          {
+            "title": "Stabæk fortsetter å imponere",
+            "publisher": "Dagsavisen",
+            "url": "https://www.dagsavisen.no/sport/stabaek-fortsetter-a-imponere/4240508",
+            "locator": "1. juni 2008: Gunnarsson spiller fri en bakromsløpende Nannskog mot Fredrikstad."
+          },
+          {
+            "title": "Stylish Stabæk delight Norway's neutrals",
+            "publisher": "UEFA",
+            "url": "https://www.uefa.com/news-media/news/01cd-0f84dd311b77-d0895467f445-1000--stylish-stab%C3%A6k-delight-norway-s-neutrals/",
+            "locator": "2008: Nannskogs eksplosive hurtighet og Gunnarssons støttearbeid."
+          }
+        ]
+      }
     },
     {
       "clubId": "lyn",

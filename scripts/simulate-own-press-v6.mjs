@@ -1,7 +1,7 @@
 import { resolveSourcedCreativeBreakthrough, resolveCompactBlockAttack, annotateCompactBlockChances } from "../src/football-matchday-compact-block-v6.js";
 // Deterministic causal pressing: high press, mid-block trap, counterpress and escapes.
 import assert from "node:assert/strict";
-import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances, annotateOpponentCreativeAttackChances, resolveOpponentFullbackOverlap, annotateOpponentFullbackOverlapChances, annotateOpponentShortCombinationChances } from "../src/football-matchday-sequence-v8.js";
+import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances, annotateOpponentCreativeAttackChances, resolveOpponentFullbackOverlap, annotateOpponentFullbackOverlapChances, annotateOpponentShortCombinationChances, resolveOpponentThreeSpaceCombination, annotateOpponentThreeSpaceChances } from "../src/football-matchday-sequence-v8.js";
 import { readFileSync } from "node:fs";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances }
   from "../src/football-matchday-own-press-v6.js";
@@ -2037,5 +2037,120 @@ assert.equal(scoreAdjusted.opponentAttackRoutePreference,undefined);
 assert.ok(resolveOpponentFullbackOverlap(scoreAdjusted,{rng:()=>0.1}));
 assert.deepEqual(resolveOpponentFullbackOverlap(JSON.parse(JSON.stringify(varied)),{rng:()=>0.5}),
   resolveOpponentFullbackOverlap(varied,{rng:()=>0.5}));
+
+// Stabæk: one creative opening, depth, then conditional late-run window.
+const stabakProfile=leagueProfiles.find(p=>p.clubId==="stabak");
+const stabakFixture=session("wide_fast_433",{causalOpponentThreeSpaceVersion:1,
+  opponent:{...stabakProfile,id:"stabak",strength:72},lineupSnapshot:glimtLineup,
+  tacticSnapshot:{id:"wide_fast_433",defensiveLine:"medium"}});
+const stabakRun=(roll,changes={})=>resolveOpponentThreeSpaceCombination({...stabakFixture,...changes},{rng:()=>roll});
+const stabakDepth=stabakRun(0.1),stabakLate=stabakRun(0.28),stabakBoth=stabakRun(0.4),stabakStop=stabakRun(0.9);
+assert.deepEqual([stabakDepth,stabakLate,stabakBoth,stabakStop].map(p=>p.status),
+  ["depth_breakthrough","late_runner_breakthrough","both_runs_contained","creation_contained"]);
+assert.deepEqual([stabakDepth,stabakLate,stabakBoth,stabakStop].map(p=>p.xgDeltaAgainst),[0.07,0.05,-0.02,-0.03]);
+assert.equal(stabakDepth.evidence.opponentPlayerId,null);
+assert.equal(stabakDepth.evidence.sourceSpace,null);
+assert.notEqual(stabakDepth.evidence.firstPresserId,stabakDepth.evidence.lateRunnerCoverId);
+const stabakWide=stabakRun(0.1,{lineupSnapshot:glimtLineup.map(p=>p.position==="LW"?{...p,matchScore:55}:p)});
+assert.equal(stabakWide.evidence.sourceSpace,"wide");assert.equal(stabakWide.evidence.targetFlank,"left");
+const stabakMiddle=stabakRun(0.1,{lineupSnapshot:glimtLineup.map(p=>p.position==="CM"?{...p,matchScore:55}:p)});
+assert.equal(stabakMiddle.evidence.sourceSpace,"between_lines");
+assert.equal(stabakMiddle.evidence.targetFlank,null);
+const stabakHigh=stabakRun(0.1,{tacticSnapshot:{id:"wide_fast_433",defensiveLine:"high"}});
+assert.ok(stabakHigh.evidence.conditionalDepthProbability>stabakDepth.evidence.conditionalDepthProbability);
+assert.equal(stabakHigh.evidence.conditionalLateRunnerProbability,stabakDepth.evidence.conditionalLateRunnerProbability);
+const stabakWeakCover=stabakRun(0.1,{lineupSnapshot:glimtLineup.map(p=>p.position==="DM"?{...p,roleId:"deep_playmaker"}:p)});
+assert.ok(stabakWeakCover.evidence.conditionalLateRunnerProbability>stabakDepth.evidence.conditionalLateRunnerProbability);
+assert.equal(stabakWeakCover.evidence.conditionalDepthProbability,stabakDepth.evidence.conditionalDepthProbability);
+assert.equal(stabakRun(0.1,{causalOpponentThreeSpaceVersion:undefined}),null);
+assert.equal(stabakRun(0.1,{lineupSnapshot:glimtLineup.filter(p=>p.position!=="DM")}),null);
+assert.equal(stabakRun(0.1,{tacticSnapshot:{id:"wide_fast_433"}}),null);
+assert.equal(stabakRun(NaN),null);
+let stabakDraws=0;resolveOpponentThreeSpaceCombination(stabakFixture,{rng:()=>{stabakDraws++;return 0.1;}});
+assert.equal(stabakDraws,1);
+assert.equal(annotateOpponentThreeSpaceChances(lskChances,stabakLate).filter(c=>c.tacticalMoment).length,1);
+assert.equal(annotateOpponentThreeSpaceChances(lskChances,stabakStop),lskChances);
+let stabakSeed;
+for(let i=0;i<3000;i++){
+  const s={...stabakFixture,id:"stabak-three-"+i};
+  if(stabakRun(highPressPhaseRoll(s,"0:opponent-three-space")).status==="depth_breakthrough"){stabakSeed=s;break;}
+}
+assert.ok(stabakSeed);
+const stabakRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(stabakSeed),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"opponent_three_space_combination");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,period.tacticalPhase.xgDeltaAgainst);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(stabakSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
+}finally{Math.random=stabakRandom;}
+
+// A wide dribble can displace central cover without extra shots or draws.
+const stabakDribbleFixture={...stabakFixture,causalOpponentDribbleDisplacementVersion:1,
+  lineupSnapshot:glimtLineup.map(p=>p.position==="LW"?{...p,matchScore:55}:p)};
+const stabakDribble=(roll,changes={})=>resolveOpponentThreeSpaceCombination({...stabakDribbleFixture,...changes},{rng:()=>roll});
+const dribblePull=stabakDribble(0.02);
+assert.equal(dribblePull.evidence.centralCoverDisplaced,true);
+assert.equal(dribblePull.evidence.displacedCoverId,dribblePull.evidence.lateRunnerCoverId);
+assert.equal(dribblePull.evidence.targetFlank,"left");
+assert.ok(dribblePull.evidence.conditionalLateRunnerIfDisplaced>dribblePull.evidence.conditionalLateRunnerProbability);
+assert.equal(dribblePull.evidence.conditionalDepthProbability,stabakWide.evidence.conditionalDepthProbability);
+const dribbleUndedicated=stabakDribble(0.02,{lineupSnapshot:stabakDribbleFixture.lineupSnapshot.map(p=>p.position==="DM"?{...p,roleId:"deep_playmaker"}:p)});
+assert.ok(dribbleUndedicated.evidence.conditionalDisplacementProbability>dribblePull.evidence.conditionalDisplacementProbability);
+const dribbleHeld=stabakDribble(0.35);
+assert.equal(dribbleHeld.evidence.centralCoverDisplaced,false);
+assert.equal(dribbleHeld.evidence.displacedCoverId,null);
+const dribbleContained=stabakDribble(0.99);
+assert.equal(dribbleContained.status,"creation_contained");
+assert.equal(dribbleContained.evidence.centralCoverDisplaced,false);
+assert.equal(stabakDribble(0.02,{lineupSnapshot:glimtLineup}).evidence.wideCreationPattern,undefined);
+assert.deepEqual(stabakDribble(0.1,{causalOpponentDribbleDisplacementVersion:undefined}),stabakWide);
+let stabakDribbleDraws=0;
+resolveOpponentThreeSpaceCombination(stabakDribbleFixture,{rng:()=>{stabakDribbleDraws++;return 0.02;}});
+assert.equal(stabakDribbleDraws,1);
+let displacedLateSeen=false;
+for(let n=0;n<1000;n++){
+  const phase=stabakDribble(n/1000);
+  if(phase.status==="late_runner_breakthrough"&&phase.evidence.centralCoverDisplaced){
+    displacedLateSeen=true;assert.equal(phase.xgDeltaAgainst,0.05);
+    assert.equal(annotateOpponentThreeSpaceChances(lskChances,phase).filter(c=>c.tacticalMoment).length,1);
+  }
+}
+assert.ok(displacedLateSeen);
+assert.deepEqual(resolveOpponentThreeSpaceCombination(JSON.parse(JSON.stringify(stabakDribbleFixture)),{rng:()=>0.02}),dribblePull);
+
+// Separate the support striker's reception from the through-ball release.
+const stabakPairFixture={...stabakFixture,causalOpponentSupportStrikerVersion:1,
+  causalOpponentDribbleDisplacementVersion:1,
+  lineupSnapshot:glimtLineup.map(p=>p.position==="CM"?{...p,matchScore:55}:p)};
+const stabakPair=(roll,changes={})=>resolveOpponentThreeSpaceCombination({...stabakPairFixture,...changes},{rng:()=>roll});
+const pairDepth=stabakPair(0.1),pairLate=stabakPair(0.22),pairBoth=stabakPair(0.3),
+  pairBlocked=stabakPair(0.5),pairNoReceive=stabakPair(0.9);
+assert.deepEqual([pairDepth,pairLate,pairBoth,pairBlocked,pairNoReceive].map(p=>p.status),
+  ["depth_breakthrough","late_runner_breakthrough","both_runs_contained","through_ball_contained","creation_contained"]);
+assert.equal(pairDepth.evidence.centralCreationPattern,"support_striker_through_ball");
+assert.equal(pairDepth.evidence.opponentPlayerId,null);
+assert.equal(pairBlocked.evidence.supportStrikerReceived,true);
+assert.equal(pairBlocked.evidence.throughBallReleased,false);
+assert.equal(pairBlocked.xgDeltaAgainst,-0.03);
+assert.deepEqual(pairBlocked.steps.slice(2).map(p=>p.result),["countered","not_reached","not_reached"]);
+assert.equal(pairNoReceive.evidence.supportStrikerReceived,false);
+assert.equal(pairDepth.evidence.conditionalDepthProbability,stabakMiddle.evidence.conditionalDepthProbability);
+assert.equal(pairDepth.evidence.conditionalLateRunnerProbability,stabakMiddle.evidence.conditionalLateRunnerProbability);
+assert.ok(pairDepth.probability<stabakMiddle.probability);
+const pairLessPress=stabakPair(0.1,{teamFitSnapshot:{...stabakPairFixture.teamFitSnapshot,tacticalProfile:{...stabakPairFixture.teamFitSnapshot.tacticalProfile,balanceScore:50}}});
+assert.ok(pairLessPress.evidence.conditionalReleaseProbability>pairDepth.evidence.conditionalReleaseProbability);
+assert.equal(stabakPair(0.1,{lineupSnapshot:glimtLineup}).evidence.centralCreationPattern,undefined);
+assert.equal(stabakPair(0.1,{lineupSnapshot:stabakDribbleFixture.lineupSnapshot}).evidence.centralCreationPattern,undefined);
+assert.deepEqual(stabakPair(0.1,{causalOpponentSupportStrikerVersion:undefined}),stabakMiddle);
+let pairDraws=0;resolveOpponentThreeSpaceCombination(stabakPairFixture,{rng:()=>{pairDraws++;return 0.1;}});
+assert.equal(pairDraws,1);
+const pairLateChances=annotateOpponentThreeSpaceChances(lskChances,pairLate);
+assert.equal(pairLateChances.filter(c=>c.tacticalMoment).length,1);
+assert.equal(pairLateChances.find(c=>c.tacticalMoment).tacticalMoment.keyAction,pairLate.steps.at(-1).action);
+assert.equal(annotateOpponentThreeSpaceChances(lskChances,pairBlocked),lskChances);
+assert.deepEqual(resolveOpponentThreeSpaceCombination(JSON.parse(JSON.stringify(stabakPairFixture)),{rng:()=>0.22}),pairLate);
 
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");

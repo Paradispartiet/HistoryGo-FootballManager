@@ -810,3 +810,115 @@ export function annotateOpponentShortCombinationChances(chances,phase){
     {...c,tacticalMoment:{...c.tacticalMoment,kind:"opponent_short_combination",label:"Kortpasningskombinasjon",
       basis:"simulated_rehearsed_short_pass",keyAction:phase.steps[2].action}}:c);
 }
+
+// Stabæk 2008: simultaneous room threats. The conditional sequence is a
+// gameplay interpretation of documented roles, not a historical fixed move.
+// One draw, no named opponent XI or extra shot. Distinct defending players
+// contest creation, depth and the late arrival.
+export function resolveOpponentThreeSpaceCombination(session,{rng=Math.random}={}){
+  if(session?.causalOpponentThreeSpaceVersion!==1||
+      session.opponent?.tacticalBehaviour?.attackingRunPattern!=="three_space_combination"||
+      !verifiedMatchLineup(session.lineupSnapshot))return null;
+  const plan=session.activePlanSnapshot||session.tacticSnapshot;
+  const line=plan?.defensiveLine;
+  if(!plan?.id||!Object.prototype.hasOwnProperty.call(BREAKTHROUGH_LINE_EXPOSURE,line))return null;
+  const {balanceScore,restDefenseScore}=session.teamFitSnapshot?.tacticalProfile||{};
+  if(![balanceScore,restDefenseScore].every(v=>finite(v)&&v>=0&&v<=100))return null;
+  const best=(positions,count=1)=>session.lineupSnapshot.filter(p=>positions.includes(p.position))
+    .sort((a,b)=>b.matchScore-a.matchScore||a.playerId.localeCompare(b.playerId)).slice(0,count);
+  const left=best(["LB","LWB"]),right=best(["RB","RWB"]),lw=best(["LW","LM"]),rw=best(["RW","RM"]),backs=best(["CB"],2);
+  const mids=best(["DM","CM"],2);
+  if(!left.length||!right.length||!lw.length||!rw.length||backs.length!==2||mids.length!==2)return null;
+  const first=mids.slice().sort((a,b)=>Number(b.roleId==="pressing_midfielder")-Number(a.roleId==="pressing_midfielder")||b.matchScore-a.matchScore||a.playerId.localeCompare(b.playerId))[0];
+  const cover=mids.find(p=>p.playerId!==first.playerId);
+  const dedicated=["balancing_six","holding_midfielder"].includes(cover.roleId);
+  const avg=ps=>ps.reduce((sum,p)=>sum+p.matchScore,0)/ps.length;
+  const clamp=v=>Math.max(0.12,Math.min(0.82,v));
+  const round=v=>Math.round(v*1000)/1000;
+  const leftFit=avg([...left,...lw]),rightFit=avg([...right,...rw]);
+  const sideFit=Math.min(leftFit,rightFit);
+  const sideGate=clamp(0.58-(sideFit-65)*0.005-(balanceScore-65)*0.002);
+  const middleGate=clamp(0.58-(first.matchScore-65)*0.005-(balanceScore-65)*0.002);
+  const sourceSpace=sideGate>middleGate+0.01?"wide":middleGate>sideGate+0.01?"between_lines":null;
+  const flank=sourceSpace==="wide"?(leftFit+2<rightFit?"left":rightFit+2<leftFit?"right":null):null;
+  // The strongest available opening is the gate, never the sum of two
+  // threats. A tied evaluation does not fabricate a specific opening.
+  const create=Math.max(sideGate,middleGate);
+  const depth=clamp(0.52-(avg(backs)-65)*0.005+BREAKTHROUGH_LINE_EXPOSURE[line]-(restDefenseScore-65)*0.002);
+  const late=clamp(0.48-(cover.matchScore-65)*0.006-(restDefenseScore-65)*0.004-(dedicated?0.07:0));
+  const draw=rng();if(!finite(draw))return null;
+  const roll=Math.max(0,Math.min(0.999999999,draw));
+  const opened=roll<create;
+  // Within the existing wide-opening interval, a second partition models
+  // central cover being drawn out by a dribble. No extra draw, shot or
+  // assumed opposing player. A dedicated screen resists leaving its zone.
+  const dribbleEnabled=session.causalOpponentDribbleDisplacementVersion===1&&
+    session.opponent.tacticalBehaviour.wideCreationPattern==="dribble_draw_cover"&&
+    sourceSpace==="wide"&&flank!==null;
+  const displacement=dribbleEnabled?clamp(0.50-(cover.matchScore-65)*0.005-
+    (balanceScore-65)*0.003-(dedicated?0.15:0)):0;
+  const pulled=dribbleEnabled&&opened&&roll<create*displacement;
+  const displacedLate=dribbleEnabled?clamp(late+0.12):late;
+  // Rescale only after the first gate. Conditional depth is unchanged;
+  // only the late-run window expands if central cover leaves its zone.
+  const localRoll=opened?(pulled?roll/(create*displacement):
+    (roll/create-displacement)/(1-displacement)):0;
+  const activeLate=pulled?displacedLate:late;
+  // A central support striker may receive but still be denied the next
+  // pass by renewed pressure. If the pass is intercepted, no downstream
+  // run is credited. Keep wide displacement and central release exclusive.
+  const pairingEnabled=session.causalOpponentSupportStrikerVersion===1&&
+    session.opponent.tacticalBehaviour.centralCreationPattern==="support_striker_through_ball"&&
+    sourceSpace==="between_lines";
+  const release=pairingEnabled?clamp(0.68-(first.matchScore-65)*0.004-
+    (balanceScore-65)*0.002-(first.roleId==="pressing_midfielder"?0.06:0)):1;
+  const released=opened&&localRoll<release;
+  const runRoll=released?localRoll/release:0;
+  const depthWon=released&&runRoll<depth;
+  const lateWon=released&&!depthWon&&runRoll<depth+(1-depth)*activeLate;
+  const success=depthWon||lateWon;
+  const totalProbability=create*release*(depth+(1-depth)*((1-displacement)*late+displacement*displacedLate));
+  const status=depthWon?"depth_breakthrough":lateWon?"late_runner_breakthrough":
+    released?"both_runs_contained":opened?"through_ball_contained":"creation_contained";
+  const actions=["Kreative motspillere søker siderom og mellomrom",pairingEnabled?
+    "Støttespissen søker mottak i mellomrommet":dribbleEnabled?
+    (pulled?"Driblingen trekker den sentrale sikringen mot kanten":"Dribleren utfordrer kanten mens sentral sikring holder sonen"):"Første mottak forsøker å åpne pasningsvinduet",
+    ...(pairingEnabled?["Støttespissen forsøker gjennomspillet under fornyet press"]:[]),
+    "Spissen søker et timet gjennombrudd bak stopperne","Et separat midtbaneløp utfordrer sikringen hvis første pasning avverges"];
+  const results=["simulated_available",opened?"simulated_available":"countered",
+    ...(pairingEnabled?[!opened?"not_reached":released?"simulated_available":"countered"]:[]),
+    !released?"not_reached":depthWon?"simulated_available":"countered",
+    !released||depthWon?"not_reached":lateWon?"simulated_available":"countered"];
+  return {version:6,situation:"opponent_three_space_combination",planId:plan.id,route:"three_space_combination",status,
+    side:success?"against":null,probability:round(totalProbability),xgDeltaFor:0,
+    xgDeltaAgainst:depthWon?0.07:lateWon?0.05:released?-0.02:-0.03,
+    cause:depthWon?(pairingEnabled?"Støttespissen finner gjennomspillet til spissmakkerens timede bakromsløp.":"Kreativ mottaker åpner et pasningsvindu og et timet løp truer bakrommet."):
+      lateWon?(pulled?"Driblingen trekker sikringen ut, og et sent midtbaneløp utnytter rommet som åpnes.":"Stopperne stenger første bakromsløp, men et sent midtbaneløp utnytter rommet foran dem."):
+      released?"Stopperne stenger bakrommet og en separat midtbanespiller følger det sene løpet.":
+      opened?"Støttespissen mottar ballen, men fornyet press avverger gjennomspillet.":
+      "Kant- og sentraldekningen stenger det første kreative mottaket.",
+    steps:actions.map((action,i)=>({action,order:i+1,result:results[i]})),
+    counterplay:{status:success?"not_triggered":"simulated_counter",
+      counter:"Behold tre adskilte sikringsoppgaver",
+      nextManagerResponse:"Press mottakeren uten å trekke stopperne ut, og behold en egen midtbanespiller til det sene løpet.",
+      automaticallyExecuted:false},
+    evidence:{basis:"sourced_simultaneous_space_threats_generic_game_hypothesis_not_observed",
+      opponentPattern:"three_space_combination",opponentPlayerId:null,sourceSpace,targetFlank:flank,
+      sideOpeningProbability:round(sideGate),betweenLinesOpeningProbability:round(middleGate),creationProbability:round(create),
+      conditionalDepthProbability:round(depth),conditionalLateRunnerProbability:round(late),
+      ...(dribbleEnabled?{wideCreationPattern:"dribble_draw_cover",conditionalDisplacementProbability:round(displacement),
+        conditionalLateRunnerIfDisplaced:round(displacedLate),centralCoverDisplaced:pulled,
+        displacedCoverId:pulled?cover.playerId:null}:{}),
+      ...(pairingEnabled?{centralCreationPattern:"support_striker_through_ball",conditionalReleaseProbability:round(release),
+        supportStrikerReceived:opened,throughBallReleased:released,renewedPresserId:first.playerId}:{}),
+      firstPresserId:first.playerId,lateRunnerCoverId:cover.playerId,dedicatedCover:dedicated,depthCover:backs.map(p=>p.playerId),
+      supportingPlayers:[...left,...right,...lw,...rw,first,cover,...backs].map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
+      eventCount:1,randomDraws:1}};
+}
+export function annotateOpponentThreeSpaceChances(chances,phase){
+  if(!Array.isArray(chances)||phase?.situation!=="opponent_three_space_combination"||phase.side!=="against")return chances;
+  const i=chances.findIndex(c=>c.side==="against");if(i<0)return chances;
+  return annotateOpponentRunChances(chances,phase).map((c,index)=>index===i?
+    {...c,tacticalMoment:{...c.tacticalMoment,kind:"opponent_three_space_combination",label:"Gjennombrudd i tre rom",
+      basis:"simulated_three_space_combination",keyAction:phase.steps[phase.status==="late_runner_breakthrough"?phase.steps.length-1:phase.steps.length-2].action}}:c);
+}
