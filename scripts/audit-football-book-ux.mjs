@@ -12,6 +12,7 @@ import { ROLE_CHAPTERS } from "../src/football-book-roles.js";
 import { PHASE_CHAPTERS } from "../src/football-book-phases.js";
 import { SET_PIECE_CHAPTERS } from "../src/football-book-set-pieces.js";
 import { TRAINING_CHAPTERS } from "../src/football-book-training.js";
+import { recordMatchRoleUsage, getRoleFamiliarity } from "../src/football-role-familiarity-engine.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
@@ -198,8 +199,8 @@ for(const c of SET_PIECE_CHAPTERS){
 }
 check(SET_PIECE_CHAPTERS.reduce((n,c)=>n+c.diagrams.length,0)===9,"Dødballfigurer mangler");
 check(bookHtml.includes('id="footballBookSetPieces"'),"Dødballer ikke tilgjengelige i spillet");
-check(TRAINING_CHAPTERS.length===5,"Treningskapitler mangler");
-check(new Set(TRAINING_CHAPTERS.map(c=>c.id)).size===5,"Duplikate treningskapitler");
+check(TRAINING_CHAPTERS.length===6,"Treningskapitler mangler");
+check(new Set(TRAINING_CHAPTERS.map(c=>c.id)).size===6,"Duplikate treningskapitler");
 for(const c of TRAINING_CHAPTERS){
   check(Boolean(c.title&&c.concept&&c.dilemma&&c.manager&&c.practice),c.id+": ufullstendig kapittel");
   check(c.principles.length>0&&c.principles.every(id=>principles.some(p=>p.id===id)),c.id+": ukjent kunnskapsprinsipp");
@@ -212,8 +213,14 @@ for(const c of TRAINING_CHAPTERS){
     check(d.arrows.every(a=>a.length===4&&a.every(n=>Number.isFinite(n)&&n>=0&&n<=100)),c.id+": ugyldig pil");
   }
 }
-check(TRAINING_CHAPTERS.reduce((n,c)=>n+c.diagrams.length,0)===7,"Treningsfigurer mangler");
+check(TRAINING_CHAPTERS.reduce((n,c)=>n+c.diagrams.length,0)===9,"Treningsfigurer mangler");
 check(bookHtml.includes('id="footballBookTraining"'),"Treningsmetodikk ikke tilgjengelig i spillet");
+const roleGraph=TRAINING_CHAPTERS.find(c=>c.id==="individual_development").diagrams.find(d=>d.kind==="bars");
+for(const [i,status] of ["perfekt","god","brukbar"].entries()){
+  let store={};for(let match=0;match<5;match++)store=recordMatchRoleUsage(store,[{playerId:"book-example",roleId:"balancing_six",status}]);
+  const value=getRoleFamiliarity(store,"book-example","balancing_six");
+  check(roleGraph.rows[i][1]===value&&roleGraph.rows[i][2]===100-value,"Fortrolighetsgraf avviker fra eksisterende motor");
+}
 console.log("Fotballboka UX QA Audit");
 console.log(`Principles: ${principles.length}`);
 console.log(`Scenarios: ${scenarios.map((scenario) => scenario.code).join(", ")}, no_matching_weak_point`);
