@@ -136,6 +136,75 @@ export function resolveSourcedCreativeBreakthrough(session, block, {rng=Math.ran
       eventCount:1,randomDraws:1}};
 }
 
+// Høgmo 2011: two central screening midfielders in an organised mid-block.
+// Do not recast the opponent as a low block, or assume an observed opponent
+// XI. Two linked gates replace the normal attack phase, with one draw.
+export function resolveDoubleMidfieldScreen(session,{rng=Math.random}={}){
+  if(session?.causalDoubleMidfieldScreenVersion!==1||
+    session.opponent?.tacticalBehaviour?.defensivePattern!=="double_midfield_screen")return null;
+  const id=session.activePlanSnapshot?.id||session.tacticSnapshot?.id||session.selectedTacticId;
+  const wide=["wide_fast_433","overlap_channels","crossing_box_presence","positional_overloads"].includes(id);
+  const central=["central_possession_4231","target_man_focus"].includes(id);
+  if(!wide&&!central)return null;
+  const lineup=Array.isArray(session.lineupSnapshot)?session.lineupSnapshot:[];
+  if(lineup.length<10||lineup.length>11||!lineup.every(p=>typeof p?.playerId==="string"&&p.playerId&&
+    p.matchFitKnown===true&&finite(p.matchScore)&&p.matchScore>=0&&p.matchScore<=100)||
+    new Set(lineup.map(p=>p.playerId)).size!==lineup.length)return null;
+  const {buildUpScore,depthScore,widthScore,balanceScore,restDefenseScore}=session.teamFitSnapshot?.tacticalProfile||{};
+  if(![buildUpScore,depthScore,widthScore,balanceScore,restDefenseScore].every(v=>finite(v)&&v>=0&&v<=100))return null;
+  const threat=session.opponent?.transitionThreat??session.opponent?.styleTraits?.transitionThreat;
+  if(!finite(threat)||threat<0||threat>100)return null;
+  const best=(positions,excluded=[])=>lineup.filter(p=>positions.includes(p.position)&&!excluded.includes(p.playerId))
+    .sort((a,b)=>b.matchScore-a.matchScore||a.playerId.localeCompare(b.playerId))[0];
+  const pivot=best(["DM","CM"]),striker=best(["ST"]);
+  if(!pivot||!striker)return null;
+  let first,second,flank=null;
+  if(wide){
+    const lBack=best(["LB","LWB"]),rBack=best(["RB","RWB"]),lWing=best(["LW","LM"]),rWing=best(["RW","RM"]);
+    const left=lBack&&lWing?[lBack,lWing]:null,right=rBack&&rWing?[rBack,rWing]:null;
+    if(!left&&!right)return null;
+    const score=ps=>ps.reduce((n,p)=>n+p.matchScore,0)/ps.length;
+    const chosen=!right?left:!left?right:score(left)>=score(right)?left:right;
+    flank=!left?"right":!right?"left":Math.abs(score(left)-score(right))>2?(chosen===left?"left":"right"):null;
+    first=chosen;second=[striker,pivot];
+  }else{
+    const runner=best(["AM","CM","ST"],[pivot.playerId,striker.playerId]);
+    if(!runner)return null;
+    first=[pivot,striker];second=[runner];
+  }
+  const fit=ps=>ps.reduce((n,p)=>n+p.matchScore,0)/ps.length;
+  // Wide play bypasses the central screen, but the final box gate still
+  // depends on the receiver and support. Central play must beat both screens.
+  const entry=clamp((wide?0.57:0.43)+(fit(first)-65)*0.005+
+    ((wide?widthScore:buildUpScore)-65)*0.004,0.12,0.82);
+  const finish=clamp((wide?0.48:0.39)+(fit(second)-65)*0.005+
+    (depthScore-65)*0.004,0.12,0.82);
+  const draw=rng();if(!finite(draw))return null;
+  const roll=clamp(draw,0,0.999999999),entered=roll<entry,success=entered&&roll<entry*finish;
+  const status=success?"breakthrough":entered?"second_screen_contained":"first_screen_contained";
+  const counterRisk=success?0:restDefenseScore>=70?0:
+    restDefenseScore>=55?(threat>=70?0.03:0):threat>=70?0.09:0.03;
+  const actions=wide?["Støttespiller søker ballen utenfor den sentrale skjermen","Back og kant forsøker å komme rundt blokken",
+    "Spissen og midtbanestøtten utfordrer forsvarernes avslutningsdekning"]:
+    ["Midtbanen finner en støttepasning mot første skjermspiller","Spissen møter ballen og forsøker å passere første skjerm",
+      "En separat tredjemann forsøker å passere den gjenværende sikringen"];
+  return {version:6,situation:"compact_block_vs_attack",planId:id,
+    route:wide?"double_screen_wide_bypass":"double_screen_central_combination",status,
+    side:success?"for":counterRisk>0?"against":null,probability:round3(entry*finish),
+    cause:success?(wide?"Bredden omgår den doble skjermen og åpner avslutningsrom.":"Støtte og tredjemannsbevegelse passerer begge sentrale sikringsledd."):
+      entered?(wide?"Bredden kommer rundt skjermen, men forsvarerne kontrollerer avslutningsrommet.":"Første skjerm passeres, men den andre stenger tredjemannsløpet."):
+      wide?"Kantkombinasjonen kommer ikke rundt blokken.":"Første skjerm stenger støttepasningen.",
+    steps:actions.map((action,i)=>({action,result:i===0||success||(entered&&i===1)?"available":!entered&&i>1?"not_reached":"blocked"})),
+    xgDeltaFor:success?0.09:0,xgDeltaAgainst:counterRisk,
+    evidence:{basis:"sourced_double_screen_midblock_game_hypothesis_not_observed",
+      defensivePattern:"double_midfield_screen",opponentPlayerId:null,targetFlank:flank,
+      entryProbability:round3(entry),conditionalFinishProbability:round3(finish),
+      firstSupport:first.map(p=>p.playerId),secondSupport:second.map(p=>p.playerId),
+      restDefenseScore,transitionThreat:threat,
+      support:[...first,...second].map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
+      eventCount:1,randomDraws:1}};
+}
+
 export function resolveCompactBlockAttack(session, { rng = Math.random } = {}) {
   if (!session || session.causalCompactBlockVersion !== 1) return null;
   const id = session.activePlanSnapshot?.id ||
@@ -147,6 +216,8 @@ export function resolveCompactBlockAttack(session, { rng = Math.random } = {}) {
     if (!finite(session.score?.for) || !finite(session.score?.against) ||
         session.score.for >= session.score.against) return null;
   }
+  const doubleScreen = resolveDoubleMidfieldScreen(session, { rng });
+  if (doubleScreen) return doubleScreen;
   const routeEntry = Object.entries(ROUTES).find(([, value]) => value.plans.includes(id));
   const block = knownCompactBlock(session.opponent);
   if (!routeEntry || !block) return null;
@@ -229,10 +300,10 @@ export function annotateCompactBlockChances(chances, phase) {
     ...chance,
     tacticalMoment: {
       kind: phase.route === "sourced_creative_breakthrough" ? "sourced_creative_breakthrough" : counter ? "counter_window" : "block_break",
-      label: phase.route === "sourced_creative_breakthrough" ? "Individuelt gjennombrudd" : counter ? "Kontringsrom etter brutt angrep" : "Lav blokk brutt",
+      label: phase.route === "sourced_creative_breakthrough" ? "Individuelt gjennombrudd" : counter ? "Kontringsrom etter brutt angrep" : phase.route.startsWith("double_screen_") ? "Dobbel midtbaneskjerm brutt" : "Lav blokk brutt",
       ...(phase.route === "sourced_creative_breakthrough" ? { creatorId: phase.evidence.creatorId, creatorName: phase.evidence.creatorName } : {}),
       description: phase.cause,
-      planId: phase.planId, planTitle: "Angrep mot kompakt lav blokk",
+      planId: phase.planId, planTitle: phase.route.startsWith("double_screen_") ? "Angrep mot dobbel midtbaneskjerm" : "Angrep mot kompakt lav blokk",
       status: counter ? "countered" : "advantage", side: phase.side,
       keyAction: phase.steps.find((step) => step.result === "blocked")?.action ||
         phase.steps[phase.steps.length - 1]?.action,
