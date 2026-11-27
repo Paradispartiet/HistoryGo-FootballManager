@@ -18,7 +18,7 @@ import { execFileSync } from "node:child_process";
 
 const root = path.resolve(new URL("..", import.meta.url).pathname);
 const site = path.join(root, "_site");
-const required = ["index.html", "style.css", "src/app.js", "src/app-manager-engine-bridge.js", "dist/index.js", "data/football_team_merits.example.json"];
+const required = ["index.html", "style.css", "football-book-club-chapters.css", "src/football-book-club-chapters.js", "data/football_league_club_profiles.json", "src/app.js", "src/app-manager-engine-bridge.js", "dist/index.js", "data/football_team_merits.example.json"];
 
 let staged = false;
 if (!fs.existsSync(site)) {
@@ -32,7 +32,7 @@ if (missing.length) {
   process.exit(1);
 }
 const html = fs.readFileSync(path.join(site, "index.html"), "utf8");
-for (const runtimePath of ["style.css", "src/app.js"]) {
+for (const runtimePath of ["style.css", "src/app.js", "football-book-club-chapters.css", "src/football-book-club-chapters.js"]) {
   if (!html.includes(runtimePath)) throw new Error(`index.html laster ikke ${runtimePath}`);
 }
 console.log(JSON.stringify({ ok: true, staged, required }, null, 2));
