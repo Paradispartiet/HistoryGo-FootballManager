@@ -114,7 +114,9 @@ check(
 const clubChapters=buildClubBookChapters(readJson(join(root,"data","football_league_club_profiles.json")).profiles);
 check(clubChapters.length===12,"Fotballboka mangler kildebelagte klubbkapitler");
 for(const chapter of clubChapters){check(Boolean(chapter.historicalNote&&chapter.interpretation&&chapter.sources.length),chapter.name+": mangler kilde eller forklaring");}
-for(const [id,count] of [["viking",3],["stabak",3],["tromso",4]])check(clubChapters.find(c=>c.id===id)?.diagrams.length===count,id+": diagrammer mangler");
+for(const [id,count] of [["rosenborg",2],["brann",2],["valerenga",2],["molde",1],["lillestrom",3],["bodo_glimt",2],["stromsgodset",2],["hodd",1],["asane",1],["viking",3],["stabak",3],["tromso",4]])check(clubChapters.find(c=>c.id===id)?.diagrams.length===count,id+": diagrammer mangler");
+check(clubChapters.reduce((sum,c)=>sum+c.diagrams.length,0)===26,"Fotballboka mangler illustrasjoner");
+for(const chapter of clubChapters)for(const d of chapter.diagrams){check(Boolean(d.title&&d.note),chapter.name+": mangler figurtekst");if(d.kind==="pitch"){check(d.players.every(([x,y,label,side])=>[x,y].every(n=>Number.isFinite(n)&&n>=0&&n<=100)&&label&&["a","d"].includes(side)),chapter.name+": ugyldig spillerposisjon");check(d.arrows.every(a=>a.length===4&&a.every(n=>Number.isFinite(n)&&n>=0&&n<=100)),chapter.name+": ugyldig pil");}}
 const bookHtml=readFileSync(join(root,"index.html"),"utf8");
 check(bookHtml.includes('id="footballBookClubChapters"')&&bookHtml.includes('src="src/football-book-club-chapters.js"'),"Klubbkapitler ikke tilgjengelige i spillet");
 console.log("Fotballboka UX QA Audit");
