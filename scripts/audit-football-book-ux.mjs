@@ -6,6 +6,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { getFootballBookGameText } from "../dist/index.js";
 import { buildClubBookChapters } from "../src/football-book-club-chapters.js";
+import { THEORY_CHAPTERS } from "../src/football-book-theory.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
@@ -119,6 +120,16 @@ check(clubChapters.reduce((sum,c)=>sum+c.diagrams.length,0)===26,"Fotballboka ma
 for(const chapter of clubChapters)for(const d of chapter.diagrams){check(Boolean(d.title&&d.note),chapter.name+": mangler figurtekst");if(d.kind==="pitch"){check(d.players.every(([x,y,label,side])=>[x,y].every(n=>Number.isFinite(n)&&n>=0&&n<=100)&&label&&["a","d"].includes(side)),chapter.name+": ugyldig spillerposisjon");check(d.arrows.every(a=>a.length===4&&a.every(n=>Number.isFinite(n)&&n>=0&&n<=100)),chapter.name+": ugyldig pil");}}
 const bookHtml=readFileSync(join(root,"index.html"),"utf8");
 check(bookHtml.includes('id="footballBookClubChapters"')&&bookHtml.includes('src="src/football-book-club-chapters.js"'),"Klubbkapitler ikke tilgjengelige i spillet");
+check(THEORY_CHAPTERS.length===7,"Teorikapitler mangler");
+check(new Set(THEORY_CHAPTERS.map(c=>c.id)).size===THEORY_CHAPTERS.length,"Duplikate teorikapitler");
+for(const c of THEORY_CHAPTERS){
+  check(Boolean(c.title&&c.concept&&c.dilemma&&c.manager&&c.practice),c.id+": ufullstendig teorikapittel");
+  check(c.principles.length>0&&c.principles.every(id=>principles.some(p=>p.id===id)),c.id+": ukjent kunnskapsprinsipp");
+  check(c.clubs.length>0&&c.clubs.every(id=>clubChapters.some(p=>p.id===id)),c.id+": ukjent klubbeksempel");
+  check(c.diagrams.length>0&&c.diagrams.every(d=>d.title&&d.note),c.id+": mangler illustrasjoner");
+}
+check(THEORY_CHAPTERS.reduce((n,c)=>n+c.diagrams.length,0)===12,"Teorifigurer mangler");
+check(bookHtml.includes('id="footballBookTheory"'),"Teoridelen er ikke tilgjengelig i spillet");
 console.log("Fotballboka UX QA Audit");
 console.log(`Principles: ${principles.length}`);
 console.log(`Scenarios: ${scenarios.map((scenario) => scenario.code).join(", ")}, no_matching_weak_point`);
