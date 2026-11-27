@@ -2236,4 +2236,50 @@ try{
   assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(tilScreen))).timeline[0].tacticalPhase,period.tacticalPhase);
 }finally{Math.random=tilScreenRandom;}
 
+// Helstrup's fourth build-up player: existing press motor and two
+// alternative outlets, not a second phase or extra shot.
+const tilKeeperFixture=session("high_press_343",{opponent:{...tilProfile,id:"tromso",strength:72},
+  lineupSnapshot:glimtLineup,causalOpponentKeeperBuildUpVersion:1});
+const keeperRun=(changes={},pressure=0.99,protection=0.99)=>resolve({...tilKeeperFixture,...changes},pressure,protection);
+const keeperBase=keeperRun();
+assert.equal(keeperBase.evidence.keeperBuildUp.buildUpSlots,4);
+assert.equal(keeperBase.evidence.keeperBuildUp.nominalForwardPressRoles,4);
+assert.equal(keeperBase.evidence.keeperBuildUp.opponentPlayerId,null);
+assert.deepEqual(keeperBase.evidence.keeperBuildUp.availableOutlets,["third_man","direct"]);
+assert.equal(keeperBase.evidence.keeperBuildUp.selectedOutlet,null);
+const keeperWeakCentral=keeperRun({lineupSnapshot:glimtLineup.map(p=>p.position==="CM"?{...p,roleId:"deep_playmaker"}:p)});
+assert.equal(keeperWeakCentral.evidence.keeperBuildUp.selectedOutlet,"third_man");
+assert.equal(keeperWeakCentral.counterplay.pathwayId,"third_man");
+const keeperWeakDepth=keeperRun({lineupSnapshot:glimtLineup.map(p=>p.position==="CB"?{...p,matchScore:55}:p)});
+assert.equal(keeperWeakDepth.evidence.keeperBuildUp.selectedOutlet,"direct");
+assert.equal(keeperWeakDepth.counterplay.pathwayId,"direct");
+const keeperThree=keeperRun({lineupSnapshot:glimtLineup.map(p=>p.position==="AM"?{...p,position:"CM"}:p)});
+assert.ok(keeperThree.evidence.keeperBuildUp.pressPenalty>keeperBase.evidence.keeperBuildUp.pressPenalty);
+assert.ok(keeperThree.probability<keeperBase.probability);
+assert.equal(keeperRun({},0,0.99).status,"regain");
+assert.equal(keeperRun({},0.99,0).status,"contained");
+assert.equal(keeperBase.status,"escaped");
+assert.equal(keeperRun({causalOpponentKeeperBuildUpVersion:undefined}).evidence.keeperBuildUp,undefined);
+assert.equal(keeperRun({tacticSnapshot:{id:"midfield_press_trap"}}).evidence.keeperBuildUp,undefined);
+const keeperExplicit=keeperRun({opponent:{...tilKeeperFixture.opponent,tacticalBehaviour:{keeperBuildUpPattern:"keeper_back_four",pressEscape:"isolated"}}});
+assert.equal(keeperExplicit.evidence.keeperBuildUp,undefined);
+assert.equal(keeperExplicit.evidence.opponentEscapeEvidence,"isolated");
+const keeperUnknown=keeperRun({lineupSnapshot:glimtLineup.map(p=>p.position==="AM"?{...p,matchFitKnown:false}:p)});
+assert.equal(keeperUnknown.evidence.keeperBuildUp,undefined);
+let keeperPressureDraws=0,keeperProtectionDraws=0;
+resolveOwnPressAgainstOpponent(tilKeeperFixture,{pressureRoll:()=>{keeperPressureDraws++;return 0.99;},
+  protectionRoll:()=>{keeperProtectionDraws++;return 0.99;}});
+assert.deepEqual([keeperPressureDraws,keeperProtectionDraws],[1,1]);
+assert.deepEqual(resolve(JSON.parse(JSON.stringify(tilKeeperFixture)),0.99,0.99),keeperBase);
+const keeperRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(tilKeeperFixture),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"our_press_vs_opponent_build_up");
+  assert.equal(period.tacticalPhase.evidence.keeperBuildUp.buildUpSlots,4);
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,period.tacticalPhase.xgDeltaAgainst);
+  assert.equal(played.minuteLog.length,period.chances);
+}finally{Math.random=keeperRandom;}
+
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
