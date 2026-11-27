@@ -688,7 +688,8 @@
       },
       "strengths": [
         "tålmodig oppbygging med tre stoppere og aktiv keeper (2023)",
-        "gjennombrudd når muligheten finnes, ellers sikret ballbesittelse (2011)"
+        "gjennombrudd når muligheten finnes, ellers sikret ballbesittelse (2011)",
+        "to dype midtbanespillere skjermer forsvaret (2011)"
       ],
       "weaknesses": [
         "rom bak vingbacker (moderne spillhypotese)"
@@ -711,17 +712,19 @@
       ],
       "managerHints": [
         "Ikke bryt egen balanse i jakten på ballen.",
-        "Sikre rommet bak ballen; da kan Tromsø velge å beholde ballen fremfor å kontre."
+        "Sikre rommet bak ballen; da kan Tromsø velge å beholde ballen fremfor å kontre.",
+        "Spill rundt skjermen med bredde, eller bruk separate støttespillere og tredjemannsbevegelse sentralt."
       ],
       "styleBasis": "tradisjon",
       "shortLabel": "3-5-2 · rolig oppbygging, bredde fra vingbackene",
       "tacticalBehaviour": {
-        "transitionPattern": "selective_break_or_retain"
+        "transitionPattern": "selective_break_or_retain",
+        "defensivePattern": "double_midfield_screen"
       },
       "tacticalBehaviourEvidence": {
         "era": "2011",
         "scope": "Høgmos overgangsprinsipp, separat fra Helstrups 2023-oppbygging. Ingen fast flanke, motstanderellever eller målt frekvens.",
-        "interpretation": "Riisnæs beskriver to dype sentrale midtbanespillere, samlet press, tidlig gjennombrudd når tilgjengelig og ballbevaring ellers. Den nye fasen modellerer først mulighet for gjenvinning, deretter betinget valg av gjennombrudd mot verifisert restforsvar; ved lavt gjennombruddsvindu velges ballbevaring. Sannsynligheter, terskel og xG er spillhypoteser. Eksisterende numeriske traits og matchup-tokens beholdes som moderne spillmodell.",
+        "interpretation": "Riisnæs beskriver to dype sentrale midtbanespillere, samlet press, tidlig gjennombrudd når tilgjengelig og ballbevaring ellers. Den nye fasen modellerer først mulighet for gjenvinning, deretter betinget valg av gjennombrudd mot verifisert restforsvar; ved lavt gjennombruddsvindu velges ballbevaring. Sannsynligheter, terskel og xG er spillhypoteser. Eksisterende numeriske traits og matchup-tokens beholdes som moderne spillmodell. Riisnæs beskriver to sentrale midtbanespillere som sjelden går høyt, samt spisser som normalt starter presset rundt midtstreken. Den doble skjermen modelleres med separate sentrale pasningshindre; bredde kan omgå skjermen, men gir ikke automatisk en sjanse i boksen. Dette er et middels blokk-scenario, ikke en påstand om en historisk lav blokk eller målte sannsynligheter.",
         "sources": [
           {
             "title": "Hvorfor leder Tromsø og Strømsgodset Tippeligaen?",
