@@ -10,6 +10,7 @@ import { THEORY_CHAPTERS } from "../src/football-book-theory.js";
 import { SCHOOL_CHAPTERS } from "../src/football-book-schools.js";
 import { ROLE_CHAPTERS } from "../src/football-book-roles.js";
 import { PHASE_CHAPTERS } from "../src/football-book-phases.js";
+import { SET_PIECE_CHAPTERS } from "../src/football-book-set-pieces.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
@@ -180,6 +181,22 @@ for(const c of PHASE_CHAPTERS){
   }
 }
 check(bookHtml.includes('id="footballBookPhases"'),"Kampfasene ikke tilgjengelige i spillet");
+check(SET_PIECE_CHAPTERS.length===5,"Dødballkapitler mangler");
+check(new Set(SET_PIECE_CHAPTERS.map(c=>c.id)).size===5,"Duplikate dødballkapitler");
+for(const c of SET_PIECE_CHAPTERS){
+  check(Boolean(c.title&&c.concept&&c.dilemma&&c.manager&&c.practice),c.id+": ufullstendig kapittel");
+  check(c.principles.every(id=>principles.some(p=>p.id===id)),c.id+": ukjent kunnskapsprinsipp");
+  check(c.clubs.every(id=>clubChapters.some(p=>p.id===id)),c.id+": ukjent klubbeksempel");
+  check(c.sources.length>=2&&c.sources.every(s=>s.title&&s.url.startsWith("https://")),c.id+": manglende kilde");
+  for(const ref of c.engineRefs||[]){check(readFileSync(join(root,ref.file),"utf8").includes("function "+ref.symbol+"("),c.id+": ukjent mekanikk");}
+  check(c.diagrams.length>0&&c.diagrams.every(d=>d.title&&d.note),c.id+": mangler illustrasjoner");
+  for(const d of c.diagrams)if(d.kind==="pitch"){
+    check(d.players.every(([x,y,label,side])=>[x,y].every(n=>Number.isFinite(n)&&n>=0&&n<=100)&&label&&["a","d"].includes(side)),c.id+": ugyldig spillerposisjon");
+    check(d.arrows.every(a=>a.length===4&&a.every(n=>Number.isFinite(n)&&n>=0&&n<=100)),c.id+": ugyldig pil");
+  }
+}
+check(SET_PIECE_CHAPTERS.reduce((n,c)=>n+c.diagrams.length,0)===9,"Dødballfigurer mangler");
+check(bookHtml.includes('id="footballBookSetPieces"'),"Dødballer ikke tilgjengelige i spillet");
 console.log("Fotballboka UX QA Audit");
 console.log(`Principles: ${principles.length}`);
 console.log(`Scenarios: ${scenarios.map((scenario) => scenario.code).join(", ")}, no_matching_weak_point`);
