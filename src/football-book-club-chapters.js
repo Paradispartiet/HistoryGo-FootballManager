@@ -6,6 +6,7 @@ import { SCHOOL_CHAPTERS } from "./football-book-schools.js";
 import { ROLE_CHAPTERS } from "./football-book-roles.js";
 import { PHASE_CHAPTERS } from "./football-book-phases.js";
 import { SET_PIECE_CHAPTERS } from "./football-book-set-pieces.js";
+import { TRAINING_CHAPTERS } from "./football-book-training.js";
 export const CLUB_DIAGRAMS = {
   rosenborg: [
     {
@@ -1184,6 +1185,7 @@ async function initTheory(clubs){
   renderSection(document.getElementById("footballBookRoles"),ROLE_CHAPTERS,"rollekapitler");
   renderSection(document.getElementById("footballBookPhases"),PHASE_CHAPTERS,"kampfaser");
   renderSection(document.getElementById("footballBookSetPieces"),SET_PIECE_CHAPTERS,"dødballkapitler");
+  renderSection(document.getElementById("footballBookTraining"),TRAINING_CHAPTERS,"treningskapitler");
 }
 async function init(){
   const root=document.getElementById("footballBookClubChapters");if(!root)return;
