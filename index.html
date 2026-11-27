@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="src/ui/manager-training-scene-v2.css">
   <link rel="stylesheet" href="src/ui/manager-matchday-scene-v1.css">
   <link rel="stylesheet" href="src/ui/manager-welcome-v1.css">
+  <link rel="stylesheet" href="football-book-club-chapters.css" />
 </head>
 <body>
   <!-- ============================ ONBOARDING (EGEN SKJERM) ============================
@@ -1339,6 +1340,13 @@
             </button>
             <p id="activeKnowledgeFocus" class="active-knowledge-focus">Ingen aktiv kunnskapsøkt valgt.</p>
             <button type="button" id="clearKnowledgeFocus" class="clear-knowledge-focus-button">Fjern aktivt fokus</button>
+            <details class="club-book-panel" id="footballBookClubChapters">
+              <summary>Fotballboka – klubbkapitler og taktikkfigurer</summary>
+              <p>Historiske spillestiler, taktisk forklaring og motspill. Figurene viser prinsipper, ikke rekonstruerte kampsituasjoner. Modellverdier er ikke historisk statistikk.</p>
+              <label>Søk etter klubb eller periode <input type="search" placeholder="F.eks. Tromsø" /></label>
+              <p class="club-book-status" aria-live="polite">Laster klubbkapitlene…</p>
+              <div class="club-book-list"></div>
+            </details>
             <ul id="managerKnowledgeRecommendations" class="knowledge-card-list"></ul>
             <details class="panel-details is-flush training-history-panel">
               <summary>Treningshistorikk</summary>
@@ -1424,6 +1432,7 @@
        er tilgjengelig fra alle flater. -->
 
   <script type="module" src="src/app.js"></script>
+  <script type="module" src="src/football-book-club-chapters.js"></script>
   <script type="module" src="src/hg-formation-library.js"></script>
 </body>
 </html>
