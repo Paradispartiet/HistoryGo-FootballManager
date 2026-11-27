@@ -8,6 +8,7 @@ import { getFootballBookGameText } from "../dist/index.js";
 import { buildClubBookChapters } from "../src/football-book-club-chapters.js";
 import { THEORY_CHAPTERS } from "../src/football-book-theory.js";
 import { SCHOOL_CHAPTERS } from "../src/football-book-schools.js";
+import { ROLE_CHAPTERS } from "../src/football-book-roles.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
@@ -146,6 +147,24 @@ for(const c of SCHOOL_CHAPTERS){
 }
 check(SCHOOL_CHAPTERS.reduce((n,c)=>n+c.diagrams.length,0)===8,"Skolefigurer mangler");
 check(bookHtml.includes('id="footballBookSchools"'),"Fotballskoler ikke tilgjengelige i spillet");
+const canonicalRoles=readJson(join(root,"data","football_roles.json")).roles;
+const bookRoleIds=ROLE_CHAPTERS.flatMap(c=>c.roles.map(r=>r.id));
+check(ROLE_CHAPTERS.length===9,"Rollekapitler mangler");
+check(new Set(bookRoleIds).size===bookRoleIds.length,"Duplikate roller i Fotballboka");
+check(bookRoleIds.length===canonicalRoles.length&&canonicalRoles.every(r=>bookRoleIds.includes(r.id)),"Fotballboka dekker ikke alle kanoniske roller");
+for(const c of ROLE_CHAPTERS){
+  check(Boolean(c.title&&c.concept&&c.dilemma&&c.manager&&c.practice),c.id+": ufullstendig rollekapittel");
+  check(c.principles.every(id=>principles.some(p=>p.id===id)),c.id+": ukjent kunnskapsprinsipp");
+  check(c.clubs.every(id=>clubChapters.some(p=>p.id===id)),c.id+": ukjent klubbeksempel");
+  check(c.roles.every(r=>r.description&&canonicalRoles.some(p=>p.id===r.id)),c.id+": ukjent rolle");
+  check(c.diagrams.length>0&&c.diagrams.every(d=>d.title&&d.note&&d.kind==="pitch"),c.id+": mangler rollefigur");
+  for(const d of c.diagrams){
+    check(d.players.every(([x,y,label,side])=>[x,y].every(n=>Number.isFinite(n)&&n>=0&&n<=100)&&label&&["a","d"].includes(side)),c.id+": ugyldig spillerposisjon");
+    check(d.arrows.every(a=>a.length===4&&a.every(n=>Number.isFinite(n)&&n>=0&&n<=100)),c.id+": ugyldig pil");
+  }
+}
+check(ROLE_CHAPTERS.reduce((n,c)=>n+c.diagrams.length,0)===11,"Rollefigurer mangler");
+check(bookHtml.includes('id="footballBookRoles"'),"Rollekapitlene ikke tilgjengelige i spillet");
 console.log("Fotballboka UX QA Audit");
 console.log(`Principles: ${principles.length}`);
 console.log(`Scenarios: ${scenarios.map((scenario) => scenario.code).join(", ")}, no_matching_weak_point`);
