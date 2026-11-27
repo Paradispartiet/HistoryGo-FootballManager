@@ -1,4 +1,4 @@
-import { resolveSourcedCreativeBreakthrough, resolveCompactBlockAttack, annotateCompactBlockChances } from "../src/football-matchday-compact-block-v6.js";
+import { resolveSourcedCreativeBreakthrough, resolveCompactBlockAttack, annotateCompactBlockChances, resolveDoubleMidfieldScreen } from "../src/football-matchday-compact-block-v6.js";
 // Deterministic causal pressing: high press, mid-block trap, counterpress and escapes.
 import assert from "node:assert/strict";
 import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances, annotateOpponentCreativeAttackChances, resolveOpponentFullbackOverlap, annotateOpponentFullbackOverlapChances, annotateOpponentShortCombinationChances, resolveOpponentThreeSpaceCombination, annotateOpponentThreeSpaceChances, resolveOpponentSelectiveTransition, annotateOpponentSelectiveTransitionChances } from "../src/football-matchday-sequence-v8.js";
@@ -2195,5 +2195,45 @@ try{
   assert.equal(played.minuteLog.length,period.chances);
   assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(tilSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
 }finally{Math.random=tilRandom;}
+
+// Tromsø's midfield screen is not a low-block prerequisite. The attack
+// phase separates first and second support, and shares one xG ledger.
+const tilScreen={...tilFixture,causalDoubleMidfieldScreenVersion:1,
+  selectedTacticId:"central_possession_4231",tacticSnapshot:{id:"central_possession_4231",defensiveLine:"medium"}};
+const screenRun=(roll,changes={})=>resolveDoubleMidfieldScreen({...tilScreen,...changes},{rng:()=>roll});
+const screenWin=screenRun(0.1),screenSecond=screenRun(0.35),screenFirst=screenRun(0.9);
+assert.deepEqual([screenWin.status,screenSecond.status,screenFirst.status],["breakthrough","second_screen_contained","first_screen_contained"]);
+assert.equal(screenWin.xgDeltaFor,0.09);
+assert.equal(screenWin.xgDeltaAgainst,0);
+assert.equal(screenWin.evidence.opponentPlayerId,null);
+assert.equal(new Set([...screenWin.evidence.firstSupport,...screenWin.evidence.secondSupport]).size,3);
+const screenWide=screenRun(0.1,{tacticSnapshot:{id:"wide_fast_433",defensiveLine:"medium"}});
+assert.equal(screenWide.route,"double_screen_wide_bypass");
+assert.ok(screenWide.evidence.entryProbability>screenWin.evidence.entryProbability);
+assert.equal(screenWide.evidence.targetFlank,null);
+const screenWeakPivot=screenRun(0.1,{lineupSnapshot:glimtLineup.map(p=>["DM","CM"].includes(p.position)?{...p,matchScore:55}:p)});
+assert.ok(screenWeakPivot.evidence.entryProbability<screenWin.evidence.entryProbability);
+const screenWeakRunner=screenRun(0.1,{lineupSnapshot:glimtLineup.map(p=>p.position==="AM"?{...p,matchScore:55}:p)});
+assert.equal(screenWeakRunner.evidence.entryProbability,screenWin.evidence.entryProbability);
+assert.ok(screenWeakRunner.evidence.conditionalFinishProbability<=screenWin.evidence.conditionalFinishProbability);
+assert.equal(screenRun(0.1,{causalDoubleMidfieldScreenVersion:undefined}),null);
+assert.equal(screenRun(0.1,{opponent:{...tilScreen.opponent,tacticalBehaviour:{}}}),null);
+assert.equal(screenRun(NaN),null);
+assert.equal(resolveCompactBlockAttack(tilScreen,{rng:()=>0.1}).route,"double_screen_central_combination");
+let tilScreenDraws=0;resolveCompactBlockAttack(tilScreen,{rng:()=>{tilScreenDraws++;return 0.1;}});
+assert.equal(tilScreenDraws,1);
+assert.equal(annotateCompactBlockChances(lskChances,screenWin).filter(c=>c.tacticalMoment).length,1);
+const weakRest=screenRun(0.9,{teamFitSnapshot:{...tilScreen.teamFitSnapshot,tacticalProfile:{...tilScreen.teamFitSnapshot.tacticalProfile,restDefenseScore:40}}});
+assert.equal(weakRest.xgDeltaAgainst,0.03);
+const tilScreenRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(tilScreen),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.route,"double_screen_central_combination");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.for-period.baselineExpectedGoals.for)*100)/100,period.tacticalPhase.xgDeltaFor);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(tilScreen))).timeline[0].tacticalPhase,period.tacticalPhase);
+}finally{Math.random=tilScreenRandom;}
 
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
