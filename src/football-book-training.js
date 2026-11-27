@@ -205,7 +205,7 @@ export const TRAINING_CHAPTERS = [
     ],
     "concept": "Skill mellom ferdighet, rolleforståelse og relasjon. En spiller kan ha god pasningsevne, men lite erfaring med å orientere seg som sekser. To spillere kan kjenne hver sin rolle uten å ha spilt sammen. Individuell trening kan arbeide med en bestemt svakhet eller rolle, mens kampbruk og gjentatt samarbeid bygger fortrolighet og timing.",
     "dilemma": "Å omskolere flere spillere samtidig kan gi langsiktig fleksibilitet, men redusere trygghet i dagens oppgaver. En ensidig jakt på forbedring kan dessuten øke belastningen. Velg individuell oppfølging etter spillerens behov, kampbruk og tilstand.",
-    "manager": "Individuell trening kan gi belastnings-, form- og rollefortrolighetsendringer eller registrere et svakhetsmål. Rolletrening fester seg bedre når spilleren brukes i den rollen samme uke; den eksisterende motoren anvender 60 prosent av beregnet vekst før avrunding når rollen ikke brukes. Rollefortrolighet og relasjonskontinuitet er egne eksisterende, avgrensede beregninger, ikke nye ferdighetstall.",
+    "manager": "Individuell trening kan gi belastnings-, form- og rollefortrolighetsendringer eller registrere et svakhetsmål. Rolletrening fester seg bedre når spilleren brukes i den rollen samme uke; den eksisterende motoren anvender 60 prosent av beregnet vekst før avrunding når rollen ikke brukes. Rollefortrolighet og relasjonskontinuitet er egne eksisterende, avgrensede beregninger, ikke nye ferdighetstall. I kamp gir status perfekt/god/brukbar henholdsvis 9/6/4 fortrolighetspoeng, feilbruk −5. Fortrolighet avgrenses til 0–100 og bonusen til kampdagens lagstyrke til maks 5. Dette er spillverdier, ikke målte læringsrater.",
     "practice": "Arbeid med én spiller som lærer sekserrollen. Øv på orientering før mottak, sikker returpasning og dekning ved balltap. Bruk ham deretter i et kampnært spill med de samme medspillerne.",
     "engineRefs": [
       {
@@ -298,6 +298,127 @@ export const TRAINING_CHAPTERS = [
         "branches": [
           "Ja → trening og kampbruk støtter hverandre",
           "Nei → individuell rollevekst blir lavere i modellen"
+        ]
+      },
+      {
+        "kind": "bars",
+        "title": "Fortrolighet etter fem kamper",
+        "note": "Regneeksempel fra 0 uten individuell trening: perfekt bruk 45, god bruk 30, brukbar 20. Ikke målt menneskelig læring.",
+        "legend": [
+          "Fortrolighet",
+          "Gjenstående til 100"
+        ],
+        "rows": [
+          [
+            "Perfekt bruk",
+            45,
+            55
+          ],
+          [
+            "God bruk",
+            30,
+            70
+          ],
+          [
+            "Brukbar",
+            20,
+            80
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "collective_training",
+    "title": "Samhandling – fra rollepar til spillmodell",
+    "principles": [
+      "total_football_needs_role_flexibility",
+      "short_commands_create_team_speed",
+      "attacking_patterns_need_timing"
+    ],
+    "clubs": [
+      "rosenborg",
+      "viking",
+      "tromso"
+    ],
+    "concept": "Tren konkrete forbindelser: møtende spiss og løper, overlappende back og innoverkant, presspiss og ettertrykk. Utvid deretter slik at motsatt side og restforsvaret får oppgaver.",
+    "dilemma": "En fast pasningssekvens kan bli gjenkjennelig, men avhengig av at forsvareren reagerer på en bestemt måte. Tren samme prinsipp mot forskjellige reaksjoner.",
+    "manager": "Relasjonsmotoren vurderer komplementære roller og kontinuitet. Positiv relasjon er ikke bevis for korrekt timing i alle situasjoner. Bruk plan og etterkamp til å vurdere registrerte signaler.",
+    "practice": "Spill 4 mot 3 med møtende spiss, løper, pasningsspiller og sekser. La forsvareren velge om han følger spissen eller holder linjen. Angriperne må velge utvei ut fra reaksjonen.",
+    "engineRefs": [
+      {
+        "file": "src/engine/calculateRoleRelationships.ts",
+        "symbol": "calculateRoleRelationships"
+      }
+    ],
+    "diagrams": [
+      {
+        "kind": "pitch",
+        "title": "Samspill med to mulige utveier",
+        "note": "Spiss og løper leser stopperens valg; sekseren sikrer bak ballen.",
+        "players": [
+          [
+            20,
+            52,
+            "Sekser",
+            "a"
+          ],
+          [
+            39,
+            30,
+            "Pasningsspiller",
+            "a"
+          ],
+          [
+            60,
+            46,
+            "Spiss",
+            "a"
+          ],
+          [
+            42,
+            74,
+            "Løper",
+            "a"
+          ],
+          [
+            69,
+            40,
+            "Stopper",
+            "d"
+          ],
+          [
+            70,
+            69,
+            "Stopper",
+            "d"
+          ],
+          [
+            49,
+            48,
+            "Skjerm",
+            "d"
+          ]
+        ],
+        "arrows": [
+          [
+            60,
+            46,
+            49,
+            36
+          ],
+          [
+            39,
+            30,
+            49,
+            36
+          ],
+          [
+            42,
+            74,
+            84,
+            72
+          ]
         ]
       }
     ]
