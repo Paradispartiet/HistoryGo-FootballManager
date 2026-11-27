@@ -175,6 +175,9 @@ for(const c of ROLE_CHAPTERS){
 check(ROLE_CHAPTERS.reduce((n,c)=>n+c.diagrams.length,0)===11,"Rollefigurer mangler");
 check(bookHtml.includes('id="footballBookRoles"'),"Rollekapitlene ikke tilgjengelige i spillet");
 check(PHASE_CHAPTERS.length===4,"Kampfasene mangler");
+const attackDetails=PHASE_CHAPTERS.find(c=>c.id==="in_possession")?.sourceDetails||[];
+check(attackDetails.map(d=>d.id).join(",")==="attack_principles,carrying,dribbling,cuts,receiving,turning,passing,passing_types,shooting,heading,finishing,one_on_one","Originalmanusets angrepsteknikk mangler");
+for(const d of attackDetails)check(d.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),d.id+": mangler fagtekst eller kilde");
 check(new Set(PHASE_CHAPTERS.map(c=>c.id)).size===4,"Duplikate kampfaser");
 for(const c of PHASE_CHAPTERS){
   check(Boolean(c.title&&c.concept&&c.dilemma&&c.manager&&c.practice),c.id+": ufullstendig fasekapittel");

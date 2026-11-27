@@ -2,6 +2,80 @@
 export const PHASE_CHAPTERS = [
   {
     "id": "in_possession",
+    "sourceDetails": [
+      {
+        "id": "attack_principles",
+        "title": "Spilleprinsippmodellen – gjennombrudd og rom",
+        "text": "Manuset deler angrep inn i overgangsangrep, angrep mot etablert forsvar og dødballangrep. Oppgaven er å score. Gjennombrudd betyr at ballen går forbi én eller flere motspillere i lengderetningen. Trange rom kan åpnes ved bevegelse rundt ballfører, bredde, lureløp og bueløp. God dybde gir ballfører flere alternativer i lengderetningen. Andreangriperen kan trekke med seg en motspiller og frigjøre et rom for en tredje spiller.",
+        "source": "Fotballdokumentet v1.pdf – 3. Offensivt / Spilleprinsippmodellen"
+      },
+      {
+        "id": "carrying",
+        "title": "Føring – valg av retning, tempo og berøringer",
+        "text": "I manusets valgskjema for føring eller pasning er spørsmålet hvilken handling som bringer laget i en bedre posisjon. Før når du kan flytte laget frem, åpne et rom eller trekke til deg press som frigjør andre. Se vekselvis på ballen og omgivelsene. Bruk hyppige, korte berøringer når motspillere er nær, lengre berøringer når rommet er stort. Veksle mellom innside og utside for å endre retning; utsiden brukes også i høy fart. Senk farten inn mot duellen, bruk taktomslag og rykk ut. Ikke slå ballen så langt foran deg at motstanderen kan overta den.",
+        "source": "Fotballdokumentet v1.pdf – 3.1 Individuelle angrepsferdigheter / Føring"
+      },
+      {
+        "id": "dribbling",
+        "title": "Dribling – timing, taktskifte og ubalanse",
+        "text": "Finten skal enten passere motstanderen eller sette ham på feil fot slik at en pasning blir mulig. Bestem tidlig hvilket rom du ønsker å nå, og lokk forsvareren i motsatt retning. For tidlig finte i lav fart kan bli lest; for sen finte i høy fart kan ende i en takling. Kort ned berøringene inn mot duellen, rykk ut av finten og kutt inn foran motstanderen når det er plass. Manusets rytme er rykk–senk–rykk. Hold balansen, og tren på begge bein. Finteutvalget omfatter pasningsfinte, skudd- og innleggsfinte, kroppsfinte, oversteg, hælfinte, sombrero, elastico og Zidane-piruett.",
+        "source": "Fotballdokumentet v1.pdf – 3.1 Individuelle angrepsferdigheter / Driblinger"
+      },
+      {
+        "id": "cuts",
+        "title": "Retningsforandringer – cuts og vendinger",
+        "text": "Manuset skiller mellom teknikker som inside cut (nå ballen, kutt, skjerm og akselerer), outside cut og double cut (utside–innside). Slap cut ruller ballen med sålen før vending og ny retning. Twist off kombinerer kutt med rotasjon. Andre varianter er sålevending, hook turn, Cruyff-vending, U-turn (stopp med sålen, dreining og føring ut), U-turn stepover (stopp, tråkk over og gå motsatt vei), pull-push-behind (dra ballen bak foten med sålen og skyv videre med utsiden av den andre foten) og slap stepon (rull, tråkk på ballen, før bort). Manuset navngir også scissors, double scissors og kombinasjoner med step over. Navn uten full teknisk beskrivelse behandles som repertoar, ikke som ferdige øvelsesinstrukser.",
+        "source": "Fotballdokumentet v1.pdf – 3.1.2 Retningsforandring / Cuts"
+      },
+      {
+        "id": "receiving",
+        "title": "Mottak og medtak – gjør neste trekk mulig",
+        "text": "Oppsøk ballen, vis med kroppsspråk hvor du ønsker pasningen, og inviter når pasningsleggeren faktisk har en åpen utvei. Førsteberøringen skal forberede neste handling. Ved retningsbestemt medtak kan foten lengst fra pasningsleggeren åpne kroppen og føre ballen inn i gunstig rom. Innsidemottak: hæl ned, tå opp og gi etter med foten. Utsidemottak kan føre ballen ut av press bakfra. Ved høy ball demper lår eller bryst ved å gi etter; manuset beskriver å slippe ut luft ved brystmottak og å senke låret ved kontakt. Valget må passe ballbanen og presset.",
+        "source": "Fotballdokumentet v1.pdf – 3.1 Individuelle angrepsferdigheter / Mottak, medtak, vending"
+      },
+      {
+        "id": "turning",
+        "title": "Vending – 90 grader, 180 grader og press i ryggen",
+        "text": "Uten motstander kan en retningsbestemt førsteberøring kombinere mottak og 180-graders vending. Ved 90-graders vending beskriver manuset mottak med innsiden. Med motstander i ryggen må spilleren bruke lavt tyngdepunkt og kroppen til lovlig skjerming før vending bort fra presset. Ved en fintevending legges tyngden på én fot, mens den andre fotens utside tar ballen i den nye retningen. Orientering før mottak avgjør om vendingen faktisk er tilgjengelig; hvis ikke kan en støttepasning være bedre.",
+        "source": "Fotballdokumentet v1.pdf – 3.1 Individuelle angrepsferdigheter / Vending"
+      },
+      {
+        "id": "passing",
+        "title": "Pasningsgeometri – fot eller rom, presisjon og kamuflering",
+        "text": "Se opp før avlevering, vurder pasning på fot eller i rom, og forestill deg linjen fra foten gjennom ballen frem til mottakeren. I manuset knyttes pasningstyper til situasjon: stopperen kan ha press rett forfra og trenge lengre oppspill, sentral midtbane kan møte sidepress og trenge korte presise pasninger, spissen kan spille i fart. Alle må likevel mestre de ulike teknikkene. Skjulte pasninger kan slås i steget eller kamufleres med blikk, kroppsvinkel eller utsiden av foten. Kroppens signal skal ikke røpe løsningen unødvendig; medspilleren må samtidig kunne lese pasningen.",
+        "source": "Fotballdokumentet v1.pdf – 3.1.2 Pasning / Orientering / Pasningens geometri / Skjul pasning"
+      },
+      {
+        "id": "passing_types",
+        "title": "Innside, utside, halvt liggende vrist og tåpasning",
+        "text": "Innside: stor trefflate, rolig hode, lett bøyd kne og stabil ankel med tærne opp. Utside: strak vrist, tær ned, litt større avstand til standfoten og gjennomføring i steget; kan gjøre videre løp og veggspill lettere. Halvt liggende vrist: skrått tilløp, standfot ved siden av eller litt bak ballen, lett bøyd standbein, balanser med armene, strak vrist og treff under midten. Brukes ved lange oppspill, spillvendinger og dødballer. Manusets detaljerte versjon beskriver liten underskru og ingen sideskru som ønsket resultat. Tåpasning kan være et raskt alternativ i trange rom, eksempelvis en kort diagonal pasning tilbake mot en medspiller som kan avslutte.",
+        "source": "Fotballdokumentet v1.pdf – 3.1.2 Pasning / Innsidepasning / Utsidepasning / Halvt liggende vristpasning / Tåpasning"
+      },
+      {
+        "id": "shooting",
+        "title": "Skuddteknikk – vrist, halvt liggende vrist og volley",
+        "text": "Orienter deg og velg skuddretning. Standfotens tå peker mot ønsket retning; stabiliser vristen, før hofte og kne frem, og fullfør bevegelsen gjennom ballen. Ved vristskudd plasseres standfoten ved siden av eller litt bak ballen, tærne peker ned, og treffet ligger omkring ballens midtpunkt. Hold hodet rolig og over ballen. Halvt liggende vristskudd bygger på den tilsvarende pasningsteknikken. Ved hel volley beskriver manuset senket skulder på skuddfotsiden, blikk på ballen og treff på øvre halvdel for å styre ballbanen. Teknikken velges etter ballens høyde, avstand, vinkel og tilgjengelig tid.",
+        "source": "Fotballdokumentet v1.pdf – 3.1.2 Skudd"
+      },
+      {
+        "id": "heading",
+        "title": "Heading – opphopp, treff og retning",
+        "text": "Manuset beskriver bred eller forskjøvet benstilling, blikk på ballen, aktiv hofte og overkropp, stabil nakke og treff med pannen. Ved opphopp beskrives langt siste steg, kne og motsatt arm i satsen, fremføring av overkroppen og kontroll av rotasjon. Hensikten bestemmer treffpunktet: lavere treff kan gi en høyere klarering, høyere treff kan styre ballen rett frem eller ned mot mål, og vridning av overkroppen kan endre retningen på et innlegg. Dette er en beskrivelse av teknikk for voksne spillere, ikke en anbefaling om repetisjonsmengde eller headingtrening for barn.",
+        "source": "Fotballdokumentet v1.pdf – 3.1.2 Heading"
+      },
+      {
+        "id": "finishing",
+        "title": "Angrepsavslutning – blindside, bueløp og orientering",
+        "text": "Vær klar for avslutning i boksen, kom foran forsvareren og hold deg på riktig side av offsidegrensen. Start fra blindside eller med bueløp, skap avstand til markøren og akselerer når innleggeren er klar. Undersøk om innleggeren er presset eller fri, hvor keeper og forsvarere står, hvor det er ledig målrom, og om en medspiller har en bedre posisjon. Velg mellom direkte avslutning, medtak, demping og volley eller en skuddfinte som får keeper til å reagere først. Skudd i steget, tåskudd og avslutning mellom forsvarerens bein kan kamuflere tidspunktet. Manusets motstridende tall om Shearers løp er ikke gjengitt som statistikk.",
+        "source": "Fotballdokumentet v1.pdf – 3.1.2 Angrepsavslutning / Bevegelse og timing / Orientering"
+      },
+      {
+        "id": "one_on_one",
+        "title": "Alene med keeper – valg fra spiss vinkel og sentralt",
+        "text": "Fra spiss vinkel skisserer manuset lav avslutning mot lengste hjørne, høy avslutning mot nærmeste, avslutning mellom beina eller å runde keeper. Sentralt beskrives hjørneplassering, å runde keeper med fart og vinkel eller chip når keeperens posisjon åpner muligheten. Unngå å føre deg så tett på keeper at avslutningsrommet forsvinner. Skuddvalg avhenger av keeperens bevegelse og ballens posisjon, ikke av en automatisk prioriteringsliste. Ved straffe anbefaler manuset lav eller høy plassering fremfor halvhøy; dette gjengis som trenerens preferanse, ikke som dokumentert universell sannsynlighet. Mentalt: aksepter bom, vær besluttsom, rolig og villig til å forsøke igjen.",
+        "source": "Fotballdokumentet v1.pdf – 3.1.2 Angrepsavslutning / Alene med keeper / Straffe"
+      }
+    ],
     "title": "Etablert angrep – fra oppbygging til avslutning",
     "principles": [
       "combination_game_beats_isolated_dribbling",

@@ -29,7 +29,7 @@ De nye avsnittene er redaksjonelle sammenfatninger av originalmaterialet, ikke o
 ## Videre kontroll (ikke ferdig)
 
 - Individuell forsvarsteknikk: første detaljerte integrasjon gjennomført i `press_cover_shift` (se bolk 2). Full OneNote-kontroll gjenstår.
-- Individuelle angrepsferdigheter: føring, finter, medtak, pasningsgeometri, skudd, heading og avslutning.
+- Individuelle angrepsferdigheter: første detaljerte integrasjon gjennomført i `in_possession` (se bolk 3); full OneNote-kontroll gjenstår.
 - Keeperens detaljerte teknikk og dødballorganisering.
 - Spillmodell: posisjonelle krav, klareringsmønster, opp–tilbake–gjennom, kontringsmønstre, signaler og konkrete øvelser.
 - Droppunkt: Fotballnotater råtekst ved byte 0x000f2da4; kontekst og koordinatsystem må avklares før bruk.
@@ -56,3 +56,24 @@ Eksisterende spillmotor er fortsatt source of truth. Koble ny kunnskap til eksis
 | interception | 2. Defensivt / Gå når ballen går / Snappe ballen / Fronting / Forsvarsfinte |
 
 Manusets konkrete avstander er trenerheuristikker, ikke motorparametre. Notater om tilsiktede frispark, ulovlig kontakt og usikre historiske påstander er bevart i originalarkivet, men ikke omsatt til anbefalte spillhandlinger. Ingen nye mekanikker. Posisjonelle arbeidsoppgaver, detaljert pressmodell og offensiv teknikk gjenstår separat. Full CI må bestås.
+
+## Bolk 3 – individuelle angrepsferdigheter
+
+Tolv søkbare underavsnitt i in_possession, basert på PDF linje 1870–2540 (3.1 / 3.1.2). Gjentatte passasjer om pasning, skudd, heading og avslutning er samordnet med den mest detaljerte versjonen som grunnlag. Originalteksten er bevart i separat arkiv. Ingen nye hovedkapitler, figurer, øvelser eller spillmotorregler. Trenerpreferanser er markert som slike; motstridende Shearer-statistikk og uverifiserte kildeattribusjoner er ikke publisert som fakta. Relasjonelle angrepsferdigheter fra 3.2, inkludert persepsjon, orientering og bevegelse, behandles separat.
+
+| ID | Kildeanker |
+|---|---|
+| attack_principles | 3. Offensivt / Spilleprinsippmodellen |
+| carrying | 3.1 Individuelle angrepsferdigheter / Føring |
+| dribbling | 3.1 Individuelle angrepsferdigheter / Driblinger |
+| cuts | 3.1.2 Retningsforandring / Cuts |
+| receiving | 3.1 Individuelle angrepsferdigheter / Mottak, medtak, vending |
+| turning | 3.1 Individuelle angrepsferdigheter / Vending |
+| passing | 3.1.2 Pasning / Orientering / Pasningens geometri / Skjul pasning |
+| passing_types | 3.1.2 Pasning / Innsidepasning / Utsidepasning / Halvt liggende vristpasning / Tåpasning |
+| shooting | 3.1.2 Skudd |
+| heading | 3.1.2 Heading |
+| finishing | 3.1.2 Angrepsavslutning / Bevegelse og timing / Orientering |
+| one_on_one | 3.1.2 Angrepsavslutning / Alene med keeper / Straffe |
+
+Datakontroll: 12 stabile, unike ID-er med tittel, fagtekst og kilde; eksisterende fire kampfaser og figurer beholdt. Full CI gjenstår.
