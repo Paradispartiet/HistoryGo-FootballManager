@@ -74,6 +74,42 @@ export const PHASE_CHAPTERS = [
         "title": "Alene med keeper – valg fra spiss vinkel og sentralt",
         "text": "Fra spiss vinkel skisserer manuset lav avslutning mot lengste hjørne, høy avslutning mot nærmeste, avslutning mellom beina eller å runde keeper. Sentralt beskrives hjørneplassering, å runde keeper med fart og vinkel eller chip når keeperens posisjon åpner muligheten. Unngå å føre deg så tett på keeper at avslutningsrommet forsvinner. Skuddvalg avhenger av keeperens bevegelse og ballens posisjon, ikke av en automatisk prioriteringsliste. Ved straffe anbefaler manuset lav eller høy plassering fremfor halvhøy; dette gjengis som trenerens preferanse, ikke som dokumentert universell sannsynlighet. Mentalt: aksepter bom, vær besluttsom, rolig og villig til å forsøke igjen.",
         "source": "Fotballdokumentet v1.pdf – 3.1.2 Angrepsavslutning / Alene med keeper / Straffe"
+      },
+      {
+        "id": "perception",
+        "title": "Persepsjon – aktiv registrering før og etter mottak",
+        "text": "Dann et bilde av banen med gjentatte blikk over skulderen, veksle mellom ball og omgivelser, og registrer aktivt hva du ser. Hvor er medspillerne, hvor kommer de fra, og hvor er de på vei? Planlegg neste handling før mottak, men oppdater planen når spillet endrer seg. Manusets eksempel for defensiv sentral midtbane er å registrere motstanderens backlinje og muligheten for bakrom. Treningsforslaget er at treneren ved et signal stopper situasjonen og ber spilleren beskrive plasseringer og ledige rom innenfor ti meter; hjelp spilleren å finne øyeblikkene der blikket kan løftes.",
+        "source": "Fotballdokumentet v1.pdf – 3.2 Relasjonelle angrepsferdigheter / Persepsjon / Orientering / Trenerøvelse"
+      },
+      {
+        "id": "open_body",
+        "title": "Åpen kropp og half-turn",
+        "text": "Sidestill kroppen slik at du kan se ballfører, medspillere, motstandere og rom i samme synsfelt. Skaff vinkel til ballfører og neste mottaker. På kanten kan kroppen åpnes inn mot banen; en møtende spiss kan motta sidevendt på half-turn for å spille ut til ving eller videre fremover. Rettvendt eller sidevendt mottak kan gjøre én- og to-touch-løsninger mulige. Forestill deg disse løsningene før ballen kommer, og la førsteberøringen ta ballen ut av press.",
+        "source": "Fotballdokumentet v1.pdf – 3.2 Relasjonelle angrepsferdigheter / Persepsjon / Åpen kropp"
+      },
+      {
+        "id": "reading_game",
+        "title": "Observer – seks spørsmål om spillebildet",
+        "text": "1) Hvor er rommet, både for medtak og pasning? 2) Hvor er medspillerne, og hvilke løp tar de? Se på naturlige relasjoner som back–kant og stopper–sentral; balanser når en indreløper går dypt. 3) Kan vi skape overtall lokalt eller foran ballen? 4) Hvordan er ballførers klima: rettvendt, sidevendt eller feilvendt, fri, løst presset, hardt presset eller i duell? 5) Hvor er sikringsspilleren – finnes åpning mellom back og stopper? 6) Dekker øvrige forsvarere rommene sine, eller har sideforskyvningen åpnet motsatt side? Se også hvem som sannsynligvis mottar neste pasning, og hvordan en forsvarers feil kan forplante seg. Kjenn medspillerens vaner, slik at avtalte bevegelser blir forutsigbare for eget lag.",
+        "source": "Fotballdokumentet v1.pdf – 3.2 Relasjonelle angrepsferdigheter / Observer – still deg spørsmål / Se fram i tid / Kjenn din medspiller"
+      },
+      {
+        "id": "passing_timing",
+        "title": "Pasningstempo, timing og spill på fot eller i rom",
+        "text": "Manuset vektlegger balltempo, tydelige pasninger og «slå og gå». Selv korte pasninger i bevegelse endrer vinklene. Avstem kraften etter mottakerens mulighet til å kontrollere ballen. Når ballfører er rettvendt og har kontroll, kan løp foran ham starte; under hardt press trengs ofte støtte. Starter mottakeren for tidlig, kan ballen komme bak ham; for sent, og muligheten for mottak i fart forsvinner. Pasningen og løpet må samordnes, gjerne slik at mottakeren kan akselerere gjennom rommet. Ikke spill automatisk på første initiativ. På fot gir kontroll og rytme når mottakeren er orientert; i rom utfordres forsvaret direkte dersom løp og pasning er presise. En rask, ren ball kan gjøre direkte viderespill lettere.",
+        "source": "Fotballdokumentet v1.pdf – 3.2 Relasjonelle angrepsferdigheter / Pasningsvalg / Timing og tempo / Spill på fot / i rom / Annet"
+      },
+      {
+        "id": "penetration",
+        "title": "Gjennombrudd – passere ledd og motta i fart",
+        "text": "Manuset skiller mellom å passere siste forsvarsledd for å komme til avslutning og det bredere begrepet å passere et hvilket som helst ledd. Løp, pasningstempo, orientering i angrepsretning og vinkelen ved mottak må samordnes. Mottakeren må kunne ta med seg ballen i fart, vende opp med én berøring når han ikke har press i ryggen, eller flikke og stusse videre i bakrom til en annen løper. En pasning gjennom et ledd er først nyttig dersom mottakeren kan utnytte fordelen.",
+        "source": "Fotballdokumentet v1.pdf – 3.2 Relasjonelle angrepsferdigheter / Gjennombrudd"
+      },
+      {
+        "id": "crossing",
+        "title": "Innlegg – tidspunkt, avslutningssoner og løpsfordeling",
+        "text": "Angriperne bør ikke stå på samme linje foran mål. Bruk blindside og avtal hvem som angriper første stolpe, bakre stolpe og rommet bak dem. Manusets eksempel for tidlige innlegg er hard, lav levering mot fremre stolpe, mens innlegger nær dødlinjen kan velge 45-graderspasning tilbake, hard ball foran mål eller en løftet ball mot bakerste stolpe dersom fremre rom er dekket. Før innlegg: registrer bakrom, avslutterens press og forsvarets balanse; siste berøring skal gi gunstig kroppsstilling og oversikt. Manuset beskriver skrudd innside ved lav levering og halvt liggende vrist ved lengre innlegg. Valget avhenger av faktisk dekning, ikke en fast rangering av innleggstyper.",
+        "source": "Fotballdokumentet v1.pdf – 3.2 Relasjonelle angrepsferdigheter / Innlegg"
       }
     ],
     "title": "Etablert angrep – fra oppbygging til avslutning",

@@ -327,6 +327,32 @@ export const THEORY_CHAPTERS = [
           ]
         ]
       }
+    ],
+    "sourceDetails": [
+      {
+        "id": "support_angles",
+        "title": "Støtte, trekanter og vinklede pasninger",
+        "text": "Ha en spiller i støtte bak ballfører, også når stopperen fører frem. En presset ballfører trenger flere støttealternativer, mens en upresset ballfører trenger alternativer fremover. Manuset ønsker minst to pasningsmuligheter og små trekanter rundt ballen. En vinklet støttepasning kan åpne neste pasningslinje bedre enn en rett retur, som kan la motstanderen presse mottakeren og samtidig stenge returen. Diagonale pasninger kan gi mottakeren bedre medtaksvinkel. En sentral tversoverpasning som brytes kan etterlate laget i ubalanse; vurder derfor dekningen bak pasningen.",
+        "source": "Fotballdokumentet v1.pdf – 3.2 Relasjonelle angrepsferdigheter / Støtte / Vinklede og diagonale pasninger / Bevegelser uten ball"
+      },
+      {
+        "id": "passing_shadow",
+        "title": "Pasningsskygge, mellom porten og motsatte bevegelser",
+        "text": "Kom ut av pasningsskyggen når ballfører er klar, slik at forsvareren ikke står på linjen mellom ball og mottaker. Manuset kaller rommet mellom to motspillere en «port»: bevegelse mellom dem kan gi et leddgjennombrudd, mens løp rett mot en av dem kan gjøre pasningen vanskeligere. Når én møter, kan en annen stikke i bakrom; et eksempel er kant som møter mens indreløper og spiss truer dybde. Ikke bruk opp rommet ved å ankomme for tidlig. Bevegelse skaper pasningsmuligheten, pasningen følger.",
+        "source": "Fotballdokumentet v1.pdf – 3.2 Relasjonelle angrepsferdigheter / Bevegelser uten ball / Pasningsskygge / Mellom porten / Loven om motsatte bevegelser"
+      },
+      {
+        "id": "run_patterns",
+        "title": "Lureløp, bueløp, blindside og samordnede løp",
+        "text": "Et lureløp starter rolig i én retning før et rykk motsatt. Bueløpet kan gjøre det vanskeligere å se både ball og løper og la spilleren time passering av offsidegrensen i fart. Blindside-løp går bak forsvarerens synsfelt; skuldersniking tar utgangspunkt i stopperens skulder. Fiskekrokløp og Z-løp endrer retning for å trekke forsvareren ut. Ved avledningsløp kan to spisser dra diagonalt samme vei og åpne rom for en kant. Ved kryssløp må spilleren med best oversikt tilpasse retningen. Tredjemann starter mens ballen er på vei mellom to andre. Spurt brukes for å utnytte åpent rom i overgang; moderat fart kan være nok for å dra med en markør.",
+        "source": "Fotballdokumentet v1.pdf – 3.2 Relasjonelle angrepsferdigheter / Rom / Bevegelser uten ball / Samarbeid om romskaping"
+      },
+      {
+        "id": "build_up_patterns",
+        "title": "Oppspill – feilvendt spiss og opp–tilbake–gjennom",
+        "text": "En feilvendt spiss har i manuset tre hovedvalg: vende unna motstanderen, flikke eller stusse videre i bakrom, eller legge igjen ballen. Når dyp sentral midtbane spiller på møtende spiss, må indreløperne gi støttevinkler. Opp–tilbake–gjennom betyr at støttespilleren spiller videre til bakrom eller kantløp; opp–tilbake–vende betyr vinklet spillvending mot motsatt side. Manuset omtaler også Flo-pasningen som en høy, luftig ball mot lavt forsvar, som gir medspillere tid til å posisjonere seg. Dette er manusets beskrevne variant, ikke en historisk dokumentasjon av Drillos Flo-pasning.",
+        "source": "Fotballdokumentet v1.pdf – 3.2 Relasjonelle angrepsferdigheter / Oppspill / Spill av press"
+      }
     ]
   },
   {
@@ -461,6 +487,14 @@ export const THEORY_CHAPTERS = [
           ]
         ]
       }
+    ],
+    "sourceDetails": [
+      {
+        "id": "support_runs",
+        "title": "Medløpspasning og samhandling bak ballfører",
+        "text": "Ved medløpspasning kommer en spiller opp på siden av ballfører og inviterer til en diagonal pasning fremover. Rettvendt mottak kan åpne for overlapping eller løp inn i kantrom bakfra. Manusets eksempel for indreløper er å gå bredere når stopperen har ball for å skape pasningsvinkel, og smalere når backen har ball for å åpne kantrom. Støtte bak en feilvendt og presset ballfører kan være viktigere enn enda et dybdeløp. Søk øyekontakt og avstem løpet med ballførerens faktiske mulighet til å spille.",
+        "source": "Fotballdokumentet v1.pdf – 3.2 Relasjonelle angrepsferdigheter / Bevegelser uten ball / Medløpspasning / Indreløperløp / Øyekontakt"
+      }
     ]
   },
   {
@@ -549,6 +583,20 @@ export const THEORY_CHAPTERS = [
             85
           ]
         ]
+      }
+    ],
+    "sourceDetails": [
+      {
+        "id": "space_timing",
+        "title": "Rom – ikke bruk opp rommet",
+        "text": "Identifiser mellomrom, korridor og bakrom, og kom gjerne inn i rommet idet pasningen kommer. Å stå der for tidlig tiltrekker oppmerksomhet og kan lukke rommet; det kan også brukes bevisst som avledning for å åpne et annet. Breddespillere kan trekke forsvarere bort fra sentrale rom og skape overtall på motsatt side. Manuset anbefaler å vri spillet når det klumper seg, «fra trangt til ledig». Spilleren som er fri på motsatt side må planlegge neste handling før ballen kommer. Etter gjenvinning kan det oppstå kantrom når motstanderen faller av og konsentrerer seg sentralt.",
+        "source": "Fotballdokumentet v1.pdf – 3.2 Relasjonelle angrepsferdigheter / Rom / Vending av spillet / Rom på kant etter gjenvinning"
+      },
+      {
+        "id": "two_against_one",
+        "title": "To mot én – skape og utnytte lokalt overtall",
+        "text": "Ballfører kan skape overtall ved å utfordre forsvareren og frigjøre en medspiller. Medspilleren kan også oppfatte presset og løpe inn i en støtteposisjon som skaper to mot én. Veggspill returnerer ballen i rom; overlapping tilbyr et løp rundt utsiden; ballovertakelse lar en medspiller ta med ballen videre i fart. En pasningsfinte kan utnytte at forsvareren forventer veggspill, mens fiskekrokløp og flikk kan endre pasningsvinkelen eller føre ballen rett videre. Les hvilken utvei forsvareren gir fra seg, fremfor å bestemme kombinasjonen uavhengig av situasjonen.",
+        "source": "Fotballdokumentet v1.pdf – 3.2 Relasjonelle angrepsferdigheter / To-mot-en-situasjoner / Kamuflasje"
       }
     ]
   },

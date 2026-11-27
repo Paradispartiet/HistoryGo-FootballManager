@@ -77,3 +77,25 @@ Tolv søkbare underavsnitt i in_possession, basert på PDF linje 1870–2540 (3.
 | one_on_one | 3.1.2 Angrepsavslutning / Alene med keeper / Straffe |
 
 Datakontroll: 12 stabile, unike ID-er med tittel, fagtekst og kilde; eksisterende fire kampfaser og figurer beholdt. Full CI gjenstår.
+
+## Bolk 4 – relasjonelle angrepsferdigheter
+
+13 søkbare underavsnitt i fire eksisterende kapitler, basert på PDF linje 2530–3144 (3.2 frem til Ballbesittelse / Konservering). Fordelt etter faglig tilhørighet for å unngå duplisering: persepsjon, åpen kropp, seks observasjonsspørsmål, timing, gjennombrudd og innlegg i in_possession; støtte, pasningsskygge, løpsmønstre og oppspill i third_man; rom og 2v1 i overloads_space; medløpspasning og indreløperrelasjoner i overlap_underlap. Manusets absolutte trenerformuleringer om pasningskraft og innlegg er bevart som trenerperspektiv, ikke universelle motorregler; uverifiserte attribusjoner er ikke publisert. Ballbesittelse, etablert angrep og overgang fra neste manusavsnitt behandles sammen med spillmodellen. Ingen nye hovedkapitler, figurer eller motorregler.
+
+| Kapittel-ID | Underavsnitt-ID | Kildeanker |
+|---|---|---|
+| in_possession | perception | Persepsjon / Orientering / Trenerøvelse |
+| in_possession | open_body | Persepsjon / Åpen kropp |
+| in_possession | reading_game | Observer – still deg spørsmål / Se fram i tid / Kjenn din medspiller |
+| in_possession | passing_timing | Pasningsvalg / Timing og tempo / Spill på fot / i rom / Annet |
+| in_possession | penetration | Gjennombrudd |
+| in_possession | crossing | Innlegg |
+| third_man | support_angles | Støtte / Vinklede og diagonale pasninger / Bevegelser uten ball |
+| third_man | passing_shadow | Bevegelser uten ball / Pasningsskygge / Mellom porten / Loven om motsatte bevegelser |
+| third_man | run_patterns | Rom / Bevegelser uten ball / Samarbeid om romskaping |
+| third_man | build_up_patterns | Oppspill / Spill av press |
+| overloads_space | space_timing | Rom / Vending av spillet / Rom på kant etter gjenvinning |
+| overloads_space | two_against_one | To-mot-en-situasjoner / Kamuflasje |
+| overlap_underlap | support_runs | Bevegelser uten ball / Medløpspasning / Indreløperløp / Øyekontakt |
+
+Datakontroll: 13 nye unike ID-er, kildeankre og eksisterende kapittel- og figurantall beholdt. CI gjenstår.
