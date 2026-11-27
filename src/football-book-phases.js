@@ -110,6 +110,36 @@ export const PHASE_CHAPTERS = [
         "title": "Innlegg – tidspunkt, avslutningssoner og løpsfordeling",
         "text": "Angriperne bør ikke stå på samme linje foran mål. Bruk blindside og avtal hvem som angriper første stolpe, bakre stolpe og rommet bak dem. Manusets eksempel for tidlige innlegg er hard, lav levering mot fremre stolpe, mens innlegger nær dødlinjen kan velge 45-graderspasning tilbake, hard ball foran mål eller en løftet ball mot bakerste stolpe dersom fremre rom er dekket. Før innlegg: registrer bakrom, avslutterens press og forsvarets balanse; siste berøring skal gi gunstig kroppsstilling og oversikt. Manuset beskriver skrudd innside ved lav levering og halvt liggende vrist ved lengre innlegg. Valget avhenger av faktisk dekning, ikke en fast rangering av innleggstyper.",
         "source": "Fotballdokumentet v1.pdf – 3.2 Relasjonelle angrepsferdigheter / Innlegg"
+      },
+      {
+        "id": "possession_cycle",
+        "title": "Ballbesittelse og konservering – rytme og tålmodighet",
+        "text": "Originalmanuset beskriver en syklus: korte pasninger trekker motstanderen sammen, en lengre pasning flytter ballen ut av presset, og oppbyggingen begynner på nytt. Hensikten er å kontrollere kampen, spare egne krefter, få motstanderen til å løpe og vente på en god åpning. Forsvarerne kan for eksempel spille seg fri med veggspill når en motstanderspiss støter, før en stopper fører frem. Velg enkle pasninger, unngå unødvendige 50/50-baller, bruk banens lengde og bredde, og registrer overtall og undertall. Overdreven balltrilling kan samtidig gjøre laget passivt og svekke skiftet til aggressivt press eller hurtig angrep. Manuset anbefaler store possession-flater, bredde helt ut mot linjen og touch-restriksjoner for å trene balltempo.",
+        "source": "Fotballdokumentet v1.pdf – Ballbesittelse / Konservering, linje 3138–3198"
+      },
+      {
+        "id": "established_model",
+        "title": "Etablert angrep – gjenskaping av bredde og strekk–møte",
+        "text": "God bevegelse i angrep og god balanse i forsvar er to postulater i manusets spillmodell. I etablert angrep skal spillerne gjenkjenne avtalte bevegelser: strekk, møte, tredjemann og støvsuging. Vingene kan holde bredde helt ute mot linjen mens indreløperne finner korridorer; når laget har trukket inn, må bredden gjenskapes. Spillvendingen flytter spillet fra trangt til ledig. Manuset skiller mellom spiss som møter og tilbyr støtte, og spiss som strekker forsvaret bakover og åpner mellomrom. Tålmodighet og det å la motstanderen bruke krefter er en del av hensikten med etablert angrep, ikke bare en pause før avslutning.",
+        "source": "Fotballdokumentet v1.pdf – Etablert angrep / Spillmønstre, linje 3200–3259"
+      },
+      {
+        "id": "corridor_to_centre",
+        "title": "Fra korridor til sentralt gjennombrudd",
+        "text": "I den konkrete spillmodellen har backen ball i framrommet i korridoren. Backen kan føre så høyt som situasjonen tillater, og spissen venter med møtebevegelsen for at tidspunktet skal passe pasningen. Motsatt ving ligger høyt; manuset åpner også for at motsatt midtbanespiller kan ligge høyt. Målet er gjennombrudd sentralt fra en bred utgangsposisjon. Dette er en avtalt relasjon mellom back, spiss og motsatt side. Referansen til Readys spillemodell 2.8.1.1 finnes i manus, men det separate underlaget er ikke tilgjengelig her.",
+        "source": "Fotballdokumentet v1.pdf – 4 Spillmønstre/Spillmodell – Etablert angrep fra korridor, linje 3747–3757"
+      },
+      {
+        "id": "centre_to_corridor",
+        "title": "Fra sentralt til bredt gjennombrudd",
+        "text": "Midtstopper eller playmaker starter i framrom og søker bredt gjennombrudd. Vingens utgangsposisjon avgjør neste bevegelse: ligger vingen smalt, kan han trekke ut og motta på utsiden av backen; ligger han bredt på backen med bakrom, starter han bakromsløp. Ligger han bredt uten bakrom, kan han søke plass bakover eller innover, og egen back kan komme frem. Et annet mønster i manus er at en spiss i mellomrom spiller støtte når stopper støter frem, for deretter selv å angripe det frigjorte rommet.",
+        "source": "Fotballdokumentet v1.pdf – 4 Spillmønstre/Spillmodell – fra sentralt, linje 3758–3771"
+      },
+      {
+        "id": "signal_triangle",
+        "title": "Signalpasning og trekanten inn–ut–inn",
+        "text": "I manusets modell kan en bakoverpasning være en avtalt signalpasning for spillvending eller bakromspasning. Spillerne må kjenne avtalen, slik at løp og pasninger koordineres. Mønsteret «Spill opp – på!» gir en møtende spiller fire valg: avlegg eller vinkling til siden med ny bevegelse, vende opp, veggspill eller stuss videre til gjennomløp. Trekanten inn i banen – ut på kant – inn foran mål beskriver en retning for kollektiv fremdrift: vinkle inn i oppbyggingen, ut i gjennombruddet og inn i avslutningsrommet. Dette er et mønster, ikke et krav om at hver støttepasning skal bli et gjennombrudd.",
+        "source": "Fotballdokumentet v1.pdf – 4 Spillmønstre/Spillmodell – Signalpasning / Spill opp – på! / Trekant, linje 3772–3800"
       }
     ],
     "title": "Etablert angrep – fra oppbygging til avslutning",
@@ -358,6 +388,38 @@ export const PHASE_CHAPTERS = [
           "Nei → beskytt dybde og målrom først"
         ]
       }
+    ],
+    "sourceDetails": [
+      {
+        "id": "press_height",
+        "title": "Presshøyder og pressbølger",
+        "text": "Manusets inndeling er høyt press ved motstanderens sekstenmeter, medium høyt ved siste tredjedel, lavt omkring midtbanen, hvilepress ved omtrent 35 meter og ultralavt ved omtrent 20 meter. De to siste avstandene gjengis som manusets egne betegnelser; målereferansen er ikke uttrykkelig definert. Eksempler på periodisering er en halv omgang høyt og en halv lavt, eller 15 minutter høyt, 15 lavt og 10 høyt. Vurder løpskapasiteten. Manuset foreslår også å endre intensitet ved avspark, innkast eller etter scoring, og presse høyt til motstanderen begynner å slå langt. Dette er trenerens hypoteser og rytmeeksempler, ikke dokumenterte statistiske lover.",
+        "source": "Fotballdokumentet v1.pdf – 2. Defensivt – Pressbølger / Presshøyde, linje 1510–1545"
+      },
+      {
+        "id": "lock_press",
+        "title": "Lås av – høyt press eller sentral skjerming",
+        "text": "Ved høyt press beskriver manuset en bevisst invitasjon: gi motstanderbacken litt rom til å motta, press deretter kraftig innover. Spissen er klar for tilbakespill mot keeper, og motsatt ving trykker inn. Ved ikke høyt press gis backen mottaksrom, mens laget ligger lavere og sentralt og nekter pasning inn i banen. Lås av beskrives også ved målspark, innkast og frispark på motstanders tredel. Identifiser pressignalet sammen, etabler førsteforsvarer, sikring og kompakte ledd. Høyt press forutsetter at resten av laget følger etter. Manusets soneorientering i høyt press er delvis formulert som et spørsmål, ikke en avklart regel.",
+        "source": "Fotballdokumentet v1.pdf – 2. Defensivt – Aktivt press / Lås av; 4 Spillmodell – Lås av med høyt press, linje 1430–1465, 1590–1601 og 3735–3743"
+      },
+      {
+        "id": "press_triggers",
+        "title": "Presstidspunkt – aktivering, hvile og falskt press",
+        "text": "Manuset identifiserer pressmuligheter når en dårlig pasning er underveis, ballen er i lufta, en mottaker har ryggen mot mål, en back løper mot dødlinjen eller en spiller tar en dårlig berøring. Det foreslår å identifisere svakheter i ballbehandlingen og lokke motstanderen til en pressfelle. Etter fall i ramme kan presset aktiveres på nytt når laget er i balanse. Hvilepress har et avtalt aktiveringspunkt slik at laget ikke blir passivt. Falskt press utnytter at motstanderen forventer et hardt press etter en periode med høy intensitet. Manusets pressbølger veksler derfor også mellom faktisk og antydet press. Ingen av signalene alene garanterer ballvinning.",
+        "source": "Fotballdokumentet v1.pdf – 2. Defensivt – Passivt press / Presstidspunkt / Falskt press, linje 1470–1520"
+      },
+      {
+        "id": "pump_and_drop",
+        "title": "Push opp, pumping, fall av og kompakte ledd",
+        "text": "Ved klarering eller bakoverpasning følger laget opp så lenge ballen er fri. Når motstanderen igjen får kontroll, tar bakre ledd ut dybde. Dette vekselspillet kalles pumping i manuset. Fall av beskrives når en motstander passerer et ledd, kommer inn i mellomrom, slår langt eller er rettvendt uten press; i backfireren må de øvrige også sikre når én støter. På ballside skyves laget sammen, og motsatt markering kan løsnes når farlige rom fortsatt er dekket. Manusets avstandseksempler varierer: 6–12 meter mellom forsvar og midtbane, og et annet sted 10 meter sidelengs og 12–15 mellom ledd. De bevares som ulike treningsholdepunkter, ikke én fast fasit.",
+        "source": "Fotballdokumentet v1.pdf – 2. Defensivt – Pressrelaterte momenter / Fall av / Komprimering, linje 1545–1593"
+      },
+      {
+        "id": "marking_models",
+        "title": "Markeringstyper og kollektivt press",
+        "text": "Rigid mannsmarkering beskrives som reaktiv og sårbar for å bli dratt ut. Fleksibel mannsmarkering tillater bytte av motspiller, men under byttet kan to forsvarere ende på samme spiller. Ved romorientert mannsmarkering beveger laget seg mot presspilleren og dekker rommet han forlater, med risiko for åpne sider. Ved posisjonsorientert sonemarkering beveger enheten seg samlet og avventer mer, med risiko for å bruke krefter dersom motstanderen konserverer ballen. Manuset navngir dessuten mannsorientert, romorientert og valgmulighetsorientert sonemarkering, uten full beskrivelse. Disse tre beholdes som navngitte kategorier; det konstrueres ikke nye definisjoner eller motorvalg.",
+        "source": "Fotballdokumentet v1.pdf – 2. Defensivt – Ulike typer markering i press, linje 1600–1619"
+      }
     ]
   },
   {
@@ -468,6 +530,38 @@ export const PHASE_CHAPTERS = [
           "Ja → gjennombrudd med støtte",
           "Nei → behold og bygg nytt angrep"
         ]
+      }
+    ],
+    "sourceDetails": [
+      {
+        "id": "counter_signal",
+        "title": "Overgang og kontring – signal, tidsmål og relativ bredde",
+        "text": "Manuset definerer en kontring som ballvinning på egen tredel og fremdrift til motstanderens tredel innen 15 sekunder. Dette er manusets operasjonelle definisjon, ikke en universell definisjon av offensiv overgang. Signalet for innøvde løp er at ballen føres eller spilles fremover fra egen tredel. Angrip mens motstanderen er i ubalanse. Relativ bredde beskrives med omtrent to tredeler av banebredden som eksempel, slik at løpene ikke spres unødvendig. Kontringsfotball og ballbesittelse kan kombineres gjennom kampens perioder. Øvelsesforslaget i manuset er raske kombinasjoner og løp frem til siste tredel på 15 sekunder eller mindre. Målet kan brukes som treningsobservasjon, men er ikke innført som automatisk spillbonus.",
+        "source": "Fotballdokumentet v1.pdf – Overgang / Kontring, linje 3260–3315"
+      },
+      {
+        "id": "counter_3v3",
+        "title": "Kontringsmønster 1 – tre mot tre",
+        "text": "Midtbanen vinner ballen og setter fart. Ballfører sentralt, to medspillere bredt. Ballfører truer én forsvarer slik at denne bindes, og spiller deretter en fri medspiller i fart. Behold bredden og unngå at begge løpere trekker inn for tidlig; ellers kan de tre forsvarerne beskytte begge utveier fra et mindre rom. Dette er manusets konkrete 3v3-variant, uten en påstand om en dokumentert historisk angrepsrute.",
+        "source": "Fotballdokumentet v1.pdf – Kontringsmønstre – 3-mot-3 kontring, linje 3495–3510"
+      },
+      {
+        "id": "counter_4v2",
+        "title": "Kontringsmønster 2 – fire mot to",
+        "text": "Ved høy ballvinning beskriver manuset fire angripere mot to forsvarere: ballfører sentralt, to brede alternativer og én dyp trussel. Overtallet skal utnyttes til å binde forsvarerne før ballen spilles til fri spiller. Angrepet går i fart, men pasningsvalget skal være rolig nok til at overtallet ikke sløses bort. Det er kombinasjonen av bredde, dybde og ballførerens valg som gjør overtallet anvendelig.",
+        "source": "Fotballdokumentet v1.pdf – Kontringsmønstre – 4-mot-2 kontring, linje 3513–3528"
+      },
+      {
+        "id": "counter_width_clearance",
+        "title": "Kontringsmønster 3 – bredde og klareringsmønster",
+        "text": "Ved sentral eller dyp ballvinning kan en hurtig pasning til kant utnytte rommet bak motstanderens høye backer mens laget komprimerer sentralt. Første pasning må være presis. Manusets klareringsmønster beskriver spiss som møter mot ballside, motsatt back på løp, ballnær ving bredt og motsatt ving inn. Spissen spiller tilbake til playmaker/midtbane eller vender opp hvis han har tid. Videre kan backen spille inn bak forsvarslinjen til vinger på kryssløp, eller komme ned og legge 45 grader tilbake til indreløper/spiss. En alternativ idé om alltid å møte mot venstre står som spørsmål i manuset og er ikke fastlagt.",
+        "source": "Fotballdokumentet v1.pdf – Kontringsmønstre – Bruk av bredde i overgang / Spillmodell – Klarering, linje 3530–3548 og 3775–3792"
+      },
+      {
+        "id": "first_after_win",
+        "title": "Første handling etter ballvinning",
+        "text": "Manuset fremhever at ballvinneren kan ha begrenset oversikt etter duellen. En støttepasning til en spiller med bedre utsyn kan derfor forberede gjennombruddet. Det beskriver også en alternativ handling: før ballen inn i rommet foran deg og la diagonalløp komme opp på siden. Når motstanderen faller av og komprimerer, kan korridorene og bakrommet på sidene bli tilgjengelige. Begge utveier står i originalmaterialet; de skal ikke erstattes av en absolutt regel om støttepasning eller direkte gjennombrudd.",
+        "source": "Fotballdokumentet v1.pdf – 2. Defensivt – Omstilling / Ballvinning, linje 1635–1654"
       }
     ]
   },
@@ -584,6 +678,14 @@ export const PHASE_CHAPTERS = [
           "Ja → gjenvinn eller forsink",
           "Nei → restforsvar må kontrollere neste rom"
         ]
+      }
+    ],
+    "sourceDetails": [
+      {
+        "id": "recalibrate",
+        "title": "Omstilling – rekalibrering, gjenvinning eller fall i ramme",
+        "text": "Etter balltap skal laget omstille tankegangen: kan ballen gjenvinnes? Spilleren nærmest ballen, ofte spilleren som mistet den, etablerer førsteforsvarer. Medspillerne skjærer av pasningsmuligheter mens de nærmer seg situasjonen. Manuset bruker femsekundersregelen, og et annet sted 5–7 sekunder, som trenerens signal for å falle tilbake i ramme hvis ballen ikke vinnes. Nytt press kan settes inn ved avtalt signal eller kjennetegn når laget er i balanse. Manuset vektlegger lavt tyngdepunkt, raske fotbevegelser, kontrollert aggresjon og at spilleren ikke dveler ved feilen. Valget må også ta hensyn til pressets kvalitet og farlige rom.",
+        "source": "Fotballdokumentet v1.pdf – 2. Defensivt – Omstilling / Gjenvinning / 5-sekundersregelen, linje 1207–1227 og 1620–1658"
       }
     ]
   }

@@ -249,6 +249,14 @@ export const THEORY_CHAPTERS = [
           ]
         ]
       }
+    ],
+    "sourceDetails": [
+      {
+        "id": "risk_balance",
+        "title": "Angrepsrisiko og offensiv markering",
+        "text": "Manuset skiller presshøyde fra offensivitet: hvor offensivt laget spiller, vurderes blant annet etter hvor mange som sendes foran ballen. Lavere risiko i oppbygging og større risiko i siste tredel er beskrevet som et prinsipp. Manusets eksempel på restforsvar er 2–3 stoppere og 1–2 sentrale midtbanespillere igjen, mens sjelden mer enn 5–6 spillere fyller siste tredel. Offensiv markering betyr å posisjonere seg i forhold til motstander også når eget lag har ballen, blant annet å markere spissen med sikring ved egen igangsetting. Tallene er eksempler i manusets modell, ikke nye kampmotorparametre.",
+        "source": "Fotballdokumentet v1.pdf – 2. Defensivt – Risiko / Balanse / Offensiv markering, linje 1409–1434 og 1451–1456"
+      }
     ]
   },
   {
@@ -840,6 +848,20 @@ export const THEORY_CHAPTERS = [
           ]
         ],
         "arrows": []
+      }
+    ],
+    "sourceDetails": [
+      {
+        "id": "proactive_reactive",
+        "title": "Spillmodell – reaktiv og proaktiv strategi",
+        "text": "Manuset har som postulat god bevegelse i angrep og god balanse i forsvar. Det foreslår 3-4-3 når laget har ballen. Reaktiv strategi defineres som fokus på etablert forsvar og overgangen fra forsvar til angrep, mens proaktiv strategi fokuserer på etablert angrep og overgangen fra angrep til forsvar. Disse skal periodiseres i løpet av kampen. Det innebærer at samme lag kan skifte prioritert fase uten at hele spillmodellen må byttes. 3-4-3 beskrives som manusets konkrete angrepsform, ikke alle lags nødvendige struktur.",
+        "source": "Fotballdokumentet v1.pdf – 4 Spillmønstre/Spillmodell – Postulater / Reaktiv og proaktiv strategi, linje 3726–3736"
+      },
+      {
+        "id": "formation_choices",
+        "title": "4-3-3, 4-4-2 og 3-4-2-1 – manusets avveininger",
+        "text": "I 4-3-3 beskriver manuset tre fremre spillere med samordnede møte- og strekkbevegelser, én sentral spiller foran stopperne og krevende omstillinger for tre på midten. 4-4-2 fremheves for gode muligheter til vingspill, med risiko for åpent mellomrom mellom forsvar og midtbane. 3-4-2-1 gir vingbackene korridoransvar; tre stoppere kan gi dekning mot innlegg og god balanse ved balltap, men kan også gi lave ballbrudd, svakere oppbygging hvis sidestopperne ikke deltar, og vanskeligere bredde eller 2v1 på kant. Manuset skiller en mer defensiv trebacksløsning fra en pressfokusert variant. Dette er taktiske avveininger, ikke en rangering av systemene.",
+        "source": "Fotballdokumentet v1.pdf – 5.5 4-3-3 / 5.6 4-4-2 / 5.7 3-4-2-1, linje 3800–3918"
       }
     ]
   },

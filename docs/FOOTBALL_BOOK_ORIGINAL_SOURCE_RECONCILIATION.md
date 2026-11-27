@@ -31,7 +31,7 @@ De nye avsnittene er redaksjonelle sammenfatninger av originalmaterialet, ikke o
 - Individuell forsvarsteknikk: første detaljerte integrasjon gjennomført i `press_cover_shift` (se bolk 2). Full OneNote-kontroll gjenstår.
 - Individuelle angrepsferdigheter: første detaljerte integrasjon gjennomført i `in_possession` (se bolk 3); full OneNote-kontroll gjenstår.
 - Keeperens detaljerte teknikk og dødballorganisering: første PDF-integrasjon gjennomført (bolk 5). Full OneNote-kontroll gjenstår.
-- Spillmodell: posisjonelle krav, klareringsmønster, opp–tilbake–gjennom, kontringsmønstre, signaler og konkrete øvelser.
+- Spillmodell: første detaljerte PDF-integrasjon gjennomført i bolk 6; separat Ready-materiale, dødballer, OneNote-dekning og motorvalidering gjenstår.
 - Droppunkt: Fotballnotater råtekst ved byte 0x000f2da4; kontekst og koordinatsystem må avklares før bruk.
 - Kampforberedelser, kommunikasjon og komplett analysemetode.
 - Fysiologi, mental trening, pedagogikk, kritikk av tidlig spesialisering og sosial tilgang.
@@ -124,3 +124,29 @@ Datakontroll: 13 nye unike ID-er, kildeankre og eksisterende kapittel- og figura
 | link_strikers | meeting_forward | Oppspill / Spillmodell – Klarering / Spill opp – på! / Åpen kropp |
 | finishing_press | striker_defence | 3.3 Posisjonelle oppgaver og valg i angrep – Midtspiss |
 | finishing_press | striker_attack | 3.3 Posisjonelle oppgaver og valg i angrep – Midtspiss / 5.5 4-3-3 |
+
+## Bolk 6 – spillmønstre og spillmodell
+
+19 nye søkbare fagavsnitt i seks eksisterende kapitler, basert på originalmanusets forsvars-, angreps-, overgangs- og formasjonsbeskrivelser. Manusets egne terminologier, avstander, tidsmål og varianter er beholdt som treneravtaler eller eksempler, inkludert spørsmålstegn, uavklarte målereferanser og alternative valg. Ikke gjort til motorparametre. Historiske spillereksempler og attribusjoner uten særskilt verifisering er ikke presentert som dokumentert historikk. Ready-referansene 2.7.1.2 og 2.8.1.1 er ikke tilgjengelige som selvstendige kilder. Dødballavsnittene og kampstrategi behandles separat. Ingen nye hovedkapitler, figurer eller spillmotorregler.
+
+| Kapittel-ID | Underavsnitt-ID | Kildeanker |
+|---|---|---|
+| in_possession | possession_cycle | Ballbesittelse / Konservering, linje 3138–3198 |
+| in_possession | established_model | Etablert angrep / Spillmønstre, linje 3200–3259 |
+| in_possession | corridor_to_centre | 4 Spillmønstre/Spillmodell – Etablert angrep fra korridor, linje 3747–3757 |
+| in_possession | centre_to_corridor | 4 Spillmønstre/Spillmodell – fra sentralt, linje 3758–3771 |
+| in_possession | signal_triangle | 4 Spillmønstre/Spillmodell – Signalpasning / Spill opp – på! / Trekant, linje 3772–3800 |
+| out_of_possession | press_height | 2. Defensivt – Pressbølger / Presshøyde, linje 1510–1545 |
+| out_of_possession | lock_press | 2. Defensivt – Aktivt press / Lås av; 4 Spillmodell – Lås av med høyt press, linje 1430–1465, 1590–1601 og 3735–3743 |
+| out_of_possession | press_triggers | 2. Defensivt – Passivt press / Presstidspunkt / Falskt press, linje 1470–1520 |
+| out_of_possession | pump_and_drop | 2. Defensivt – Pressrelaterte momenter / Fall av / Komprimering, linje 1545–1593 |
+| out_of_possession | marking_models | 2. Defensivt – Ulike typer markering i press, linje 1600–1619 |
+| transition_attack | counter_signal | Overgang / Kontring, linje 3260–3315 |
+| transition_attack | counter_3v3 | Kontringsmønstre – 3-mot-3 kontring, linje 3495–3510 |
+| transition_attack | counter_4v2 | Kontringsmønstre – 4-mot-2 kontring, linje 3513–3528 |
+| transition_attack | counter_width_clearance | Kontringsmønstre – Bruk av bredde i overgang / Spillmodell – Klarering, linje 3530–3548 og 3775–3792 |
+| transition_attack | first_after_win | 2. Defensivt – Omstilling / Ballvinning, linje 1635–1654 |
+| transition_defend | recalibrate | 2. Defensivt – Omstilling / Gjenvinning / 5-sekundersregelen, linje 1207–1227 og 1620–1658 |
+| formations | proactive_reactive | 4 Spillmønstre/Spillmodell – Postulater / Reaktiv og proaktiv strategi, linje 3726–3736 |
+| formations | formation_choices | 5.5 4-3-3 / 5.6 4-4-2 / 5.7 3-4-2-1, linje 3800–3918 |
+| rest_defence | risk_balance | 2. Defensivt – Risiko / Balanse / Offensiv markering, linje 1409–1434 og 1451–1456 |

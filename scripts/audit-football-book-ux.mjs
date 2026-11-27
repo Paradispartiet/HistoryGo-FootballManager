@@ -181,7 +181,7 @@ check(ROLE_CHAPTERS.reduce((n,c)=>n+c.diagrams.length,0)===11,"Rollefigurer mang
 check(bookHtml.includes('id="footballBookRoles"'),"Rollekapitlene ikke tilgjengelige i spillet");
 check(PHASE_CHAPTERS.length===4,"Kampfasene mangler");
 const attackDetails=PHASE_CHAPTERS.find(c=>c.id==="in_possession")?.sourceDetails||[];
-check(attackDetails.map(d=>d.id).join(",")==="attack_principles,carrying,dribbling,cuts,receiving,turning,passing,passing_types,shooting,heading,finishing,one_on_one,perception,open_body,reading_game,passing_timing,penetration,crossing","Originalmanusets individuelle og relasjonelle angrepsteknikk mangler");
+check(attackDetails.map(d=>d.id).join(",")==="attack_principles,carrying,dribbling,cuts,receiving,turning,passing,passing_types,shooting,heading,finishing,one_on_one,perception,open_body,reading_game,passing_timing,penetration,crossing,possession_cycle,established_model,corridor_to_centre,centre_to_corridor,signal_triangle","Originalmanusets individuelle, relasjonelle og kollektive angrepsferdigheter mangler");
 for(const [id,expected] of Object.entries({"third_man":["support_angles","passing_shadow","run_patterns","build_up_patterns"],"overloads_space":["space_timing","two_against_one"],"overlap_underlap":["support_runs"]})){
   const ds=THEORY_CHAPTERS.find(c=>c.id===id)?.sourceDetails||[];
   check(ds.map(d=>d.id).join(",")===expected.join(","),id+": relasjonelle angrepsferdigheter mangler");
@@ -189,6 +189,11 @@ for(const [id,expected] of Object.entries({"third_man":["support_angles","passin
 }
 for(const d of attackDetails)check(d.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),d.id+": mangler fagtekst eller kilde");
 check(new Set(PHASE_CHAPTERS.map(c=>c.id)).size===4,"Duplikate kampfaser");
+for(const [id,expected] of Object.entries({"out_of_possession":["press_height","lock_press","press_triggers","pump_and_drop","marking_models"],"transition_attack":["counter_signal","counter_3v3","counter_4v2","counter_width_clearance","first_after_win"],"transition_defend":["recalibrate"],"formations":["proactive_reactive","formation_choices"],"rest_defence":["risk_balance"]})){
+  const sections=[...PHASE_CHAPTERS,...THEORY_CHAPTERS].find(c=>c.id===id)?.sourceDetails||[];
+  check(sections.map(d=>d.id).join(",")===expected.join(","),id+": originalmanusets spillmodell mangler");
+  for(const d of sections)check(d.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),d.id+": mangler fagtekst eller kilde");
+}
 for(const c of PHASE_CHAPTERS){
   check(Boolean(c.title&&c.concept&&c.dilemma&&c.manager&&c.practice),c.id+": ufullstendig fasekapittel");
   check(c.principles.every(id=>principles.some(p=>p.id===id)),c.id+": ukjent kunnskapsprinsipp");
