@@ -5,6 +5,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { getFootballBookGameText } from "../dist/index.js";
+import { buildClubBookChapters } from "../src/football-book-club-chapters.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
@@ -110,6 +111,12 @@ check(
   "training: viser Fotballboka-tekst når weakPoint og eksisterende training area peker i ulike retninger",
 );
 
+const clubChapters=buildClubBookChapters(readJson(join(root,"data","football_league_club_profiles.json")).profiles);
+check(clubChapters.length===12,"Fotballboka mangler kildebelagte klubbkapitler");
+for(const chapter of clubChapters){check(Boolean(chapter.historicalNote&&chapter.interpretation&&chapter.sources.length),chapter.name+": mangler kilde eller forklaring");}
+for(const [id,count] of [["viking",3],["stabak",3],["tromso",4]])check(clubChapters.find(c=>c.id===id)?.diagrams.length===count,id+": diagrammer mangler");
+const bookHtml=readFileSync(join(root,"index.html"),"utf8");
+check(bookHtml.includes('id="footballBookClubChapters"')&&bookHtml.includes('src="src/football-book-club-chapters.js"'),"Klubbkapitler ikke tilgjengelige i spillet");
 console.log("Fotballboka UX QA Audit");
 console.log(`Principles: ${principles.length}`);
 console.log(`Scenarios: ${scenarios.map((scenario) => scenario.code).join(", ")}, no_matching_weak_point`);
