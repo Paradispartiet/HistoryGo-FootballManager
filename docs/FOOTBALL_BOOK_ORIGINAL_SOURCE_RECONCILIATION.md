@@ -30,7 +30,7 @@ De nye avsnittene er redaksjonelle sammenfatninger av originalmaterialet, ikke o
 
 - Individuell forsvarsteknikk: første detaljerte integrasjon gjennomført i `press_cover_shift` (se bolk 2). Full OneNote-kontroll gjenstår.
 - Individuelle angrepsferdigheter: første detaljerte integrasjon gjennomført i `in_possession` (se bolk 3); full OneNote-kontroll gjenstår.
-- Keeperens detaljerte teknikk og dødballorganisering.
+- Keeperens detaljerte teknikk og dødballorganisering: første PDF-integrasjon gjennomført (bolk 5). Full OneNote-kontroll gjenstår.
 - Spillmodell: posisjonelle krav, klareringsmønster, opp–tilbake–gjennom, kontringsmønstre, signaler og konkrete øvelser.
 - Droppunkt: Fotballnotater råtekst ved byte 0x000f2da4; kontekst og koordinatsystem må avklares før bruk.
 - Kampforberedelser, kommunikasjon og komplett analysemetode.
@@ -99,3 +99,28 @@ Datakontroll: 12 stabile, unike ID-er med tittel, fagtekst og kilde; eksisterend
 | overlap_underlap | support_runs | Bevegelser uten ball / Medløpspasning / Indreløperløp / Øyekontakt |
 
 Datakontroll: 13 nye unike ID-er, kildeankre og eksisterende kapittel- og figurantall beholdt. CI gjenstår.
+
+## Bolk 5 – posisjonelle arbeidsoppgaver
+
+18 søkbare fagavsnitt i alle ni eksisterende rollekapitler, basert på PDF linje 811–1206, 1795–1853, 3550–3637 og 3800–3920, med supplerende relevante passasjer fra spillmodell og oppspill. PDF-en henviser også til et separat arbeidsoppgavedokument som ikke er identifisert her. Rolle-ID-er, rolledefinisjoner, 11 rollefigurer og hovedkapittelantall er uendret. Instruksene gjelder manusets konkrete spillmodell, ikke alle varianter av hver spillrolle. Hengende spiss er ikke automatisk en klassisk tier; vingens ulike møteavtaler er synliggjort. Uferdige hypoteser, usikre statistiske/historiske påstander og råformuleringer om uforsvarlig kontakt er ikke presentert som instruks. Full OneNote-kontroll gjenstår.
+
+| Kapittel-ID | Underavsnitt-ID | Kildeanker |
+|---|---|---|
+| keepers | keeper_positioning | 1.1 Posisjonering / Vinkelkontroll / Dybdejustering / Én-mot-én |
+| keepers | keeper_saves | 1.2 Skuddstopping / Returer / Spesielle situasjoner / Straffer |
+| keepers | keeper_distribution | 1.3 Distribuering / 1.4 Kommunikasjon / 1.5 Dødball / 5.5 4-3-3 |
+| centre_backs | centre_back_defence | Posisjonelle oppgaver/valg i forsvar – Stopper / 5.5 4-3-3 |
+| centre_backs | centre_back_attack | 3.3 Posisjonelle oppgaver og valg i angrep – Stopper |
+| fullbacks | fullback_defence | Posisjonelle oppgaver/valg i forsvar – Back |
+| fullbacks | fullback_attack | 3.3 Posisjonelle oppgaver og valg i angrep – Back / 5.5 4-3-3 |
+| fullbacks | wingback_corridor | 5.7 3-4-2-1 / Spill med tre bak |
+| six_regista | central_midfield_defence | Posisjonelle oppgaver/valg i forsvar – Midtbane / 5.5 4-3-3 |
+| six_regista | central_midfield_attack | 3.3 Posisjonelle oppgaver og valg i angrep – Midtbane / Oppspill |
+| eight_press | eight_defence | Posisjonelle oppgaver/valg i forsvar – Indreløper / Spillmodell – Back blir utfordret |
+| eight_press | eight_attack | 3.3 Posisjonelle oppgaver og valg i angrep – Indreløper / Bevegelser uten ball |
+| ten_creator | supporting_forward | 3.3 Posisjonelle oppgaver og valg i angrep – Hengende spiss / 5.5 4-3-3 |
+| wingers | winger_defence | Posisjonelle oppgaver/valg i forsvar – Ving / Spillmodell – Back blir utfordret |
+| wingers | winger_attack | 3.3 Posisjonelle oppgaver og valg i angrep – Ving / 5.5 4-3-3 |
+| link_strikers | meeting_forward | Oppspill / Spillmodell – Klarering / Spill opp – på! / Åpen kropp |
+| finishing_press | striker_defence | 3.3 Posisjonelle oppgaver og valg i angrep – Midtspiss |
+| finishing_press | striker_attack | 3.3 Posisjonelle oppgaver og valg i angrep – Midtspiss / 5.5 4-3-3 |

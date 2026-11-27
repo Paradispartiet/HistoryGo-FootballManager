@@ -89,6 +89,26 @@ export const ROLE_CHAPTERS = [
           ]
         ]
       }
+    ],
+    "sourceDetails": [
+      {
+        "id": "keeper_positioning",
+        "title": "Keeper – posisjonering og romkontroll",
+        "text": "Kjenn plasseringen av stolpene, femmeteren og straffemerket. Manuset beskriver en høyere utgangsposisjon når ballen er langt unna, og en dypere posisjon når den nærmer seg mål. Bruk vinkelen fra ballen til begge stolpene som orienteringspunkt. Juster dybden med små steg i takt med ballførerens berøringer, og flytt sidelengs med balanse og føttene klare. Ved langskudd beskrives en mer oppreist beredskap, ved korte avstander et lavere tyngdepunkt. Ved innlegg vurderes ballbanen og spillerne i feltet før keeper velger å bli på linjen eller møte ballen. I én-mot-én beskriver manuset en høy startposisjon fulgt av en bred, lav stjerneposisjon når angriperen nærmer seg. Vurder egen fart, risikoen for lobb og baneforhold.",
+        "source": "Fotballdokumentet v1.pdf – 1.1 Posisjonering / Vinkelkontroll / Dybdejustering / Én-mot-én"
+      },
+      {
+        "id": "keeper_saves",
+        "title": "Keeper – skuddstopping, returer og straffespark",
+        "text": "Vær lett på fotbladet, se på ballen og velg raskt mellom grep, parering og blokkering. Manuset skiller mellom skudd innenfor rekkevidde, harde skudd nær kroppen og skudd i ytterkant: forsøk grep der det er forsvarlig, blokker kroppsnære skudd og styr vanskelige pareringer ut til siden. Kom raskt opp igjen og forbered returen. Ved lave skudd beskrives bruk av kropp og bein; ved høye skudd den øverste armen for rekkevidde. Manuset omtaler split step, kontrollert landing og beredskap for stuss. Ved straffer: studer tidligere straffer, les tilløp og hofter og avvent så lenge situasjonen tillater. Manusets antakelser om skuddfot og hjørne gjengis ikke som sikre sannsynligheter.",
+        "source": "Fotballdokumentet v1.pdf – 1.2 Skuddstopping / Returer / Spesielle situasjoner / Straffer"
+      },
+      {
+        "id": "keeper_distribution",
+        "title": "Keeper – distribusjon, styring og dødball",
+        "text": "Spill kort og presist til stoppere eller backer, eller sett i gang tidlig med kast eller utspark når det finnes kontringsrom. Etter langvarig press kan laget trenge tid til å flytte ut, innenfor spillets regler. Manuset beskriver innsidespark i kort oppbygging, halvhøye kast som kan passere et pressledd, halvvolley mot kant eller spiss og lange utspark der retning og lengde må samordnes. Gi tydelige beskjeder, særlig i undertall: meld når laget er i balanse slik at forsvarer kan støte, diriger blokkering og signaliser langt utspill. Organiser mur og markering tidlig ved dødball, og forbered laget på andreballen. I manusets 4-3-3-profil skal keeper være god med ballen, offensiv i feltet og kunne sette i gang hurtig og kaste langt.",
+        "source": "Fotballdokumentet v1.pdf – 1.3 Distribuering / 1.4 Kommunikasjon / 1.5 Dødball / 5.5 4-3-3"
+      }
     ]
   },
   {
@@ -189,6 +209,20 @@ export const ROLE_CHAPTERS = [
             79
           ]
         ]
+      }
+    ],
+    "sourceDetails": [
+      {
+        "id": "centre_back_defence",
+        "title": "Stopper – defensive arbeidsoppgaver",
+        "text": "Orienter deg kontinuerlig rundt deg, avgjør når en mottaker skal følges og når linjen må holdes. Sikre sidebacken med riktig vinkel, sentrer når backen følger motstanderen mot linjen, og angrip luftballer med timing og retning. Når én stopper støter frem, må backene eller en midtbanespiller ivareta balansen. Diriger leddet med beskjeder om fall, støt, push og linje. Ved innlegg: plasser deg foran mål, sidestilt med oversikt over angriperne; bryt foran mottakeren når timingen og sikringen tillater det. Manusets 4-3-3-ideal er et komplementært par: én rask og ballspillende, én sterk i dueller, begge med kommunikasjon og sikringsferdigheter. Høyrefotet høyrestopper og motsatt på venstre er en preferanse, ikke et krav.",
+        "source": "Fotballdokumentet v1.pdf – Posisjonelle oppgaver/valg i forsvar – Stopper / 5.5 4-3-3"
+      },
+      {
+        "id": "centre_back_attack",
+        "title": "Stopper – oppbygging og pasningsvalg",
+        "text": "I manusets oppbygging står stopperen gjerne ved hjørnet av sekstenmeteren, sidestilt for å kunne se flere alternativer. Han styrer rytmen og kan føre gjennom et ledd for å skape overtall. Vurder ni utveier: spiss i bakrom, møtende spiss, kant i bakrom, møtende kant, indreløper i medløp, direkte gjennombrudd, sentral midtbane, back eller stopper i støtte. Søk øyekontakt, bruk blikket aktivt og vurder hvilket rom pasningen åpner. Når ballen føres frem, må andre ivareta sikringen.",
+        "source": "Fotballdokumentet v1.pdf – 3.3 Posisjonelle oppgaver og valg i angrep – Stopper"
       }
     ]
   },
@@ -330,6 +364,26 @@ export const ROLE_CHAPTERS = [
           ]
         ]
       }
+    ],
+    "sourceDetails": [
+      {
+        "id": "fullback_defence",
+        "title": "Back – timing av støt, sikring og sideforskyvning",
+        "text": "Følg stopperen innenfor deg og hold riktig side mellom motstander og mål. Led motstanderen utover i manusets backinstruks. Støt slik at du kan presse kantens førsteberøring, men ikke så tidlig at ballen kan spilles i rommet bak. Unngå å stå og markere en ving som befinner seg i midtbanens sone før pasningen er aktuell. Sikre stopperen i duell, orienter deg kontinuerlig og gjenvinn ved balltap dersom laget har dekning. Manuset bruker to holdepunkter for å forlate formasjonen: en realistisk mulighet til å vinne ballen, eller en mottaker uten støttepasning. Ved sideforskyvning trekker backen inn mot nærmeste stolpe etter situasjonen; uten en motspiller mellom deg og sidelinjen kan du være unødvendig bred. Når eget lag angriper på motsatt side, beskrives en posisjon bak ballfører.",
+        "source": "Fotballdokumentet v1.pdf – Posisjonelle oppgaver/valg i forsvar – Back"
+      },
+      {
+        "id": "fullback_attack",
+        "title": "Back – bredde, overlapp og pasningsvalg",
+        "text": "Når keeper har ball, går backen opp og ut med riktig timing. Bruk veggspill og overlapp, men hold igjen når motsatt back går. Er kanten tett markert, vurder bakrom; er kanten fri, spill på fot. Pasningsalternativene omfatter møtende eller stikkende spiss, kant, indreløper i medløp, sentral midtbane og stopper i støtte. Spill fremover hvis mulig, støtte hvis nødvendig. Manuset skiller tidlige innlegg mot første stolpe ved høyt forsvar fra levering mot bakre stolpe eller 45-gradersinnlegg mot etablert forsvar. I 4-3-3 skal backen kunne ta ned lange spillvendinger, slå innlegg, ha hurtighet og mestre én-mot-én uten å selge seg.",
+        "source": "Fotballdokumentet v1.pdf – 3.3 Posisjonelle oppgaver og valg i angrep – Back / 5.5 4-3-3"
+      },
+      {
+        "id": "wingback_corridor",
+        "title": "Vingback – korridoransvar med tre stoppere",
+        "text": "I manusets 3-4-2-1 har vingbackene ansvar for sidekorridoren. Når laget forsvarer i en femmer, kan ballnær vingback støte tidlig ut for å hindre kant eller back i å vende opp. Motsatt vingback kan da ligge noe høyere enn de tre stopperne, slik at bakre ledd ser ut som tre eller fire. Tre stoppere kan dekke innlegg og sentrale rom, men laget kan bli baktungt og få lave ballbrudd. Dersom sidestopperne ikke bidrar i ballfordelingen, blir det færre oppspillspunkter. Fordelingen av bredde og sikring må derfor avtales; tre stoppere alene betyr ikke nødvendigvis en defensiv spillestil.",
+        "source": "Fotballdokumentet v1.pdf – 5.7 3-4-2-1 / Spill med tre bak"
+      }
     ]
   },
   {
@@ -431,6 +485,20 @@ export const ROLE_CHAPTERS = [
           ]
         ]
       }
+    ],
+    "sourceDetails": [
+      {
+        "id": "central_midfield_defence",
+        "title": "Sentral midtbane – skjerming, andreball og balanse",
+        "text": "Behersk førsteforsvareroppgavene, vinn luftdueller, fall ned for å plukke opp andreballer og skjerm pasninger til motstanderens spiss. I manusets 4-3-3 skal én spiller alltid dekke hullet foran stopperne, og de tre sentrale skal ikke trekkes helt ut mot kanten samtidig. Midtbanen må være løpssterk og omstille fordi formen i angrep kan avvike fra forsvarsformen. Tidlig gjenvinning er en prioritert mulighet, men dekningen foran stopperne må ivaretas.",
+        "source": "Fotballdokumentet v1.pdf – Posisjonelle oppgaver/valg i forsvar – Midtbane / 5.5 4-3-3"
+      },
+      {
+        "id": "central_midfield_attack",
+        "title": "Sentral midtbane – spillbarhet og rytmekontroll",
+        "text": "Vær spillbar i igangsettingen og når laget utfordrer på sidene. Motta under press, se etter bakrom, behersk lengre pasninger og posisjoner deg slik at angrepet kan få fart. Støtt møtende spiss; når dyp midtbane spiller opp på ham, må indreløperne gi støttevinkler. Søk returrommet ved innlegg dersom lagets balanse tillater det. Manusets instrukser gjelder sentral midtbane generelt, ikke en egen dokumentert regista-spesifikasjon.",
+        "source": "Fotballdokumentet v1.pdf – 3.3 Posisjonelle oppgaver og valg i angrep – Midtbane / Oppspill"
+      }
     ]
   },
   {
@@ -511,6 +579,20 @@ export const ROLE_CHAPTERS = [
             65
           ]
         ]
+      }
+    ],
+    "sourceDetails": [
+      {
+        "id": "eight_defence",
+        "title": "Indreløper – sikring ved sideangrep",
+        "text": "Når egen back utfordres bredt, skal en indreløper i manusets modell gå i sikring, mens motsatt indreløper holder igjen. Midtbanens relasjon til stopperne må bevares når spillere støter. Dette beskriver et kollektivt ansvar: ballnær spiller hjelper ved duellen, mens spilleren på motsatt side bidrar til balanse og dekning av neste rom.",
+        "source": "Fotballdokumentet v1.pdf – Posisjonelle oppgaver/valg i forsvar – Indreløper / Spillmodell – Back blir utfordret"
+      },
+      {
+        "id": "eight_attack",
+        "title": "Indreløper – møte, stikke og fylle feltet",
+        "text": "Tilpass bevegelsen til backen på samme side: noen ganger møte, andre ganger stikke. Når stopper har ball, kan indreløper gå bredt for å gi vinkel; når back har ball, kan indreløper trekke smalere for å åpne kantrommet. Ikke bruk opp mellomrommet før pasningen kan slås. I siste tredjedel beskriver manuset at minst én indreløper tar dypt løp inn i feltet, mens den andre må vurdere balansen. Dette gir vertikal trussel uten at begge nødvendigvis forlater samme rom.",
+        "source": "Fotballdokumentet v1.pdf – 3.3 Posisjonelle oppgaver og valg i angrep – Indreløper / Bevegelser uten ball"
       }
     ]
   },
@@ -609,6 +691,14 @@ export const ROLE_CHAPTERS = [
           ]
         ]
       }
+    ],
+    "sourceDetails": [
+      {
+        "id": "supporting_forward",
+        "title": "Hengende spiss – mellomrom, støtte og overgangsspill",
+        "text": "Manuset beskriver den hengende spissen som en mobil, teknisk og taktisk sterk spiller som lever mellom motstanderens midtbane og forsvar. Når midtspissen møter og trekker en stopper ut, kan den hengende spissen angripe bakrommet; han skal gi støtte på siden, ta bakromsløp og være en ekstra avslutter på innlegg. I en omvendt diamant vektlegges løpskapasitet, oversikt, kommunikasjon og evne til å orkestrere overgangsspillet ut fra medangripernes bevegelser. Denne posisjonsbeskrivelsen utdyper tierkapitlet, men er ikke identisk med enhver klassisk tier eller fri skaper.",
+        "source": "Fotballdokumentet v1.pdf – 3.3 Posisjonelle oppgaver og valg i angrep – Hengende spiss / 5.5 4-3-3"
+      }
     ]
   },
   {
@@ -701,6 +791,20 @@ export const ROLE_CHAPTERS = [
           ]
         ]
       }
+    ],
+    "sourceDetails": [
+      {
+        "id": "winger_defence",
+        "title": "Ving – pressretning og ansvar for motstanderens back",
+        "text": "Følg motstanderbackens løp, legg press på backen og velg pressretning etter lagets plan. Ved ballnært sideangrep kan manusets spillmodell la vingen bli noe høyere mens midtbanespilleren sikrer egen back og stopperne beholder sentral dekning. Motsatt ving faller inn. Dette er en situasjonsavhengig kontringsberedskap, ikke en generell tillatelse til å unnlate defensivt arbeid. Ved gjenvinning beskrives møtende spiss og ving som buer løpet ut.",
+        "source": "Fotballdokumentet v1.pdf – Posisjonelle oppgaver/valg i forsvar – Ving / Spillmodell – Back blir utfordret"
+      },
+      {
+        "id": "winger_attack",
+        "title": "Ving – bredde, bakrom og avslutning på motsatt side",
+        "text": "Hold høy bredde på ballside i manusets etablerte angrep; den konkrete instruksen er å ikke møte når egen back har ball i denne varianten. I 4-3-3 beskrives samtidig en annen avtalt bevegelse der vingen møter og backen går forbi. Begge er mulige mønstre, og må avtales. Rettvendt utfordres én-mot-én med fart når rom og sikring tillater det. På overgang kan vingen skjære inn motsatt; ved innlegg fra andre siden angripes bakre stolpe eller målrommet. Vingen skal true bakrom, kunne bytte side ved behov og være tålmodig når ballen er på motsatt side. Profilen vektlegger fart, dribling, avslutning og kombinasjoner med spiss, back og midtbane.",
+        "source": "Fotballdokumentet v1.pdf – 3.3 Posisjonelle oppgaver og valg i angrep – Ving / 5.5 4-3-3"
+      }
     ]
   },
   {
@@ -787,6 +891,14 @@ export const ROLE_CHAPTERS = [
             67
           ]
         ]
+      }
+    ],
+    "sourceDetails": [
+      {
+        "id": "meeting_forward",
+        "title": "Møtende spiss – oppspill og bevegelse etter avlegg",
+        "text": "Når en spiss møter ballfører, kan sidevendt mottak gi mulighet for direkte spill mot ving eller fremover. Ved feilvendt mottak beskriver manuset fire konkrete utveier: legge igjen eller vinkle til siden og starte ny bevegelse, vende opp og utfordre, fungere som vegg eller stusse videre til en gjennomløpende medspiller. Ved klarering beskrives møte mot ballside fra lengste stopper mot nærmeste. Støtte til midtbane kan åpne ny pasning i rom; dersom stopperen følger spissen ut, kan spissen selv angripe rommet etter avlegget. Dette er oppgaven til møtende spiss i manusets spillmodell, ikke en definisjon av alle falske niere.",
+        "source": "Fotballdokumentet v1.pdf – Oppspill / Spillmodell – Klarering / Spill opp – på! / Åpen kropp"
       }
     ]
   },
@@ -943,6 +1055,20 @@ export const ROLE_CHAPTERS = [
             58
           ]
         ]
+      }
+    ],
+    "sourceDetails": [
+      {
+        "id": "striker_defence",
+        "title": "Midtspiss – lede press og gjøre laget kontringsklart",
+        "text": "Midtspissen leder i manusets pressplan mot den svakeste stopperen hos motstanderen. Han må lese når presset kan styre mot en bestemt mottaker, og samarbeide med de øvrige fremre spillerne. Etter gjenvinning skal han være spillbar tidlig og ta ansvar for klareringer som går over midtbanen. Manusets eksempel på kontringsberedskap plasserer spiss og ving rundt ti meter inn på motstanders halvdel. Dette er en avtalt utgangsposisjon, ikke et universelt krav uavhengig av forsvarshøyde og kampbilde.",
+        "source": "Fotballdokumentet v1.pdf – 3.3 Posisjonelle oppgaver og valg i angrep – Midtspiss"
+      },
+      {
+        "id": "striker_attack",
+        "title": "Midtspiss – sentral strekk, første stolpe og rom for andre",
+        "text": "Strekk sentralt når ballen går på kant, angrip første stolpe ved innlegg og skap rom for indreløpernes dype løp. Identifiser om motstanderen har sikring: dersom den mangler, kan spissen vende opp og utfordre direkte. Manusets 4-3-3-profil vektlegger evnen til å spille feilvendt, luftstyrke, fysisk kapasitet og mobilitet. En av de tre fremste kan gjøre møtebevegelse, mens andre opprettholder strekk og bakromstrussel. Oppgavene må samordnes med kant, hengende spiss og indreløper, slik at alle ikke søker samme rom.",
+        "source": "Fotballdokumentet v1.pdf – 3.3 Posisjonelle oppgaver og valg i angrep – Midtspiss / 5.5 4-3-3"
       }
     ]
   }

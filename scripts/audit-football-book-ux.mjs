@@ -159,6 +159,11 @@ check(bookHtml.includes('id="footballBookSchools"'),"Fotballskoler ikke tilgjeng
 const canonicalRoles=readJson(join(root,"data","football_roles.json")).roles;
 const bookRoleIds=ROLE_CHAPTERS.flatMap(c=>c.roles.map(r=>r.id));
 check(ROLE_CHAPTERS.length===9,"Rollekapitler mangler");
+for(const [id,expected] of Object.entries({"keepers":["keeper_positioning","keeper_saves","keeper_distribution"],"centre_backs":["centre_back_defence","centre_back_attack"],"fullbacks":["fullback_defence","fullback_attack","wingback_corridor"],"six_regista":["central_midfield_defence","central_midfield_attack"],"eight_press":["eight_defence","eight_attack"],"ten_creator":["supporting_forward"],"wingers":["winger_defence","winger_attack"],"link_strikers":["meeting_forward"],"finishing_press":["striker_defence","striker_attack"]})){
+  const sections=ROLE_CHAPTERS.find(c=>c.id===id)?.sourceDetails||[];
+  check(sections.map(d=>d.id).join(",")===expected.join(","),id+": originalmanusets posisjonelle arbeidsoppgaver mangler");
+  for(const d of sections)check(d.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),d.id+": mangler fagtekst eller kilde");
+}
 check(new Set(bookRoleIds).size===bookRoleIds.length,"Duplikate roller i Fotballboka");
 check(bookRoleIds.length===canonicalRoles.length&&canonicalRoles.every(r=>bookRoleIds.includes(r.id)),"Fotballboka dekker ikke alle kanoniske roller");
 for(const c of ROLE_CHAPTERS){
