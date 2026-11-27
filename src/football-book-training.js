@@ -188,6 +188,26 @@ export const TRAINING_CHAPTERS = [
           "Nei → vis ett signal og gjenta situasjonen"
         ]
       }
+    ],
+    "sourceDetails": [
+      {
+        "id": "communication_purpose",
+        "title": "Kommunikasjon – informasjon før oppmuntring og korrigering",
+        "text": "Manuset setter informasjon først: vi prater for å hjelpe medspilleren til et mer utfyllende bilde av spillet. Ros kan gi en medspiller energi, og oppmuntring kan løfte laget; kjeft hjelper ifølge manusets trenerperspektiv sjelden. Skill mellom informasjon som hjelper neste handling og tilbakemelding som kommer etter handlingen. Kroppsspråk er også informasjon. Når alle snakker på en hensiktsmessig måte, kan laget få et lydbilde som hjelper spillerne å registrere hvor medspillerne befinner seg.",
+        "source": "Fotballdokumentet v1.pdf – Kommunikasjon, linje 3654–3696"
+      },
+      {
+        "id": "communication_timing",
+        "title": "Kommunikativ timing og kampklima",
+        "text": "Spilleren uten ball må signalisere i riktig øyeblikk. Ikke stress en medspiller som har havnet i problemer; skap først pasningsalternativer og gi beskjed når han har tid til å bruke den. Spillere som prater mye må også ta pauser, slik at praten ikke blir et uromoment. Manuset foreslår å trene på ro rett etter baklengsmål. Ved en 2–0-ledelse der laget er i ferd med å bli selvtilfreds, kan mer engasjert kommunikasjon brukes for å få laget på igjen. Dette er situasjonseksempler, ikke faste reaksjoner ved en bestemt stilling.",
+        "source": "Fotballdokumentet v1.pdf – Kommunikasjon – kommunikativ timing / kampforløp, linje 3661–3682"
+      },
+      {
+        "id": "feedback_culture",
+        "title": "Tilbakemeldingskultur – kompis, ikke kjeft",
+        "text": "Manuset anbefaler personlige tilbakemeldinger én til én fremfor kjeft. Bruk et vennlig kroppsspråk, øyekontakt og et uttrykk som viser at du har tro på medspilleren. Ikke skjell ut noen for en feilpasning de allerede vet at de har gjort. Gi positive tilbakemeldinger også under kamp. Ved lav innsats eller en vanskelig holdning: spør hva som er galt, om spilleren er sliten eller ønsker å bli byttet ut. Hvis ikke, kan du tydelig si at du forventer mer løpsarbeid. Gi konkrete tips om bevegelsesmønstre, posisjonering, kommunikasjon og taktikk.",
+        "source": "Fotballdokumentet v1.pdf – Kommunikasjon – personlige tilbakemeldinger / kroppsspråk, linje 3670–3696"
+      }
     ]
   },
   {
@@ -420,6 +440,26 @@ export const TRAINING_CHAPTERS = [
             72
           ]
         ]
+      }
+    ],
+    "sourceDetails": [
+      {
+        "id": "defensive_language",
+        "title": "Defensive beskjeder – lagets felles ordliste",
+        "text": "Originalmanusets beskjeder: «Pump ut!», «Gå i sikring!», «Støt opp», «Kom nærmere meg» (stoppere), «Sett inn press», «Mann kommer inn i sone», «Fall av», «Stå høyt», «Jobb tilbake!», «Har han», «Du ligger feil, du er feilposisjonert», «Jobb hjem!». Ved dødball: gi konkret markeringsbeskjed, for eksempel «Du tar den mannen», og spør «Har du han?». «Aktivt press!» ropes tydelig slik at hele laget vet at det avtalte presset starter. Bruk beskjedene om linje, sikring og markering i sammenheng, slik at spillerne ikke får motstridende signaler.",
+        "source": "Fotballdokumentet v1.pdf – 4.1 Defensive beskjeder, linje 3697–3715"
+      },
+      {
+        "id": "offensive_language",
+        "title": "Offensive beskjeder – lagets felles ordliste",
+        "text": "Originalmanusets beskjeder: «Jeg er ledig», «Du har plass», «Har tid», «Mann i rygg», «Vri spillet», «Start løp», «Skyt», «Jeg er i støtte», «Gå i støtteposisjon», «Vend om», «Vend opp». I kampanalysedelen nevnes også «Kommer», «Støtte», «Dribl» og «Skyt» som korte, felles beskjeder. Øv på å bruke de samme ordene og unngå for mange beskjeder samtidig. Ordlisten skal hjelpe spilleren å velge neste handling ut fra faktisk rom og press, ikke erstatte spillerens eget blikk.",
+        "source": "Fotballdokumentet v1.pdf – 4.2 Offensive beskjeder / Kampanalyse – Kommunikasjon, linje 3716–3726 og 3928–3936"
+      },
+      {
+        "id": "communication_relations",
+        "title": "Relasjoner – hvem har oversikt og hvem gir beskjed?",
+        "text": "Når dyp sentral midtbane spiller opp på møtende spiss, skal han ifølge manuset få indreløperne til å gå i støtte. Det er en konkret relasjon mellom pasningslegger, mottaker og spillere som skal gjøre neste handling mulig. I forsvar har motsatt back eller stopper ofte best oversikt når en back utfordres bredt; disse må varsle om markering og dype løp. Keeperen skal gi raske, tydelige beskjeder, særlig i undertall, om balanse, blokkering og når forsvaret kan støte. Manuset vektlegger også øyekontakt. Tren både tidspunktet for signalet og bevegelsen som følger det.",
+        "source": "Fotballdokumentet v1.pdf – Kommunikasjon / 1.4 Keeperkommunikasjon / Orientering–registrering / Øyekontakt, linje 1188–1200, 1375–1393, 2650–2668 og 3690–3696"
       }
     ]
   },

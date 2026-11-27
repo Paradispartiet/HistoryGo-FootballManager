@@ -223,6 +223,15 @@ for(const c of SET_PIECE_CHAPTERS){
 check(SET_PIECE_CHAPTERS.reduce((n,c)=>n+c.diagrams.length,0)===9,"Dødballfigurer mangler");
 check(bookHtml.includes('id="footballBookSetPieces"'),"Dødballer ikke tilgjengelige i spillet");
 check(TRAINING_CHAPTERS.length===6,"Treningskapitler mangler");
+for(const [id,expected] of Object.entries({"coaching_transfer":["communication_purpose","communication_timing","feedback_culture"],"collective_training":["defensive_language","offensive_language","communication_relations"]})){
+  const sections=TRAINING_CHAPTERS.find(c=>c.id===id)?.sourceDetails||[];
+  for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),key+": originalmanusets kommunikasjon mangler");}
+}
+const languageDetails=TRAINING_CHAPTERS.find(c=>c.id==="collective_training")?.sourceDetails||[];
+for(const [id,commands] of Object.entries({"defensive_language":["Pump ut","Gå i sikring","Støt opp","Fall av","Aktivt press","Har du han"],"offensive_language":["Mann i rygg","Vri spillet","Start løp","Vend om","Vend opp","Jeg er i støtte"]})){
+  const detail=languageDetails.find(d=>d.id===id);
+  for(const command of commands)check(detail?.text.includes(command),id+": mangler "+command);
+}
 check(new Set(TRAINING_CHAPTERS.map(c=>c.id)).size===6,"Duplikate treningskapitler");
 for(const c of TRAINING_CHAPTERS){
   check(Boolean(c.title&&c.concept&&c.dilemma&&c.manager&&c.practice),c.id+": ufullstendig kapittel");

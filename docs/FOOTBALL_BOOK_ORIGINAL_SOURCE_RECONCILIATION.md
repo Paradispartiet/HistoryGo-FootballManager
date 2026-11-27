@@ -33,7 +33,7 @@ De nye avsnittene er redaksjonelle sammenfatninger av originalmaterialet, ikke o
 - Keeperens detaljerte teknikk og dødballorganisering: første PDF-integrasjon gjennomført (bolk 5). Full OneNote-kontroll gjenstår.
 - Spillmodell: første detaljerte PDF-integrasjon gjennomført i bolk 6; separat Ready-materiale, dødballer, OneNote-dekning og motorvalidering gjenstår.
 - Droppunkt: Fotballnotater råtekst ved byte 0x000f2da4; kontekst og koordinatsystem må avklares før bruk.
-- Kampforberedelser, kommunikasjon og komplett analysemetode.
+- Kommunikasjon: første detaljerte PDF-integrasjon i bolk 7; kampforberedelser og komplett analysemetode gjenstår.
 - Fysiologi, mental trening, pedagogikk, kritikk av tidlig spesialisering og sosial tilgang.
 - Fotballhistorie, kultur, spiller- og trenereksempler; historiske påstander og sitater kildekontrolleres før publisering.
 - Full eksport av begge OneNote-seksjonene med sider, bilder og gjeldende revisjoner; deretter linje-/avsnittsbasert dekningsregister. Ikke anta at binæruttrekk er komplette.
@@ -150,3 +150,16 @@ Datakontroll: 13 nye unike ID-er, kildeankre og eksisterende kapittel- og figura
 | formations | proactive_reactive | 4 Spillmønstre/Spillmodell – Postulater / Reaktiv og proaktiv strategi, linje 3726–3736 |
 | formations | formation_choices | 5.5 4-3-3 / 5.6 4-4-2 / 5.7 3-4-2-1, linje 3800–3918 |
 | rest_defence | risk_balance | 2. Defensivt – Risiko / Balanse / Offensiv markering, linje 1409–1434 og 1451–1456 |
+
+## Bolk 7 – kommunikasjon
+
+Seks kildeforankrede, søkbare fagavsnitt i coaching_transfer og collective_training, basert på PDF Kommunikasjon / 4.1 / 4.2 (linje 3654–3726), keeperkommunikasjon, orientering og kampanalyse. Originalmanusets offensive og defensive beskjeder er bevart med normalisert tegnsetting, og kontekstuelle råd om kampklima, én-til-én-tilbakemeldinger, positiv kommunikasjon og relasjoner er integrert. Avsnittene supplerer det eksisterende kunnskapsprinsippet short_commands_create_team_speed uten å endre dets ID, motor, treningsøvelser eller statistikk. Ingen nye hovedkapitler eller figurer. Kontroller er lagt til for avsnitts-ID-er, kilder og sentrale kommandoer. Full CI og OneNote-gjennomgang gjenstår.
+
+| Kapittel-ID | Underavsnitt-ID | Kildeanker |
+|---|---|---|
+| coaching_transfer | communication_purpose | Kommunikasjon, linje 3654–3696 |
+| coaching_transfer | communication_timing | Kommunikasjon – kommunikativ timing / kampforløp, linje 3661–3682 |
+| coaching_transfer | feedback_culture | Kommunikasjon – personlige tilbakemeldinger / kroppsspråk, linje 3670–3696 |
+| collective_training | defensive_language | 4.1 Defensive beskjeder, linje 3697–3715 |
+| collective_training | offensive_language | 4.2 Offensive beskjeder / Kampanalyse – Kommunikasjon, linje 3716–3726 og 3928–3936 |
+| collective_training | communication_relations | Kommunikasjon / 1.4 Keeperkommunikasjon / Orientering–registrering / Øyekontakt, linje 1188–1200, 1375–1393, 2650–2668 og 3690–3696 |
