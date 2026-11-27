@@ -1355,8 +1355,32 @@ export function resolveOwnPressAgainstOpponent(session, {
     originalShape?.pressEscape == null &&
     originalShape?.pressEscapeRoute == null &&
     originalShape?.pressEscapeCandidateRoutes == null;
+  // Helstrup 2023: keeper participates as the fourth build-up player.
+  // Scope the known alternatives to high press; never overwrite explicit
+  // live escape evidence or assume exact opponent player identities.
+  const scopedKeeper = session.causalOpponentKeeperBuildUpVersion === 1 &&
+    route === "front_press" && originalShape?.keeperBuildUpPattern === "keeper_back_four" &&
+    originalShape.pressEscape == null && originalShape.pressEscapeRoute == null &&
+    originalShape.pressEscapeCandidateRoutes == null &&
+    originalShape.pressEscapeTargetFlank == null &&
+    originalShape.pressEscapeTiming == null && originalShape.pressEscapeActionSequence == null &&
+    hasVerifiedLineup(session.lineupSnapshot);
+  const frontRoles = scopedKeeper ? session.lineupSnapshot.filter(p =>
+    ["ST","LW","RW","AM"].includes(p.position)) : [];
+  // Four nominal build-up players versus available forward press roles.
+  // This is a bounded structural proxy, not live marking/tracking.
+  const keeperModel = scopedKeeper && frontRoles.length >= 2 ? {
+    basis:"sourced_keeper_back_four_generic_game_hypothesis_not_observed",
+    opponentPlayerId:null,buildUpSlots:4,nominalForwardPressRoles:frontRoles.length,
+    pressingPlayers:frontRoles.map(p=>p.playerId),
+    pressPenalty:frontRoles.length>=4?0.11:frontRoles.length===3?0.15:0.19,
+    availableOutlets:["third_man","direct"]
+  } : null;
   const shape = scopedDirect
     ? { ...originalShape, pressEscapeRoute: "direct" }
+    : keeperModel ? {...originalShape,pressEscape:"supported",
+        pressEscapeCandidateRoutes:keeperModel.availableOutlets,
+        pressEscapeRoutePolicy:"weakest_verified_cover"}
     : originalShape;
   const scenario = opponent?.styleTraits?.[config.opponentMetric] ??
     (config.opponentMetric === "transitionThreat" ? opponent?.transitionThreat : null);
@@ -1374,7 +1398,7 @@ export function resolveOwnPressAgainstOpponent(session, {
 
   const avgFit = players.reduce((sum, p) => sum + p.matchScore, 0) / players.length;
   const weakestFit = Math.min(...players.map(p => p.matchScore));
-  const routePolicyRequested = session.causalOpponentRouteAdaptationVersion === 1 &&
+  const routePolicyRequested = (session.causalOpponentRouteAdaptationVersion === 1 || Boolean(keeperModel)) &&
     shape?.pressEscapeRoutePolicy === "weakest_verified_cover" &&
     !Object.prototype.hasOwnProperty.call(shape, "pressEscapeRoute") &&
     !Object.prototype.hasOwnProperty.call(shape, "pressEscapeTargetFlank") &&
@@ -1414,7 +1438,7 @@ export function resolveOwnPressAgainstOpponent(session, {
       (Math.min(...metrics) - 65) * 0.003 +
       (weakestFit - 60) * 0.001 -
       (resistance - 70) * 0.004 -
-      (documentedEscape ? 0.15 : 0),
+      (documentedEscape ? keeperModel?.pressPenalty ?? 0.15 : 0),
     0.12, 0.85
   );
   const pressResult = Number(pressureRoll());
@@ -1536,7 +1560,13 @@ export function resolveOwnPressAgainstOpponent(session, {
   const terminalConcededXg = regainLost ? 0 : outcome === "regain" ? -0.01 :
     outcome === "contained" ? 0.02 :
       round3(baseEscapeXg + routeXgOffset);
-  const steps = config.steps.map((action, i) => ({
+  const phaseActions = keeperModel ? [
+    "Keeperen og tre stoppere danner et situasjonsavhengig oppspillsledd",
+    "Vårt fremste pressledd forsøker å stenge keeperens og stoppernes pasningsvinkler",
+    "Midtbanen forsøker å stenge den ledige sentrale mottakeren",
+    "Stopperne sikrer bakrommet dersom presset passeres"
+  ] : config.steps;
+  const steps = phaseActions.map((action, i) => ({
     action,
     result: regained ? "completed" :
       i === 0 ? "completed" :
@@ -1599,13 +1629,15 @@ export function resolveOwnPressAgainstOpponent(session, {
         : secondBallRelease?.status === "blocked_by_counterpress"
           ? " I simuleringen stopper motpresset støttepasningen, og ingen alternativ utvei er verifisert."
           : "") +
-      (terminalFinish ? " " + terminalFinish.explanation : ""),
+      (terminalFinish ? " " + terminalFinish.explanation : "") +
+      (keeperModel && !regained ? " Keeperens deltakelse gir motstanderen en ekstra oppspillsspiller; sentral sikring og bakrom må dekkes samtidig." : ""),
     steps: regainCounterpress ? [...steps, ...regainCounterpress.steps.slice(1)] : steps,
     counterplay: counterplay && directSecondBall
       ? { ...counterplay, directSecondBall } : counterplay,
     evidence: {
       opponentTrigger: config.opponentMetric, opponentValue: scenario,
       ...(scopedDirect ? { opponentTriggerBasis: "documented_direct_high_press_escape" } : {}),
+      ...(keeperModel ? {keeperBuildUp: {...keeperModel,selectedOutlet:routeChoice?.route || null}} : {}),
       pressResistance: resistance, transitionThreat: threat,
       opponentEscapeRoute: shape?.pressEscapeRoute || "unknown",
       ...(routePolicyRequested ? { opponentRouteAdaptation: routeAdaptation } : {}),
