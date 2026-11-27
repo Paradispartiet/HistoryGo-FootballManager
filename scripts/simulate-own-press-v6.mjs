@@ -1,7 +1,7 @@
-import { resolveSourcedCreativeBreakthrough, resolveCompactBlockAttack, annotateCompactBlockChances } from "../src/football-matchday-compact-block-v6.js";
+import { resolveSourcedCreativeBreakthrough, resolveCompactBlockAttack, annotateCompactBlockChances, resolveDoubleMidfieldScreen } from "../src/football-matchday-compact-block-v6.js";
 // Deterministic causal pressing: high press, mid-block trap, counterpress and escapes.
 import assert from "node:assert/strict";
-import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances, annotateOpponentCreativeAttackChances, resolveOpponentFullbackOverlap, annotateOpponentFullbackOverlapChances, annotateOpponentShortCombinationChances, resolveOpponentThreeSpaceCombination, annotateOpponentThreeSpaceChances } from "../src/football-matchday-sequence-v8.js";
+import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances, annotateOpponentCreativeAttackChances, resolveOpponentFullbackOverlap, annotateOpponentFullbackOverlapChances, annotateOpponentShortCombinationChances, resolveOpponentThreeSpaceCombination, annotateOpponentThreeSpaceChances, resolveOpponentSelectiveTransition, annotateOpponentSelectiveTransitionChances, resolveOpponentWingbackPin, annotateOpponentWingbackPinChances } from "../src/football-matchday-sequence-v8.js";
 import { readFileSync } from "node:fs";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances }
   from "../src/football-matchday-own-press-v6.js";
@@ -2152,5 +2152,173 @@ assert.equal(pairLateChances.filter(c=>c.tacticalMoment).length,1);
 assert.equal(pairLateChances.find(c=>c.tacticalMoment).tacticalMoment.keyAction,pairLate.steps.at(-1).action);
 assert.equal(annotateOpponentThreeSpaceChances(lskChances,pairBlocked),lskChances);
 assert.deepEqual(resolveOpponentThreeSpaceCombination(JSON.parse(JSON.stringify(stabakPairFixture)),{rng:()=>0.22}),pairLate);
+
+// Høgmo: a good rest defence prevents a forced transition, not every
+// regain is a shot and the selection remains deterministic.
+const tilProfile=leagueProfiles.find(p=>p.clubId==="tromso");
+const tilFixture=session("wide_fast_433",{causalOpponentSelectiveTransitionVersion:1,
+  opponent:{...tilProfile,id:"tromso",strength:72},lineupSnapshot:glimtLineup,
+  tacticSnapshot:{id:"wide_fast_433",defensiveLine:"medium"}});
+const tilRun=(roll,changes={})=>resolveOpponentSelectiveTransition({...tilFixture,...changes},{rng:()=>roll});
+const tilRetain=tilRun(0.1),tilProtect=tilRun(0.95);
+assert.equal(tilRetain.status,"retained");
+assert.equal(tilRetain.xgDeltaAgainst,0);
+assert.equal(tilProtect.status,"possession_protected");
+const tilHigh={tacticSnapshot:{id:"wide_fast_433",defensiveLine:"high"}};
+const tilBreak=tilRun(0.1,tilHigh),tilContained=tilRun(0.35,tilHigh);
+assert.equal(tilBreak.status,"breakthrough");
+assert.equal(tilBreak.xgDeltaAgainst,0.07);
+assert.equal(tilContained.status,"transition_contained");
+assert.equal(tilBreak.evidence.regainProbability,tilRetain.evidence.regainProbability);
+assert.ok(tilBreak.evidence.conditionalBreakthroughProbability>tilRetain.evidence.conditionalBreakthroughProbability);
+const tilWeakBuild=tilRun(0.1,{teamFitSnapshot:{...tilFixture.teamFitSnapshot,tacticalProfile:{...tilFixture.teamFitSnapshot.tacticalProfile,buildUpScore:40}}});
+assert.ok(tilWeakBuild.evidence.regainProbability>tilRetain.evidence.regainProbability);
+assert.equal(tilWeakBuild.evidence.conditionalBreakthroughProbability,tilRetain.evidence.conditionalBreakthroughProbability);
+assert.equal(tilRun(0.1,{causalOpponentSelectiveTransitionVersion:undefined}),null);
+assert.equal(tilRun(0.1,{lineupSnapshot:glimtLineup.filter(p=>p.position!=="DM")}),null);
+assert.equal(tilRun(NaN),null);
+assert.equal(annotateOpponentSelectiveTransitionChances(lskChances,tilBreak).filter(c=>c.tacticalMoment).length,1);
+assert.equal(annotateOpponentSelectiveTransitionChances(lskChances,tilRetain),lskChances);
+let tilSeed;
+for(let i=0;i<3000;i++){
+  const s={...tilFixture,...tilHigh,id:"til-transition-"+i};
+  if(resolveOpponentSelectiveTransition(s,{rng:()=>highPressPhaseRoll(s,"0:opponent-selective-transition")}).status==="breakthrough"){tilSeed=s;break;}
+}
+assert.ok(tilSeed);
+const tilRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(tilSeed),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"opponent_selective_transition");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,period.tacticalPhase.xgDeltaAgainst);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(tilSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
+}finally{Math.random=tilRandom;}
+
+// Tromsø's midfield screen is not a low-block prerequisite. The attack
+// phase separates first and second support, and shares one xG ledger.
+const tilScreen={...tilFixture,causalDoubleMidfieldScreenVersion:1,
+  selectedTacticId:"central_possession_4231",tacticSnapshot:{id:"central_possession_4231",defensiveLine:"medium"}};
+const screenRun=(roll,changes={})=>resolveDoubleMidfieldScreen({...tilScreen,...changes},{rng:()=>roll});
+const screenWin=screenRun(0.1),screenSecond=screenRun(0.35),screenFirst=screenRun(0.9);
+assert.deepEqual([screenWin.status,screenSecond.status,screenFirst.status],["breakthrough","second_screen_contained","first_screen_contained"]);
+assert.equal(screenWin.xgDeltaFor,0.09);
+assert.equal(screenWin.xgDeltaAgainst,0);
+assert.equal(screenWin.evidence.opponentPlayerId,null);
+assert.equal(new Set([...screenWin.evidence.firstSupport,...screenWin.evidence.secondSupport]).size,3);
+const screenWide=screenRun(0.1,{tacticSnapshot:{id:"wide_fast_433",defensiveLine:"medium"}});
+assert.equal(screenWide.route,"double_screen_wide_bypass");
+assert.ok(screenWide.evidence.entryProbability>screenWin.evidence.entryProbability);
+assert.equal(screenWide.evidence.targetFlank,null);
+const screenWeakPivot=screenRun(0.1,{lineupSnapshot:glimtLineup.map(p=>["DM","CM"].includes(p.position)?{...p,matchScore:55}:p)});
+assert.ok(screenWeakPivot.evidence.entryProbability<screenWin.evidence.entryProbability);
+const screenWeakRunner=screenRun(0.1,{lineupSnapshot:glimtLineup.map(p=>p.position==="AM"?{...p,matchScore:55}:p)});
+assert.equal(screenWeakRunner.evidence.entryProbability,screenWin.evidence.entryProbability);
+assert.ok(screenWeakRunner.evidence.conditionalFinishProbability<=screenWin.evidence.conditionalFinishProbability);
+assert.equal(screenRun(0.1,{causalDoubleMidfieldScreenVersion:undefined}),null);
+assert.equal(screenRun(0.1,{opponent:{...tilScreen.opponent,tacticalBehaviour:{}}}),null);
+assert.equal(screenRun(NaN),null);
+assert.equal(resolveCompactBlockAttack(tilScreen,{rng:()=>0.1}).route,"double_screen_central_combination");
+let tilScreenDraws=0;resolveCompactBlockAttack(tilScreen,{rng:()=>{tilScreenDraws++;return 0.1;}});
+assert.equal(tilScreenDraws,1);
+assert.equal(annotateCompactBlockChances(lskChances,screenWin).filter(c=>c.tacticalMoment).length,1);
+const weakRest=screenRun(0.9,{teamFitSnapshot:{...tilScreen.teamFitSnapshot,tacticalProfile:{...tilScreen.teamFitSnapshot.tacticalProfile,restDefenseScore:40}}});
+assert.equal(weakRest.xgDeltaAgainst,0.03);
+const tilScreenRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(tilScreen),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.route,"double_screen_central_combination");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.for-period.baselineExpectedGoals.for)*100)/100,period.tacticalPhase.xgDeltaFor);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(tilScreen))).timeline[0].tacticalPhase,period.tacticalPhase);
+}finally{Math.random=tilScreenRandom;}
+
+// Helstrup's fourth build-up player: existing press motor and two
+// alternative outlets, not a second phase or extra shot.
+const tilKeeperFixture=session("high_press_343",{opponent:{...tilProfile,id:"tromso",strength:72},
+  lineupSnapshot:glimtLineup,causalOpponentKeeperBuildUpVersion:1});
+const keeperRun=(changes={},pressure=0.99,protection=0.99)=>resolve({...tilKeeperFixture,...changes},pressure,protection);
+const keeperBase=keeperRun();
+assert.equal(keeperBase.evidence.keeperBuildUp.buildUpSlots,4);
+assert.equal(keeperBase.evidence.keeperBuildUp.nominalForwardPressRoles,4);
+assert.equal(keeperBase.evidence.keeperBuildUp.opponentPlayerId,null);
+assert.deepEqual(keeperBase.evidence.keeperBuildUp.availableOutlets,["third_man","direct"]);
+assert.equal(keeperBase.evidence.keeperBuildUp.selectedOutlet,null);
+const keeperWeakCentral=keeperRun({lineupSnapshot:glimtLineup.map(p=>p.position==="CM"?{...p,roleId:"deep_playmaker"}:p)});
+assert.equal(keeperWeakCentral.evidence.keeperBuildUp.selectedOutlet,"third_man");
+assert.equal(keeperWeakCentral.counterplay.pathwayId,"third_man");
+const keeperWeakDepth=keeperRun({lineupSnapshot:glimtLineup.map(p=>p.position==="CB"?{...p,matchScore:55}:p)});
+assert.equal(keeperWeakDepth.evidence.keeperBuildUp.selectedOutlet,"direct");
+assert.equal(keeperWeakDepth.counterplay.pathwayId,"direct");
+const keeperThree=keeperRun({lineupSnapshot:glimtLineup.map(p=>p.position==="AM"?{...p,position:"CM"}:p)});
+assert.ok(keeperThree.evidence.keeperBuildUp.pressPenalty>keeperBase.evidence.keeperBuildUp.pressPenalty);
+assert.ok(keeperThree.probability<keeperBase.probability);
+assert.equal(keeperRun({},0,0.99).status,"regain");
+assert.equal(keeperRun({},0.99,0).status,"contained");
+assert.equal(keeperBase.status,"escaped");
+assert.equal(keeperRun({causalOpponentKeeperBuildUpVersion:undefined}).evidence.keeperBuildUp,undefined);
+assert.equal(keeperRun({tacticSnapshot:{id:"midfield_press_trap"}}).evidence.keeperBuildUp,undefined);
+const keeperExplicit=keeperRun({opponent:{...tilKeeperFixture.opponent,tacticalBehaviour:{keeperBuildUpPattern:"keeper_back_four",pressEscape:"isolated"}}});
+assert.equal(keeperExplicit.evidence.keeperBuildUp,undefined);
+assert.equal(keeperExplicit.evidence.opponentEscapeEvidence,"isolated");
+const keeperUnknown=keeperRun({lineupSnapshot:glimtLineup.map(p=>p.position==="AM"?{...p,matchFitKnown:false}:p)});
+assert.equal(keeperUnknown.evidence.keeperBuildUp,undefined);
+let keeperPressureDraws=0,keeperProtectionDraws=0;
+resolveOwnPressAgainstOpponent(tilKeeperFixture,{pressureRoll:()=>{keeperPressureDraws++;return 0.99;},
+  protectionRoll:()=>{keeperProtectionDraws++;return 0.99;}});
+assert.deepEqual([keeperPressureDraws,keeperProtectionDraws],[1,1]);
+assert.deepEqual(resolve(JSON.parse(JSON.stringify(tilKeeperFixture)),0.99,0.99),keeperBase);
+const keeperRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(tilKeeperFixture),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"our_press_vs_opponent_build_up");
+  assert.equal(period.tacticalPhase.evidence.keeperBuildUp.buildUpSlots,4);
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,period.tacticalPhase.xgDeltaAgainst);
+  assert.equal(played.minuteLog.length,period.chances);
+}finally{Math.random=keeperRandom;}
+
+// Modern Tromsø: separate wingback cover, midfield screen and depth.
+const pinFixture={...tilFixture,causalOpponentWingbackPinVersion:1};
+const pinRun=(roll,changes={})=>resolveOpponentWingbackPin({...pinFixture,...changes},{rng:()=>roll});
+const pinWin=pinRun(0.1),pinDepth=pinRun(0.35),pinStop=pinRun(0.9);
+assert.deepEqual([pinWin.status,pinDepth.status,pinStop.status],["breakthrough","depth_contained","entry_contained"]);
+assert.deepEqual([pinWin.xgDeltaAgainst,pinDepth.xgDeltaAgainst,pinStop.xgDeltaAgainst],[0.07,-0.02,-0.03]);
+assert.equal(pinWin.evidence.opponentPlayerId,null);
+assert.equal(new Set([...pinWin.evidence.wideCover,...pinWin.evidence.centralCover,...pinWin.evidence.depthCover]).size,8);
+const pinWeakWide=pinRun(0.1,{lineupSnapshot:glimtLineup.map(p=>p.position==="LW"?{...p,matchScore:45}:p)});
+assert.ok(pinWeakWide.evidence.pinPressure>pinWin.evidence.pinPressure);
+assert.ok(pinWeakWide.evidence.centralEntryProbability>pinWin.evidence.centralEntryProbability);
+assert.equal(pinWeakWide.evidence.conditionalDepthProbability,pinWin.evidence.conditionalDepthProbability);
+const pinWeakMiddle=pinRun(0.1,{lineupSnapshot:glimtLineup.map(p=>["CM","DM"].includes(p.position)?{...p,matchScore:50}:p)});
+assert.equal(pinWeakMiddle.evidence.sourceSpace,"between_lines");
+assert.equal(pinWeakMiddle.evidence.targetFlank,null);
+const pinHigh=pinRun(0.1,tilHigh);
+assert.ok(pinHigh.evidence.conditionalDepthProbability>pinWin.evidence.conditionalDepthProbability);
+assert.equal(pinHigh.evidence.entryProbability,pinWin.evidence.entryProbability);
+assert.equal(pinRun(0.1,{causalOpponentWingbackPinVersion:undefined}),null);
+assert.equal(pinRun(0.1,{lineupSnapshot:glimtLineup.filter(p=>p.position==="LW"?false:true)}),null);
+assert.equal(pinRun(NaN),null);
+let pinDraws=0;resolveOpponentWingbackPin(pinFixture,{rng:()=>{pinDraws++;return 0.1;}});
+assert.equal(pinDraws,1);
+assert.equal(annotateOpponentWingbackPinChances(lskChances,pinWin).filter(c=>c.tacticalMoment).length,1);
+assert.equal(annotateOpponentWingbackPinChances(lskChances,pinStop),lskChances);
+const pinClock={...pinFixture,events:[{id:"test_1"},{id:"test_2"},{id:"test_3"}]};
+const pinRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(pinClock),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"opponent_wingback_pin");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,period.tacticalPhase.xgDeltaAgainst);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(pinClock))).timeline[0].tacticalPhase,period.tacticalPhase);
+  const next=advanceMatchClock(played).timeline[1];
+  assert.equal(next.tacticalPhase.situation,"opponent_selective_transition");
+}finally{Math.random=pinRandom;}
 
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");

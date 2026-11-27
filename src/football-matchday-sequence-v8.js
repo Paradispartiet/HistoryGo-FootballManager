@@ -922,3 +922,133 @@ export function annotateOpponentThreeSpaceChances(chances,phase){
     {...c,tacticalMoment:{...c.tacticalMoment,kind:"opponent_three_space_combination",label:"Gjennombrudd i tre rom",
       basis:"simulated_three_space_combination",keyAction:phase.steps[phase.status==="late_runner_breakthrough"?phase.steps.length-1:phase.steps.length-2].action}}:c);
 }
+
+// Høgmo 2011: selective transition after a modeled regain opportunity.
+// A strong rest defence discourages a forced forward pass. No extra
+// possession event, extra RNG or inferred opposing players.
+export function resolveOpponentSelectiveTransition(session,{rng=Math.random}={}){
+  if(session?.causalOpponentSelectiveTransitionVersion!==1||
+      session.opponent?.tacticalBehaviour?.transitionPattern!=="selective_break_or_retain"||
+      !verifiedMatchLineup(session.lineupSnapshot))return null;
+  const plan=session.activePlanSnapshot||session.tacticSnapshot;
+  const line=plan?.defensiveLine;
+  if(!plan?.id||!Object.prototype.hasOwnProperty.call(BREAKTHROUGH_LINE_EXPOSURE,line))return null;
+  const {buildUpScore,balanceScore,restDefenseScore}=session.teamFitSnapshot?.tacticalProfile||{};
+  if(![buildUpScore,balanceScore,restDefenseScore].every(v=>finite(v)&&v>=0&&v<=100))return null;
+  const best=(positions,count=1)=>session.lineupSnapshot.filter(p=>positions.includes(p.position))
+    .sort((a,b)=>b.matchScore-a.matchScore||a.playerId.localeCompare(b.playerId)).slice(0,count);
+  const backs=best(["CB"],2),mids=best(["DM","CM"],2);
+  if(backs.length!==2||mids.length!==2)return null;
+  const avg=ps=>ps.reduce((sum,p)=>sum+p.matchScore,0)/ps.length;
+  const clamp=v=>Math.max(0.12,Math.min(0.82,v));
+  const round=v=>Math.round(v*1000)/1000;
+  const dedicated=mids.some(p=>["balancing_six","holding_midfielder"].includes(p.roleId));
+  const regain=clamp(0.48-(buildUpScore-65)*0.005-(balanceScore-65)*0.003);
+  const window=clamp(0.52+BREAKTHROUGH_LINE_EXPOSURE[line]-(restDefenseScore-65)*0.005-
+    (avg([...backs,...mids])-65)*0.004-(dedicated?0.06:0));
+  const attempt=window>=0.45;
+  const draw=rng();if(!finite(draw))return null;
+  const roll=Math.max(0,Math.min(0.999999999,draw)),won=roll<regain;
+  const through=won&&attempt&&roll<regain*window;
+  const status=!won?"possession_protected":!attempt?"retained":through?"breakthrough":"transition_contained";
+  const actions=["Tromsø søker en gjenvinningsmulighet mot vårt oppspill",
+    "Ved gjenvinning vurderer motstanderen rommet bak ballen",
+    !attempt?"Gjennombruddsvinduet er lite; behold ballen og balansen":"Motstanderen forsøker en tidlig fremoverpasning",
+    "Vårt restforsvar kontrollerer eller mister gjennombruddsrommet"];
+  const results=["simulated_available",won?"simulated_available":"countered",
+    !won?"not_reached":!attempt?"retained":through?"simulated_available":"countered",
+    !won||!attempt?"not_reached":through?"simulated_available":"countered"];
+  return {version:6,situation:"opponent_selective_transition",planId:plan.id,route:"selective_break_or_retain",status,
+    side:through?"against":null,probability:round(attempt?regain*window:0),
+    xgDeltaFor:0,xgDeltaAgainst:through?0.07:status==="transition_contained"?-0.02:0,
+    cause:!won?"Vår oppbygging og balanse hindrer gjenvinning.":!attempt?
+      "Tromsø vinner ballen, men velger kontroll fremfor et tvunget gjennombrudd.":
+      through?"Et åpent gjennombruddsvindu etter gjenvinning utnyttes raskt.":
+      "Tromsø forsøker gjennombrudd, men vårt restforsvar stanser det.",
+    steps:actions.map((action,i)=>({action,order:i+1,result:results[i]})),
+    counterplay:{status:through?"not_triggered":"simulated_counter",counter:"Beskytt oppspill og restforsvar",
+      nextManagerResponse:"Behold støtte rundt ballfører, to stoppere og en skjermende midtbanespiller.",automaticallyExecuted:false},
+    evidence:{basis:"sourced_selective_transition_generic_game_hypothesis_not_observed",
+      opponentPattern:"selective_break_or_retain",opponentPlayerId:null,targetFlank:null,
+      regainProbability:round(regain),conditionalBreakthroughProbability:round(window),attemptThreshold:0.45,
+      regainSimulated:won,routeDecision:won?(attempt?"breakthrough":"retain"):null,
+      dedicatedCover:dedicated,restCover:[...backs,...mids].map(p=>p.playerId),
+      supportingPlayers:[...backs,...mids].map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
+      eventCount:1,randomDraws:1}};
+}
+export function annotateOpponentSelectiveTransitionChances(chances,phase){
+  if(!Array.isArray(chances)||phase?.situation!=="opponent_selective_transition"||phase.side!=="against")return chances;
+  return annotateOpponentRunChances(chances,phase).map((c,i)=>i===chances.findIndex(x=>x.side==="against")?
+    {...c,tacticalMoment:{...c.tacticalMoment,kind:"opponent_selective_transition",label:"Gjennombrudd etter gjenvinning",
+      basis:"simulated_selective_transition",keyAction:phase.steps[2].action}}:c);
+}
+
+// Helstrup 2023: high wingbacks pin the outside defenders while a false
+// nine and other receivers occupy between-lines space. One simulated
+// attack, not observed tracking, opponent players or a measured sequence.
+export function resolveOpponentWingbackPin(session,{rng=Math.random}={}){
+  if(session?.causalOpponentWingbackPinVersion!==1||
+    session.opponent?.tacticalBehaviour?.attackingRunPattern!=="wingback_pin_false_nine"||
+    !verifiedMatchLineup(session.lineupSnapshot))return null;
+  const plan=session.activePlanSnapshot||session.tacticSnapshot;
+  const line=plan?.defensiveLine;
+  if(!plan?.id||!Object.prototype.hasOwnProperty.call(BREAKTHROUGH_LINE_EXPOSURE,line))return null;
+  const {balanceScore,restDefenseScore}=session.teamFitSnapshot?.tacticalProfile||{};
+  if(![balanceScore,restDefenseScore].every(v=>finite(v)&&v>=0&&v<=100))return null;
+  const best=(positions,count=1)=>session.lineupSnapshot.filter(p=>positions.includes(p.position))
+    .sort((a,b)=>b.matchScore-a.matchScore||a.playerId.localeCompare(b.playerId)).slice(0,count);
+  const left=best(["LB","LWB"]),right=best(["RB","RWB"]),lw=best(["LW","LM"]),rw=best(["RW","RM"]);
+  const mids=best(["DM","CM"],2),backs=best(["CB"],2);
+  if(!left.length||!right.length||!lw.length||!rw.length||mids.length!==2||backs.length!==2)return null;
+  const avg=ps=>ps.reduce((n,p)=>n+p.matchScore,0)/ps.length;
+  const clamp=v=>Math.max(0.12,Math.min(0.82,v));
+  const round=v=>Math.round(v*1000)/1000;
+  // Separate wide support from screening and depth. Weak wide support
+  // increases the modeled burden on the central screen, not a free bonus
+  // for each wingback or a fabricated defender relocation.
+  const leftFit=avg([...left,...lw]),rightFit=avg([...right,...rw]);
+  const wideFit=Math.min(leftFit,rightFit);
+  const pinPressure=clamp(0.55-(wideFit-65)*0.005-(balanceScore-65)*0.002);
+  const dedicated=mids.some(p=>["balancing_six","holding_midfielder"].includes(p.roleId));
+  const centralBase=clamp(0.54-(avg(mids)-65)*0.005-(balanceScore-65)*0.003-(dedicated?0.06:0));
+  const central=clamp(centralBase+Math.max(0,pinPressure-0.40)*0.30);
+  const wide=clamp(0.52-(wideFit-65)*0.005-(balanceScore-65)*0.002);
+  const route=central>wide+0.02?"between_lines":wide>central+0.02?"wide":null;
+  const flank=route==="wide"?(leftFit+2<rightFit?"left":rightFit+2<leftFit?"right":null):null;
+  const entry=Math.max(central,wide);
+  const depth=clamp(0.51-(avg(backs)-65)*0.005-(restDefenseScore-65)*0.003+
+    BREAKTHROUGH_LINE_EXPOSURE[line]);
+  const draw=rng();if(!finite(draw))return null;
+  const roll=Math.max(0,Math.min(0.999999999,draw));
+  const entered=roll<entry,success=entered&&roll<entry*depth;
+  const status=success?"breakthrough":entered?"depth_contained":"entry_contained";
+  const actions=["Høye vingbacker binder breddeforsvaret",
+    route==="between_lines"?"En møtende spiss søker mottak mellom leddene":
+      route==="wide"?"Motstanderen søker progresjon via vingbacken":"Motstanderen søker et tilgjengelig mottak sentralt eller bredt",
+    "En medspiller truer rommet bak forsvarsleddet fra en lavere posisjon",
+    "Stopperne forsøker å holde dybden og avverge gjennomspillet"];
+  const results=["simulated_available",entered?"simulated_available":"countered",
+    !entered?"not_reached":"simulated_available",!entered?"not_reached":success?"simulated_available":"countered"];
+  return {version:6,situation:"opponent_wingback_pin",planId:plan.id,route:"wingback_pin_false_nine",status,
+    side:success?"against":null,probability:round(entry*depth),xgDeltaFor:0,xgDeltaAgainst:success?0.07:entered?-0.02:-0.03,
+    cause:success?"Bredde og bevegelser mellom leddene åpner et mottak; neste løp truer bakrommet.":
+      entered?"Motstanderen finner mottaket, men stopperne bevarer dybden og avverger gjennomspillet.":
+      "Kantstøtte og sentral skjerming nekter motstanderen et fremoverrettet mottak.",
+    steps:actions.map((action,i)=>({action,order:i+1,result:results[i]})),
+    counterplay:{status:success?"not_triggered":"simulated_counter",counter:"Fordel bredde, mellomrom og dybde",
+      nextManagerResponse:"La kantstøtten hjelpe backen, skjerm møtende spiss med midtbanen og behold stoppernes dybde.",automaticallyExecuted:false},
+    evidence:{basis:"sourced_wingback_pin_generic_game_hypothesis_not_observed",opponentPattern:"wingback_pin_false_nine",
+      opponentPlayerId:null,sourceSpace:route,targetFlank:flank,pinPressure:round(pinPressure),
+      centralEntryWithoutPin:round(centralBase),centralEntryProbability:round(central),wideEntryProbability:round(wide),
+      entryProbability:round(entry),conditionalDepthProbability:round(depth),dedicatedCover:dedicated,
+      wideCover:[...left,...right,...lw,...rw].map(p=>p.playerId),centralCover:mids.map(p=>p.playerId),
+      depthCover:backs.map(p=>p.playerId),supportingPlayers:[...left,...right,...lw,...rw,...mids,...backs]
+        .map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),eventCount:1,randomDraws:1}};
+}
+export function annotateOpponentWingbackPinChances(chances,phase){
+  if(!Array.isArray(chances)||phase?.situation!=="opponent_wingback_pin"||phase.side!=="against")return chances;
+  const at=chances.findIndex(c=>c.side==="against");
+  return annotateOpponentRunChances(chances,phase).map((c,i)=>i===at?
+    {...c,tacticalMoment:{...c.tacticalMoment,kind:"opponent_wingback_pin",label:"Vingbackbredde og mellomrom",
+      basis:"simulated_wingback_pin",keyAction:phase.steps[2].action}}:c);
+}

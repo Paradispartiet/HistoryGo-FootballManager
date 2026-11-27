@@ -655,14 +655,14 @@
       "clubId": "tromso",
       "styleName": "Nordlyset",
       "tacticalSchool": "Posisjonsspill i 3-5-2 med vingbacker",
-      "era": "1986– · tydeligst i moderne tid",
+      "era": "2010–2011 (Høgmo) · 2023 (Helstrup)",
       "style": "Rolig med ballen, kontrollert framrykk og et etablert angrep de faktisk har en plan for",
-      "historicalNote": "TIL har aldri vært et lag som legger seg bakover — cupgullene i 1986 og 1996 og 3-2 mot Chelsea i snødrevet på Alfheim i 1997 ble tatt med mot. Den moderne utgaven har satt system på motet: 3-5-2, rolig i besittelse, framrykk gjennom skapte fordeler i stedet for tilfeldigheter, og et etablert angrep som er blant ligaens mest gjennomarbeidede. Kulda og underlaget kommer i tillegg, ikke i stedet for.",
-      "inPossessionShape": "3-5-2 med vingbacker som holder bredden",
-      "outOfPossessionShape": "5-3-2 som faller sammen i middels blokk",
+      "historicalNote": "Tromsø vant cupen i 1986 og 1996. Under Per-Mathias Høgmo i 2010–2011 var laget defensivt disiplinert; i 2011 vanligvis 4-4-2, med to sentrale midtbanespillere som skjermet forsvaret. Etter gjenvinning søkte de gjennombrudd når muligheten var der, ellers beholdt de ballen. Gaute Helstrups 2023-lag hadde en annen oppbyggingsstruktur, normalt 3-5-2, med tålmodig posisjonsspill og aktiv bruk av keeper. Disse periodene er separate kilder til klubbens spillmodell.",
+      "inPossessionShape": "3-5-2 (Helstrup 2023); Høgmo 2011 vanligvis 4-4-2 med én offensiv back",
+      "outOfPossessionShape": "5-3-2 (moderne spillmodell); Høgmo 2011 samlet 4-4-2 / 4-5-1",
       "defensiveBlock": "Middels blokk",
-      "buildUpStyle": "Rolig bakfra med tre stoppere, opp gjennom skapte fordeler",
-      "attackingStyle": "Etablert angrep — bredde fra vingbackene, to spisser i boksen",
+      "buildUpStyle": "Situasjonsavhengig bakre firer med aktiv keeper og brede sidestoppere (2023)",
+      "attackingStyle": "Høye vingbacker, falsk nier og mellomromsbevegelser (2023); situasjonsstyrt gjennombrudd etter gjenvinning (2011)",
       "tempo": "Kontrollert, stigende",
       "riskLevel": "medium",
       "baseStyleId": "possession_opponent",
@@ -687,12 +687,12 @@
         "intensity": 64
       },
       "strengths": [
-        "tre stoppere gjør at de alltid har en fri mann i oppbyggingen",
-        "vingbackene strekker deg bredt før de går inn i boksen"
+        "tålmodig oppbygging med tre stoppere og aktiv keeper (2023)",
+        "gjennombrudd når muligheten finnes, ellers sikret ballbesittelse (2011)",
+        "to dype midtbanespillere skjermer forsvaret (2011)"
       ],
       "weaknesses": [
-        "to spisser mot tre bakerst gir deg overtall i din egen oppbygging",
-        "rommet ved siden av vingbacken er alltid der"
+        "rom bak vingbacker (moderne spillhypotese)"
       ],
       "vulnerableZones": [
         "rommet bak vingbacken",
@@ -711,11 +711,63 @@
         "angrip rommet vingbacken forlot"
       ],
       "managerHints": [
-        "Presser du ikke den tredje stopperen, får de bygge i fred hele kampen.",
-        "Bredden deres kommer fra vingbackene — tar du dem, tar du angrepet."
+        "Ikke bryt egen balanse i jakten på ballen.",
+        "Sikre rommet bak ballen; da kan Tromsø velge å beholde ballen fremfor å kontre.",
+        "Spill rundt skjermen med bredde, eller bruk separate støttespillere og tredjemannsbevegelse sentralt.",
+        "Koordiner presset på keeper og stoppere med sentral pasningsdekning og dybdesikring.",
+        "La kantstøtten dekke vingbackene mens sentral midtbane skjermer møtende spiss; ikke trekk begge stopperne ut."
       ],
       "styleBasis": "tradisjon",
-      "shortLabel": "3-5-2 · rolig oppbygging, bredde fra vingbackene"
+      "shortLabel": "3-5-2 · rolig oppbygging, bredde fra vingbackene",
+      "tacticalBehaviour": {
+        "transitionPattern": "selective_break_or_retain",
+        "defensivePattern": "double_midfield_screen",
+        "keeperBuildUpPattern": "keeper_back_four",
+        "attackingRunPattern": "wingback_pin_false_nine"
+      },
+      "tacticalBehaviourEvidence": {
+        "era": "2011",
+        "scope": "Høgmos overgangs- og skjermprinsipper (2011), separat fra Helstrups oppbyggingsprinsipp (2023). Ingen fast flanke, motstanderellever eller målt frekvens.",
+        "interpretation": "Riisnæs beskriver to dype sentrale midtbanespillere, samlet press, tidlig gjennombrudd når tilgjengelig og ballbevaring ellers. Den nye fasen modellerer først mulighet for gjenvinning, deretter betinget valg av gjennombrudd mot verifisert restforsvar; ved lavt gjennombruddsvindu velges ballbevaring. Sannsynligheter, terskel og xG er spillhypoteser. Eksisterende numeriske traits og matchup-tokens beholdes som moderne spillmodell. Riisnæs beskriver to sentrale midtbanespillere som sjelden går høyt, samt spisser som normalt starter presset rundt midtstreken. Den doble skjermen modelleres med separate sentrale pasningshindre; bredde kan omgå skjermen, men gir ikke automatisk en sjanse i boksen. Dette er et middels blokk-scenario, ikke en påstand om en historisk lav blokk eller målte sannsynligheter. Johansson beskriver Haugaard som en av to smale stoppere i en situasjonsavhengig bakre firer, sidestoppere bredt, tredjemannspasning sentralt og direkte pasning ved tilgjengelig bakrom. Disse to tilgjengelige pressutveiene aktiveres kun i den modellerte høypressfasen. Valget av svakere verifisert sikring, antall nominelle fremre pressroller og beregnet pressmotstand er spillhypoteser, ikke observerte posisjoner eller historisk frekvens. Johansson beskriver høye vingbacker som binder motstanderens backer og tidvis stoppere, Erlien som falsk nier og flere mottakere i mellomrommet som også kan true bakrom fra dype posisjoner. En egen etablert angrepsfase modellerer valget mellom bred progresjon og sentralt mottak, etterfulgt av et betinget gjennombrudd. Vekter, gates og xG er spillhypoteser. Fasen veksler med 2011-prinsippet i ledige perioder; ingen historisk kampfrekvens antas.",
+        "sources": [
+          {
+            "title": "Hvorfor leder Tromsø og Strømsgodset Tippeligaen?",
+            "publisher": "Harald Riisnæs / Fotballanalyse",
+            "url": "https://fotballanalyse.wordpress.com/2011/05/31/hvorfor-leder-tromso-og-stromsgodset-tippeligaen/",
+            "locator": "Tromsø: 4-4-2, to dype sentrale, gjennombrudd når tilgjengelig, ellers beholde ballen og sikre balansen."
+          },
+          {
+            "title": "Tromsø taking Norway by storm",
+            "publisher": "UEFA",
+            "url": "https://www.uefa.com/news-media/news/01e5-0f85eff917b8-3055e4bc1ac7-1000--tromso-taking-norway-by-storm/",
+            "locator": "2010: defensiv soliditet under Høgmo; ikke belegg for bestemt taktisk sekvens."
+          },
+          {
+            "title": "Gautes guta – Tromsø i etablert angrep",
+            "publisher": "Anders Romsøy Johansson / Fotballdykket",
+            "url": "https://fotballdykket.wordpress.com/2023/09/01/gautes-guta-tromso-i-etablert-angrep/",
+            "locator": "2023: avsnittene «Keeper – eller stopper nr. 4» og «Fake it till you make it»: keeper i midlertidig bakre firer, brede sidestoppere, sentrale tredjemannspasninger og direkte pasninger i bakrom. Videre: høye vingbacker binder backer; Erlien møter i mellomrom; indreløpere og spisser truer bakrom fra lave posisjoner."
+          },
+          {
+            "title": "Fire avgjørende faser for poeng i nord",
+            "publisher": "Sandefjord Fotball",
+            "url": "https://www.sandefjordfotball.no/nyheter/fire-avgjorende-faser-for-poeng-i-nord",
+            "locator": "2021: Helstrups 3-5-2 og utfordringen med å dekke den dype ballsentralen; ikke en dokumentert oppstillingsdetalj fra 2023."
+          },
+          {
+            "title": "Taktisk analyse: Start – Tromsø 4-5",
+            "publisher": "Anders Romsøy Johansson / Fotballdykket",
+            "url": "https://fotballdykket.wordpress.com/2023/03/16/taktisk-analyse-start-tromso-4-5/",
+            "locator": "Eksempel på bred oppbygging, forskyvning og fri ballfører i mellomrom."
+          }
+        ],
+        "eraByPattern": {
+          "transitionPattern": "2011",
+          "defensivePattern": "2011",
+          "keeperBuildUpPattern": "2023",
+          "attackingRunPattern": "2023"
+        }
+      }
     },
     {
       "clubId": "bodo_glimt",
