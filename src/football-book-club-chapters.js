@@ -1,6 +1,7 @@
 // Fotballboka: editorial club chapters on the existing knowledge surface.
 // Historical descriptions and sources are read from the canonical club
 // profiles. Illustrations are didactic diagrams, never reconstructed tracking.
+import { THEORY_CHAPTERS } from "./football-book-theory.js";
 export const CLUB_DIAGRAMS = {
   rosenborg: [
     {
@@ -1139,15 +1140,35 @@ function chapterCard(c){
   section.append(el("h5","Managerens motspill"));const ul=el("ul");for(const hint of c.hints)ul.append(el("li",hint));section.append(ul,el("p",c.scope,"muted-text"),el("h5","Registrerte kilder"));
   const sources=el("ul");for(const source of c.sources){const li=el("li");let href;try{const u=new URL(source.url);if(["http:","https:"].includes(u.protocol))href=u.href;}catch{}if(href){const link=el("a",source.title||source.publisher||href);link.href=href;link.target="_blank";link.rel="noopener noreferrer";li.append(link);}else li.append(el("span",source.title||source.publisher||"Kilde"));if(source.locator)li.append(el("p",source.locator));sources.append(li);}section.append(sources);return section;
 }
+function theoryCard(chapter,principles,clubs){
+  const section=el("details",null,"club-book-chapter");
+  section.append(el("summary",chapter.title),el("h5","Prinsippet"),el("p",chapter.concept));
+  for(const d of chapter.diagrams)section.append(figure(d));
+  section.append(el("h5","Taktisk dilemma"),el("p",chapter.dilemma),el("h5","I spillet"),el("p",chapter.manager),el("h5","Treningsøvelse"),el("p",chapter.practice),el("h5","Klubbeksempler"));
+  const examples=el("ul");for(const id of chapter.clubs){const c=clubs.find(c=>c.id===id);if(!c)continue;const button=el("button",c.name+" – "+c.title);button.type="button";button.addEventListener("click",()=>{const root=document.getElementById("footballBookClubChapters"),node=document.getElementById("club-book-"+id);if(!root||!node)return;root.open=true;const input=root.querySelector("input");if(input){input.value="";input.dispatchEvent(new Event("input"));}node.open=true;node.scrollIntoView({block:"start"});node.querySelector("summary")?.focus({preventScroll:true});});const li=el("li");li.append(button);examples.append(li);}
+  section.append(examples,el("h5","Grunnlag i Fotballboka"));
+  const list=el("ul");for(const id of chapter.principles){const p=principles.find(p=>p.id===id);if(!p)continue;const li=el("li");li.append(el("strong",p.title),el("p",p.handbookText));list.append(li);}section.append(list);return section;
+}
+async function initTheory(clubs){
+  const root=document.getElementById("footballBookTheory");if(!root)return;
+  const list=root.querySelector(".club-book-list"),status=root.querySelector(".club-book-status"),search=root.querySelector("input");
+  let principles=[];
+  try{const base=new URL("../",import.meta.url);const response=await fetch(new URL("data/football_book_knowledge_principles.json",base));if(!response.ok)throw Error("book index");const index=await response.json();principles=(await Promise.all(index.files.map(async path=>{const r=await fetch(new URL(path,base));if(!r.ok)throw Error(path);return (await r.json()).principles||[];}))).flat();}
+  catch{status.textContent="Grunntekstene kunne ikke lastes. Teorikapitlene er fortsatt tilgjengelige.";}
+  const cards=THEORY_CHAPTERS.map(c=>({c,node:theoryCard(c,principles,clubs)}));list.append(...cards.map(x=>x.node));
+  const filter=()=>{const q=search.value.trim().toLocaleLowerCase("nb");let count=0;for(const {c,node} of cards){node.hidden=!(c.title+" "+c.concept+" "+c.dilemma).toLocaleLowerCase("nb").includes(q);if(!node.hidden)count++;}status.textContent=count+" av "+cards.length+" teorikapitler"+(!principles.length?" · grunntekster utilgjengelige":"");};
+  search.addEventListener("input",filter);filter();
+}
 async function init(){
   const root=document.getElementById("footballBookClubChapters");if(!root)return;
   const list=root.querySelector(".club-book-list"),status=root.querySelector(".club-book-status"),search=root.querySelector("input");
   try{
     const response=await fetch(new URL("../data/football_league_club_profiles.json",import.meta.url));if(!response.ok)throw Error("HTTP "+response.status);
     const chapters=buildClubBookChapters((await response.json()).profiles);
-    const cards=chapters.map(c=>({c,node:chapterCard(c)}));list.append(...cards.map(x=>x.node));
+    const cards=chapters.map(c=>({c,node:chapterCard(c)}));for(const {c,node} of cards)node.id="club-book-"+c.id;list.append(...cards.map(x=>x.node));
     const filter=()=>{const q=search.value.trim().toLocaleLowerCase("nb");let count=0;for(const {c,node} of cards){node.hidden=!(c.name+" "+c.title+" "+c.era).toLocaleLowerCase("nb").includes(q);if(!node.hidden)count++;}status.textContent=count+" av "+chapters.length+" klubbkapitler";};
     search.addEventListener("input",filter);filter();
-  }catch{status.textContent="Klubbkapitlene kunne ikke lastes. Åpne spillet på nytt for å prøve igjen.";}
+    await initTheory(chapters);
+  }catch{status.textContent="Klubbkapitlene kunne ikke lastes. Åpne spillet på nytt for å prøve igjen.";await initTheory([]);}
 }
 if(typeof document!=="undefined")init();
