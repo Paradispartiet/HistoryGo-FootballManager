@@ -1,7 +1,7 @@
 import { resolveSourcedCreativeBreakthrough, resolveCompactBlockAttack, annotateCompactBlockChances } from "../src/football-matchday-compact-block-v6.js";
 // Deterministic causal pressing: high press, mid-block trap, counterpress and escapes.
 import assert from "node:assert/strict";
-import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances, annotateOpponentCreativeAttackChances, resolveOpponentFullbackOverlap, annotateOpponentFullbackOverlapChances, annotateOpponentShortCombinationChances, resolveOpponentThreeSpaceCombination, annotateOpponentThreeSpaceChances } from "../src/football-matchday-sequence-v8.js";
+import { resolveOpponentRunSequence, resolveOpponentSwitchCrossSequence, annotateOpponentRunChances, resolveOpponentZonalShift, annotateOpponentZonalShiftChances, resolveOpponentRehearsedOutlet, annotateOpponentRehearsedOutletChances, resolveOpponentDirectSecondBall, annotateOpponentDirectSecondBallChances, resolveOpponentSetPiece, annotateOpponentSetPieceChances, annotateOpponentCreativeAttackChances, resolveOpponentFullbackOverlap, annotateOpponentFullbackOverlapChances, annotateOpponentShortCombinationChances, resolveOpponentThreeSpaceCombination, annotateOpponentThreeSpaceChances, resolveOpponentSelectiveTransition, annotateOpponentSelectiveTransitionChances } from "../src/football-matchday-sequence-v8.js";
 import { readFileSync } from "node:fs";
 import { resolveOwnPressAgainstOpponent, annotateOwnPressChances }
   from "../src/football-matchday-own-press-v6.js";
@@ -2152,5 +2152,48 @@ assert.equal(pairLateChances.filter(c=>c.tacticalMoment).length,1);
 assert.equal(pairLateChances.find(c=>c.tacticalMoment).tacticalMoment.keyAction,pairLate.steps.at(-1).action);
 assert.equal(annotateOpponentThreeSpaceChances(lskChances,pairBlocked),lskChances);
 assert.deepEqual(resolveOpponentThreeSpaceCombination(JSON.parse(JSON.stringify(stabakPairFixture)),{rng:()=>0.22}),pairLate);
+
+// Høgmo: a good rest defence prevents a forced transition, not every
+// regain is a shot and the selection remains deterministic.
+const tilProfile=leagueProfiles.find(p=>p.clubId==="tromso");
+const tilFixture=session("wide_fast_433",{causalOpponentSelectiveTransitionVersion:1,
+  opponent:{...tilProfile,id:"tromso",strength:72},lineupSnapshot:glimtLineup,
+  tacticSnapshot:{id:"wide_fast_433",defensiveLine:"medium"}});
+const tilRun=(roll,changes={})=>resolveOpponentSelectiveTransition({...tilFixture,...changes},{rng:()=>roll});
+const tilRetain=tilRun(0.1),tilProtect=tilRun(0.95);
+assert.equal(tilRetain.status,"retained");
+assert.equal(tilRetain.xgDeltaAgainst,0);
+assert.equal(tilProtect.status,"possession_protected");
+const tilHigh={tacticSnapshot:{id:"wide_fast_433",defensiveLine:"high"}};
+const tilBreak=tilRun(0.1,tilHigh),tilContained=tilRun(0.35,tilHigh);
+assert.equal(tilBreak.status,"breakthrough");
+assert.equal(tilBreak.xgDeltaAgainst,0.07);
+assert.equal(tilContained.status,"transition_contained");
+assert.equal(tilBreak.evidence.regainProbability,tilRetain.evidence.regainProbability);
+assert.ok(tilBreak.evidence.conditionalBreakthroughProbability>tilRetain.evidence.conditionalBreakthroughProbability);
+const tilWeakBuild=tilRun(0.1,{teamFitSnapshot:{...tilFixture.teamFitSnapshot,tacticalProfile:{...tilFixture.teamFitSnapshot.tacticalProfile,buildUpScore:40}}});
+assert.ok(tilWeakBuild.evidence.regainProbability>tilRetain.evidence.regainProbability);
+assert.equal(tilWeakBuild.evidence.conditionalBreakthroughProbability,tilRetain.evidence.conditionalBreakthroughProbability);
+assert.equal(tilRun(0.1,{causalOpponentSelectiveTransitionVersion:undefined}),null);
+assert.equal(tilRun(0.1,{lineupSnapshot:glimtLineup.filter(p=>p.position!=="DM")}),null);
+assert.equal(tilRun(NaN),null);
+assert.equal(annotateOpponentSelectiveTransitionChances(lskChances,tilBreak).filter(c=>c.tacticalMoment).length,1);
+assert.equal(annotateOpponentSelectiveTransitionChances(lskChances,tilRetain),lskChances);
+let tilSeed;
+for(let i=0;i<3000;i++){
+  const s={...tilFixture,...tilHigh,id:"til-transition-"+i};
+  if(resolveOpponentSelectiveTransition(s,{rng:()=>highPressPhaseRoll(s,"0:opponent-selective-transition")}).status==="breakthrough"){tilSeed=s;break;}
+}
+assert.ok(tilSeed);
+const tilRandom=Math.random;
+try{
+  Math.random=()=>0.99;
+  const played=advanceMatchClock(tilSeed),period=played.timeline[0];
+  assert.equal(period.tacticalPhase.situation,"opponent_selective_transition");
+  assert.equal(period.tacticalXg,undefined);
+  assert.equal(Math.round((period.expectedGoals.against-period.baselineExpectedGoals.against)*100)/100,period.tacticalPhase.xgDeltaAgainst);
+  assert.equal(played.minuteLog.length,period.chances);
+  assert.deepEqual(advanceMatchClock(JSON.parse(JSON.stringify(tilSeed))).timeline[0].tacticalPhase,period.tacticalPhase);
+}finally{Math.random=tilRandom;}
 
 console.log("OK: v6 own press, midblock, counterpress, known escape, non-stacked xG");
