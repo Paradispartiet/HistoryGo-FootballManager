@@ -3,6 +3,7 @@
 // profiles. Illustrations are didactic diagrams, never reconstructed tracking.
 import { THEORY_CHAPTERS } from "./football-book-theory.js";
 import { SCHOOL_CHAPTERS } from "./football-book-schools.js";
+import { ROLE_CHAPTERS } from "./football-book-roles.js";
 export const CLUB_DIAGRAMS = {
   rosenborg: [
     {
@@ -1141,9 +1142,20 @@ function chapterCard(c){
   section.append(el("h5","Managerens motspill"));const ul=el("ul");for(const hint of c.hints)ul.append(el("li",hint));section.append(ul,el("p",c.scope,"muted-text"),el("h5","Registrerte kilder"));
   const sources=el("ul");for(const source of c.sources){const li=el("li");let href;try{const u=new URL(source.url);if(["http:","https:"].includes(u.protocol))href=u.href;}catch{}if(href){const link=el("a",source.title||source.publisher||href);link.href=href;link.target="_blank";link.rel="noopener noreferrer";li.append(link);}else li.append(el("span",source.title||source.publisher||"Kilde"));if(source.locator)li.append(el("p",source.locator));sources.append(li);}section.append(sources);return section;
 }
-function theoryCard(chapter,principles,clubs){
+function theoryCard(chapter,principles,clubs,roles=[]){
   const section=el("details",null,"club-book-chapter");
   section.append(el("summary",chapter.title));if(chapter.era)section.append(el("p",chapter.era,"muted-text"));section.append(el("h5","Prinsippet"),el("p",chapter.concept));
+  if(chapter.roles?.length){
+    section.append(el("h5","Rollene i spillet"));
+    const roleList=el("ul");
+    for(const entry of chapter.roles){
+      const definition=roles.find(r=>r.id===entry.id);
+      const li=el("li");li.append(el("strong",definition?.name||entry.id),el("p",entry.description));
+      if(definition?.validPositions?.length)li.append(el("p","Spillets posisjoner: "+definition.validPositions.join(", "),"muted-text"));
+      roleList.append(li);
+    }
+    section.append(roleList);
+  }
   for(const d of chapter.diagrams)section.append(figure(d));
   section.append(el("h5","Taktisk dilemma"),el("p",chapter.dilemma),el("h5","I spillet"),el("p",chapter.manager),el("h5","Treningsøvelse"),el("p",chapter.practice),el("h5","Klubbeksempler"));
   const examples=el("ul");for(const id of chapter.clubs){const c=clubs.find(c=>c.id===id);if(!c)continue;const button=el("button",c.name+" – "+c.title);button.type="button";button.addEventListener("click",()=>{const root=document.getElementById("footballBookClubChapters"),node=document.getElementById("club-book-"+id);if(!root||!node)return;root.open=true;const input=root.querySelector("input");if(input){input.value="";input.dispatchEvent(new Event("input"));}node.open=true;node.scrollIntoView({block:"start"});node.querySelector("summary")?.focus({preventScroll:true});});const li=el("li");li.append(button);examples.append(li);}
@@ -1156,15 +1168,18 @@ async function initTheory(clubs){
   let principles=[];
   try{const base=new URL("../",import.meta.url);const response=await fetch(new URL("data/football_book_knowledge_principles.json",base));if(!response.ok)throw Error("book index");const index=await response.json();principles=(await Promise.all(index.files.map(async path=>{const r=await fetch(new URL(path,base));if(!r.ok)throw Error(path);return (await r.json()).principles||[];}))).flat();}
   catch{status.textContent="Grunntekstene kunne ikke lastes. Teorikapitlene er fortsatt tilgjengelige.";}
+  let roles=[];
+  try{const response=await fetch(new URL("../data/football_roles.json",import.meta.url));if(!response.ok)throw Error("roles");roles=(await response.json()).roles||[];}catch{}
   const renderSection=(root,chapters,label)=>{
     if(!root)return;
     const list=root.querySelector(".club-book-list"),status=root.querySelector(".club-book-status"),search=root.querySelector("input");
-    const cards=chapters.map(c=>({c,node:theoryCard(c,principles,clubs)}));list.append(...cards.map(x=>x.node));
-    const filter=()=>{const q=search.value.trim().toLocaleLowerCase("nb");let count=0;for(const {c,node} of cards){node.hidden=!(c.title+" "+(c.era||"")+" "+c.concept+" "+c.dilemma).toLocaleLowerCase("nb").includes(q);if(!node.hidden)count++;}status.textContent=count+" av "+cards.length+" "+label+(!principles.length?" · grunntekster utilgjengelige":"");};
+    const cards=chapters.map(c=>({c,node:theoryCard(c,principles,clubs,roles)}));list.append(...cards.map(x=>x.node));
+    const filter=()=>{const q=search.value.trim().toLocaleLowerCase("nb");let count=0;for(const {c,node} of cards){node.hidden=!(c.title+" "+(c.era||"")+" "+c.concept+" "+c.dilemma+" "+(c.roles||[]).map(entry=>(roles.find(r=>r.id===entry.id)?.name||entry.id)+" "+entry.description).join(" ")).toLocaleLowerCase("nb").includes(q);if(!node.hidden)count++;}status.textContent=count+" av "+cards.length+" "+label+(!principles.length?" · grunntekster utilgjengelige":"");};
     search.addEventListener("input",filter);filter();
   };
   renderSection(root,THEORY_CHAPTERS,"teorikapitler");
   renderSection(document.getElementById("footballBookSchools"),SCHOOL_CHAPTERS,"fotballskoler");
+  renderSection(document.getElementById("footballBookRoles"),ROLE_CHAPTERS,"rollekapitler");
 }
 async function init(){
   const root=document.getElementById("footballBookClubChapters");if(!root)return;
