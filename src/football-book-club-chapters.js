@@ -6,6 +6,7 @@ import { SCHOOL_CHAPTERS } from "./football-book-schools.js";
 import { ROLE_CHAPTERS } from "./football-book-roles.js";
 import { PHASE_CHAPTERS } from "./football-book-phases.js";
 import { SET_PIECE_CHAPTERS } from "./football-book-set-pieces.js";
+import { TRAINING_CHAPTERS } from "./football-book-training.js";
 export const CLUB_DIAGRAMS = {
   rosenborg: [
     {
@@ -1131,7 +1132,7 @@ function figure(d){
   const f=el("figure",null,"club-book-figure");f.append(el("h5",d.title));
   if(d.kind==="pitch"){f.append(pitch(d),el("p","Blå: angripere · lyse: forsvarere · stiplet: mulig pasning eller løp","muted-text"));}
   else if(d.kind==="bars"){
-    for(const [name,a,b] of d.rows){const bar=el("div",null,"club-book-bar");bar.setAttribute("role","img");bar.setAttribute("aria-label",name+": "+a+" prosent overlapping, "+b+" prosent kortpasning");for(const [value,cls] of [[a,"club-book-bar-a"],[b,"club-book-bar-b"]]){const seg=el("span",value+" %",cls);seg.style.width=value+"%";bar.append(seg);}f.append(el("p",name),bar);}
+    for(const [name,a,b] of d.rows){const bar=el("div",null,"club-book-bar");bar.setAttribute("role","img");bar.setAttribute("aria-label",name+": "+a+" prosent "+d.legend[0]+", "+b+" prosent "+d.legend[1]);for(const [value,cls] of [[a,"club-book-bar-a"],[b,"club-book-bar-b"]]){const seg=el("span",value+" %",cls);seg.style.width=value+"%";bar.append(seg);}f.append(el("p",name),bar);}
     f.append(el("p",d.legend.join(" / "),"muted-text"));
   }else{const flow=el("div",null,"club-book-flow");flow.append(el("strong",d.start),el("span","↓"),el("strong",d.decision));const branches=el("div",null,"club-book-branches");for(const b of d.branches)branches.append(el("span",b));flow.append(branches);f.append(flow);}
   f.append(el("figcaption",d.note));return f;
@@ -1184,6 +1185,7 @@ async function initTheory(clubs){
   renderSection(document.getElementById("footballBookRoles"),ROLE_CHAPTERS,"rollekapitler");
   renderSection(document.getElementById("footballBookPhases"),PHASE_CHAPTERS,"kampfaser");
   renderSection(document.getElementById("footballBookSetPieces"),SET_PIECE_CHAPTERS,"dødballkapitler");
+  renderSection(document.getElementById("footballBookTraining"),TRAINING_CHAPTERS,"treningskapitler");
 }
 async function init(){
   const root=document.getElementById("footballBookClubChapters");if(!root)return;
