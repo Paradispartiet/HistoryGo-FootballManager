@@ -922,3 +922,63 @@ export function annotateOpponentThreeSpaceChances(chances,phase){
     {...c,tacticalMoment:{...c.tacticalMoment,kind:"opponent_three_space_combination",label:"Gjennombrudd i tre rom",
       basis:"simulated_three_space_combination",keyAction:phase.steps[phase.status==="late_runner_breakthrough"?phase.steps.length-1:phase.steps.length-2].action}}:c);
 }
+
+// Høgmo 2011: selective transition after a modeled regain opportunity.
+// A strong rest defence discourages a forced forward pass. No extra
+// possession event, extra RNG or inferred opposing players.
+export function resolveOpponentSelectiveTransition(session,{rng=Math.random}={}){
+  if(session?.causalOpponentSelectiveTransitionVersion!==1||
+      session.opponent?.tacticalBehaviour?.transitionPattern!=="selective_break_or_retain"||
+      !verifiedMatchLineup(session.lineupSnapshot))return null;
+  const plan=session.activePlanSnapshot||session.tacticSnapshot;
+  const line=plan?.defensiveLine;
+  if(!plan?.id||!Object.prototype.hasOwnProperty.call(BREAKTHROUGH_LINE_EXPOSURE,line))return null;
+  const {buildUpScore,balanceScore,restDefenseScore}=session.teamFitSnapshot?.tacticalProfile||{};
+  if(![buildUpScore,balanceScore,restDefenseScore].every(v=>finite(v)&&v>=0&&v<=100))return null;
+  const best=(positions,count=1)=>session.lineupSnapshot.filter(p=>positions.includes(p.position))
+    .sort((a,b)=>b.matchScore-a.matchScore||a.playerId.localeCompare(b.playerId)).slice(0,count);
+  const backs=best(["CB"],2),mids=best(["DM","CM"],2);
+  if(backs.length!==2||mids.length!==2)return null;
+  const avg=ps=>ps.reduce((sum,p)=>sum+p.matchScore,0)/ps.length;
+  const clamp=v=>Math.max(0.12,Math.min(0.82,v));
+  const round=v=>Math.round(v*1000)/1000;
+  const dedicated=mids.some(p=>["balancing_six","holding_midfielder"].includes(p.roleId));
+  const regain=clamp(0.48-(buildUpScore-65)*0.005-(balanceScore-65)*0.003);
+  const window=clamp(0.52+BREAKTHROUGH_LINE_EXPOSURE[line]-(restDefenseScore-65)*0.005-
+    (avg([...backs,...mids])-65)*0.004-(dedicated?0.06:0));
+  const attempt=window>=0.45;
+  const draw=rng();if(!finite(draw))return null;
+  const roll=Math.max(0,Math.min(0.999999999,draw)),won=roll<regain;
+  const through=won&&attempt&&roll<regain*window;
+  const status=!won?"possession_protected":!attempt?"retained":through?"breakthrough":"transition_contained";
+  const actions=["Tromsø søker en gjenvinningsmulighet mot vårt oppspill",
+    "Ved gjenvinning vurderer motstanderen rommet bak ballen",
+    !attempt?"Gjennombruddsvinduet er lite; behold ballen og balansen":"Motstanderen forsøker en tidlig fremoverpasning",
+    "Vårt restforsvar kontrollerer eller mister gjennombruddsrommet"];
+  const results=["simulated_available",won?"simulated_available":"countered",
+    !won?"not_reached":!attempt?"retained":through?"simulated_available":"countered",
+    !won||!attempt?"not_reached":through?"simulated_available":"countered"];
+  return {version:6,situation:"opponent_selective_transition",planId:plan.id,route:"selective_break_or_retain",status,
+    side:through?"against":null,probability:round(attempt?regain*window:0),
+    xgDeltaFor:0,xgDeltaAgainst:through?0.07:status==="transition_contained"?-0.02:0,
+    cause:!won?"Vår oppbygging og balanse hindrer gjenvinning.":!attempt?
+      "Tromsø vinner ballen, men velger kontroll fremfor et tvunget gjennombrudd.":
+      through?"Et åpent gjennombruddsvindu etter gjenvinning utnyttes raskt.":
+      "Tromsø forsøker gjennombrudd, men vårt restforsvar stanser det.",
+    steps:actions.map((action,i)=>({action,order:i+1,result:results[i]})),
+    counterplay:{status:through?"not_triggered":"simulated_counter",counter:"Beskytt oppspill og restforsvar",
+      nextManagerResponse:"Behold støtte rundt ballfører, to stoppere og en skjermende midtbanespiller.",automaticallyExecuted:false},
+    evidence:{basis:"sourced_selective_transition_generic_game_hypothesis_not_observed",
+      opponentPattern:"selective_break_or_retain",opponentPlayerId:null,targetFlank:null,
+      regainProbability:round(regain),conditionalBreakthroughProbability:round(window),attemptThreshold:0.45,
+      regainSimulated:won,routeDecision:won?(attempt?"breakthrough":"retain"):null,
+      dedicatedCover:dedicated,restCover:[...backs,...mids].map(p=>p.playerId),
+      supportingPlayers:[...backs,...mids].map(({playerId,position,roleId,matchScore})=>({playerId,position,roleId,matchScore})),
+      eventCount:1,randomDraws:1}};
+}
+export function annotateOpponentSelectiveTransitionChances(chances,phase){
+  if(!Array.isArray(chances)||phase?.situation!=="opponent_selective_transition"||phase.side!=="against")return chances;
+  return annotateOpponentRunChances(chances,phase).map((c,i)=>i===chances.findIndex(x=>x.side==="against")?
+    {...c,tacticalMoment:{...c.tacticalMoment,kind:"opponent_selective_transition",label:"Gjennombrudd etter gjenvinning",
+      basis:"simulated_selective_transition",keyAction:phase.steps[2].action}}:c);
+}
