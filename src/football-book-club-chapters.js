@@ -1148,6 +1148,9 @@ function chapterCard(c){
 function theoryCard(chapter,principles,clubs,roles=[]){
   const section=el("details",null,"club-book-chapter");
   section.append(el("summary",chapter.title));if(chapter.era)section.append(el("p",chapter.era,"muted-text"));section.append(el("h5","Prinsippet"),el("p",chapter.concept));
+  for(const detail of chapter.sourceDetails||[]){
+    section.append(el("h5",detail.title),el("p",detail.text),el("p","Kilde: "+detail.source,"muted-text"));
+  }
   if(chapter.roles?.length){
     section.append(el("h5","Rollene i spillet"));
     const roleList=el("ul");
@@ -1177,7 +1180,7 @@ async function initTheory(clubs){
     if(!root)return;
     const list=root.querySelector(".club-book-list"),status=root.querySelector(".club-book-status"),search=root.querySelector("input");
     const cards=chapters.map(c=>({c,node:theoryCard(c,principles,clubs,roles)}));list.append(...cards.map(x=>x.node));
-    const filter=()=>{const q=search.value.trim().toLocaleLowerCase("nb");let count=0;for(const {c,node} of cards){node.hidden=!(c.title+" "+(c.era||"")+" "+c.concept+" "+c.dilemma+" "+(c.roles||[]).map(entry=>(roles.find(r=>r.id===entry.id)?.name||entry.id)+" "+entry.description).join(" ")).toLocaleLowerCase("nb").includes(q);if(!node.hidden)count++;}status.textContent=count+" av "+cards.length+" "+label+(!principles.length?" · grunntekster utilgjengelige":"");};
+    const filter=()=>{const q=search.value.trim().toLocaleLowerCase("nb");let count=0;for(const {c,node} of cards){node.hidden=!(c.title+" "+(c.era||"")+" "+c.concept+" "+c.dilemma+" "+(c.sourceDetails||[]).map(detail=>detail.title+" "+detail.text+" "+detail.source).join(" ")+" "+(c.roles||[]).map(entry=>(roles.find(r=>r.id===entry.id)?.name||entry.id)+" "+entry.description).join(" ")).toLocaleLowerCase("nb").includes(q);if(!node.hidden)count++;}status.textContent=count+" av "+cards.length+" "+label+(!principles.length?" · grunntekster utilgjengelige":"");};
     search.addEventListener("input",filter);filter();
   };
   renderSection(root,THEORY_CHAPTERS,"teorikapitler");

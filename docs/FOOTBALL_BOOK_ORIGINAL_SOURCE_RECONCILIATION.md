@@ -28,7 +28,7 @@ De nye avsnittene er redaksjonelle sammenfatninger av originalmaterialet, ikke o
 
 ## Videre kontroll (ikke ferdig)
 
-- Individuell forsvarsteknikk: markering, kroppsstilling, blokkering, undertall, sikringsvinkler og konkrete situasjoner.
+- Individuell forsvarsteknikk: første detaljerte integrasjon gjennomført i `press_cover_shift` (se bolk 2). Full OneNote-kontroll gjenstår.
 - Individuelle angrepsferdigheter: føring, finter, medtak, pasningsgeometri, skudd, heading og avslutning.
 - Keeperens detaljerte teknikk og dødballorganisering.
 - Spillmodell: posisjonelle krav, klareringsmønster, opp–tilbake–gjennom, kontringsmønstre, signaler og konkrete øvelser.
@@ -39,3 +39,20 @@ De nye avsnittene er redaksjonelle sammenfatninger av originalmaterialet, ikke o
 - Full eksport av begge OneNote-seksjonene med sider, bilder og gjeldende revisjoner; deretter linje-/avsnittsbasert dekningsregister. Ikke anta at binæruttrekk er komplette.
 
 Eksisterende spillmotor er fortsatt source of truth. Koble ny kunnskap til eksisterende mekanismer før eventuelle endringer vurderes. Ingen flere kapitler før dekningskontroll er gjennomført.
+
+## Bolk 2 – individuell forsvarsteknikk
+
+Åtte kildeforankrede underavsnitt i eksisterende teori-kapittel press_cover_shift, basert på PDF 2. Defensivt (linje 1207–1399 og 1660–1780). Eksisterende figurer, kapitler og øvelser beholdt. Underavsnittene vises med egne overskrifter og er inkludert i kapittelsøk.
+
+| ID | Kildeanker |
+|---|---|
+| first_defender | 2. Defensivt / Førsteforsvarer / Kroppsstilling / Markering og avstand |
+| steering | 2. Defensivt / Førsteforsvarer / Lede og styre |
+| marking | 2. Defensivt / Soneforsvar / Markering og avstand / Forsvarstriangel |
+| blocking | 2. Defensivt / Blokkering av skudd / Forsvare innlegg fra korridor |
+| cover | 2. Defensivt / Andreforsvarer/Sikringsspiller / Tredjeforsvarere / Orientering |
+| duels | 2. Defensivt / Konkrete forsvarssituasjoner / Forsvare undertall |
+| back_to_goal | 2. Defensivt / Forsvare feilvendt / Forsvare overlapping |
+| interception | 2. Defensivt / Gå når ballen går / Snappe ballen / Fronting / Forsvarsfinte |
+
+Manusets konkrete avstander er trenerheuristikker, ikke motorparametre. Notater om tilsiktede frispark, ulovlig kontakt og usikre historiske påstander er bevart i originalarkivet, men ikke omsatt til anbefalte spillhandlinger. Ingen nye mekanikker. Posisjonelle arbeidsoppgaver, detaljert pressmodell og offensiv teknikk gjenstår separat. Full CI må bestås.

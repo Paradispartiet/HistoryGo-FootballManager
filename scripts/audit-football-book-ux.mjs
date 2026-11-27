@@ -127,6 +127,11 @@ for(const chapter of clubChapters)for(const d of chapter.diagrams){check(Boolean
 const bookHtml=readFileSync(join(root,"index.html"),"utf8");
 check(bookHtml.includes('id="footballBookClubChapters"')&&bookHtml.includes('src="src/football-book-club-chapters.js"'),"Klubbkapitler ikke tilgjengelige i spillet");
 check(THEORY_CHAPTERS.length===7,"Teorikapitler mangler");
+const defenceDetails=THEORY_CHAPTERS.find(c=>c.id==="press_cover_shift")?.sourceDetails||[];
+check(defenceDetails.map(d=>d.id).join(",")==="first_defender,steering,marking,blocking,cover,duels,back_to_goal,interception","Originalmanusets forsvarsteknikk mangler");
+for(const d of defenceDetails)check(d.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),d.id+": mangler fagtekst eller kilde");
+const detailRenderer=readFileSync(join(root,"src","football-book-club-chapters.js"),"utf8");
+check(detailRenderer.includes("chapter.sourceDetails||[]")&&detailRenderer.includes("c.sourceDetails||[]"),"Originalstoff må kunne leses og søkes i boka");
 check(new Set(THEORY_CHAPTERS.map(c=>c.id)).size===THEORY_CHAPTERS.length,"Duplikate teorikapitler");
 for(const c of THEORY_CHAPTERS){
   check(Boolean(c.title&&c.concept&&c.dilemma&&c.manager&&c.practice),c.id+": ufullstendig teorikapittel");

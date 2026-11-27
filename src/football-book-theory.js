@@ -2,6 +2,56 @@
 export const THEORY_CHAPTERS = [
   {
     "id": "press_cover_shift",
+    "sourceDetails": [
+      {
+        "id": "first_defender",
+        "title": "Førsteforsvarer – kroppsstilling og avstand",
+        "text": "Nærm deg kontrollert, med små steg, bøyde knær, lavt tyngdepunkt og sidestilt kropp. Unngå å stå på hælene eller lene overkroppen så langt frem at du mister balansen. Manuset bruker 2–3 meter som eksempel ved opphold og omtrent én meter når hensikten er ballvinning. Avstandene er trenerens holdepunkter, ikke universelle mål: fart, rom, sikring og avstand til mål avgjør. Se fot og ball og avskjær løpsretningen uten ulovlig kontakt.",
+        "source": "Fotballdokumentet v1.pdf – 2. Defensivt / Førsteforsvarer / Kroppsstilling / Markering og avstand"
+      },
+      {
+        "id": "steering",
+        "title": "Lede og styre",
+        "text": "Pressretningen velges ut fra lagets plan, sikringsspilleren, motstanderens foretrukne fot og åpne pasningsmuligheter. I manusets 4-3-3-eksempel styres motstanderen inn i banen, men utover nær eget mål (omtrent siste 20 meter). Andre systemer styrer konsekvent mot flankene. Andreforsvareren kan gi høyre- eller venstresignal; hensikten er å gjøre neste handling mindre farlig, ikke bare å komme tett på.",
+        "source": "Fotballdokumentet v1.pdf – 2. Defensivt / Førsteforsvarer / Lede og styre"
+      },
+      {
+        "id": "marking",
+        "title": "Markering – nær ballen og nær mål",
+        "text": "Manuset anbefaler tettere markering i farlige områder, ved dødballer og når mottakeren er nær ballen eller ballføreren ikke kan spille i bakrom. Ellers kan løsere markering gi bedre romdekning. Mot en feilvendt mottaker: stå nær nok til å hindre vending, men ikke så nær at du mister balansen. Forsvarstriangelet gir oversikt over både ball og markert spiller. Den konkrete sone-til-mann-overgangen nær mål er et eksempel på en spillmodell, ikke en regel som gjelder alle lag.",
+        "source": "Fotballdokumentet v1.pdf – 2. Defensivt / Soneforsvar / Markering og avstand / Forsvarstriangel"
+      },
+      {
+        "id": "blocking",
+        "title": "Blokkering av skudd og innlegg",
+        "text": "Plasser kroppen mellom ball og mål, i stedet for bare å stikke ut en fot. Bruk små steg, unngå kryssede ben og hold hendene naturlig langs kroppen. Ved innlegg fra korridor forsøker backen å hindre leveringen før den kommer inn i feltet. Manuset beskriver også en blokkfinte: antyd blokk uten å selge deg dersom angriperen kutter innover. Ansvar for skuddvinkel må koordineres med keeperens posisjon.",
+        "source": "Fotballdokumentet v1.pdf – 2. Defensivt / Blokkering av skudd / Forsvare innlegg fra korridor"
+      },
+      {
+        "id": "cover",
+        "title": "Andre- og tredjeforsvarer – vinkel, dybde og orientering",
+        "text": "Manuset angir 3–6 meter og rundt 45 grader som eksempel på sikringsavstand og -vinkel bak 1F. Høy fart hos angriperen kan kreve mer dybde; tett press kan tillate mindre. 3F orienterer seg etter linjen og dekker neste rom eller mottaker. Ved sideangrep har ofte motsatt back eller stopper best oversikt og bør varsle dype løp og hvem som må dekkes. Når en spiller bryter ut, må de øvrige forskyve seg slik at rommet bak ikke står åpent.",
+        "source": "Fotballdokumentet v1.pdf – 2. Defensivt / Andreforsvarer/Sikringsspiller / Tredjeforsvarere / Orientering"
+      },
+      {
+        "id": "duels",
+        "title": "Dueller – én mot én, to mot én og tre mot to",
+        "text": "I 1 mot 1 er det ofte tilstrekkelig å forsinke, styre mot et mindre farlig rom eller tvinge frem støttepasning. Et taklingsøyeblikk oppstår når ballen forlater motstanderens fot; manuset advarer mot å takle med den vektbærende foten. I 2 mot 1 rygger forsvareren mellom angriperne, forsøker å isolere ballfører og skjerme pasningen. I 3 mot 2 styrer 1F mot sikringen og forsøker å hindre pasningen utenfor seg. Målet i undertall er å kjøpe tid og beskytte målrommet.",
+        "source": "Fotballdokumentet v1.pdf – 2. Defensivt / Konkrete forsvarssituasjoner / Forsvare undertall"
+      },
+      {
+        "id": "back_to_goal",
+        "title": "Feilvendt mottaker og overlapping",
+        "text": "Mot en feilvendt mottaker: avvent hvis ballen er skjermet, hold balansen og unngå unødvendige frispark. Når mottakeren legger igjen ballen og går på løp, må neste løp håndteres. En vending kan gi mulighet for ballvinning dersom ballen blir eksponert og sikringen finnes. Ved overlapping beskriver manuset et koordinert markeringsbytte: én overtar løperen, en annen ballfører. Uten kommunikasjon kan begge følge samme spiller.",
+        "source": "Fotballdokumentet v1.pdf – 2. Defensivt / Forsvare feilvendt / Forsvare overlapping"
+      },
+      {
+        "id": "interception",
+        "title": "Gå når ballen går – snappe, fronte og finte",
+        "text": "Start forflytningen mens pasningen er underveis for å redusere tiden mottakeren får. Ved et diagonalt eller buet pressløp kan du samtidig skjerme rommet du forlater. For å snappe ballen må du kunne lese både pasningslegger og mottaker; sikring av det forlatte rommet er viktig. I undertall advarer manuset mot å gamble på brudd. Fronting betyr å plassere seg i den mulige pasningsbanen. En forsvarsfinte kan lokke frem en lengre ballberøring, men må ikke koste forsvareren balansen.",
+        "source": "Fotballdokumentet v1.pdf – 2. Defensivt / Gå når ballen går / Snappe ballen / Fronting / Forsvarsfinte"
+      }
+    ],
     "title": "Press, sikring og sideforskyvning",
     "principles": [
       "defending_uses_first_second_third_defender",
