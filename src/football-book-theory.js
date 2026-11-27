@@ -13,7 +13,7 @@ export const THEORY_CHAPTERS = [
       "valerenga",
       "hodd"
     ],
-    "concept": "Førsteforsvareren styrer ballfører mot en bestemt utvei, andreforsvareren dekker rommet presspilleren forlater, og tredjeforsvareren beskytter neste pasning. Hele blokken må flytte mens ballen er på vei; hvis bare førstepresseren flytter, åpnes et rom bak ham.",
+    "concept": "Førsteforsvareren styrer ballfører mot en bestemt utvei, andreforsvareren dekker rommet presspilleren forlater, og tredjeforsvareren beskytter neste pasning. Hele blokken må flytte mens ballen er på vei; hvis bare førstepresseren flytter, åpnes et rom bak ham. I originalmanusets forsvarstriangel skal forsvareren kunne se både ball og spilleren som markeres. Uten sikring må førsteforsvareren først og fremst forsinke. Sikkerhetsavstanden avhenger også av dribleren: lange ballberøringer og høy fart kan kreve større sikringsavstand enn dribling tett på foten. Manuset bruker «No Splits!» om å nekte pasninger mellom forsvarere. Et supplerende trenernotat skiller mellom å styre inn i en forberedt pressfelle når laget er i balanse, og å styre mot mindre farlige rom når laget er i ubalanse.",
     "dilemma": "Å støte tidlig kan hindre en vending, men skaper også et rom bak presspilleren. Mot en spiller som kan vende under press må andreforsvareren være nær nok til å overta uten at stopperne forlater dybden.",
     "manager": "Velg presshøyde etter lagets samhandling og rollepassform. I kampanalysen: skill mellom et brutt førsteforsvar og manglende sikring.",
     "practice": "Spill 4 mot 4 med to målsoner. Stopp spillet ved ballens sideskift og la forsvarerne identifisere 1F, 2F og 3F.",
@@ -107,7 +107,7 @@ export const THEORY_CHAPTERS = [
       "stromsgodset",
       "tromso"
     ],
-    "concept": "Restforsvar er organiseringen av laget mens det selv angriper. Når ballen mistes, avgjør avstanden til ballfører og dekningen av neste pasning om laget kan gjenvinne umiddelbart eller må falle av. Det er ikke nødvendigvis de samme spillerne som presser og sikrer.",
+    "concept": "Restforsvar er organiseringen av laget mens det selv angriper. Når ballen mistes, avgjør avstanden til ballfører og dekningen av neste pasning om laget kan gjenvinne umiddelbart eller må falle av. Det er ikke nødvendigvis de samme spillerne som presser og sikrer. I originalmanuset er gjenvinning i 5–7 sekunder før fall tilbake i ramme en trenerregel, ikke en universell tidsgrense. Det avgjørende er om laget har press på ballfører, sikring og dekning av farlige rom; ellers må laget prioritere å hindre mål. Numerisk balanse (nok spillere bak ballen) er ikke det samme som posisjonell balanse (riktig dekning av rom).",
     "dilemma": "Flere samtidige boksløp kan øke avslutningsmuligheten, men et tomt sentralt returrom gjør første kontringspasning farligere. Et gjenvinningspress uten bakre sikring kan derfor bli mer risikabelt enn et kontrollert fall.",
     "manager": "Bruk en balanserende midtbanerolle og vurder hvor mange forsvarere som går frem. Les kampmotorens restforsvarsvurdering før du øker risikoen.",
     "practice": "Spill 6 mot 6 med omstillingsmål. Etter balltap må laget enten stenge første pasning sammen eller falle samlet tilbake.",
@@ -426,7 +426,7 @@ export const THEORY_CHAPTERS = [
       "bodo_glimt",
       "tromso"
     ],
-    "concept": "Numerisk overtall betyr flere spillere i en sone; posisjonelt overtall betyr at en spiller blir spillbar i et rom motstanderen ikke kan dekke uten å oppgi et annet rom. En ekstra spiller bak presset har liten verdi hvis alle pasningslinjene er stengt. Bredde kan trekke blokken slik at sentrale mottakere blir fri.",
+    "concept": "Numerisk overtall betyr flere spillere i en sone; posisjonelt overtall betyr at en spiller blir spillbar i et rom motstanderen ikke kan dekke uten å oppgi et annet rom. En ekstra spiller bak presset har liten verdi hvis alle pasningslinjene er stengt. Bredde kan trekke blokken slik at sentrale mottakere blir fri. Originalmanuset kaller kontrollert ballføring som trekker motspillere mot ballfører for «støvsuging». Verdien ligger i at en medspiller kan utnytte rommet som åpnes, ikke i selve driblingen. Når laget samler motstanderen på én side, kan en rask spillvending utnytte motsatt side.",
     "dilemma": "Overbelastning på ballside kan skape korte pasningsmuligheter, men gjør motsatt side viktig. En sen spillvending lar forsvaret forskyve; en tidlig vending uten mottaker kan gi balltap.",
     "manager": "Velg bredde og støtte etter hvor motstanderen har sin styrke. Vurder keeperoppbygging, sentral skjerming og sidesikring som ulike oppgaver.",
     "practice": "Spill 5 mot 4 med en nøytral spiller på motsatt kant. Laget må enten spille gjennom presset eller vende når ballside blir stengt.",

@@ -21,7 +21,7 @@ export const ROLE_CHAPTERS = [
         "description": "Dekker rommet bak en høy linje og kan være ekstra pasningsalternativ i oppbyggingen."
       }
     ],
-    "concept": "Keeperrollen bestemmer hvor mye av rommet utenfor målområdet laget kan forsvare, og om keeperen inngår som oppspillsspiller. Linjekeeperen og sweeperkeeperen har ulike krav til plassering og støtte.",
+    "concept": "Keeperrollen bestemmer hvor mye av rommet utenfor målområdet laget kan forsvare, og om keeperen inngår som oppspillsspiller. Linjekeeperen og sweeperkeeperen har ulike krav til plassering og støtte. Originalmanuset beskriver vinkelkontroll, dybdejustering og sideforflytning som egne keeperoppgaver. Keeperen må også avgjøre om et skudd kan holdes, pareres ut i et trygt rom eller blokkeres, og være klar til returen. Ved igangsetting er tempo et valg: tidlig distribusjon kan utnytte motstanderens ubalanse, mens laget etter langvarig press kan trenge tid til å flytte opp. Keeperens kommunikasjon hjelper blokken å avgjøre når laget er i balanse og hvem som kan støte.",
     "dilemma": "En høy linje med keeper som blir stående dypt kan åpne bakrom. En keeper som går høyt uten at stopperne dekker returen risikerer på sin side å bli passert.",
     "manager": "Relasjonsmotoren belønner sweeperkeeper med ballspillende forsvar, og linjekeeper med duellstopper i lav blokk. Linjekeeper bak høy linje gir en negativ relasjon. Dette er modellregler, ikke universelle fasiter.",
     "practice": "Tren oppspill fra keeper med to stoppere og en sekser, deretter gjennomspill bak høy linje. Veksle mellom å bryte pasningen og falle for å beskytte målet.",
