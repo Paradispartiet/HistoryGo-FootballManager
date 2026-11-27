@@ -1875,6 +1875,7 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     causalOpponentSupportStrikerVersion: 1,
     causalOpponentSelectiveTransitionVersion: 1,
     causalDoubleMidfieldScreenVersion: 1,
+    causalOpponentKeeperBuildUpVersion: 1,
     // New matches can release a counterattack after a sourced cross exposure.
     causalOpponentCrossRecoveryVersion: 1,
     // In-match fatigue uses the current match clock and existing freshness model.
