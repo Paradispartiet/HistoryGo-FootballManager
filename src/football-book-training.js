@@ -349,6 +349,24 @@ export const TRAINING_CHAPTERS = [
         "title": "Kontekstualisert teknikk – fra showtriks til kampferdighet",
         "text": "Originalmanuset kritiserer overfokus på spektakulære triks. Å kunne mange finter isolert er ikke det samme som å kunne velge og utføre dem i høy fart, under press eller i samspill. Verdien av en pasning avhenger av timing, rom, motstander og medspiller. Selv en teknisk ren førsteberøring kan være lite hensiktsmessig hvis den leder inn i press. Manuset betrakter pasning, mottak og finte som samordning av beslutning, orientering og kroppslig utførelse i en meningsfull kampsituasjon.",
         "source": "Fotballdokumentet v1.pdf – 2.7 Overfokus på triks / Kontekstualisering av teknikk / 3.0 Spillnærhet og helhet"
+      },
+      {
+        "id": "mental_reset",
+        "title": "Mental omstilling – ikke dvele ved feil",
+        "text": "Manusets omstillingsdel knytter mental reaksjon til en konkret arbeidsoppgave. Når motstanderen vinner ballen, må laget rekalibrere tankegangen og undersøke om ballen kan gjenvinnes. Spillerne skal ikke dvele ved feil; særlig spilleren som mistet ballen skal arbeide for å vinne den tilbake eller komme på rett side. Dette henger sammen med den kollektive gjenvinningsavtalen. Ved kommunikasjon skal medspilleren ikke skjelles ut for en feilpasning han allerede kjenner til; skap heller alternativer og hjelp når han kan bruke beskjeden.",
+        "source": "Fotballdokumentet v1.pdf – 2. Defensivt – Omstilling / Gjenvinning, linje 1620–1657 / Kommunikasjon, linje 3675–3682"
+      },
+      {
+        "id": "mental_match_climate",
+        "title": "Stress, ro og kampklima",
+        "text": "Kommunikasjonsdelen foreslår å trene på ro rett etter scoring imot, og mer engasjert kommunikasjon dersom laget leder 2–0 og blir selvtilfreds. Ikke stress spilleren som er i trøbbel; skap alternativer. Manusets 4-mot-2-kontring krever fart kombinert med ro til å slå riktig pasning. Dette er konkrete situasjonseksempler på å tilpasse intensitet og kommunikasjon, ikke en fast regel om hvordan alle spillere reagerer på stillingen. En egen stressmestrings- eller nerveøvelse er ennå ikke gjenfunnet.",
+        "source": "Fotballdokumentet v1.pdf – Kommunikasjon, linje 3661–3682 / Kontringsmønstre – 4-mot-2 / 7. Det mentale aspektet"
+      },
+      {
+        "id": "style_psychology",
+        "title": "Spillets estetikk og psykologiske dimensjon",
+        "text": "I manusets filosofidel beskrives estetisk spill som en mulig kilde til selvtillit, momentum og kreativitet når spilleren lykkes med en vakker bevegelse. Publikums begeistring kan også påvirke kampklimaet. På den andre siden beskrives en mer risikoreduserende og resultatorientert spillestil som en mulig kilde til trygghet og kontroll i avgjørende kamper. Dette gjengir manusets refleksjon om sammenhengen mellom spillestil og psykologi. Det er ikke lagt inn kausale effekter, psykologiske spillerverdier eller garantier for hvilken stil som gir best mental tilstand.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Estetikk, kultur og filosofi / Psykologiske aspekter, linje 4421–4433"
       }
     ]
   },
@@ -525,6 +543,30 @@ export const TRAINING_CHAPTERS = [
         "title": "Balanse, holdning og propriosepsjon",
         "text": "I fysiologidisposisjonen er balanse knyttet til mage, holdning, proprioception, skadeforebygging og et planlagt George Best-eksempel. Propriosepsjon er også navngitt i sportsvitenskapens disposisjon. I de bevarte teknikkdelene beskrives balanse blant annet ved dribling, pasning og skudd, og lavt tyngdepunkt ved vending under press. Dette viser hvor balanse inngår i manusets praktiske fotballstoff. Den utførlige teorien om propriosepsjon og det nevnte spillereksemplet er ikke gjenfunnet i den tilgjengelige teksten. De er derfor registrert som uavklarte, ikke rekonstruert med antakelser.",
         "source": "Fotballdokumentet v1.pdf – 6. Fysiologi – Balanse / Sportsvitenskap og fysiologi / 3.1 Individuelle angrepsferdigheter"
+      },
+      {
+        "id": "mental_development_outline",
+        "title": "Det mentale aspektet – utvikle menneske og spiller",
+        "text": "Originalmanusets disposisjon begynner med å utvikle mennesket og spilleren, og navngir selvtillit, motivasjon, fokus, mentale bilder og stressmestring. Den nevner også lytting, begrepsforståelse, det å bidra, å finne sitt nivå, enkle pasninger, lagånd, tilstedeværelse og bruk av treningstiden. Dette er den bevarte strukturen for den mentale hovedblokken. De enkelte temaene er ikke utdypet i denne disposisjonen, og den utførlige teksten er ennå ikke identifisert. Derfor gis det ikke et nytt psykologisk treningsprogram basert på antakelser.",
+        "source": "Fotballdokumentet v1.pdf – 7. Det mentale aspektet, linje 789–801"
+      },
+      {
+        "id": "confidence_finishing",
+        "title": "Selvtillit og besluttsomhet ved avslutning",
+        "text": "Avslutningsdelen gir konkrete mentale råd: ha selvtillit, aksepter bom, stol på egne ferdigheter og ha mot til å prøve igjen. Vær besluttsom i avslutningen, men behold roen: se opp, velg plass og utfør skuddet rolig og riktig. Originalmanuset har to overlappende lister over mentale faktorer; den mest utfyllende er brukt her uten å miste poenget om besluttsomhet og ro. Dette er manusets fotballfaglige instrukser til avslutteren, ikke generelle psykologiske diagnoser eller målbare effekter.",
+        "source": "Fotballdokumentet v1.pdf – 3.1.2 Angrepsavslutning – Mentale faktorer, linje 2222–2228 og 2487–2495"
+      },
+      {
+        "id": "mental_images",
+        "title": "Mentale bilder, fokus og spilleforståelse",
+        "text": "I orienteringsdelen beskriver manuset å danne et bilde av banen ved å veksle mellom blikk på ball og omgivelser. Lag deg bilder i hodet av hva som kommer til å skje, og forsøk å vite hvor ballen skal før mottak. Registrer hvor medspillerne er, hvor de kommer fra og hvor de er på vei. Aktiv registrering betyr å tenke over det man ser, ikke bare å se. Dette er manusets konkrete kobling mellom mentale bilder, fokus og handling i spillet; den separate disposisjonens øvrige mentale treningsmetoder er ikke beskrevet.",
+        "source": "Fotballdokumentet v1.pdf – 3.2 Persepsjon / Orientering, linje 2537–2570"
+      },
+      {
+        "id": "goals_effort_outline",
+        "title": "Målsetting, relativ suksess og innsats – bevarte temaer",
+        "text": "Manuset navngir målsetting med Lampard som kildepeker, relativ suksess, forskjellen på å prøve hardt og å prøve maksimalt, å bruke treningstiden og å være til stede. Nerver knyttes i disposisjonen til forberedelser; enkelhet ved formsvikt knyttes til Okwonga. Uttrykket «finn ditt nivå» og enkle pasninger står også i oversikten. Disse punktene er bevart som temaer for videre kildearbeid, ikke som en rekonstruert metode eller bekreftede sitater fra de nevnte personene.",
+        "source": "Fotballdokumentet v1.pdf – 7. Det mentale aspektet, linje 790–799 / 2. Psykologi og mental trening, linje 4269–4276"
       }
     ]
   },
@@ -646,6 +688,12 @@ export const TRAINING_CHAPTERS = [
         "title": "Spillnær samhandling – possession og kontringsøvelse",
         "text": "Manuset anbefaler possession-øvelser på store områder for å trene hele banens bredde og lengde, med touch-restriksjoner når målet er økt balltempo. Kortpasninger kan trekke motstanderen sammen før en lengre pasning flytter spillet ut av press. Et separat kontringseksempel trener hurtige løp og korte kombinasjoner med mål om å nå siste tredel innen 15 sekunder. Tidsmålet er en konkret treningsvariant fra manuset, ikke et universelt prestasjonskrav. Begge øvelsesidéer er tekstlige varianter, uten ny spillmotorbonus eller separat øvelses-ID.",
         "source": "Fotballdokumentet v1.pdf – Ballbesittelse / Konservering / Overgang–Kontring"
+      },
+      {
+        "id": "team_spirit_outline",
+        "title": "Vinnermentalitet, lagånd og verdier",
+        "text": "Disposisjonen om det mentale aspektet knytter vinnermentalitet til lagånd, tilstedeværelse, lytting og det å bidra. Den viser til et Herrera-sitat om å kjempe og spille, og navngir planlagte kontrastcaser om psyke og kultur samt Sócrates og Weah i forbindelse med verdier og ansvar. De konkrete casene og sitatgrunnlaget er ikke dokumentert i den mentale blokken. I den bevarte kommunikasjonsdelen vektlegges ros, oppmuntring, vennlig kroppsspråk og konkrete tilbakemeldinger én til én. Dette er tilgjengelig praksisstoff, mens en egen teori om vinnermentalitet og lagånd krever mer originalmateriale.",
+        "source": "Fotballdokumentet v1.pdf – 7. Det mentale aspektet / 2. Psykologi og mental trening / Kommunikasjon, linje 789–801, 4269–4276 og 3654–3696"
       }
     ]
   },

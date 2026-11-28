@@ -34,7 +34,7 @@ De nye avsnittene er redaksjonelle sammenfatninger av originalmaterialet, ikke o
 - Spillmodell: første detaljerte PDF-integrasjon gjennomført i bolk 6; separat Ready-materiale, dødballer, OneNote-dekning og motorvalidering gjenstår.
 - Droppunkt: Fotballnotater råtekst ved byte 0x000f2da4; kontekst og koordinatsystem må avklares før bruk.
 - Kommunikasjon og kampanalyse/-strategi: første detaljerte PDF-integrasjon i bolk 7–8; separat arbeidsoppgavedokument, uutfylt kampforberedelse og OneNote-dekning gjenstår.
-- Pedagogikk, øvelsesidéer, kritikk av tidlig spesialisering og sosial tilgang: første PDF-integrasjon i bolk 9; Frade, Seirul·lo, Godfoten, Dreier og Descamps krever ytterligere kilder. Sportsvitenskap: første PDF-integrasjon i bolk 10. Fysiologidisposisjonen er bevart, men den detaljerte fysiologiblokken og mental trening gjenstår.
+- Pedagogikk, øvelsesidéer, kritikk av tidlig spesialisering og sosial tilgang: første PDF-integrasjon i bolk 9; Frade, Seirul·lo, Godfoten, Dreier og Descamps krever ytterligere kilder. Sportsvitenskap: første PDF-integrasjon i bolk 10. Fysiologidisposisjonen er bevart, men den detaljerte fysiologiblokken gjenstår. Psykologi og mental trening er delvis integrert i bolk 11; full mental hovedblokk gjenstår.
 - Fotballhistorie, kultur, spiller- og trenereksempler; historiske påstander og sitater kildekontrolleres før publisering.
 - Full eksport av begge OneNote-seksjonene med sider, bilder og gjeldende revisjoner; deretter linje-/avsnittsbasert dekningsregister. Ikke anta at binæruttrekk er komplette.
 
@@ -219,3 +219,20 @@ Seks søkbare fagavsnitt i individual_development og load_recovery. PDF linje 39
 | load_recovery | speed_play_outline | 6. Fysiologi – Hurtighet / Lek |
 
 **Åpent:** Full fysiologiblokk med utholdenhet, spenst/hurtighet, styrke, bevegelighet, balanse, skadeforebygging, konkrete hurtighetsdrag og lekregler; avklar måleenhet for restitusjonsnotasjonen. Full CI og OneNote-gjennomgang gjenstår.
+
+## Bolk 11 – psykologi og mental trening (delvis dekning)
+
+Åtte søkbare fagavsnitt i individual_development, coaching_transfer og collective_training. PDF 7. Det mentale aspektet (linje 789–801) og 2. Psykologi og mental trening (4269–4276) er disposisjoner, ikke den komplette mentale hovedblokken. De sammenhengende praksispassasjene om mentale faktorer ved avslutning (2222–2228, 2487–2495), mentale bilder og orientering (2537–2570), reaksjon etter balltap (1620–1657), kommunikasjon og kampklima (3654–3696) og estetikkens psykologi (4421–4433) er integrert. Målsetting, relativ suksess, nivå, maksimal innsats, nerveforberedelser, vinnermentalitet og lagånd er bevart som disposisjonstemaer uten å rekonstruere manglende innhold. Ingen nye psykologiske tester, treningsdoser, spillerverdier eller motorregler. Personnavn i disposisjonen er kilde-/casepekere, ikke grunnlag for karakteristikker av personers psykiske helse. Uverifiserte sitater er ikke publisert som autentiske. OneNote-dekning er ikke kontrollert særskilt i denne bolken; full sideeksport gjenstår.
+
+| Kapittel-ID | Underavsnitt-ID | Kildeanker |
+|---|---|---|
+| individual_development | mental_development_outline | 7. Det mentale aspektet, linje 789–801 |
+| individual_development | confidence_finishing | 3.1.2 Angrepsavslutning – Mentale faktorer, linje 2222–2228 og 2487–2495 |
+| individual_development | mental_images | 3.2 Persepsjon / Orientering, linje 2537–2570 |
+| individual_development | goals_effort_outline | 7. Det mentale aspektet, linje 790–799 / 2. Psykologi og mental trening, linje 4269–4276 |
+| coaching_transfer | mental_reset | 2. Defensivt – Omstilling / Gjenvinning, linje 1620–1657 / Kommunikasjon, linje 3675–3682 |
+| coaching_transfer | mental_match_climate | Kommunikasjon, linje 3661–3682 / Kontringsmønstre – 4-mot-2 / 7. Det mentale aspektet |
+| coaching_transfer | style_psychology | Del IV – Estetikk, kultur og filosofi / Psykologiske aspekter, linje 4421–4433 |
+| collective_training | team_spirit_outline | 7. Det mentale aspektet / 2. Psykologi og mental trening / Kommunikasjon, linje 789–801, 4269–4276 og 3654–3696 |
+
+**Åpent:** Full mental hovedblokk, målsettingsmetode, innsatsbegrep, stress og nerver, konkrete kildehenvisninger og casebeskrivelser. Full CI og OneNote-gjennomgang gjenstår.
