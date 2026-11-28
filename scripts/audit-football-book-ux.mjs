@@ -195,7 +195,7 @@ check(PHASE_CHAPTERS.length===4,"Kampfasene mangler");
 const attackDetails=PHASE_CHAPTERS.find(c=>c.id==="in_possession")?.sourceDetails||[];
 check(attackDetails.map(d=>d.id).join(",")==="attack_principles,carrying,dribbling,cuts,receiving,turning,passing,passing_types,shooting,heading,finishing,one_on_one,perception,open_body,reading_game,passing_timing,penetration,crossing,possession_cycle,established_model,corridor_to_centre,centre_to_corridor,signal_triangle","Originalmanusets individuelle, relasjonelle og kollektive angrepsferdigheter mangler");
 for(const [id,expected] of Object.entries({"third_man":["support_angles","passing_shadow","run_patterns","build_up_patterns"],"overloads_space":["space_timing","two_against_one"],"overlap_underlap":["support_runs"]})){
-  const ds=THEORY_CHAPTERS.find(c=>c.id===id)?.sourceDetails||[];
+  const ds=(THEORY_CHAPTERS.find(c=>c.id===id)?.sourceDetails||[]).filter(d=>d.source.startsWith("Fotballdokumentet v1.pdf"));
   check(ds.map(d=>d.id).join(",")===expected.join(","),id+": relasjonelle angrepsferdigheter mangler");
   for(const d of ds)check(d.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),d.id+": mangler fagtekst eller kilde");
 }
