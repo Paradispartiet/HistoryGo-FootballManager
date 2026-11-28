@@ -275,3 +275,38 @@ På brukerens bestilling om å fullføre fysiologi er 15 nye fagavsnitt lagt til
 | exercise_constraints | phys_play_soldat |
 | exercise_constraints | phys_play_number |
 | exercise_constraints | phys_play_pair |
+
+## Bolk 13 – ferdigstilt psykologi som redaksjonell fagfordypning
+
+14 nye fagavsnitt i fire eksisterende treningskapitler. Alle er eksplisitt merket «Faglig tillegg» og har eksterne kildelenker; de åtte originalbaserte avsnittene fra bolk 11 beholdes uendret. Temaene i originalens disposisjon er utdypet med motivasjon, målsetting/relativ suksess, mestringstro, enkelhet ved formsvikt, visualisering, konsentrasjon, indre dialog, spenningsregulering, kampforberedelse, innsats, refleksjon, lagånd og vinnermentalitet. To nye redaksjonelle øvelsesvarianter knytter psykologi til kampatferd. Eksempler er pedagogiske anvendelser, ikke forskningsvaliderte fotballprotokoller eller gjenfunnet originaltekst. Uverifiserte Lampard-, Herrera- og Okwonga-attribusjoner og personcaser står fortsatt som åpne kildepunkter. Forskning på mentale intervensjoner har varierende kvalitet og effekt; ingen prestasjonsgarantier, nye mentale spillerverdier, diagnoser, motorregler eller øvelses-ID-er. Tematisk ferdigstilt, men den manglende originale hovedblokken er ikke gjenfunnet. Full CI og OneNote-gjennomgang gjenstår.
+
+### Kilder til fagtillegg
+
+- Olympiatoppen – Idrettspsykologi, tjenester og fagområder, https://olympiatoppen.no/fagomrader/idrettspsykologi/tjenester/
+- Autonomy support in sport and exercise settings: a systematic review and meta-analysis (2022), https://doi.org/10.1080/1750984X.2022.2031252
+- Mental Well-Being or Ill-Being through Coaching in Adult Grassroots Sport (2021), https://pubmed.ncbi.nlm.nih.gov/34204539/
+- The performance and psychological effects of goal setting in sport: a systematic review and meta-analysis (2022), https://doi.org/10.1080/1750984X.2022.2116723
+- The what, why, and how of goal setting: a review of the goal-setting process in applied sport psychology practice (2023), https://doi.org/10.1080/10413200.2023.2185699
+- The effectiveness of pre-performance routines in sports: a meta-analysis (2021), https://doi.org/10.1080/1750984X.2021.1944271
+- The Effects of Imagery Practice on Athletes' Performance: A Multilevel Meta-Analysis with Systematic Review (2025), https://pubmed.ncbi.nlm.nih.gov/40426460/
+- Effects of Psychological Interventions to Enhance Athletic Performance: A Systematic Review and Meta-Analysis, https://pubmed.ncbi.nlm.nih.gov/37812334/
+- Hatzigeorgiadis mfl. (2011), Self-Talk and Sports Performance: A Meta-Analysis, https://doi.org/10.1177/1745691611413136
+- Performance Under Pressure in Sport: A Position Statement from Exercise and Sports Science Australia (2026), https://pmc.ncbi.nlm.nih.gov/articles/PMC13457279/
+- Analyzing the impact of team-building interventions on team cohesion in sports teams: a meta-analysis study (2024), https://pubmed.ncbi.nlm.nih.gov/38558775/
+
+| Kapittel-ID | Underavsnitt-ID |
+|---|---|
+| individual_development | mental_motivation |
+| individual_development | mental_relative_success |
+| individual_development | mental_self_efficacy |
+| individual_development | mental_imagery_practice |
+| individual_development | mental_attention |
+| individual_development | mental_self_talk |
+| coaching_transfer | mental_arousal |
+| coaching_transfer | mental_preparation |
+| coaching_transfer | mental_effort |
+| coaching_transfer | mental_reflection |
+| collective_training | mental_team_cohesion |
+| collective_training | mental_winning |
+| exercise_constraints | mental_pressure_practice |
+| exercise_constraints | mental_reset_practice |

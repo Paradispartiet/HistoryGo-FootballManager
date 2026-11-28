@@ -276,6 +276,18 @@ export const TRAINING_CHAPTERS = [
         "title": "Hurtighetslek – hest og kjerre (ny kontaktfri variant)",
         "text": "Redaksjonell variant uten trekkutstyr eller bæring: spillerne er par i parallelle løpskorridorer. Hesten leder et kort løp med kontrollert temposkifte, mens kjerra forsøker å tilpasse farten og holde samme nivå sideveis. Etter mållinjen bremses rolig; bytt leder. Ingen holder fast i partneren, bruker tau eller bærer en annen spiller. Hensikten er å oppfatte medspillerens fart og samordne egen akselerasjon. Kan gjennomføres med moderate hastigheter før intensiteten økes, tilpasset nivå og underlag. Navnet kommer fra manusets disposisjon, men reglene er et nytt redaksjonelt forslag.",
         "source": "Faglig tillegg – Redaksjonelt øvelsesforslag; navn fra Fotballdokumentet v1.pdf – 6. Fysiologi"
+      },
+      {
+        "id": "mental_pressure_practice",
+        "title": "Øvelse – beslutning under gradvis økende press",
+        "text": "Redaksjonelt eksempel: spill et retningsbestemt 4 mot 4-spill der laget skal spille seg gjennom en målport. Første runde spilles med vanlige regler. Andre runde får spillerne kortere tid til å starte på nytt etter balltap, slik at omstillingen blir mer krevende. Avtal på forhånd ett handlingssignal, for eksempel neste pasning eller sikre. Etter runden spør treneren hva som endret seg i oppmerksomhet og beslutning, og om signalet hjalp. Juster presset gradvis; unngå ydmykelse, straff og kunstig høy risiko. Dette er en ny øvelse inspirert av forskning om prestasjon under press, ikke et validert testopplegg.",
+        "source": "Faglig tillegg – Performance Under Pressure in Sport: A Position Statement from Exercise and Sports Science Australia (2026), https://pmc.ncbi.nlm.nih.gov/articles/PMC13457279/ | The effectiveness of pre-performance routines in sports: a meta-analysis (2021), https://doi.org/10.1080/1750984X.2021.1944271"
+      },
+      {
+        "id": "mental_reset_practice",
+        "title": "Øvelse – neste handling etter feil",
+        "text": "Redaksjonell øvelse i smålagsspill: ved balltap skal spilleren først registrere om gjenvinning er realistisk. Hvis ja, etabler press sammen med nærmeste medspillere; hvis nei, gjenopprett balanse. Medspillere bruker korte informative beskjeder fremfor skyldkommentarer. Treneren observerer responsen etter feil, ikke bare hvor ofte ballen vinnes tilbake. Etter økten velger hver spiller én situasjon der han kom raskt videre og én situasjon han vil løse annerledes. Ingen ekstra fysisk straff for feil. Øvelsen kombinerer manusets rekalibrering med prosessmål og kort indre dialog, og er et nytt pedagogisk opplegg.",
+        "source": "Faglig tillegg – The performance and psychological effects of goal setting in sport: a systematic review and meta-analysis (2022), https://doi.org/10.1080/1750984X.2022.2116723 | Hatzigeorgiadis mfl. (2011), Self-Talk and Sports Performance: A Meta-Analysis, https://doi.org/10.1177/1745691611413136"
       }
     ]
   },
@@ -391,6 +403,30 @@ export const TRAINING_CHAPTERS = [
         "title": "Spillets estetikk og psykologiske dimensjon",
         "text": "I manusets filosofidel beskrives estetisk spill som en mulig kilde til selvtillit, momentum og kreativitet når spilleren lykkes med en vakker bevegelse. Publikums begeistring kan også påvirke kampklimaet. På den andre siden beskrives en mer risikoreduserende og resultatorientert spillestil som en mulig kilde til trygghet og kontroll i avgjørende kamper. Dette gjengir manusets refleksjon om sammenhengen mellom spillestil og psykologi. Det er ikke lagt inn kausale effekter, psykologiske spillerverdier eller garantier for hvilken stil som gir best mental tilstand.",
         "source": "Fotballdokumentet v1.pdf – Del IV – Estetikk, kultur og filosofi / Psykologiske aspekter, linje 4421–4433"
+      },
+      {
+        "id": "mental_arousal",
+        "title": "Nerver, stress og spenningsregulering",
+        "text": "Nervøsitet før kamp kan merkes som kroppslig aktivering, uro eller tanker om konsekvenser. Litt aktivering kan oppleves som energi, mens sterk uro kan trekke oppmerksomheten bort fra oppgaven. Det finnes ikke ett optimalt spenningsnivå for alle. Forbered konkrete første arbeidsoppgaver og la spilleren finne en enkel rutine: registrer spenningen, pust rolig uten å tvinge pusten, rett oppmerksomheten mot neste oppgave. En spiller trenger kanskje ro, en annen trenger mer aktivering. Øv i trening før bruk i kamp. Ved vedvarende psykiske plager, sterk prestasjonsangst eller problemer utenfor idretten bør treneren støtte kontakt med kvalifisert fagperson, ikke forsøke å behandle spilleren selv.",
+        "source": "Faglig tillegg – Olympiatoppen – Idrettspsykologi, tjenester og fagområder, https://olympiatoppen.no/fagomrader/idrettspsykologi/tjenester/ | The effectiveness of pre-performance routines in sports: a meta-analysis (2021), https://doi.org/10.1080/1750984X.2021.1944271 | Performance Under Pressure in Sport: A Position Statement from Exercise and Sports Science Australia (2026), https://pmc.ncbi.nlm.nih.gov/articles/PMC13457279/"
+      },
+      {
+        "id": "mental_preparation",
+        "title": "Kampforberedelse – rutine før første aksjon",
+        "text": "En førprestasjonsrutine er en gjenkjennelig rekkefølge av handlinger og oppmerksomhetssignaler før en oppgave. I fotball kan en rutine før avspark være å sjekke egen rolle, lokalisere støtte og avtale første pressignal. Før en dødball kan spilleren registrere plassering, velge målområde og bruke ett kjent oppgaveord. Rutinen må kunne tilpasses nye signaler og skal ikke bli en rigid overtro. Øv på rutinen under vanlige betingelser og deretter med gradvis økt, realistisk press. En meta-analyse støtter bruk av slike rutiner i idrett; det konkrete fotballeksemplet er en redaksjonell variant, ikke en dokumentert optimal rutine.",
+        "source": "Faglig tillegg – The effectiveness of pre-performance routines in sports: a meta-analysis (2021), https://doi.org/10.1080/1750984X.2021.1944271 | Performance Under Pressure in Sport: A Position Statement from Exercise and Sports Science Australia (2026), https://pmc.ncbi.nlm.nih.gov/articles/PMC13457279/"
+      },
+      {
+        "id": "mental_effort",
+        "title": "Å prøve hardt og å prøve maksimalt – hensiktsmessig innsats",
+        "text": "Manusets skille mellom hard og maksimal innsats kan utdypes ved å skille fysisk intensitet fra kvaliteten på oppgaveløsningen. Å sprinte maksimalt uten sikring kan bryte lagets balanse; å holde posisjon eller vente med press kan være den riktige krevende handlingen. I hurtighetstrening kan maksimal fart være målet, mens teknisk læring og restitusjon krever andre belastninger. Avtal hvilken innsats oppgaven krever, og vurder den etter gjennomføring, ikke bare hvor sliten spilleren blir. Som trener: spør om tretthet, usikkerhet eller uklar oppgave før du konkluderer med lav vilje. Dette er en fotballfaglig konkretisering av disposisjonen, ikke et sitat eller en ny måling av mentalitet.",
+        "source": "Faglig tillegg – Mental Well-Being or Ill-Being through Coaching in Adult Grassroots Sport (2021), https://pubmed.ncbi.nlm.nih.gov/34204539/ | Autonomy support in sport and exercise settings: a systematic review and meta-analysis (2022), https://doi.org/10.1080/1750984X.2022.2031252"
+      },
+      {
+        "id": "mental_reflection",
+        "title": "Mentalt treningsarbeid – plan, gjennomføring og refleksjon",
+        "text": "Bruk en enkel samtale før og etter treningsøkten. Før: spilleren velger én konkret handling å arbeide med og ett signal som minner om den. Under: treneren observerer situasjoner der handlingen var mulig, også når utfallet ble mislykket. Etter: spilleren forklarer hva han registrerte, hva som fungerte og hvilken justering han vil prøve neste gang. Eksempel: en back ønsker å bli tryggere ved presset mottak. Vurder orientering, kroppsstilling og valg av støtte, ikke bare om laget beholdt ballen. Dette redaksjonelle verktøyet bygger på prosessmål og autonomistøtte; det er ikke en standardisert psykologisk test.",
+        "source": "Faglig tillegg – The what, why, and how of goal setting: a review of the goal-setting process in applied sport psychology practice (2023), https://doi.org/10.1080/10413200.2023.2185699 | The performance and psychological effects of goal setting in sport: a systematic review and meta-analysis (2022), https://doi.org/10.1080/1750984X.2022.2116723 | Autonomy support in sport and exercise settings: a systematic review and meta-analysis (2022), https://doi.org/10.1080/1750984X.2022.2031252"
       }
     ]
   },
@@ -627,6 +663,42 @@ export const TRAINING_CHAPTERS = [
         "title": "Propriosepsjon og balanse – kroppens eget informasjonssystem",
         "text": "Propriosepsjon er sansningen av kroppsdelenes stilling, bevegelse og kraft. Informasjon fra blant annet muskler og sener bidrar til at nervesystemet kan regulere bevegelsen uten at spilleren må se på alle kroppsdeler. Balanse krever i tillegg integrasjon med syn og balanseorganer. Fotballanvendelse: stabilt støttebein når man slår en pasning, kontroll i landing etter hopp og å opprettholde kroppsstilling ved retningsendring. Tren eksempelvis ettbeinsstilling med pasning til partner, kontrollert ettbeinsknebøy eller lavt hopp med stabil landing. Øk utfordringen gradvis ved å legge til ball, bevegelse og relevante beslutninger. Kjernemuskulatur bidrar til kontroll, men balanse er ikke bare magestyrke.",
         "source": "Faglig tillegg – Proske og Gandevia (2012), The proprioceptive senses, https://pubmed.ncbi.nlm.nih.gov/23073629/ | Skadefri – Skadefri fotball, https://skadefri.no/idretter/fotball/skadefri-fotball/"
+      },
+      {
+        "id": "mental_motivation",
+        "title": "Motivasjon – autonomi, kompetanse og tilhørighet",
+        "text": "Skill mellom å spille fordi man selv ønsker å utvikle seg, og å spille hovedsakelig for å unngå kritikk eller oppnå belønning. Selvbestemmelsesteori fremhever autonomi, kompetanse og tilhørighet. En autonomistøttende trener kan forklare hvorfor en oppgave er viktig, gi reelle valg innenfor lagets rammer og invitere spilleren til å vurdere egen utvikling. En ving som strever med dribling kan velge mellom å trene mottak i fart og finte etter forsvarerens kroppsstilling, med et tydelig læringsmål. Det betyr ikke at alle taktiske beslutninger skal overlates til spilleren. Forskningen viser sammenhenger mellom autonomistøtte og motivasjon, ikke garanti for at en bestemt beskjed virker for alle.",
+        "source": "Faglig tillegg – Autonomy support in sport and exercise settings: a systematic review and meta-analysis (2022), https://doi.org/10.1080/1750984X.2022.2031252 | Mental Well-Being or Ill-Being through Coaching in Adult Grassroots Sport (2021), https://pubmed.ncbi.nlm.nih.gov/34204539/"
+      },
+      {
+        "id": "mental_relative_success",
+        "title": "Målsetting og relativ suksess – resultat, prestasjon og prosess",
+        "text": "Skille mellom resultatmål (vinne kampen), prestasjonsmål (forbedre en egen prestasjon) og prosessmål (gjennomføre en bestemt handling). Resultatet avhenger også av motstanderen. Et prosessmål for en sekser kan være å sjekke bakre skulder før mottak og velge en støttepasning når fremoverrommet er stengt. Relativ suksess forstås her redaksjonelt som fremgang vurdert mot eget utgangspunkt og oppgave, ikke bare andres resultater. Avtal ett observerbart mål, se på representative situasjoner, og juster etter samtale med spilleren. Forskning på målsetting gir støtte til prosessmål, men mål må tilpasses person og kontekst. Dette er ikke en rekonstruksjon av Lampards målsettingsmetode.",
+        "source": "Faglig tillegg – The performance and psychological effects of goal setting in sport: a systematic review and meta-analysis (2022), https://doi.org/10.1080/1750984X.2022.2116723 | The what, why, and how of goal setting: a review of the goal-setting process in applied sport psychology practice (2023), https://doi.org/10.1080/10413200.2023.2185699"
+      },
+      {
+        "id": "mental_self_efficacy",
+        "title": "Selvtillit, mestringstro og formsvikt",
+        "text": "Selvtillit kan være generell, mens mestringstro er mer knyttet til forventningen om å kunne løse en bestemt oppgave. En stopper kan være trygg i luftdueller og samtidig usikker på oppspill under høyt press. Ved formsvikt: identifiser hva som faktisk er vanskelig. Gjør oppgaven avgrenset og realistisk, og bygg gradvis opp igjen kravene. For eksempel kan en stopper først trene åpnet kropp og støttepasning med oversikt, deretter med aktivt press og til sist med fremoveralternativ. Gi konkret tilbakemelding på handlingen, ikke en merkelapp på personen. Dette er en faglig utdyping av manusets tema om enkelhet og å finne sitt nivå, ikke en gjengivelse av Okwonga.",
+        "source": "Faglig tillegg – The performance and psychological effects of goal setting in sport: a systematic review and meta-analysis (2022), https://doi.org/10.1080/1750984X.2022.2116723 | Mental Well-Being or Ill-Being through Coaching in Adult Grassroots Sport (2021), https://pubmed.ncbi.nlm.nih.gov/34204539/"
+      },
+      {
+        "id": "mental_imagery_practice",
+        "title": "Visualisering – øv på situasjonen, ikke bare suksessen",
+        "text": "Mental forestilling kan supplere fysisk trening. Ta utgangspunkt i en konkret fotballsituasjon: du står som sekser med en motspiller i ryggen, ser over skulderen, oppfatter en fri back og velger pasning. Forestill deg synsinntrykk, tempo, kroppsstilling og alternative utfall. Gjenta også en situasjon der første alternativ er stengt, slik at øvelsen omfatter tilpasning fremfor bare en perfekt sekvens. Bruk en kort forestillingsøvelse før en fysisk repetisjon og sammenlign hva du forventet med hva du faktisk registrerte. Forskningen på mental forestilling er lovende, men varierende; den erstatter ikke representativ kamptrening og gir ingen garantert prestasjonsøkning.",
+        "source": "Faglig tillegg – The Effects of Imagery Practice on Athletes' Performance: A Multilevel Meta-Analysis with Systematic Review (2025), https://pubmed.ncbi.nlm.nih.gov/40426460/ | Effects of Psychological Interventions to Enhance Athletic Performance: A Systematic Review and Meta-Analysis, https://pubmed.ncbi.nlm.nih.gov/37812334/"
+      },
+      {
+        "id": "mental_attention",
+        "title": "Konsentrasjon og oppmerksomhet – skifte mellom oversikt og handling",
+        "text": "En fotballspiller må veksle mellom bred oppmerksomhet mot rom og medspillere og smalere oppmerksomhet ved utførelse. Under oppbygging trenger stopperen oversikt over press og mulige pasningslinjer; i pasningsøyeblikket må han også kontrollere selve balltreffet. Et kort oppgaveord kan hjelpe når tankene flyttes til resultat eller siste feil, eksempelvis se rom eller neste handling. I en spilløvelse kan treneren stoppe spillet etter et mottak og spørre hvilken informasjon spilleren hadde før ballen kom. Vurder faktisk registrering og valg, ikke bare hvor ofte hodet beveges. Oppgaveord og øvelsen er redaksjonelle anvendelser av oppmerksomhets- og rutineprinsipper.",
+        "source": "Faglig tillegg – The effectiveness of pre-performance routines in sports: a meta-analysis (2021), https://doi.org/10.1080/1750984X.2021.1944271 | Performance Under Pressure in Sport: A Position Statement from Exercise and Sports Science Australia (2026), https://pmc.ncbi.nlm.nih.gov/articles/PMC13457279/"
+      },
+      {
+        "id": "mental_self_talk",
+        "title": "Indre dialog – korte signaler som støtter neste handling",
+        "text": "Indre dialog kan være instruksjonsorientert, som åpen kropp eller se opp, eller motiverende, som neste aksjon. Treneren kan hjelpe spilleren med å finne ett ord som er forståelig og relevant for situasjonen. En spiss som nettopp har bommet kan velge neste løp fremfor å gjenta en vurdering av egen verdi. Et signal skal støtte handling, ikke kreve at spilleren undertrykker alle ubehagelige tanker. Tren det først i en vanlig øvelse, deretter under realistisk tidspress. Forskning på self-talk viser mulige prestasjonsfordeler, men effekten varierer med oppgave og gjennomføring.",
+        "source": "Faglig tillegg – Hatzigeorgiadis mfl. (2011), Self-Talk and Sports Performance: A Meta-Analysis, https://doi.org/10.1177/1745691611413136 | Effects of Psychological Interventions to Enhance Athletic Performance: A Systematic Review and Meta-Analysis, https://pubmed.ncbi.nlm.nih.gov/37812334/"
       }
     ]
   },
@@ -754,6 +826,18 @@ export const TRAINING_CHAPTERS = [
         "title": "Vinnermentalitet, lagånd og verdier",
         "text": "Disposisjonen om det mentale aspektet knytter vinnermentalitet til lagånd, tilstedeværelse, lytting og det å bidra. Den viser til et Herrera-sitat om å kjempe og spille, og navngir planlagte kontrastcaser om psyke og kultur samt Sócrates og Weah i forbindelse med verdier og ansvar. De konkrete casene og sitatgrunnlaget er ikke dokumentert i den mentale blokken. I den bevarte kommunikasjonsdelen vektlegges ros, oppmuntring, vennlig kroppsspråk og konkrete tilbakemeldinger én til én. Dette er tilgjengelig praksisstoff, mens en egen teori om vinnermentalitet og lagånd krever mer originalmateriale.",
         "source": "Fotballdokumentet v1.pdf – 7. Det mentale aspektet / 2. Psykologi og mental trening / Kommunikasjon, linje 789–801, 4269–4276 og 3654–3696"
+      },
+      {
+        "id": "mental_team_cohesion",
+        "title": "Lagånd – oppgavekohesjon og sosial kohesjon",
+        "text": "Lagånd har både en oppgaveside og en sosial side. Oppgavekohesjon handler om at spillerne samler seg om felles mål og arbeidsoppgaver, mens sosial kohesjon gjelder tilhørighet og relasjoner i gruppen. Et lag kan ha godt vennskap uten samordnet press, eller løse taktiske oppgaver uten at alle opplever seg inkludert. Tren derfor konkrete felles handlinger og skap et miljø der spillere blir hørt. Etter et brutt press kan laget sammen forklare hvem som skulle støte, sikre og dekke neste pasning, uten å gjøre én spiller til syndebukk. Forskning på lagbygging støtter arbeid med kohesjon, men det kan ikke reduseres til én bonus eller ett tall.",
+        "source": "Faglig tillegg – Analyzing the impact of team-building interventions on team cohesion in sports teams: a meta-analysis study (2024), https://pubmed.ncbi.nlm.nih.gov/38558775/ | Mental Well-Being or Ill-Being through Coaching in Adult Grassroots Sport (2021), https://pubmed.ncbi.nlm.nih.gov/34204539/"
+      },
+      {
+        "id": "mental_winning",
+        "title": "Vinnermentalitet – konkurranse, ansvar og lagets verdier",
+        "text": "Vinnermentalitet kan i praksis bety å tåle motgang, ta ansvar for neste handling, arbeide for laget og respektere avtalte oppgaver. Det er ikke det samme som å kjefte høyest eller overse smerte, regler og medspillere. Etter baklengsmål kan kapteinen samle laget om én konkret oppgave, for eksempel å gjenopprette avstander og vente på et avtalt pressignal. Når laget leder, kan det fortsatt kreves konsentrasjon og presisjon fremfor risikofylt jakt på et nytt mål. Dette er en normativ fotballfaglig utdyping av manusets vinnermentalitet, lagånd og tilstedeværelse, ikke en rekonstruksjon av Herrera-sitatet eller en psykologisk karakteristikk av navngitte spillere.",
+        "source": "Faglig tillegg – Mental Well-Being or Ill-Being through Coaching in Adult Grassroots Sport (2021), https://pubmed.ncbi.nlm.nih.gov/34204539/ | Analyzing the impact of team-building interventions on team cohesion in sports teams: a meta-analysis study (2024), https://pubmed.ncbi.nlm.nih.gov/38558775/"
       }
     ]
   },

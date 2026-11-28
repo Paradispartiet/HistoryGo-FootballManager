@@ -223,6 +223,10 @@ for(const c of SET_PIECE_CHAPTERS){
 check(SET_PIECE_CHAPTERS.reduce((n,c)=>n+c.diagrams.length,0)===9,"Dødballfigurer mangler");
 check(bookHtml.includes('id="footballBookSetPieces"'),"Dødballer ikke tilgjengelige i spillet");
 check(TRAINING_CHAPTERS.length===6,"Treningskapitler mangler");
+for(const [id,expected] of Object.entries({"individual_development":["mental_motivation","mental_relative_success","mental_self_efficacy","mental_imagery_practice","mental_attention","mental_self_talk"],"coaching_transfer":["mental_arousal","mental_preparation","mental_effort","mental_reflection"],"collective_training":["mental_team_cohesion","mental_winning"],"exercise_constraints":["mental_pressure_practice","mental_reset_practice"]})){
+  const sections=TRAINING_CHAPTERS.find(c=>c.id===id)?.sourceDetails||[];
+  for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("Faglig tillegg – ")&&d.source.includes("https://"),key+": mental treningsfordypning eller kildeavgrensning mangler");}
+}
 for(const [id,expected] of Object.entries({"individual_development":["phys_energy","phys_endurance","phys_strength","phys_power","phys_mobility","phys_proprio"],"load_recovery":["phys_acceleration","phys_speed_session","phys_injury_prevention","phys_monitoring","phys_recovery"],"exercise_constraints":["phys_play_snipp","phys_play_soldat","phys_play_number","phys_play_pair"]})){
   const sections=TRAINING_CHAPTERS.find(c=>c.id===id)?.sourceDetails||[];
   for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("Faglig tillegg – "),key+": fysiologifordypning eller tydelig kildeavgrensning mangler");}
