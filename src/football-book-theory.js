@@ -366,6 +366,12 @@ export const THEORY_CHAPTERS = [
         "title": "Rollepar – møtende spiss og gjennomløper kontra pasningslegger og boksangriper",
         "text": "Originalmanusets Bergkamp–Henry-eksempel og Premier Leagues analyse av De Bruyne–Haaland gir to ulike utgangspunkter for å studere angrepsrelasjoner. I opp–tilbake–gjennom møter en spiller og neste pasning kan frigjøre en gjennomløper. I en innleggssituasjon kan en pasningslegger fra halvrommet finne en spiss som angriper målområdet. Mønstrene har felles krav til timing, støtte og forsvarerens beslutning, men er ikke identiske. Tren begge mot en aktiv forsvarslinje: la ballfører velge mellom å spille tidlig, bruke støtte eller beholde ballen. Vurder om spillere uten ball skaper en reell fordel, og om laget har balanse ved tap. Eksemplene er pedagogiske sammenligninger, ikke nye historiske kamprekonstruksjoner eller relasjonsbonuser.",
         "source": "Faglig tillegg – PDF linje 3458–3467; Premier League, https://www.premierleague.com/en/news/2785853 ; https://www.premierleague.com/en/news/2915555; personnavn og eventuelle mønstre fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_wenger",
+        "title": "Arsène Wenger – utvikling og relasjonelt kombinasjonsspill",
+        "text": "Originalmanuset bruker Wengers Arsenal som eksempel på opp–tilbake–gjennom, med Bergkamp som møtende spiller og Henry som gjennomløper. Den konkrete sekvensen beholdes som manusets eksempel, ikke som uavhengig dokumentert kampmønster. Arsenals egen historie beskriver Wengers endringer i treningsarbeid, kosthold og sammensetning av spillergruppen. Faglig kan trenercaset knytte utviklingsmiljøet til relasjonene på banen: tren førsteberøring, støttepasning og løp med aktiv motstand, og la spillerne velge om de skal bruke gjennombruddet eller beholde ballen. Evaluer både individuell ferdighet og samhandlingen som gjør den anvendelig. Ingen treningsdose eller historisk øvelsesprotokoll tilskrives Wenger.",
+        "source": "Faglig tillegg – PDF linje 3458–3467; Arsenal FC, https://www.arsenal.com/feature/the-wenger-years-a05Ex7F5N6vd; navn og tema fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -928,6 +934,30 @@ export const THEORY_CHAPTERS = [
         "title": "Billy Meredith og William McGregor – spillerprofil og fotballens institusjoner",
         "text": "Billy Meredith var en tidlig walisisk fotballstjerne med karriere i begge Manchester-klubbene, dokumentert av Welsh Sports Hall of Fame. William McGregor var derimot en organisator, ikke en spillerprofil: EFL knytter ham til etableringen av Football League i 1888. Originalmanusets to epokeikoner illustrerer ulike sider av fotballhistorien. Spillernes individuelle ferdigheter utvikles i institusjonelle rammer som gjør regelmessig konkurranse mulig. Dette avsnittet skiller derfor mellom teknisk fotballarv og ligaorganisering, uten å tilskrive McGregor en taktisk spillerrolle.",
         "source": "Faglig tillegg – Welsh Sports Hall of Fame, https://welsh-sports-hall-of-fame.wales/hall-of-fame/billy-meredith/ ; EFL, https://www.efl.com/about-the-efl/history/; personnavn fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_pozzo",
+        "title": "Vittorio Pozzo – metodo og balanse mellom ledd",
+        "text": "Originalmanuset navngir Pozzo blant trenerarkitektene, men gir ingen fullstendig systembeskrivelse. FIFA dokumenterer at han ledet Italia til VM-seier i 1934 og 1938 og utviklet metodo. Treccanis fotballhistorie beskriver systemet som 2-3-2-3, med en sentral halfback og to tilbaketrukne indre angripere. Det gir et alternativ til å trekke en tredje spiller helt ned i forsvarsrekken, slik WM gjør. Undersøk hvordan den sentrale spilleren kan støtte oppbygging og samtidig beskytte rom foran de to bakerste. Formasjonstallene er historiske analysemodeller, ikke en rekonstruksjon av enhver kamp. Ingen direkte årsakssammenheng mellom systemet og mesterskapsseirene fastsettes.",
+        "source": "Faglig tillegg – FIFA, https://inside.fifa.com/tournaments/mens/worldcup/2018russia/news/20-march-countdown-86-days-2932639 ; Treccani, https://www.treccani.it/enciclopedia/calcio-la-storia-del-calcio_%28Enciclopedia-dello-Sport%29/; navn og tema fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_chapman",
+        "title": "Herbert Chapman – WM som svar på et nytt romproblem",
+        "text": "Manuset knytter Chapman til Arsenals WM og kombinasjonen av defensiv struktur og offensiv fleksibilitet. Offsideendringen i 1925 reduserte antallet motspillere som normalt måtte befinne seg nærmere mållinjen ved pasningsøyeblikket, fra tre til to. Dermed endret forutsetningene for angrep bak forsvarslinjen seg. WM organiserer utespillerne som 3-2-2-3, med en sentral forsvarer og forbindelser mellom forsvar og angrep. Jonathan Wilsons historiske gjennomgang problematiserer forestillingen om Chapman som eneste oppfinner. Sammenlign WM og metodo ved å plassere de samme spillerne i de to modellene: hvilket rom beskyttes, hvilke støttevinkler oppstår, og hvem må omstille seg ved balltap? Øvelsen er redaksjonell, ikke en dokumentert Chapman-økt.",
+        "source": "Faglig tillegg – PDF linje 194–197; Jonathan Wilson, The Guardian, https://www.theguardian.com/football/blog/2011/sep/20/arsenal-herbert-chapman-southampton-tactics ; Treccani, https://www.treccani.it/enciclopedia/calcio-la-storia-del-calcio_%28Enciclopedia-dello-Sport%29/; navn og tema fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_tuchel",
+        "title": "Thomas Tuchel – formasjonsskifte som kampjustering",
+        "text": "Tuchel står som eksempel på taktiske variasjoner i originalmanuset. UEFA dokumenterer at Chelsea startet mot Real Madrid i april 2022 med 3-4-2-1 og skiftet til 4-3-3 ved pause. Eksemplet illustrerer hvordan et formasjonsskifte påvirker bredde, antallet sentrale spillere og forholdet mellom egen pressform og motstanderens posisjoner. En manager bør først identifisere problemet: blir vingbackene bundet, mangler laget en sentral pasningsmulighet, eller er restforsvaret sårbart? Vurder deretter hvordan rollebytter og nye avstander kan løse det. Et bytte av formasjon garanterer ikke resultatforbedring, og denne kampen gir ikke grunnlag for å beskrive alle Tuchels lag med én modell.",
+        "source": "Faglig tillegg – UEFA, https://www.uefa.com/uefachampionsleague/news/0274-14dc6f3757fd-ac23344fea44-1000--in-the-zone-chelsea-1-3-real-madrid-performance-analysis/; navn og tema fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_ferguson",
+        "title": "Alex Ferguson – bredde og fleksibilitet innenfor 4-4-2",
+        "text": "Originaldisposisjonen knytter Ferguson til kultur og periodisering av spillestil. Premier Leagues taktiske forklaring av 4-4-2 beskriver hvordan hans Manchester United kunne angripe rundt forsvarslinjen med brede midtbanespillere, eller bruke dem i indre korridorer i kombinasjon med indreløpende midtbanespillere. Dette er forskjellige løsninger innenfor samme grunnformasjon. Observer om bredden binder motstanderens back, og hvem som tilbyr støtte når kantspilleren går inn. Den konkrete rollefordelingen må vurderes mot lagets tilgjengelige spillere og motstanderens press. Manusets henvisning til periodisering gir ikke grunnlag for en bestemt historisk treningsuke; portrettet avgrenser seg til dokumentert taktisk variasjon.",
+        "source": "Faglig tillegg – Premier League, https://www.premierleague.com/en/news/4243787/the-4-4-2-football-tactics-explained; navn og tema fra Fotballdokumentet v1.pdf"
       }
     ]
   },

@@ -452,3 +452,18 @@ Dette er en prioritert oversikt over uutfylte eksempler, ikke komplette nye port
 | finishing_press | portrait_cristiano_heading | UEFA, https://www.uefa.com/uefaeuro/match/2017905--portugal-vs-wales/events/ |
 | individual_development | portrait_zlatan_longevity | AC Milan, https://www.acmilan.com/en/news/articles/club/2023-12-11/redbird-capital-partners-press-release |
 | individual_development | portrait_physical_role_comparison | FIFA Training Centre, https://www.fifatrainingcentre.com/en/fwc2022/physical-analysis/using-case-studies-to-reveal-the-reasons-why-various-tactical-roles-exert-themselves-physically-during-world-cup-matches.php |
+
+## Bolk 21 – trenerarkitekter
+
+8 fagtillegg i eksisterende teori-, skole- og fasekapitler. Originalens arkitektliste (Del I), Del V (system vs. individ), Del II (Ranieri) og mønstereksemplet opp–tilbake–gjennom (3458–3467) er grunnlag for utvalget. Historiske holdepunkter kontrollert mot FIFA, Treccani, Jonathan Wilson, UEFA, Arsenal og Premier League. Pozzos metodo og Chapmans WM sammenlignes som formasjonseksempler; Rangnicks høye press og Ranieris overgangsmodell skilles fra hverandre. Tuchels formasjonsskifte og Mourinhos to semifinalekamper er avgrensede dokumenterte eksempler, ikke komplette historiske spillmodeller. Faglige observasjonsoppgaver er redaksjonelle tillegg. Ingen nye hovedkapitler, figurer, treningsdoser eller motorregler. Tidligere personcaser og originaltekst bevart. Full OneNote-gjennomgang og CI gjenstår.
+
+| Kapittel | Underavsnitt | Ekstern kilde |
+|---|---|---|
+| formations | portrait_pozzo | FIFA, https://inside.fifa.com/tournaments/mens/worldcup/2018russia/news/20-march-countdown-86-days-2932639 ; Treccani, https://www.treccani.it/enciclopedia/calcio-la-storia-del-calcio_%28Enciclopedia-dello-Sport%29/ |
+| formations | portrait_chapman | PDF linje 194–197; Jonathan Wilson, The Guardian, https://www.theguardian.com/football/blog/2011/sep/20/arsenal-herbert-chapman-southampton-tactics ; Treccani, https://www.treccani.it/enciclopedia/calcio-la-storia-del-calcio_%28Enciclopedia-dello-Sport%29/ |
+| gegenpress | portrait_rangnick | UEFA, https://www.uefa.com/uefaeuro/history/news/028d-1b058a1a388d-5665645fc203-1000--uefa-euro-2024-meet-the-24-teams/ ; https://www.uefa.com/uefaeuro/history/news/028e-1b3f9d965e00-3ec1a6f8adb9-1000--euro-2024-group-stage-uefa-technical-observers-tactical-r/ |
+| formations | portrait_tuchel | UEFA, https://www.uefa.com/uefachampionsleague/news/0274-14dc6f3757fd-ac23344fea44-1000--in-the-zone-chelsea-1-3-real-madrid-performance-analysis/ |
+| catenaccio | portrait_mourinho | UEFA, https://www.uefa.com/uefachampionsleague/news/01e4-0e745dd6d8b8-559388d26824-1000--impressive-inter-leave-barca-on-the-ropes/ ; https://www.uefa.com/uefachampionsleague/news/01e4-0e746dee4629-e22f0b2f81cf-1000--barcelona-dethroned-by-resilient-inter/ |
+| third_man | portrait_wenger | PDF linje 3458–3467; Arsenal FC, https://www.arsenal.com/feature/the-wenger-years-a05Ex7F5N6vd |
+| formations | portrait_ferguson | Premier League, https://www.premierleague.com/en/news/4243787/the-4-4-2-football-tactics-explained |
+| transition_attack | portrait_ranieri | Premier League, https://www.premierleague.com/en/news/2748139 |

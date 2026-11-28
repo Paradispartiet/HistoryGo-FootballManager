@@ -568,6 +568,12 @@ export const PHASE_CHAPTERS = [
         "title": "Egil Olsen – direkte overgangsspill som analysemodell",
         "text": "Store norske leksikon og UEFA dokumenterer Egil Olsens periode som norsk landslagstrener og kvalifiseringene til VM 1994 og 1998. Originalmanuset navngir Drillo ved direkte overgangsspill. Det faglige spørsmålet er ikke om alle pasninger skal slås langt, men når laget kan utnytte motstanderens ubalanse raskere enn den rekker å reorganisere seg. Undersøk første handling etter ballvinning, hvilke spillere som kan løpe foran ballen, og når en støttepasning er et bedre valg. Dette er en analysemodell knyttet til manusets tema og bokas eksisterende overgangskapittel, ikke en rekonstruksjon av alle Olsens kampavtaler.",
         "source": "Faglig tillegg – Store norske leksikon, https://snl.no/Egil_Olsen ; UEFA, https://www.uefa.com/european-qualifiers/news/01d5-0f85a69d71f2-db2bcddf3c1c-1000--olsen-returns-hungry-for-more/; personnavn fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_ranieri",
+        "title": "Claudio Ranieri – kompakt 4-4-2 og kontringsorganisering",
+        "text": "Originalmanuset navngir Leicester 2016 som kontringsmodell. Premier Leagues analyse av mesterskapssesongen 2015/16 beskriver Ranieris overgang fra tre bakre spillere til en kompakt 4-4-2, med raske overganger. Modellen må forstås som en relasjon mellom forsvar og angrep: en samlet blokk kan redusere tilgjengelige rom for motstanderen, mens et tidlig angrep etter ballvinning utnytter rommet som oppstår når motstanderen har spillere foran ballen. Observer første pasning, spissens løp og om det finnes støtte bak ballen. Sammenlign med Rangnicks høye press: begge kan skape overganger, men ballvinningens sted og lagets utgangsposisjoner kan være forskjellige. Det er ikke en garanti for at kompakt 4-4-2 alltid gir effektiv kontring.",
+        "source": "Faglig tillegg – Premier League, https://www.premierleague.com/en/news/2748139; navn og tema fra Fotballdokumentet v1.pdf"
       }
     ]
   },

@@ -142,6 +142,10 @@ for(const c of THEORY_CHAPTERS){
 check(THEORY_CHAPTERS.reduce((n,c)=>n+c.diagrams.length,0)===12,"Teorifigurer mangler");
 check(bookHtml.includes('id="footballBookTheory"'),"Teoridelen er ikke tilgjengelig i spillet");
 check(SCHOOL_CHAPTERS.length===6,"Fotballskoler mangler");
+for(const [id,expected] of Object.entries({"formations":["portrait_pozzo","portrait_chapman","portrait_tuchel","portrait_ferguson"],"gegenpress":["portrait_rangnick"],"catenaccio":["portrait_mourinho"],"third_man":["portrait_wenger"],"transition_attack":["portrait_ranieri"]})){
+  const sections=[...THEORY_CHAPTERS,...SCHOOL_CHAPTERS,...PHASE_CHAPTERS].find(c=>c.id===id)?.sourceDetails||[];
+  for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("Faglig tillegg – ")&&d.source.includes("https://"),key+": trenerarkitekt-case mangler");}
+}
 for(const [id,expected] of Object.entries({"keepers":["portrait_keeper_depth","portrait_keeper_angles","portrait_keeper_saves","portrait_keeper_distribution"],"link_strikers":["portrait_hidegkuti"],"finishing_press":["portrait_puskas"],"six_regista":["portrait_scanning"],"ten_creator":["portrait_creative"],"total_football":["portrait_cruyff_michels"],"catenaccio":["portrait_herrera"],"gegenpress":["portrait_klopp"],"positional_play":["portrait_guardiola_ederson"]})){
   const sections=[...ROLE_CHAPTERS,...SCHOOL_CHAPTERS].find(c=>c.id===id)?.sourceDetails||[];
   for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),key+": personcase mangler");}

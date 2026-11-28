@@ -275,6 +275,12 @@ export const SCHOOL_CHAPTERS = [
         "title": "Helenio Herrera – organisering og overgang",
         "text": "Originalmanuset fremhever Herreras Inter som eksempel på defensiv struktur og raske kontringer. Den faglige analysen bør undersøke hvordan markering og en fri sikringsspiller henger sammen med muligheten til å starte angrep etter ballvinning. Herrera er allerede plassert i bokas catenaccio-kapittel; dette portrettet presiserer trenerens funksjon som case, ikke en påstand om at han oppfant alle prinsippene. Manusets planlagte sitat om vinnermentalitet er ikke dokumentert i den bevarte teksten.",
         "source": "Fotballdokumentet v1.pdf – Del I – Italiensk catenaccio / 7. Det mentale aspektet"
+      },
+      {
+        "id": "portrait_mourinho",
+        "title": "José Mourinho – kampbilde, risiko og overgang",
+        "text": "Manuset navngir Mourinho ved kontroll og kontring. UEFA dokumenterer to forskjellige kampbilder fra Inters semifinale mot Barcelona i 2010: hjemmeseier 3–1 og et 0–1-tap på bortebane etter utvisning, som likevel ga avansement. Det første oppgjøret viser at organisering kan kombineres med offensiv overgang; det andre viser hvordan kampstilling, samlet resultat og numerisk undertall kan endre risikovalget. Undersøk hvilke rom laget beskytter, hvilken støtte det har ved ballvinning og når det er mulig å true bakrom. En moderne defensiv blokk er ikke automatisk historisk catenaccio. Caset begrunner ikke en fast defensiv spillestil for alle Mourinhos lag.",
+        "source": "Faglig tillegg – UEFA, https://www.uefa.com/uefachampionsleague/news/01e4-0e745dd6d8b8-559388d26824-1000--impressive-inter-leave-barca-on-the-ropes/ ; https://www.uefa.com/uefachampionsleague/news/01e4-0e746dee4629-e22f0b2f81cf-1000--barcelona-dethroned-by-resilient-inter/; navn og tema fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -399,6 +405,12 @@ export const SCHOOL_CHAPTERS = [
         "title": "Jürgen Klopp – kollektiv gjenvinning og teknikk under press",
         "text": "Originalmanuset knytter Klopp til Borussia Dortmund og Liverpool og beskriver koordinert press umiddelbart etter balltap. Det understreker at pasning, mottak og orientering må fungere i fart og under motstand. Trenercaset brukes til å undersøke nærmeste spilleres press og resten av lagets dekning, ikke til å gi én trener æren for å oppfinne gjenvinningspress. Ralf Rangnick og Thomas Tuchel er navngitt som planlagte fordypninger, men kilden gir ikke tilsvarende utførlige portretter av dem.",
         "source": "Fotballdokumentet v1.pdf – Del V – Klopp og gegenpressing / Moderne mestre, linje 4557–4623"
+      },
+      {
+        "id": "portrait_rangnick",
+        "title": "Ralf Rangnick – kollektiv intensitet og høyt press",
+        "text": "Originaldisposisjonen plasserer Rangnick som en moderne trenerarkitekt knyttet til presskolen. UEFA omtaler hans betydning for gegenpressing og fremhever Østerrikes effektive høye press i gruppespillet i EM 2024. Høyt press mot etablert oppbygging må skilles fra umiddelbar gjenvinning etter eget balltap. Begge forutsetter at spillere nær ballen og spillere lenger unna samordner sine arbeidsoppgaver. Observer hvem som setter press, hvilke pasningsalternativer som dekkes og hvordan laget beskytter rom bak presset. Ved manglende sikring kan en lavere utgangsposisjon være mer hensiktsmessig. Det innføres ingen fast tidsgrense eller pressverdi knyttet til Rangnick.",
+        "source": "Faglig tillegg – UEFA, https://www.uefa.com/uefaeuro/history/news/028d-1b058a1a388d-5665645fc203-1000--uefa-euro-2024-meet-the-24-teams/ ; https://www.uefa.com/uefaeuro/history/news/028e-1b3f9d965e00-3ec1a6f8adb9-1000--euro-2024-group-stage-uefa-technical-observers-tactical-r/; navn og tema fra Fotballdokumentet v1.pdf"
       }
     ]
   },
