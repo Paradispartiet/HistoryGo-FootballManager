@@ -21,3 +21,16 @@ Eksisterende testskript om høyt press og kompakt blokk har eksplisitte asserts 
 4. Innlegg og avslutning: gjennomgå faktisk avslutnings- og keepermotor, og skill boksadgang fra skuddteknikk.
 
 Neste bolk: etablert forsvar, deretter overganger og dødballer; roller, trening, historie og kultur etterpå. Ingen nye xG-bonuser, nye motorer, eller endring i bokas innhold. Tester skal bevise samme inngangsdata med endret relevant motgrep/rolle gir forventet konsekvens, manglende data er nøytrale, og det ikke oppstår dobbel xG-attribusjon. Første mekanikk velges etter motorkontroll.
+
+## Bolk 2 – etablert forsvar
+
+13 avsnitt i `press_cover_shift` og `out_of_possession` kontrollert mot egen pressmotor, motstanderens soneforskyvning, forsvar mot overlapp/innlegg og løpsmønster. 12 delvis dekket, ett uavklart (markeringsmodeller). Samlet vurdert 46/287.
+
+### Viktige funn
+
+- Egen pressmotor har allerede frontpress, midtbanefelle og gjenvinningspress med separate gjenvinnings- og sikringsporter. Restforsvar evalueres ved brutt press; sluttutfall prises én gang.
+- Eksplisitte forsvarsoppgaver kan ha tidsfrister, geometriske bevegelsesankere og dokumenterte individuelle reaksjonsegenskaper. `sourcedDefensiveTaskTiming` begrenser besparelse til 0,25 sekunder per oppgave. Disse er spillmodellheuristikker for avgrensede situasjoner, ikke målte fysiske verdier eller generell posisjonssimulering.
+- Motstanderens overlapper, innlegg og tre-romsangrep har ulike forsvarsporter. En dedikert skjermspiller kan påvirke risikoen for at sentral dekning trekkes ut. Dette er ikke det samme som å ha generelle 1F–2F–3F-posisjoner i alle situasjoner.
+- Prioriter forsinkelse kontra aktivt press betinget av sikring, deretter eksplisitte signaler/pressrytme og dynamisk pumping. Fullt markeringsvalg må undersøkes videre. Kunnskapslaget har forklaringer som ikke nødvendigvis er motorvalg.
+
+Kildene er bokas eksisterende fagavsnitt og de kontrollerte motorfunksjonene. Testskriptets assertions for egne presskjeder og dokumenterte reaksjonsegenskaper er inspisert, ikke kjørt i denne bolken. Ingen motorendring eller nye xG-verdier. Neste bolk: offensive og defensive overganger, inkludert restforsvar. Deretter dødballer.

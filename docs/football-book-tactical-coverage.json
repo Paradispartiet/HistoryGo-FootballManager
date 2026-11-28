@@ -44,6 +44,49 @@
       "symbol": "resolveGameControlPhase",
       "test": "scripts/simulate-game-control-v6.mjs",
       "scope": "Kontroll/avlastning under spesifikke kampplaner; ikke kontinuerlig posisjonssimulering."
+    },
+    "P": {
+      "file": "src/football-matchday-own-press-v6.js",
+      "symbol": "resolveOwnPressAgainstOpponent",
+      "test": "scripts/simulate-own-press-v6.mjs",
+      "scope": "Eget frontpress, midtbanefelle og gjenvinningspress; samordnet presseenhet, motstanderens kjente utvei, restforsvar og én terminal xG-effekt."
+    },
+    "A": {
+      "file": "src/football-matchday-own-press-v6.js",
+      "symbol": "sourcedDefensiveTaskTiming",
+      "test": "scripts/simulate-own-press-v6.mjs",
+      "scope": "Dokumenterte individuelle styrker kan redusere reaksjons- og bevegelsestid i eksplisitt definerte forsvarsoppgaver. Maks 0,25 sekunder besparelse per oppgave; ingen oppfunnet spillerdata."
+    },
+    "G": {
+      "file": "src/football-matchday-own-press-v6.js",
+      "symbol": "recoveryFromAuthoredActions",
+      "test": "scripts/simulate-own-press-v6.mjs",
+      "scope": "Eksplisitt definerte handlingsvinduer, forsvarsoppgaver og banekoordinater for motstanderens pressutspill; feil korridor skilles fra manglende data."
+    },
+    "Z": {
+      "file": "src/football-matchday-sequence-v8.js",
+      "symbol": "resolveOpponentZonalShift",
+      "scope": "Motstanderens dokumenterte sonepress/sikring/forskyvning mot eget breddeangrep; to porter på ett utfall, ikke en generell egen forsvarsposisjonsmotor."
+    },
+    "X": {
+      "file": "src/football-matchday-sequence-v8.js",
+      "symbol": "resolveOpponentSwitchCrossSequence",
+      "scope": "Forsvar mot spillvending og tidlig innlegg: separate porter for bredde- og boksforsvar."
+    },
+    "O": {
+      "file": "src/football-matchday-sequence-v8.js",
+      "symbol": "resolveOpponentFullbackOverlap",
+      "scope": "Forsvar mot overlapp med back/kant-støtte og boksforsvar, to porter; ingen oppdiktet historisk målside."
+    },
+    "L": {
+      "file": "src/football-matchday-sequence-v8.js",
+      "symbol": "resolveOpponentRunSequence",
+      "scope": "Forsvarslinjens høyde, stopperdybde, midtbaneskjerm og sidedekning mot koordinert løpsmønster."
+    },
+    "M": {
+      "file": "src/football-matchday-sequence-v8.js",
+      "symbol": "resolveOpponentThreeSpaceCombination",
+      "scope": "Kjent motstanders tre-romsangrep: side-, mellomroms-, dybde- og senløpsforsvar; dedikert sikringsrolle påvirker avledningsrisiko."
     }
   },
   "entries": [
@@ -51,49 +94,108 @@
       "id": "first_defender",
       "chapterId": "press_cover_shift",
       "title": "Førsteforsvarer – kroppsstilling og avstand",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "P",
+        "A",
+        "G"
+      ],
+      "implemented": "Førstepress inngår i samordnet presskjede; dokumenterte reaksjonsegenskaper kan endre tidsvindu for spesifikke forsvarsoppgaver.",
+      "nextCheck": "Undersøk separat 1F-valg om å forsinke eller gå på ballvinning, kroppsstilling og situasjonsavhengig avstand. Ikke innfør manusets meterverdier som universelle grenser."
     },
     {
       "id": "steering",
       "chapterId": "press_cover_shift",
       "title": "Lede og styre",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "P",
+        "G",
+        "M"
+      ],
+      "implemented": "Frontpress styrer første oppspill til én side, midtbanefelle inviterer inn sentralt; kjent utvei og sikring påvirker resultat. Dedikert skjerm kan motstå avledning.",
+      "nextCheck": "Kontroller styringsvalg inn/ut av banen betinget av egen sikring, farlig rom, ballførers muligheter og side. Ikke likestill motstanderens utvei med vårt valgte pressmål."
     },
     {
       "id": "marking",
       "chapterId": "press_cover_shift",
       "title": "Markering – nær ballen og nær mål",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "A",
+        "G",
+        "L",
+        "X"
+      ],
+      "implemented": "Dokumentert marking/tackling kan påvirke tidsbruk ved relevante oppgaver; løps- og boksdekning påvirker sjansevindu.",
+      "nextCheck": "Undersøk markeringstetthet, forsvarstriangel og bytte mellom rom- og mannsansvar. Ingen bevis for komplett markeringsmodell."
     },
     {
       "id": "blocking",
       "chapterId": "press_cover_shift",
       "title": "Blokkering av skudd og innlegg",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "X",
+        "O"
+      ],
+      "implemented": "Innlegg kan avverges før levering eller i boksen gjennom ulike porter.",
+      "nextCheck": "Kontroller skuddblokkering, lovlig kroppsstilling og forhold mellom keeperens skuddvinkel og forsvarerens blokkeringsoppgave."
     },
     {
       "id": "cover",
       "chapterId": "press_cover_shift",
       "title": "Andre- og tredjeforsvarer – vinkel, dybde og orientering",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "P",
+        "G",
+        "A",
+        "L",
+        "M"
+      ],
+      "implemented": "Press- og sikringskjede, dedikert skjerm, feil korridor og individuelle reaksjonsvinduer kan påvirke utfall når underlaget finnes.",
+      "nextCheck": "Kontroller generell 1F–2F–3F-geometri, vinkel/dybde og samtidighet utenfor eksplisitt scenario. Bevar kildeavstandene som eksempler."
     },
     {
       "id": "duels",
       "chapterId": "press_cover_shift",
       "title": "Dueller – én mot én, to mot én og tre mot to",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "M",
+        "P",
+        "A"
+      ],
+      "implemented": "Motstanderens utfordring og etterfølgende pasningsrom kan stoppes; individuell relevant defensiv reaksjon kan hjelpe i avgrenset oppgave.",
+      "nextCheck": "Kontroller beslutning om opphold, forsinkelse eller takling ved 1v1, 2v1 og 3v2; vurder undertall uten å anta kontinuerlige spillerkoordinater."
     },
     {
       "id": "back_to_goal",
       "chapterId": "press_cover_shift",
       "title": "Feilvendt mottaker og overlapping",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "P",
+        "A",
+        "O",
+        "G"
+      ],
+      "implemented": "Pressutspill med støtte/avlegg, reaksjon på førsteberøring og oppfølging av løper samt back/kant-sikring er modellert i avgrensede kjeder.",
+      "nextCheck": "Kontroller eksplisitt feilvendt mottak, vending kontra avlegg og markeringsbytte ved overlapp. Ikke tell en fasebeskrivelse som et uavhengig motorvalg."
     },
     {
       "id": "interception",
       "chapterId": "press_cover_shift",
       "title": "Gå når ballen går – snappe, fronte og finte",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "P",
+        "A",
+        "G"
+      ],
+      "implemented": "Pasningsdekning, tidsfrister og reaksjon på konkrete handlinger kan påvirke gjenvinning/inneslutning.",
+      "nextCheck": "Kontroller særskilt avskjæring av pasningsbane, start mens ballen går, risiko ved undertall og forskjell mellom å bryte og å følge."
     },
     {
       "id": "risk_balance",
@@ -1186,31 +1288,62 @@
       "id": "press_height",
       "chapterId": "out_of_possession",
       "title": "Presshøyder og pressbølger",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "P",
+        "T",
+        "L"
+      ],
+      "implemented": "Høyt frontpress, midtbanefelle og lav blokk har forskjellige kjeder; forsvarslinje påvirker bakromsrisiko. Kampplanene har egne pressing-, defensiveLine- og intensity-felt.",
+      "nextCheck": "Kontroller automatisk og managerstyrt veksling mellom aktivt press og hvilepress. Ikke konstruer 15-minutters bølger som obligatorisk mønster."
     },
     {
       "id": "lock_press",
       "chapterId": "out_of_possession",
       "title": "Lås av – høyt press eller sentral skjerming",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "P",
+        "G"
+      ],
+      "implemented": "Frontpress styrer mot side med støtte, midtbanefelle bruker pasningssignal og sikring; motstanderens kjent utvei kan bryte fellen.",
+      "nextCheck": "Kontroller konkret låsing på innkast/målspark, backens mottak, keeperretur og motsatt vings posisjon. Skill avgrensede planruter fra allmenn pressfelle."
     },
     {
       "id": "press_triggers",
       "chapterId": "out_of_possession",
       "title": "Presstidspunkt – aktivering, hvile og falskt press",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "P",
+        "A",
+        "G"
+      ],
+      "implemented": "Avgrensede planutløsere og eksplicitte handlingsvinduer finnes; reaksjon ved førsteberøring kan avhenge av dokumenterte egenskaper.",
+      "nextCheck": "Kontroller om dårlig touch, bakoverpasning, feilvendt mottaker og luftball fungerer som egne signaler i generell kampflyt. Hvilepress og falskt press ikke bekreftet."
     },
     {
       "id": "pump_and_drop",
       "chapterId": "out_of_possession",
       "title": "Push opp, pumping, fall av og kompakte ledd",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "P",
+        "L",
+        "Z",
+        "M"
+      ],
+      "implemented": "Forsvarslinje, kollektiv sikring og motstanderens soneforskyvning har konsekvenser i spesialistkjeder; manager kan senke laget.",
+      "nextCheck": "Kontroller om eget lag dynamisk pumper opp ved fri ball og tar dybde ved kontrollert motstanderball. Ikke avled avstander fra lagets score."
     },
     {
       "id": "marking_models",
       "chapterId": "out_of_possession",
       "title": "Markeringstyper og kollektivt press",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Soneforsvar og mann-mot-mann omtales i kunnskapslaget. De undersøkte motorfunksjonene dokumenterer ikke alle manusets markeringsmodeller som valgbare, forskjellige egne forsvarsregler.",
+      "nextCheck": "Kartlegg eksakte taktikktagger og motorbruk for rigid/fleksibel mann, rom- og posisjonsorientering. Ikke inferer mannsmarkering fra høy intensitet eller sonemarkering fra pasningsspill."
     },
     {
       "id": "counter_signal",
