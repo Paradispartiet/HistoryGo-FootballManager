@@ -129,22 +129,80 @@ export function opponentPressWorkload(session) {
     basis: "completed_simulated_collective_press_periods_not_measured_fitness" };
 }
 
+// Candidate quality is a gameplay heuristic using evaluated role fit, not
+// observed receiving orientation or a measured open passing lane.
+function buildUpProbability(players, metricValues, pressure, workload, coverPenalty) {
+  const avgFit = players.reduce((sum, player) => sum + player.matchScore, 0) / players.length;
+  const weakestFit = Math.min(...players.map(player => player.matchScore));
+  const axis = Math.min(...metricValues);
+  return clamp((workload?.adjustment || 0) + 0.48 + (avgFit - 65) * 0.004
+    + (axis - 65) * 0.003 + (weakestFit - 60) * 0.0015
+    - (pressure - 70) * 0.003 - coverPenalty, 0.12, 0.82);
+}
+
+// Football book: meeting_forward / build_up_patterns. Only when there is
+// an actual linking striker AND two distinct, role-suitable layoff options.
+// Never interpret missing cover as an available outlet. No extra RNG or xG.
+export function resolveMeetingForwardChoice(session, pressure, workload) {
+  if (session?.causalMeetingForwardDecisionVersion !== 1 ||
+      selectedRoute(session)?.name !== "third_man" || !finite(pressure)) return null;
+  const shape = session.opponent?.tacticalBehaviour;
+  const laneCover = shape?.passingLaneCover;
+  if (shape?.pressCoordination !== "collective" ||
+      !["central", "wide"].includes(laneCover)) return null;
+  const lineup = session.lineupSnapshot;
+  if (!Array.isArray(lineup) || lineup.length !== 11 ||
+      lineup.some(p => !p?.playerId || p.matchFitKnown !== true ||
+        !finite(p.matchScore) || p.matchScore < 0 || p.matchScore > 100) ||
+      new Set(lineup.map(p => p.playerId)).size !== 11) return null;
+  const profile = session.teamFitSnapshot?.tacticalProfile;
+  if (!["buildUpScore", "balanceScore", "widthScore", "restDefenseScore"]
+      .every(key => finite(profile?.[key]) && profile[key] >= 0 && profile[key] <= 100)) return null;
+  const best = (positions, roles) => lineup.filter(p =>
+    positions.includes(p.position) && (!roles || roles.includes(p.roleId)))
+    .sort((a,b) => b.matchScore-a.matchScore || String(a.playerId).localeCompare(String(b.playerId)))[0];
+  const keeper = best(["GK"]), stopper = best(["CB"]);
+  const forward = best(["ST"], ["linking_striker"]);
+  const central = best(["DM","CM","AM"], ["balancing_six","holding_midfielder","deep_playmaker",
+    "regista","box_to_box","classic_ten","free_creator","pressing_midfielder"]);
+  const wide = best(["LW","RW"], ["wide_dribbler"]);
+  if (!keeper || !stopper || !forward || !central || !wide) return null;
+  const make = (choice, receiver, metricNames, penalty) => {
+    const players = [keeper, stopper, forward, receiver];
+    const metricValues = metricNames.map(key => profile[key]);
+    return {choice, receiver, players, metricNames, metricValues, penalty,
+      probability: buildUpProbability(players, metricValues, pressure, workload, penalty)};
+  };
+  // Both alternatives start with a central feed. A lateral layoff can reduce
+  // the *exit* exposure, but central coverage still penalizes the feed.
+  // These are deliberately explicit provisional game constants, not statistics.
+  const alternatives = [
+    make("central_layoff", central, ["buildUpScore","balanceScore"], laneCover === "central" ? 0.20 : 0),
+    make("wide_layoff", wide, ["buildUpScore","balanceScore","widthScore"], laneCover === "central" ? 0.10 : 0.20)
+  ];
+  const selected = alternatives.slice().sort((a,b) => b.probability-a.probability ||
+    Number(b.choice === (laneCover === "central" ? "wide_layoff" : "central_layoff")) -
+    Number(a.choice === (laneCover === "central" ? "wide_layoff" : "central_layoff")))[0];
+  return {...selected, forward, alternatives: alternatives.map(a => ({
+    choice: a.choice, receiverId: a.receiver.playerId, coverPenalty: a.penalty,
+    probability: Math.round(a.probability*1000)/1000
+  }))};
+}
+
 export function resolveHighPressBuildUp(session, { rng = Math.random } = {}) {
   if (!session || typeof session !== "object") return null;
   const route = selectedRoute(session);
   const pressure = pressingOpponent(session.opponent);
   if (!route || pressure === null) return null;
-  const players = supportedPlayers(
+  let players = supportedPlayers(
     Array.isArray(session.lineupSnapshot) ? session.lineupSnapshot : [], route.positions
   );
   const profile = session.teamFitSnapshot?.tacticalProfile;
   const restDefense = profile?.restDefenseScore;
-  const metricValues = route.metrics.map((metric) => profile?.[metric]);
+  let metricNames = route.metrics.slice();
+  let metricValues = metricNames.map((metric) => profile?.[metric]);
   if (!players || !finite(restDefense) || !metricValues.every(finite)) return null;
 
-  const avgFit = players.reduce((sum, player) => sum + player.matchScore, 0) / players.length;
-  const weakestFit = Math.min(...players.map((player) => player.matchScore));
-  const axis = Math.min(...metricValues);
   // Confirmed shape/cover is allowed to counter a route, but unknown cover
   // does NOT mean an open lane. It contributes a neutral adjustment.
   const shape = session.opponent?.tacticalBehaviour;
@@ -152,19 +210,27 @@ export function resolveHighPressBuildUp(session, { rng = Math.random } = {}) {
     ((route.name === "third_man" && shape.passingLaneCover === "central") ||
      (route.name === "switch_play" && shape.passingLaneCover === "wide"));
   const workload = opponentPressWorkload(session);
-  const probability = clamp(
-    (workload?.adjustment || 0) + 0.48 + (avgFit - 65) * 0.004 + (axis - 65) * 0.003
-      + (weakestFit - 60) * 0.0015 - (pressure - 70) * 0.003
-      - (coveredLane ? 0.2 : 0),
-    0.12, 0.82
-  );
+  const meeting = resolveMeetingForwardChoice(session, pressure, workload);
+  if (meeting) {
+    players = meeting.players;
+    metricNames = meeting.metricNames;
+    metricValues = meeting.metricValues;
+  }
+  const probability = meeting?.probability ??
+    buildUpProbability(players, metricValues, pressure, workload, coveredLane ? 0.2 : 0);
+  const actions = meeting ? [
+    "Keeper trekker til seg første pressledd",
+    "Stopper forsøker oppspill på møtende spiss",
+    meeting.choice === "wide_layoff" ? "Spissen forsøker avlegg ut mot bred kant" : "Spissen forsøker avlegg til sentral støtte",
+    "Mottakeren forsøker å spille laget forbi presset"
+  ] : route.actions;
   const rawRoll = Number(rng());
   // An invalid RNG must not create certainty or a phantom success.
   if (!finite(rawRoll)) return null;
   const succeeded = clamp(rawRoll, 0, 0.999999999) < probability;
   const attacking = succeeded;
-  const failureStep = coveredLane ? route.name === "third_man" ? 2 : 1 : route.actions.length - 1;
-  const steps = route.actions.map((action, i) => ({
+  const failureStep = coveredLane ? route.name === "third_man" ? 2 : 1 : actions.length - 1;
+  const steps = actions.map((action, i) => ({
     action,
     result: succeeded || i < failureStep ? "available" : "blocked"
   }));
@@ -180,7 +246,10 @@ export function resolveHighPressBuildUp(session, { rng = Math.random } = {}) {
     status: succeeded ? "breakthrough" : "turnover",
     side: attacking ? "for" : "against",
     probability: Math.round(probability * 1000) / 1000,
-    cause: succeeded ? route.success
+    cause: succeeded ? meeting
+      ? meeting.choice === "wide_layoff" ? "Møtende spiss legger av mot bredde; laget spiller seg forbi presset." : "Møtende spiss legger av til sentral støtte; laget spiller seg forbi presset."
+      : route.success
+      : meeting ? "Oppspill og valgt avlegg lykkes ikke mot presset; ballen tapes."
       : coveredLane
         ? "Samordnet press og dokumentert pasningsdekning bryter kjeden."
         : "Utførelsen lykkes ikke mot presset; ballen tapes før neste angrep.",
@@ -197,7 +266,15 @@ export function resolveHighPressBuildUp(session, { rng = Math.random } = {}) {
         playerId: player.playerId, position: player.position, roleId: player.roleId,
         matchScore: player.matchScore
       })),
-      metricNames: route.metrics.slice(),
+      metricNames,
+      ...(meeting ? {meetingForward: {
+        version: 1,
+        choice: meeting.choice,
+        forwardId: meeting.forward.playerId,
+        receiverId: meeting.receiver.playerId,
+        alternatives: meeting.alternatives,
+        basis: "simulated_role_fit_and_documented_collective_cover_not_tracking"
+      }} : {}),
       metricValues,
       restDefenseScore: restDefense
     }
