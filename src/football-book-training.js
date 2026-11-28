@@ -771,6 +771,12 @@ export const TRAINING_CHAPTERS = [
         "title": "Motivasjon – samtale om hensikt og innsats",
         "text": "Trenernotatene innleder med spørsmål om hva motivasjon er, og hvorfor spillerne er til stede. De legger vekt på å arbeide for hverandre, sette langsiktige mål, gjøre sitt beste og kjenne egen arbeidsoppgave. Resultatet blir i en av notisene underordnet felles innsats. Dette bevares som et uttrykk for trenerens verdier, ikke som en empirisk påstand om at tro alene bestemmer ferdighetsnivå. De eksisterende fagavsnittene om mestringstro og prosessmål gir en separat faglig utdyping.",
         "source": "OneNote – Fotballnotater (Den 16.05.2026).one, råuttrekk 0x000f9c80–0x000fa780 og 0x001022f4"
+      },
+      {
+        "id": "onenote_duncan_edwards",
+        "title": "Duncan Edwards – en avbrutt karriere",
+        "text": "OneNote plasserer Duncan Edwards blant arbeidsmaurene og omtaler ham som et symbol på en tapt fremtid. Manchester United dokumenterer at han døde 21 år gammel etter flyulykken i München i 1958, og at det finnes begrenset historisk filmopptak. Dette er et historisk minne, ikke en anledning til å spekulere i hvilke prestasjoner eller trofeer han kunne ha oppnådd. Det kan brukes til å reflektere over forskjellen mellom observerbar prestasjon, utviklingspotensial og ettertidens fortellinger. Manusets vurdering av hva han representerer beholdes som en fortolkning, ikke som en fysiologisk eller psykologisk måling.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00298374, 0x007e8c6c; Manchester United, https://www.manutd.com/en/news/a-new-way-to-celebrate-duncan-edwards ; https://www.manutd.com/en/club/history/munich-remembered/the-darkest-day"
       }
     ]
   },

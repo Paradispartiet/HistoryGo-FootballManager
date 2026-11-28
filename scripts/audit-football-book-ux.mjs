@@ -175,6 +175,10 @@ check(bookHtml.includes('id="footballBookSchools"'),"Fotballskoler ikke tilgjeng
 const canonicalRoles=readJson(join(root,"data","football_roles.json")).roles;
 const bookRoleIds=ROLE_CHAPTERS.flatMap(c=>c.roles.map(r=>r.id));
 check(ROLE_CHAPTERS.length===9,"Rollekapitler mangler");
+for(const [id,expected] of Object.entries({"six_regista":["onenote_directors","onenote_pirlo_architect","onenote_workers_protectors","onenote_gattuso_pirlo","onenote_van_bommel_jeremies"],"eight_press":["onenote_xavi_modric","onenote_cambiasso_vieira_redondo","onenote_essien_bridge"],"centre_backs":["onenote_desailly_rijkaard_mascherano"],"fullbacks":["onenote_zambrotta_luis_enrique"],"individual_development":["onenote_duncan_edwards"]})){
+  const sections=[...ROLE_CHAPTERS,...TRAINING_CHAPTERS].find(c=>c.id===id)?.sourceDetails||[];
+  for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("OneNote – ")&&d.source.includes("0x"),key+": OneNote-regissør eller beskytter mangler");}
+}
 for(const [id,expected] of Object.entries({"keepers":["keeper_positioning","keeper_saves","keeper_distribution","portrait_keeper_depth","portrait_keeper_angles","portrait_keeper_saves","portrait_keeper_distribution"],"centre_backs":["centre_back_defence","centre_back_attack"],"fullbacks":["fullback_defence","fullback_attack","wingback_corridor"],"six_regista":["central_midfield_defence","central_midfield_attack","portrait_scanning"],"eight_press":["eight_defence","eight_attack"],"ten_creator":["supporting_forward","portrait_creative"],"wingers":["winger_defence","winger_attack"],"link_strikers":["meeting_forward","portrait_hidegkuti"],"finishing_press":["striker_defence","striker_attack","portrait_puskas"]})){
   const sections=(ROLE_CHAPTERS.find(c=>c.id===id)?.sourceDetails||[]).filter(d=>d.source.startsWith("Fotballdokumentet v1.pdf"));
   check(sections.map(d=>d.id).join(",")===expected.join(","),id+": originalmanusets posisjonelle arbeidsoppgaver mangler");

@@ -516,3 +516,21 @@ De 218 lengre, ikke eksakt samsvarende teoriblokkene inkluderer 202 uten treff p
 | collective_training | onenote_shared_perception | Fotballteori (Den 12.06.2026).one, råuttrekk 0x00037ec4 |
 | training_problem | onenote_data_analysis | Fotballteori (Den 12.06.2026).one, råuttrekk 0x00035824 og 0x00035f9c |
 | positional_play | onenote_rhythm_space | Fotballteori (Den 12.06.2026).one, råuttrekk 0x00032d94 |
+
+## Bolk 24 – OneNote: Regissørene, arbeidsmaurene, beskytterne og allrounderne
+
+11 fagavsnitt i eksisterende rolle- og treningskapitler. Råuttrekket fra Fotballteori er åpnet på nytt ved byteankerne 0x002892f4–0x00299df4, 0x002c00da–0x002c080c, 0x007e71f4–0x007e94ac og 0x007f263c. Kategoriene og de konkrete gjenfunne formuleringene er bevart som redaksjonelle sammenfatninger, mens fragmenterte overskrifter ikke fremstilles som fullstendige portretter. Eksterne holdepunkter fra UEFA, FIFA og klubbenes egne arkiver er uttrykkelig skilt fra råteksten og nye observasjonsoppgaver. Aggressive karakteristikker og uverifiserte anekdoter gjengis ikke som instruksjoner eller fakta. Tidligere PDF- og fagtillegg om Makélélé, Keane, Deschamps, Modrić, Di Stéfano, Beckenbauer og Matthäus beholdes. Ingen nye kapitler, øvelses-ID-er, figurer eller motorregler. Full OneNote-sideeksport, resterende temagrupper og CI gjenstår.
+
+| Kapittel | Underavsnitt | Kildeanker |
+|---|---|---|
+| six_regista | onenote_directors | 0x00292e2c–0x00294fec, 0x007e71f4–0x007e7d5c; UEFA, https://www.uefa.com/news/025f-0fd804989c24-45d85162032d-1000--great-playmaker-displays/ |
+| six_regista | onenote_pirlo_architect | 0x00292fa4–0x002937b4, 0x007e747c; UEFA, https://www.uefa.com/uefachampionsleague/news/024b-0e9939ae84c1-34d29b70c069-1000--champions-league-100-club-andrea-pirlo/ |
+| eight_press | onenote_xavi_modric | 0x00293ae4, 0x0029446c–0x00294fec, 0x007e79c4; UEFA, https://www.uefa.com/news-media/news/01d6-0f85ae208ec7-b014ffa38f92-1000--xavi-reveals-passing-perfection/ |
+| six_regista | onenote_workers_protectors | 0x0029537a–0x00299df4, 0x007e82cc–0x007e8c6c, 0x002c00da–0x002c0184 |
+| six_regista | onenote_gattuso_pirlo | 0x002969e4, 0x007e86cc, 0x00292fa4–0x002937b4; UEFA, https://www.uefa.com/uefaeuropaleague/news/023f-0e980c697c63-7e3fcc259953-1000--why-milan-chose-gattuso-as-their-new-coach/ |
+| centre_backs | onenote_desailly_rijkaard_mascherano | 0x00297774–0x00297fac, 0x0028a3fc, 0x007e8a7c; AC Milan, https://www.acmilan.com/en/club/legends/players/rijkaard ; FIFA, https://www.fifa.com/en/tournaments/mens/worldcup/articles/argentina-players-record-appearances-games |
+| eight_press | onenote_cambiasso_vieira_redondo | 0x002973cc, 0x00297bcc, 0x002990cc–0x00299614, 0x007e8a7c; Inter, https://www.inter.it/en/news/esteban-cambiasso-birthday-2025 |
+| six_regista | onenote_van_bommel_jeremies | 0x002892f4–0x00289b9c, 0x00298924–0x00298c7c |
+| eight_press | onenote_essien_bridge | 0x0028d2cc–0x0028d76c, 0x007f263c; Chelsea, https://www.chelseafc.com/en/news/article/from-the-archive-the-smile-on-michael-essiens-face |
+| fullbacks | onenote_zambrotta_luis_enrique | 0x0028da6c, 0x0028e144, 0x007f263c; FC Barcelona, https://www.fcbarcelona.com/en/football/barca-legends/players/1082626/zambrotta ; https://www.fcbarcelona.com/en/news/648051/luis-enrique-martinez/amp |
+| individual_development | onenote_duncan_edwards | 0x00298374, 0x007e8c6c; Manchester United, https://www.manutd.com/en/news/a-new-way-to-celebrate-duncan-edwards ; https://www.manutd.com/en/club/history/munich-remembered/the-darkest-day |

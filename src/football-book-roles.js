@@ -259,6 +259,12 @@ export const ROLE_CHAPTERS = [
         "title": "Franz Beckenbauer – liberoens offensive ansvar",
         "text": "FIFA beskriver Beckenbauer som en sentral skikkelse i utviklingen av liberorollen, med teknikk og bevegelse som gjorde det mulig å gå fra forsvar til angrep. Han var kaptein da Vest-Tyskland vant VM i 1974. Caset viser at sikringsspilleren også kan bidra i oppbyggingen. Undersøk når en fremføring skaper overtall på midtbanen, og hvem som beskytter rommet bak. En offensiv libero forutsetter kollektiv omorganisering; rollen er ikke det samme som enhver moderne ballspillende stopper.",
         "source": "Faglig tillegg – FIFA, https://inside.fifa.com/organisation/news/a-tribute-to-franz-beckenbauer-1945-2024 ; https://inside.fifa.com/en/news/der-kaiser-turns-75; personnavn fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "onenote_desailly_rijkaard_mascherano",
+        "title": "Desailly, Rijkaard og Mascherano – mellom bakre ledd og midtbane",
+        "text": "OneNote grupperer Desailly og Rijkaard med beskytterne, og har en separat overskrift for Javier Mascherano. Desailly beskrives gjennom fysisk styrke og posisjonsspill; Rijkaards overskrift fremhever brobygging. AC Milan dokumenterer at Sacchi hentet Rijkaard for å styrke midtbanen, mens FIFA dokumenterer Mascheranos roller som midtbanespiller og stopper. Dette gir et faglig spørsmål om overføring av romforståelse mellom ledd: når er det riktig å støte frem, når må spilleren holde linjen, og hvem overtar sikringen? Mascherano-avsnittet er fragmentarisk, så det eksterne holdepunktet er eksplisitt merket her. Ingen historiske kampavtaler rekonstrueres.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00297774–0x00297fac, 0x0028a3fc, 0x007e8a7c; AC Milan, https://www.acmilan.com/en/club/legends/players/rijkaard ; FIFA, https://www.fifa.com/en/tournaments/mens/worldcup/articles/argentina-players-record-appearances-games"
       }
     ]
   },
@@ -425,6 +431,12 @@ export const ROLE_CHAPTERS = [
         "title": "Philipp Lahm – rollefortrolighet på back og midtbane",
         "text": "Bayern Münchens historiske portrett dokumenterer Lahms bruk som høyreback, venstreback og tidvis midtbanespiller. Det gir et eksempel på forskjellen mellom posisjonsnavn og arbeidsoppgaver. På back må spilleren ofte forholde seg til sidelinjen, kantspilleren og rom bak seg; sentralt må han registrere press fra flere retninger og tilby støttevinkler. Observer hvilke ferdigheter som kan overføres, som orientering og kroppsstilling, og hvilke relasjoner som må læres på nytt. Allsidighet betyr ikke at enhver spiller automatisk behersker alle roller. Denne fagteksten endrer ikke motorens eksisterende rollefortrolighet.",
         "source": "Faglig tillegg – FC Bayern, https://fcbayern.com/en/club/hall-of-fame/philipp-lahm; personnavn og tematikk fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "onenote_zambrotta_luis_enrique",
+        "title": "Zambrotta og Luis Enrique – allsidighet og endrede rollekrav",
+        "text": "Manusets allroundergruppe omfatter Zambrotta, Essien og Luis Enrique. En senere råblokk beskriver dem sammen med Hassan Salihamidžić som anvendelige på back, midtbane eller kant. Barcelonas klubbportretter gir eksterne holdepunkter om Zambrottas fysiske kapasitet og Luis Enriques lederskap. Det faglige poenget er at en ny rolle medfører nye relasjoner: en back må samhandle med stopper og kant, mens en spiller sentralt må orientere seg mot press fra flere retninger. Den korte råteksten angir ikke en komplett liste over hver spillers historiske posisjoner. Ingen posisjonsfortrolighet endres i spillet.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x0028da6c, 0x0028e144, 0x007f263c; FC Barcelona, https://www.fcbarcelona.com/en/football/barca-legends/players/1082626/zambrotta ; https://www.fcbarcelona.com/en/news/648051/luis-enrique-martinez/amp"
       }
     ]
   },
@@ -552,6 +564,36 @@ export const ROLE_CHAPTERS = [
         "title": "Claude Makélélé – posisjonell sikring og arbeidsøkonomi",
         "text": "Chelsea beskriver Makélélé-rollen som en midtbanespiller som beskytter bakre ledd og ofte lar andre ta mer offensive posisjoner. Faglig er forskjellen mellom å løpe for å reparere et åpent rom og å plassere seg slik at rommet allerede er beskyttet, viktig. En sekser kan flytte seg sideveis, stenge pasningslinjen mot spissen og være tilgjengelig for en enkel pasning etter gjenvinning. Observer når han holder posisjonen i stedet for å følge ballen. Det er ikke grunnlag for å fastsette individuelle utholdenhetsverdier eller anta at Makélélé alltid handlet på samme måte. Caset utfyller originalens refleksjon om mindre synlige bidrag.",
         "source": "Faglig tillegg – Chelsea FC, https://www.chelseafc.com/en/news/article/how-claude-makelele-changed-english-football; personnavn og tematikk fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "onenote_directors",
+        "title": "Regissørene – Pirlo, Xavi og Modrić",
+        "text": "OneNote-manuset samler Andrea Pirlo, Xavi Hernández og Luka Modrić under Regissørene. Der beskrives fotball som styring av rytme, rom og tid, ikke bare tempo og kraft. Pirlo fremheves for langpasninger og ro, Xavi for rytme, og Modrić for kombinasjonen av rytme, teknikk og arbeidskapasitet. De tre skal ikke reduseres til samme posisjon: å organisere fra dypet og å skape forbindelser høyere i banen kan kreve forskjellige utgangsposisjoner. UEFA behandler Pirlo og Xavi som pasningsspesialister og viser også Modrić som eksempel på spillstyring. Manusets rangering og absolutte karakteristikker er ikke objektive målinger. Se regissøren i sammenheng med lagets støttepunkter og bevegelser uten ball.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00292e2c–0x00294fec, 0x007e71f4–0x007e7d5c; UEFA, https://www.uefa.com/news/025f-0fd804989c24-45d85162032d-1000--great-playmaker-displays/"
+      },
+      {
+        "id": "onenote_pirlo_architect",
+        "title": "Pirlo – arkitekten og den lange pasningens funksjon",
+        "text": "Manuset omtaler Pirlo som arkitekten og beskriver hvordan langpasninger kan skjære gjennom et forsvar. UEFA dokumenterer hans rolle som dyptliggende playmaker, ro under press og presisjon ved dødballer. Den faglige utfordringen er å registrere neste rom før ballmottak: kan en lang pasning frigjøre en spiller på motsatt side, eller må laget først bruke en støttepasning for å få riktig vinkel? Ved kampanalyse kan man sammenligne pasningen som bryter et pressledd, pasningen som flytter presset, og pasningen som gir laget tid. Dette er en redaksjonell observasjonsoppgave; manusets formulering om at han aldri trengte fysisk kapasitet gjengis ikke bokstavelig.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00292fa4–0x002937b4, 0x007e747c; UEFA, https://www.uefa.com/uefachampionsleague/news/024b-0e9939ae84c1-34d29b70c069-1000--champions-league-100-club-andrea-pirlo/"
+      },
+      {
+        "id": "onenote_workers_protectors",
+        "title": "Arbeidsmaurene og beskytterne – skjult kollektiv verdi",
+        "text": "OneNote-manuset bruker Arbeidsmaurene og beskytterne som en egen kategori for spillere som rydder, dekker rom og gir de skapende spillerne tid. Makélélé, Deschamps, Gattuso, Keane, Vieira, Desailly, Redondo, Rijkaard og Edwards er navngitt; en utvidet versjon inkluderer Van Bommel og Cambiasso. Kategorien handler om funksjon, ikke om at alle spillerne har samme stil. Den kan forstås gjennom tre observasjonsspørsmål: hvilket rom beskytter spilleren, hvilken pasning blir mulig etter ballvinning, og hvilke medspillere får frihet når han holder posisjonen? Dette er en ny faglig anvendelse av manusets kategori. Ingen rollebonus eller rangering innføres.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x0029537a–0x00299df4, 0x007e82cc–0x007e8c6c, 0x002c00da–0x002c0184"
+      },
+      {
+        "id": "onenote_gattuso_pirlo",
+        "title": "Gattuso og Pirlo – komplementære midtbaneoppgaver",
+        "text": "Manuset omtaler Gattuso som beskytter, mens Pirlo hører til regissørene. UEFA beskriver Gattuso som en defensiv midtbanespiller og setter hans egenskaper i kontrast til Pirlos pasningsvisjon. Milan er derfor et nyttig utgangspunkt for å undersøke komplementære roller: hvem støter mot ballfører, hvem beskytter neste pasning, og hvem er tilgjengelig når laget vinner ballen? De to funksjonene kan støtte hverandre uten at én spiller reduseres til bare løpskraft eller den andre til bare teknikk. Den konkrete rollefordelingen må undersøkes mot kampmateriale. Manusets aggressive karakteristikker brukes ikke som anbefalinger om ulovlig spill.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x002969e4, 0x007e86cc, 0x00292fa4–0x002937b4; UEFA, https://www.uefa.com/uefaeuropaleague/news/023f-0e980c697c63-7e3fcc259953-1000--why-milan-chose-gattuso-as-their-new-coach/"
+      },
+      {
+        "id": "onenote_van_bommel_jeremies",
+        "title": "Van Bommel og Jeremies – rytmebrudd innenfor reglene",
+        "text": "Originalen har egne overskrifter om Mark van Bommel og Jens Jeremies. Van Bommel beskrives som en spiller som bryter motstanderens rytme; Jeremies-teksten er i dette uttrekket bare en overskrift. Den faglige ideen kan beholdes uten å oppfordre til provokasjon eller ulovlige taklinger. Et lag kan bryte rytmen ved å stenge en pasningslinje, forsinke ballføreren, vinne ballen lovlig eller endre tempoet etter gjenvinning. Observer om en defensiv handling gir laget tid til å reorganisere seg, eller om den åpner nye rom. Van Bommels og Jeremies' individuelle kampmønstre er ikke dokumentert i den gjenfunne råteksten.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x002892f4–0x00289b9c, 0x00298924–0x00298c7c"
       }
     ]
   },
@@ -683,6 +725,24 @@ export const ROLE_CHAPTERS = [
         "title": "Hidetoshi Nakata og Park Ji-sung – forskjellige midtbaneoppgaver",
         "text": "AS Roma dokumenterer Nakatas scoring fra utenfor boksen i opphentingen mot Juventus i 2001. Manchester United fremhever Parks betydning for laget og hans uselviske bidrag. Eksemplene gir anledning til å skille mellom den synlige offensive handlingen og arbeidet som gjør medspillernes handlinger mulige. Observer skuddrom, støtte, dekning og bevegelse uten ball. Spillernes japanske og sørkoreanske bakgrunn brukes ikke som forklaring på deres taktiske egenskaper. Dette er to individuelle case, ikke en påstand om en felles asiatisk spillestil.",
         "source": "Faglig tillegg – AS Roma, https://www.asroma.com/en/news/44052/on-this-day-in-2001-watch-the-goals-in-the-famous-comeback-against-juve ; Manchester United, https://www.manutd.com/en/news/manchester-united-around-the-world-xi; personnavn fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "onenote_xavi_modric",
+        "title": "Xavi og Modrić – rytme, mottak og neste handling",
+        "text": "Xavi har egen overskrift i det bevarte råuttrekket, men ikke et sammenhengende portrett. Den utdypende Modrić-teksten sammenligner ham med Xavis rytme og Pirlos pasningsfot. UEFA har publisert Xavis egen gjennomgang av kontroll og pasning, der han skiller mellom medspillere som ønsker ballen til fot og spillere som løper i dybden. Dette gir et konkret faglig holdepunkt for å studere rytmekontroll: pasningens retning og fart må passe mottakerens neste oppgave. De eksisterende portrettene om orientering og Modrićs pasningspresisjon beholdes. Utdypingen av Xavi er et kildebelagt tillegg til den fragmentariske OneNote-teksten.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00293ae4, 0x0029446c–0x00294fec, 0x007e79c4; UEFA, https://www.uefa.com/news-media/news/01d6-0f85ae208ec7-b014ffa38f92-1000--xavi-reveals-passing-perfection/"
+      },
+      {
+        "id": "onenote_cambiasso_vieira_redondo",
+        "title": "Cambiasso, Vieira og Redondo – arbeid med og uten ball",
+        "text": "Manuset beskriver Cambiasso som en undervurdert arkitekt og stille allrounder, og navngir Vieira og Redondo i gruppen som gir kunstnerne tid og rom. Inters egen omtale av Cambiasso dokumenterer hans bidrag i midtbanen og ved Champions League-triumfen i 2010. Dette kan brukes til å undersøke hvordan en midtbanespiller går fra å beskytte rom til å tilby en spillbar forbindelse i angrep. Vieira og Redondo har bare overskrifter og en kollektiv karakteristikk i den gjenfunne teksten; deres individuelle portretter må eventuelt utdypes med ytterligere kilder. Kategorien skal ikke forstås som en påstand om at alle tre løser identiske oppgaver.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x002973cc, 0x00297bcc, 0x002990cc–0x00299614, 0x007e8a7c; Inter, https://www.inter.it/en/news/esteban-cambiasso-birthday-2025"
+      },
+      {
+        "id": "onenote_essien_bridge",
+        "title": "Michael Essien – broen mellom arbeidsmaur og allrounder",
+        "text": "OneNote beskriver Essien som forbindelsen mellom arbeidsmauren og allrounderen. I et intervju med Chelsea forteller Essien om bakgrunn som forsvarsspiller, midtbaneoppgaver og perioder der han som høyreback beveget seg inn på midtbanen. Det gir konkret grunnlag for å undersøke hvordan allsidighet fungerer i et lag: når en back flytter inn, hvem holder bredden og hvem beskytter bakrommet? En allrounder må ikke bare ha mange ferdigheter; han må kunne anvende dem i forskjellige relasjoner. Det er et skille mellom å kunne bekle flere posisjoner og å forlate en posisjon uten at laget kompenserer.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x0028d2cc–0x0028d76c, 0x007f263c; Chelsea, https://www.chelseafc.com/en/news/article/from-the-archive-the-smile-on-michael-essiens-face"
       }
     ]
   },
