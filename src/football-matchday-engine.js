@@ -1813,6 +1813,8 @@ export function createMatchdaySession({ teamFit, formation, tactic, activeClassi
     // Explicit opt-in for NEW matches. Existing in-progress saves keep their
     // original v6 build-up model until their match is completed.
     causalTransitionsVersion: 1,
+    // New matches only: compare documented support roles before the same high-press phase.
+    causalMeetingForwardDecisionVersion: 1,
     // Activate causal compact-block actions only for newly started matches.
     causalCompactBlockVersion: 1,
     // Only new matches opt in to pre-chance pressing/escape sequences.

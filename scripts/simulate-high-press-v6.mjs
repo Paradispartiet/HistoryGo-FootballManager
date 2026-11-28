@@ -231,3 +231,64 @@ try {
   Math.random = roll;
 }
 console.log("OK: v6 high-press/build-up causal chain, conservation, evidence and legacy fallback");
+
+// Meeting-forward decision v1: real role IDs, known central cover from the
+// league profile, complete XI; fixture players are synthetic for isolation.
+const meetingXI = [
+  {...player("gk","GK"),roleId:"line_keeper"},
+  {...player("cb","CB"),roleId:"ball_playing_centre_back"},
+  {...player("cb2","CB"),roleId:"duel_centre_back"},
+  {...player("lb","LB"),roleId:"support_fullback"},
+  {...player("rb","RB"),roleId:"support_fullback"},
+  {...player("dm","DM"),roleId:"balancing_six"},
+  {...player("cm","CM"),roleId:"box_to_box"},
+  {...player("am","AM"),roleId:"classic_ten"},
+  {...player("lw","LW"),roleId:"wide_dribbler"},
+  {...player("rw","RW"),roleId:"inverted_winger"},
+  {...player("st","ST"),roleId:"linking_striker"}
+];
+const meetingSession = session({causalMeetingForwardDecisionVersion:1,
+  lineupSnapshot:meetingXI, opponent:brannOpponent});
+let draws=0;
+const meeting = resolveHighPressBuildUp(meetingSession,{rng:()=>{draws++;return .01;}});
+assert.equal(draws,1);
+assert.equal(meeting.evidence.meetingForward.choice,"wide_layoff");
+assert.equal(meeting.evidence.meetingForward.forwardId,"st");
+assert.equal(meeting.evidence.meetingForward.receiverId,"lw");
+assert.equal(meeting.evidence.support.length,4);
+assert.equal(new Set(meeting.evidence.support.map(p=>p.playerId)).size,4);
+assert.equal(meeting.evidence.meetingForward.alternatives.length,2);
+assert.equal(meeting.route,"third_man");
+assert.equal(meeting.xgDeltaFor,.12);
+assert.equal(meeting.xgDeltaAgainst,-.02);
+const wideCover = {...brannOpponent,tacticalBehaviour:{pressCoordination:"collective",passingLaneCover:"wide"}};
+const centralMeeting = resolveHighPressBuildUp({...meetingSession,opponent:wideCover},{rng:()=>.01});
+assert.equal(centralMeeting.evidence.meetingForward.choice,"central_layoff");
+const weakWide = resolveHighPressBuildUp({...meetingSession,lineupSnapshot:meetingXI.map(p=>p.playerId==="lw"?{...p,matchScore:10}:p)},{rng:()=>.01});
+assert.equal(weakWide.evidence.meetingForward.choice,"central_layoff","covered central lane may still be best with poor wide fit");
+const legacyMeeting = {...meetingSession,causalMeetingForwardDecisionVersion:undefined};
+for(const fallback of [
+  {...meetingSession,opponent:unknownBrann},
+  {...meetingSession,lineupSnapshot:meetingXI.slice(0,10)},
+  {...meetingSession,lineupSnapshot:meetingXI.map(p=>p.playerId==="st"?{...p,roleId:"advanced_forward"}:p)},
+  {...meetingSession,lineupSnapshot:meetingXI.map(p=>p.playerId==="lw"?{...p,matchFitKnown:false}:p)},
+  {...meetingSession,lineupSnapshot:meetingXI.map(p=>p.playerId==="lw"?{...p,playerId:"st"}:p)}
+]){
+  const {causalMeetingForwardDecisionVersion:_,...oldSession}=fallback;
+  assert.deepEqual(resolveHighPressBuildUp(fallback,{rng:()=>.42}),resolveHighPressBuildUp(oldSession,{rng:()=>.42}));
+}
+assert.equal(resolveHighPressBuildUp(legacyMeeting,{rng:()=>.01}).evidence.meetingForward,undefined);
+const failure=resolveHighPressBuildUp(meetingSession,{rng:()=>.99});
+assert.equal(failure.status,"turnover");
+assert.equal(failure.xgDeltaFor,0);
+assert.equal(failure.xgDeltaAgainst,.04);
+assert.equal(resolveHighPressBuildUp(meetingSession,{rng:()=>NaN}),null);
+assert.equal(annotateHighPressBuildUpChances(existing,meeting).filter(x=>x.tacticalMoment).length,1);
+try {
+  Math.random=()=>.01;
+  const period=advanceMatchClock(meetingSession).timeline[0];
+  assert.equal(period.tacticalPhase.evidence.meetingForward.choice,"wide_layoff");
+  assert.equal(Math.round((period.expectedGoals.for-period.baselineExpectedGoals.for)*100)/100,period.tacticalPhase.xgDeltaFor);
+  assert.equal(period.tacticalXg,undefined);
+} finally { Math.random=roll; }
+console.log("OK: meeting-forward choice, known cover, role suitability, fallback and single-phase xG");

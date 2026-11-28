@@ -237,6 +237,12 @@
       "symbol": "createPlanChange",
       "test": "scripts/simulate-match-plan.mjs",
       "scope": "Kampplanbytte vurderer kampstilling, motstander, egen profil og omstillingskostnad. Planens formasjonsarv er ikke automatisk ny formasjon."
+    },
+    "MF": {
+      "file": "src/football-matchday-high-press-v6.js",
+      "symbol": "resolveMeetingForwardChoice",
+      "test": "scripts/simulate-high-press-v6.mjs",
+      "scope": "Avgrenset valg mellom sentralt og bredt avlegg ved dokumentert kollektiv pasningsdekning og komplett verifisert XI. Ingen mottaksorientering, stuss eller vending."
     }
   },
   "entries": [
@@ -407,10 +413,11 @@
       "evidence": [
         "H",
         "C",
-        "R"
+        "R",
+        "MF"
       ],
-      "implemented": "Opp–tilbake–gjennom, spillvending, direkte oppspill og andreball er representert.",
-      "nextCheck": "Kontroller spissens valg mellom vending, stuss og avlegg som situasjonsavhengige utveier."
+      "implemented": "Opp–tilbake–gjennom, spillvending, direkte oppspill og andreball er representert. Motorutvidelse v1 foreslått: sammenligner sentralt og bredt avlegg fra faktisk møtende spiss i samme oppspillsfase; CI gjenstår.",
+      "nextCheck": "Kontroller CI og reelle kampforløp; vending, stuss, støtte som eget behold-ball-utfall og mottaksorientering er fortsatt ikke implementert i denne utvidelsen."
     },
     {
       "id": "portrait_bergkamp_henry_debruyne_haaland",
@@ -1598,10 +1605,11 @@
         "H",
         "C",
         "R",
-        "D"
+        "D",
+        "MF"
       ],
-      "implemented": "Møtende spiss og falsk nier har rollefit; avlegg til tredjemann inngår i oppspills- og blokkfasen, kreativt gjennombrudd kan være alternativ for dokumentert spiller.",
-      "nextCheck": "Prioriter eksplisitt utveivalg: vende, flikke/stusse, avlegg eller støtte. Motstanderens press, tilgjengelig mottaker og sikring må avgjøre; ikke gi ny parallell xG."
+      "implemented": "Møtende spiss og falsk nier har rollefit; avlegg til tredjemann inngår i oppspills- og blokkfasen, kreativt gjennombrudd kan være alternativ for dokumentert spiller. Motorutvidelse v1 foreslått: sammenligner sentralt og bredt avlegg fra faktisk møtende spiss i samme oppspillsfase; CI gjenstår.",
+      "nextCheck": "Kontroller CI og reelle kampforløp; vending, stuss, støtte som eget behold-ball-utfall og mottaksorientering er fortsatt ikke implementert i denne utvidelsen."
     },
     {
       "id": "portrait_hidegkuti",

@@ -106,3 +106,7 @@ CI 46148887934 feilet på at audit krevde teksten assert i eksisterende regresjo
 6. Orientering, kommunikasjon, keeper og avslutning etter dokumentert datagrunnlag. Ingen oppfunnet tracking eller dobbeltprising.
 
 Ingen motorregler endret. Prioriteringen er basert på kodegjennomgang, ikke krav om motorregler for all historisk eller filosofisk kunnskap.
+
+## Motorutvidelse 1a – møtende spiss
+
+Ny versjonsstyrt utvidelse i eksisterende høyt-press-fase. Krever faktisk komplett XI med dokumentert matchfit, linking_striker, sentral støtte, bred dribler, kjente lagverdier og dokumentert kollektiv dekning. Sammenligner to avlegg med samme eksisterende sannsynlighetsformel; ved sentral dekning beholder bredt avlegg en foreløpig 0,10 straff for sentralt oppspill, mot 0,20 for sentral rute. Dette er eksplisitte spillheuristikker, ikke observerte pasningsbaner eller empiriske tall. Ingen ekstra RNG, fase eller xG. Ukjent/manglende underlag og gamle sesjoner beholder eksisterende modell. Nytt bevisfelt med spiller-ID-er og alternativer. Vending, stuss og separat støtte/ballbehold krever videre mekanikk og konkret situasjonsgrunnlag. Regresjonstester lagt til for faktisk Brann-profil med syntetisk ellever, endret dekning, svak kant, fallbacks, balltap og xG-regnskap. CI gjenstår.
