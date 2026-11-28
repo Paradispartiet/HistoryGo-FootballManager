@@ -777,6 +777,12 @@ export const TRAINING_CHAPTERS = [
         "title": "Duncan Edwards – en avbrutt karriere",
         "text": "OneNote plasserer Duncan Edwards blant arbeidsmaurene og omtaler ham som et symbol på en tapt fremtid. Manchester United dokumenterer at han døde 21 år gammel etter flyulykken i München i 1958, og at det finnes begrenset historisk filmopptak. Dette er et historisk minne, ikke en anledning til å spekulere i hvilke prestasjoner eller trofeer han kunne ha oppnådd. Det kan brukes til å reflektere over forskjellen mellom observerbar prestasjon, utviklingspotensial og ettertidens fortellinger. Manusets vurdering av hva han representerer beholdes som en fortolkning, ikke som en fysiologisk eller psykologisk måling.",
         "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00298374, 0x007e8c6c; Manchester United, https://www.manutd.com/en/news/a-new-way-to-celebrate-duncan-edwards ; https://www.manutd.com/en/club/history/munich-remembered/the-darkest-day"
+      },
+      {
+        "id": "onenote_peak_narratives",
+        "title": "Når heltene brått falt – prestasjon, vendepunkt og erindring",
+        "text": "OneNote har en egen serie om spillere hvis karriere fikk et vendepunkt ved eller etter en periode med stor suksess. Manuset inkluderer Gascoigne, Van Basten, Ronaldo Nazário, Adriano, Owen, Falcao, Torres, Kaká og Sjevtsjenko, i tillegg til kortere tekster om blant andre Savićević og de to forskjellige spillerne Paolo Rossi og Giuseppe Rossi. Fortellingen om en tapt fremtid er en fortolkning, ikke et målbart utfall. Skill mellom dokumentert prestasjon, faktisk karriereforløp og spekulasjon om hva spilleren kunne oppnådd. Skade, rolleendring, klubbskifte og form kan ikke uten videre tilskrives én årsak. Det tidligere portrettet om Duncan Edwards beholdes som et særskilt historisk minne.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x001a425c–0x001acd94"
       }
     ]
   },
@@ -940,6 +946,12 @@ export const TRAINING_CHAPTERS = [
         "title": "Delt persepsjon – samhandling uten verbal beskjed",
         "text": "OneNote-utkastet nevner shared affordances og beskriver samhandling som noe som også kan springe ut av delt persepsjon, ikke bare verbale beskjeder. Den faglige ideen er at flere spillere kan registrere det samme åpne rommet eller den samme endringen i motstanderens posisjon og tilpasse handlingene til hverandre. Dette utfyller manusets kommunikasjonsdel om signaler og øyekontakt. Den angitte forskningshenvisningen i råteksten er ikke kontrollert mot originalpublikasjonen; begrepet beholdes som en kildeankret teoriidé, ikke som en forskningskonklusjon.",
         "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00037ec4"
+      },
+      {
+        "id": "onenote_pop_icons",
+        "title": "Pop- og kultikonene – sportslig og symbolsk verdi",
+        "text": "Manuset setter Gamst Pedersen, Waddle, Beckham, Ibrahimović, Best, Okocha, Neymar og Pogba inn i en fortelling om fotballens popkultur. Det fremhever blant annet reklame, frisyrer, musikk og selviscenesettelse. Dette er en egen tematisk gruppe i originalen, ikke en rangering av sportslige prestasjoner. Skillet mellom spillerens funksjon i laget, publikums identifikasjon og kommersiell synlighet knyttes til bokas drøfting av symbolsk kapital. Detaljer om enkeltavtaler og tilskrevne motiver er ikke selvstendig kontrollert. Spørsmålet for manageren er hvordan man verdsetter både synlige og mindre synlige bidrag uten å forveksle popularitet med fotballfaglig effekt.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00280308–0x00284cdc"
       }
     ]
   },
@@ -1033,6 +1045,12 @@ export const TRAINING_CHAPTERS = [
         "title": "Restitusjon og kampuke – kapasitet må være tilgjengelig",
         "text": "Restitusjon mellom kamper handler blant annet om søvn, tilstrekkelig mat og væske og tilpasning av treningsbelastningen. Behovet varierer mellom spillere og med kampminutter, kampintensitet og hvor tett kampene kommer. Ved én kamp i uka kan treneren prioritere gjenoppbygging etter kampen, en mer krevende treningsperiode når spillerne er klare, og redusert belastning mot ny kamp. Ved to kamper tett på hverandre kan vedlikehold og taktisk forberedelse bli viktigere enn store nye belastninger. Spillere med få kampminutter kan trenge et annet opplegg enn spillere som har gjennomført hele kampen. Eksempelet er en planleggingslogikk, ikke en fast medisinsk restitusjonsfrist.",
         "source": "Faglig tillegg – Evidence-Based Recovery in Soccer (2022), https://pubmed.ncbi.nlm.nih.gov/36196351/ | The Time Course of Postmatch Physical Impairments in Professional Soccer (2025), https://pubmed.ncbi.nlm.nih.gov/40845278/"
+      },
+      {
+        "id": "onenote_injury_interruptions",
+        "title": "Gascoigne, Van Basten, Giuseppe Rossi og Falcao – skadeavbrudd",
+        "text": "Manuset bruker disse karrierene til å reflektere over avbrudd i sportslig utvikling. Tottenham dokumenterer Gascoignes alvorlige kneskade i FA-cupfinalen 1991. Van Basten har selv beskrevet plagene som gjorde at han avsluttet karrieren tidlig. UEFA dokumenterer Giuseppe Rossis skadefravær i 2011 og 2014, mens FIFA bekrefter at Falcao mistet VM i 2014 etter en kneskade. Historiene viser forskjellige forløp, ikke en felles medisinsk forklaring. I Fotballboka knyttes de til forsvarlig belastningsstyring, individuell oppfølging og usikkerheten rundt tilbakekomst. Ingen diagnose utover dokumenterte opplysninger, rehabiliteringsprotokoll eller prognose utledes.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x001a4e04–0x001a510c, 0x001a808c–0x001a8f8c, 0x001aaa3c–0x001aae24; Tottenham, https://www.tottenhamhotspur.com/news/989049/spurs-vs-newcastle-boot-in-both-camps-paul-gascoigne ; BBC, https://www.bbc.co.uk/sport/football/54816131 ; UEFA, https://www.uefa.com/uefaeuropaleague/news/0219-0e8c152c8589-8809a1eacaaf-1000--fiorentina-lose-rossi-to-another-knee-injury/ ; FIFA, https://inside.fifa.com/news/five-captains-in-the-spotlight"
       }
     ]
   }

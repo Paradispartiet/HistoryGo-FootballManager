@@ -878,6 +878,12 @@ export const ROLE_CHAPTERS = [
         "title": "Zico, Roberto Baggio og Gianfranco Zola – den skapende angriperen",
         "text": "I et FIFA-intervju beskriver Zico hvordan han ba en medspiller være klar til å angripe rom bak Liverpools linje. FIFA dokumenterer Baggios fem mål på vei til VM-finalen i 1994, mens Chelsea dokumenterer Zolas bidrag med både mål og målgivende pasninger. Casene brukes til å undersøke forbindelsen mellom kreativitet og lagets gjennombrudd: kan spilleren registrere et rom før det åpner seg, finne en medspiller eller selv avslutte? Dette er ulike karrierer, ikke tre identiske rolleprofiler. Vurder både handlingen med ball og medspillernes mulighet til å utnytte den.",
         "source": "Faglig tillegg – FIFA, https://www.fifa.com/en/tournaments/mens/club-world-cup/usa-2025/articles/zico-flamengo-determination-love-passion ; https://www.fifa.com/en/archive/roberto-baggio ; Chelsea, https://www.chelseafc.com/en/news/article/chelseas-team-of-120-forward-gianfranco-zola; personnavn fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "onenote_savicevic_kaka",
+        "title": "Savićević og Kaká – høydepunkter og kreative arbeidsoppgaver",
+        "text": "OneNote beskriver Savićevićs lob mot Barcelona i 1994 og Kakás toppår i 2007. UEFA bekrefter førstnevntes mål i europacupfinalen og Kakás Ballon d’Or, samt hans mål og målgivende pasninger i klubb-VM-finalen. Eksemplene gir ulike kreative problemer: oppdage en uventet avslutningsmulighet eller kombinere egne gjennombrudd med pasninger til en angriper. En høydepunktsekvens er ikke bevis for manglende stabilitet i resten av karrieren. Manusets personlige karakteristikker og bastante forklaringer på senere formsvikt beholdes derfor ikke som dokumenterte fakta.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x001a425c–0x001a45cc, 0x001abaec–0x001abefc; UEFA, https://www.uefa.com/uefachampionsleague/news/021f-0e8f9a357f7e-80893333dd43-1000--legendary-moments-savicevic-on-1994-lob/ ; https://www.uefa.com/news/0250-0c50f2621e37-47ba14abda3a-1000--kaka-inspires-milan-to-world-title/"
       }
     ]
   },
@@ -1020,6 +1026,24 @@ export const ROLE_CHAPTERS = [
         "title": "Morten Gamst Pedersen og Jesper Grønkjær – bredde og innlegg",
         "text": "Store norske leksikon beskriver Gamst Pedersen som venstre kantspiller, mens Chelsea beskriver Grønkjær som en hurtig kantspiller og dokumenterer hans innlegg til Desaillys utligning mot Liverpool i 2003. Bruk eksemplene til å vurdere kantens ansvar for bredde og leveringsvinkel: når bør han holde sidelinjen, utfordre inn eller levere før forsvareren rekker å stenge? Medspillernes bevegelse i boksen avgjør hvilke innlegg som er aktuelle. Gamst Pedersens profil krever mer kampmateriale før konkrete historiske innleggssekvenser kan beskrives.",
         "source": "Faglig tillegg – SNL, https://snl.no/Morten_Gamst_Pedersen ; Chelsea, https://www.chelseafc.com/en/news/article/beating-liverpool-in-2003 ; https://www.chelseafc.com/en/news/article/legends-from-overseas-added-to-squad-for-liverpool; personnavn fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "onenote_waddle_pop",
+        "title": "Chris Waddle – kantspill og popkultur",
+        "text": "I OneNote-delen Pop- og kultikonene brukes Chris Waddle som eksempel på forbindelsen mellom fotball, mote og musikk. Tottenham dokumenterer både hans tekniske kantspill og samarbeidet med Glenn Hoddle, som også resulterte i singelen Diamond Lights. Manusets taktiske fortolkning av Waddles venstrefot fra høyre side peker mot dilemmaet mellom å holde bredden og å trekke inn. Undersøk hvordan en slik bevegelse endrer pasningsvinkelen og backens oppgave. Klubben bekrefter ikke at Waddle oppfant dagens innoverkanter; dette beholdes som en historisk sammenligning, ikke en oppfinnerpåstand.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00280d8c–0x00281454; Tottenham, https://www.tottenhamhotspur.com/news/1010025/five-stars-who-shone-for-tottenham-and-the-toon"
+      },
+      {
+        "id": "onenote_beckham_deep_cross",
+        "title": "David Beckham – tidlig innlegg og globalt fotballikon",
+        "text": "Originalteksten fremhever Beckhams presise innlegg fra dyp høyreside som alternativ til å nå dødlinjen, og drøfter hvordan fotballspilleren også ble en internasjonal merkevare. Den taktiske ideen er å levere før forsvarslinjen har rukket å organisere seg mot et innlegg. Vurder ballførerens tid, spissens løp, forsvarerens orientering og muligheten for å sikre en klarering. Manusets avstand på 35 meter er et illustrerende eksempel, ikke en fast leveringsavstand. Påstandene om Real Madrids konkrete kjøpsmotiver er ikke dokumentert i råteksten og brukes ikke som fakta.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x002818ac–0x00281f44"
+      },
+      {
+        "id": "onenote_best_icon",
+        "title": "George Best – driblekunst og fotballens kjendisfortelling",
+        "text": "OneNote fremstiller Best som fotballens rockestjerne. Det nordirske fotballforbundet dokumenterer at prestasjonen mot Benfica i 1966 ga ham et Beatles-inspirert tilnavn, og at han vant Ballon d’Or i 1968. Manchester Uniteds historiske kampomtale gir også et holdepunkt for hans bidrag i europacupfinalen samme år. Faglig skal kampanalysen skille driblingens effekt på motstanderens organisering fra den kulturelle fortellingen om spilleren. Manusets beskrivelser av privatliv og livsstil er ikke nødvendige for å forstå teknikken og gjengis ikke som forklaring på prestasjon.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00282f94–0x002836ec; IFA, https://www.irishfa.com/news/2025/november/george-best-s-iconic-moments ; Manchester United, https://www.manutd.com/en/news/seven-and-a-half-notable-games-from-career-of-man-utd-legend-george-best"
       }
     ]
   },
@@ -1381,6 +1405,18 @@ export const ROLE_CHAPTERS = [
         "title": "Kanu og Fabrizio Ravanelli – avslutning når kampbildet endres",
         "text": "Premier League dokumenterer Kanus hattrick i Arsenals opphenting fra 0–2 mot Chelsea i 1999. UEFA dokumenterer Ravanellis scoring fra svært skrå vinkel i europacupfinalen i 1996 etter at han utnyttet en feil i Ajax-forsvaret. Bruk situasjonene til å undersøke hvordan en spiss registrerer nye muligheter etter en feil, et nedfall eller en endret kampstilling. Når skuddvinkelen er liten, må spilleren vurdere om direkte skudd, kontroll eller pasning er mest hensiktsmessig. Casene illustrerer konkrete kampbegivenheter, ikke generelle sannsynligheter for avslutning.",
         "source": "Faglig tillegg – Premier League, https://www.premierleague.com/en/news/2284536/black-history-month-heroes-nwankwo-kanu ; UEFA, https://www.uefa.com/uefachampionsleague/news/013d-0ea96a4b53b8-032c0735e213-1000--juventus-hold-their-nerve-to-seal-the-real-deal/; personnavn fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "onenote_owen_torres",
+        "title": "Michael Owen og Fernando Torres – gjennombrudd og avslutningsvalg",
+        "text": "OneNote fremhever Owens gjennombrudd i VM 1998 og Torres’ avgjørende mål i EM-finalen 2008. FIFA dokumenterer Owens sololøp mot Argentina, mens UEFA beskriver hvordan Torres kom foran Philipp Lahm og avsluttet over Jens Lehmann. De to kampøyeblikkene gir et utgangspunkt for å undersøke fart i forhold til ballbane, motstanderens orientering og avslutningsvalg. Manusets senere beskrivelser av karrierefall er fortolkninger. Enkeltmål kan ikke dokumentere en spillers samlede fysiske kapasitet, og formsvikt kan ikke forklares med antatte nerver eller personlige egenskaper uten kildegrunnlag.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x001aa274–0x001aa554, 0x001ab2b4–0x001ab644; FIFA, https://inside.fifa.com/tournaments/mens/worldcup/1998france/news/world-cup-at-home-argentina-england-1998-3070883 ; UEFA, https://www.uefa.com/uefaeuro/history/news/0253-0d7c89c87906-4e5d5cebef3e-1000--spain-deliver-on-promise-at-last/"
+      },
+      {
+        "id": "onenote_rossi_shevchenko_adriano",
+        "title": "Paolo Rossi, Sjevtsjenko og Adriano – karrierens dokumenterte holdepunkter",
+        "text": "Manusets karrierefortellinger inkluderer Paolo Rossi, Andrij Sjevtsjenko og Adriano. FIFA dokumenterer Rossis seks mål i VM 1982, UEFA Sjevtsjenkos Ballon d’Or i 2004, og Inter Adrianos klubbkarriere. Disse holdepunktene viser hvorfor spillerne fikk en sentral plass i fotballhistorien. De dokumenterer derimot ikke at karrierene deres var identiske eller at et senere klubbskifte nødvendigvis skyldtes bestemte psykologiske forhold. Paolo Rossi og Giuseppe Rossi er forskjellige spillere, med ulike karriereforløp. Bruk portrettene som historiske innganger til kampanalyse, ikke som grunnlag for hypotetiske toppverdier eller medisinske prognoser.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x001a48f4, 0x001a9b94, 0x001ac3f4–0x001ac51c; FIFA, https://inside.fifa.com/tournaments/mens/worldcup/1982spain/news/world-football-pays-tribute-to-pablito ; UEFA, https://www.uefa.com/news-media/news/01a4-0e108f265ffc-7d37e0988b22-1000--shevchenko-takes-ballon-d-or/ ; Inter, https://www.inter.it/en/archivio_giocatore/G0726"
       }
     ]
   }

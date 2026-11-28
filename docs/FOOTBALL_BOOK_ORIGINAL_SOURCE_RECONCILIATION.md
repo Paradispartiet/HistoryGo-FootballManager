@@ -534,3 +534,19 @@ De 218 lengre, ikke eksakt samsvarende teoriblokkene inkluderer 202 uten treff p
 | eight_press | onenote_essien_bridge | 0x0028d2cc–0x0028d76c, 0x007f263c; Chelsea, https://www.chelseafc.com/en/news/article/from-the-archive-the-smile-on-michael-essiens-face |
 | fullbacks | onenote_zambrotta_luis_enrique | 0x0028da6c, 0x0028e144, 0x007f263c; FC Barcelona, https://www.fcbarcelona.com/en/football/barca-legends/players/1082626/zambrotta ; https://www.fcbarcelona.com/en/news/648051/luis-enrique-martinez/amp |
 | individual_development | onenote_duncan_edwards | 0x00298374, 0x007e8c6c; Manchester United, https://www.manutd.com/en/news/a-new-way-to-celebrate-duncan-edwards ; https://www.manutd.com/en/club/history/munich-remembered/the-darkest-day |
+
+## Bolk 25 – OneNote: pop- og kultikonene og avbrutte karrierer
+
+9 nye kildeankrede fagavsnitt. Råuttrekket fra originalarkivet er åpnet på nytt ved 0x001a425c–0x001acd94 og 0x00280308–0x00288a34. Manusets egne temagrupper beholdes, med dokumenterte eksterne holdepunkter der angitt. Historiske prestasjoner, karriereforløp og redaksjonelle fortolkninger skilles; uverifiserte kommersielle motiver, medisinske årsaksforklaringer, spekulasjoner om privatliv og kriminalitetsmerkelapper publiseres ikke som fakta. Råstoffet er bevart i originalarkivet. Tidligere personcase om Ronaldo, Zlatan, Okocha, Neymar, Tom Lund, Strandli og Leonhardsen beholdes; øvrige korte overskrifter og kontrastcase (Gary Speed, Abel Balbo, Robin Friday, Cantona m.fl.) er ikke fullstendig dekket. Ingen nye hovedkapitler, motorregler eller illustrasjoner. Full OneNote-eksport og CI gjenstår.
+
+| Kapittel | Underavsnitt | Kildeanker |
+|---|---|---|
+| wingers | onenote_waddle_pop | 0x00280d8c–0x00281454; Tottenham, https://www.tottenhamhotspur.com/news/1010025/five-stars-who-shone-for-tottenham-and-the-toon |
+| wingers | onenote_beckham_deep_cross | 0x002818ac–0x00281f44 |
+| wingers | onenote_best_icon | 0x00282f94–0x002836ec; IFA, https://www.irishfa.com/news/2025/november/george-best-s-iconic-moments ; Manchester United, https://www.manutd.com/en/news/seven-and-a-half-notable-games-from-career-of-man-utd-legend-george-best |
+| collective_training | onenote_pop_icons | 0x00280308–0x00284cdc |
+| individual_development | onenote_peak_narratives | 0x001a425c–0x001acd94 |
+| load_recovery | onenote_injury_interruptions | 0x001a4e04–0x001a510c, 0x001a808c–0x001a8f8c, 0x001aaa3c–0x001aae24; Tottenham, https://www.tottenhamhotspur.com/news/989049/spurs-vs-newcastle-boot-in-both-camps-paul-gascoigne ; BBC, https://www.bbc.co.uk/sport/football/54816131 ; UEFA, https://www.uefa.com/uefaeuropaleague/news/0219-0e8c152c8589-8809a1eacaaf-1000--fiorentina-lose-rossi-to-another-knee-injury/ ; FIFA, https://inside.fifa.com/news/five-captains-in-the-spotlight |
+| finishing_press | onenote_owen_torres | 0x001aa274–0x001aa554, 0x001ab2b4–0x001ab644; FIFA, https://inside.fifa.com/tournaments/mens/worldcup/1998france/news/world-cup-at-home-argentina-england-1998-3070883 ; UEFA, https://www.uefa.com/uefaeuro/history/news/0253-0d7c89c87906-4e5d5cebef3e-1000--spain-deliver-on-promise-at-last/ |
+| ten_creator | onenote_savicevic_kaka | 0x001a425c–0x001a45cc, 0x001abaec–0x001abefc; UEFA, https://www.uefa.com/uefachampionsleague/news/021f-0e8f9a357f7e-80893333dd43-1000--legendary-moments-savicevic-on-1994-lob/ ; https://www.uefa.com/news/0250-0c50f2621e37-47ba14abda3a-1000--kaka-inspires-milan-to-world-title/ |
+| finishing_press | onenote_rossi_shevchenko_adriano | 0x001a48f4, 0x001a9b94, 0x001ac3f4–0x001ac51c; FIFA, https://inside.fifa.com/tournaments/mens/worldcup/1982spain/news/world-football-pays-tribute-to-pablito ; UEFA, https://www.uefa.com/news-media/news/01a4-0e108f265ffc-7d37e0988b22-1000--shevchenko-takes-ballon-d-or/ ; Inter, https://www.inter.it/en/archivio_giocatore/G0726 |

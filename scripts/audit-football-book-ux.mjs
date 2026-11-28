@@ -175,6 +175,10 @@ check(bookHtml.includes('id="footballBookSchools"'),"Fotballskoler ikke tilgjeng
 const canonicalRoles=readJson(join(root,"data","football_roles.json")).roles;
 const bookRoleIds=ROLE_CHAPTERS.flatMap(c=>c.roles.map(r=>r.id));
 check(ROLE_CHAPTERS.length===9,"Rollekapitler mangler");
+for(const [id,expected] of Object.entries({"wingers":["onenote_waddle_pop","onenote_beckham_deep_cross","onenote_best_icon"],"collective_training":["onenote_pop_icons"],"individual_development":["onenote_peak_narratives"],"load_recovery":["onenote_injury_interruptions"],"finishing_press":["onenote_owen_torres","onenote_rossi_shevchenko_adriano"],"ten_creator":["onenote_savicevic_kaka"]})){
+  const sections=[...ROLE_CHAPTERS,...TRAINING_CHAPTERS].find(c=>c.id===id)?.sourceDetails||[];
+  for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("OneNote – ")&&d.source.includes("0x"),key+": OneNote-popkultur eller karrierecase mangler");}
+}
 for(const [id,expected] of Object.entries({"six_regista":["onenote_directors","onenote_pirlo_architect","onenote_workers_protectors","onenote_gattuso_pirlo","onenote_van_bommel_jeremies"],"eight_press":["onenote_xavi_modric","onenote_cambiasso_vieira_redondo","onenote_essien_bridge"],"centre_backs":["onenote_desailly_rijkaard_mascherano"],"fullbacks":["onenote_zambrotta_luis_enrique"],"individual_development":["onenote_duncan_edwards"]})){
   const sections=[...ROLE_CHAPTERS,...TRAINING_CHAPTERS].find(c=>c.id===id)?.sourceDetails||[];
   for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("OneNote – ")&&d.source.includes("0x"),key+": OneNote-regissør eller beskytter mangler");}
