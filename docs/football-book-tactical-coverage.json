@@ -1,0 +1,3542 @@
+{
+  "schema": "historygo-football-manager.football-book-tactical-coverage.v1",
+  "baselineCommit": "d382816ad602efefb9a64f6125c9d94df0c32321",
+  "scope": "Alle sourceDetails i de 37 ikke-klubbkapitlene; 12 klubbkapitler kartlegges senere separat. Vurdering per fagavsnitt, ikke per atomisk motorregel.",
+  "statusDefinitions": {
+    "covered": "Hele det avgrensede fagavsnittets relevante mekanikk dokumentert og testet.",
+    "partial": "Noe motorstøtte dokumentert; konkrete delvalg eller generalisering ikke bekreftet.",
+    "missing": "Bekreftet manglende mekanikk etter gjennomgang av relevante motorer.",
+    "unverified": "Gjennomgått angrepsstoff uten tilstrekkelig motorevidens; ikke bekreftet fravær.",
+    "explanatory": "Pedagogisk/historisk stoff uten krav om egen mekanikk.",
+    "pending": "Indeksert, ikke faglig vurdert ennå."
+  },
+  "evidence": {
+    "H": {
+      "file": "src/football-matchday-high-press-v6.js",
+      "symbol": "resolveHighPressBuildUp",
+      "test": "scripts/simulate-high-press-v6.mjs",
+      "scope": "Oppspill mot høyt press: tredjemann, spillvending, direkte oppspill; rollefit og kjent pasningsdekning."
+    },
+    "C": {
+      "file": "src/football-matchday-compact-block-v6.js",
+      "symbol": "resolveCompactBlockAttack",
+      "test": "scripts/simulate-compact-block-v6.mjs",
+      "scope": "Kompakt lav blokk: breddeovertall, innlegg, avlegg og slutttrykk; kjent romdekning og restforsvar."
+    },
+    "D": {
+      "file": "src/football-matchday-compact-block-v6.js",
+      "symbol": "resolveSourcedCreativeBreakthrough",
+      "test": "scripts/simulate-compact-block-v6.mjs",
+      "scope": "Kreatør med dokumenterte dribling/vision-egenskaper; utfordring og frigjøring har separate porter i én simulert hendelse."
+    },
+    "S": {
+      "file": "src/football-matchday-sequence-v8.js",
+      "symbol": "resolveAuthoredSequencePeriod",
+      "scope": "Kanonisk firetrinnskjede med verifisert ellever, lagprofil og kjent motgrep; fallback før xG."
+    },
+    "R": {
+      "file": "src/engine/calculateRoleRelationships.ts",
+      "symbol": "calculateRoleRelationships",
+      "scope": "Rollepar og strukturell støtte; ikke observerte individuelle løp."
+    },
+    "T": {
+      "file": "src/football-matchday-control-v6.js",
+      "symbol": "resolveGameControlPhase",
+      "test": "scripts/simulate-game-control-v6.mjs",
+      "scope": "Kontroll/avlastning under spesifikke kampplaner; ikke kontinuerlig posisjonssimulering."
+    },
+    "P": {
+      "file": "src/football-matchday-own-press-v6.js",
+      "symbol": "resolveOwnPressAgainstOpponent",
+      "test": "scripts/simulate-own-press-v6.mjs",
+      "scope": "Eget frontpress, midtbanefelle og gjenvinningspress; samordnet presseenhet, motstanderens kjente utvei, restforsvar og én terminal xG-effekt."
+    },
+    "A": {
+      "file": "src/football-matchday-own-press-v6.js",
+      "symbol": "sourcedDefensiveTaskTiming",
+      "test": "scripts/simulate-own-press-v6.mjs",
+      "scope": "Dokumenterte individuelle styrker kan redusere reaksjons- og bevegelsestid i eksplisitt definerte forsvarsoppgaver. Maks 0,25 sekunder besparelse per oppgave; ingen oppfunnet spillerdata."
+    },
+    "G": {
+      "file": "src/football-matchday-own-press-v6.js",
+      "symbol": "recoveryFromAuthoredActions",
+      "test": "scripts/simulate-own-press-v6.mjs",
+      "scope": "Eksplisitt definerte handlingsvinduer, forsvarsoppgaver og banekoordinater for motstanderens pressutspill; feil korridor skilles fra manglende data."
+    },
+    "Z": {
+      "file": "src/football-matchday-sequence-v8.js",
+      "symbol": "resolveOpponentZonalShift",
+      "scope": "Motstanderens dokumenterte sonepress/sikring/forskyvning mot eget breddeangrep; to porter på ett utfall, ikke en generell egen forsvarsposisjonsmotor."
+    },
+    "X": {
+      "file": "src/football-matchday-sequence-v8.js",
+      "symbol": "resolveOpponentSwitchCrossSequence",
+      "scope": "Forsvar mot spillvending og tidlig innlegg: separate porter for bredde- og boksforsvar."
+    },
+    "O": {
+      "file": "src/football-matchday-sequence-v8.js",
+      "symbol": "resolveOpponentFullbackOverlap",
+      "scope": "Forsvar mot overlapp med back/kant-støtte og boksforsvar, to porter; ingen oppdiktet historisk målside."
+    },
+    "L": {
+      "file": "src/football-matchday-sequence-v8.js",
+      "symbol": "resolveOpponentRunSequence",
+      "scope": "Forsvarslinjens høyde, stopperdybde, midtbaneskjerm og sidedekning mot koordinert løpsmønster."
+    },
+    "M": {
+      "file": "src/football-matchday-sequence-v8.js",
+      "symbol": "resolveOpponentThreeSpaceCombination",
+      "scope": "Kjent motstanders tre-romsangrep: side-, mellomroms-, dybde- og senløpsforsvar; dedikert sikringsrolle påvirker avledningsrisiko."
+    },
+    "U": {
+      "file": "src/football-matchday-turnover-v6.js",
+      "symbol": "resolveTurnoverTransition",
+      "test": "scripts/simulate-turnovers-v6.mjs",
+      "scope": "Eget balltap i oppspill mot høyt press: første fremoverpasning kan brytes, deretter vurderes restforsvaret. Terminal overgang erstatter tidligere balltapsrisiko."
+    },
+    "V": {
+      "file": "src/football-matchday-sequence-v8.js",
+      "symbol": "resolveOpponentSelectiveTransition",
+      "scope": "Kjent motstandermønster selective_break_or_retain: gjenvinning, vurdering av gjennombruddsvindu, behold ballen eller forsøk gjennombrudd. Avgrenset motstanderfase, ikke generell egen overgangsmotor."
+    },
+    "B": {
+      "file": "src/football-matchday-own-press-v6.js",
+      "symbol": "secondBallReleaseFor",
+      "test": "scripts/simulate-own-press-v6.mjs",
+      "scope": "Egen gjenvunnet andreball: verifisert sekser, forbindelsesspiller og dybdeløper; dokumentert motpress kan blokkere sentral utvei eller utløse bredt svar."
+    },
+    "Q": {
+      "file": "src/football-matchday-sequence-v8.js",
+      "symbol": "crossRecoveryRelease",
+      "scope": "Et avverget innlegg kan bli egen kontring når kjent motstandereksponering, riktig tempo og verifiserte komplementære roller foreligger. Samme hendelse og trekning."
+    },
+    "Y": {
+      "file": "src/football-matchday-own-press-v6.js",
+      "symbol": "resolveRegainCounterpress",
+      "test": "scripts/simulate-own-press-v6.mjs",
+      "scope": "Egen ballvinning mot dokumentert kollektivt motpress: støtte, bredde og fremre mottaker avgjør om ballen beholdes eller mistes igjen, uten ny trekning."
+    },
+    "K": {
+      "file": "src/football-matchday-sequence-v8.js",
+      "symbol": "resolveOpponentSetPiece",
+      "scope": "Motstanderens dokumenterte generelle dødballmønster ved eksisterende kamphendelser: keeper/stoppere påvirker første kontakt, sentral skjerm påvirker nedfall. Etter klarering spilles ikke første duell på nytt. Én trekning, ett terminalt utfall."
+    },
+    "F": {
+      "file": "src/engine/calculatePlayerMatchFit.ts",
+      "symbol": "calculatePlayerMatchFit",
+      "test": "scripts/simulate-real-role-formation-matrix.mjs",
+      "scope": "Eksisterende rolle-, posisjons- og taktikkfit for valgt spiller. Rollekrav er ikke samme som selvstendige handlinger på banen."
+    },
+    "E": {
+      "file": "src/engine/calculateTeamFit.ts",
+      "symbol": "calculateTeamFit",
+      "test": "scripts/simulate-sourced-player-team-fit.mjs",
+      "scope": "Lagprofil med rolleforbindelser og begrensede bidrag fra kildebelagte individuelle styrker; JS/TS-paritet og ulike stopperprofiler er dekket av testskript."
+    },
+    "N": {
+      "file": "src/football-role-familiarity-engine.js",
+      "symbol": "recordMatchRoleUsage",
+      "test": "scripts/simulate-role-familiarity.mjs",
+      "scope": "Spiller×rolle-fortrolighet over tid, feilbruk kan redusere den. Kampstyrkebidrag er begrenset; endrer ikke grunnkvalitet eller alle individuelle handlinger."
+    },
+    "J": {
+      "file": "src/football-player-stats.js",
+      "symbol": "attributeGoal",
+      "test": "scripts/simulate-player-stats.mjs",
+      "scope": "Fordeler allerede scorede mål og assists ut fra posisjon, rolle og matchfit. Ikke selvstendig skudd-, pasnings- eller redningsmotor."
+    },
+    "EX": {
+      "file": "src/football-training-exercise-design.js",
+      "symbol": "evaluateTrainingExerciseDesign",
+      "test": "scripts/simulate-manager-training-exercise-design-v1.mjs",
+      "scope": "Interaktiv øvelsesdesign: flate, antall, retning, touch. Uttrykkelig læringshypotese uten effekt på lagret belastning, kampbonus, spillerverdier eller progresjon."
+    },
+    "TR": {
+      "file": "src/football-training-week.js",
+      "symbol": "evaluateTrainingDecisionSupport",
+      "test": "scripts/simulate-training-week.mjs",
+      "scope": "Relevant ukefokus og stabsstøtte påvirker managerbeslutningens score og kan dempe risiko; ikke en generell individuell ferdighetsendring."
+    },
+    "IT": {
+      "file": "src/football-individual-training.js",
+      "symbol": "resolveIndividualTrainingWeek",
+      "test": "scripts/simulate-individual-training.mjs",
+      "scope": "Individuell trening gir belastning/form, rehabuke, rollefortrolighet og svakhetsmål etter validering og stabsstøtte."
+    },
+    "WK": {
+      "file": "src/football-player-weaknesses.js",
+      "symbol": "applyWeaknessTraining",
+      "test": "scripts/simulate-player-weaknesses.mjs",
+      "scope": "Separat fremdrift for spiller×svakhet; ikke endring av grunnrating. Kampstyrkebidrag er avgrenset til bruk i relevante roller."
+    },
+    "PC": {
+      "file": "src/football-player-condition.js",
+      "symbol": "applyMatchLoad",
+      "test": "scripts/simulate-player-condition.mjs",
+      "scope": "Spillerbelastning knyttet til kampminutter/intensitet, friskhet, skade og restitusjon; abstrakt modell, ikke medisinsk prognose."
+    },
+    "FM": {
+      "file": "src/football-player-condition.js",
+      "symbol": "applyMatchForm",
+      "test": "scripts/simulate-player-condition.mjs",
+      "scope": "Midlertidig form fra kampresultat, minutter, mål og assist; ikke måling av individuell mestringstro."
+    },
+    "WL": {
+      "file": "src/football-training-plan.js",
+      "symbol": "calculateWeeklyTrainingIntensity",
+      "test": "scripts/simulate-training-plan.mjs",
+      "scope": "Programmenes belastning og ukefokus påvirker aggregert treningsintensitet."
+    },
+    "RC": {
+      "file": "src/football-player-condition.js",
+      "symbol": "applyWeeklyRecovery",
+      "test": "scripts/simulate-player-condition.mjs",
+      "scope": "Ukerestitusjon avhenger av treningsintensitet; skadestatus/tilgjengelighet oppdateres i spillmodellen."
+    },
+    "OP": {
+      "file": "src/football-off-pitch-parameters.js",
+      "symbol": "applyTrainingProgramOffPitchEffects",
+      "test": "scripts/simulate-off-pitch-parameters.mjs",
+      "scope": "Treningsprogram påvirker aggregerte signaler for blant annet fatigue, wear, injuryRisk, confidence, cohesion og tacticalClarity; ikke individuell psykologisk diagnose."
+    },
+    "OA": {
+      "file": "src/football-opponent-analysis.js",
+      "symbol": "createOpponentAnalysisWorkspace",
+      "scope": "Analyse av kjent motstander, kampplan, forventet taktisk motspill og konkret observasjonsfokus."
+    },
+    "MA": {
+      "file": "src/football-match-explanation-engine.js",
+      "symbol": "buildMatchExplanation",
+      "scope": "Forklarer allerede registrerte kampfaktorer, trening og konsekvenser; ikke en ny uavhengig måling av hendelser."
+    },
+    "TF": {
+      "file": "src/engine/createTrainingFocusFromTeamFit.ts",
+      "symbol": "createTrainingFocusFromTeamFit",
+      "scope": "Oversetter kjente svakheter i lagoppsett til treningsfokus."
+    },
+    "MD": {
+      "file": "src/football-medical-decision-learning.js",
+      "symbol": "evaluateRehabilitationAvailability",
+      "test": "scripts/simulate-medical-rehabilitation-v2.mjs",
+      "scope": "Pedagogisk rehabiliterings- og tilgjengelighetsvalg med eksisterende tilstand; ingen reell medisinsk vurdering."
+    },
+    "HY": {
+      "file": "src/football-training-exercise-design.js",
+      "symbol": "createTrainingExerciseHypothesis",
+      "test": "scripts/simulate-manager-training-exercise-design-v1.mjs",
+      "scope": "Lagrer treningsintensjon, hypotese, observasjon og trenerpunkter; ikke input til trenings-/kampmotor."
+    },
+    "HF": {
+      "file": "src/engine/calculateHistoricalFormationFit.ts",
+      "symbol": "calculateHistoricalFormationFit",
+      "test": "scripts/audit-historical-formation-fit.mjs",
+      "scope": "Historisk formasjonstilpasning med rolledekning, lagmetrikk, systemkrav og trenerforståelse. Ikke historisk tracking."
+    },
+    "PL": {
+      "file": "src/football-match-plan.js",
+      "symbol": "createPlanChange",
+      "test": "scripts/simulate-match-plan.mjs",
+      "scope": "Kampplanbytte vurderer kampstilling, motstander, egen profil og omstillingskostnad. Planens formasjonsarv er ikke automatisk ny formasjon."
+    }
+  },
+  "entries": [
+    {
+      "id": "first_defender",
+      "chapterId": "press_cover_shift",
+      "title": "Førsteforsvarer – kroppsstilling og avstand",
+      "status": "partial",
+      "evidence": [
+        "P",
+        "A",
+        "G"
+      ],
+      "implemented": "Førstepress inngår i samordnet presskjede; dokumenterte reaksjonsegenskaper kan endre tidsvindu for spesifikke forsvarsoppgaver.",
+      "nextCheck": "Undersøk separat 1F-valg om å forsinke eller gå på ballvinning, kroppsstilling og situasjonsavhengig avstand. Ikke innfør manusets meterverdier som universelle grenser."
+    },
+    {
+      "id": "steering",
+      "chapterId": "press_cover_shift",
+      "title": "Lede og styre",
+      "status": "partial",
+      "evidence": [
+        "P",
+        "G",
+        "M"
+      ],
+      "implemented": "Frontpress styrer første oppspill til én side, midtbanefelle inviterer inn sentralt; kjent utvei og sikring påvirker resultat. Dedikert skjerm kan motstå avledning.",
+      "nextCheck": "Kontroller styringsvalg inn/ut av banen betinget av egen sikring, farlig rom, ballførers muligheter og side. Ikke likestill motstanderens utvei med vårt valgte pressmål."
+    },
+    {
+      "id": "marking",
+      "chapterId": "press_cover_shift",
+      "title": "Markering – nær ballen og nær mål",
+      "status": "partial",
+      "evidence": [
+        "A",
+        "G",
+        "L",
+        "X"
+      ],
+      "implemented": "Dokumentert marking/tackling kan påvirke tidsbruk ved relevante oppgaver; løps- og boksdekning påvirker sjansevindu.",
+      "nextCheck": "Undersøk markeringstetthet, forsvarstriangel og bytte mellom rom- og mannsansvar. Ingen bevis for komplett markeringsmodell."
+    },
+    {
+      "id": "blocking",
+      "chapterId": "press_cover_shift",
+      "title": "Blokkering av skudd og innlegg",
+      "status": "partial",
+      "evidence": [
+        "X",
+        "O"
+      ],
+      "implemented": "Innlegg kan avverges før levering eller i boksen gjennom ulike porter.",
+      "nextCheck": "Kontroller skuddblokkering, lovlig kroppsstilling og forhold mellom keeperens skuddvinkel og forsvarerens blokkeringsoppgave."
+    },
+    {
+      "id": "cover",
+      "chapterId": "press_cover_shift",
+      "title": "Andre- og tredjeforsvarer – vinkel, dybde og orientering",
+      "status": "partial",
+      "evidence": [
+        "P",
+        "G",
+        "A",
+        "L",
+        "M"
+      ],
+      "implemented": "Press- og sikringskjede, dedikert skjerm, feil korridor og individuelle reaksjonsvinduer kan påvirke utfall når underlaget finnes.",
+      "nextCheck": "Kontroller generell 1F–2F–3F-geometri, vinkel/dybde og samtidighet utenfor eksplisitt scenario. Bevar kildeavstandene som eksempler."
+    },
+    {
+      "id": "duels",
+      "chapterId": "press_cover_shift",
+      "title": "Dueller – én mot én, to mot én og tre mot to",
+      "status": "partial",
+      "evidence": [
+        "M",
+        "P",
+        "A"
+      ],
+      "implemented": "Motstanderens utfordring og etterfølgende pasningsrom kan stoppes; individuell relevant defensiv reaksjon kan hjelpe i avgrenset oppgave.",
+      "nextCheck": "Kontroller beslutning om opphold, forsinkelse eller takling ved 1v1, 2v1 og 3v2; vurder undertall uten å anta kontinuerlige spillerkoordinater."
+    },
+    {
+      "id": "back_to_goal",
+      "chapterId": "press_cover_shift",
+      "title": "Feilvendt mottaker og overlapping",
+      "status": "partial",
+      "evidence": [
+        "P",
+        "A",
+        "O",
+        "G"
+      ],
+      "implemented": "Pressutspill med støtte/avlegg, reaksjon på førsteberøring og oppfølging av løper samt back/kant-sikring er modellert i avgrensede kjeder.",
+      "nextCheck": "Kontroller eksplisitt feilvendt mottak, vending kontra avlegg og markeringsbytte ved overlapp. Ikke tell en fasebeskrivelse som et uavhengig motorvalg."
+    },
+    {
+      "id": "interception",
+      "chapterId": "press_cover_shift",
+      "title": "Gå når ballen går – snappe, fronte og finte",
+      "status": "partial",
+      "evidence": [
+        "P",
+        "A",
+        "G"
+      ],
+      "implemented": "Pasningsdekning, tidsfrister og reaksjon på konkrete handlinger kan påvirke gjenvinning/inneslutning.",
+      "nextCheck": "Kontroller særskilt avskjæring av pasningsbane, start mens ballen går, risiko ved undertall og forskjell mellom å bryte og å følge."
+    },
+    {
+      "id": "risk_balance",
+      "chapterId": "rest_defence",
+      "title": "Angrepsrisiko og offensiv markering",
+      "status": "partial",
+      "evidence": [
+        "U",
+        "P",
+        "C",
+        "M",
+        "V"
+      ],
+      "implemented": "Restforsvar og balanse samt verifiserte stopper-/midtbaneroller påvirker konsekvensen ved balltap og motstanderens gjennombruddsvindu. Dedikert skjerm har betydning i avgrensede kjeder.",
+      "nextCheck": "Kontroller antall foran/bak ballen, hvilke rom og motspillere som dekkes, offensiv markering og risiko per sone. Rollefit og lagscore er ikke identisk med numerisk eller posisjonell geometri."
+    },
+    {
+      "id": "support_angles",
+      "chapterId": "third_man",
+      "title": "Støtte, trekanter og vinklede pasninger",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C"
+      ],
+      "implemented": "Støttevinkel og blokkert utvei inngår i kjeden.",
+      "nextCheck": "Kontroller faktisk alternative støttepunkter og vinkel under press."
+    },
+    {
+      "id": "passing_shadow",
+      "chapterId": "third_man",
+      "title": "Pasningsskygge, mellom porten og motsatte bevegelser",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "R"
+      ],
+      "implemented": "Kjent sentral/bred pasningsdekning og dybderelasjoner endrer utfall.",
+      "nextCheck": "Kontroller at mottaker kan bevege seg ut av pasningsskygge; ikke inferer posisjoner fra tagger."
+    },
+    {
+      "id": "run_patterns",
+      "chapterId": "third_man",
+      "title": "Lureløp, bueløp, blindside og samordnede løp",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "R"
+      ],
+      "implemented": "Tredjemann og dybde-/boksløp finnes på kjedenivå.",
+      "nextCheck": "Kontroller konkrete avledningsløp, blindside, kryssløp og timing mot offside."
+    },
+    {
+      "id": "build_up_patterns",
+      "chapterId": "third_man",
+      "title": "Oppspill – feilvendt spiss og opp–tilbake–gjennom",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "R"
+      ],
+      "implemented": "Opp–tilbake–gjennom, spillvending, direkte oppspill og andreball er representert.",
+      "nextCheck": "Kontroller spissens valg mellom vending, stuss og avlegg som situasjonsavhengige utveier."
+    },
+    {
+      "id": "portrait_bergkamp_henry_debruyne_haaland",
+      "chapterId": "third_man",
+      "title": "Rollepar – møtende spiss og gjennomløper kontra pasningslegger og boksangriper",
+      "status": "explanatory",
+      "evidence": [
+        "H",
+        "C",
+        "R"
+      ],
+      "implemented": "Pedagogisk sammenligning; generiske mønstre dekkes av andre rader.",
+      "nextCheck": "Ingen navnebasert bonus; ikke rekonstruer historiske kamper uten belegg."
+    },
+    {
+      "id": "portrait_wenger",
+      "chapterId": "third_man",
+      "title": "Arsène Wenger – utvikling og relasjonelt kombinasjonsspill",
+      "status": "explanatory",
+      "evidence": [
+        "R"
+      ],
+      "implemented": "Historisk/pedagogisk eksempel på utvikling og relasjoner.",
+      "nextCheck": "Knytt trening til generisk prinsipp, ikke trenernavnbonus."
+    },
+    {
+      "id": "support_runs",
+      "chapterId": "overlap_underlap",
+      "title": "Medløpspasning og samhandling bak ballfører",
+      "status": "partial",
+      "evidence": [
+        "C",
+        "R"
+      ],
+      "implemented": "Kant og overlapp er representert i modell og rolleforbindelser.",
+      "nextCheck": "Kontroller medløpspasning, underlapp og støttevalg ved feilvendt ballfører."
+    },
+    {
+      "id": "space_timing",
+      "chapterId": "overloads_space",
+      "title": "Rom – ikke bruk opp rommet",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C"
+      ],
+      "implemented": "Bredde, spillvending og motstanderdekning påvirker resultat.",
+      "nextCheck": "Kontroller tidspunkt for ankomst i rom, avledning og fri mottakers neste handling."
+    },
+    {
+      "id": "two_against_one",
+      "chapterId": "overloads_space",
+      "title": "To mot én – skape og utnytte lokalt overtall",
+      "status": "partial",
+      "evidence": [
+        "C",
+        "D",
+        "R"
+      ],
+      "implemented": "Breddeovertall, veggspill og kreativ utfordring har kjeder.",
+      "nextCheck": "Kontroller 2v1-valg mot faktisk forsvarerreaksjon, ikke bare valg av plan."
+    },
+    {
+      "id": "proactive_reactive",
+      "chapterId": "formations",
+      "title": "Spillmodell – reaktiv og proaktiv strategi",
+      "status": "partial",
+      "evidence": [
+        "PL",
+        "P",
+        "T",
+        "U"
+      ],
+      "implemented": "Kampplanbytte, press, kontroll og overgang har spillvirkning.",
+      "nextCheck": "Kontroller reaktiv/proaktiv veksling og rollefordeling per fase; ingen fast 3-4-3 eller tidsintervall."
+    },
+    {
+      "id": "formation_choices",
+      "chapterId": "formations",
+      "title": "4-3-3, 4-4-2 og 3-4-2-1 – manusets avveininger",
+      "status": "partial",
+      "evidence": [
+        "HF",
+        "E",
+        "R",
+        "L",
+        "O",
+        "T"
+      ],
+      "implemented": "Formasjonens rolledekning, lagprofil og avgrensede motspill påvirker kamp.",
+      "nextCheck": "Kontroller ansvar i angrep/forsvar for 4-3-3, 4-4-2 og 3-4-2-1."
+    },
+    {
+      "id": "history_chaos",
+      "chapterId": "formations",
+      "title": "Fra kaos til form – de tidlige angrepssystemene",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Tidlige angrepssystemer og pyramide. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "history_combination",
+      "chapterId": "formations",
+      "title": "Dribbling game og combination game",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Dribling og kombinasjonsspill. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "history_rules",
+      "chapterId": "formations",
+      "title": "Regelendringer som katalysator",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Regelendringers betydning for taktisk rom. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "history_continent",
+      "chapterId": "formations",
+      "title": "Kontinentale impulser og transnasjonal utvikling",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Kontinentale impulser. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "history_wm",
+      "chapterId": "formations",
+      "title": "WM – omorganisering av ansvar",
+      "status": "explanatory",
+      "evidence": [
+        "HF"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: WM og rollefordeling. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "history_brazil",
+      "chapterId": "formations",
+      "title": "Brasils 4-2-4 – frihet og struktur",
+      "status": "explanatory",
+      "evidence": [
+        "HF",
+        "R"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: 4-2-4, frihet og struktur. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "history_women",
+      "chapterId": "formations",
+      "title": "Kvinnefotball – parallelle utviklingslinjer",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Kvinnefotballens utviklingslinjer. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "culture_elias",
+      "chapterId": "formations",
+      "title": "Elias – sivilisasjonsprosessen og regulert konkurranse",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Regulert konkurranse. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "culture_regional_examples",
+      "chapterId": "formations",
+      "title": "Internasjonale fotballmiljøer – læringsbetingelser og konkrete eksempler",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Internasjonale læringsmiljøer. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "portrait_meredith_mcgregor",
+      "chapterId": "formations",
+      "title": "Billy Meredith og William McGregor – spillerprofil og fotballens institusjoner",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Spiller og institusjonsbygger. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "portrait_pozzo",
+      "chapterId": "formations",
+      "title": "Vittorio Pozzo – metodo og balanse mellom ledd",
+      "status": "explanatory",
+      "evidence": [
+        "HF"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Metodo. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "portrait_chapman",
+      "chapterId": "formations",
+      "title": "Herbert Chapman – WM som svar på et nytt romproblem",
+      "status": "explanatory",
+      "evidence": [
+        "HF"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: WM og nytt romproblem. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "portrait_tuchel",
+      "chapterId": "formations",
+      "title": "Thomas Tuchel – formasjonsskifte som kampjustering",
+      "status": "explanatory",
+      "evidence": [
+        "HF",
+        "PL"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Formasjonsskifte. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "portrait_ferguson",
+      "chapterId": "formations",
+      "title": "Alex Ferguson – bredde og fleksibilitet innenfor 4-4-2",
+      "status": "explanatory",
+      "evidence": [
+        "R",
+        "C",
+        "PL"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Fleksibilitet i 4-4-2. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "onenote_history_wm_space",
+      "chapterId": "formations",
+      "title": "WM – rombevissthet, struktur og fleksibilitet",
+      "status": "explanatory",
+      "evidence": [
+        "HF"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: WM, rom og risiko. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "onenote_history_skill_collective",
+      "chapterId": "formations",
+      "title": "Historiske utviklingslinjer – fra individuell teknikk til kollektiv romforståelse",
+      "status": "explanatory",
+      "evidence": [
+        "R",
+        "E",
+        "P"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Historisk kollektiv romforståelse. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "history_hungary",
+      "chapterId": "false_nine_inverted_back",
+      "title": "Ungarns magiske lag – den møtende spissen",
+      "status": "explanatory",
+      "evidence": [
+        "R"
+      ],
+      "implemented": "Historisk inngang til møtende spiss; generisk false_nine-relasjon finnes.",
+      "nextCheck": "Ingen egen historisk bonus; konkret stopperbeslutning må vurderes i rolle/angrepsaudit."
+    },
+    {
+      "id": "history_total",
+      "chapterId": "total_football",
+      "title": "Totalfotball – kollektiv intelligens og rollebytter",
+      "status": "partial",
+      "evidence": [
+        "HF",
+        "R",
+        "E",
+        "PL"
+      ],
+      "implemented": "Rolleforbindelser, formasjonstilpasning og planbytte finnes; totalfotballens familiehendelser er ikke dynamisk romovertakelse.",
+      "nextCheck": "Kontroller at en medspiller faktisk overtar rommet en annen forlater."
+    },
+    {
+      "id": "history_collective_cognition",
+      "chapterId": "total_football",
+      "title": "Fra individuell briljans til kollektiv intelligens",
+      "status": "partial",
+      "evidence": [
+        "R",
+        "G",
+        "N",
+        "E"
+      ],
+      "implemented": "Kontinuitet, samhandling og avgrensede tidsvinduer finnes.",
+      "nextCheck": "Kontroller felles persepsjon uten antatt mental informasjon."
+    },
+    {
+      "id": "culture_art_results",
+      "chapterId": "total_football",
+      "title": "Estetikk og resultater – kunst og nytte",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Kunst og nytte. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "culture_adorno",
+      "chapterId": "total_football",
+      "title": "Adorno – kunstens autonomi og instrumentell rasjonalitet",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Autonomi og instrumentell nytte. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "culture_eco",
+      "chapterId": "total_football",
+      "title": "Eco – det åpne verket og publikums fortolkning",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Publikums fortolkning. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "culture_gadamer",
+      "chapterId": "total_football",
+      "title": "Gadamer – lekens egenverdi",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Lekens egenverdi. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "culture_aristotle",
+      "chapterId": "total_football",
+      "title": "Aristoteles – poiesis og praxis",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Poiesis og praxis. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "culture_synthesis",
+      "chapterId": "total_football",
+      "title": "Estetikk som grunnvilkår – struktur og brudd",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Estetikk, frihet og kontroll. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "portrait_cruyff_michels",
+      "chapterId": "total_football",
+      "title": "Cruyff og Michels – spiller og trener i samme taktiske tradisjon",
+      "status": "explanatory",
+      "evidence": [
+        "HF",
+        "R"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Rolleflyt som historisk case. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "history_catenaccio",
+      "chapterId": "catenaccio",
+      "title": "Catenaccio – kontroll og kontring",
+      "status": "partial",
+      "evidence": [
+        "HF",
+        "T",
+        "U",
+        "PL"
+      ],
+      "implemented": "Historisk rolledekning, catenaccio-hendelser og dyp blokk med kontring finnes.",
+      "nextCheck": "Kontroller fri sikringsspiller og markøransvar; ikke likestill lav blokk og catenaccio."
+    },
+    {
+      "id": "culture_pragmatism",
+      "chapterId": "catenaccio",
+      "title": "Resultatfotball og estetikkens historiske dilemma",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Resultatfotballens dilemma. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "portrait_herrera",
+      "chapterId": "catenaccio",
+      "title": "Helenio Herrera – organisering og overgang",
+      "status": "explanatory",
+      "evidence": [
+        "HF",
+        "T"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Sikring og overgang. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "portrait_mourinho",
+      "chapterId": "catenaccio",
+      "title": "José Mourinho – kampbilde, risiko og overgang",
+      "status": "explanatory",
+      "evidence": [
+        "T",
+        "PL"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Kampbilde og risiko. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "history_intensity",
+      "chapterId": "gegenpress",
+      "title": "Moderne fotball – teknikk under press",
+      "status": "partial",
+      "evidence": [
+        "U",
+        "P",
+        "Y",
+        "A",
+        "PC"
+      ],
+      "implemented": "Gjenvinning, motpress, restforsvar og reaksjon har avgrensede mekanikker.",
+      "nextCheck": "Kontroller mottak, vending og pasning under gjentatt press."
+    },
+    {
+      "id": "portrait_klopp",
+      "chapterId": "gegenpress",
+      "title": "Jürgen Klopp – kollektiv gjenvinning og teknikk under press",
+      "status": "explanatory",
+      "evidence": [
+        "U",
+        "P"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Gjenvinningspress. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "portrait_rangnick",
+      "chapterId": "gegenpress",
+      "title": "Ralf Rangnick – kollektiv intensitet og høyt press",
+      "status": "explanatory",
+      "evidence": [
+        "P",
+        "U"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Høyt press kontra gjenvinning. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "onenote_selective_press",
+      "chapterId": "gegenpress",
+      "title": "Stormpress og selektivt press – når presset selv åpner rom",
+      "status": "partial",
+      "evidence": [
+        "P",
+        "G",
+        "U",
+        "V"
+      ],
+      "implemented": "Frontpress, midtbanefelle, motstanderens utvei og restforsvar finnes.",
+      "nextCheck": "Kontroller konkret feiltouch, bakoverpasning og feilvendt mottaker som signal; press eller hold posisjon."
+    },
+    {
+      "id": "history_cruyff_barca",
+      "chapterId": "positional_play",
+      "title": "Fra Cruyff til Barcelona – kontinuitet og endring",
+      "status": "explanatory",
+      "evidence": [
+        "HF",
+        "R",
+        "C"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Kontinuitet mellom fotballskoler. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "history_keeper",
+      "chapterId": "positional_play",
+      "title": "Positional play 2.0 – keeper som aktivt oppspillsledd",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "P",
+        "T",
+        "R"
+      ],
+      "implemented": "Keeper inngår i oppbygging, kontroll og dokumentert motstanderoppbygging.",
+      "nextCheck": "Kontroller eget kort/langt valg, overtall mot kjent press og balltapsrisiko."
+    },
+    {
+      "id": "portrait_guardiola_ederson",
+      "chapterId": "positional_play",
+      "title": "Guardiola og Ederson – romkontroll med elleve spillere",
+      "status": "explanatory",
+      "evidence": [
+        "H",
+        "P",
+        "T"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Keeper som ekstra oppspiller. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "onenote_structure_break",
+      "chapterId": "positional_play",
+      "title": "Systemkritikk – når den skapende spilleren bryter mønsteret",
+      "status": "partial",
+      "evidence": [
+        "D",
+        "C",
+        "R"
+      ],
+      "implemented": "Kreativt individuelt gjennombrudd er en avgrenset alternativ rute.",
+      "nextCheck": "Kontroller når bryte mønster kontra sirkulere med støtte og risiko."
+    },
+    {
+      "id": "onenote_rhythm_space",
+      "chapterId": "positional_play",
+      "title": "Rom og rytme – kontroll gjennom skiftende tempo",
+      "status": "partial",
+      "evidence": [
+        "PL",
+        "T",
+        "H",
+        "C"
+      ],
+      "implemented": "Tempo og kontroll kan endres via kampplan; spillvending og gjennombrudd finnes.",
+      "nextCheck": "Kontroller rytmeskifte som situasjonsvalg fremfor planbytte alene."
+    },
+    {
+      "id": "culture_identity",
+      "chapterId": "relationism",
+      "title": "Futebol d’arte – estetikk, identitet og kulturell selvhevdelse",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Estetikk og kulturell identitet. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
+    },
+    {
+      "id": "keeper_positioning",
+      "chapterId": "keepers",
+      "title": "Keeper – posisjonering og romkontroll",
+      "status": "partial",
+      "evidence": [
+        "F",
+        "R",
+        "K",
+        "L"
+      ],
+      "implemented": "Linjekeeper og sweeperkeeper har separate rollekrav; keeper/stoppere påvirker dødballkontakt, og sweeperkeeper kan støtte ballspillende forsvar i relasjonsmotoren.",
+      "nextCheck": "Kontroller keeperens konkrete dybde, vinkel, 1v1-valg og reaksjon på lobb/bakrom. Ikke likestill rollefit med beregnet keeperplassering."
+    },
+    {
+      "id": "keeper_saves",
+      "chapterId": "keepers",
+      "title": "Keeper – skuddstopping, returer og straffespark",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Den undersøkte generelle sjansegeneratoren avgjør scoring fra sjansekvalitet; keeperens fit i dødballkontakt dokumenterer ikke grep, parering, blokkering eller returvalg.",
+      "nextCheck": "Revider egen keeper-/avslutningsflyt og straffespark, skill redningsvalg fra generisk bomtekst. Ikke konstruer redningsprosent."
+    },
+    {
+      "id": "keeper_distribution",
+      "chapterId": "keepers",
+      "title": "Keeper – distribusjon, styring og dødball",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "P",
+        "T",
+        "R"
+      ],
+      "implemented": "Keeper inngår i oppspill mot press, kontrollkjede og oppbyggingsrelasjon. Motstanderens spesifikt dokumenterte keeperoppbygging kan påvirke eget press.",
+      "nextCheck": "Kontroller eget valg kort/lang, kast kontra spark, tidlig kontring kontra ro og keeperens konkrete kommunikasjonsoppgave."
+    },
+    {
+      "id": "portrait_keeper_depth",
+      "chapterId": "keepers",
+      "title": "Neuer, Higuita og Alisson – rommet bak forsvarslinjen",
+      "status": "explanatory",
+      "evidence": [
+        "F",
+        "R"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Neuer, Higuita og Alisson – rommet bak forsvarslinjen. Keeperens startposisjon, redningsvalg og distribusjon vurderes i keeper_positioning, keeper_saves og keeper_distribution. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_keeper_angles",
+      "chapterId": "keepers",
+      "title": "Schmeichel, Banks og Zoff – vinkel, dybde og reaksjon",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Schmeichel, Banks og Zoff – vinkel, dybde og reaksjon. Keeperens startposisjon, redningsvalg og distribusjon vurderes i keeper_positioning, keeper_saves og keeper_distribution. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_keeper_saves",
+      "chapterId": "keepers",
+      "title": "Yashin, Buffon, Casillas, Kahn og De Gea – forskjellige redningsoppgaver",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Yashin, Buffon, Casillas, Kahn og De Gea – forskjellige redningsoppgaver. Keeperens startposisjon, redningsvalg og distribusjon vurderes i keeper_positioning, keeper_saves og keeper_distribution. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_keeper_distribution",
+      "chapterId": "keepers",
+      "title": "Ter Stegen, Casillas, Schmeichel, Alisson og Ederson – tempo i igangsettingen",
+      "status": "explanatory",
+      "evidence": [
+        "H",
+        "T"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Ter Stegen, Casillas, Schmeichel, Alisson og Ederson – tempo i igangsettingen. Keeperens startposisjon, redningsvalg og distribusjon vurderes i keeper_positioning, keeper_saves og keeper_distribution. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "centre_back_defence",
+      "chapterId": "centre_backs",
+      "title": "Stopper – defensive arbeidsoppgaver",
+      "status": "partial",
+      "evidence": [
+        "A",
+        "G",
+        "L",
+        "M",
+        "K",
+        "E"
+      ],
+      "implemented": "Stopperdybde, skjerm, boksduell og dokumenterte individuelle reaksjonsstyrker påvirker avgrensede faser. Ulike stopperstyrker gir forskjellig oppbygging/restforsvar.",
+      "nextCheck": "Kontroller når stopper støter kontra holder linje, samordnet sikring og keeperkommunikasjon. Ikke utled individuell fart eller luftduell fra matchfit alene."
+    },
+    {
+      "id": "centre_back_attack",
+      "chapterId": "centre_backs",
+      "title": "Stopper – oppbygging og pasningsvalg",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "R",
+        "E",
+        "T"
+      ],
+      "implemented": "Stopperoppbygging, spillvending og relasjon til dyp playmaker er modellert. Dokumentert pasningsstyrke kan endre lagprofilen.",
+      "nextCheck": "Kontroller valg mellom manusets ni utveier, føring inn i midtbane, og hvilken medspiller sikrer når stopper går frem."
+    },
+    {
+      "id": "portrait_maldini",
+      "chapterId": "centre_backs",
+      "title": "Paolo Maldini – levetid, posisjonering og tilpasning",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Paolo Maldini – levetid, posisjonering og tilpasning. Generiske stoppervalg vurderes i centre_back_defence og centre_back_attack. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_beckenbauer",
+      "chapterId": "centre_backs",
+      "title": "Franz Beckenbauer – liberoens offensive ansvar",
+      "status": "explanatory",
+      "evidence": [
+        "R",
+        "E"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Franz Beckenbauer – liberoens offensive ansvar. Generiske stoppervalg vurderes i centre_back_defence og centre_back_attack. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "onenote_desailly_rijkaard_mascherano",
+      "chapterId": "centre_backs",
+      "title": "Desailly, Rijkaard og Mascherano – mellom bakre ledd og midtbane",
+      "status": "explanatory",
+      "evidence": [
+        "R",
+        "N"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Desailly, Rijkaard og Mascherano – mellom bakre ledd og midtbane. Generiske stoppervalg vurderes i centre_back_defence og centre_back_attack. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "fullback_defence",
+      "chapterId": "fullbacks",
+      "title": "Back – timing av støt, sikring og sideforskyvning",
+      "status": "partial",
+      "evidence": [
+        "O",
+        "X",
+        "G",
+        "A",
+        "L"
+      ],
+      "implemented": "Back/kant-støtte, innleggshindring, bakromssikring og konkrete forsvarsreaksjonsvinduer finnes i avgrensede faser.",
+      "nextCheck": "Kontroller timing av støt, lede utover, posisjon relativt til stopper og asymmetrisk sideforskyvning."
+    },
+    {
+      "id": "fullback_attack",
+      "chapterId": "fullbacks",
+      "title": "Back – bredde, overlapp og pasningsvalg",
+      "status": "partial",
+      "evidence": [
+        "C",
+        "R",
+        "H",
+        "B"
+      ],
+      "implemented": "Kant-overlapp, bredde, spillvending og bred utvei via støtteback finnes. Relasjonsmotoren varsler om begge backer går uten holder.",
+      "nextCheck": "Kontroller valg på fot/i bakrom, motsatt backs tilbakehold, timing med keeper og alternative innleggsbaner."
+    },
+    {
+      "id": "wingback_corridor",
+      "chapterId": "fullbacks",
+      "title": "Vingback – korridoransvar med tre stoppere",
+      "status": "partial",
+      "evidence": [
+        "F",
+        "R",
+        "T",
+        "O"
+      ],
+      "implemented": "Vingback er egen rolle, med bredde, støtte og kontringsrute fra lav blokk. Forsvar mot overlapp tar med bred forsvarsenhet i avgrenset situasjon.",
+      "nextCheck": "Kontroller egen vingbacks dynamiske korridoransvar, ballnær støt og motsatt vingback i femmer. Ikke anta dette ut fra tre stoppere."
+    },
+    {
+      "id": "portrait_lahm",
+      "chapterId": "fullbacks",
+      "title": "Philipp Lahm – rollefortrolighet på back og midtbane",
+      "status": "explanatory",
+      "evidence": [
+        "N",
+        "F"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Philipp Lahm – rollefortrolighet på back og midtbane. Generiske backvalg og overføring mellom roller vurderes i fullback_defence, fullback_attack og wingback_corridor. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "onenote_zambrotta_luis_enrique",
+      "chapterId": "fullbacks",
+      "title": "Zambrotta og Luis Enrique – allsidighet og endrede rollekrav",
+      "status": "explanatory",
+      "evidence": [
+        "N",
+        "F"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Zambrotta og Luis Enrique – allsidighet og endrede rollekrav. Generiske backvalg og overføring mellom roller vurderes i fullback_defence, fullback_attack og wingback_corridor. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "central_midfield_defence",
+      "chapterId": "six_regista",
+      "title": "Sentral midtbane – skjerming, andreball og balanse",
+      "status": "partial",
+      "evidence": [
+        "P",
+        "U",
+        "M",
+        "K",
+        "B"
+      ],
+      "implemented": "Midtbaneskjerm, sikring etter brutt press, nedfall og andreballfrigjøring er konkrete mekanikker; dedikert sikringsrolle kan holde rom.",
+      "nextCheck": "Kontroller aktiv overtakelse av 1F-oppgave, luftduell og at én spiller blir igjen foran stopperne ved sideangrep."
+    },
+    {
+      "id": "central_midfield_attack",
+      "chapterId": "six_regista",
+      "title": "Sentral midtbane – spillbarhet og rytmekontroll",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "R",
+        "B",
+        "T",
+        "E"
+      ],
+      "implemented": "Dyp playmaker med dybdeløper, sentral støtte, avlegg, kontroll og andreballutvei finnes i avgrensede kjeder.",
+      "nextCheck": "Kontroller mottak under press, rytmeskifte og beslutning mellom støtte, vending og bakrom i samme situasjon."
+    },
+    {
+      "id": "portrait_scanning",
+      "chapterId": "six_regista",
+      "title": "Xavi, Iniesta og andre orienteringssterke midtbanespillere",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Xavi, Iniesta og andre orienteringssterke midtbanespillere. Generiske skjerm-, rytme- og støttevalg vurderes i central_midfield_defence og central_midfield_attack. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_makelele",
+      "chapterId": "six_regista",
+      "title": "Claude Makélélé – posisjonell sikring og arbeidsøkonomi",
+      "status": "explanatory",
+      "evidence": [
+        "R",
+        "M",
+        "U"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Claude Makélélé – posisjonell sikring og arbeidsøkonomi. Generiske skjerm-, rytme- og støttevalg vurderes i central_midfield_defence og central_midfield_attack. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "onenote_directors",
+      "chapterId": "six_regista",
+      "title": "Regissørene – Pirlo, Xavi og Modrić",
+      "status": "explanatory",
+      "evidence": [
+        "R",
+        "E",
+        "F"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Regissørene – Pirlo, Xavi og Modrić. Generiske skjerm-, rytme- og støttevalg vurderes i central_midfield_defence og central_midfield_attack. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "onenote_pirlo_architect",
+      "chapterId": "six_regista",
+      "title": "Pirlo – arkitekten og den lange pasningens funksjon",
+      "status": "explanatory",
+      "evidence": [
+        "R",
+        "H"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Pirlo – arkitekten og den lange pasningens funksjon. Generiske skjerm-, rytme- og støttevalg vurderes i central_midfield_defence og central_midfield_attack. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "onenote_workers_protectors",
+      "chapterId": "six_regista",
+      "title": "Arbeidsmaurene og beskytterne – skjult kollektiv verdi",
+      "status": "explanatory",
+      "evidence": [
+        "R",
+        "M",
+        "E",
+        "P"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Arbeidsmaurene og beskytterne – skjult kollektiv verdi. Generiske skjerm-, rytme- og støttevalg vurderes i central_midfield_defence og central_midfield_attack. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "onenote_gattuso_pirlo",
+      "chapterId": "six_regista",
+      "title": "Gattuso og Pirlo – komplementære midtbaneoppgaver",
+      "status": "explanatory",
+      "evidence": [
+        "R",
+        "E"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Gattuso og Pirlo – komplementære midtbaneoppgaver. Generiske skjerm-, rytme- og støttevalg vurderes i central_midfield_defence og central_midfield_attack. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "onenote_van_bommel_jeremies",
+      "chapterId": "six_regista",
+      "title": "Van Bommel og Jeremies – rytmebrudd innenfor reglene",
+      "status": "explanatory",
+      "evidence": [
+        "P"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Van Bommel og Jeremies – rytmebrudd innenfor reglene. Generiske skjerm-, rytme- og støttevalg vurderes i central_midfield_defence og central_midfield_attack. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "eight_defence",
+      "chapterId": "eight_press",
+      "title": "Indreløper – sikring ved sideangrep",
+      "status": "partial",
+      "evidence": [
+        "P",
+        "G",
+        "M",
+        "O",
+        "R"
+      ],
+      "implemented": "Pressende midtbane og støtte for breddekontroll, skjerm og sikring er representert gjennom roller og konkrete motspill.",
+      "nextCheck": "Kontroller ballnær indreløpers sikring og motsatt indreløpers tilbakehold samtidig, uten å anta live posisjoner."
+    },
+    {
+      "id": "eight_attack",
+      "chapterId": "eight_press",
+      "title": "Indreløper – møte, stikke og fylle feltet",
+      "status": "partial",
+      "evidence": [
+        "R",
+        "C",
+        "B",
+        "H"
+      ],
+      "implemented": "Dybdeløper, møtende spiss, bredt gjennombrudd og støtte har komplementære rolleforbindelser og avgrensede motorhandlinger.",
+      "nextCheck": "Kontroller indreløpers valg om møte/stikke, bredere støtte ved stopperball og smalere løp ved backball, samt timet boksfylling."
+    },
+    {
+      "id": "portrait_leonhardsen",
+      "chapterId": "eight_press",
+      "title": "Øyvind Leonhardsen – indreløperens løp og timing",
+      "status": "explanatory",
+      "evidence": [
+        "R",
+        "Q"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Øyvind Leonhardsen – indreløperens løp og timing. Generiske sikrings-, løps- og støttevalg vurderes i eight_defence og eight_attack. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_kante",
+      "chapterId": "eight_press",
+      "title": "N'Golo Kanté – arbeidskapasitet, gjenvinning og ballbruk",
+      "status": "explanatory",
+      "evidence": [
+        "P",
+        "Y"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: N'Golo Kanté – arbeidskapasitet, gjenvinning og ballbruk. Generiske sikrings-, løps- og støttevalg vurderes i eight_defence og eight_attack. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_matthaus",
+      "chapterId": "eight_press",
+      "title": "Lothar Matthäus – allrounderen fra midtbane til libero",
+      "status": "explanatory",
+      "evidence": [
+        "N",
+        "F"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Lothar Matthäus – allrounderen fra midtbane til libero. Generiske sikrings-, løps- og støttevalg vurderes i eight_defence og eight_attack. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_modric",
+      "chapterId": "eight_press",
+      "title": "Luka Modrić – rytmekontroll og langvarig prestasjon",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Luka Modrić – rytmekontroll og langvarig prestasjon. Generiske sikrings-, løps- og støttevalg vurderes i eight_defence og eight_attack. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_yaya_toure",
+      "chapterId": "eight_press",
+      "title": "Yaya Touré – midtbanespilleren som også truer mål",
+      "status": "explanatory",
+      "evidence": [
+        "R",
+        "J"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Yaya Touré – midtbanespilleren som også truer mål. Generiske sikrings-, løps- og støttevalg vurderes i eight_defence og eight_attack. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_nakata_park",
+      "chapterId": "eight_press",
+      "title": "Hidetoshi Nakata og Park Ji-sung – forskjellige midtbaneoppgaver",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Hidetoshi Nakata og Park Ji-sung – forskjellige midtbaneoppgaver. Generiske sikrings-, løps- og støttevalg vurderes i eight_defence og eight_attack. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "onenote_xavi_modric",
+      "chapterId": "eight_press",
+      "title": "Xavi og Modrić – rytme, mottak og neste handling",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Xavi og Modrić – rytme, mottak og neste handling. Generiske sikrings-, løps- og støttevalg vurderes i eight_defence og eight_attack. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "onenote_cambiasso_vieira_redondo",
+      "chapterId": "eight_press",
+      "title": "Cambiasso, Vieira og Redondo – arbeid med og uten ball",
+      "status": "explanatory",
+      "evidence": [
+        "R",
+        "M"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Cambiasso, Vieira og Redondo – arbeid med og uten ball. Generiske sikrings-, løps- og støttevalg vurderes i eight_defence og eight_attack. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "onenote_essien_bridge",
+      "chapterId": "eight_press",
+      "title": "Michael Essien – broen mellom arbeidsmaur og allrounder",
+      "status": "explanatory",
+      "evidence": [
+        "N",
+        "F",
+        "R"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Michael Essien – broen mellom arbeidsmaur og allrounder. Generiske sikrings-, løps- og støttevalg vurderes i eight_defence og eight_attack. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "supporting_forward",
+      "chapterId": "ten_creator",
+      "title": "Hengende spiss – mellomrom, støtte og overgangsspill",
+      "status": "partial",
+      "evidence": [
+        "R",
+        "D",
+        "C"
+      ],
+      "implemented": "Kreatør, klassisk tier og møtende spiss har rolleforbindelser med løpere. Dokumentert kreativ dribling/vision kan påvirke avgrenset gjennombrudd.",
+      "nextCheck": "Kontroller selvstendig valg i mellomrom, samordnet støtte og løp bak stopperen som følger møtende spiss; ikke anta at forsvareren alltid følger."
+    },
+    {
+      "id": "portrait_creative",
+      "chapterId": "ten_creator",
+      "title": "Zidane, Ronaldinho og Maradona – den kreative handlingen",
+      "status": "explanatory",
+      "evidence": [
+        "D"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Zidane, Ronaldinho og Maradona – den kreative handlingen. Generisk kreativ støtte og mellomrom vurderes i supporting_forward. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_tom_lund",
+      "chapterId": "ten_creator",
+      "title": "Tom Lund – teknikk, oversikt og kreativitet",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Tom Lund – teknikk, oversikt og kreativitet. Generisk kreativ støtte og mellomrom vurderes i supporting_forward. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_de_bruyne",
+      "chapterId": "ten_creator",
+      "title": "Kevin De Bruyne – halvrom, ballbane og gjennombrudd",
+      "status": "explanatory",
+      "evidence": [
+        "R",
+        "C"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Kevin De Bruyne – halvrom, ballbane og gjennombrudd. Generisk kreativ støtte og mellomrom vurderes i supporting_forward. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_messi",
+      "chapterId": "ten_creator",
+      "title": "Lionel Messi – kreativitet, ballnær støtte og brudd med strukturen",
+      "status": "explanatory",
+      "evidence": [
+        "D"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Lionel Messi – kreativitet, ballnær støtte og brudd med strukturen. Generisk kreativ støtte og mellomrom vurderes i supporting_forward. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_zico_baggio_zola",
+      "chapterId": "ten_creator",
+      "title": "Zico, Roberto Baggio og Gianfranco Zola – den skapende angriperen",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Zico, Roberto Baggio og Gianfranco Zola – den skapende angriperen. Generisk kreativ støtte og mellomrom vurderes i supporting_forward. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "onenote_savicevic_kaka",
+      "chapterId": "ten_creator",
+      "title": "Savićević og Kaká – høydepunkter og kreative arbeidsoppgaver",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Savićević og Kaká – høydepunkter og kreative arbeidsoppgaver. Generisk kreativ støtte og mellomrom vurderes i supporting_forward. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "winger_defence",
+      "chapterId": "wingers",
+      "title": "Ving – pressretning og ansvar for motstanderens back",
+      "status": "partial",
+      "evidence": [
+        "P",
+        "O",
+        "X",
+        "G"
+      ],
+      "implemented": "Kant inngår i samordnet frontpress og bred forsvarsenhet mot overlapp og tidlig innlegg.",
+      "nextCheck": "Kontroller ansvar for motstanders back, pressretning og når kant skal bli høy mens midtbanen sikrer."
+    },
+    {
+      "id": "winger_attack",
+      "chapterId": "wingers",
+      "title": "Ving – bredde, bakrom og avslutning på motsatt side",
+      "status": "partial",
+      "evidence": [
+        "C",
+        "H",
+        "R",
+        "B"
+      ],
+      "implemented": "Bred dribler og innoverkant er ulike roller, med overlapp, spillvending, bred utvei og boksrelasjon.",
+      "nextCheck": "Kontroller valget om høy bredde kontra møte, løp bakrom og motsatt kants boksfylling, knyttet til ballens plassering."
+    },
+    {
+      "id": "portrait_mathews_garrincha",
+      "chapterId": "wingers",
+      "title": "Stanley Matthews og Garrincha – dribling som taktisk virkemiddel",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Stanley Matthews og Garrincha – dribling som taktisk virkemiddel. Generisk bredde, dribling, løp og press vurderes i winger_attack og winger_defence. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_okocha",
+      "chapterId": "wingers",
+      "title": "Jay-Jay Okocha – finter, dribling og neste pasning",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Jay-Jay Okocha – finter, dribling og neste pasning. Generisk bredde, dribling, løp og press vurderes i winger_attack og winger_defence. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_neymar",
+      "chapterId": "wingers",
+      "title": "Neymar – improvisasjon og kombinasjoner i trangt rom",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Neymar – improvisasjon og kombinasjoner i trangt rom. Generisk bredde, dribling, løp og press vurderes i winger_attack og winger_defence. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_mbappe",
+      "chapterId": "wingers",
+      "title": "Kylian Mbappé – brems, akselerasjon og bueløp",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Kylian Mbappé – brems, akselerasjon og bueløp. Generisk bredde, dribling, løp og press vurderes i winger_attack og winger_defence. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_son",
+      "chapterId": "wingers",
+      "title": "Son Heung-min – gjennombrudd og avslutning med begge føtter",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Son Heung-min – gjennombrudd og avslutning med begge føtter. Generisk bredde, dribling, løp og press vurderes i winger_attack og winger_defence. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_gamst_gronkjaer",
+      "chapterId": "wingers",
+      "title": "Morten Gamst Pedersen og Jesper Grønkjær – bredde og innlegg",
+      "status": "explanatory",
+      "evidence": [
+        "C"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Morten Gamst Pedersen og Jesper Grønkjær – bredde og innlegg. Generisk bredde, dribling, løp og press vurderes i winger_attack og winger_defence. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "onenote_waddle_pop",
+      "chapterId": "wingers",
+      "title": "Chris Waddle – kantspill og popkultur",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Chris Waddle – kantspill og popkultur. Generisk bredde, dribling, løp og press vurderes i winger_attack og winger_defence. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "onenote_beckham_deep_cross",
+      "chapterId": "wingers",
+      "title": "David Beckham – tidlig innlegg og globalt fotballikon",
+      "status": "explanatory",
+      "evidence": [
+        "C"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: David Beckham – tidlig innlegg og globalt fotballikon. Generisk bredde, dribling, løp og press vurderes i winger_attack og winger_defence. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "onenote_best_icon",
+      "chapterId": "wingers",
+      "title": "George Best – driblekunst og fotballens kjendisfortelling",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: George Best – driblekunst og fotballens kjendisfortelling. Generisk bredde, dribling, løp og press vurderes i winger_attack og winger_defence. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "meeting_forward",
+      "chapterId": "link_strikers",
+      "title": "Møtende spiss – oppspill og bevegelse etter avlegg",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "R",
+        "D"
+      ],
+      "implemented": "Møtende spiss og falsk nier har rollefit; avlegg til tredjemann inngår i oppspills- og blokkfasen, kreativt gjennombrudd kan være alternativ for dokumentert spiller.",
+      "nextCheck": "Prioriter eksplisitt utveivalg: vende, flikke/stusse, avlegg eller støtte. Motstanderens press, tilgjengelig mottaker og sikring må avgjøre; ikke gi ny parallell xG."
+    },
+    {
+      "id": "portrait_hidegkuti",
+      "chapterId": "link_strikers",
+      "title": "Nándor Hidegkuti – den møtende spissens beslutningsproblem",
+      "status": "explanatory",
+      "evidence": [
+        "R",
+        "C"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Nándor Hidegkuti – den møtende spissens beslutningsproblem. Generisk mottak, støtte og utveivalg vurderes i meeting_forward. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_pele",
+      "chapterId": "link_strikers",
+      "title": "Pelé – kreativitet og avslutning i et kollektiv",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Pelé – kreativitet og avslutning i et kollektiv. Generisk mottak, støtte og utveivalg vurderes i meeting_forward. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_bergkamp",
+      "chapterId": "link_strikers",
+      "title": "Dennis Bergkamp – førsteberøring og opp–tilbake–gjennom",
+      "status": "explanatory",
+      "evidence": [
+        "R",
+        "H",
+        "C"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Dennis Bergkamp – førsteberøring og opp–tilbake–gjennom. Generisk mottak, støtte og utveivalg vurderes i meeting_forward. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_drogba_lukaku",
+      "chapterId": "link_strikers",
+      "title": "Didier Drogba og Romelu Lukaku – fysisk kapasitet i spissens støtteoppgave",
+      "status": "explanatory",
+      "evidence": [
+        "R",
+        "C"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Didier Drogba og Romelu Lukaku – fysisk kapasitet i spissens støtteoppgave. Generisk mottak, støtte og utveivalg vurderes i meeting_forward. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_di_stefano",
+      "chapterId": "link_strikers",
+      "title": "Alfredo Di Stéfano – leder og forbindelsesspiller",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Alfredo Di Stéfano – leder og forbindelsesspiller. Generisk mottak, støtte og utveivalg vurderes i meeting_forward. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "striker_defence",
+      "chapterId": "finishing_press",
+      "title": "Midtspiss – lede press og gjøre laget kontringsklart",
+      "status": "partial",
+      "evidence": [
+        "P",
+        "R",
+        "Y"
+      ],
+      "implemented": "Pressende spiss og midtbanepress er rolleforbindelse; frontpress og gjenvinning er kausale kjeder.",
+      "nextCheck": "Kontroller valg av hvilken stopper som presses basert på dokumentert motstanderdata, samordnet pressretning og tidlig spillbarhet etter brudd."
+    },
+    {
+      "id": "striker_attack",
+      "chapterId": "finishing_press",
+      "title": "Midtspiss – sentral strekk, første stolpe og rom for andre",
+      "status": "partial",
+      "evidence": [
+        "R",
+        "C",
+        "H",
+        "Q",
+        "J"
+      ],
+      "implemented": "Dybdeløp, avlegg, innlegg/boksløp og overgang via bakromsspiss finnes. Målattribusjon vektes etter rolle, posisjon og fit.",
+      "nextCheck": "Kontroller individuell timing, første stolpe, romskaping for indreløper og valg om å vende ved manglende sikring. Attribusjon av scorede mål er ikke bevis for skuddvalg."
+    },
+    {
+      "id": "portrait_puskas",
+      "chapterId": "finishing_press",
+      "title": "Ferenc Puskás – avslutning i en kollektiv angrepsstruktur",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Ferenc Puskás – avslutning i en kollektiv angrepsstruktur. Generisk press, boks- og dybdeløp vurderes i striker_defence og striker_attack; konkrete avslutningsteknikker vurderes i angrepsbolken. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_strandli",
+      "chapterId": "finishing_press",
+      "title": "Frank Strandli – spissens avslutningsoppgave",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Frank Strandli – spissens avslutningsoppgave. Generisk press, boks- og dybdeløp vurderes i striker_defence og striker_attack; konkrete avslutningsteknikker vurderes i angrepsbolken. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_meazza_eusebio",
+      "chapterId": "finishing_press",
+      "title": "Giuseppe Meazza og Eusébio – avslutninger i forskjellige epoker",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Giuseppe Meazza og Eusébio – avslutninger i forskjellige epoker. Generisk press, boks- og dybdeløp vurderes i striker_defence og striker_attack; konkrete avslutningsteknikker vurderes i angrepsbolken. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_van_basten",
+      "chapterId": "finishing_press",
+      "title": "Marco van Basten – avslutning før forsvar og keeper rekker å justere",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Marco van Basten – avslutning før forsvar og keeper rekker å justere. Generisk press, boks- og dybdeløp vurderes i striker_defence og striker_attack; konkrete avslutningsteknikker vurderes i angrepsbolken. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_shearer",
+      "chapterId": "finishing_press",
+      "title": "Alan Shearer – gjentatte løp, duell og avslutningsberedskap",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Alan Shearer – gjentatte løp, duell og avslutningsberedskap. Generisk press, boks- og dybdeløp vurderes i striker_defence og striker_attack; konkrete avslutningsteknikker vurderes i angrepsbolken. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_haaland",
+      "chapterId": "finishing_press",
+      "title": "Erling Braut Haaland – bakromstrussel og angrep av avslutningssoner",
+      "status": "explanatory",
+      "evidence": [
+        "R",
+        "C"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Erling Braut Haaland – bakromstrussel og angrep av avslutningssoner. Generisk press, boks- og dybdeløp vurderes i striker_defence og striker_attack; konkrete avslutningsteknikker vurderes i angrepsbolken. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_henry",
+      "chapterId": "finishing_press",
+      "title": "Thierry Henry – fart, venstresidig utgangsposisjon og gjennombrudd",
+      "status": "explanatory",
+      "evidence": [
+        "R",
+        "Q"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Thierry Henry – fart, venstresidig utgangsposisjon og gjennombrudd. Generisk press, boks- og dybdeløp vurderes i striker_defence og striker_attack; konkrete avslutningsteknikker vurderes i angrepsbolken. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_ronaldo_nazario",
+      "chapterId": "finishing_press",
+      "title": "Ronaldo Nazário – avslutningsteknikk og tilbakekomst",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Ronaldo Nazário – avslutningsteknikk og tilbakekomst. Generisk press, boks- og dybdeløp vurderes i striker_defence og striker_attack; konkrete avslutningsteknikker vurderes i angrepsbolken. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_cristiano_heading",
+      "chapterId": "finishing_press",
+      "title": "Cristiano Ronaldo – spenst, tilløp og timing ved heading",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Cristiano Ronaldo – spenst, tilløp og timing ved heading. Generisk press, boks- og dybdeløp vurderes i striker_defence og striker_attack; konkrete avslutningsteknikker vurderes i angrepsbolken. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_romario",
+      "chapterId": "finishing_press",
+      "title": "Romário – avslutning med begrenset tid og rom",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Romário – avslutning med begrenset tid og rom. Generisk press, boks- og dybdeløp vurderes i striker_defence og striker_attack; konkrete avslutningsteknikker vurderes i angrepsbolken. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "portrait_kanu_ravanelli",
+      "chapterId": "finishing_press",
+      "title": "Kanu og Fabrizio Ravanelli – avslutning når kampbildet endres",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Kanu og Fabrizio Ravanelli – avslutning når kampbildet endres. Generisk press, boks- og dybdeløp vurderes i striker_defence og striker_attack; konkrete avslutningsteknikker vurderes i angrepsbolken. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "onenote_owen_torres",
+      "chapterId": "finishing_press",
+      "title": "Michael Owen og Fernando Torres – gjennombrudd og avslutningsvalg",
+      "status": "explanatory",
+      "evidence": [
+        "Q",
+        "R"
+      ],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Michael Owen og Fernando Torres – gjennombrudd og avslutningsvalg. Generisk press, boks- og dybdeløp vurderes i striker_defence og striker_attack; konkrete avslutningsteknikker vurderes i angrepsbolken. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "onenote_rossi_shevchenko_adriano",
+      "chapterId": "finishing_press",
+      "title": "Paolo Rossi, Sjevtsjenko og Adriano – karrierens dokumenterte holdepunkter",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballbokas pedagogiske/historiske eksempel: Paolo Rossi, Sjevtsjenko og Adriano – karrierens dokumenterte holdepunkter. Generisk press, boks- og dybdeløp vurderes i striker_defence og striker_attack; konkrete avslutningsteknikker vurderes i angrepsbolken. Personcaset dokumenterer ikke egen motorregel eller målt egenskap.",
+      "nextCheck": "Behold som analyse- og læringscase. Bruk bare individuelt dokumenterte spillerdata i eksisterende fit-/handlingsmodell; ingen bonus fra navn, karrierefortelling eller bokomtale. Eksterne kilder er ikke kontrollert i denne revisjonen."
+    },
+    {
+      "id": "attack_principles",
+      "chapterId": "in_possession",
+      "title": "Spilleprinsippmodellen – gjennombrudd og rom",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "S"
+      ],
+      "implemented": "Leddgjennombrudd og støtte har virkning i avgrensede kjeder.",
+      "nextCheck": "Kontroller progresjon per ledd og romvalg utenfor spesialistplanene."
+    },
+    {
+      "id": "carrying",
+      "chapterId": "in_possession",
+      "title": "Føring – valg av retning, tempo og berøringer",
+      "status": "partial",
+      "evidence": [
+        "D"
+      ],
+      "implemented": "Kreatør kan utfordre før frigjøring av medspiller.",
+      "nextCheck": "Kontroller føring versus pasning, retning, fart og ballberøringer som selvstendige valg."
+    },
+    {
+      "id": "dribbling",
+      "chapterId": "in_possession",
+      "title": "Dribling – timing, taktskifte og ubalanse",
+      "status": "partial",
+      "evidence": [
+        "D"
+      ],
+      "implemented": "Separat dribleport og neste frigjøringsport.",
+      "nextCheck": "Kontroller om forsvarerubalanse, timing og fintevalg faktisk endrer utfallet."
+    },
+    {
+      "id": "cuts",
+      "chapterId": "in_possession",
+      "title": "Retningsforandringer – cuts og vendinger",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Detaljerte cuts og finter er ikke dokumentert som egne handlinger i undersøkte angrepskjeder.",
+      "nextCheck": "Avklar riktig abstraksjonsnivå: vending/retning og press, ikke en motor for hver navngitte finte."
+    },
+    {
+      "id": "receiving",
+      "chapterId": "in_possession",
+      "title": "Mottak og medtak – gjør neste trekk mulig",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C"
+      ],
+      "implemented": "Oppspill og mottak inngår i kjeden, med rollefit.",
+      "nextCheck": "Kontroller særskilt mottak, ballbane, førsteberøring og neste handling under press."
+    },
+    {
+      "id": "turning",
+      "chapterId": "in_possession",
+      "title": "Vending – 90 grader, 180 grader og press i ryggen",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Ingen selvstendig vending/skjerming-port dokumentert i gjennomgåtte kjeder.",
+      "nextCheck": "Undersøk mottakerens orientering og mulighet til vending kontra avlegg."
+    },
+    {
+      "id": "passing",
+      "chapterId": "in_possession",
+      "title": "Pasningsgeometri – fot eller rom, presisjon og kamuflering",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C"
+      ],
+      "implemented": "Støttepasning og pasningsdekning påvirker gjennombrudd.",
+      "nextCheck": "Kontroller pasning på fot/i rom, mottaksvinkel og kamuflering."
+    },
+    {
+      "id": "passing_types",
+      "chapterId": "in_possession",
+      "title": "Innside, utside, halvt liggende vrist og tåpasning",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "De fire fot-/treffteknikkene er ikke dokumentert som separate motorvalg her.",
+      "nextCheck": "Vurder situasjonsbestemt kort/lang og direkte pasning fremfor animasjon av fotteknikk."
+    },
+    {
+      "id": "shooting",
+      "chapterId": "in_possession",
+      "title": "Skuddteknikk – vrist, halvt liggende vrist og volley",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "xG-utfall er påvist for angrepskjeder, ikke valg av vrist/volley i avslutningsmotoren.",
+      "nextCheck": "Revider avslutningsmotor separat før manglende mekanikk erklæres."
+    },
+    {
+      "id": "heading",
+      "chapterId": "in_possession",
+      "title": "Heading – opphopp, treff og retning",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Innleggsrom er modellert; headingens treff og ballbane er ikke kontrollert.",
+      "nextCheck": "Undersøk luftdueller og valg av heading som avslutning/klarering."
+    },
+    {
+      "id": "finishing",
+      "chapterId": "in_possession",
+      "title": "Angrepsavslutning – blindside, bueløp og orientering",
+      "status": "partial",
+      "evidence": [
+        "C",
+        "R"
+      ],
+      "implemented": "Boksløp, innleggsrom og avslutningsvindu påvirker kjeden.",
+      "nextCheck": "Kontroller blindside, offside, avslutterens valg og keeperens posisjon."
+    },
+    {
+      "id": "one_on_one",
+      "chapterId": "in_possession",
+      "title": "Alene med keeper – valg fra spiss vinkel og sentralt",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Keeperduellens konkrete valg er ikke kontrollert.",
+      "nextCheck": "Undersøk eksisterende sjanse-/keeperberegning før ny mekanikk."
+    },
+    {
+      "id": "perception",
+      "chapterId": "in_possession",
+      "title": "Persepsjon – aktiv registrering før og etter mottak",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Ingen eksplisitt registreringsport før mottak dokumentert i de undersøkte angrepskjeder.",
+      "nextCheck": "Kartlegg eksisterende vision/beslutningsdata; aldri oppfinn manglende spillerattributter."
+    },
+    {
+      "id": "open_body",
+      "chapterId": "in_possession",
+      "title": "Åpen kropp og half-turn",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Rettvendt tredjemann beskrives; kroppsstilling er ikke påvist som separat beslutningsvariabel.",
+      "nextCheck": "Kontroller om mottaksvinkel påvirker vending/avlegg."
+    },
+    {
+      "id": "reading_game",
+      "chapterId": "in_possession",
+      "title": "Observer – seks spørsmål om spillebildet",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "D",
+        "S"
+      ],
+      "implemented": "Motoren bruker kjent motstanderdekning, rollefit og struktur.",
+      "nextCheck": "Kontroller situasjonsvalg per ballfører: rom, støtte, kroppsstilling og neste løp."
+    },
+    {
+      "id": "passing_timing",
+      "chapterId": "in_possession",
+      "title": "Pasningstempo, timing og spill på fot eller i rom",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "R"
+      ],
+      "implemented": "Rekkefølge og relasjoner gir gjennombruddsvinduer.",
+      "nextCheck": "Kontroller for tidlig/sent løp og pasning på fot kontra i rom."
+    },
+    {
+      "id": "penetration",
+      "chapterId": "in_possession",
+      "title": "Gjennombrudd – passere ledd og motta i fart",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "S"
+      ],
+      "implemented": "Simulert leddbrudd kan gi xG; brutt kjede har konsekvens.",
+      "nextCheck": "Kontroller mottak i fart og forskjell mellom å passere ett og siste ledd."
+    },
+    {
+      "id": "crossing",
+      "chapterId": "in_possession",
+      "title": "Innlegg – tidspunkt, avslutningssoner og løpsfordeling",
+      "status": "partial",
+      "evidence": [
+        "C"
+      ],
+      "implemented": "Innleggsrom, løp inn i boks, returdekning og motstanderens boksdekning.",
+      "nextCheck": "Kontroller valg mellom tidlig lavt innlegg, tilbakespill og bakre stolpe."
+    },
+    {
+      "id": "possession_cycle",
+      "chapterId": "in_possession",
+      "title": "Ballbesittelse og konservering – rytme og tålmodighet",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "T"
+      ],
+      "implemented": "Spillvending og kontrollkjeder er implementert for spesifikke planer.",
+      "nextCheck": "Kontroller gjentatt kort–lang syklus og rytmeskifte som valgbare handlinger."
+    },
+    {
+      "id": "established_model",
+      "chapterId": "in_possession",
+      "title": "Etablert angrep – gjenskaping av bredde og strekk–møte",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "R",
+        "D"
+      ],
+      "implemented": "Tredjemann, møtende spiss, bredde og kreativ frigjøring inngår.",
+      "nextCheck": "Kontroller gjenskaping av bredde, strekk–møte og støvsuging med reelt alternativvalg."
+    },
+    {
+      "id": "corridor_to_centre",
+      "chapterId": "in_possession",
+      "title": "Fra korridor til sentralt gjennombrudd",
+      "status": "partial",
+      "evidence": [
+        "C",
+        "R"
+      ],
+      "implemented": "Bred støtte og spissrelasjoner er representert, men ikke denne konkrete back–spiss–motsatt side-kjeden.",
+      "nextCheck": "Finn eksisterende korridorplan og vurder eksplisitt timing/utvei."
+    },
+    {
+      "id": "centre_to_corridor",
+      "chapterId": "in_possession",
+      "title": "Fra sentralt til bredt gjennombrudd",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C"
+      ],
+      "implemented": "Spillvending og bredt gjennombrudd har resultat.",
+      "nextCheck": "Kontroller vingens valg mellom bredde, bakrom, møte og backens fremrykk."
+    },
+    {
+      "id": "signal_triangle",
+      "chapterId": "in_possession",
+      "title": "Signalpasning og trekanten inn–ut–inn",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C"
+      ],
+      "implemented": "Avlegg/tredjemann og vending finnes som separate ruter.",
+      "nextCheck": "Kontroller bakoverpasning som avtalt signal, valget mellom fire utveier og inn–ut–inn."
+    },
+    {
+      "id": "press_height",
+      "chapterId": "out_of_possession",
+      "title": "Presshøyder og pressbølger",
+      "status": "partial",
+      "evidence": [
+        "P",
+        "T",
+        "L"
+      ],
+      "implemented": "Høyt frontpress, midtbanefelle og lav blokk har forskjellige kjeder; forsvarslinje påvirker bakromsrisiko. Kampplanene har egne pressing-, defensiveLine- og intensity-felt.",
+      "nextCheck": "Kontroller automatisk og managerstyrt veksling mellom aktivt press og hvilepress. Ikke konstruer 15-minutters bølger som obligatorisk mønster."
+    },
+    {
+      "id": "lock_press",
+      "chapterId": "out_of_possession",
+      "title": "Lås av – høyt press eller sentral skjerming",
+      "status": "partial",
+      "evidence": [
+        "P",
+        "G"
+      ],
+      "implemented": "Frontpress styrer mot side med støtte, midtbanefelle bruker pasningssignal og sikring; motstanderens kjent utvei kan bryte fellen.",
+      "nextCheck": "Kontroller konkret låsing på innkast/målspark, backens mottak, keeperretur og motsatt vings posisjon. Skill avgrensede planruter fra allmenn pressfelle."
+    },
+    {
+      "id": "press_triggers",
+      "chapterId": "out_of_possession",
+      "title": "Presstidspunkt – aktivering, hvile og falskt press",
+      "status": "partial",
+      "evidence": [
+        "P",
+        "A",
+        "G"
+      ],
+      "implemented": "Avgrensede planutløsere og eksplicitte handlingsvinduer finnes; reaksjon ved førsteberøring kan avhenge av dokumenterte egenskaper.",
+      "nextCheck": "Kontroller om dårlig touch, bakoverpasning, feilvendt mottaker og luftball fungerer som egne signaler i generell kampflyt. Hvilepress og falskt press ikke bekreftet."
+    },
+    {
+      "id": "pump_and_drop",
+      "chapterId": "out_of_possession",
+      "title": "Push opp, pumping, fall av og kompakte ledd",
+      "status": "partial",
+      "evidence": [
+        "P",
+        "L",
+        "Z",
+        "M"
+      ],
+      "implemented": "Forsvarslinje, kollektiv sikring og motstanderens soneforskyvning har konsekvenser i spesialistkjeder; manager kan senke laget.",
+      "nextCheck": "Kontroller om eget lag dynamisk pumper opp ved fri ball og tar dybde ved kontrollert motstanderball. Ikke avled avstander fra lagets score."
+    },
+    {
+      "id": "marking_models",
+      "chapterId": "out_of_possession",
+      "title": "Markeringstyper og kollektivt press",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Soneforsvar og mann-mot-mann omtales i kunnskapslaget. De undersøkte motorfunksjonene dokumenterer ikke alle manusets markeringsmodeller som valgbare, forskjellige egne forsvarsregler.",
+      "nextCheck": "Kartlegg eksakte taktikktagger og motorbruk for rigid/fleksibel mann, rom- og posisjonsorientering. Ikke inferer mannsmarkering fra høy intensitet eller sonemarkering fra pasningsspill."
+    },
+    {
+      "id": "counter_signal",
+      "chapterId": "transition_attack",
+      "title": "Overgang og kontring – signal, tidsmål og relativ bredde",
+      "status": "partial",
+      "evidence": [
+        "T",
+        "V",
+        "Q"
+      ],
+      "implemented": "Kontring fra lav blokk og etter innlegg, samt motstanderens selektive gjennombrudd eller kontroll, er avgrensede motorfaser.",
+      "nextCheck": "Kontroller et generelt eget valg etter ballvinning, faktisk ballvinningssone og tids-/breddeobservasjon. 15 sekunder og to tredeler av bredden er manusets treningsmål, ikke automatisk bonus."
+    },
+    {
+      "id": "counter_3v3",
+      "chapterId": "transition_attack",
+      "title": "Kontringsmønster 1 – tre mot tre",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "De kontrollerte overgangsrutene bruker rollegrupper og lagscore; den konkrete tre-mot-tre-situasjonen med sentral ballfører og to brede utveier er ikke påvist som egen modell.",
+      "nextCheck": "Undersøk om eksisterende fasegrunnlag kan representere tre angripere mot tre forsvarere og forsvarerens reaksjon på ballfører. Ikke anta lokal numerisk balanse fra formasjonen alene."
+    },
+    {
+      "id": "counter_4v2",
+      "chapterId": "transition_attack",
+      "title": "Kontringsmønster 2 – fire mot to",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Høy gjenvinning og fremoverstøtte finnes, men fire mot to som konkret lokalt overtall er ikke dokumentert i de undersøkte overgangsrutene.",
+      "nextCheck": "Undersøk om lokal numerisk balanse er tilgjengelig ved høy ballvinning. Skill bredde/dybdevalg og binding av forsvarer fra et automatisk overtallsbonus."
+    },
+    {
+      "id": "counter_width_clearance",
+      "chapterId": "transition_attack",
+      "title": "Kontringsmønster 3 – bredde og klareringsmønster",
+      "status": "partial",
+      "evidence": [
+        "B",
+        "Q",
+        "T",
+        "H"
+      ],
+      "implemented": "Gjenvunnet andreball kan frigjøres sentralt eller bredt; avverget innlegg kan utløse kontring via midtbanestøtte og bakromsspiss; langt oppspill og andreball finnes.",
+      "nextCheck": "Kontroller den konkrete koordineringen med motsatt back, bred ballnær ving, motsatt ving inn, spissens vending/avlegg og kryssløp eller tilbakespill. Ikke lås mønsteret mot venstre."
+    },
+    {
+      "id": "first_after_win",
+      "chapterId": "transition_attack",
+      "title": "Første handling etter ballvinning",
+      "status": "partial",
+      "evidence": [
+        "V",
+        "B",
+        "Y",
+        "Q"
+      ],
+      "implemented": "Motstanderen kan velge kontroll eller gjennombrudd; eget lag kan frigjøre gjenvunnet ball gjennom dokumentert støtte, bredt svar eller tidlig pasning, og miste ballen på nytt under motpress.",
+      "nextCheck": "Undersøk om eget lag kan velge støttepasning, føring eller direkte gjennombrudd fra samme ballvinning ut fra kjent rom, press og mottaker. Ikke gi automatisk xG for ballvinning."
+    },
+    {
+      "id": "portrait_drillo",
+      "chapterId": "transition_attack",
+      "title": "Egil Olsen – direkte overgangsspill som analysemodell",
+      "status": "explanatory",
+      "evidence": [
+        "T",
+        "Q"
+      ],
+      "implemented": "Historisk og pedagogisk analyseeksempel for generiske overgangsprinsipper.",
+      "nextCheck": "Ingen trenernavnbonus eller antatt historisk pasningsfordeling. Koble til generisk gjennombrudd/kontroll."
+    },
+    {
+      "id": "portrait_ranieri",
+      "chapterId": "transition_attack",
+      "title": "Claudio Ranieri – kompakt 4-4-2 og kontringsorganisering",
+      "status": "explanatory",
+      "evidence": [
+        "T",
+        "V"
+      ],
+      "implemented": "Pedagogisk eksempel på sammenheng mellom kompakt forsvar og overgang. Generiske avgrensede kontroll- og kontringsruter finnes.",
+      "nextCheck": "Ingen bonus for trenernavn eller 4-4-2 alene. Undersøk forhold mellom ballvinningssted og faktisk overgangsmulighet."
+    },
+    {
+      "id": "recalibrate",
+      "chapterId": "transition_defend",
+      "title": "Omstilling – rekalibrering, gjenvinning eller fall i ramme",
+      "status": "partial",
+      "evidence": [
+        "U",
+        "P",
+        "Y"
+      ],
+      "implemented": "Eget balltap i høyt press følges av gjenvinningsforsøk, deretter sikring eller åpent kontringsrom. Motpress kan også bryte egen nylig gjenvunnet ball.",
+      "nextCheck": "Kontroller situasjonsavhengig valg mellom press, forsinkelse og fall i ramme ved ulike balltap. Tidsregelen på 5–7 sekunder er trenerens eksempel; dynamisk reaktivering av press er ikke bekreftet."
+    },
+    {
+      "id": "corner_low_delivery",
+      "chapterId": "attacking_corners",
+      "title": "Offensiv corner – lav bue og målrettet levering",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Bokas leveringspreferanse og korte cornere er forklaringsstoff; undersøkt taktikkdata har ikke egne cornervarianter. Motstanderens generelle dødballfase skiller ikke lav bue, inn-/utskru eller nær/bakre stolpe.",
+      "nextCheck": "Kontroller egne dødballutløsere, leverings- og mottakerdata før eventuell mekanikk. Lav bue skal ikke gi automatisk bonus."
+    },
+    {
+      "id": "corner_disguise",
+      "chapterId": "attacking_corners",
+      "title": "Corner – oppstilling, bevegelse og kamuflering",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Ingen dokumentert separat corneroppstilling eller kamuflert løpsvariant i de undersøkte motorene.",
+      "nextCheck": "Kartlegg spilleroppgaver og motstanders dekning før variantvalg. Lovlig bevegelse og separasjon; ikke ulovlig sperring som taktisk fordel."
+    },
+    {
+      "id": "free_kick_targets",
+      "chapterId": "free_kicks",
+      "title": "Offensivt frispark – tre leveringsmål og skjulte varianter",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Motstanderens generelle dødballfase omfatter bokslevering, men ikke dokumenterte valg mellom direkte skudd, kort pasning og tre leveringsmål ved egne frispark.",
+      "nextCheck": "Undersøk om en egen frisparkhendelse kan knyttes til eksisterende sjanseflyt med avstand/vinkel og direkte/indirekte status. Ikke anta mål fra indirekte frispark uten ny berøring."
+    },
+    {
+      "id": "penalty_kicker",
+      "chapterId": "free_kicks",
+      "title": "Straffespark – avslutningsvalg og ro",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Sjansegeneratoren bruker xG og trekning; det er ikke påvist en separat straffesparkrute med skyttervalg og dokumentert keeperdata i de undersøkte filene.",
+      "nextCheck": "Kontroller egne og motstanders straffehendelser samt valg av skytter, avslutning og keeper. Ingen fast fordel for høy/lav plassering uten underlag."
+    },
+    {
+      "id": "penalty_keeper",
+      "chapterId": "free_kicks",
+      "title": "Straffespark – keeperens observasjon og timing",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Keeperfit påvirker generell dødballkontakt, men straffesparkets særskilte reaksjon/timing er ikke påvist.",
+      "nextCheck": "Kontroller eksisterende keeper-/straffesparkdata. Ikke prediker hjørne fra fot eller bruk udokumenterte redningsprosentverdier."
+    },
+    {
+      "id": "portrait_juninho_beckham_pirlo",
+      "chapterId": "free_kicks",
+      "title": "Juninho, Beckham og Pirlo – frispark som teknisk spesialisering",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Pedagogisk spillergruppe for å studere leveringsbane og spesialisering. Ingen egen historisk bonus er nødvendig.",
+      "nextCheck": "Koble til generiske frisparkvalg dersom de implementeres; ikke bruk spillerens navn som ferdighetsbevis."
+    },
+    {
+      "id": "portrait_rivelino",
+      "chapterId": "free_kicks",
+      "title": "Rivelino – frisparkets leveringsbane",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk/pedagogisk eksempel på frisparkets leveringsbane.",
+      "nextCheck": "Ingen rekonstruksjon av fysisk treff eller automatisk bonus. Generiske situasjonsvalg undersøkes i free_kick_targets."
+    },
+    {
+      "id": "restart_lock",
+      "chapterId": "throw_ins",
+      "title": "Lås av ved motstanderens igangsetting",
+      "status": "partial",
+      "evidence": [
+        "P",
+        "G"
+      ],
+      "implemented": "Frontpress, kollektiv sikring og midtbanefelle er simulert for avgrensede kampplaner. Ikke påvist som egen målspark-/innkast-/frisparkutløser.",
+      "nextCheck": "Undersøk igangsettingstyper, mottakeralternativer og press ved sidelinje; skille generell presskjede fra konkret innkastregel."
+    },
+    {
+      "id": "corner_defence_posts",
+      "chapterId": "marking_blocks",
+      "title": "Defensiv corner – mann-mot-mann og stolpeansvar",
+      "status": "partial",
+      "evidence": [
+        "K"
+      ],
+      "implemented": "Keeper og to stoppere påvirker første kontakt; midtbane påvirker andreball. Manager kan velge tett markering i generell dødballhendelse.",
+      "nextCheck": "Kontroller egne valg mellom sone, mann og blanding, stolpeansvar og faktisk løpsdekning. Ingen slik eksplisitt organisering påvist i dødballfasen."
+    },
+    {
+      "id": "restart_organize",
+      "chapterId": "marking_blocks",
+      "title": "Defensive dødballer – keeperens organisering og konkrete beskjeder",
+      "status": "partial",
+      "evidence": [
+        "K",
+        "A"
+      ],
+      "implemented": "Keeperfit har effekt i dødballkontakt og relevante dokumenterte reaksjonsegenskaper påvirker avgrensede forsvarsoppgaver andre steder.",
+      "nextCheck": "Undersøk keeperens konkrete valg om å gå ut/holde linje, mur og kommunikasjon. Ikke likestill keeperfit med organisering."
+    },
+    {
+      "id": "portrait_ramos",
+      "chapterId": "marking_blocks",
+      "title": "Sergio Ramos – stopperens offensive dødballoppgave",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Pedagogisk spillerportrett om stopperens offensive løp og heading.",
+      "nextCheck": "Koble til generisk dødballrolle og restforsvar, ikke personnavnbonus eller vinnermentalitet."
+    },
+    {
+      "id": "offensive_marking_restart",
+      "chapterId": "second_ball_security",
+      "title": "Offensiv markering – sikring mens eget lag har ballen",
+      "status": "partial",
+      "evidence": [
+        "K",
+        "U",
+        "M"
+      ],
+      "implemented": "Restforsvar og sentral nedfallsdekning påvirker avgrensede motorutfall; dedikert skjerm kan holde rom i andre faser.",
+      "nextCheck": "Undersøk hvem som markerer motstanderens fremre utløp under egen dødball og keeperigangsetting; ikke bruk rollefit som bevis for konkret posisjon."
+    },
+    {
+      "id": "clearance_counter_restart",
+      "chapterId": "second_ball_security",
+      "title": "Klarering etter dødball – fra forsvar til angrep",
+      "status": "partial",
+      "evidence": [
+        "K",
+        "B",
+        "Q",
+        "T"
+      ],
+      "implemented": "Dødballforsvaret skiller første kontakt fra nedfall. Generisk managerhendelse kan velge rask kontring; kontring etter avverget innlegg og vunnet andreball finnes separat.",
+      "nextCheck": "Koble en bekreftet dødballklarering til kontrollert frigjøring med eksisterende overgangslogikk. K gir ikke egen xG-for-kontring; B/Q er ikke bevis for dødballspesifikk kontring. Kontroller manusets konkrete spiss/back/vingmønster."
+    },
+    {
+      "id": "analysis_before_after",
+      "chapterId": "training_problem",
+      "title": "Før og etter kamp – avtal arbeidsoppgaver og evaluer",
+      "status": "partial",
+      "evidence": [
+        "OA",
+        "MA",
+        "TF",
+        "TR"
+      ],
+      "implemented": "Motstanderanalyse, kampforklaring, lagets svakheter og relevant ukefokus finnes.",
+      "nextCheck": "Koble avtalte spilleroppgaver og bokas ni observasjonspunkter til faktisk simulert kampbevis, ikke bare resultat."
+    },
+    {
+      "id": "analysis_01_possession",
+      "chapterId": "training_problem",
+      "title": "1. Possession – ballbesittelse og risiko",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "U",
+        "MA"
+      ],
+      "implemented": "Oppspillsutfall, balltap og risiko har konkrete kjeder.",
+      "nextCheck": "Kontroller om unødvendig risiko og tap per situasjon registreres separat; ikke utled possession-statistikk fra xG."
+    },
+    {
+      "id": "analysis_02_support",
+      "chapterId": "training_problem",
+      "title": "2. Støtte – spillbarhet rundt og bak ballfører",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "R",
+        "TF"
+      ],
+      "implemented": "Støtterelasjoner og pasningsutveier inngår i kjeder og rapporter.",
+      "nextCheck": "Observer om støtte er tilgjengelig ved faktisk mottak, ikke bare rollepar."
+    },
+    {
+      "id": "analysis_03_communication",
+      "chapterId": "training_problem",
+      "title": "3. Kommunikasjon – felles beskjeder",
+      "status": "unverified",
+      "evidence": [
+        "OP"
+      ],
+      "implemented": "Kampbeskjeder og lagets taktiske klarhet finnes som pedagogiske eller aggregerte elementer; felles ordliste er ikke dokumentert som individuell signalflyt.",
+      "nextCheck": "Kontroller informasjon fra medspiller til neste handling, med timing og riktig mottaker."
+    },
+    {
+      "id": "analysis_04_delay",
+      "chapterId": "training_problem",
+      "title": "4. Forsinkelse i forsvar – ikke selg deg",
+      "status": "partial",
+      "evidence": [
+        "P",
+        "U",
+        "MA"
+      ],
+      "implemented": "Restforsvar kan stanse en overgang etter brutt press.",
+      "nextCheck": "Knytt analyse til eksplisitt opphold/forsinkelse kontra støt der dette blir simulert."
+    },
+    {
+      "id": "analysis_05_penetration",
+      "chapterId": "training_problem",
+      "title": "5. Gjennombrudd – gjennombruddshissighet og taktisk justering",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "D",
+        "OA"
+      ],
+      "implemented": "Gjennombrudd og motgrep har egne kjeder og kampplananalyse.",
+      "nextCheck": "Kontroller registrerte fremovervalg og om gjentatt mislykket dribling kan begrunne en annen utvei."
+    },
+    {
+      "id": "analysis_06_concentration",
+      "chapterId": "training_problem",
+      "title": "6. Konsentrering i forsvar",
+      "status": "partial",
+      "evidence": [
+        "L",
+        "Z",
+        "M"
+      ],
+      "implemented": "Dekning og kompakt struktur har effekt i avgrensede motstanderfaser.",
+      "nextCheck": "Kontroller eget lags samtidige forskyvning og dekning etter pressutløser."
+    },
+    {
+      "id": "analysis_07_width",
+      "chapterId": "training_problem",
+      "title": "7. Bredde i angrep",
+      "status": "partial",
+      "evidence": [
+        "E",
+        "C",
+        "H",
+        "TF"
+      ],
+      "implemented": "Breddeprofil, spillvending og bredt overtall kan påvirke kamp og treningsfokus.",
+      "nextCheck": "Skill estimert bredde fra observerte brede posisjoner og gjenskaping av bredde."
+    },
+    {
+      "id": "analysis_08_movement",
+      "chapterId": "training_problem",
+      "title": "8. Bevegelse i angrep",
+      "status": "partial",
+      "evidence": [
+        "R",
+        "C",
+        "L",
+        "M"
+      ],
+      "implemented": "Dybdeløp, overlapp og boksfylling inngår i avgrensede kjeder.",
+      "nextCheck": "Kontroller konkret timing og samordnet bevegelse før pasning."
+    },
+    {
+      "id": "analysis_09_balance",
+      "chapterId": "training_problem",
+      "title": "9. Balanse i forsvar",
+      "status": "partial",
+      "evidence": [
+        "U",
+        "E",
+        "M",
+        "TF"
+      ],
+      "implemented": "Restforsvar, skjerm og lagbalanse påvirker overgangsutfall og treningsfokus.",
+      "nextCheck": "Skill numerisk og posisjonell balanse fra aggregert score."
+    },
+    {
+      "id": "opponent_attack",
+      "chapterId": "training_problem",
+      "title": "Motstanderanalyse – angrepsrisiko, oppbygging og gjennombruddsvalg",
+      "status": "partial",
+      "evidence": [
+        "OA",
+        "V",
+        "P",
+        "H"
+      ],
+      "implemented": "Motstanders kjente oppbygging, overgangsvalg og utveier kan påvirke analysen og kampfasen.",
+      "nextCheck": "Kontroller faktiske registreringer for backenes høyde, antall spillere foran ballen og lokale overtall."
+    },
+    {
+      "id": "opponent_defence",
+      "chapterId": "training_problem",
+      "title": "Motstanderanalyse – press, markering og formasjonsendringer",
+      "status": "partial",
+      "evidence": [
+        "OA",
+        "Z",
+        "C",
+        "P"
+      ],
+      "implemented": "Kjent kompakt blokk, soneforskyvning, press og pasningsdekning kan påvirke kamp.",
+      "nextCheck": "Kontroller valgbare markeringssystemer og dynamiske formasjons-/pressendringer."
+    },
+    {
+      "id": "onenote_data_analysis",
+      "chapterId": "training_problem",
+      "title": "Dataanalyse – romkontroll, pasningsnettverk og expected threat",
+      "status": "unverified",
+      "evidence": [
+        "MA"
+      ],
+      "implemented": "Spillet har xG og fasebevis, men GPS, romkontroll, pasningsnettverk og xT er ikke påvist som selvstendige datamodeller i de undersøkte filene.",
+      "nextCheck": "Undersøk dataoppløsningen før eventuelle xT-/rommodeller; ikke konstruer tracking."
+    },
+    {
+      "id": "constraints_led",
+      "chapterId": "exercise_constraints",
+      "title": "Constraints-Led Approach – utform problemet",
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "HY",
+        "TR"
+      ],
+      "implemented": "Manager kan endre øvelsens flate, antall, retning og touch. Oppsettet er uttrykkelig læringshypotese uten motorvirkning.",
+      "nextCheck": "Koble valgt betingelse til dokumentert oppgavesuksess og relevant, begrenset læring; ikke automatisk kampbonus."
+    },
+    {
+      "id": "rondo_practice",
+      "chapterId": "exercise_constraints",
+      "title": "Firkantspill – presisjon, orientering og veggspill",
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "TR"
+      ],
+      "implemented": "Øvelsesdesign kan velge antall, rom og touch, og oppbyggingsfokus påvirker relevante managerbeslutninger.",
+      "nextCheck": "Kontroller spesifikk rondo, mottak/orientering og målt overføring; ikke tolke valg av to touch som ferdighetsøkning."
+    },
+    {
+      "id": "duel_practice",
+      "chapterId": "exercise_constraints",
+      "title": "Én mot én – velg finte etter forsvarerens kroppsstilling",
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "D",
+        "WK"
+      ],
+      "implemented": "Øvelsesdesign og svakhetsarbeid finnes, kreativt gjennombrudd har avgrenset kampmekanikk.",
+      "nextCheck": "Kontroller konkret 1v1-øvelse mot aktiv motstand og om treningen forbedrer situasjonsvalg."
+    },
+    {
+      "id": "scanning_practice",
+      "chapterId": "exercise_constraints",
+      "title": "Orienteringsøvelse – registrer før mottak",
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "HY"
+      ],
+      "implemented": "Øvelsesdesigner beskriver scanning og touchbegrensning som læringsvalg.",
+      "nextCheck": "Kontroller konkret orienteringsoppgave med observasjon før mottak og begrenset overføring; ingen målt scanningrate."
+    },
+    {
+      "id": "restriction_practice",
+      "chapterId": "exercise_constraints",
+      "title": "Småspill med restriksjoner – teknisk fleksibilitet",
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "HY"
+      ],
+      "implemented": "Touchrestriksjoner kan velges og gir pedagogisk forklaring.",
+      "nextCheck": "Undersøk om de ulike restriksjonene endrer oppgaven og relevant treningsutfall; ingen automatisk verdiøkning."
+    },
+    {
+      "id": "phys_play_snipp",
+      "chapterId": "exercise_constraints",
+      "title": "Hurtighetslek – snipp og snapp",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Navngitt lek/øvelseseksempel i bokas fysiske treningsstoff, ikke en selvstendig kampmekanikk.",
+      "nextCheck": "Kan inngå i øvelsesbibliotek med mål, sikker organisering og passende belastning. Ikke gi egen sprintbonus fra øvelsesnavnet."
+    },
+    {
+      "id": "phys_play_soldat",
+      "chapterId": "exercise_constraints",
+      "title": "Hurtighetslek – soldat og røver (ny variant)",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Navngitt lek/øvelseseksempel i bokas fysiske treningsstoff, ikke en selvstendig kampmekanikk.",
+      "nextCheck": "Kan inngå i øvelsesbibliotek med mål, sikker organisering og passende belastning. Ikke gi egen sprintbonus fra øvelsesnavnet."
+    },
+    {
+      "id": "phys_play_number",
+      "chapterId": "exercise_constraints",
+      "title": "Hurtighetslek – nummerkappløp (ny variant)",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Navngitt lek/øvelseseksempel i bokas fysiske treningsstoff, ikke en selvstendig kampmekanikk.",
+      "nextCheck": "Kan inngå i øvelsesbibliotek med mål, sikker organisering og passende belastning. Ikke gi egen sprintbonus fra øvelsesnavnet."
+    },
+    {
+      "id": "phys_play_pair",
+      "chapterId": "exercise_constraints",
+      "title": "Hurtighetslek – hest og kjerre (ny kontaktfri variant)",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Navngitt lek/øvelseseksempel i bokas fysiske treningsstoff, ikke en selvstendig kampmekanikk.",
+      "nextCheck": "Kan inngå i øvelsesbibliotek med mål, sikker organisering og passende belastning. Ikke gi egen sprintbonus fra øvelsesnavnet."
+    },
+    {
+      "id": "mental_pressure_practice",
+      "chapterId": "exercise_constraints",
+      "title": "Øvelse – beslutning under gradvis økende press",
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "HY",
+        "TR"
+      ],
+      "implemented": "Øvelsesdesign kan endre rom/tid/antall, relevant fokus støtter managerbeslutning.",
+      "nextCheck": "Kontroller gradert beslutningspress og observerbar handlingskvalitet; ikke opprett mental diagnose."
+    },
+    {
+      "id": "mental_reset_practice",
+      "chapterId": "exercise_constraints",
+      "title": "Øvelse – neste handling etter feil",
+      "status": "partial",
+      "evidence": [
+        "U",
+        "P",
+        "EX"
+      ],
+      "implemented": "Gjenvinning kontra sikring er representert i overgangsfase; øvelsen er pedagogisk.",
+      "nextCheck": "Kontroller øvelse på neste handling etter feil og overføring til samme balltapsbeslutning."
+    },
+    {
+      "id": "culture_material_conditions",
+      "chapterId": "exercise_constraints",
+      "title": "Materielle forhold – bane, ball og treningsmetoder",
+      "status": "explanatory",
+      "evidence": [
+        "EX"
+      ],
+      "implemented": "Sosiologisk forklaring av bane, ball og organisering; ikke egen egenskap per spiller.",
+      "nextCheck": "Bruk som ramme for treningsdesign; ingen bonus fra kulturell bakgrunn."
+    },
+    {
+      "id": "onenote_cone_gate",
+      "chapterId": "exercise_constraints",
+      "title": "Pasningsøvelse – kjegleport og returbevegelse",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Uferdig øvelsesidé med kjegleport og returbevegelse.",
+      "nextCheck": "Behold som øvelsesidé; avstander, scoring og effekt må defineres før implementering."
+    },
+    {
+      "id": "onenote_waiting_groups",
+      "chapterId": "exercise_constraints",
+      "title": "Organisering av økten – aktiv ventetid",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Praktisk trenernotat om aktivitet i ventetid og organisering.",
+      "nextCheck": "Behold som pedagogikk; ikke anta at aktiv ventetid automatisk gir ekstra belastning/ferdighet."
+    },
+    {
+      "id": "method_seirullo",
+      "chapterId": "exercise_constraints",
+      "title": "Paco Seirul·lo – strukturert trening og preferensielle simuleringssituasjoner",
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "HY",
+        "TR"
+      ],
+      "implemented": "Spillnært øvelsesdesign og relevant treningsfokus finnes.",
+      "nextCheck": "Kontroller preferensiell simuleringssituasjon og overføring til konkret kampoppgave; ikke hevde komplett metodikk."
+    },
+    {
+      "id": "communication_purpose",
+      "chapterId": "coaching_transfer",
+      "title": "Kommunikasjon – informasjon før oppmuntring og korrigering",
+      "status": "unverified",
+      "evidence": [
+        "OP"
+      ],
+      "implemented": "Lagets signaler og taktiske klarhet er aggregert, ikke påvist som beskjeder fra spiller til spiller.",
+      "nextCheck": "Kontroller nyttig informasjon før neste handling, adskilt fra ros og korrigering."
+    },
+    {
+      "id": "communication_timing",
+      "chapterId": "coaching_transfer",
+      "title": "Kommunikativ timing og kampklima",
+      "status": "unverified",
+      "evidence": [
+        "OP"
+      ],
+      "implemented": "Relasjoner og timing finnes i avgrensede motorfaser, men selve signalet er ikke dokumentert som variabel.",
+      "nextCheck": "Kontroller om beskjed kan gis før mottak/løp og påvirke riktig utvei."
+    },
+    {
+      "id": "feedback_culture",
+      "chapterId": "coaching_transfer",
+      "title": "Tilbakemeldingskultur – kompis, ikke kjeft",
+      "status": "unverified",
+      "evidence": [
+        "OP"
+      ],
+      "implemented": "Lagets trivsel, selvtillit og form er modellerte abstraksjoner; vennlig individuell feedback er ikke dokumentert som eget valg.",
+      "nextCheck": "Undersøk trenerdialog med konkret observasjon uten skjult psykologisk personvurdering."
+    },
+    {
+      "id": "match_periodization",
+      "chapterId": "coaching_transfer",
+      "title": "Kampstrategi – styring av kampdynamikken",
+      "status": "partial",
+      "evidence": [
+        "P",
+        "T",
+        "WL",
+        "PC"
+      ],
+      "implemented": "Kampplaner har intensitet, og belastning/restitusjon finnes.",
+      "nextCheck": "Kontroller managerstyrt veksling mellom hardt press, kontroll og hvile uten faste manusintervaller."
+    },
+    {
+      "id": "match_balance_choices",
+      "chapterId": "coaching_transfer",
+      "title": "Kampstrategi – avtal risiko og rollefordeling",
+      "status": "partial",
+      "evidence": [
+        "E",
+        "R",
+        "U",
+        "OA"
+      ],
+      "implemented": "Lagbalanse, rolleforbindelser og motspillsanalyse er tilgjengelig.",
+      "nextCheck": "Kontroller konkrete antall bak ballen og risiko per sone; ikke påtving manusets alternative tall."
+    },
+    {
+      "id": "match_adjustments",
+      "chapterId": "coaching_transfer",
+      "title": "Taktiske justeringer – les og påvirk motstanderens struktur",
+      "status": "partial",
+      "evidence": [
+        "OA",
+        "S",
+        "C",
+        "MA"
+      ],
+      "implemented": "Planrespons, kjeder og kampforklaring finnes.",
+      "nextCheck": "Kontroller om justeringen svarer på registrert motstanderhandling fremfor en generell bonus."
+    },
+    {
+      "id": "play_practice",
+      "chapterId": "coaching_transfer",
+      "title": "Deliberate play og deliberate practice",
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "TR",
+        "IT"
+      ],
+      "implemented": "Treningsdesign og målrettet individuelt arbeid finnes.",
+      "nextCheck": "Kontroller forskjell mellom fri lek og strukturert repetisjon på observerbar oppgavekvalitet."
+    },
+    {
+      "id": "guided_discovery",
+      "chapterId": "coaching_transfer",
+      "title": "Guided discovery – spilleren finner løsningen",
+      "status": "partial",
+      "evidence": [
+        "HY",
+        "EX",
+        "MA"
+      ],
+      "implemented": "Hypotese, trenerpunkter og observasjonsspørsmål finnes som læringslag.",
+      "nextCheck": "Kontroller spillerens eget valg og refleksjon uten at riktig svar automatisk gir attributt."
+    },
+    {
+      "id": "contextual_technique",
+      "chapterId": "coaching_transfer",
+      "title": "Kontekstualisert teknikk – fra showtriks til kampferdighet",
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "D",
+        "A",
+        "WK"
+      ],
+      "implemented": "Spillnære designvalg, dokumenterte handlingsstyrker og svakhetstrening finnes.",
+      "nextCheck": "Kontroller samme ferdighet under ulike press/romforhold og faktisk relevant overføring."
+    },
+    {
+      "id": "mental_reset",
+      "chapterId": "coaching_transfer",
+      "title": "Mental omstilling – ikke dvele ved feil",
+      "status": "partial",
+      "evidence": [
+        "U",
+        "P",
+        "FM"
+      ],
+      "implemented": "Neste defensive handlingskjede og midlertidig form finnes.",
+      "nextCheck": "Kontroller om spillerens konkrete respons etter feil kan velges/observeres uten å utlede mentalitet fra kampresultat."
+    },
+    {
+      "id": "mental_match_climate",
+      "chapterId": "coaching_transfer",
+      "title": "Stress, ro og kampklima",
+      "status": "partial",
+      "evidence": [
+        "OP",
+        "FM",
+        "EX"
+      ],
+      "implemented": "Aggregerte signaler og form endres ved trening/kamp; øvelsesdesign er læringslag.",
+      "nextCheck": "Kontroller konkrete ro-/kommunikasjonsoppgaver etter scoring, ikke automatisk mental bonus ved 2–0."
+    },
+    {
+      "id": "style_psychology",
+      "chapterId": "coaching_transfer",
+      "title": "Spillets estetikk og psykologiske dimensjon",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Filosofisk drøfting av estetikk, kreativitet og risikovalg.",
+      "nextCheck": "Behold som analyseperspektiv; ikke automatisk selvtillit fra vakker spillestil."
+    },
+    {
+      "id": "mental_arousal",
+      "chapterId": "coaching_transfer",
+      "title": "Nerver, stress og spenningsregulering",
+      "status": "unverified",
+      "evidence": [
+        "OP",
+        "HY"
+      ],
+      "implemented": "Skjult stress/mental belastning er aggregerte spillsignaler, ikke individuelt målt aktivering.",
+      "nextCheck": "Undersøk avgrenset kampforberedelse og oppgavevalg, ikke optimal spenningsprosent."
+    },
+    {
+      "id": "mental_preparation",
+      "chapterId": "coaching_transfer",
+      "title": "Kampforberedelse – rutine før første aksjon",
+      "status": "unverified",
+      "evidence": [
+        "OP",
+        "HY"
+      ],
+      "implemented": "Forberedelse og ukefokus finnes, men individuell førprestasjonsrutine er ikke påvist som egen mekanikk.",
+      "nextCheck": "Undersøk om konkrete første arbeidsoppgaver kan registreres uten psykologisk bonus."
+    },
+    {
+      "id": "mental_effort",
+      "chapterId": "coaching_transfer",
+      "title": "Å prøve hardt og å prøve maksimalt – hensiktsmessig innsats",
+      "status": "unverified",
+      "evidence": [
+        "OP",
+        "HY"
+      ],
+      "implemented": "Intensitet og belastning finnes, men hensiktsmessig innsats kontra maksimal innsats er ikke en påvist individuell beslutning.",
+      "nextCheck": "Koble til faktisk press/forsinkelsesvalg, ikke belønn maksimal løping i alle situasjoner."
+    },
+    {
+      "id": "mental_reflection",
+      "chapterId": "coaching_transfer",
+      "title": "Mentalt treningsarbeid – plan, gjennomføring og refleksjon",
+      "status": "unverified",
+      "evidence": [
+        "OP",
+        "HY"
+      ],
+      "implemented": "Treningshypotese og kampobservasjon finnes, ikke en bekreftet individuell refleksjonsprogresjon.",
+      "nextCheck": "Undersøk samtale før/etter øvelse knyttet til registrert handling."
+    },
+    {
+      "id": "onenote_ball_path",
+      "chapterId": "coaching_transfer",
+      "title": "Ballens bane og oppmerksomhet på treffpunkt",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Konkret treneroppmerksomhet ved ballbane og treffpunkt.",
+      "nextCheck": "Behold øvelsesnotat; kontroller mottak/pasning før selvstendig motorregel."
+    },
+    {
+      "id": "onenote_free_play",
+      "chapterId": "coaching_transfer",
+      "title": "Fritt spill, arbeidsoppgaver og kreativ utfoldelse",
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "HY",
+        "TR"
+      ],
+      "implemented": "Øvelsesvalg og treningsfokus finnes.",
+      "nextCheck": "Undersøk avgrensning av fri utfoldelse etter observert mestring, ikke automatisk restriksjonsbonus."
+    },
+    {
+      "id": "method_dreier",
+      "chapterId": "coaching_transfer",
+      "title": "Sverre Dreier – individuell og relasjonell fotballferdighet",
+      "status": "partial",
+      "evidence": [
+        "R",
+        "F",
+        "EX",
+        "H"
+      ],
+      "implemented": "Individuell rollefit, relasjonell støtte og avleggskjede finnes.",
+      "nextCheck": "Knytt konkret individuell/relasjonell treningsoppgave til utveivalg i eksisterende kjede. Ekstern metodikk ikke verifisert."
+    },
+    {
+      "id": "method_comparison",
+      "chapterId": "coaching_transfer",
+      "title": "Fem metodiske perspektiver – fra spillidé til samhandling",
+      "status": "explanatory",
+      "evidence": [
+        "EX",
+        "WL"
+      ],
+      "implemented": "Pedagogisk sammenstilling av fem metodiske perspektiver.",
+      "nextCheck": "Bruk som treningsrefleksjon, ikke fem separate trenerbonuser."
+    },
+    {
+      "id": "early_specialization",
+      "chapterId": "individual_development",
+      "title": "Tidlig spesialisering og press på unge spillere",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Manusets faglige bekymring for barns ensidige spesialisering og press.",
+      "nextCheck": "Behold som pedagogisk ramme; ikke modellér barns skade- eller utbrenthetsrisiko fra denne teksten."
+    },
+    {
+      "id": "learning_environment",
+      "chapterId": "individual_development",
+      "title": "Habitus og læringsmiljø – teknikkens sosiale rammer",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Sosiologisk perspektiv på læringsmiljø, lek og tilgang.",
+      "nextCheck": "Ingen spillerverdi basert på bakgrunn eller nasjonalitet."
+    },
+    {
+      "id": "physical_resources",
+      "chapterId": "individual_development",
+      "title": "Fire fysiske ressurser – manusets inndeling",
+      "status": "partial",
+      "evidence": [
+        "PC",
+        "F",
+        "E"
+      ],
+      "implemented": "Spillet har fysisk rollekrav, dokumenterte styrker og aggregert friskhet/belastning.",
+      "nextCheck": "Skill utholdenhet, spenst/hurtighet, styrke og bevegelighet; ikke anta komplette fysiologidata."
+    },
+    {
+      "id": "motor_learning",
+      "chapterId": "individual_development",
+      "title": "Motorisk læring – variasjon og overføring",
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "HY",
+        "IT",
+        "WK"
+      ],
+      "implemented": "Variert øvelsesdesign og avgrenset individuell progresjon finnes separat.",
+      "nextCheck": "Kontroller overføring fra endret øvelsesbetingelse til situasjonsspesifikk ferdighet."
+    },
+    {
+      "id": "neuromuscular_control",
+      "chapterId": "individual_development",
+      "title": "Nevromuskulær kontroll – muskler, sanser og kognisjon",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Bokas nevromuskulære forklaring har ikke påvist individuell sanse-/bevegelsesmodell.",
+      "nextCheck": "Undersøk relevant førsteberøring og motorisk valg på spillets abstraksjonsnivå; ikke modellér uobserverte biologiske målinger."
+    },
+    {
+      "id": "balance_proprioception",
+      "chapterId": "individual_development",
+      "title": "Balanse, holdning og propriosepsjon",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Lagbalanse er strukturell, ikke spillerens kroppslige balanse eller propriosepsjon.",
+      "nextCheck": "Kontroller fysisk balanse i vending/duell der dokumentert spillerdata finnes."
+    },
+    {
+      "id": "mental_development_outline",
+      "chapterId": "individual_development",
+      "title": "Det mentale aspektet – utvikle menneske og spiller",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Originaldisposisjon over menneskelig/spillerutvikling med ufullstendige temaer.",
+      "nextCheck": "Behold temastruktur, ikke innfør individuell psykologisk rating fra disposisjon."
+    },
+    {
+      "id": "confidence_finishing",
+      "chapterId": "individual_development",
+      "title": "Selvtillit og besluttsomhet ved avslutning",
+      "status": "partial",
+      "evidence": [
+        "FM",
+        "OP",
+        "J"
+      ],
+      "implemented": "Midlertidig form, kollektiv selvtillit og rollebasert målattribusjon finnes.",
+      "nextCheck": "Kontroller konkret avslutningsbeslutning etter bom; form eller mål er ikke direkte måling av mestringstro."
+    },
+    {
+      "id": "mental_images",
+      "chapterId": "individual_development",
+      "title": "Mentale bilder, fokus og spilleforståelse",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Boka beskriver mentalt bilde før mottak; selvstendig persepsjonsvariabel er ikke påvist.",
+      "nextCheck": "Undersøk registrering av rom og neste handling før mottak."
+    },
+    {
+      "id": "goals_effort_outline",
+      "chapterId": "individual_development",
+      "title": "Målsetting, relativ suksess og innsats – bevarte temaer",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Ufullstendig originaldisposisjon om mål, relativ suksess, innsats og tilstedeværelse.",
+      "nextCheck": "Behold som refleksjon; utdypede prosessmål vurderes separat."
+    },
+    {
+      "id": "phys_energy",
+      "chapterId": "individual_development",
+      "title": "Fysiologi – energi og fotballens arbeidskrav",
+      "status": "partial",
+      "evidence": [
+        "PC",
+        "WL",
+        "RC"
+      ],
+      "implemented": "Abstrakt kampbelastning, treningsintensitet og restitusjon finnes.",
+      "nextCheck": "Ikke likestill belastningsscore med aerob/anaerob energiomsetning; vurder fysisk handlingskapasitet ved gjentatte aksjoner."
+    },
+    {
+      "id": "phys_endurance",
+      "chapterId": "individual_development",
+      "title": "Utholdenhet – aerob kapasitet og gjentatte aksjoner",
+      "status": "partial",
+      "evidence": [
+        "PC",
+        "WL",
+        "E"
+      ],
+      "implemented": "Belastning og lagprofil kan påvirke kamp; treningsintensitet styrer ukebelastning.",
+      "nextCheck": "Kontroller individuell evne til gjentatte aksjoner og spesifikk utholdenhetsutvikling, ikke nye doser."
+    },
+    {
+      "id": "phys_strength",
+      "chapterId": "individual_development",
+      "title": "Styrke – kraft, bremsing og duellspill",
+      "status": "partial",
+      "evidence": [
+        "F",
+        "E",
+        "IT"
+      ],
+      "implemented": "Fysiske rollekrav og individuelle treningsspor finnes.",
+      "nextCheck": "Kontroller om spesifikk dokumentert styrke påvirker duell, bremsing og mottak, og om treningssporet gir relevant progresjon."
+    },
+    {
+      "id": "phys_power",
+      "chapterId": "individual_development",
+      "title": "Spenst og eksplosivitet – sats, landing og retningsskifte",
+      "status": "partial",
+      "evidence": [
+        "F",
+        "A",
+        "E"
+      ],
+      "implemented": "Dokumenterte fysiske styrker og reaksjonsegenskaper kan bidra i avgrensede oppgaver.",
+      "nextCheck": "Kontroller egen sats/landing og kraftutvikling i relevante dueller uten oppfunnet hopphøyde."
+    },
+    {
+      "id": "phys_mobility",
+      "chapterId": "individual_development",
+      "title": "Bevegelighet – funksjonelt bevegelsesutslag",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Treningsveiledning omtaler mobilitet og restitusjon, men aktivt bevegelsesutslag er ikke påvist i motoren.",
+      "nextCheck": "Undersøk om dette bør forbli øvelsesbibliotek eller knyttes til dokumentert funksjonell handling."
+    },
+    {
+      "id": "phys_proprio",
+      "chapterId": "individual_development",
+      "title": "Propriosepsjon og balanse – kroppens eget informasjonssystem",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Propriosepsjon som kroppslig sansesystem er ikke påvist som modellvariabel.",
+      "nextCheck": "Ikke innfør fysiologisk pseudopresisjon; vurder relevant balanse og kontroll i observerbare handlinger."
+    },
+    {
+      "id": "mental_motivation",
+      "chapterId": "individual_development",
+      "title": "Motivasjon – autonomi, kompetanse og tilhørighet",
+      "status": "unverified",
+      "evidence": [
+        "OP"
+      ],
+      "implemented": "Lagets morale/trivsel er spillabstraksjoner, ikke bekreftet individuell autonomi-, kompetanse- og tilhørighetsmodell.",
+      "nextCheck": "Undersøk valg og samtaler om arbeidsoppgaver; ikke inferer psykologi fra identitet."
+    },
+    {
+      "id": "mental_relative_success",
+      "chapterId": "individual_development",
+      "title": "Målsetting og relativ suksess – resultat, prestasjon og prosess",
+      "status": "partial",
+      "evidence": [
+        "HY",
+        "MA",
+        "TF"
+      ],
+      "implemented": "Manager kan velge hypotese, observasjon og neste treningsfokus fremfor bare resultat.",
+      "nextCheck": "Kontroller individuelle prosessmål knyttet til registrerte handlinger."
+    },
+    {
+      "id": "mental_self_efficacy",
+      "chapterId": "individual_development",
+      "title": "Selvtillit, mestringstro og formsvikt",
+      "status": "unverified",
+      "evidence": [
+        "FM",
+        "OP"
+      ],
+      "implemented": "Midlertidig form finnes, men oppgavespesifikk mestringstro er ikke bekreftet.",
+      "nextCheck": "Ikke utled mestringstro fra mål eller score alene."
+    },
+    {
+      "id": "mental_imagery_practice",
+      "chapterId": "individual_development",
+      "title": "Visualisering – øv på situasjonen, ikke bare suksessen",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Mental forestilling som øvelse er ikke dokumentert som individuell treningsmekanikk.",
+      "nextCheck": "Behold pedagogisk øvelsesforslag, kontroller oppgave før eventuell overføring."
+    },
+    {
+      "id": "mental_attention",
+      "chapterId": "individual_development",
+      "title": "Konsentrasjon og oppmerksomhet – skifte mellom oversikt og handling",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Ingen påvist separat oppmerksomhetsskifte mellom oversikt og utførelse.",
+      "nextCheck": "Knytt eventuelt til konkret orientering/mottak, ikke en skjult psykologisk rating."
+    },
+    {
+      "id": "mental_self_talk",
+      "chapterId": "individual_development",
+      "title": "Indre dialog – korte signaler som støtter neste handling",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Indre dialog er ikke påvist som egen individuell spillmekanikk.",
+      "nextCheck": "Behold korte oppgaveord som trenerverktøy; ikke beregn mentalitet fra dem."
+    },
+    {
+      "id": "culture_habitus_field",
+      "chapterId": "individual_development",
+      "title": "Bourdieu – habitus, felt og teknikk",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Sosiologisk forklaring av kroppslig erfaring og institusjonelle rammer.",
+      "nextCheck": "Behold som lærings-/refleksjonsstoff. Ingen automatiske person-, bakgrunns- eller helseverdier; eksterne kildehenvisninger ikke verifisert."
+    },
+    {
+      "id": "culture_symbolic_capital",
+      "chapterId": "individual_development",
+      "title": "Estetikk som symbolsk kapital",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Sosiologisk perspektiv på anerkjennelse og estetikk.",
+      "nextCheck": "Behold som lærings-/refleksjonsstoff. Ingen automatiske person-, bakgrunns- eller helseverdier; eksterne kildehenvisninger ikke verifisert."
+    },
+    {
+      "id": "culture_access_class",
+      "chapterId": "individual_development",
+      "title": "Klasse, profesjonalisering og tilgang til fotball",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Samfunnsperspektiv på tilgang, ressurser og profesjonalisering.",
+      "nextCheck": "Behold som lærings-/refleksjonsstoff. Ingen automatiske person-, bakgrunns- eller helseverdier; eksterne kildehenvisninger ikke verifisert."
+    },
+    {
+      "id": "portrait_zlatan_longevity",
+      "chapterId": "individual_development",
+      "title": "Zlatan Ibrahimović – levetid og individuell tilpasning",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk/pedagogisk eksempel om karrierelengde og tilpasning.",
+      "nextCheck": "Behold som lærings-/refleksjonsstoff. Ingen automatiske person-, bakgrunns- eller helseverdier; eksterne kildehenvisninger ikke verifisert."
+    },
+    {
+      "id": "portrait_physical_role_comparison",
+      "chapterId": "individual_development",
+      "title": "Fysiske spesialister – samme ressurs, forskjellige arbeidsoppgaver",
+      "status": "partial",
+      "evidence": [
+        "F",
+        "E",
+        "A",
+        "PC"
+      ],
+      "implemented": "Rollekrav, dokumenterte individuelle styrker og avgrenset belastning gir ulike arbeidsbetingelser.",
+      "nextCheck": "Kontroller faktisk handlingskrav per rolle før spesifikke fysiske effekter. Ingen navnebasert bonus."
+    },
+    {
+      "id": "onenote_motivation_conversation",
+      "chapterId": "individual_development",
+      "title": "Motivasjon – samtale om hensikt og innsats",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Trenernotat om samtale, mål og innsats.",
+      "nextCheck": "Behold som lærings-/refleksjonsstoff. Ingen automatiske person-, bakgrunns- eller helseverdier; eksterne kildehenvisninger ikke verifisert."
+    },
+    {
+      "id": "onenote_duncan_edwards",
+      "chapterId": "individual_development",
+      "title": "Duncan Edwards – en avbrutt karriere",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk minne om en avbrutt karriere.",
+      "nextCheck": "Behold som lærings-/refleksjonsstoff. Ingen automatiske person-, bakgrunns- eller helseverdier; eksterne kildehenvisninger ikke verifisert."
+    },
+    {
+      "id": "onenote_peak_narratives",
+      "chapterId": "individual_development",
+      "title": "Når heltene brått falt – prestasjon, vendepunkt og erindring",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historiske karrierefortellinger, ikke individuell psykologisk eller medisinsk måling.",
+      "nextCheck": "Behold som lærings-/refleksjonsstoff. Ingen automatiske person-, bakgrunns- eller helseverdier; eksterne kildehenvisninger ikke verifisert."
+    },
+    {
+      "id": "defensive_language",
+      "chapterId": "collective_training",
+      "title": "Defensive beskjeder – lagets felles ordliste",
+      "status": "unverified",
+      "evidence": [
+        "R",
+        "G"
+      ],
+      "implemented": "Press/sikring og planbeskjeder finnes i faseforklaringer; den konkrete ordlisten er ikke påvist som spiller-til-spiller signal.",
+      "nextCheck": "Kontroller hvem som varsler fall, støt eller sikring og når beskjeden endrer utfall."
+    },
+    {
+      "id": "offensive_language",
+      "chapterId": "collective_training",
+      "title": "Offensive beskjeder – lagets felles ordliste",
+      "status": "unverified",
+      "evidence": [
+        "R",
+        "G"
+      ],
+      "implemented": "Støtte og utveier finnes, men de konkrete verbale signalene er ikke påvist som egen mekanikk.",
+      "nextCheck": "Kontroller beskjed om tid, mann i rygg og ledig støtte før valg."
+    },
+    {
+      "id": "communication_relations",
+      "chapterId": "collective_training",
+      "title": "Relasjoner – hvem har oversikt og hvem gir beskjed?",
+      "status": "unverified",
+      "evidence": [
+        "R",
+        "G"
+      ],
+      "implemented": "Rolleforbindelser finnes, men avsenderens oversikt og beskjedens mottaker er ikke dokumentert som kausal variabel.",
+      "nextCheck": "Kontroller relevante forbindelser og timing, ikke gi generisk kommunikasjonsbonus."
+    },
+    {
+      "id": "possession_counter_practice",
+      "chapterId": "collective_training",
+      "title": "Spillnær samhandling – possession og kontringsøvelse",
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "TR",
+        "H",
+        "T"
+      ],
+      "implemented": "Oppbygging, bredde og kontringsfokus samt øvelsesdesign finnes.",
+      "nextCheck": "Kontroller øvelsesutfall for kort–lang syklus og kontringsvindu; ikke bruk manuelt tidsmål som bonus."
+    },
+    {
+      "id": "team_spirit_outline",
+      "chapterId": "collective_training",
+      "title": "Vinnermentalitet, lagånd og verdier",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Originaldisposisjon om lagånd, verdier og vinnermentalitet.",
+      "nextCheck": "Behold fagtema uten å konstruere individuelle karaktertrekk."
+    },
+    {
+      "id": "mental_team_cohesion",
+      "chapterId": "collective_training",
+      "title": "Lagånd – oppgavekohesjon og sosial kohesjon",
+      "status": "partial",
+      "evidence": [
+        "OP",
+        "R",
+        "TR"
+      ],
+      "implemented": "Kollektiv cohesion, strukturelle relasjoner og relevant treningsfokus finnes.",
+      "nextCheck": "Skill sosial tilhørighet fra faktisk samordnet oppgave; ikke likestill aggregerte signaler med målt kohesjon."
+    },
+    {
+      "id": "mental_winning",
+      "chapterId": "collective_training",
+      "title": "Vinnermentalitet – konkurranse, ansvar og lagets verdier",
+      "status": "unverified",
+      "evidence": [
+        "OP",
+        "FM"
+      ],
+      "implemented": "Form, morale og lagreaksjoner finnes som abstraksjon, ikke individuell ansvarlig neste handling som psykologisk egenskap.",
+      "nextCheck": "Knytt eventuell kapteinsoppgave til registrert handling, ikke karakterdom."
+    },
+    {
+      "id": "culture_socrates",
+      "chapterId": "collective_training",
+      "title": "Sócrates og Corinthians-demokratiet – fotball som samfunnshandling",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk samfunns- og demokratiperspektiv.",
+      "nextCheck": "Behold som pedagogisk case; ingen person- eller identitetsbonus og ingen ekstern kildeverifisering."
+    },
+    {
+      "id": "portrait_keane_deschamps",
+      "chapterId": "collective_training",
+      "title": "Roy Keane og Didier Deschamps – ledelse gjennom arbeidsoppgaven",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historiske eksempler på ledelse gjennom arbeidsoppgaven.",
+      "nextCheck": "Behold som pedagogisk case; ingen person- eller identitetsbonus og ingen ekstern kildeverifisering."
+    },
+    {
+      "id": "portrait_weah_romario_civic",
+      "chapterId": "collective_training",
+      "title": "George Weah og Romário – fotballens samfunnsstemmer",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historiske samfunnsroller.",
+      "nextCheck": "Behold som pedagogisk case; ingen person- eller identitetsbonus og ingen ekstern kildeverifisering."
+    },
+    {
+      "id": "onenote_shared_perception",
+      "chapterId": "collective_training",
+      "title": "Delt persepsjon – samhandling uten verbal beskjed",
+      "status": "unverified",
+      "evidence": [
+        "R",
+        "G"
+      ],
+      "implemented": "Relasjons- og tidsmodeller finnes, men delt persepsjon som selvstendig handlingsgrunnlag er ikke påvist.",
+      "nextCheck": "Kontroller felles registrering av en eksplisitt situasjon uten å anta at kommunikasjon har skjedd."
+    },
+    {
+      "id": "onenote_pop_icons",
+      "chapterId": "collective_training",
+      "title": "Pop- og kultikonene – sportslig og symbolsk verdi",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballens popkultur og symbolsk verdi.",
+      "nextCheck": "Behold som pedagogisk case; ingen person- eller identitetsbonus og ingen ekstern kildeverifisering."
+    },
+    {
+      "id": "method_eggen",
+      "chapterId": "collective_training",
+      "title": "Nils Arne Eggen – Godfoten og samhandling",
+      "status": "partial",
+      "evidence": [
+        "R",
+        "E",
+        "F",
+        "TR"
+      ],
+      "implemented": "Komplementære roller og dokumenterte individuelle styrker påvirker lagprofil og kampstøtte.",
+      "nextCheck": "Kontroller om styrken faktisk utføres i relasjon til medspiller i en konkret hendelse; ikke en ekstra Godfoten-bonus."
+    },
+    {
+      "id": "training_periodization",
+      "chapterId": "load_recovery",
+      "title": "Periodisering og treningsfilosofier – helhet fremfor isolasjon",
+      "status": "partial",
+      "evidence": [
+        "WL",
+        "TR",
+        "OP",
+        "RC"
+      ],
+      "implemented": "Ukefokus, programbelastning, trenerstøtte og restitusjon finnes.",
+      "nextCheck": "Kontroller helhetlig spillidé i øvelsesvalg og belastningsfordeling, uten å hevde komplett periodiseringsmetodikk."
+    },
+    {
+      "id": "speed_training_outline",
+      "chapterId": "load_recovery",
+      "title": "Hurtighet – disposisjon for oppvarming, drag og pauser",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Ufullstendig disposisjon med uavklart prosentnotasjon.",
+      "nextCheck": "Ikke bruk uavklart prosent som treningsdose eller motorparameter."
+    },
+    {
+      "id": "speed_play_outline",
+      "chapterId": "load_recovery",
+      "title": "Hurtighet gjennom lek – fire navngitte øvelsesidéer",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fire navngitte hurtighetsleker, uten full originalinstruks.",
+      "nextCheck": "Behold som øvelsesidéer; redaksjonelle varianter er ikke originale doser."
+    },
+    {
+      "id": "phys_acceleration",
+      "chapterId": "load_recovery",
+      "title": "Hurtighet – akselerasjon, toppfart og reaksjon",
+      "status": "partial",
+      "evidence": [
+        "A",
+        "F",
+        "E",
+        "PC"
+      ],
+      "implemented": "Dokumentert pace kan påvirke avgrenset reaksjonstid; belastning og rollekrav finnes.",
+      "nextCheck": "Skill akselerasjon, toppfart og gjentatte aksjoner med dokumenterte data. Ikke konverter fit til m/s."
+    },
+    {
+      "id": "phys_speed_session",
+      "chapterId": "load_recovery",
+      "title": "Hurtighetsøkt – oppvarming, drag, pauser og serier",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Redaksjonelt økteksempel for friske voksne, ikke en empirisk treningsresponsmodell.",
+      "nextCheck": "Behold i øvelsesbibliotek; ingen automatisk sprintøkning eller medisinsk anbefaling."
+    },
+    {
+      "id": "phys_injury_prevention",
+      "chapterId": "load_recovery",
+      "title": "Skadeforebygging – kontroll, styrke og gradvis belastning",
+      "status": "partial",
+      "evidence": [
+        "PC",
+        "WL",
+        "RC",
+        "MD"
+      ],
+      "implemented": "Spillmodell for belastning, skade, hvile og tilgjengelighet finnes.",
+      "nextCheck": "Kontroller forebyggende treningsspor og avgrenset effekt uten å love skadefrihet eller kalibrere klinisk risiko fra boken."
+    },
+    {
+      "id": "phys_monitoring",
+      "chapterId": "load_recovery",
+      "title": "Belastningsstyring – forskjellen på hva spilleren gjør og hvordan han reagerer",
+      "status": "partial",
+      "evidence": [
+        "PC",
+        "WL",
+        "OP"
+      ],
+      "implemented": "Spillet registrerer abstrahert belastning, kampminutter, friskhet og aggregerte signaler.",
+      "nextCheck": "Skill ytre belastning fra respons; ikke presentér simulerte verdier som GPS, puls, søvn eller RPE."
+    },
+    {
+      "id": "phys_recovery",
+      "chapterId": "load_recovery",
+      "title": "Restitusjon og kampuke – kapasitet må være tilgjengelig",
+      "status": "partial",
+      "evidence": [
+        "RC",
+        "PC",
+        "IT",
+        "WL"
+      ],
+      "implemented": "Ukerestitusjon avhenger av belastning; individuell trening kan tilpasses form, hvile og rehab.",
+      "nextCheck": "Kontroller variasjon ved kampminutter og tett kampprogram. Ikke utled reelt søvn-/ernæringsbehov."
+    },
+    {
+      "id": "onenote_injury_interruptions",
+      "chapterId": "load_recovery",
+      "title": "Gascoigne, Van Basten, Giuseppe Rossi og Falcao – skadeavbrudd",
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historiske karriere- og skadeavbrudd, ikke individuelle prognoser.",
+      "nextCheck": "Behold som faglig minne; ikke utled skaderisiko, varighet eller rehabilitering fra personnavn."
+    },
+    {
+      "id": "method_frade",
+      "chapterId": "load_recovery",
+      "title": "Vítor Frade – taktisk periodisering",
+      "status": "partial",
+      "evidence": [
+        "TR",
+        "EX",
+        "WL",
+        "HY"
+      ],
+      "implemented": "Spillidé, treningsfokus, programbelastning og øvelseshypotese finnes.",
+      "nextCheck": "Knytt øvelsens faktiske betingelser til valgt spillidé og målt oppgavesuksess før eventuell effekt."
+    },
+    {
+      "id": "method_verheijen",
+      "chapterId": "load_recovery",
+      "title": "Raymond Verheijen – fotballhandlinger, kvalitet og belastning",
+      "status": "partial",
+      "evidence": [
+        "PC",
+        "WL",
+        "RC",
+        "A"
+      ],
+      "implemented": "Belastning, restitusjon og avgrenset handlings-/reaksjonstid finnes.",
+      "nextCheck": "Kontroller gjentatt kvalitet på fotballhandlinger under tretthet; ikke hevde empirisk periodisering eller automatisk treningsdose."
+    }
+  ]
+}
