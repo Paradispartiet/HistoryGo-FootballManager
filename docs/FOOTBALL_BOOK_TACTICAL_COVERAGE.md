@@ -69,3 +69,17 @@ Alle 27 rolle-ID-er i bokas ni rollekapitler er sammenlignet mot `data/football_
 - Første kandidat til motorutvidelse er den møtende spissens utveivalg: bygge videre på eksisterende tredjemann/avlegg, med verifiserte alternative mottakere og motspill. Deretter individuell førsteberøring/orientering og forsvarsvalg. Hold samme kampfase, ikke dobbel xG eller ny generell rating.
 
 Ingen motorendringer eller nye rolle-ID-er. Neste bolk: treningsmetodikk, spillerutvikling, fysiologi og psykologi. Deretter fotballskoler, historie og kultur. Klubbkapitler og basistekst er fortsatt separat arbeid.
+
+## Bolk 6 – trening, spillerutvikling, fysiologi og psykologi
+
+Alle 102 fagavsnitt i de seks treningskapitlene vurdert: 48 delvis dekket, 24 uavklarte og 30 forklarende. Samlet vurdert 246/287.
+
+### Det avgjørende skillet: treningsvalg kontra læringshypotese
+
+- `evaluateTrainingDecisionSupport` påvirker relevante managerbeslutninger i kamp (scorebonus, risikodemping), med stabsstøtte. `resolveIndividualTrainingWeek` gir faktiske spilltilstandseffekter for belastning, form, rehab, rollefortrolighet og svakhetsmål. Svakhetsarbeid er separat progresjon, ikke generell attributtøkning.
+- `evaluateTrainingExerciseDesign` og `createTrainingExerciseHypothesis` gir valg av rom, antall, retning og touch. Koden sier eksplisitt at oppsettet ikke påvirker lagret treningsbelastning, kampbonus, spillerverdier eller progresjon. Ikke tell dette som kausal treningsmekanikk. Den nye prioriterte koblingen er øvelsesbetingelse → avgrenset oppgavesuksess → eksisterende, relevant progresjon, med kjent underlag og uten dobbel bonus.
+- `applyMatchLoad`, `applyWeeklyRecovery` og programintensitet håndterer abstrakt belastning, friskhet og skade/tilgjengelighet. `applyMatchForm` er midlertidig form knyttet til kamp og mål/assist. Off-pitch-programmet oppdaterer aggregerte signaler som selvtillit, kohesjon og taktisk klarhet. Ingen av disse er bevis for individuell fysiologisk måling, diagnostikk, søvn, puls, eller mestringstro. Rehabiliteringslaget er pedagogisk. Ingen nye medisinske eller psykologiske parametre.
+- Motstanderanalyse, lagets svakheter, kampforklaring og treningsfokus er koblet. Manusets ni analysepunkter vurdert separat. Ikke presenter xG som tracking, xT, pasningsnettverk eller romkontroll. Individuell kommunikasjon, oppmerksomhet og felles persepsjon krever konkret hendelsesgrunnlag.
+- Frade, Seirul·lo, Verheijen, Eggen og Dreier har overlappende mekanikker i eksisterende system, men ikke dokumentert full metodisk simulering. Knytt treningsprinsipp til faktisk fotballhandling, ikke trenernavnbonus. Øvelseseksempler, historiske, sosiologiske og ufullstendige disposisjoner beholdes som fagstoff der egen regel ikke er hensiktsmessig.
+
+Kontroll av kildekode og utvalgte testassertions, ikke ny testkjøring. Eksterne kilde-URL-er er ikke kontrollert. Ingen motorendringer, ingen nye spillerverdier. Neste bolk: resterende 41 fagavsnitt i fotballskoler og formasjonsteori/historie/kultur. Basistekst og 12 klubbkapitler fortsatt separat kontroll.

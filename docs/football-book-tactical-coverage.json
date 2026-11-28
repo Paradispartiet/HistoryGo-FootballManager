@@ -144,6 +144,87 @@
       "symbol": "attributeGoal",
       "test": "scripts/simulate-player-stats.mjs",
       "scope": "Fordeler allerede scorede mål og assists ut fra posisjon, rolle og matchfit. Ikke selvstendig skudd-, pasnings- eller redningsmotor."
+    },
+    "EX": {
+      "file": "src/football-training-exercise-design.js",
+      "symbol": "evaluateTrainingExerciseDesign",
+      "test": "scripts/simulate-manager-training-exercise-design-v1.mjs",
+      "scope": "Interaktiv øvelsesdesign: flate, antall, retning, touch. Uttrykkelig læringshypotese uten effekt på lagret belastning, kampbonus, spillerverdier eller progresjon."
+    },
+    "TR": {
+      "file": "src/football-training-week.js",
+      "symbol": "evaluateTrainingDecisionSupport",
+      "test": "scripts/simulate-training-week.mjs",
+      "scope": "Relevant ukefokus og stabsstøtte påvirker managerbeslutningens score og kan dempe risiko; ikke en generell individuell ferdighetsendring."
+    },
+    "IT": {
+      "file": "src/football-individual-training.js",
+      "symbol": "resolveIndividualTrainingWeek",
+      "test": "scripts/simulate-individual-training.mjs",
+      "scope": "Individuell trening gir belastning/form, rehabuke, rollefortrolighet og svakhetsmål etter validering og stabsstøtte."
+    },
+    "WK": {
+      "file": "src/football-player-weaknesses.js",
+      "symbol": "applyWeaknessTraining",
+      "test": "scripts/simulate-player-weaknesses.mjs",
+      "scope": "Separat fremdrift for spiller×svakhet; ikke endring av grunnrating. Kampstyrkebidrag er avgrenset til bruk i relevante roller."
+    },
+    "PC": {
+      "file": "src/football-player-condition.js",
+      "symbol": "applyMatchLoad",
+      "test": "scripts/simulate-player-condition.mjs",
+      "scope": "Spillerbelastning knyttet til kampminutter/intensitet, friskhet, skade og restitusjon; abstrakt modell, ikke medisinsk prognose."
+    },
+    "FM": {
+      "file": "src/football-player-condition.js",
+      "symbol": "applyMatchForm",
+      "test": "scripts/simulate-player-condition.mjs",
+      "scope": "Midlertidig form fra kampresultat, minutter, mål og assist; ikke måling av individuell mestringstro."
+    },
+    "WL": {
+      "file": "src/football-training-plan.js",
+      "symbol": "calculateWeeklyTrainingIntensity",
+      "test": "scripts/simulate-training-plan.mjs",
+      "scope": "Programmenes belastning og ukefokus påvirker aggregert treningsintensitet."
+    },
+    "RC": {
+      "file": "src/football-player-condition.js",
+      "symbol": "applyWeeklyRecovery",
+      "test": "scripts/simulate-player-condition.mjs",
+      "scope": "Ukerestitusjon avhenger av treningsintensitet; skadestatus/tilgjengelighet oppdateres i spillmodellen."
+    },
+    "OP": {
+      "file": "src/football-off-pitch-parameters.js",
+      "symbol": "applyTrainingProgramOffPitchEffects",
+      "test": "scripts/simulate-off-pitch-parameters.mjs",
+      "scope": "Treningsprogram påvirker aggregerte signaler for blant annet fatigue, wear, injuryRisk, confidence, cohesion og tacticalClarity; ikke individuell psykologisk diagnose."
+    },
+    "OA": {
+      "file": "src/football-opponent-analysis.js",
+      "symbol": "createOpponentAnalysisWorkspace",
+      "scope": "Analyse av kjent motstander, kampplan, forventet taktisk motspill og konkret observasjonsfokus."
+    },
+    "MA": {
+      "file": "src/football-match-explanation-engine.js",
+      "symbol": "buildMatchExplanation",
+      "scope": "Forklarer allerede registrerte kampfaktorer, trening og konsekvenser; ikke en ny uavhengig måling av hendelser."
+    },
+    "TF": {
+      "file": "src/engine/createTrainingFocusFromTeamFit.ts",
+      "symbol": "createTrainingFocusFromTeamFit",
+      "scope": "Oversetter kjente svakheter i lagoppsett til treningsfokus."
+    },
+    "MD": {
+      "file": "src/football-medical-decision-learning.js",
+      "symbol": "evaluateRehabilitationAvailability",
+      "test": "scripts/simulate-medical-rehabilitation-v2.mjs",
+      "scope": "Pedagogisk rehabiliterings- og tilgjengelighetsvalg med eksisterende tilstand; ingen reell medisinsk vurdering."
+    },
+    "HY": {
+      "file": "src/football-training-exercise-design.js",
+      "symbol": "createTrainingExerciseHypothesis",
+      "test": "scripts/simulate-manager-training-exercise-design-v1.mjs",
+      "scope": "Lagrer treningsintensjon, hypotese, observasjon og trenerpunkter; ikke input til trenings-/kampmotor."
     }
   },
   "entries": [
@@ -2051,613 +2132,1179 @@
       "id": "analysis_before_after",
       "chapterId": "training_problem",
       "title": "Før og etter kamp – avtal arbeidsoppgaver og evaluer",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "OA",
+        "MA",
+        "TF",
+        "TR"
+      ],
+      "implemented": "Motstanderanalyse, kampforklaring, lagets svakheter og relevant ukefokus finnes.",
+      "nextCheck": "Koble avtalte spilleroppgaver og bokas ni observasjonspunkter til faktisk simulert kampbevis, ikke bare resultat."
     },
     {
       "id": "analysis_01_possession",
       "chapterId": "training_problem",
       "title": "1. Possession – ballbesittelse og risiko",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "U",
+        "MA"
+      ],
+      "implemented": "Oppspillsutfall, balltap og risiko har konkrete kjeder.",
+      "nextCheck": "Kontroller om unødvendig risiko og tap per situasjon registreres separat; ikke utled possession-statistikk fra xG."
     },
     {
       "id": "analysis_02_support",
       "chapterId": "training_problem",
       "title": "2. Støtte – spillbarhet rundt og bak ballfører",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "R",
+        "TF"
+      ],
+      "implemented": "Støtterelasjoner og pasningsutveier inngår i kjeder og rapporter.",
+      "nextCheck": "Observer om støtte er tilgjengelig ved faktisk mottak, ikke bare rollepar."
     },
     {
       "id": "analysis_03_communication",
       "chapterId": "training_problem",
       "title": "3. Kommunikasjon – felles beskjeder",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [
+        "OP"
+      ],
+      "implemented": "Kampbeskjeder og lagets taktiske klarhet finnes som pedagogiske eller aggregerte elementer; felles ordliste er ikke dokumentert som individuell signalflyt.",
+      "nextCheck": "Kontroller informasjon fra medspiller til neste handling, med timing og riktig mottaker."
     },
     {
       "id": "analysis_04_delay",
       "chapterId": "training_problem",
       "title": "4. Forsinkelse i forsvar – ikke selg deg",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "P",
+        "U",
+        "MA"
+      ],
+      "implemented": "Restforsvar kan stanse en overgang etter brutt press.",
+      "nextCheck": "Knytt analyse til eksplisitt opphold/forsinkelse kontra støt der dette blir simulert."
     },
     {
       "id": "analysis_05_penetration",
       "chapterId": "training_problem",
       "title": "5. Gjennombrudd – gjennombruddshissighet og taktisk justering",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "D",
+        "OA"
+      ],
+      "implemented": "Gjennombrudd og motgrep har egne kjeder og kampplananalyse.",
+      "nextCheck": "Kontroller registrerte fremovervalg og om gjentatt mislykket dribling kan begrunne en annen utvei."
     },
     {
       "id": "analysis_06_concentration",
       "chapterId": "training_problem",
       "title": "6. Konsentrering i forsvar",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "L",
+        "Z",
+        "M"
+      ],
+      "implemented": "Dekning og kompakt struktur har effekt i avgrensede motstanderfaser.",
+      "nextCheck": "Kontroller eget lags samtidige forskyvning og dekning etter pressutløser."
     },
     {
       "id": "analysis_07_width",
       "chapterId": "training_problem",
       "title": "7. Bredde i angrep",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "E",
+        "C",
+        "H",
+        "TF"
+      ],
+      "implemented": "Breddeprofil, spillvending og bredt overtall kan påvirke kamp og treningsfokus.",
+      "nextCheck": "Skill estimert bredde fra observerte brede posisjoner og gjenskaping av bredde."
     },
     {
       "id": "analysis_08_movement",
       "chapterId": "training_problem",
       "title": "8. Bevegelse i angrep",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "R",
+        "C",
+        "L",
+        "M"
+      ],
+      "implemented": "Dybdeløp, overlapp og boksfylling inngår i avgrensede kjeder.",
+      "nextCheck": "Kontroller konkret timing og samordnet bevegelse før pasning."
     },
     {
       "id": "analysis_09_balance",
       "chapterId": "training_problem",
       "title": "9. Balanse i forsvar",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "U",
+        "E",
+        "M",
+        "TF"
+      ],
+      "implemented": "Restforsvar, skjerm og lagbalanse påvirker overgangsutfall og treningsfokus.",
+      "nextCheck": "Skill numerisk og posisjonell balanse fra aggregert score."
     },
     {
       "id": "opponent_attack",
       "chapterId": "training_problem",
       "title": "Motstanderanalyse – angrepsrisiko, oppbygging og gjennombruddsvalg",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "OA",
+        "V",
+        "P",
+        "H"
+      ],
+      "implemented": "Motstanders kjente oppbygging, overgangsvalg og utveier kan påvirke analysen og kampfasen.",
+      "nextCheck": "Kontroller faktiske registreringer for backenes høyde, antall spillere foran ballen og lokale overtall."
     },
     {
       "id": "opponent_defence",
       "chapterId": "training_problem",
       "title": "Motstanderanalyse – press, markering og formasjonsendringer",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "OA",
+        "Z",
+        "C",
+        "P"
+      ],
+      "implemented": "Kjent kompakt blokk, soneforskyvning, press og pasningsdekning kan påvirke kamp.",
+      "nextCheck": "Kontroller valgbare markeringssystemer og dynamiske formasjons-/pressendringer."
     },
     {
       "id": "onenote_data_analysis",
       "chapterId": "training_problem",
       "title": "Dataanalyse – romkontroll, pasningsnettverk og expected threat",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [
+        "MA"
+      ],
+      "implemented": "Spillet har xG og fasebevis, men GPS, romkontroll, pasningsnettverk og xT er ikke påvist som selvstendige datamodeller i de undersøkte filene.",
+      "nextCheck": "Undersøk dataoppløsningen før eventuelle xT-/rommodeller; ikke konstruer tracking."
     },
     {
       "id": "constraints_led",
       "chapterId": "exercise_constraints",
       "title": "Constraints-Led Approach – utform problemet",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "HY",
+        "TR"
+      ],
+      "implemented": "Manager kan endre øvelsens flate, antall, retning og touch. Oppsettet er uttrykkelig læringshypotese uten motorvirkning.",
+      "nextCheck": "Koble valgt betingelse til dokumentert oppgavesuksess og relevant, begrenset læring; ikke automatisk kampbonus."
     },
     {
       "id": "rondo_practice",
       "chapterId": "exercise_constraints",
       "title": "Firkantspill – presisjon, orientering og veggspill",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "TR"
+      ],
+      "implemented": "Øvelsesdesign kan velge antall, rom og touch, og oppbyggingsfokus påvirker relevante managerbeslutninger.",
+      "nextCheck": "Kontroller spesifikk rondo, mottak/orientering og målt overføring; ikke tolke valg av to touch som ferdighetsøkning."
     },
     {
       "id": "duel_practice",
       "chapterId": "exercise_constraints",
       "title": "Én mot én – velg finte etter forsvarerens kroppsstilling",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "D",
+        "WK"
+      ],
+      "implemented": "Øvelsesdesign og svakhetsarbeid finnes, kreativt gjennombrudd har avgrenset kampmekanikk.",
+      "nextCheck": "Kontroller konkret 1v1-øvelse mot aktiv motstand og om treningen forbedrer situasjonsvalg."
     },
     {
       "id": "scanning_practice",
       "chapterId": "exercise_constraints",
       "title": "Orienteringsøvelse – registrer før mottak",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "HY"
+      ],
+      "implemented": "Øvelsesdesigner beskriver scanning og touchbegrensning som læringsvalg.",
+      "nextCheck": "Kontroller konkret orienteringsoppgave med observasjon før mottak og begrenset overføring; ingen målt scanningrate."
     },
     {
       "id": "restriction_practice",
       "chapterId": "exercise_constraints",
       "title": "Småspill med restriksjoner – teknisk fleksibilitet",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "HY"
+      ],
+      "implemented": "Touchrestriksjoner kan velges og gir pedagogisk forklaring.",
+      "nextCheck": "Undersøk om de ulike restriksjonene endrer oppgaven og relevant treningsutfall; ingen automatisk verdiøkning."
     },
     {
       "id": "phys_play_snipp",
       "chapterId": "exercise_constraints",
       "title": "Hurtighetslek – snipp og snapp",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Navngitt lek/øvelseseksempel i bokas fysiske treningsstoff, ikke en selvstendig kampmekanikk.",
+      "nextCheck": "Kan inngå i øvelsesbibliotek med mål, sikker organisering og passende belastning. Ikke gi egen sprintbonus fra øvelsesnavnet."
     },
     {
       "id": "phys_play_soldat",
       "chapterId": "exercise_constraints",
       "title": "Hurtighetslek – soldat og røver (ny variant)",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Navngitt lek/øvelseseksempel i bokas fysiske treningsstoff, ikke en selvstendig kampmekanikk.",
+      "nextCheck": "Kan inngå i øvelsesbibliotek med mål, sikker organisering og passende belastning. Ikke gi egen sprintbonus fra øvelsesnavnet."
     },
     {
       "id": "phys_play_number",
       "chapterId": "exercise_constraints",
       "title": "Hurtighetslek – nummerkappløp (ny variant)",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Navngitt lek/øvelseseksempel i bokas fysiske treningsstoff, ikke en selvstendig kampmekanikk.",
+      "nextCheck": "Kan inngå i øvelsesbibliotek med mål, sikker organisering og passende belastning. Ikke gi egen sprintbonus fra øvelsesnavnet."
     },
     {
       "id": "phys_play_pair",
       "chapterId": "exercise_constraints",
       "title": "Hurtighetslek – hest og kjerre (ny kontaktfri variant)",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Navngitt lek/øvelseseksempel i bokas fysiske treningsstoff, ikke en selvstendig kampmekanikk.",
+      "nextCheck": "Kan inngå i øvelsesbibliotek med mål, sikker organisering og passende belastning. Ikke gi egen sprintbonus fra øvelsesnavnet."
     },
     {
       "id": "mental_pressure_practice",
       "chapterId": "exercise_constraints",
       "title": "Øvelse – beslutning under gradvis økende press",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "HY",
+        "TR"
+      ],
+      "implemented": "Øvelsesdesign kan endre rom/tid/antall, relevant fokus støtter managerbeslutning.",
+      "nextCheck": "Kontroller gradert beslutningspress og observerbar handlingskvalitet; ikke opprett mental diagnose."
     },
     {
       "id": "mental_reset_practice",
       "chapterId": "exercise_constraints",
       "title": "Øvelse – neste handling etter feil",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "U",
+        "P",
+        "EX"
+      ],
+      "implemented": "Gjenvinning kontra sikring er representert i overgangsfase; øvelsen er pedagogisk.",
+      "nextCheck": "Kontroller øvelse på neste handling etter feil og overføring til samme balltapsbeslutning."
     },
     {
       "id": "culture_material_conditions",
       "chapterId": "exercise_constraints",
       "title": "Materielle forhold – bane, ball og treningsmetoder",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [
+        "EX"
+      ],
+      "implemented": "Sosiologisk forklaring av bane, ball og organisering; ikke egen egenskap per spiller.",
+      "nextCheck": "Bruk som ramme for treningsdesign; ingen bonus fra kulturell bakgrunn."
     },
     {
       "id": "onenote_cone_gate",
       "chapterId": "exercise_constraints",
       "title": "Pasningsøvelse – kjegleport og returbevegelse",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Uferdig øvelsesidé med kjegleport og returbevegelse.",
+      "nextCheck": "Behold som øvelsesidé; avstander, scoring og effekt må defineres før implementering."
     },
     {
       "id": "onenote_waiting_groups",
       "chapterId": "exercise_constraints",
       "title": "Organisering av økten – aktiv ventetid",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Praktisk trenernotat om aktivitet i ventetid og organisering.",
+      "nextCheck": "Behold som pedagogikk; ikke anta at aktiv ventetid automatisk gir ekstra belastning/ferdighet."
     },
     {
       "id": "method_seirullo",
       "chapterId": "exercise_constraints",
       "title": "Paco Seirul·lo – strukturert trening og preferensielle simuleringssituasjoner",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "HY",
+        "TR"
+      ],
+      "implemented": "Spillnært øvelsesdesign og relevant treningsfokus finnes.",
+      "nextCheck": "Kontroller preferensiell simuleringssituasjon og overføring til konkret kampoppgave; ikke hevde komplett metodikk."
     },
     {
       "id": "communication_purpose",
       "chapterId": "coaching_transfer",
       "title": "Kommunikasjon – informasjon før oppmuntring og korrigering",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [
+        "OP"
+      ],
+      "implemented": "Lagets signaler og taktiske klarhet er aggregert, ikke påvist som beskjeder fra spiller til spiller.",
+      "nextCheck": "Kontroller nyttig informasjon før neste handling, adskilt fra ros og korrigering."
     },
     {
       "id": "communication_timing",
       "chapterId": "coaching_transfer",
       "title": "Kommunikativ timing og kampklima",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [
+        "OP"
+      ],
+      "implemented": "Relasjoner og timing finnes i avgrensede motorfaser, men selve signalet er ikke dokumentert som variabel.",
+      "nextCheck": "Kontroller om beskjed kan gis før mottak/løp og påvirke riktig utvei."
     },
     {
       "id": "feedback_culture",
       "chapterId": "coaching_transfer",
       "title": "Tilbakemeldingskultur – kompis, ikke kjeft",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [
+        "OP"
+      ],
+      "implemented": "Lagets trivsel, selvtillit og form er modellerte abstraksjoner; vennlig individuell feedback er ikke dokumentert som eget valg.",
+      "nextCheck": "Undersøk trenerdialog med konkret observasjon uten skjult psykologisk personvurdering."
     },
     {
       "id": "match_periodization",
       "chapterId": "coaching_transfer",
       "title": "Kampstrategi – styring av kampdynamikken",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "P",
+        "T",
+        "WL",
+        "PC"
+      ],
+      "implemented": "Kampplaner har intensitet, og belastning/restitusjon finnes.",
+      "nextCheck": "Kontroller managerstyrt veksling mellom hardt press, kontroll og hvile uten faste manusintervaller."
     },
     {
       "id": "match_balance_choices",
       "chapterId": "coaching_transfer",
       "title": "Kampstrategi – avtal risiko og rollefordeling",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "E",
+        "R",
+        "U",
+        "OA"
+      ],
+      "implemented": "Lagbalanse, rolleforbindelser og motspillsanalyse er tilgjengelig.",
+      "nextCheck": "Kontroller konkrete antall bak ballen og risiko per sone; ikke påtving manusets alternative tall."
     },
     {
       "id": "match_adjustments",
       "chapterId": "coaching_transfer",
       "title": "Taktiske justeringer – les og påvirk motstanderens struktur",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "OA",
+        "S",
+        "C",
+        "MA"
+      ],
+      "implemented": "Planrespons, kjeder og kampforklaring finnes.",
+      "nextCheck": "Kontroller om justeringen svarer på registrert motstanderhandling fremfor en generell bonus."
     },
     {
       "id": "play_practice",
       "chapterId": "coaching_transfer",
       "title": "Deliberate play og deliberate practice",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "TR",
+        "IT"
+      ],
+      "implemented": "Treningsdesign og målrettet individuelt arbeid finnes.",
+      "nextCheck": "Kontroller forskjell mellom fri lek og strukturert repetisjon på observerbar oppgavekvalitet."
     },
     {
       "id": "guided_discovery",
       "chapterId": "coaching_transfer",
       "title": "Guided discovery – spilleren finner løsningen",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "HY",
+        "EX",
+        "MA"
+      ],
+      "implemented": "Hypotese, trenerpunkter og observasjonsspørsmål finnes som læringslag.",
+      "nextCheck": "Kontroller spillerens eget valg og refleksjon uten at riktig svar automatisk gir attributt."
     },
     {
       "id": "contextual_technique",
       "chapterId": "coaching_transfer",
       "title": "Kontekstualisert teknikk – fra showtriks til kampferdighet",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "D",
+        "A",
+        "WK"
+      ],
+      "implemented": "Spillnære designvalg, dokumenterte handlingsstyrker og svakhetstrening finnes.",
+      "nextCheck": "Kontroller samme ferdighet under ulike press/romforhold og faktisk relevant overføring."
     },
     {
       "id": "mental_reset",
       "chapterId": "coaching_transfer",
       "title": "Mental omstilling – ikke dvele ved feil",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "U",
+        "P",
+        "FM"
+      ],
+      "implemented": "Neste defensive handlingskjede og midlertidig form finnes.",
+      "nextCheck": "Kontroller om spillerens konkrete respons etter feil kan velges/observeres uten å utlede mentalitet fra kampresultat."
     },
     {
       "id": "mental_match_climate",
       "chapterId": "coaching_transfer",
       "title": "Stress, ro og kampklima",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "OP",
+        "FM",
+        "EX"
+      ],
+      "implemented": "Aggregerte signaler og form endres ved trening/kamp; øvelsesdesign er læringslag.",
+      "nextCheck": "Kontroller konkrete ro-/kommunikasjonsoppgaver etter scoring, ikke automatisk mental bonus ved 2–0."
     },
     {
       "id": "style_psychology",
       "chapterId": "coaching_transfer",
       "title": "Spillets estetikk og psykologiske dimensjon",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Filosofisk drøfting av estetikk, kreativitet og risikovalg.",
+      "nextCheck": "Behold som analyseperspektiv; ikke automatisk selvtillit fra vakker spillestil."
     },
     {
       "id": "mental_arousal",
       "chapterId": "coaching_transfer",
       "title": "Nerver, stress og spenningsregulering",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [
+        "OP",
+        "HY"
+      ],
+      "implemented": "Skjult stress/mental belastning er aggregerte spillsignaler, ikke individuelt målt aktivering.",
+      "nextCheck": "Undersøk avgrenset kampforberedelse og oppgavevalg, ikke optimal spenningsprosent."
     },
     {
       "id": "mental_preparation",
       "chapterId": "coaching_transfer",
       "title": "Kampforberedelse – rutine før første aksjon",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [
+        "OP",
+        "HY"
+      ],
+      "implemented": "Forberedelse og ukefokus finnes, men individuell førprestasjonsrutine er ikke påvist som egen mekanikk.",
+      "nextCheck": "Undersøk om konkrete første arbeidsoppgaver kan registreres uten psykologisk bonus."
     },
     {
       "id": "mental_effort",
       "chapterId": "coaching_transfer",
       "title": "Å prøve hardt og å prøve maksimalt – hensiktsmessig innsats",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [
+        "OP",
+        "HY"
+      ],
+      "implemented": "Intensitet og belastning finnes, men hensiktsmessig innsats kontra maksimal innsats er ikke en påvist individuell beslutning.",
+      "nextCheck": "Koble til faktisk press/forsinkelsesvalg, ikke belønn maksimal løping i alle situasjoner."
     },
     {
       "id": "mental_reflection",
       "chapterId": "coaching_transfer",
       "title": "Mentalt treningsarbeid – plan, gjennomføring og refleksjon",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [
+        "OP",
+        "HY"
+      ],
+      "implemented": "Treningshypotese og kampobservasjon finnes, ikke en bekreftet individuell refleksjonsprogresjon.",
+      "nextCheck": "Undersøk samtale før/etter øvelse knyttet til registrert handling."
     },
     {
       "id": "onenote_ball_path",
       "chapterId": "coaching_transfer",
       "title": "Ballens bane og oppmerksomhet på treffpunkt",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Konkret treneroppmerksomhet ved ballbane og treffpunkt.",
+      "nextCheck": "Behold øvelsesnotat; kontroller mottak/pasning før selvstendig motorregel."
     },
     {
       "id": "onenote_free_play",
       "chapterId": "coaching_transfer",
       "title": "Fritt spill, arbeidsoppgaver og kreativ utfoldelse",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "HY",
+        "TR"
+      ],
+      "implemented": "Øvelsesvalg og treningsfokus finnes.",
+      "nextCheck": "Undersøk avgrensning av fri utfoldelse etter observert mestring, ikke automatisk restriksjonsbonus."
     },
     {
       "id": "method_dreier",
       "chapterId": "coaching_transfer",
       "title": "Sverre Dreier – individuell og relasjonell fotballferdighet",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "R",
+        "F",
+        "EX",
+        "H"
+      ],
+      "implemented": "Individuell rollefit, relasjonell støtte og avleggskjede finnes.",
+      "nextCheck": "Knytt konkret individuell/relasjonell treningsoppgave til utveivalg i eksisterende kjede. Ekstern metodikk ikke verifisert."
     },
     {
       "id": "method_comparison",
       "chapterId": "coaching_transfer",
       "title": "Fem metodiske perspektiver – fra spillidé til samhandling",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [
+        "EX",
+        "WL"
+      ],
+      "implemented": "Pedagogisk sammenstilling av fem metodiske perspektiver.",
+      "nextCheck": "Bruk som treningsrefleksjon, ikke fem separate trenerbonuser."
     },
     {
       "id": "early_specialization",
       "chapterId": "individual_development",
       "title": "Tidlig spesialisering og press på unge spillere",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Manusets faglige bekymring for barns ensidige spesialisering og press.",
+      "nextCheck": "Behold som pedagogisk ramme; ikke modellér barns skade- eller utbrenthetsrisiko fra denne teksten."
     },
     {
       "id": "learning_environment",
       "chapterId": "individual_development",
       "title": "Habitus og læringsmiljø – teknikkens sosiale rammer",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Sosiologisk perspektiv på læringsmiljø, lek og tilgang.",
+      "nextCheck": "Ingen spillerverdi basert på bakgrunn eller nasjonalitet."
     },
     {
       "id": "physical_resources",
       "chapterId": "individual_development",
       "title": "Fire fysiske ressurser – manusets inndeling",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "PC",
+        "F",
+        "E"
+      ],
+      "implemented": "Spillet har fysisk rollekrav, dokumenterte styrker og aggregert friskhet/belastning.",
+      "nextCheck": "Skill utholdenhet, spenst/hurtighet, styrke og bevegelighet; ikke anta komplette fysiologidata."
     },
     {
       "id": "motor_learning",
       "chapterId": "individual_development",
       "title": "Motorisk læring – variasjon og overføring",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "HY",
+        "IT",
+        "WK"
+      ],
+      "implemented": "Variert øvelsesdesign og avgrenset individuell progresjon finnes separat.",
+      "nextCheck": "Kontroller overføring fra endret øvelsesbetingelse til situasjonsspesifikk ferdighet."
     },
     {
       "id": "neuromuscular_control",
       "chapterId": "individual_development",
       "title": "Nevromuskulær kontroll – muskler, sanser og kognisjon",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Bokas nevromuskulære forklaring har ikke påvist individuell sanse-/bevegelsesmodell.",
+      "nextCheck": "Undersøk relevant førsteberøring og motorisk valg på spillets abstraksjonsnivå; ikke modellér uobserverte biologiske målinger."
     },
     {
       "id": "balance_proprioception",
       "chapterId": "individual_development",
       "title": "Balanse, holdning og propriosepsjon",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Lagbalanse er strukturell, ikke spillerens kroppslige balanse eller propriosepsjon.",
+      "nextCheck": "Kontroller fysisk balanse i vending/duell der dokumentert spillerdata finnes."
     },
     {
       "id": "mental_development_outline",
       "chapterId": "individual_development",
       "title": "Det mentale aspektet – utvikle menneske og spiller",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Originaldisposisjon over menneskelig/spillerutvikling med ufullstendige temaer.",
+      "nextCheck": "Behold temastruktur, ikke innfør individuell psykologisk rating fra disposisjon."
     },
     {
       "id": "confidence_finishing",
       "chapterId": "individual_development",
       "title": "Selvtillit og besluttsomhet ved avslutning",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "FM",
+        "OP",
+        "J"
+      ],
+      "implemented": "Midlertidig form, kollektiv selvtillit og rollebasert målattribusjon finnes.",
+      "nextCheck": "Kontroller konkret avslutningsbeslutning etter bom; form eller mål er ikke direkte måling av mestringstro."
     },
     {
       "id": "mental_images",
       "chapterId": "individual_development",
       "title": "Mentale bilder, fokus og spilleforståelse",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Boka beskriver mentalt bilde før mottak; selvstendig persepsjonsvariabel er ikke påvist.",
+      "nextCheck": "Undersøk registrering av rom og neste handling før mottak."
     },
     {
       "id": "goals_effort_outline",
       "chapterId": "individual_development",
       "title": "Målsetting, relativ suksess og innsats – bevarte temaer",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Ufullstendig originaldisposisjon om mål, relativ suksess, innsats og tilstedeværelse.",
+      "nextCheck": "Behold som refleksjon; utdypede prosessmål vurderes separat."
     },
     {
       "id": "phys_energy",
       "chapterId": "individual_development",
       "title": "Fysiologi – energi og fotballens arbeidskrav",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "PC",
+        "WL",
+        "RC"
+      ],
+      "implemented": "Abstrakt kampbelastning, treningsintensitet og restitusjon finnes.",
+      "nextCheck": "Ikke likestill belastningsscore med aerob/anaerob energiomsetning; vurder fysisk handlingskapasitet ved gjentatte aksjoner."
     },
     {
       "id": "phys_endurance",
       "chapterId": "individual_development",
       "title": "Utholdenhet – aerob kapasitet og gjentatte aksjoner",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "PC",
+        "WL",
+        "E"
+      ],
+      "implemented": "Belastning og lagprofil kan påvirke kamp; treningsintensitet styrer ukebelastning.",
+      "nextCheck": "Kontroller individuell evne til gjentatte aksjoner og spesifikk utholdenhetsutvikling, ikke nye doser."
     },
     {
       "id": "phys_strength",
       "chapterId": "individual_development",
       "title": "Styrke – kraft, bremsing og duellspill",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "F",
+        "E",
+        "IT"
+      ],
+      "implemented": "Fysiske rollekrav og individuelle treningsspor finnes.",
+      "nextCheck": "Kontroller om spesifikk dokumentert styrke påvirker duell, bremsing og mottak, og om treningssporet gir relevant progresjon."
     },
     {
       "id": "phys_power",
       "chapterId": "individual_development",
       "title": "Spenst og eksplosivitet – sats, landing og retningsskifte",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "F",
+        "A",
+        "E"
+      ],
+      "implemented": "Dokumenterte fysiske styrker og reaksjonsegenskaper kan bidra i avgrensede oppgaver.",
+      "nextCheck": "Kontroller egen sats/landing og kraftutvikling i relevante dueller uten oppfunnet hopphøyde."
     },
     {
       "id": "phys_mobility",
       "chapterId": "individual_development",
       "title": "Bevegelighet – funksjonelt bevegelsesutslag",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Treningsveiledning omtaler mobilitet og restitusjon, men aktivt bevegelsesutslag er ikke påvist i motoren.",
+      "nextCheck": "Undersøk om dette bør forbli øvelsesbibliotek eller knyttes til dokumentert funksjonell handling."
     },
     {
       "id": "phys_proprio",
       "chapterId": "individual_development",
       "title": "Propriosepsjon og balanse – kroppens eget informasjonssystem",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Propriosepsjon som kroppslig sansesystem er ikke påvist som modellvariabel.",
+      "nextCheck": "Ikke innfør fysiologisk pseudopresisjon; vurder relevant balanse og kontroll i observerbare handlinger."
     },
     {
       "id": "mental_motivation",
       "chapterId": "individual_development",
       "title": "Motivasjon – autonomi, kompetanse og tilhørighet",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [
+        "OP"
+      ],
+      "implemented": "Lagets morale/trivsel er spillabstraksjoner, ikke bekreftet individuell autonomi-, kompetanse- og tilhørighetsmodell.",
+      "nextCheck": "Undersøk valg og samtaler om arbeidsoppgaver; ikke inferer psykologi fra identitet."
     },
     {
       "id": "mental_relative_success",
       "chapterId": "individual_development",
       "title": "Målsetting og relativ suksess – resultat, prestasjon og prosess",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "HY",
+        "MA",
+        "TF"
+      ],
+      "implemented": "Manager kan velge hypotese, observasjon og neste treningsfokus fremfor bare resultat.",
+      "nextCheck": "Kontroller individuelle prosessmål knyttet til registrerte handlinger."
     },
     {
       "id": "mental_self_efficacy",
       "chapterId": "individual_development",
       "title": "Selvtillit, mestringstro og formsvikt",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [
+        "FM",
+        "OP"
+      ],
+      "implemented": "Midlertidig form finnes, men oppgavespesifikk mestringstro er ikke bekreftet.",
+      "nextCheck": "Ikke utled mestringstro fra mål eller score alene."
     },
     {
       "id": "mental_imagery_practice",
       "chapterId": "individual_development",
       "title": "Visualisering – øv på situasjonen, ikke bare suksessen",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Mental forestilling som øvelse er ikke dokumentert som individuell treningsmekanikk.",
+      "nextCheck": "Behold pedagogisk øvelsesforslag, kontroller oppgave før eventuell overføring."
     },
     {
       "id": "mental_attention",
       "chapterId": "individual_development",
       "title": "Konsentrasjon og oppmerksomhet – skifte mellom oversikt og handling",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Ingen påvist separat oppmerksomhetsskifte mellom oversikt og utførelse.",
+      "nextCheck": "Knytt eventuelt til konkret orientering/mottak, ikke en skjult psykologisk rating."
     },
     {
       "id": "mental_self_talk",
       "chapterId": "individual_development",
       "title": "Indre dialog – korte signaler som støtter neste handling",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Indre dialog er ikke påvist som egen individuell spillmekanikk.",
+      "nextCheck": "Behold korte oppgaveord som trenerverktøy; ikke beregn mentalitet fra dem."
     },
     {
       "id": "culture_habitus_field",
       "chapterId": "individual_development",
       "title": "Bourdieu – habitus, felt og teknikk",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Sosiologisk forklaring av kroppslig erfaring og institusjonelle rammer.",
+      "nextCheck": "Behold som lærings-/refleksjonsstoff. Ingen automatiske person-, bakgrunns- eller helseverdier; eksterne kildehenvisninger ikke verifisert."
     },
     {
       "id": "culture_symbolic_capital",
       "chapterId": "individual_development",
       "title": "Estetikk som symbolsk kapital",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Sosiologisk perspektiv på anerkjennelse og estetikk.",
+      "nextCheck": "Behold som lærings-/refleksjonsstoff. Ingen automatiske person-, bakgrunns- eller helseverdier; eksterne kildehenvisninger ikke verifisert."
     },
     {
       "id": "culture_access_class",
       "chapterId": "individual_development",
       "title": "Klasse, profesjonalisering og tilgang til fotball",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Samfunnsperspektiv på tilgang, ressurser og profesjonalisering.",
+      "nextCheck": "Behold som lærings-/refleksjonsstoff. Ingen automatiske person-, bakgrunns- eller helseverdier; eksterne kildehenvisninger ikke verifisert."
     },
     {
       "id": "portrait_zlatan_longevity",
       "chapterId": "individual_development",
       "title": "Zlatan Ibrahimović – levetid og individuell tilpasning",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk/pedagogisk eksempel om karrierelengde og tilpasning.",
+      "nextCheck": "Behold som lærings-/refleksjonsstoff. Ingen automatiske person-, bakgrunns- eller helseverdier; eksterne kildehenvisninger ikke verifisert."
     },
     {
       "id": "portrait_physical_role_comparison",
       "chapterId": "individual_development",
       "title": "Fysiske spesialister – samme ressurs, forskjellige arbeidsoppgaver",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "F",
+        "E",
+        "A",
+        "PC"
+      ],
+      "implemented": "Rollekrav, dokumenterte individuelle styrker og avgrenset belastning gir ulike arbeidsbetingelser.",
+      "nextCheck": "Kontroller faktisk handlingskrav per rolle før spesifikke fysiske effekter. Ingen navnebasert bonus."
     },
     {
       "id": "onenote_motivation_conversation",
       "chapterId": "individual_development",
       "title": "Motivasjon – samtale om hensikt og innsats",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Trenernotat om samtale, mål og innsats.",
+      "nextCheck": "Behold som lærings-/refleksjonsstoff. Ingen automatiske person-, bakgrunns- eller helseverdier; eksterne kildehenvisninger ikke verifisert."
     },
     {
       "id": "onenote_duncan_edwards",
       "chapterId": "individual_development",
       "title": "Duncan Edwards – en avbrutt karriere",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk minne om en avbrutt karriere.",
+      "nextCheck": "Behold som lærings-/refleksjonsstoff. Ingen automatiske person-, bakgrunns- eller helseverdier; eksterne kildehenvisninger ikke verifisert."
     },
     {
       "id": "onenote_peak_narratives",
       "chapterId": "individual_development",
       "title": "Når heltene brått falt – prestasjon, vendepunkt og erindring",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historiske karrierefortellinger, ikke individuell psykologisk eller medisinsk måling.",
+      "nextCheck": "Behold som lærings-/refleksjonsstoff. Ingen automatiske person-, bakgrunns- eller helseverdier; eksterne kildehenvisninger ikke verifisert."
     },
     {
       "id": "defensive_language",
       "chapterId": "collective_training",
       "title": "Defensive beskjeder – lagets felles ordliste",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [
+        "R",
+        "G"
+      ],
+      "implemented": "Press/sikring og planbeskjeder finnes i faseforklaringer; den konkrete ordlisten er ikke påvist som spiller-til-spiller signal.",
+      "nextCheck": "Kontroller hvem som varsler fall, støt eller sikring og når beskjeden endrer utfall."
     },
     {
       "id": "offensive_language",
       "chapterId": "collective_training",
       "title": "Offensive beskjeder – lagets felles ordliste",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [
+        "R",
+        "G"
+      ],
+      "implemented": "Støtte og utveier finnes, men de konkrete verbale signalene er ikke påvist som egen mekanikk.",
+      "nextCheck": "Kontroller beskjed om tid, mann i rygg og ledig støtte før valg."
     },
     {
       "id": "communication_relations",
       "chapterId": "collective_training",
       "title": "Relasjoner – hvem har oversikt og hvem gir beskjed?",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [
+        "R",
+        "G"
+      ],
+      "implemented": "Rolleforbindelser finnes, men avsenderens oversikt og beskjedens mottaker er ikke dokumentert som kausal variabel.",
+      "nextCheck": "Kontroller relevante forbindelser og timing, ikke gi generisk kommunikasjonsbonus."
     },
     {
       "id": "possession_counter_practice",
       "chapterId": "collective_training",
       "title": "Spillnær samhandling – possession og kontringsøvelse",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "EX",
+        "TR",
+        "H",
+        "T"
+      ],
+      "implemented": "Oppbygging, bredde og kontringsfokus samt øvelsesdesign finnes.",
+      "nextCheck": "Kontroller øvelsesutfall for kort–lang syklus og kontringsvindu; ikke bruk manuelt tidsmål som bonus."
     },
     {
       "id": "team_spirit_outline",
       "chapterId": "collective_training",
       "title": "Vinnermentalitet, lagånd og verdier",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Originaldisposisjon om lagånd, verdier og vinnermentalitet.",
+      "nextCheck": "Behold fagtema uten å konstruere individuelle karaktertrekk."
     },
     {
       "id": "mental_team_cohesion",
       "chapterId": "collective_training",
       "title": "Lagånd – oppgavekohesjon og sosial kohesjon",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "OP",
+        "R",
+        "TR"
+      ],
+      "implemented": "Kollektiv cohesion, strukturelle relasjoner og relevant treningsfokus finnes.",
+      "nextCheck": "Skill sosial tilhørighet fra faktisk samordnet oppgave; ikke likestill aggregerte signaler med målt kohesjon."
     },
     {
       "id": "mental_winning",
       "chapterId": "collective_training",
       "title": "Vinnermentalitet – konkurranse, ansvar og lagets verdier",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [
+        "OP",
+        "FM"
+      ],
+      "implemented": "Form, morale og lagreaksjoner finnes som abstraksjon, ikke individuell ansvarlig neste handling som psykologisk egenskap.",
+      "nextCheck": "Knytt eventuell kapteinsoppgave til registrert handling, ikke karakterdom."
     },
     {
       "id": "culture_socrates",
       "chapterId": "collective_training",
       "title": "Sócrates og Corinthians-demokratiet – fotball som samfunnshandling",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk samfunns- og demokratiperspektiv.",
+      "nextCheck": "Behold som pedagogisk case; ingen person- eller identitetsbonus og ingen ekstern kildeverifisering."
     },
     {
       "id": "portrait_keane_deschamps",
       "chapterId": "collective_training",
       "title": "Roy Keane og Didier Deschamps – ledelse gjennom arbeidsoppgaven",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historiske eksempler på ledelse gjennom arbeidsoppgaven.",
+      "nextCheck": "Behold som pedagogisk case; ingen person- eller identitetsbonus og ingen ekstern kildeverifisering."
     },
     {
       "id": "portrait_weah_romario_civic",
       "chapterId": "collective_training",
       "title": "George Weah og Romário – fotballens samfunnsstemmer",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historiske samfunnsroller.",
+      "nextCheck": "Behold som pedagogisk case; ingen person- eller identitetsbonus og ingen ekstern kildeverifisering."
     },
     {
       "id": "onenote_shared_perception",
       "chapterId": "collective_training",
       "title": "Delt persepsjon – samhandling uten verbal beskjed",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [
+        "R",
+        "G"
+      ],
+      "implemented": "Relasjons- og tidsmodeller finnes, men delt persepsjon som selvstendig handlingsgrunnlag er ikke påvist.",
+      "nextCheck": "Kontroller felles registrering av en eksplisitt situasjon uten å anta at kommunikasjon har skjedd."
     },
     {
       "id": "onenote_pop_icons",
       "chapterId": "collective_training",
       "title": "Pop- og kultikonene – sportslig og symbolsk verdi",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fotballens popkultur og symbolsk verdi.",
+      "nextCheck": "Behold som pedagogisk case; ingen person- eller identitetsbonus og ingen ekstern kildeverifisering."
     },
     {
       "id": "method_eggen",
       "chapterId": "collective_training",
       "title": "Nils Arne Eggen – Godfoten og samhandling",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "R",
+        "E",
+        "F",
+        "TR"
+      ],
+      "implemented": "Komplementære roller og dokumenterte individuelle styrker påvirker lagprofil og kampstøtte.",
+      "nextCheck": "Kontroller om styrken faktisk utføres i relasjon til medspiller i en konkret hendelse; ikke en ekstra Godfoten-bonus."
     },
     {
       "id": "training_periodization",
       "chapterId": "load_recovery",
       "title": "Periodisering og treningsfilosofier – helhet fremfor isolasjon",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "WL",
+        "TR",
+        "OP",
+        "RC"
+      ],
+      "implemented": "Ukefokus, programbelastning, trenerstøtte og restitusjon finnes.",
+      "nextCheck": "Kontroller helhetlig spillidé i øvelsesvalg og belastningsfordeling, uten å hevde komplett periodiseringsmetodikk."
     },
     {
       "id": "speed_training_outline",
       "chapterId": "load_recovery",
       "title": "Hurtighet – disposisjon for oppvarming, drag og pauser",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Ufullstendig disposisjon med uavklart prosentnotasjon.",
+      "nextCheck": "Ikke bruk uavklart prosent som treningsdose eller motorparameter."
     },
     {
       "id": "speed_play_outline",
       "chapterId": "load_recovery",
       "title": "Hurtighet gjennom lek – fire navngitte øvelsesidéer",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Fire navngitte hurtighetsleker, uten full originalinstruks.",
+      "nextCheck": "Behold som øvelsesidéer; redaksjonelle varianter er ikke originale doser."
     },
     {
       "id": "phys_acceleration",
       "chapterId": "load_recovery",
       "title": "Hurtighet – akselerasjon, toppfart og reaksjon",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "A",
+        "F",
+        "E",
+        "PC"
+      ],
+      "implemented": "Dokumentert pace kan påvirke avgrenset reaksjonstid; belastning og rollekrav finnes.",
+      "nextCheck": "Skill akselerasjon, toppfart og gjentatte aksjoner med dokumenterte data. Ikke konverter fit til m/s."
     },
     {
       "id": "phys_speed_session",
       "chapterId": "load_recovery",
       "title": "Hurtighetsøkt – oppvarming, drag, pauser og serier",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Redaksjonelt økteksempel for friske voksne, ikke en empirisk treningsresponsmodell.",
+      "nextCheck": "Behold i øvelsesbibliotek; ingen automatisk sprintøkning eller medisinsk anbefaling."
     },
     {
       "id": "phys_injury_prevention",
       "chapterId": "load_recovery",
       "title": "Skadeforebygging – kontroll, styrke og gradvis belastning",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "PC",
+        "WL",
+        "RC",
+        "MD"
+      ],
+      "implemented": "Spillmodell for belastning, skade, hvile og tilgjengelighet finnes.",
+      "nextCheck": "Kontroller forebyggende treningsspor og avgrenset effekt uten å love skadefrihet eller kalibrere klinisk risiko fra boken."
     },
     {
       "id": "phys_monitoring",
       "chapterId": "load_recovery",
       "title": "Belastningsstyring – forskjellen på hva spilleren gjør og hvordan han reagerer",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "PC",
+        "WL",
+        "OP"
+      ],
+      "implemented": "Spillet registrerer abstrahert belastning, kampminutter, friskhet og aggregerte signaler.",
+      "nextCheck": "Skill ytre belastning fra respons; ikke presentér simulerte verdier som GPS, puls, søvn eller RPE."
     },
     {
       "id": "phys_recovery",
       "chapterId": "load_recovery",
       "title": "Restitusjon og kampuke – kapasitet må være tilgjengelig",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "RC",
+        "PC",
+        "IT",
+        "WL"
+      ],
+      "implemented": "Ukerestitusjon avhenger av belastning; individuell trening kan tilpasses form, hvile og rehab.",
+      "nextCheck": "Kontroller variasjon ved kampminutter og tett kampprogram. Ikke utled reelt søvn-/ernæringsbehov."
     },
     {
       "id": "onenote_injury_interruptions",
       "chapterId": "load_recovery",
       "title": "Gascoigne, Van Basten, Giuseppe Rossi og Falcao – skadeavbrudd",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historiske karriere- og skadeavbrudd, ikke individuelle prognoser.",
+      "nextCheck": "Behold som faglig minne; ikke utled skaderisiko, varighet eller rehabilitering fra personnavn."
     },
     {
       "id": "method_frade",
       "chapterId": "load_recovery",
       "title": "Vítor Frade – taktisk periodisering",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "TR",
+        "EX",
+        "WL",
+        "HY"
+      ],
+      "implemented": "Spillidé, treningsfokus, programbelastning og øvelseshypotese finnes.",
+      "nextCheck": "Knytt øvelsens faktiske betingelser til valgt spillidé og målt oppgavesuksess før eventuell effekt."
     },
     {
       "id": "method_verheijen",
       "chapterId": "load_recovery",
       "title": "Raymond Verheijen – fotballhandlinger, kvalitet og belastning",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "PC",
+        "WL",
+        "RC",
+        "A"
+      ],
+      "implemented": "Belastning, restitusjon og avgrenset handlings-/reaksjonstid finnes.",
+      "nextCheck": "Kontroller gjentatt kvalitet på fotballhandlinger under tretthet; ikke hevde empirisk periodisering eller automatisk treningsdose."
     }
   ]
 }
