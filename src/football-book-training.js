@@ -252,6 +252,30 @@ export const TRAINING_CHAPTERS = [
         "title": "Småspill med restriksjoner – teknisk fleksibilitet",
         "text": "Manusets konkrete restriksjoner er å spille bare med utsiden av foten, med ett touch eller med krav om vending før pasning. Begrensningene skal skape variasjon og få spillerne til å finne nye løsninger. Smålagsspill trekkes frem som en arena for flere ballberøringer, scanning og teknikk i fart. Vurder restriksjonen mot øvelsens formål: dersom den fjerner handlingsalternativet som skal trenes, må treneren tilpasse den. Det siste er en redaksjonell kobling til bokas eksisterende øvelsesdesign.",
         "source": "Fotballdokumentet v1.pdf – 3.0 Ballkontroll og restriksjoner / 3.4 Fotballfaglige og praktiske implikasjoner"
+      },
+      {
+        "id": "phys_play_snipp",
+        "title": "Hurtighetslek – snipp og snapp",
+        "text": "To grupper står parvis mot hverandre langs en midtlinje, med hver sin mållinje bak seg. Ved signalet Snipp løper Snipp-gruppen mot sin linje, mens Snapp forsøker å ta igjen partneren. Ved Snapp byttes rollene. Bruk atskilte løpskorridorer og god plass til å stoppe etter mållinjen. Kontakt skal være lett berøring, aldri dytt eller takling; en kontaktfri variant bruker passering av mållinjen. Varier startstilling og signal etter nivå. Hensikten er reaksjon og akselerasjon, med rolig retur og nok pause for god kvalitet. Dette er en sikkerhetstilpasset variant inspirert av Aktivitetsbanken, ikke en gjenfunnet ordrett oppskrift fra originalmanuset.",
+        "source": "Faglig tillegg – Aktivitetsbanken – Snipp og Snapp, https://aktivitetsbanken.no/basis/ovelser/snipp-og-snapp-1/"
+      },
+      {
+        "id": "phys_play_soldat",
+        "title": "Hurtighetslek – soldat og røver (ny variant)",
+        "text": "Redaksjonell kontaktfri variant inspirert av originalens navn: to spillere starter i parallelle korridorer. Røveren velger ved startsignal én av to markerte utganger i sin korridor; soldaten reagerer og forsøker å nå tilsvarende mållinje i sin korridor før røveren. Bytt roller etter hvert løp. Hold løpsretninger atskilt, bruk flatt underlag og gi nok bremselengde. Ingen fysisk fastholding eller takling. Øv på å registrere bevegelsen og akselerere i valgt retning. Tilpass avstanden etter alder, nivå og plass. Dette er en ny øvelsesidé, ikke dokumentasjon av manusets opprinnelige regler.",
+        "source": "Faglig tillegg – Redaksjonelt øvelsesforslag; navn fra Fotballdokumentet v1.pdf – 6. Fysiologi"
+      },
+      {
+        "id": "phys_play_number",
+        "title": "Hurtighetslek – nummerkappløp (ny variant)",
+        "text": "Redaksjonell variant: del spillerne i to lag med egne parallelle løpsbaner og gi hver spiller et nummer. Når treneren roper et nummer, løper spilleren med det nummeret på hvert lag til en mållinje. Gi poeng for å krysse linjen først med kontrollert løp, og la alle få tilsvarende muligheter. Bruk en egen bremsesone og gå rolig tilbake utenfor løpsbanene. Varier signal og startstilling når spillerne behersker grunnformen. Treneren kan legge til en enkel balloppgave før startsignalet, men bør ikke introdusere mange oppgaver på en gang. Ny variant, ikke gjenfunnet originalbeskrivelse.",
+        "source": "Faglig tillegg – Redaksjonelt øvelsesforslag; navn fra Fotballdokumentet v1.pdf – 6. Fysiologi"
+      },
+      {
+        "id": "phys_play_pair",
+        "title": "Hurtighetslek – hest og kjerre (ny kontaktfri variant)",
+        "text": "Redaksjonell variant uten trekkutstyr eller bæring: spillerne er par i parallelle løpskorridorer. Hesten leder et kort løp med kontrollert temposkifte, mens kjerra forsøker å tilpasse farten og holde samme nivå sideveis. Etter mållinjen bremses rolig; bytt leder. Ingen holder fast i partneren, bruker tau eller bærer en annen spiller. Hensikten er å oppfatte medspillerens fart og samordne egen akselerasjon. Kan gjennomføres med moderate hastigheter før intensiteten økes, tilpasset nivå og underlag. Navnet kommer fra manusets disposisjon, men reglene er et nytt redaksjonelt forslag.",
+        "source": "Faglig tillegg – Redaksjonelt øvelsesforslag; navn fra Fotballdokumentet v1.pdf – 6. Fysiologi"
       }
     ]
   },
@@ -567,6 +591,42 @@ export const TRAINING_CHAPTERS = [
         "title": "Målsetting, relativ suksess og innsats – bevarte temaer",
         "text": "Manuset navngir målsetting med Lampard som kildepeker, relativ suksess, forskjellen på å prøve hardt og å prøve maksimalt, å bruke treningstiden og å være til stede. Nerver knyttes i disposisjonen til forberedelser; enkelhet ved formsvikt knyttes til Okwonga. Uttrykket «finn ditt nivå» og enkle pasninger står også i oversikten. Disse punktene er bevart som temaer for videre kildearbeid, ikke som en rekonstruert metode eller bekreftede sitater fra de nevnte personene.",
         "source": "Fotballdokumentet v1.pdf – 7. Det mentale aspektet, linje 790–799 / 2. Psykologi og mental trening, linje 4269–4276"
+      },
+      {
+        "id": "phys_energy",
+        "title": "Fysiologi – energi og fotballens arbeidskrav",
+        "text": "Fotball er intervallpreget: gange og roligere løp avløses av akselerasjoner, sprint, dueller og brå bremsing. Kroppen bruker flere energisystemer samtidig. Aerob energiomsetning bidrar vesentlig gjennom kampen og til gjenvinning av kapasitet mellom intense aksjoner. Anaerobe prosesser, blant annet rask bruk av fosfokreatin og glykolyse, bidrar ved høy intensitet. En spiller kan derfor ha god generell utholdenhet, men likevel mangle evne til å gjenta raske aksjoner. Treneren må skille mellom å kunne løpe lenge, å kunne løpe fort og å kunne gjenta fotballrelevante løp. Eksempel: en kant kan ha god kapasitet over hele kampen, men miste kvaliteten i de første meterne av et bakromsløp. Dette krever en annen vurdering enn total distanse.",
+        "source": "Faglig tillegg – Performance Adaptations to Intensified Training in Top-Level Football (2022), https://pmc.ncbi.nlm.nih.gov/articles/PMC9667002/ | Assessment of Aerobic Fitness and Repeated Sprint Ability in Elite Male Soccer (2025), https://pubmed.ncbi.nlm.nih.gov/40220211/"
+      },
+      {
+        "id": "phys_endurance",
+        "title": "Utholdenhet – aerob kapasitet og gjentatte aksjoner",
+        "text": "Aerob utholdenhet gir grunnlag for arbeid over tid og restitusjon mellom arbeidsperioder. Intervalltrening og smålagsspill kan utvikle kapasitet, men belastningen avhenger av organisering. Et tett småspill kan gi mange akselerasjoner uten å gi særlig eksponering for toppfart. Bruk større spillflater når lengre løp er en del av målet. En pedagogisk voksenøvelse kan være fire perioder à tre minutter med spill i høyt, kontrollert tempo, avbrutt av to minutter roligere aktivitet; dette er et eksempel, ikke en forskningsfastsatt optimal dose. Juster areal, varighet og intensitet etter nivå. Observer om spilleren fortsatt kan orientere seg, støtte og forflytte seg effektivt mot slutten.",
+        "source": "Faglig tillegg – Strength and Conditioning for Soccer Players (2014), https://doi.org/10.1519/SSC.0000000000000054 | Performance Adaptations to Intensified Training in Top-Level Football (2022), https://pmc.ncbi.nlm.nih.gov/articles/PMC9667002/"
+      },
+      {
+        "id": "phys_strength",
+        "title": "Styrke – kraft, bremsing og duellspill",
+        "text": "Styrke gir et fysisk grunnlag for å akselerere, stå imot kontakt, bremse og endre retning. Maksimal styrke og evnen til å utvikle kraft raskt er forskjellige egenskaper. I fotball er særlig kontrollert arbeid i ettbeinsstillinger, hofte- og knebevegelse, leggstyrke og stabilisering av overkropp relevant. Eksempler på øvelser er knebøy, utfall, hoftehev, tåhev og tilpassede øvelser for bakside lår, lyske og kjernemuskulatur. Start med teknikk og håndterbar belastning, og øk gradvis med veiledning. Observer kontroll i senkefasen og stabilitet i fot, kne og hofte. God styrke alene garanterer ikke gode dueller: timing, posisjon og teknikk må også fungere.",
+        "source": "Faglig tillegg – Strength and Conditioning for Soccer Players (2014), https://doi.org/10.1519/SSC.0000000000000054 | Skadefri – Skadefri fotball, https://skadefri.no/idretter/fotball/skadefri-fotball/"
+      },
+      {
+        "id": "phys_power",
+        "title": "Spenst og eksplosivitet – sats, landing og retningsskifte",
+        "text": "Spenst handler om å produsere kraft raskt og utnytte elastiske og nevromuskulære egenskaper i satsen. I fotball kan det bidra i luftdueller, akselerasjon og raske retningsskifter. Tren både kraftutvikling og kontroll når spilleren tar imot belastning i landing og bremsing. En enkel progresjon er lave hopp med kontrollert landing, deretter hopp med retning og til sist kamplignende sats eller retningsskifte. Hold kvaliteten høy og avslutt dersom landingene blir ukontrollerte. Heading og luftdueller krever i tillegg lesing av ballbane og timing; spenst alene er ikke nok. Følg gjeldende aldersregler og klubbens retningslinjer for heading.",
+        "source": "Faglig tillegg – Strength and Conditioning for Soccer Players (2014), https://doi.org/10.1519/SSC.0000000000000054 | Skadefri – Fotball, https://www.skadefri.no/idretter/fotball"
+      },
+      {
+        "id": "phys_mobility",
+        "title": "Bevegelighet – funksjonelt bevegelsesutslag",
+        "text": "Bevegelighet handler om tilgjengelig utslag i ledd og muskel-/senesystem. Mobilitet i fotball krever også at spilleren kan kontrollere utslaget aktivt. Hofte, ankel og overkropp er relevante når man vender, tar imot ball, skyter eller bremser. Dynamiske utfall, kontrollerte rotasjoner og gradvis økende løpsbevegelser kan brukes i oppvarming. Velg øvelser ut fra hvilke bevegelseskrav spilleren faktisk trenger, ikke ut fra et mål om størst mulig utslag. Styrke og kontroll gjennom bevegelsen er like viktige som passiv bevegelighet. Unngå å presse gjennom smerte. Tilpass individuell trening til eventuelle begrensninger og faglig vurdering.",
+        "source": "Faglig tillegg – Olympiatoppen – Bevegelighet med tanke på utvikling av mobilitet, https://www.olympiatoppen.no/fagomrader/motorikk-og-ferdighetsutvikling/fagstoff/bevegelighet-med-tanke-pa-utvikling-av-mobilitet/ | Olympiatoppen – Oppvarming før trening og konkurranse, https://www.olympiatoppen.no/fagomrader/utholdenhet/fagstoff/oppvarming/"
+      },
+      {
+        "id": "phys_proprio",
+        "title": "Propriosepsjon og balanse – kroppens eget informasjonssystem",
+        "text": "Propriosepsjon er sansningen av kroppsdelenes stilling, bevegelse og kraft. Informasjon fra blant annet muskler og sener bidrar til at nervesystemet kan regulere bevegelsen uten at spilleren må se på alle kroppsdeler. Balanse krever i tillegg integrasjon med syn og balanseorganer. Fotballanvendelse: stabilt støttebein når man slår en pasning, kontroll i landing etter hopp og å opprettholde kroppsstilling ved retningsendring. Tren eksempelvis ettbeinsstilling med pasning til partner, kontrollert ettbeinsknebøy eller lavt hopp med stabil landing. Øk utfordringen gradvis ved å legge til ball, bevegelse og relevante beslutninger. Kjernemuskulatur bidrar til kontroll, men balanse er ikke bare magestyrke.",
+        "source": "Faglig tillegg – Proske og Gandevia (2012), The proprioceptive senses, https://pubmed.ncbi.nlm.nih.gov/23073629/ | Skadefri – Skadefri fotball, https://skadefri.no/idretter/fotball/skadefri-fotball/"
       }
     ]
   },
@@ -757,6 +817,36 @@ export const TRAINING_CHAPTERS = [
         "title": "Hurtighet gjennom lek – fire navngitte øvelsesidéer",
         "text": "Under hurtighet navngir originaldisposisjonen fire lekformer: snipp og snapp, soldat og røver, nummerkappløp og hest og kjerre. De bevares som manusets øvelsesidéer. Reglene, organiseringen, antall spillere, distansene, pausene og tilpasningen til aldersgruppe er ikke beskrevet i den tilgjengelige fysiologiblokken. Dette er derfor et register over kildens navngitte aktiviteter, ikke fire ferdige øvelser eller nye oppføringer i treningsmotoren.",
         "source": "Fotballdokumentet v1.pdf – 6. Fysiologi – Hurtighet / Lek"
+      },
+      {
+        "id": "phys_acceleration",
+        "title": "Hurtighet – akselerasjon, toppfart og reaksjon",
+        "text": "Akselerasjon er evnen til å øke fart, toppfart er høyeste løpshastighet, og gjentatt sprint er evnen til å gjennomføre flere raske drag. I fotball kommer hurtighet også til uttrykk gjennom reaksjon på pasninger, løp og motstanderens bevegelse. Tren akselerasjon med korte løp fra ulike fotballrelevante utgangsposisjoner, og toppfart med kontrollert oppbygging til høy hastighet på en tilstrekkelig lang bane. Ved ren sprinttrening er god pause nødvendig for å kunne gjenta kvaliteten. Reaksjonsøvelser kan inneholde et uforutsigbart signal, men skal ikke bli en erstatning for løp med god fart. Tren løpsteknikk og beslutning hver for seg når det er hensiktsmessig, og kombiner dem etter hvert. Sprintforskning fra friidrett må tilpasses fotballens krav.",
+        "source": "Faglig tillegg – Haugen, Seiler, Sandbakk og Tønnessen (2019), The Training and Development of Elite Sprint Performance, https://doi.org/10.1186/s40798-019-0221-0 | Assessment of Aerobic Fitness and Repeated Sprint Ability in Elite Male Soccer (2025), https://pubmed.ncbi.nlm.nih.gov/40220211/"
+      },
+      {
+        "id": "phys_speed_session",
+        "title": "Hurtighetsøkt – oppvarming, drag, pauser og serier",
+        "text": "Redaksjonelt økteksempel for friske, løpsvante voksne: start med 10–15 minutter gradvis oppvarming, med rolig aktivitet, dynamiske bevegelser og progressive stigningsløp. Deretter to serier med tre akselerasjoner på 15–20 meter, med omtrent to minutters rolig pause mellom drag og tre–fire minutter mellom serier. Start kontrollert og øk farten når teknikken er god. Den konkrete kombinasjonen er et pedagogisk eksempel, ikke et sitat fra Tønnessen eller en universell dose. Skill denne kvalitetsøkten fra gjentatt sprint med korte pauser, der tretthet er en del av belastningen. Avslutt eller tilpass dersom fart eller bevegelseskvalitet faller tydelig. Gi nok plass til å bremse. Manusets uavklarte restitusjon <70 % brukes ikke som pulsterskel eller belastningsmål.",
+        "source": "Faglig tillegg – Olympiatoppen – Oppvarming før trening og konkurranse, https://www.olympiatoppen.no/fagomrader/utholdenhet/fagstoff/oppvarming/ | Haugen, Seiler, Sandbakk og Tønnessen (2019), The Training and Development of Elite Sprint Performance, https://doi.org/10.1186/s40798-019-0221-0"
+      },
+      {
+        "id": "phys_injury_prevention",
+        "title": "Skadeforebygging – kontroll, styrke og gradvis belastning",
+        "text": "En strukturert, fotballspesifikk oppvarming kan kombinere løp, styrke, balanse, hopp og kontrollert landing. FIFA 11+ er et dokumentert eksempel på et forebyggende program; forskningsoversikter viser redusert samlet skaderisiko i undersøkte spillergrupper, ikke at alle skader kan unngås. Skadefri tilbyr praktiske progresjoner for blant annet bakside lår, lyske, bein og kjerne. Gjennomfør øvelsene med riktig teknikk, tilpass vanskelighetsgrad og øk belastning gradvis. Ved smerter, ny skade eller usikkerhet om retur til trening må fagperson vurdere situasjonen; boka er ikke et rehabiliteringsprogram. Trenerens mål er kontinuitet og god utførelse, ikke å samle flest mulig repetisjoner.",
+        "source": "Faglig tillegg – Skadefri – Fotball, https://www.skadefri.no/idretter/fotball | Effect of specific exercise-based football injury prevention programmes (2017), https://pubmed.ncbi.nlm.nih.gov/28087568/"
+      },
+      {
+        "id": "phys_monitoring",
+        "title": "Belastningsstyring – forskjellen på hva spilleren gjør og hvordan han reagerer",
+        "text": "Registrer treningsvarighet, type aktivitet og opplevd anstrengelse sammen med observasjoner av kvalitet. Løpsdistanse, antall akselerasjoner og høyhastighetsløp kan beskrive ytre belastning dersom det finnes pålitelige data. Opplevd anstrengelse, puls i relevante økter, søvn og generell tilstand sier noe om spillerens respons. To spillere kan gjennomføre samme økt og ha ulik restitusjon. Puls stiger med forsinkelse og er derfor lite egnet som eneste mål for korte sprintdrag. Treningsdagboken kan bidra til å vurdere sammenheng mellom plan, faktisk gjennomføring og utvikling. I spillet brukes bare allerede registrerte belastnings- og formdata; det innføres ikke fiktive GPS-verdier eller medisinske terskler.",
+        "source": "Faglig tillegg – Olympiatoppen – Treningsdagbok som verktøy, https://olympiatoppen.no/fagomrader/utholdenhet/fagstoff/treningsdagbok-som-verktoy-for-optimalisering-av-treningsprosessen/ | Assessment of Aerobic Fitness and Repeated Sprint Ability in Elite Male Soccer (2025), https://pubmed.ncbi.nlm.nih.gov/40220211/"
+      },
+      {
+        "id": "phys_recovery",
+        "title": "Restitusjon og kampuke – kapasitet må være tilgjengelig",
+        "text": "Restitusjon mellom kamper handler blant annet om søvn, tilstrekkelig mat og væske og tilpasning av treningsbelastningen. Behovet varierer mellom spillere og med kampminutter, kampintensitet og hvor tett kampene kommer. Ved én kamp i uka kan treneren prioritere gjenoppbygging etter kampen, en mer krevende treningsperiode når spillerne er klare, og redusert belastning mot ny kamp. Ved to kamper tett på hverandre kan vedlikehold og taktisk forberedelse bli viktigere enn store nye belastninger. Spillere med få kampminutter kan trenge et annet opplegg enn spillere som har gjennomført hele kampen. Eksempelet er en planleggingslogikk, ikke en fast medisinsk restitusjonsfrist.",
+        "source": "Faglig tillegg – Evidence-Based Recovery in Soccer (2022), https://pubmed.ncbi.nlm.nih.gov/36196351/ | The Time Course of Postmatch Physical Impairments in Professional Soccer (2025), https://pubmed.ncbi.nlm.nih.gov/40845278/"
       }
     ]
   }

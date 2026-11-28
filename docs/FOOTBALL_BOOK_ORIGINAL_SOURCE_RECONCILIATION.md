@@ -236,3 +236,42 @@ Seks søkbare fagavsnitt i individual_development og load_recovery. PDF linje 39
 | collective_training | team_spirit_outline | 7. Det mentale aspektet / 2. Psykologi og mental trening / Kommunikasjon, linje 789–801, 4269–4276 og 3654–3696 |
 
 **Åpent:** Full mental hovedblokk, målsettingsmetode, innsatsbegrep, stress og nerver, konkrete kildehenvisninger og casebeskrivelser. Full CI og OneNote-gjennomgang gjenstår.
+
+## Bolk 12 – ferdigstilt fysiologi som redaksjonell fagfordypning
+
+På brukerens bestilling om å fullføre fysiologi er 15 nye fagavsnitt lagt til i individual_development, load_recovery og exercise_constraints. Alle merkes med «Faglig tillegg» og ligger ved siden av de seks originalbaserte avsnittene fra bolk 10. Dette fullfører tematisk fagdekning, men ikke gjenfinning av den manglende originalblokken. Ingen originaltekst eller eksisterende øvelser er fjernet. Tre lekvarianter er nye redaksjonelle forslag, Snipp og Snapp er tilpasset fra Aktivitetsbanken. Den konkrete sprintøkten er et illustrativt vokseneksempel basert på generelle sprint- og oppvarmingsprinsipper, ikke et ordrett Tønnessen-program. Restitusjonsnotasjonen <70 % og George Best-eksemplet forblir uavklarte i originalen. Kildegrunnlaget er eksternt og markert per avsnitt. Ingen medisinske terskler, nye øvelses-ID-er, motorregler eller spillerverdier. Full CI og OneNote-gjennomgang gjenstår.
+
+### Kilder til fagtillegg
+
+- Performance Adaptations to Intensified Training in Top-Level Football (2022), https://pmc.ncbi.nlm.nih.gov/articles/PMC9667002/
+- Strength and Conditioning for Soccer Players (2014), https://doi.org/10.1519/SSC.0000000000000054
+- Assessment of Aerobic Fitness and Repeated Sprint Ability in Elite Male Soccer (2025), https://pubmed.ncbi.nlm.nih.gov/40220211/
+- Haugen, Seiler, Sandbakk og Tønnessen (2019), The Training and Development of Elite Sprint Performance, https://doi.org/10.1186/s40798-019-0221-0
+- Olympiatoppen – Oppvarming før trening og konkurranse, https://www.olympiatoppen.no/fagomrader/utholdenhet/fagstoff/oppvarming/
+- Olympiatoppen – Bevegelighet med tanke på utvikling av mobilitet, https://www.olympiatoppen.no/fagomrader/motorikk-og-ferdighetsutvikling/fagstoff/bevegelighet-med-tanke-pa-utvikling-av-mobilitet/
+- Skadefri – Fotball, https://www.skadefri.no/idretter/fotball
+- Skadefri – Skadefri fotball, https://skadefri.no/idretter/fotball/skadefri-fotball/
+- Proske og Gandevia (2012), The proprioceptive senses, https://pubmed.ncbi.nlm.nih.gov/23073629/
+- Effect of specific exercise-based football injury prevention programmes (2017), https://pubmed.ncbi.nlm.nih.gov/28087568/
+- Olympiatoppen – Treningsdagbok som verktøy, https://olympiatoppen.no/fagomrader/utholdenhet/fagstoff/treningsdagbok-som-verktoy-for-optimalisering-av-treningsprosessen/
+- Evidence-Based Recovery in Soccer (2022), https://pubmed.ncbi.nlm.nih.gov/36196351/
+- The Time Course of Postmatch Physical Impairments in Professional Soccer (2025), https://pubmed.ncbi.nlm.nih.gov/40845278/
+- Aktivitetsbanken – Snipp og Snapp, https://aktivitetsbanken.no/basis/ovelser/snipp-og-snapp-1/
+
+| Kapittel-ID | Underavsnitt-ID |
+|---|---|
+| individual_development | phys_energy |
+| individual_development | phys_endurance |
+| individual_development | phys_strength |
+| individual_development | phys_power |
+| individual_development | phys_mobility |
+| individual_development | phys_proprio |
+| load_recovery | phys_acceleration |
+| load_recovery | phys_speed_session |
+| load_recovery | phys_injury_prevention |
+| load_recovery | phys_monitoring |
+| load_recovery | phys_recovery |
+| exercise_constraints | phys_play_snipp |
+| exercise_constraints | phys_play_soldat |
+| exercise_constraints | phys_play_number |
+| exercise_constraints | phys_play_pair |
