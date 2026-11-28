@@ -467,3 +467,23 @@ Dette er en prioritert oversikt over uutfylte eksempler, ikke komplette nye port
 | third_man | portrait_wenger | PDF linje 3458–3467; Arsenal FC, https://www.arsenal.com/feature/the-wenger-years-a05Ex7F5N6vd |
 | formations | portrait_ferguson | Premier League, https://www.premierleague.com/en/news/4243787/the-4-4-2-football-tactics-explained |
 | transition_attack | portrait_ranieri | Premier League, https://www.premierleague.com/en/news/2748139 |
+
+## Bolk 22 – ledere, kulthelter, regionale profiler og samfunnsstemmer
+
+13 fagtillegg med kildebelagte historiske holdepunkter. Originalens navnelister i Del I (246–279), Del II (350–414), Del IV (4470–4519) og mentaldisposisjonen (788–802) er brukt som register, ikke som utfylte biografier. Di Stéfano, Beckenbauer, Keane, Deschamps, Ramos, Zico, Baggio, Zola, Rivelino, Romário, Yaya Touré, Nakata, Park, Son, Gamst Pedersen, Grønkjær, Kanu, Ravanelli og Weah er nå tematisk representert. Samfunnscaset om Sócrates fra bolk 15 er beholdt. Originalens merkelapper om kriminalitet og psyke gjengis ikke som fakta; eventuelle separate personcase krever dokumenterte hendelser og relevant formål. Portrett av Ancelotti og øvrige navngitte trener-/spillerreferanser i brødteksten er ikke uttømmende kontrollert. Ingen nye motorregler eller illustrasjoner. Full OneNote-kontroll og CI gjenstår.
+
+| Kapittel | Underavsnitt | Ekstern kilde |
+|---|---|---|
+| link_strikers | portrait_di_stefano | Real Madrid, https://www.realmadrid.com/en-US/the-club/history/football-legends/alfredo-di-stefano-laulhe |
+| centre_backs | portrait_beckenbauer | FIFA, https://inside.fifa.com/organisation/news/a-tribute-to-franz-beckenbauer-1945-2024 ; https://inside.fifa.com/en/news/der-kaiser-turns-75 |
+| collective_training | portrait_keane_deschamps | Premier League, https://www.premierleague.com/en/events/hall-of-fame/inductees/roy-keane ; FIFA, https://inside.fifa.com/tournaments/mens/worldcup/qatar2022/news/the-secrets-to-deschamps-longevity-with-les-bleus |
+| marking_blocks | portrait_ramos | Real Madrid, https://www.realmadrid.com/en-US/news/club/latest-news/la-decima-cumple-diez-anos-24-05-2024 |
+| ten_creator | portrait_zico_baggio_zola | FIFA, https://www.fifa.com/en/tournaments/mens/club-world-cup/usa-2025/articles/zico-flamengo-determination-love-passion ; https://www.fifa.com/en/archive/roberto-baggio ; Chelsea, https://www.chelseafc.com/en/news/article/chelseas-team-of-120-forward-gianfranco-zola |
+| free_kicks | portrait_rivelino | FIFA, https://collect.fifa.com/collectible/182425449578756 |
+| finishing_press | portrait_romario | FIFA, https://www.fifa.com/en/tournaments/mens/worldcup/articles/netherlands-brazil-dallas-usa-1994 ; https://www.fifa.com/en/tournaments/mens/worldcup/articles/jorginho-brazil-usa-1994 |
+| eight_press | portrait_yaya_toure | Manchester City, https://www.mancity.com/news/first-team/first-team-news/2017/september/man-city-yaya-toure-longform-300-appearances |
+| eight_press | portrait_nakata_park | AS Roma, https://www.asroma.com/en/news/44052/on-this-day-in-2001-watch-the-goals-in-the-famous-comeback-against-juve ; Manchester United, https://www.manutd.com/en/news/manchester-united-around-the-world-xi |
+| wingers | portrait_son | Premier League, https://www.premierleague.com/en/news/1750634 ; https://www.premierleague.com/en/news/4271919/opta-analyst-elanga |
+| wingers | portrait_gamst_gronkjaer | SNL, https://snl.no/Morten_Gamst_Pedersen ; Chelsea, https://www.chelseafc.com/en/news/article/beating-liverpool-in-2003 ; https://www.chelseafc.com/en/news/article/legends-from-overseas-added-to-squad-for-liverpool |
+| finishing_press | portrait_kanu_ravanelli | Premier League, https://www.premierleague.com/en/news/2284536/black-history-month-heroes-nwankwo-kanu ; UEFA, https://www.uefa.com/uefachampionsleague/news/013d-0ea96a4b53b8-032c0735e213-1000--juventus-hold-their-nerve-to-seal-the-real-deal/ |
+| collective_training | portrait_weah_romario_civic | FIFA, https://inside.fifa.com/campaigns/no-discrimination/media-releases/players-voice-panel-tackle-racism-in-football ; Brasils senat, https://www12.senado.leg.br/noticias/materias/2014/10/05/romario-e-eleito-senador |

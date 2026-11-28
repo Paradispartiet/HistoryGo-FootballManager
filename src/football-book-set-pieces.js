@@ -327,6 +327,12 @@ export const SET_PIECE_CHAPTERS = [
         "title": "Juninho, Beckham og Pirlo – frispark som teknisk spesialisering",
         "text": "UEFAs samling av historiske frispark og kampreferatet fra Lyon dokumenterer Juninho Pernambucano som frisparkspesialist. I et intervju beskriver Juninho selv sin tekniske utvikling. Bruk Juninho, Beckham og Pirlo, som alle er nevnt i originaldisposisjonen, til å undersøke ulike leveringsbaner: skrudd ball, varierende rotasjon og målrettet plassering. Observer tilløp, treffpunkt, mur, avstand og keeperposisjon. Teknisk variant må velges ut fra situasjonen, ikke spillerens berømmelse. Ingen fast frisparksannsynlighet eller rangering av spillerne legges inn.",
         "source": "Faglig tillegg – UEFA, https://www.uefa.com/uefachampionsleague/news/0271-142ab5eaac54-565b3cc3cec4-1000--the-best-free-kicks-in-uefa-champions-league-history/ ; https://www.uefa.com/uefachampionsleague/news/01b2-0e6d65fc4647-b5a0bb928927-1000--juninho-strike-leaves-lyon-on-top/ ; FourFourTwo, https://www.fourfourtwo.com/features/best-free-kick-taker-ever-juninho-pernambucano-how-he-got-so-good; personnavn fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_rivelino",
+        "title": "Rivelino – frisparkets leveringsbane",
+        "text": "FIFAs historiske videomateriale dokumenterer Rivelinos frisparkmål i VM 1974. Originalmanuset nevner ham sammen med Beckham, Juninho og Pirlo. Bruk klippet som utgangspunkt for å undersøke ballens bane, skuddretning, murens plassering og keeperens reaksjon. Skytteren kan søke en direkte avslutning eller velge en pasning dersom situasjonen tilsier det. Ikke utled nøyaktige fysiske treffverdier fra en enkelt video. Formålet er å forstå hvordan teknikk og situasjonsvalg henger sammen, ikke å kopiere en berømt skuddrutine uten tilpasning.",
+        "source": "Faglig tillegg – FIFA, https://collect.fifa.com/collectible/182425449578756; personnavn fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -642,6 +648,12 @@ export const SET_PIECE_CHAPTERS = [
         "title": "Defensive dødballer – keeperens organisering og konkrete beskjeder",
         "text": "Keeperdelen fremhever tidlig organisering av mur, spillermarkeringer og høyt press på andreballer. Keeperen vurderer om han kan gå ut og angripe ballen eller bør holde posisjonen nærmere linjen. Kommunikasjonsdelen anbefaler konkrete avklaringer av hvem som har hvilken motstander, for eksempel spørsmålet Har du han? En felles beskjed kan utløse press. Den separate overskriften Defensiv frispark har ingen utfylt forklaring i originalmanuset; den eksisterende bokas frisparkkapittel gir derfor supplerende fagstoff, ikke en rekonstruert originalbeskrivelse.",
         "source": "Fotballdokumentet v1.pdf – Keeper 1.5 Dødball, linje 1199–1203 / Situasjonsavhengig posisjonering, 958–963 / Kommunikasjon, 3707–3712 / Defensiv frispark, 1866"
+      },
+      {
+        "id": "portrait_ramos",
+        "title": "Sergio Ramos – stopperens offensive dødballoppgave",
+        "text": "Real Madrid dokumenterer Ramos' utligning med heading i europacupfinalen i 2014. Den historiske hendelsen kan brukes til å undersøke en stoppers offensive arbeidsoppgave ved dødball: startposisjon, timing, ballbane og lovlig duell. Avklar samtidig hvem som sikrer bak angrepet. En avgjørende scoring er ikke i seg selv en måling av vinnermentalitet eller bevis for at en bestemt risikostrategi er optimal. Caset plasseres derfor i dødballkapitlet fremfor å brukes som psykologisk karakteristikk.",
+        "source": "Faglig tillegg – Real Madrid, https://www.realmadrid.com/en-US/news/club/latest-news/la-decima-cumple-diez-anos-24-05-2024; personnavn fra Fotballdokumentet v1.pdf"
       }
     ]
   },

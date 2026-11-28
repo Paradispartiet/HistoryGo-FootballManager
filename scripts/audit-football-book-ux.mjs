@@ -252,6 +252,10 @@ for(const c of SET_PIECE_CHAPTERS){
 check(SET_PIECE_CHAPTERS.reduce((n,c)=>n+c.diagrams.length,0)===9,"Dødballfigurer mangler");
 check(bookHtml.includes('id="footballBookSetPieces"'),"Dødballer ikke tilgjengelige i spillet");
 check(TRAINING_CHAPTERS.length===6,"Treningskapitler mangler");
+for(const [id,expected] of Object.entries({"link_strikers":["portrait_di_stefano"],"centre_backs":["portrait_beckenbauer"],"collective_training":["portrait_keane_deschamps","portrait_weah_romario_civic"],"marking_blocks":["portrait_ramos"],"ten_creator":["portrait_zico_baggio_zola"],"free_kicks":["portrait_rivelino"],"finishing_press":["portrait_romario","portrait_kanu_ravanelli"],"eight_press":["portrait_yaya_toure","portrait_nakata_park"],"wingers":["portrait_son","portrait_gamst_gronkjaer"]})){
+  const sections=[...ROLE_CHAPTERS,...TRAINING_CHAPTERS,...SET_PIECE_CHAPTERS].find(c=>c.id===id)?.sourceDetails||[];
+  for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("Faglig tillegg – ")&&d.source.includes("https://"),key+": kultur- og spillerprofil mangler");}
+}
 for(const [id,expected] of Object.entries({"finishing_press":["portrait_henry","portrait_ronaldo_nazario","portrait_cristiano_heading"],"wingers":["portrait_mbappe"],"link_strikers":["portrait_drogba_lukaku"],"eight_press":["portrait_kante","portrait_matthaus","portrait_modric"],"six_regista":["portrait_makelele"],"fullbacks":["portrait_lahm"],"centre_backs":["portrait_maldini"],"individual_development":["portrait_zlatan_longevity","portrait_physical_role_comparison"]})){
   const sections=[...ROLE_CHAPTERS,...TRAINING_CHAPTERS].find(c=>c.id===id)?.sourceDetails||[];
   for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("Faglig tillegg – ")&&d.source.includes("https://"),key+": fysisk eller allrounder-case mangler");}

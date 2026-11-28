@@ -253,6 +253,12 @@ export const ROLE_CHAPTERS = [
         "title": "Paolo Maldini – levetid, posisjonering og tilpasning",
         "text": "AC Milan dokumenterer Maldinis lange spillerkarriere fra debuten i januar 1985, mens UEFA allerede i 2005 fremhevet hans vedvarende prestasjoner på høyt nivå. Originalmanuset nevner ham ved robusthet og levetid. En lang karriere kan brukes til å studere hvordan spillere løser defensive problemer gjennom plassering, timing og samhandling, og hvordan arbeidsoppgavene kan endres over tid. Den dokumenterer ikke at én bestemt treningsmetode eller posisjoneringsstil hindrer skade. I managerens analyse bør kampbelastning, tilgjengelighet og rollekrav vurderes individuelt fremfor å utlede robusthet fra alder eller karrierelengde alene.",
         "source": "Faglig tillegg – AC Milan, https://www.acmilan.com/en/club/legends/player/paolo-maldini ; UEFA, https://www.uefa.com/uefachampionsleague/news/01a9-0e6cc45febef-9f10f83f46b9-1000--dutch-style-wins-maldini-over/; personnavn og tematikk fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_beckenbauer",
+        "title": "Franz Beckenbauer – liberoens offensive ansvar",
+        "text": "FIFA beskriver Beckenbauer som en sentral skikkelse i utviklingen av liberorollen, med teknikk og bevegelse som gjorde det mulig å gå fra forsvar til angrep. Han var kaptein da Vest-Tyskland vant VM i 1974. Caset viser at sikringsspilleren også kan bidra i oppbyggingen. Undersøk når en fremføring skaper overtall på midtbanen, og hvem som beskytter rommet bak. En offensiv libero forutsetter kollektiv omorganisering; rollen er ikke det samme som enhver moderne ballspillende stopper.",
+        "source": "Faglig tillegg – FIFA, https://inside.fifa.com/organisation/news/a-tribute-to-franz-beckenbauer-1945-2024 ; https://inside.fifa.com/en/news/der-kaiser-turns-75; personnavn fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -665,6 +671,18 @@ export const ROLE_CHAPTERS = [
         "title": "Luka Modrić – rytmekontroll og langvarig prestasjon",
         "text": "UEFAs analyse av Kroatia–Italia i EM 2024 fremhever Modrićs pasning til mottakerens bakre fot, slik at neste handling kan gå fremover. UEFA omtaler også hans betydning for Kroatia som 37-åring i VM 2022. Caset knytter teknisk presisjon til spilleforståelse: en god pasning er ikke bare en pasning som når frem, men en som gir medspilleren en gunstig kroppsstilling og tid. Vurder hvordan tempo og støtte endres når spilleren møter press. Lang karriere er et historisk holdepunkt, ikke grunnlag for å fastsette biologisk alder, treningsdose eller skadeprognose.",
         "source": "Faglig tillegg – UEFA, https://www.uefa.com/uefaeuro/history/news/028e-1b37474f637b-9784d3f1e6e4-1000--croatia-1-1-italy-analysis-the-magic-of-modric/ ; https://www.uefa.com/news/027b-169a7169dd60-6148d39469f8-1000--croatia-at-the-2022-world-cup/; personnavn og tematikk fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_yaya_toure",
+        "title": "Yaya Touré – midtbanespilleren som også truer mål",
+        "text": "Manchester City dokumenterer Tourés 20 ligamål i mesterskapssesongen 2013/14. Det gir et eksempel på at en sentral midtbanespiller også kan ha betydelig offensiv produksjon. Undersøk når spilleren kan føre ballen inn i et nytt rom, støtte angrepet eller bevege seg mot avslutningssonen. Samtidig må andre spillere ivareta balanse dersom han forlater sin utgangsposisjon. Målstatistikken sier ikke alene hvilke løp eller pasningsmønstre som skapte scoringsmulighetene. Caset brukes derfor som observasjonsoppgave, ikke som grunnlag for en fast motorbonus.",
+        "source": "Faglig tillegg – Manchester City, https://www.mancity.com/news/first-team/first-team-news/2017/september/man-city-yaya-toure-longform-300-appearances; personnavn fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_nakata_park",
+        "title": "Hidetoshi Nakata og Park Ji-sung – forskjellige midtbaneoppgaver",
+        "text": "AS Roma dokumenterer Nakatas scoring fra utenfor boksen i opphentingen mot Juventus i 2001. Manchester United fremhever Parks betydning for laget og hans uselviske bidrag. Eksemplene gir anledning til å skille mellom den synlige offensive handlingen og arbeidet som gjør medspillernes handlinger mulige. Observer skuddrom, støtte, dekning og bevegelse uten ball. Spillernes japanske og sørkoreanske bakgrunn brukes ikke som forklaring på deres taktiske egenskaper. Dette er to individuelle case, ikke en påstand om en felles asiatisk spillestil.",
+        "source": "Faglig tillegg – AS Roma, https://www.asroma.com/en/news/44052/on-this-day-in-2001-watch-the-goals-in-the-famous-comeback-against-juve ; Manchester United, https://www.manutd.com/en/news/manchester-united-around-the-world-xi; personnavn fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -794,6 +812,12 @@ export const ROLE_CHAPTERS = [
         "title": "Lionel Messi – kreativitet, ballnær støtte og brudd med strukturen",
         "text": "Manuset plasserer Messi sammen med Maradona og Zidane i drøftingen av geniet innenfor en struktur. FIFA Training Centres analyser av Argentina i VM 2022 viser hvordan Messi og midtbanespillerne kunne søke mot ballen, samtidig som andre opprettholdt bredde og dybde; hans assist mot Nederland og Kroatia er eksempler på dribling og pasningsvalg. Faglig er det avgjørende å skille mellom lokal overtallsskaping og rommet som frigjøres lenger unna. En kreativ spiller kan møte, binde en forsvarer eller føre ballen fremover, men trenger samtidige tilbud for neste handling. Observer hvem som holder bredden, hvem som truer bakrom, og hvem som sikrer når en dribling mislykkes. Dette er ikke et krav om å kopiere Messis individuelle bevegelsesmønster.",
         "source": "Faglig tillegg – PDF Del V, linje 4624–4645; FIFA Training Centre, https://www.fifatrainingcentre.com/en/game/game-analysis/world-class-tactics/argentina--ball-proximity-in-possession.php ; https://www.fifatrainingcentre.com/en/fwc2022/physical-analysis/using-case-studies-to-reveal-the-reasons-why-various-tactical-roles-exert-themselves-physically-during-world-cup-matches.php; personnavn og eventuelle mønstre fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_zico_baggio_zola",
+        "title": "Zico, Roberto Baggio og Gianfranco Zola – den skapende angriperen",
+        "text": "I et FIFA-intervju beskriver Zico hvordan han ba en medspiller være klar til å angripe rom bak Liverpools linje. FIFA dokumenterer Baggios fem mål på vei til VM-finalen i 1994, mens Chelsea dokumenterer Zolas bidrag med både mål og målgivende pasninger. Casene brukes til å undersøke forbindelsen mellom kreativitet og lagets gjennombrudd: kan spilleren registrere et rom før det åpner seg, finne en medspiller eller selv avslutte? Dette er ulike karrierer, ikke tre identiske rolleprofiler. Vurder både handlingen med ball og medspillernes mulighet til å utnytte den.",
+        "source": "Faglig tillegg – FIFA, https://www.fifa.com/en/tournaments/mens/club-world-cup/usa-2025/articles/zico-flamengo-determination-love-passion ; https://www.fifa.com/en/archive/roberto-baggio ; Chelsea, https://www.chelseafc.com/en/news/article/chelseas-team-of-120-forward-gianfranco-zola; personnavn fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -924,6 +948,18 @@ export const ROLE_CHAPTERS = [
         "title": "Kylian Mbappé – brems, akselerasjon og bueløp",
         "text": "FIFA Training Centre analyserer hvordan Mbappé reduserer farten for å binde forsvareren før han øker den igjen, og hvordan han bruker buede løp og retningsendringer bak forsvarslinjen. Fotballhurtighet er dermed ikke bare en rettlinjet sprint. Når forsvareren nærmer seg, kan en kontrollert oppbremsing gjøre en ny akselerasjon vanskeligere å følge. Observer ballens avstand fra foten, forsvarerens tyngdeoverføring og rommet som åpnes. En treningsvariant er å møte en aktiv forsvarer og velge mellom å akselerere, endre retning og spille videre. Dette er et pedagogisk forslag, ikke en måling av spillerens kapasitet.",
         "source": "Faglig tillegg – FIFA Training Centre, https://www.fifatrainingcentre.com/en/game/individual-qualities/world-class-skills/mbappe-deceleration-to-acceleration2.php ; https://www.fifatrainingcentre.com/en/fwc2022/physical-analysis/using-case-studies-to-reveal-the-reasons-why-various-tactical-roles-exert-themselves-physically-during-world-cup-matches.php; personnavn og tematikk fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_son",
+        "title": "Son Heung-min – gjennombrudd og avslutning med begge føtter",
+        "text": "Premier League dokumenterer Sons solomål mot Burnley i 2019 og beskriver ham i en separat analyse som en avslutter med forholdsvis jevn fordeling mellom føttene. Caset knytter ballføring i fart til evnen til å avslutte fra ulike vinkler. Se etter om forsvarerens plassering gir en fordel ved å gå inn eller ut, og om neste berøring gir et godt skuddrom. En angriper som behersker flere avslutningsvalg kan gjøre forsvarerens styring vanskeligere. Dette er en taktisk tolkning, ikke en ny måling av Sons ferdigheter.",
+        "source": "Faglig tillegg – Premier League, https://www.premierleague.com/en/news/1750634 ; https://www.premierleague.com/en/news/4271919/opta-analyst-elanga; personnavn fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_gamst_gronkjaer",
+        "title": "Morten Gamst Pedersen og Jesper Grønkjær – bredde og innlegg",
+        "text": "Store norske leksikon beskriver Gamst Pedersen som venstre kantspiller, mens Chelsea beskriver Grønkjær som en hurtig kantspiller og dokumenterer hans innlegg til Desaillys utligning mot Liverpool i 2003. Bruk eksemplene til å vurdere kantens ansvar for bredde og leveringsvinkel: når bør han holde sidelinjen, utfordre inn eller levere før forsvareren rekker å stenge? Medspillernes bevegelse i boksen avgjør hvilke innlegg som er aktuelle. Gamst Pedersens profil krever mer kampmateriale før konkrete historiske innleggssekvenser kan beskrives.",
+        "source": "Faglig tillegg – SNL, https://snl.no/Morten_Gamst_Pedersen ; Chelsea, https://www.chelseafc.com/en/news/article/beating-liverpool-in-2003 ; https://www.chelseafc.com/en/news/article/legends-from-overseas-added-to-squad-for-liverpool; personnavn fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -1043,6 +1079,12 @@ export const ROLE_CHAPTERS = [
         "title": "Didier Drogba og Romelu Lukaku – fysisk kapasitet i spissens støtteoppgave",
         "text": "Premier League fremhever Drogbas kombinasjon av kraft, fart og ferdigheter, og beskriver Lukakus evne til å holde forsvarere unna ballen i boksen. Casene brukes til å skille mellom å skjerme ballen, vinne en duell og gjøre neste handling tilgjengelig for en medspiller. En spiss kan ta imot under press, vende dersom rommet åpnes eller legge igjen ballen dersom støtte er tilgjengelig. Styrke er et fysisk grunnlag; valg av kroppsstilling, timing og lovlig kontakt avgjør hvordan den anvendes. I kampanalyse bør man skille mellom mottak med forsvarer i ryggen og mottak på løp. Dette er ikke identiske spillerprofiler eller en rangering av duellstyrke.",
         "source": "Faglig tillegg – Premier League, https://www.premierleague.com/en/events/hall-of-fame/inductees/didier-drogba ; https://www.premierleague.com/en/news/2211857; personnavn og tematikk fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_di_stefano",
+        "title": "Alfredo Di Stéfano – leder og forbindelsesspiller",
+        "text": "Real Madrids historiske portrett fremhever Di Stéfanos ledende rolle i klubbens fem første europacuptriumfer. Originalmanuset plasserer ham blant ledere og allroundere. Bruk kampfilm til å undersøke hvordan en angriper kan knytte sammen midtbane og angrep: når møter han ballen, når må han selv true mål, og hvem overtar rommet han forlater? Dette er en observasjonsramme, ikke en påstand om at han alltid utførte én bestemt rolle eller spilte med dagens taktiske begreper.",
+        "source": "Faglig tillegg – Real Madrid, https://www.realmadrid.com/en-US/the-club/history/football-legends/alfredo-di-stefano-laulhe; personnavn fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -1267,6 +1309,18 @@ export const ROLE_CHAPTERS = [
         "title": "Cristiano Ronaldo – spenst, tilløp og timing ved heading",
         "text": "Originalmanuset nevner Cristiano Ronaldo særskilt ved spenst. UEFA dokumenterer headingen i EM-semifinalen mot Wales i 2016 og fremhever hoppet ved scoringen. Caset kan brukes til å analysere hvordan en angriper finner plass for sats, følger ballbanen og møter ballen i riktig øyeblikk. Spenst alene avgjør ikke luftduellen: innleggets kvalitet, forsvarerens plassering og spillerens timing må vurderes sammen. Det innføres ingen udokumenterte målinger av hopphøyde eller faste headingverdier. Praktisk trening skal følge gjeldende aldersregler og klubbens sikkerhetsrutiner.",
         "source": "Faglig tillegg – UEFA, https://www.uefa.com/uefaeuro/match/2017905--portugal-vs-wales/events/; personnavn og tematikk fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_romario",
+        "title": "Romário – avslutning med begrenset tid og rom",
+        "text": "FIFA beskriver Romários tåavslutning mot Nederland i VM 1994 og Jorginhos innlegg til hans avgjørende scoring mot Sverige. De to eksemplene illustrerer at avslutningsteknikken må tilpasses situasjonen. En rask tåavslutning kan være aktuell når det er liten tid til tilløp, mens en mottaker ved innlegg må lese ballbanen og finne et egnet treffpunkt. Undersøk hvorfor en bestemt teknikk er hensiktsmessig i den aktuelle situasjonen. Ikke behandle Romários valg som en universell regel for avslutninger i boksen.",
+        "source": "Faglig tillegg – FIFA, https://www.fifa.com/en/tournaments/mens/worldcup/articles/netherlands-brazil-dallas-usa-1994 ; https://www.fifa.com/en/tournaments/mens/worldcup/articles/jorginho-brazil-usa-1994; personnavn fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_kanu_ravanelli",
+        "title": "Kanu og Fabrizio Ravanelli – avslutning når kampbildet endres",
+        "text": "Premier League dokumenterer Kanus hattrick i Arsenals opphenting fra 0–2 mot Chelsea i 1999. UEFA dokumenterer Ravanellis scoring fra svært skrå vinkel i europacupfinalen i 1996 etter at han utnyttet en feil i Ajax-forsvaret. Bruk situasjonene til å undersøke hvordan en spiss registrerer nye muligheter etter en feil, et nedfall eller en endret kampstilling. Når skuddvinkelen er liten, må spilleren vurdere om direkte skudd, kontroll eller pasning er mest hensiktsmessig. Casene illustrerer konkrete kampbegivenheter, ikke generelle sannsynligheter for avslutning.",
+        "source": "Faglig tillegg – Premier League, https://www.premierleague.com/en/news/2284536/black-history-month-heroes-nwankwo-kanu ; UEFA, https://www.uefa.com/uefachampionsleague/news/013d-0ea96a4b53b8-032c0735e213-1000--juventus-hold-their-nerve-to-seal-the-real-deal/; personnavn fra Fotballdokumentet v1.pdf"
       }
     ]
   }

@@ -880,6 +880,18 @@ export const TRAINING_CHAPTERS = [
         "title": "Sócrates og Corinthians-demokratiet – fotball som samfunnshandling",
         "text": "Manuset løfter frem Sócrates som elegant midtbanespiller, lege, kaptein for Brasil i VM 1982 og politisk engasjert fotballspiller. Forskning på Democracia Corinthiana beskriver en klubbpraksis med økt medbestemmelse og en bevegelse som fikk betydning i kampen for demokratiske rettigheter under Brasils militærdiktatur. Sócrates var en sentral deltaker, sammen med andre spillere og aktører i klubben. Caset viser hvordan fotball kan være en arena for samfunnshandling og kollektivt ansvar, uten at en klubborganisering må kopieres direkte i spillets managerrolle. Den historiske konteksten er særskilt kildebelagt.",
         "source": "Fotballdokumentet v1.pdf – Del IV – Sócrates – doktoren som ledet revolusjonen; FIFA, https://inside.fifa.com/tournaments/mens/worldcup/1982spain/news/tele-and-his-gods-of-82 ; Playing for freedom: Sócrates, futebol-arte and democratic struggle in Brazil, https://doi.org/10.1080/14660970.2014.912014"
+      },
+      {
+        "id": "portrait_keane_deschamps",
+        "title": "Roy Keane og Didier Deschamps – ledelse gjennom arbeidsoppgaven",
+        "text": "Premier League dokumenterer Keanes kapteinsrolle i Manchester United fra 1997. FIFA beskriver Deschamps som defensiv midtbanespiller og kaptein ved Frankrikes VM-triumf i 1998. De gir to historiske utgangspunkter for å undersøke ledelse fra midtbanen. Observer hvordan en spiller tilbyr støtte, hjelper andre med posisjonering og kommuniserer ved omstilling. Kapteinsrollen gir ansvar, men beviser ikke at en bestemt personlighet eller konfrontasjonsstil gir bedre prestasjoner. Tren felles beskjeder og vurder handlinger fremfor å tildele spillerne psykologiske merkelapper.",
+        "source": "Faglig tillegg – Premier League, https://www.premierleague.com/en/events/hall-of-fame/inductees/roy-keane ; FIFA, https://inside.fifa.com/tournaments/mens/worldcup/qatar2022/news/the-secrets-to-deschamps-longevity-with-les-bleus; personnavn fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_weah_romario_civic",
+        "title": "George Weah og Romário – fotballens samfunnsstemmer",
+        "text": "Originalmanuset nevner Weah og Romário sammen med Sócrates og Pelé som samfunnsstemmer. FIFA dokumenterer Weahs rolle som æreskaptein i Players' Voice Panel mot rasisme, mens Brasils senat dokumenterer Romários valg til senatet i 2014. Casene viser ulike måter en fotballprofil kan delta i offentligheten på: organisert arbeid mot diskriminering og folkevalgt politikk. De brukes som historiske og institusjonelle eksempler, ikke som partipolitisk støtte eller som bevis for at sportslig dyktighet gir politisk kompetanse. Det tidligere Sócrates-avsnittet beholdes.",
+        "source": "Faglig tillegg – FIFA, https://inside.fifa.com/campaigns/no-discrimination/media-releases/players-voice-panel-tackle-racism-in-football ; Brasils senat, https://www12.senado.leg.br/noticias/materias/2014/10/05/romario-e-eleito-senador; personnavn fra Fotballdokumentet v1.pdf"
       }
     ]
   },
