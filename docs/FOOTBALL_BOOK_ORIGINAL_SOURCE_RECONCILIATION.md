@@ -353,3 +353,20 @@ På brukerens bestilling om å fullføre fysiologi er 15 nye fagavsnitt lagt til
 | formations | culture_regional_examples | Del II – Ferdigheter i kultur og kontekst; FIFA, https://www.fifa.com/en/articles/world-cup-qatar-2022-surprises-that-shook-the-world ; https://www.fifa.com/en/tournaments/mens/worldcup/articles/asia-best-moments |
 | collective_training | culture_socrates | Del IV – Sócrates – doktoren som ledet revolusjonen; FIFA, https://inside.fifa.com/tournaments/mens/worldcup/1982spain/news/tele-and-his-gods-of-82 ; Playing for freedom: Sócrates, futebol-arte and democratic struggle in Brazil, https://doi.org/10.1080/14660970.2014.912014 |
 | total_football | culture_synthesis | Del IV – Avslutning: Estetikk som grunnvilkår / Del V – System vs. individ / Arven |
+
+## Bolk 16 – dødballer og spesialsituasjoner
+
+10 søkbare fagavsnitt i alle fem eksisterende dødballkapitler. PDF 1.2 Straffer (1089–1104), 1.5 Dødball (1199–1203), Lås av (1594–1601), Defensiv Dødball (1855–1866), Angrepsavslutning (2487–2525), Offensiv dødball (3316–3346), Kommunikasjon (3707–3712) og Klarering (3775–3792). Manusets leveringspreferanser, defensive stolpeansvar, lås av, offensiv markering og overgangsvariant er bevart. IFAB gjeldende regler 11, 12, 13 og 14 er kontrollert; ulovlig hindring, holding og usportslig forstyrrelse av skytter presenteres ikke som taktiske instruksjoner. Uverifiserte straffestatistikker og keeperanekdoter er avgrenset. Defensiv frispark er en tom overskrift i kilden; full offensiv innkastvariant er ikke beskrevet. Eksisterende fagtekst dekker disse temaene uten å utgi seg for originalen. Ingen nye hovedkapitler, figurer, motorregler eller øvelses-ID-er. Full CI, personcaser og komplett OneNote-kontroll gjenstår.
+
+| Kapittel | Underavsnitt | Kildeanker |
+|---|---|---|
+| attacking_corners | corner_low_delivery | Offensiv dødball – Corner, linje 3316–3333 / Tre angrepstyper |
+| attacking_corners | corner_disguise | Offensiv dødball – Corner, linje 3322–3346; IFAB regel 12, https://www.theifab.com/laws/latest/fouls-and-misconduct/ |
+| free_kicks | free_kick_targets | Offensiv dødball – Frispark, linje 3334–3346; IFAB regel 11 og 13, https://www.theifab.com/laws/latest/offside/ ; https://www.theifab.com/laws/latest/free-kicks/ |
+| free_kicks | penalty_kicker | Angrepsavslutning – Mentale faktorer / Straffe, linje 2487–2495 og 2521–2525; IFAB regel 14, https://www.theifab.com/laws/latest/the-penalty-kick/ |
+| free_kicks | penalty_keeper | Keeper – Straffer, linje 1089–1104; IFAB regel 14, https://www.theifab.com/laws/latest/the-penalty-kick/ |
+| throw_ins | restart_lock | 2. Defensivt – Lås av, linje 1594–1601; IFAB regel 11, https://www.theifab.com/laws/latest/offside/ |
+| marking_blocks | corner_defence_posts | Defensiv Dødball – Defensiv corner, linje 1855–1860; IFAB regel 12, https://www.theifab.com/laws/latest/fouls-and-misconduct/ |
+| marking_blocks | restart_organize | Keeper 1.5 Dødball, linje 1199–1203 / Situasjonsavhengig posisjonering, 958–963 / Kommunikasjon, 3707–3712 / Defensiv frispark, 1866 |
+| second_ball_security | offensive_marking_restart | Defensiv Dødball – Offensiv markering, linje 1859–1866 / Keeper 1.5 Dødball |
+| second_ball_security | clearance_counter_restart | Klarering, linje 3775–3792 |

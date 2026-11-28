@@ -215,6 +215,11 @@ for(const c of PHASE_CHAPTERS){
 }
 check(bookHtml.includes('id="footballBookPhases"'),"Kampfasene ikke tilgjengelige i spillet");
 check(SET_PIECE_CHAPTERS.length===5,"Dødballkapitler mangler");
+for(const [id,expected] of Object.entries({"attacking_corners":["corner_low_delivery","corner_disguise"],"free_kicks":["free_kick_targets","penalty_kicker","penalty_keeper"],"throw_ins":["restart_lock"],"marking_blocks":["corner_defence_posts","restart_organize"],"second_ball_security":["offensive_marking_restart","clearance_counter_restart"]})){
+  const sections=SET_PIECE_CHAPTERS.find(c=>c.id===id)?.sourceDetails||[];
+  check(JSON.stringify(sections.map(d=>d.id))===JSON.stringify(expected),id+": dødballavsnittene fra originalmanuset mangler");
+  for(const d of sections)check(d.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),d.id+": kilde mangler");
+}
 check(new Set(SET_PIECE_CHAPTERS.map(c=>c.id)).size===5,"Duplikate dødballkapitler");
 for(const c of SET_PIECE_CHAPTERS){
   check(Boolean(c.title&&c.concept&&c.dilemma&&c.manager&&c.practice),c.id+": ufullstendig kapittel");
