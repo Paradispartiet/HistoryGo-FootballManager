@@ -221,6 +221,38 @@ export const TRAINING_CHAPTERS = [
           "Endre retning eller touch → observer valgene"
         ]
       }
+    ],
+    "sourceDetails": [
+      {
+        "id": "constraints_led",
+        "title": "Constraints-Led Approach – utform problemet",
+        "text": "I manusets beskrivelse formes ferdighetene ved å endre betingelsene: banestørrelse, antall spillere og regler. Spilleren må tilpasse seg og oppdage løsninger fremfor å få alle bevegelser instruert direkte. I en liten én-mot-én-bane må angriperen for eksempel velge finte ut fra forsvarerens kroppsstilling. En elastico eller et oversteg får først fotballfaglig verdi når situasjonen gjør finten hensiktsmessig. Variasjon i fart, rom og press er sentralt i manusets fremstilling av motorisk læring.",
+        "source": "Fotballdokumentet v1.pdf – 3.0 Trening og øvelser – Finter og 1v1 / 3.4 Pedagogiske modeller / Sportsvitenskapelige perspektiver"
+      },
+      {
+        "id": "rondo_practice",
+        "title": "Firkantspill – presisjon, orientering og veggspill",
+        "text": "Originaløvelsen har fire eller fem spillere rundt et kvadrat og én eller to presspillere i midten. Ballen holdes i laget med maksimalt to berøringer. Hensikten er pasnings- og mottakspresisjon, orientering før mottak og samarbeid. En mer avansert variant bruker en liten flate med krav om pasning i fart eller veggspill, slik at kroppsstilling og timing får betydning. Manuset angir ikke eksakte banemål, varighet eller belastningsdosering for øvelsen.",
+        "source": "Fotballdokumentet v1.pdf – 3.0 Trening og øvelser – Pasningsøvelser"
+      },
+      {
+        "id": "duel_practice",
+        "title": "Én mot én – velg finte etter forsvarerens kroppsstilling",
+        "text": "Bruk små baner med reell motstander. Målet er ikke bare å lære flere finter, men å lese situasjonen og velge den teknikken som passer. Spilleren vurderer forsvarerens kroppsstilling, ubalanse og åpne rom. Manuset fremhever 1v1 med fokus på kroppsstilling som praktisk trening i finter og driblinger. Det er ikke angitt bestemte banemål, antall repetisjoner eller poengregler.",
+        "source": "Fotballdokumentet v1.pdf – 3.0 Trening og øvelser – Finter og 1v1-situasjoner / 3.4 Fotballfaglige og praktiske implikasjoner"
+      },
+      {
+        "id": "scanning_practice",
+        "title": "Orienteringsøvelse – registrer før mottak",
+        "text": "Manuset beskriver en øvelse der spilleren får ballen i en trang situasjon, men før mottaket må se bak seg og si høyt hvilken farge, figur eller hvilket nummer som vises. Hensikten er å knytte persepsjon til teknikk og raske valg under press. I en annen manusvariant signaliserer treneren, og spilleren beskriver hvor spillerne og rommet innenfor ti meter er. Bruk de registrerte opplysningene til å forstå hva spilleren faktisk så; øvelsen er ikke et nytt målt scanningstall i kampmotoren.",
+        "source": "Fotballdokumentet v1.pdf – 3.0 Orientering og scanning / 3.2 Persepsjon – Trenerøvelse"
+      },
+      {
+        "id": "restriction_practice",
+        "title": "Småspill med restriksjoner – teknisk fleksibilitet",
+        "text": "Manusets konkrete restriksjoner er å spille bare med utsiden av foten, med ett touch eller med krav om vending før pasning. Begrensningene skal skape variasjon og få spillerne til å finne nye løsninger. Smålagsspill trekkes frem som en arena for flere ballberøringer, scanning og teknikk i fart. Vurder restriksjonen mot øvelsens formål: dersom den fjerner handlingsalternativet som skal trenes, må treneren tilpasse den. Det siste er en redaksjonell kobling til bokas eksisterende øvelsesdesign.",
+        "source": "Fotballdokumentet v1.pdf – 3.0 Ballkontroll og restriksjoner / 3.4 Fotballfaglige og praktiske implikasjoner"
+      }
     ]
   },
   {
@@ -299,6 +331,24 @@ export const TRAINING_CHAPTERS = [
         "title": "Taktiske justeringer – les og påvirk motstanderens struktur",
         "text": "Manuset skiller mellom å tilpasse eget angrep til motstanderens defensive struktur og å forsøke å manipulere den. Trenerens oppgave på sidelinjen kan være å avkode forsvarsmønsteret og finne veier rundt eller forbi det. Mot etablert forsvar fremheves bredde. Mot en motstander som legger seg bakpå, beskrives en konkret løsning med tre bak og én sidestopper som går offensivt ut for å skape korridorbredde, utfordre eller spille bredt. Justeringen er et alternativ i manusets spillmodell; vurder om den passer kampens faktiske rom og lagets balanse.",
         "source": "Fotballdokumentet v1.pdf – 5.3 Strategi – Spillalternativer i.f.t. motstander, linje 4010–4027"
+      },
+      {
+        "id": "play_practice",
+        "title": "Deliberate play og deliberate practice",
+        "text": "Manuset setter lekbasert læring, deliberate play, opp mot strukturert og målrettet trening, deliberate practice. Lek skal gi rom for kreativitet og intuisjon, mens målrettet trening arbeider med presisjon og spesifikke ferdigheter. Poenget er balansen: for mye drill kan hemme kreativitet, mens for lite struktur kan hindre progresjon. Jean Côté er nevnt i manusets fremstilling. Den konkrete litteraturhenvisningen er ikke kontrollert her, og det innføres ingen universell prosentfordeling mellom lek og struktur.",
+        "source": "Fotballdokumentet v1.pdf – 3.4 Pedagogiske modeller / 2.7 Trenerens dilemma"
+      },
+      {
+        "id": "guided_discovery",
+        "title": "Guided discovery – spilleren finner løsningen",
+        "text": "Trenerens rolle er i manuset å legge til rette for læring fremfor å gi alle svarene. Guidet oppdagelse skal hjelpe spilleren til selv å gjenkjenne rom, press og muligheter i kamp. Trenere står samtidig i et dilemma mellom kreativitet og kollektiv struktur: et overdrevent fokus på drill og riktige løsninger kan gjøre unge spillere redde for å ta sjanser, mens for mye frihet uten rammer kan svekke utvikling av presisjon. Bevar derfor begge hensynene når treneren velger øvelse og veiledning.",
+        "source": "Fotballdokumentet v1.pdf – 3.4 Pedagogiske modeller / 2.7 Trenerens dilemma"
+      },
+      {
+        "id": "contextual_technique",
+        "title": "Kontekstualisert teknikk – fra showtriks til kampferdighet",
+        "text": "Originalmanuset kritiserer overfokus på spektakulære triks. Å kunne mange finter isolert er ikke det samme som å kunne velge og utføre dem i høy fart, under press eller i samspill. Verdien av en pasning avhenger av timing, rom, motstander og medspiller. Selv en teknisk ren førsteberøring kan være lite hensiktsmessig hvis den leder inn i press. Manuset betrakter pasning, mottak og finte som samordning av beslutning, orientering og kroppslig utførelse i en meningsfull kampsituasjon.",
+        "source": "Fotballdokumentet v1.pdf – 2.7 Overfokus på triks / Kontekstualisering av teknikk / 3.0 Spillnærhet og helhet"
       }
     ]
   },
@@ -438,6 +488,20 @@ export const TRAINING_CHAPTERS = [
           ]
         ]
       }
+    ],
+    "sourceDetails": [
+      {
+        "id": "early_specialization",
+        "title": "Tidlig spesialisering og press på unge spillere",
+        "text": "Manusets kritiske perspektiv er at ensidig spesialisering i barneårene kan gi kortsiktig teknisk fremgang, men også risiko for skader, utbrenthet og tapt idrettsglede. Det advarer mot at forventninger fra foreldre, akademier og resultatkrav kan fortrenge allsidighet, lek, taktisk forståelse og psykososial trivsel. Dette gjengis som manusets faglige bekymring, ikke som en individuell diagnose eller et fast program for barneidrett. Kildens henvisninger til Côté og NFF er ikke særskilt verifisert her.",
+        "source": "Fotballdokumentet v1.pdf – 2.7 Tidlig spesialisering og press på unge spillere"
+      },
+      {
+        "id": "learning_environment",
+        "title": "Habitus og læringsmiljø – teknikkens sosiale rammer",
+        "text": "Manuset bruker Bourdieus habitus som begrep for kroppsliggjort erfaring og fremhever hvordan miljø og oppvekst former teknikk. Det stiller uorganisert lek og futsal på små flater opp mot systematisk akademi- og klubbtrening, med ulike muligheter for improvisasjon, presisjon og kollektive mønstre. Samtidig fremheves ulik tilgang til baner, utstyr og trenerkompetanse, også for barn som ikke har råd til ekstra økter. Disse eksemplene beskriver manusets sosiologiske perspektiv; de skal ikke brukes som nasjonale stereotypier eller som automatiske spillerverdier.",
+        "source": "Fotballdokumentet v1.pdf – 2.7 Sosiale og økonomiske skjevheter / 3.4 Sosiologi – Kulturelle læringsmiljøer"
+      }
     ]
   },
   {
@@ -552,6 +616,12 @@ export const TRAINING_CHAPTERS = [
         "title": "Relasjoner – hvem har oversikt og hvem gir beskjed?",
         "text": "Når dyp sentral midtbane spiller opp på møtende spiss, skal han ifølge manuset få indreløperne til å gå i støtte. Det er en konkret relasjon mellom pasningslegger, mottaker og spillere som skal gjøre neste handling mulig. I forsvar har motsatt back eller stopper ofte best oversikt når en back utfordres bredt; disse må varsle om markering og dype løp. Keeperen skal gi raske, tydelige beskjeder, særlig i undertall, om balanse, blokkering og når forsvaret kan støte. Manuset vektlegger også øyekontakt. Tren både tidspunktet for signalet og bevegelsen som følger det.",
         "source": "Fotballdokumentet v1.pdf – Kommunikasjon / 1.4 Keeperkommunikasjon / Orientering–registrering / Øyekontakt, linje 1188–1200, 1375–1393, 2650–2668 og 3690–3696"
+      },
+      {
+        "id": "possession_counter_practice",
+        "title": "Spillnær samhandling – possession og kontringsøvelse",
+        "text": "Manuset anbefaler possession-øvelser på store områder for å trene hele banens bredde og lengde, med touch-restriksjoner når målet er økt balltempo. Kortpasninger kan trekke motstanderen sammen før en lengre pasning flytter spillet ut av press. Et separat kontringseksempel trener hurtige løp og korte kombinasjoner med mål om å nå siste tredel innen 15 sekunder. Tidsmålet er en konkret treningsvariant fra manuset, ikke et universelt prestasjonskrav. Begge øvelsesidéer er tekstlige varianter, uten ny spillmotorbonus eller separat øvelses-ID.",
+        "source": "Fotballdokumentet v1.pdf – Ballbesittelse / Konservering / Overgang–Kontring"
       }
     ]
   },
@@ -595,6 +665,14 @@ export const TRAINING_CHAPTERS = [
           "Ja → gjennomfør valgt program",
           "Nei → tilpass oppfølging og vurder hvile"
         ]
+      }
+    ],
+    "sourceDetails": [
+      {
+        "id": "training_periodization",
+        "title": "Periodisering og treningsfilosofier – helhet fremfor isolasjon",
+        "text": "Manuset fremhever at teknikktrening skal integreres i helhetlige, spillnære sammenhenger med realistisk tempo og motstand. Raymond Verheijen nevnes i forbindelse med periodisering. Disposisjonen navngir dessuten Vítor Frade (Tactical Periodization), Paco Seirul·lo, Nils Arne Eggen (Godfoten), Dreier og Descamps, men gir ikke her en fullstendig redegjørelse for hver metodikk. Disse navnene beholdes som planlagte faglige fordypninger. Det legges ikke til en egen ukemodell, belastningsdosering eller påstått trenerfilosofi som manusavsnittet ikke beskriver.",
+        "source": "Fotballdokumentet v1.pdf – 3.3 Pedagogiske modeller – Periodisering & treningsfilosofier / 3.4 Pedagogiske modeller"
       }
     ]
   }

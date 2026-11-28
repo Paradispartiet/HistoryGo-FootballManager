@@ -34,7 +34,7 @@ De nye avsnittene er redaksjonelle sammenfatninger av originalmaterialet, ikke o
 - Spillmodell: første detaljerte PDF-integrasjon gjennomført i bolk 6; separat Ready-materiale, dødballer, OneNote-dekning og motorvalidering gjenstår.
 - Droppunkt: Fotballnotater råtekst ved byte 0x000f2da4; kontekst og koordinatsystem må avklares før bruk.
 - Kommunikasjon og kampanalyse/-strategi: første detaljerte PDF-integrasjon i bolk 7–8; separat arbeidsoppgavedokument, uutfylt kampforberedelse og OneNote-dekning gjenstår.
-- Fysiologi, mental trening, pedagogikk, kritikk av tidlig spesialisering og sosial tilgang.
+- Pedagogikk, øvelsesidéer, kritikk av tidlig spesialisering og sosial tilgang: første PDF-integrasjon i bolk 9; Frade, Seirul·lo, Godfoten, Dreier og Descamps krever ytterligere kilder. Fysiologi og mental trening gjenstår.
 - Fotballhistorie, kultur, spiller- og trenereksempler; historiske påstander og sitater kildekontrolleres før publisering.
 - Full eksport av begge OneNote-seksjonene med sider, bilder og gjeldende revisjoner; deretter linje-/avsnittsbasert dekningsregister. Ikke anta at binæruttrekk er komplette.
 
@@ -185,3 +185,22 @@ Seks kildeforankrede, søkbare fagavsnitt i coaching_transfer og collective_trai
 | coaching_transfer | match_periodization | 5.3 Strategi, linje 3993–4010 |
 | coaching_transfer | match_balance_choices | 5.3 Strategi – Bestem / Back og innoverving, linje 3998–4007 |
 | coaching_transfer | match_adjustments | 5.3 Strategi – Spillalternativer i.f.t. motstander, linje 4010–4027 |
+
+## Bolk 9 – pedagogikk og treningsmetodikk
+
+12 søkbare fagavsnitt i fem eksisterende treningskapitler, forankret i PDF 2.7 Kritiske perspektiver, 3.0 Trening og øvelser (linje 420–630), 3.3–3.4 Pedagogiske modeller og Sosiologi (linje 4025–4157), samt tidligere persepsjons-, possession- og kontringsavsnitt. Øvelsesvariantene beskrives i boka, ikke som nye øvelses-ID-er eller endringer i treningsmotoren. Eksakte banemål, dosering og uutfylte teorideler er ikke konstruert. Manusets kildereferanser, direkte sitater og kvantitative forskningspåstander er ikke selvstendig verifisert. Godfoten, Frade, Seirul·lo, Dreier og Descamps er i denne pedagogikkdisposisjonen navngitt uten full metodebeskrivelse; de er markert for videre fordypning, ikke presentert som ferdig integrerte metodikker. Ingen nye hovedkapitler, figurer eller motorregler. Full CI og OneNote-kontroll gjenstår.
+
+| Kapittel-ID | Underavsnitt-ID | Kildeanker |
+|---|---|---|
+| exercise_constraints | constraints_led | 3.0 Trening og øvelser – Finter og 1v1 / 3.4 Pedagogiske modeller / Sportsvitenskapelige perspektiver |
+| exercise_constraints | rondo_practice | 3.0 Trening og øvelser – Pasningsøvelser |
+| exercise_constraints | duel_practice | 3.0 Trening og øvelser – Finter og 1v1-situasjoner / 3.4 Fotballfaglige og praktiske implikasjoner |
+| exercise_constraints | scanning_practice | 3.0 Orientering og scanning / 3.2 Persepsjon – Trenerøvelse |
+| exercise_constraints | restriction_practice | 3.0 Ballkontroll og restriksjoner / 3.4 Fotballfaglige og praktiske implikasjoner |
+| coaching_transfer | play_practice | 3.4 Pedagogiske modeller / 2.7 Trenerens dilemma |
+| coaching_transfer | guided_discovery | 3.4 Pedagogiske modeller / 2.7 Trenerens dilemma |
+| coaching_transfer | contextual_technique | 2.7 Overfokus på triks / Kontekstualisering av teknikk / 3.0 Spillnærhet og helhet |
+| individual_development | early_specialization | 2.7 Tidlig spesialisering og press på unge spillere |
+| individual_development | learning_environment | 2.7 Sosiale og økonomiske skjevheter / 3.4 Sosiologi – Kulturelle læringsmiljøer |
+| collective_training | possession_counter_practice | Ballbesittelse / Konservering / Overgang–Kontring |
+| load_recovery | training_periodization | 3.3 Pedagogiske modeller – Periodisering & treningsfilosofier / 3.4 Pedagogiske modeller |

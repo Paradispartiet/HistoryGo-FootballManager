@@ -223,6 +223,10 @@ for(const c of SET_PIECE_CHAPTERS){
 check(SET_PIECE_CHAPTERS.reduce((n,c)=>n+c.diagrams.length,0)===9,"Dødballfigurer mangler");
 check(bookHtml.includes('id="footballBookSetPieces"'),"Dødballer ikke tilgjengelige i spillet");
 check(TRAINING_CHAPTERS.length===6,"Treningskapitler mangler");
+for(const [id,expected] of Object.entries({"exercise_constraints":["constraints_led","rondo_practice","duel_practice","scanning_practice","restriction_practice"],"coaching_transfer":["play_practice","guided_discovery","contextual_technique"],"individual_development":["early_specialization","learning_environment"],"collective_training":["possession_counter_practice"],"load_recovery":["training_periodization"]})){
+  const sections=TRAINING_CHAPTERS.find(c=>c.id===id)?.sourceDetails||[];
+  for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),key+": originalmanusets treningsmetodikk mangler");}
+}
 for(const [id,expected] of Object.entries({"training_problem":["analysis_before_after","analysis_01_possession","analysis_02_support","analysis_03_communication","analysis_04_delay","analysis_05_penetration","analysis_06_concentration","analysis_07_width","analysis_08_movement","analysis_09_balance","opponent_attack","opponent_defence"],"coaching_transfer":["match_periodization","match_balance_choices","match_adjustments"]})){
   const sections=TRAINING_CHAPTERS.find(c=>c.id===id)?.sourceDetails||[];
   for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),key+": originalmanusets kampanalyse eller kampstrategi mangler");}
