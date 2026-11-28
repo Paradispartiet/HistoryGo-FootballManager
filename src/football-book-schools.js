@@ -114,6 +114,42 @@ export const SCHOOL_CHAPTERS = [
         "title": "Fra individuell briljans til kollektiv intelligens",
         "text": "Manuset fremhever at spillere må tolke medspillernes intensjoner, overvåke motstanderen og samordne rollebytter, pasninger og press. Teknikk, hukommelse, sansing og reaksjon knyttes til rytme, timing og rom. Taktiske systemer stiller krav til teknikk, men gjør også ferdighetene mer anvendelige når medspillerne skaper alternativer. Dette er manusets samlende tese, ikke en påstand om at tidligere spillere manglet spilleforståelse eller at historien har én entydig utviklingsretning.",
         "source": "Fotballdokumentet v1.pdf – Sportsvitenskap og fysiologi – Kognitive ferdigheter og psykologiske krav"
+      },
+      {
+        "id": "culture_art_results",
+        "title": "Estetikk og resultater – kunst og nytte",
+        "text": "Originalmanuset åpner filosofidelen med spenningen mellom futebol d’arte og futebol de resultados: å spille vakkert eller å vinne. Zidane, Ronaldinho og Maradona illustrerer i manuset den uttrykksfulle teknikken; Xavi, Kroos og Busquets representerer rytme, funksjon og kollektiv kontroll. Dette er analytiske poler, ikke en rangering av spillerne. En elegant kombinasjon kan samtidig være effektiv, og en presis defensiv bevegelse kan også ha estetisk verdi. Manusets sentrale tese er at fotballens skjønnhet oppstår i spenningen mellom frihet og struktur, ikke utenfor taktikken.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Estetikk og resultater / Avslutning: Estetikk som grunnvilkår"
+      },
+      {
+        "id": "culture_adorno",
+        "title": "Adorno – kunstens autonomi og instrumentell rasjonalitet",
+        "text": "Manuset anvender Adornos estetiske tenkning på fotballens spenning mellom kunstnerisk frihet og instrumentell nytte. Futebol d’arte får representere rom for uttrykk som ikke kan reduseres til resultat alene, mens futebol de resultados fremhever virkemidler for å oppnå seier. Adornos faktiske teori om kunstens autonomi er mer sammensatt enn dette skillet. Det er derfor uttrykkelig en fotballfilosofisk anvendelse i manuset, ikke et sitat eller en påstand om at Adorno selv analyserte disse spillestilene. Trenerens dilemma blir hvor mye frihet en kollektiv struktur kan romme.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Filosofi og estetikk; Stanford Encyclopedia of Philosophy, https://plato.stanford.edu/entries/adorno/"
+      },
+      {
+        "id": "culture_eco",
+        "title": "Eco – det åpne verket og publikums fortolkning",
+        "text": "Med utgangspunkt i Ecos idé om det åpne verket drøfter manuset hvordan fotballens mening oppstår også i møtet med publikum. En bevegelse, pasning eller kamp kan forstås forskjellig av ulike tilskuere, og får videre mening gjennom kommentarer og erindring. Estetikk er dermed ikke bare en objektiv egenskap ved en teknisk handling. Dette er manusets analogi mellom kunst og fotball, ikke en gjengivelse av Ecos egne analyser av bestemte kamper. Den åpne fortolkningen opphever heller ikke spillets regler eller det faktiske kampresultatet.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Teoretiske perspektiver / Umberto Eco"
+      },
+      {
+        "id": "culture_gadamer",
+        "title": "Gadamer – lekens egenverdi",
+        "text": "Manuset bruker Gadamers forståelse av lek for å drøfte fotballens estetiske erfaring. Spillerne deltar i et spill som har egen dynamikk og som ikke fullt ut kan kontrolleres av individet. Tilskuerne deltar på en annen måte gjennom opplevelse og fortolkning. Gadamers estetikk knytter lek til erfaringen av kunst og forståelse; koblingen til fotball er manusets egen anvendelse. Å vinne er fortsatt et reelt mål, men opplevelsen av spillet kan ha verdi utover sluttresultatet. Lek må derfor ikke forveksles med mangel på alvor eller disiplin.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Filosofiske utdypinger / Gadamer; Stanford Encyclopedia of Philosophy, https://plato.stanford.edu/entries/gadamer-aesthetics/"
+      },
+      {
+        "id": "culture_aristotle",
+        "title": "Aristoteles – poiesis og praxis",
+        "text": "Manuset bruker poiesis og praxis som analogi for skapende uttrykk og målrettet handling i fotball. Filosofisk må skillet presiseres: poiesis viser til frembringelse eller produksjon, mens praxis betegner handling; det er ikke en enkel motsetning mellom egenverdi og seier. Manusets kobling av futebol d’arte til poiesis og futebol de resultados til praxis bevares som en fortolkningsidé, ikke som en bokstavelig definisjon hos Aristoteles. Fotball kan romme både skapende handlinger og målrettede prestasjoner samtidig.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Filosofiske utdypinger / Aristoteles; Stanford Encyclopedia of Philosophy, https://plato.stanford.edu/entries/episteme-techne/"
+      },
+      {
+        "id": "culture_synthesis",
+        "title": "Estetikk som grunnvilkår – struktur og brudd",
+        "text": "Originalmanusets avslutning samler perspektivene: kunstens egenverdi, publikums fortolkning, sosialt formet teknikk, regulert konkurranse og lek. Tesen er at estetikk ikke bare er et tillegg til taktikk, men en del av fotballens indre spenning mellom frihet og kontroll, individ og kollektiv, kunst og nytte. Dette er bokas normative og filosofiske refleksjon, ikke et empirisk bevist krav for alle kamper. En manager kan derfor både spørre hvordan laget kan vinne, og hvilken måte å spille på laget ønsker å utvikle. De to spørsmålene kan besvares ulikt uten at det ene nødvendigvis opphever det andre.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Avslutning: Estetikk som grunnvilkår / Del V – System vs. individ / Arven"
       }
     ]
   },
@@ -221,6 +257,12 @@ export const SCHOOL_CHAPTERS = [
         "title": "Catenaccio – kontroll og kontring",
         "text": "Manuset bruker Herreras Inter som eksempel på stram organisering kombinert med raske kontringer. UEFA beskriver hvordan laget utnyttet tekniske midtbanespillere og hurtige angripere i overgang. Sikring kan forberede en presis offensiv overgang; forsvar er ikke nødvendigvis passivitet. Dette viderefører bokas skille mellom libero- og markeringsstrukturen i catenaccio og en moderne lav soneblokk. Kilden gir ikke grunnlag for bestemte oppspillsruter eller kvantitative kampverdier.",
         "source": "Fotballdokumentet v1.pdf – Del I – Italiensk catenaccio og sweeper-logikken; UEFA, https://www.uefa.com/uefachampionsleague/news/0231-0e94dd0ff999-827e03392bff-1000--in-profile-helenio-herrera/"
+      },
+      {
+        "id": "culture_pragmatism",
+        "title": "Resultatfotball og estetikkens historiske dilemma",
+        "text": "Manuset stiller den brasilianske angrepstradisjonen og Nederlands totalfotball opp mot mer resultatorienterte systemer, særlig italiensk catenaccio. Det bruker Brasils VM i 1982 og de nederlandske finaletapene i 1974 og 1978 som historiske refleksjonspunkter. Slike kampresultater kan illustrere at estetisk appell ikke garanterer seier, men alene forklarer de ikke hvorfor et lag taper. Å organisere sikring, vente på riktig overgang og forvalte risiko kan være en avansert fotballfaglig praksis. Skillet er manusets drøfting av verdier, ikke en universell klassifisering av nasjoner eller trenere.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Estetikk og resultater"
       }
     ]
   },
@@ -705,6 +747,14 @@ export const SCHOOL_CHAPTERS = [
             50
           ]
         ]
+      }
+    ],
+    "sourceDetails": [
+      {
+        "id": "culture_identity",
+        "title": "Futebol d’arte – estetikk, identitet og kulturell selvhevdelse",
+        "text": "Manuset drøfter futebol d’arte som mer enn en estetisk stil: det kan fungere som uttrykk for identitet og kulturell selvhevdelse i møte med andre fotballidealer. Brasil og Latin-Amerika brukes i refleksjonen, mens tysk fotball og Sommermärchen i 2006 står som kontrast. Dette er kulturelle fortellinger, ikke uttømmende beskrivelser av hele kontinenter. Manuset antyder at nasjonale selvbilder og verdsetting av spillestil kan endres. Det er ikke dokumentert her at tysk estetisk fotball først oppstod i 2006; den bastante påstanden gjengis derfor ikke. Relasjonisme er et eget nyere taktisk begrep, ikke synonymt med brasiliansk estetikk.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Sosiokulturelle dimensjoner"
       }
     ]
   }

@@ -904,6 +904,18 @@ export const THEORY_CHAPTERS = [
         "title": "Kvinnefotball – parallelle utviklingslinjer",
         "text": "Manuset fremhever at kvinnefotball og regionale turneringer må inngå i historien om kollektivt spill. Norge og USA på 1980- og 1990-tallet nevnes. FIFA dokumenterer at USA vant finalen mot Norge i det første offisielle kvinne-VM i 1991, og at Norge vant i 1995. Manusets refleksjon om ressurser, treningsmiljø og kollektiv samhandling beholdes. Detaljerte taktiske ruter i bestemte kamper krever ytterligere kilder.",
         "source": "Fotballdokumentet v1.pdf – Sportsvitenskap og fysiologi – Kvinnefotball og alternative perspektiver; FIFA, https://www.fifa.com/en/tournaments/womens/womensworldcup/articles/facts-history-launch-start"
+      },
+      {
+        "id": "culture_elias",
+        "title": "Elias – sivilisasjonsprosessen og regulert konkurranse",
+        "text": "Manuset bruker Norbert Elias’ sivilisasjonsprosess som perspektiv på fotballens gradvise regulering og disiplinering. Regelverk og institusjoner gir rammer for konkurransen og begrenser uregulert fysisk konflikt. Samtidig bevarer spillet rom for uforutsigbarhet og kreativitet. Manusets uttrykk om å bryte med reglene forstås her som å bryte med forventede spillemønstre innenfor lovlige rammer, ikke som oppfordring til regelbrudd. Dette er en anvendelse av teorien på fotball, ikke en full historisk fremstilling av Elias eller en lineær påstand om at all vold er forsvunnet.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Teoretiske perspektiver / Norbert Elias"
+      },
+      {
+        "id": "culture_regional_examples",
+        "title": "Internasjonale fotballmiljøer – læringsbetingelser og konkrete eksempler",
+        "text": "Originalmanuset nevner Kamerun og Nigeria på 1990-tallet, Japan og Sør-Korea samt nordiske miljøer. FIFA bekrefter Kameruns seier mot Argentina i VM-åpningen i 1990 og Sør-Koreas vei til semifinalen i 2002 via Italia og Spania. Eksemplene brukes her til å vise at ulike treningsmiljøer og organisasjoner kan utvikle konkurransedyktige løsninger. De beviser ikke at afrikanske spillere er mindre taktiske eller at asiatiske spillere har en iboende kollektiv disiplin. Manusets brede regionale karakteristikker behandles som historiske fortellinger som må undersøkes, ikke som egenskaper knyttet til opprinnelse. Nordiske særpreg og spillerportretter står som videre fordypning.",
+        "source": "Fotballdokumentet v1.pdf – Del II – Ferdigheter i kultur og kontekst; FIFA, https://www.fifa.com/en/articles/world-cup-qatar-2022-surprises-that-shook-the-world ; https://www.fifa.com/en/tournaments/mens/worldcup/articles/asia-best-moments"
       }
     ]
   },

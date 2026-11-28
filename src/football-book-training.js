@@ -288,6 +288,12 @@ export const TRAINING_CHAPTERS = [
         "title": "Øvelse – neste handling etter feil",
         "text": "Redaksjonell øvelse i smålagsspill: ved balltap skal spilleren først registrere om gjenvinning er realistisk. Hvis ja, etabler press sammen med nærmeste medspillere; hvis nei, gjenopprett balanse. Medspillere bruker korte informative beskjeder fremfor skyldkommentarer. Treneren observerer responsen etter feil, ikke bare hvor ofte ballen vinnes tilbake. Etter økten velger hver spiller én situasjon der han kom raskt videre og én situasjon han vil løse annerledes. Ingen ekstra fysisk straff for feil. Øvelsen kombinerer manusets rekalibrering med prosessmål og kort indre dialog, og er et nytt pedagogisk opplegg.",
         "source": "Faglig tillegg – The performance and psychological effects of goal setting in sport: a systematic review and meta-analysis (2022), https://doi.org/10.1080/1750984X.2022.2116723 | Hatzigeorgiadis mfl. (2011), Self-Talk and Sports Performance: A Meta-Analysis, https://doi.org/10.1177/1745691611413136"
+      },
+      {
+        "id": "culture_material_conditions",
+        "title": "Materielle forhold – bane, ball og treningsmetoder",
+        "text": "Manuset fremhever at underlag, balltype og organisert trening påvirker teknikk og kollektiv samhandling. Ujevne baner kan gjøre korte pasninger vanskeligere; jevnere flater kan gi bedre betingelser for presise kombinasjoner. Videoanalyse, oppvarming og systematiske taktiske økter beskrives som verktøy for utvikling av kollektiv organisering. Den detaljerte historiske dateringen og påstanden om lettere baller er ikke selvstendig kontrollert. Hovedpoenget bevares: øvelser og spillestil må forstås i lys av de materielle mulighetene. Dette er ikke nye simulerte bane- eller utstyrsbonuser.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Banekvalitet og materielle forhold / Teknologi, banekvalitet og treningsmetoder"
       }
     ]
   },
@@ -699,6 +705,24 @@ export const TRAINING_CHAPTERS = [
         "title": "Indre dialog – korte signaler som støtter neste handling",
         "text": "Indre dialog kan være instruksjonsorientert, som åpen kropp eller se opp, eller motiverende, som neste aksjon. Treneren kan hjelpe spilleren med å finne ett ord som er forståelig og relevant for situasjonen. En spiss som nettopp har bommet kan velge neste løp fremfor å gjenta en vurdering av egen verdi. Et signal skal støtte handling, ikke kreve at spilleren undertrykker alle ubehagelige tanker. Tren det først i en vanlig øvelse, deretter under realistisk tidspress. Forskning på self-talk viser mulige prestasjonsfordeler, men effekten varierer med oppgave og gjennomføring.",
         "source": "Faglig tillegg – Hatzigeorgiadis mfl. (2011), Self-Talk and Sports Performance: A Meta-Analysis, https://doi.org/10.1177/1745691611413136 | Effects of Psychological Interventions to Enhance Athletic Performance: A Systematic Review and Meta-Analysis, https://pubmed.ncbi.nlm.nih.gov/37812334/"
+      },
+      {
+        "id": "culture_habitus_field",
+        "title": "Bourdieu – habitus, felt og teknikk",
+        "text": "Manuset anvender habitus som kroppsliggjorte erfaringer og disposisjoner som utvikles gjennom sosial praksis. Futsal på små flater, systematisk akademitrening og spill på ujevne baner nevnes som ulike læringsmiljøer. Feltet viser til de institusjonelle rammene der aktører konkurrerer om hva som verdsettes, blant annet klubber, ligaer og turneringer. En spillers ferdigheter må derfor forstås i forhold til miljøet der de utvikles og anvendes. Dette er manusets anvendelse av Bourdieu; eksemplene beskriver mulige læringsbetingelser og ikke egenskaper som følger av nasjonalitet. Ingen nye spillerverdier utledes av dem.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Bourdieu: Habitus og felt / 3.4 Sosiologi"
+      },
+      {
+        "id": "culture_symbolic_capital",
+        "title": "Estetikk som symbolsk kapital",
+        "text": "Manuset drøfter hvordan anerkjennelse for en spillers uttrykk kan bli en form for symbolsk kapital. Zidane brukes som eksempel på eleganse og rytme, mens Makélélé illustrerer betydningen av mindre spektakulære, strukturelle oppgaver. Publikum, medier og klubber kan verdsette ulike bidrag; sportslig nytte, synlighet og økonomisk verdi er ikke nødvendigvis sammenfallende. Dette er en sosiologisk fortolkning av fotballens verdsetting, ikke dokumenterte forskjeller i sponsorinntekter eller en måling av spillernes popularitet. Manageren kan bruke perspektivet til å reflektere over hvorfor både synlige og mindre synlige roller fortjener oppmerksomhet.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Estetikk som kapital"
+      },
+      {
+        "id": "culture_access_class",
+        "title": "Klasse, profesjonalisering og tilgang til fotball",
+        "text": "Manuset knytter fotballens utvikling til sosiale og klassemessige forhold, profesjonalisering og tilgang til trening. Muligheten til å bruke tid på systematisk trening påvirkes av materielle og institusjonelle betingelser. Også i ressurssterke land kan kostnader til akademier, utstyr og ekstra økter begrense deltakelsen. Dermed er teknikkutvikling både et individuelt og et sosialt spørsmål. Manusets kontrast mellom tidlige amatør- og arbeiderklubber er en historisk tolkning som trenger nærmere kildearbeid, ikke en regel om sosial klasses spillestil.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Klasse, kultur og profesjonalisering / 2.7 Sosiale og økonomiske skjevheter"
       }
     ]
   },
@@ -838,6 +862,12 @@ export const TRAINING_CHAPTERS = [
         "title": "Vinnermentalitet – konkurranse, ansvar og lagets verdier",
         "text": "Vinnermentalitet kan i praksis bety å tåle motgang, ta ansvar for neste handling, arbeide for laget og respektere avtalte oppgaver. Det er ikke det samme som å kjefte høyest eller overse smerte, regler og medspillere. Etter baklengsmål kan kapteinen samle laget om én konkret oppgave, for eksempel å gjenopprette avstander og vente på et avtalt pressignal. Når laget leder, kan det fortsatt kreves konsentrasjon og presisjon fremfor risikofylt jakt på et nytt mål. Dette er en normativ fotballfaglig utdyping av manusets vinnermentalitet, lagånd og tilstedeværelse, ikke en rekonstruksjon av Herrera-sitatet eller en psykologisk karakteristikk av navngitte spillere.",
         "source": "Faglig tillegg – Mental Well-Being or Ill-Being through Coaching in Adult Grassroots Sport (2021), https://pubmed.ncbi.nlm.nih.gov/34204539/ | Analyzing the impact of team-building interventions on team cohesion in sports teams: a meta-analysis study (2024), https://pubmed.ncbi.nlm.nih.gov/38558775/"
+      },
+      {
+        "id": "culture_socrates",
+        "title": "Sócrates og Corinthians-demokratiet – fotball som samfunnshandling",
+        "text": "Manuset løfter frem Sócrates som elegant midtbanespiller, lege, kaptein for Brasil i VM 1982 og politisk engasjert fotballspiller. Forskning på Democracia Corinthiana beskriver en klubbpraksis med økt medbestemmelse og en bevegelse som fikk betydning i kampen for demokratiske rettigheter under Brasils militærdiktatur. Sócrates var en sentral deltaker, sammen med andre spillere og aktører i klubben. Caset viser hvordan fotball kan være en arena for samfunnshandling og kollektivt ansvar, uten at en klubborganisering må kopieres direkte i spillets managerrolle. Den historiske konteksten er særskilt kildebelagt.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Sócrates – doktoren som ledet revolusjonen; FIFA, https://inside.fifa.com/tournaments/mens/worldcup/1982spain/news/tele-and-his-gods-of-82 ; Playing for freedom: Sócrates, futebol-arte and democratic struggle in Brazil, https://doi.org/10.1080/14660970.2014.912014"
       }
     ]
   },

@@ -35,7 +35,7 @@ De nye avsnittene er redaksjonelle sammenfatninger av originalmaterialet, ikke o
 - Droppunkt: Fotballnotater råtekst ved byte 0x000f2da4; kontekst og koordinatsystem må avklares før bruk.
 - Kommunikasjon og kampanalyse/-strategi: første detaljerte PDF-integrasjon i bolk 7–8; separat arbeidsoppgavedokument, uutfylt kampforberedelse og OneNote-dekning gjenstår.
 - Pedagogikk, øvelsesidéer, kritikk av tidlig spesialisering og sosial tilgang: første PDF-integrasjon i bolk 9; Frade, Seirul·lo, Godfoten, Dreier og Descamps krever ytterligere kilder. Sportsvitenskap: første PDF-integrasjon i bolk 10. Fysiologidisposisjonen er bevart, men den detaljerte fysiologiblokken gjenstår. Psykologi og mental trening er delvis integrert i bolk 11; full mental hovedblokk gjenstår.
-- Fotballhistorie: første integrasjon i bolk 14; kultur, filosofi og øvrige spiller-/trenercaser gjenstår. Historiske påstander og sitater kontrolleres før publisering.
+- Fotballhistorie, kultur og filosofi: første integrasjon i bolk 14–15; øvrige spiller-/trenercaser og uverifiserte sitater gjenstår.
 - Full eksport av begge OneNote-seksjonene med sider, bilder og gjeldende revisjoner; deretter linje-/avsnittsbasert dekningsregister. Ikke anta at binæruttrekk er komplette.
 
 Eksisterende spillmotor er fortsatt source of truth. Koble ny kunnskap til eksisterende mekanismer før eventuelle endringer vurderes. Ingen flere kapitler før dekningskontroll er gjennomført.
@@ -331,3 +331,25 @@ På brukerens bestilling om å fullføre fysiologi er 15 nye fagavsnitt lagt til
 | positional_play | history_cruyff_barca | Del I – Cruyff og totalfotballen / Del II – Totalfotball og moderne kollektivitet; FC Barcelona, https://www.fcbarcelona.com/en/news/1457129/la-masia-is-40-years-old/amp |
 | positional_play | history_keeper | Del V – Guardiola og positional play 2.0; FIFA Training Centre, https://www.fifatrainingcentre.com/en/practice/elite-sessions/goalkeeper/goalkeepersbuildup.php ; FIFA, https://www.fifa.com/en/articles/gyula-grosics-hungary-goalkeeping-legacy |
 | gegenpress | history_intensity | Del V – Moderne krav / Klopp og gegenpressing; FIFA Training Centre, https://www.fifatrainingcentre.com/en/practice/elite-sessions/transition-to-defending/counter-pressing.php |
+
+## Bolk 15 – estetikk, kultur og filosofi
+
+15 søkbare fagavsnitt i eksisterende teori-, skole- og treningskapitler, basert på PDF Del IV (4280–4519), Del I (klasse og baneforhold), Del II (kultur og kontekst), 2.7 (sosial tilgang), 3.4 (sosiologi) og teknologiavsnittet (4170–4199). Manusets egne fortolkninger av Bourdieu, Adorno, Eco, Elias, Gadamer og Aristoteles beholdes som fotballfilosofiske anvendelser, ikke sitater eller fullstendige gjengivelser av originalverk. Aristoteles-distinksjonen presiseres med ekstern fagkilde, og brede nasjonale karakteristikker avgrenses. FIFA-holdepunkter og forskningsartikkel om Sócrates/Corinthians-demokratiet er kontrollert og oppgitt ved relevante avsnitt. Øvrige sitater og detaljerte historiske årsaksforklaringer er ikke uavhengig kontrollert. Ingen nye hovedkapitler, illustrasjoner eller motorregler; originalarkivet uendret. Spiller-/trenercase, separat dødballdekning og full OneNote-gjennomgang gjenstår. Full CI er ikke verifisert.
+
+| Kapittel | Underavsnitt | Kildeanker |
+|---|---|---|
+| total_football | culture_art_results | Del IV – Estetikk og resultater / Avslutning: Estetikk som grunnvilkår |
+| catenaccio | culture_pragmatism | Del IV – Estetikk og resultater |
+| individual_development | culture_habitus_field | Del IV – Bourdieu: Habitus og felt / 3.4 Sosiologi |
+| individual_development | culture_symbolic_capital | Del IV – Estetikk som kapital |
+| individual_development | culture_access_class | Del I – Klasse, kultur og profesjonalisering / 2.7 Sosiale og økonomiske skjevheter |
+| exercise_constraints | culture_material_conditions | Del I – Banekvalitet og materielle forhold / Teknologi, banekvalitet og treningsmetoder |
+| total_football | culture_adorno | Del IV – Filosofi og estetikk; Stanford Encyclopedia of Philosophy, https://plato.stanford.edu/entries/adorno/ |
+| total_football | culture_eco | Del IV – Teoretiske perspektiver / Umberto Eco |
+| formations | culture_elias | Del IV – Teoretiske perspektiver / Norbert Elias |
+| total_football | culture_gadamer | Del IV – Filosofiske utdypinger / Gadamer; Stanford Encyclopedia of Philosophy, https://plato.stanford.edu/entries/gadamer-aesthetics/ |
+| total_football | culture_aristotle | Del IV – Filosofiske utdypinger / Aristoteles; Stanford Encyclopedia of Philosophy, https://plato.stanford.edu/entries/episteme-techne/ |
+| relationism | culture_identity | Del IV – Sosiokulturelle dimensjoner |
+| formations | culture_regional_examples | Del II – Ferdigheter i kultur og kontekst; FIFA, https://www.fifa.com/en/articles/world-cup-qatar-2022-surprises-that-shook-the-world ; https://www.fifa.com/en/tournaments/mens/worldcup/articles/asia-best-moments |
+| collective_training | culture_socrates | Del IV – Sócrates – doktoren som ledet revolusjonen; FIFA, https://inside.fifa.com/tournaments/mens/worldcup/1982spain/news/tele-and-his-gods-of-82 ; Playing for freedom: Sócrates, futebol-arte and democratic struggle in Brazil, https://doi.org/10.1080/14660970.2014.912014 |
+| total_football | culture_synthesis | Del IV – Avslutning: Estetikk som grunnvilkår / Del V – System vs. individ / Arven |
