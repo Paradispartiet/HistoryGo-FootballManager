@@ -111,6 +111,12 @@ export const TRAINING_CHAPTERS = [
         "title": "Motstanderanalyse – press, markering og formasjonsendringer",
         "text": "Undersøk om motstanderen prioriterer gjenvinning eller å komme på rett side og falle i ramme. Presser den høyt eller lavt? Forsvarer den sone- eller markeringsorientert? Prioriterer den å nekte rom, snappe ballen eller presse aggressivt og takle? Hvem løper mest, hvem mister ballen mest, og henger laget sammen formasjonsmessig? Manuset fremhever at formasjonen endres med spillfase og ballens plassering. Se derfor på banen og rommet rundt ballen, ikke bare på ballfører. Formasjonsnavnet alene forteller ikke hvordan laget opptrer.",
         "source": "Fotballdokumentet v1.pdf – 6. Kapmpanalyse – Hvordan identifisere motsanders karakteristika / Formasjonen"
+      },
+      {
+        "id": "onenote_data_analysis",
+        "title": "Dataanalyse – romkontroll, pasningsnettverk og expected threat",
+        "text": "OneNote-utkastet nevner GPS-sporing, videodata og AI-analyse sammen med spatial control, passing networks og expected threat (xT). Det setter slike analyseverktøy opp mot spillerens beslutninger i selve kampen. Dette er et nytt kildepunkt sammenlignet med PDF-ens ni analyseprinsipper. Råteksten gir imidlertid ingen fullstendige definisjoner, beregningsmetoder eller datakrav. Derfor er dette en introduksjon til manusets analysetemaer, ikke en ny xT-implementering eller en påstand om hvilke algoritmer navngitte klubber bruker. Eksisterende kampmotor og datamodell beholdes.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00035824 og 0x00035f9c"
       }
     ]
   },
@@ -294,6 +300,18 @@ export const TRAINING_CHAPTERS = [
         "title": "Materielle forhold – bane, ball og treningsmetoder",
         "text": "Manuset fremhever at underlag, balltype og organisert trening påvirker teknikk og kollektiv samhandling. Ujevne baner kan gjøre korte pasninger vanskeligere; jevnere flater kan gi bedre betingelser for presise kombinasjoner. Videoanalyse, oppvarming og systematiske taktiske økter beskrives som verktøy for utvikling av kollektiv organisering. Den detaljerte historiske dateringen og påstanden om lettere baller er ikke selvstendig kontrollert. Hovedpoenget bevares: øvelser og spillestil må forstås i lys av de materielle mulighetene. Dette er ikke nye simulerte bane- eller utstyrsbonuser.",
         "source": "Fotballdokumentet v1.pdf – Del I – Banekvalitet og materielle forhold / Teknologi, banekvalitet og treningsmetoder"
+      },
+      {
+        "id": "onenote_cone_gate",
+        "title": "Pasningsøvelse – kjegleport og returbevegelse",
+        "text": "Trenernotatet beskriver to kjegler som danner en port for pasningen, en linje som spilleren må bevege seg mellom for å hente ballen, to lag og store kjegler. Notatet angir ikke avstander, poengberegning eller antall spillere. Bruk oppsettet som en uferdig øvelsesidé: treneren velger avstand og organiserer henting slik at pasningsbanen er fri. En tilhørende notis oppfordrer spillerne til å registrere hvor de treffer ballen, og til å trene mellomlange pasninger. Øvelsens fullstendige regler må avklares; den får ikke en ny øvelses-ID i denne integrasjonen.",
+        "source": "OneNote – Fotballnotater (Den 16.05.2026).one, råuttrekk 0x0000573c og 0x00005834"
+      },
+      {
+        "id": "onenote_waiting_groups",
+        "title": "Organisering av økten – aktiv ventetid",
+        "text": "Et praktisk notat foreslår at hjelpetrenere holder telling og organiserer en skuddkonkurranse for spillerne som venter. Det sier også at det kan avtales spesialtrening, mens andre kan arbeide med andre oppgaver. Dette er organisatoriske ideer, ikke en ferdig øktplan. Treneren må sørge for at sideaktiviteten ikke kommer i konflikt med hovedøvelsen, og at ansvaret for organisering er tydelig. Notatets personnavn og praktiske meldingsdetaljer er utelatt.",
+        "source": "OneNote – Fotballnotater (Den 16.05.2026).one, råuttrekk 0x00005ae4, 0x00005bac og 0x000daf3c"
       }
     ]
   },
@@ -433,6 +451,18 @@ export const TRAINING_CHAPTERS = [
         "title": "Mentalt treningsarbeid – plan, gjennomføring og refleksjon",
         "text": "Bruk en enkel samtale før og etter treningsøkten. Før: spilleren velger én konkret handling å arbeide med og ett signal som minner om den. Under: treneren observerer situasjoner der handlingen var mulig, også når utfallet ble mislykket. Etter: spilleren forklarer hva han registrerte, hva som fungerte og hvilken justering han vil prøve neste gang. Eksempel: en back ønsker å bli tryggere ved presset mottak. Vurder orientering, kroppsstilling og valg av støtte, ikke bare om laget beholdt ballen. Dette redaksjonelle verktøyet bygger på prosessmål og autonomistøtte; det er ikke en standardisert psykologisk test.",
         "source": "Faglig tillegg – The what, why, and how of goal setting: a review of the goal-setting process in applied sport psychology practice (2023), https://doi.org/10.1080/10413200.2023.2185699 | The performance and psychological effects of goal setting in sport: a systematic review and meta-analysis (2022), https://doi.org/10.1080/1750984X.2022.2116723 | Autonomy support in sport and exercise settings: a systematic review and meta-analysis (2022), https://doi.org/10.1080/1750984X.2022.2031252"
+      },
+      {
+        "id": "onenote_ball_path",
+        "title": "Ballens bane og oppmerksomhet på treffpunkt",
+        "text": "Et kort trenernotat oppfordrer spilleren til å la ballen gjøre arbeidet og ikke alltid dempe den, men følge ballens bane. Et annet ber spilleren registrere treffpunktet på ballen ved mellomlange pasninger. Sammen gir de en konkret oppmerksomhetsoppgave ved trening av mottak og pasning. Her beholdes notatene som trenerens observasjonspunkter, ikke som krav om at ballen alltid skal få løpe videre. Valget mellom demping og å følge ballbanen må avhenge av neste handling.",
+        "source": "OneNote – Fotballnotater (Den 16.05.2026).one, råuttrekk 0x00004b2c og 0x0000573c"
+      },
+      {
+        "id": "onenote_free_play",
+        "title": "Fritt spill, arbeidsoppgaver og kreativ utfoldelse",
+        "text": "Trenernotatene kombinerer tydelige arbeidsoppgaver med fri utfoldelse. De fremhever kreativitet, skudd og kantspillernes én-mot-én-muligheter i siste tredel, og sier at fritt spill kan avgrenses når spillerne ikke lenger mestrer oppgaven. Dette er en treneridé om forholdet mellom frihet og veiledning. I gjennomføringen bør det avklares hva spillerne skal løse selv, og når treneren skal gripe inn for å gjøre oppgaven forståelig. Ingen fast terskel for å avbryte fritt spill er angitt i notatene.",
+        "source": "OneNote – Fotballnotater (Den 16.05.2026).one, råuttrekk 0x000f9a40, 0x000fa3a8 og 0x00102580"
       }
     ]
   },
@@ -735,6 +765,12 @@ export const TRAINING_CHAPTERS = [
         "title": "Fysiske spesialister – samme ressurs, forskjellige arbeidsoppgaver",
         "text": "Sammenlign de fysiske ressursene i originalmanuset med rollekravene: en kant trenger ofte akselerasjon når et siderom åpnes; en spiss trenger kraft og kontroll i mottak under press; en indreløper må gjenta forflytninger mellom arbeidsrom; en sekser kan beskytte rom ved tidlig posisjonering. FIFA Training Centres VM-analyse viser at ulike taktiske roller og kampoppgaver påvirker fysisk belastning. Observer derfor ikke bare hvor mye en spiller løper, men når, hvor og hvorfor han løper. Eksemplene i denne bolken er faglige observasjonsmodeller, ikke en sammenlignbar fysisk test av historiske spillere. Ingen spillerverdier, aldersterskler eller simulerte treningsbonuser endres.",
         "source": "Faglig tillegg – FIFA Training Centre, https://www.fifatrainingcentre.com/en/fwc2022/physical-analysis/using-case-studies-to-reveal-the-reasons-why-various-tactical-roles-exert-themselves-physically-during-world-cup-matches.php; personnavn og tematikk fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "onenote_motivation_conversation",
+        "title": "Motivasjon – samtale om hensikt og innsats",
+        "text": "Trenernotatene innleder med spørsmål om hva motivasjon er, og hvorfor spillerne er til stede. De legger vekt på å arbeide for hverandre, sette langsiktige mål, gjøre sitt beste og kjenne egen arbeidsoppgave. Resultatet blir i en av notisene underordnet felles innsats. Dette bevares som et uttrykk for trenerens verdier, ikke som en empirisk påstand om at tro alene bestemmer ferdighetsnivå. De eksisterende fagavsnittene om mestringstro og prosessmål gir en separat faglig utdyping.",
+        "source": "OneNote – Fotballnotater (Den 16.05.2026).one, råuttrekk 0x000f9c80–0x000fa780 og 0x001022f4"
       }
     ]
   },
@@ -892,6 +928,12 @@ export const TRAINING_CHAPTERS = [
         "title": "George Weah og Romário – fotballens samfunnsstemmer",
         "text": "Originalmanuset nevner Weah og Romário sammen med Sócrates og Pelé som samfunnsstemmer. FIFA dokumenterer Weahs rolle som æreskaptein i Players' Voice Panel mot rasisme, mens Brasils senat dokumenterer Romários valg til senatet i 2014. Casene viser ulike måter en fotballprofil kan delta i offentligheten på: organisert arbeid mot diskriminering og folkevalgt politikk. De brukes som historiske og institusjonelle eksempler, ikke som partipolitisk støtte eller som bevis for at sportslig dyktighet gir politisk kompetanse. Det tidligere Sócrates-avsnittet beholdes.",
         "source": "Faglig tillegg – FIFA, https://inside.fifa.com/campaigns/no-discrimination/media-releases/players-voice-panel-tackle-racism-in-football ; Brasils senat, https://www12.senado.leg.br/noticias/materias/2014/10/05/romario-e-eleito-senador; personnavn fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "onenote_shared_perception",
+        "title": "Delt persepsjon – samhandling uten verbal beskjed",
+        "text": "OneNote-utkastet nevner shared affordances og beskriver samhandling som noe som også kan springe ut av delt persepsjon, ikke bare verbale beskjeder. Den faglige ideen er at flere spillere kan registrere det samme åpne rommet eller den samme endringen i motstanderens posisjon og tilpasse handlingene til hverandre. Dette utfyller manusets kommunikasjonsdel om signaler og øyekontakt. Den angitte forskningshenvisningen i råteksten er ikke kontrollert mot originalpublikasjonen; begrepet beholdes som en kildeankret teoriidé, ikke som en forskningskonklusjon.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00037ec4"
       }
     ]
   },

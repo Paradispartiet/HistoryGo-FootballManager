@@ -487,3 +487,32 @@ Dette er en prioritert oversikt over uutfylte eksempler, ikke komplette nye port
 | wingers | portrait_gamst_gronkjaer | SNL, https://snl.no/Morten_Gamst_Pedersen ; Chelsea, https://www.chelseafc.com/en/news/article/beating-liverpool-in-2003 ; https://www.chelseafc.com/en/news/article/legends-from-overseas-added-to-squad-for-liverpool |
 | finishing_press | portrait_kanu_ravanelli | Premier League, https://www.premierleague.com/en/news/2284536/black-history-month-heroes-nwankwo-kanu ; UEFA, https://www.uefa.com/uefachampionsleague/news/013d-0ea96a4b53b8-032c0735e213-1000--juventus-hold-their-nerve-to-seal-the-real-deal/ |
 | collective_training | portrait_weah_romario_civic | FIFA, https://inside.fifa.com/campaigns/no-discrimination/media-releases/players-voice-panel-tackle-racism-in-football ; Brasils senat, https://www12.senado.leg.br/noticias/materias/2014/10/05/romario-e-eleito-senador |
+
+## Bolk 23 – OneNote: automatisk dekningsindeks og første kildeintegrasjon
+
+Originalenes SHA-256 er sammenlignet med originalarkivet, og begge OneNote-filer er byteidentiske. ZIP-integritet er kontrollert. Indeksen er generert lokalt fra de allerede dedupliserte binære tekstuttrekkene; råtekst og indeks lastes ikke opp til GitHub. Ingen komplett OneNote-sideeksport er tilgjengelig. Normalisering er Unicode NFKC, små bokstaver og ordsekvenser. For hvert råuttrekk er ordantall, eksakt sammenhengende PDF-treff og andel 8-ordsvinduer med steg 4 registrert. Dette er tekstlikhet, ikke ferdig faglig dekningskontroll eller andel av hele originalen.
+
+| Uttrekk | Blokker | Minst 25 ord | Eksakt PDF-treff (minst 25 ord) | Ikke eksakt (minst 25 ord) |
+|---|---:|---:|---:|---:|
+| Fotballteori UTF-16 | 902 | 339 | 121 | 218 |
+| Fotballnotater UTF-16 | 9 | 4 | 0 | 4 |
+| Fotballnotater Windows-1252 | 61 | 6 | 1 | 5 |
+
+De 218 lengre, ikke eksakt samsvarende teoriblokkene inkluderer 202 uten treff på 8-ordsvinduer. De kan inneholde utvidelser, alternative revisjoner, dubletter, referanser og dialogrester. Ikke likestill dette med 218 nye fagavsnitt. Korte notater er også relevante og må vurderes separat. Bilder, sidestruktur og gjeldende revisjon er ikke rekonstruert. Kildeankere nedenfor viser byteposisjoner i råuttrekket, ikke sidetall.
+
+### Første redaksjonelle integrasjon
+
+10 avsnitt med OneNote-kildeanker og eksplisitte avgrensninger. Notatene om pressretning ved balanse/ubalanse (0x000d2624), offensiv sidestopper (0x0000537c) og kontring (0x000f9810) er allerede tematisk dekket av press-, kampstrategi- og overgangskapitlene. Ikke dupliser. Droppunkt (0x000f2da4) har fortsatt uklar kontekst; ingen koordinatregel innføres. Fragmenterte formuleringer, personopplysninger, ulovlige duellråd og uverifiserte sitater beholdes i privat originalarkiv, ikke som spillerinstruks. Utvidet historikk, legende-/arbeidsmaur-/regissørstoff, skade- og karrierefortellinger og øvrige råblokker krever neste faglige gjennomgang. Ingen motorregler, hovedkapitler, øvelses-ID-er eller illustrasjoner endret. Full CI gjenstår.
+
+| Kapittel | Underavsnitt | Kildeanker |
+|---|---|---|
+| exercise_constraints | onenote_cone_gate | Fotballnotater (Den 16.05.2026).one, råuttrekk 0x0000573c og 0x00005834 |
+| coaching_transfer | onenote_ball_path | Fotballnotater (Den 16.05.2026).one, råuttrekk 0x00004b2c og 0x0000573c |
+| exercise_constraints | onenote_waiting_groups | Fotballnotater (Den 16.05.2026).one, råuttrekk 0x00005ae4, 0x00005bac og 0x000daf3c |
+| coaching_transfer | onenote_free_play | Fotballnotater (Den 16.05.2026).one, råuttrekk 0x000f9a40, 0x000fa3a8 og 0x00102580 |
+| individual_development | onenote_motivation_conversation | Fotballnotater (Den 16.05.2026).one, råuttrekk 0x000f9c80–0x000fa780 og 0x001022f4 |
+| gegenpress | onenote_selective_press | Fotballteori (Den 12.06.2026).one, råuttrekk 0x00067614, 0x00073bd4 og 0x000751cc |
+| positional_play | onenote_structure_break | Fotballteori (Den 12.06.2026).one, råuttrekk 0x00067d24, 0x000683fc, 0x000754d4 og 0x00075c94 |
+| collective_training | onenote_shared_perception | Fotballteori (Den 12.06.2026).one, råuttrekk 0x00037ec4 |
+| training_problem | onenote_data_analysis | Fotballteori (Den 12.06.2026).one, råuttrekk 0x00035824 og 0x00035f9c |
+| positional_play | onenote_rhythm_space | Fotballteori (Den 12.06.2026).one, råuttrekk 0x00032d94 |

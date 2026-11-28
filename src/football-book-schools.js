@@ -411,6 +411,12 @@ export const SCHOOL_CHAPTERS = [
         "title": "Ralf Rangnick – kollektiv intensitet og høyt press",
         "text": "Originaldisposisjonen plasserer Rangnick som en moderne trenerarkitekt knyttet til presskolen. UEFA omtaler hans betydning for gegenpressing og fremhever Østerrikes effektive høye press i gruppespillet i EM 2024. Høyt press mot etablert oppbygging må skilles fra umiddelbar gjenvinning etter eget balltap. Begge forutsetter at spillere nær ballen og spillere lenger unna samordner sine arbeidsoppgaver. Observer hvem som setter press, hvilke pasningsalternativer som dekkes og hvordan laget beskytter rom bak presset. Ved manglende sikring kan en lavere utgangsposisjon være mer hensiktsmessig. Det innføres ingen fast tidsgrense eller pressverdi knyttet til Rangnick.",
         "source": "Faglig tillegg – UEFA, https://www.uefa.com/uefaeuro/history/news/028d-1b058a1a388d-5665645fc203-1000--uefa-euro-2024-meet-the-24-teams/ ; https://www.uefa.com/uefaeuro/history/news/028e-1b3f9d965e00-3ec1a6f8adb9-1000--euro-2024-group-stage-uefa-technical-observers-tactical-r/; navn og tema fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "onenote_selective_press",
+        "title": "Stormpress og selektivt press – når presset selv åpner rom",
+        "text": "I den utvidede teoriteksten argumenteres det mot ukritisk stormpress: flere spillere som går samtidig kan både stenge og åpne rom. Den fremhever feiltouch, bakoverpasning og feilvendt ballfører som signaler for selektivt press. Den beskriver også hvordan en motstander kan utnytte rom som oppstår når flere forlater sine posisjoner. Dette er manusets kritiske perspektiv på systemfotball, ikke dokumentasjon av at alle navngitte historiske lag alltid presset selektivt. Bruk perspektivet sammen med bokas eksisterende regler for press, sikring og gjenvinning.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00067614, 0x00073bd4 og 0x000751cc"
       }
     ]
   },
@@ -666,6 +672,18 @@ export const SCHOOL_CHAPTERS = [
         "title": "Guardiola og Ederson – romkontroll med elleve spillere",
         "text": "Manuset bruker Guardiolas posisjonsspill og Ederson som eksempel på keeperens rolle i pasningsstrukturen. Manchester City beskriver keeperens evne til å starte angrep både kort og langt. Fotballfaglig kan keeperens involvering gi en ekstra pasningsmulighet og tvinge motstanderen til å velge hvilke rom den skal dekke. Det betyr ikke at oppbygging alltid må være kort. Manuset omtaler dette som positional play 2.0; uttrykket beholdes som manusets egen analytiske betegnelse. Ingen nye spillerverdier eller faste oppspill utledes av trenercaset.",
         "source": "Fotballdokumentet v1.pdf – Del V – Guardiola og positional play 2.0, linje 4591–4617; Manchester City, https://www.mancity.com/news/mens/ederson-fulham-preview-premier-league-63863644"
+      },
+      {
+        "id": "onenote_structure_break",
+        "title": "Systemkritikk – når den skapende spilleren bryter mønsteret",
+        "text": "Den utvidede OneNote-teksten utdyper spenningen mellom en kollektiv pasningsstruktur og den kreative midtbanespilleren. Den argumenterer for at spilleren må kunne se når et mønster bør brytes, og fremhever stopp i rytmen, vending inn i press og uventede handlinger. Manusets vurderinger av konkrete treneres begrensning av kreativiteten er fortolkninger, ikke selvstendig dokumenterte årsakspåstander. Faglig beholdes dilemmaet: en struktur skaper forutsigbare støttepunkter, samtidig som spilleren kan oppdage en bedre løsning enn den avtalte. Det er ingen ny instruks om å avvike fra lagets plan i alle situasjoner.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00067d24, 0x000683fc, 0x000754d4 og 0x00075c94"
+      },
+      {
+        "id": "onenote_rhythm_space",
+        "title": "Rom og rytme – kontroll gjennom skiftende tempo",
+        "text": "En kort teoriblokk kontrasterer totalfotballens fleksible rom med moderne fotballs rytmiske rom, der tempo må varieres og ikke bare strukturen kontrolleres. Dette er manusets analytiske bilde, ikke en uttømmende historisk forskjell mellom epokene. Det gir et spørsmål til kampobservasjonen: når bør ballen sirkuleres for å flytte motstanderen, når bør laget akselerere mot en åpning, og når er det riktig å holde igjen? Perspektivet knyttes til bokas eksisterende ballbesittelses- og romkontrollprinsipper, uten å innføre faste tempovekter.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00032d94"
       }
     ]
   },
