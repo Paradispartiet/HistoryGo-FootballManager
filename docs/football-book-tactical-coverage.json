@@ -225,6 +225,18 @@
       "symbol": "createTrainingExerciseHypothesis",
       "test": "scripts/simulate-manager-training-exercise-design-v1.mjs",
       "scope": "Lagrer treningsintensjon, hypotese, observasjon og trenerpunkter; ikke input til trenings-/kampmotor."
+    },
+    "HF": {
+      "file": "src/engine/calculateHistoricalFormationFit.ts",
+      "symbol": "calculateHistoricalFormationFit",
+      "test": "scripts/audit-historical-formation-fit.mjs",
+      "scope": "Historisk formasjonstilpasning med rolledekning, lagmetrikk, systemkrav og trenerforståelse. Ikke historisk tracking."
+    },
+    "PL": {
+      "file": "src/football-match-plan.js",
+      "symbol": "createPlanChange",
+      "test": "scripts/simulate-match-plan.mjs",
+      "scope": "Kampplanbytte vurderer kampstilling, motstander, egen profil og omstillingskostnad. Planens formasjonsarv er ikke automatisk ny formasjon."
     }
   },
   "entries": [
@@ -465,109 +477,197 @@
       "id": "proactive_reactive",
       "chapterId": "formations",
       "title": "Spillmodell – reaktiv og proaktiv strategi",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "PL",
+        "P",
+        "T",
+        "U"
+      ],
+      "implemented": "Kampplanbytte, press, kontroll og overgang har spillvirkning.",
+      "nextCheck": "Kontroller reaktiv/proaktiv veksling og rollefordeling per fase; ingen fast 3-4-3 eller tidsintervall."
     },
     {
       "id": "formation_choices",
       "chapterId": "formations",
       "title": "4-3-3, 4-4-2 og 3-4-2-1 – manusets avveininger",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "HF",
+        "E",
+        "R",
+        "L",
+        "O",
+        "T"
+      ],
+      "implemented": "Formasjonens rolledekning, lagprofil og avgrensede motspill påvirker kamp.",
+      "nextCheck": "Kontroller ansvar i angrep/forsvar for 4-3-3, 4-4-2 og 3-4-2-1."
     },
     {
       "id": "history_chaos",
       "chapterId": "formations",
       "title": "Fra kaos til form – de tidlige angrepssystemene",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Tidlige angrepssystemer og pyramide. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "history_combination",
       "chapterId": "formations",
       "title": "Dribbling game og combination game",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Dribling og kombinasjonsspill. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "history_rules",
       "chapterId": "formations",
       "title": "Regelendringer som katalysator",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Regelendringers betydning for taktisk rom. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "history_continent",
       "chapterId": "formations",
       "title": "Kontinentale impulser og transnasjonal utvikling",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Kontinentale impulser. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "history_wm",
       "chapterId": "formations",
       "title": "WM – omorganisering av ansvar",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [
+        "HF"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: WM og rollefordeling. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "history_brazil",
       "chapterId": "formations",
       "title": "Brasils 4-2-4 – frihet og struktur",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [
+        "HF",
+        "R"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: 4-2-4, frihet og struktur. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "history_women",
       "chapterId": "formations",
       "title": "Kvinnefotball – parallelle utviklingslinjer",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Kvinnefotballens utviklingslinjer. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "culture_elias",
       "chapterId": "formations",
       "title": "Elias – sivilisasjonsprosessen og regulert konkurranse",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Regulert konkurranse. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "culture_regional_examples",
       "chapterId": "formations",
       "title": "Internasjonale fotballmiljøer – læringsbetingelser og konkrete eksempler",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Internasjonale læringsmiljøer. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "portrait_meredith_mcgregor",
       "chapterId": "formations",
       "title": "Billy Meredith og William McGregor – spillerprofil og fotballens institusjoner",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Spiller og institusjonsbygger. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "portrait_pozzo",
       "chapterId": "formations",
       "title": "Vittorio Pozzo – metodo og balanse mellom ledd",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [
+        "HF"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Metodo. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "portrait_chapman",
       "chapterId": "formations",
       "title": "Herbert Chapman – WM som svar på et nytt romproblem",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [
+        "HF"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: WM og nytt romproblem. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "portrait_tuchel",
       "chapterId": "formations",
       "title": "Thomas Tuchel – formasjonsskifte som kampjustering",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [
+        "HF",
+        "PL"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Formasjonsskifte. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "portrait_ferguson",
       "chapterId": "formations",
       "title": "Alex Ferguson – bredde og fleksibilitet innenfor 4-4-2",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [
+        "R",
+        "C",
+        "PL"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Fleksibilitet i 4-4-2. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "onenote_history_wm_space",
       "chapterId": "formations",
       "title": "WM – rombevissthet, struktur og fleksibilitet",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [
+        "HF"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: WM, rom og risiko. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "onenote_history_skill_collective",
       "chapterId": "formations",
       "title": "Historiske utviklingslinjer – fra individuell teknikk til kollektiv romforståelse",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [
+        "R",
+        "E",
+        "P"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Historisk kollektiv romforståelse. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "history_hungary",
@@ -584,139 +684,271 @@
       "id": "history_total",
       "chapterId": "total_football",
       "title": "Totalfotball – kollektiv intelligens og rollebytter",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "HF",
+        "R",
+        "E",
+        "PL"
+      ],
+      "implemented": "Rolleforbindelser, formasjonstilpasning og planbytte finnes; totalfotballens familiehendelser er ikke dynamisk romovertakelse.",
+      "nextCheck": "Kontroller at en medspiller faktisk overtar rommet en annen forlater."
     },
     {
       "id": "history_collective_cognition",
       "chapterId": "total_football",
       "title": "Fra individuell briljans til kollektiv intelligens",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "R",
+        "G",
+        "N",
+        "E"
+      ],
+      "implemented": "Kontinuitet, samhandling og avgrensede tidsvinduer finnes.",
+      "nextCheck": "Kontroller felles persepsjon uten antatt mental informasjon."
     },
     {
       "id": "culture_art_results",
       "chapterId": "total_football",
       "title": "Estetikk og resultater – kunst og nytte",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Kunst og nytte. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "culture_adorno",
       "chapterId": "total_football",
       "title": "Adorno – kunstens autonomi og instrumentell rasjonalitet",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Autonomi og instrumentell nytte. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "culture_eco",
       "chapterId": "total_football",
       "title": "Eco – det åpne verket og publikums fortolkning",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Publikums fortolkning. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "culture_gadamer",
       "chapterId": "total_football",
       "title": "Gadamer – lekens egenverdi",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Lekens egenverdi. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "culture_aristotle",
       "chapterId": "total_football",
       "title": "Aristoteles – poiesis og praxis",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Poiesis og praxis. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "culture_synthesis",
       "chapterId": "total_football",
       "title": "Estetikk som grunnvilkår – struktur og brudd",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Estetikk, frihet og kontroll. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "portrait_cruyff_michels",
       "chapterId": "total_football",
       "title": "Cruyff og Michels – spiller og trener i samme taktiske tradisjon",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [
+        "HF",
+        "R"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Rolleflyt som historisk case. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "history_catenaccio",
       "chapterId": "catenaccio",
       "title": "Catenaccio – kontroll og kontring",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "HF",
+        "T",
+        "U",
+        "PL"
+      ],
+      "implemented": "Historisk rolledekning, catenaccio-hendelser og dyp blokk med kontring finnes.",
+      "nextCheck": "Kontroller fri sikringsspiller og markøransvar; ikke likestill lav blokk og catenaccio."
     },
     {
       "id": "culture_pragmatism",
       "chapterId": "catenaccio",
       "title": "Resultatfotball og estetikkens historiske dilemma",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Resultatfotballens dilemma. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "portrait_herrera",
       "chapterId": "catenaccio",
       "title": "Helenio Herrera – organisering og overgang",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [
+        "HF",
+        "T"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Sikring og overgang. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "portrait_mourinho",
       "chapterId": "catenaccio",
       "title": "José Mourinho – kampbilde, risiko og overgang",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [
+        "T",
+        "PL"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Kampbilde og risiko. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "history_intensity",
       "chapterId": "gegenpress",
       "title": "Moderne fotball – teknikk under press",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "U",
+        "P",
+        "Y",
+        "A",
+        "PC"
+      ],
+      "implemented": "Gjenvinning, motpress, restforsvar og reaksjon har avgrensede mekanikker.",
+      "nextCheck": "Kontroller mottak, vending og pasning under gjentatt press."
     },
     {
       "id": "portrait_klopp",
       "chapterId": "gegenpress",
       "title": "Jürgen Klopp – kollektiv gjenvinning og teknikk under press",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [
+        "U",
+        "P"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Gjenvinningspress. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "portrait_rangnick",
       "chapterId": "gegenpress",
       "title": "Ralf Rangnick – kollektiv intensitet og høyt press",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [
+        "P",
+        "U"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Høyt press kontra gjenvinning. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "onenote_selective_press",
       "chapterId": "gegenpress",
       "title": "Stormpress og selektivt press – når presset selv åpner rom",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "P",
+        "G",
+        "U",
+        "V"
+      ],
+      "implemented": "Frontpress, midtbanefelle, motstanderens utvei og restforsvar finnes.",
+      "nextCheck": "Kontroller konkret feiltouch, bakoverpasning og feilvendt mottaker som signal; press eller hold posisjon."
     },
     {
       "id": "history_cruyff_barca",
       "chapterId": "positional_play",
       "title": "Fra Cruyff til Barcelona – kontinuitet og endring",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [
+        "HF",
+        "R",
+        "C"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Kontinuitet mellom fotballskoler. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "history_keeper",
       "chapterId": "positional_play",
       "title": "Positional play 2.0 – keeper som aktivt oppspillsledd",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "H",
+        "P",
+        "T",
+        "R"
+      ],
+      "implemented": "Keeper inngår i oppbygging, kontroll og dokumentert motstanderoppbygging.",
+      "nextCheck": "Kontroller eget kort/langt valg, overtall mot kjent press og balltapsrisiko."
     },
     {
       "id": "portrait_guardiola_ederson",
       "chapterId": "positional_play",
       "title": "Guardiola og Ederson – romkontroll med elleve spillere",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [
+        "H",
+        "P",
+        "T"
+      ],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Keeper som ekstra oppspiller. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "onenote_structure_break",
       "chapterId": "positional_play",
       "title": "Systemkritikk – når den skapende spilleren bryter mønsteret",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "D",
+        "C",
+        "R"
+      ],
+      "implemented": "Kreativt individuelt gjennombrudd er en avgrenset alternativ rute.",
+      "nextCheck": "Kontroller når bryte mønster kontra sirkulere med støtte og risiko."
     },
     {
       "id": "onenote_rhythm_space",
       "chapterId": "positional_play",
       "title": "Rom og rytme – kontroll gjennom skiftende tempo",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "PL",
+        "T",
+        "H",
+        "C"
+      ],
+      "implemented": "Tempo og kontroll kan endres via kampplan; spillvending og gjennombrudd finnes.",
+      "nextCheck": "Kontroller rytmeskifte som situasjonsvalg fremfor planbytte alene."
     },
     {
       "id": "culture_identity",
       "chapterId": "relationism",
       "title": "Futebol d’arte – estetikk, identitet og kulturell selvhevdelse",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk, pedagogisk eller filosofisk case: Estetikk og kulturell identitet. Ingen særskilt motorregel kreves av caset.",
+      "nextCheck": "Behold som fagstoff og koble eventuelle generiske taktiske prinsipper til øvrige handlingsrader. Ingen bonus fra navn, epoke, identitet eller nasjonalitet; eksterne kilder ikke kontrollert."
     },
     {
       "id": "keeper_positioning",

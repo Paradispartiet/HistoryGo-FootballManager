@@ -353,7 +353,9 @@ for(const entry of coverage.entries){
 }
 for(const [key,ref] of Object.entries(coverage.evidence)){
   check(readFileSync(join(root,ref.file),"utf8").includes("function "+ref.symbol+"("),key+": motorfunksjon finnes ikke");
-  if(ref.test)check(readFileSync(join(root,ref.test),"utf8").includes("assert"),key+": regresjonstest mangler");
+  // Both node:assert and simulation check(label, condition) helpers are valid.
+  // Verify the reference, not a test run.
+  if(ref.test)check(/(?:^|\n)\s*(?:assert(?:\.[A-Za-z]+)?|check)\s*\(/.test(readFileSync(join(root,ref.test),"utf8")),key+": regresjonstest mangler");
 }
 const searchable=allBookChapters.map(c=>({c}));
 for(const [query,id] of [["Godfoten","method_eggen"],["Seirullo","method_seirullo"],["Pirlo","onenote_directors"],["droppunkt",""],["stormpress","onenote_selective_press"]]){

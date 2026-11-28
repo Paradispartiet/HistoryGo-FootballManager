@@ -83,3 +83,26 @@ Alle 102 fagavsnitt i de seks treningskapitlene vurdert: 48 delvis dekket, 24 ua
 - Frade, Seirul·lo, Verheijen, Eggen og Dreier har overlappende mekanikker i eksisterende system, men ikke dokumentert full metodisk simulering. Knytt treningsprinsipp til faktisk fotballhandling, ikke trenernavnbonus. Øvelseseksempler, historiske, sosiologiske og ufullstendige disposisjoner beholdes som fagstoff der egen regel ikke er hensiktsmessig.
 
 Kontroll av kildekode og utvalgte testassertions, ikke ny testkjøring. Eksterne kilde-URL-er er ikke kontrollert. Ingen motorendringer, ingen nye spillerverdier. Neste bolk: resterende 41 fagavsnitt i fotballskoler og formasjonsteori/historie/kultur. Basistekst og 12 klubbkapitler fortsatt separat kontroll.
+
+## Bolk 7 – fotballskoler, formasjonsteori, historie og kultur
+
+41 avsnitt vurdert: 10 delvis dekket og 31 forklarende. Alle 287 registrerte sourceDetails er dermed gjennomgått. Historisk formasjonstilpasning og kampplanbytte har eksisterende mekanikk; planens formasjonsarv er ikke automatisk en faktisk ny formasjon. Totalfotballens dynamiske romovertakelse, selektive pressutløsere, catenaccios markøransvar og kreativt rytmeskifte er delvis dekket, ikke fullt bekreftet. Relasjonismens basistekst må kartlegges separat. Historiske og filosofiske case beholdes som læringsstoff, uten navn- eller nasjonalitetsbonus.
+
+CI 46148887934 feilet på at audit krevde teksten assert i eksisterende regresjonsskript som bruker check(label, condition). Rettet til å godta begge teststiler, uten å fjerne kontroll av symbol, testfil eller ID-dekning. De konkrete feilende testskriptenes check-kall er inspisert. Ny CI må bekrefte rettelsen.
+
+## Status og prioritert motorarbeid
+
+- partial: 119
+- explanatory: 127
+- unverified: 41
+
+287 vurderte avsnitt er ikke 287 implementerte regler. Ingen sammensatte avsnitt er klassifisert fullt dekket eller bekreftet manglende. Uavklart betyr ikke bevist fravær. Basistekst, 12 klubbkapitler og de 16 opprinnelige strukturerte prinsippene samt eksterne kilder krever separat kontroll.
+
+1. Møtende spiss: avlegg, vending, stuss eller støtte i eksisterende oppspillsfase. Verifiser mottakere og motspill; ukjent underlag beholder eksisterende fallback. Én terminal effekt. Test blokkert/frigjort utvei, ukjent underlag og koble meeting_forward og build_up_patterns til motorbevis.
+2. Førsteforsvarer: forsinkelse eller press med kjent sikringsunderlag; viderefør reaksjonsmodell.
+3. Egen første handling etter dokumentert ballvinning: kontroll kontra gjennombrudd med støtte og motspill.
+4. Øvelsesdesign: oppgavekvalitet og relevant eksisterende progresjon, ikke automatisk bonus fra flate/touch.
+5. Dødballer: eksplisitt hendelse og oppgaver før leveringsvariant; kontakt/nedfall/overgang med én terminal effekt.
+6. Orientering, kommunikasjon, keeper og avslutning etter dokumentert datagrunnlag. Ingen oppfunnet tracking eller dobbeltprising.
+
+Ingen motorregler endret. Prioriteringen er basert på kodegjennomgang, ikke krav om motorregler for all historisk eller filosofisk kunnskap.
