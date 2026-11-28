@@ -565,3 +565,7 @@ De 218 lengre, ikke eksakt samsvarende teoriblokkene inkluderer 202 uten treff p
 | coaching_transfer | method_comparison | Faglig tillegg – redaksjonell sammenstilling av de fem kildebelagte metodeavsnittene; OneNote-disposisjonen 0x000089ac og 0x001a3590 |
 | formations | onenote_history_wm_space | OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x0003c4c4, 0x0003f694–0x00040bec, 0x0005bfe4–0x0005cdec |
 | formations | onenote_history_skill_collective | OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00046cec, 0x00050c1c, 0x0005165c, 0x001b0fac og 0x007c9ebc |
+
+## Bolk 27 – lesbarhet, felles søk og direkte navigasjon
+
+Globalt søk på tvers av alle sju bokdeler, 49 kapitler og 287 fagavsnitt, med hopp til første eller valgt treff. Søk inkluderer fagtekst og overskrifter; kilde-URL-er utelates fra globalt søk for å unngå støy. Diakritiske varianter normaliseres. Eksisterende seksjonssøk beholdes. Lange kapitler får sammenleggbar innholdsfortegnelse; alle kildehenvisninger beholdes i egne sammenleggbare kildefelt. Ingen innholdsfiler eller figurer endret. Målrettet audit av totaler, unike ID-er og søketreff. Full CI og faktisk iPad-kontroll må bekreftes før ferdigmelding. OneNote-sideeksport, droppunkt, separat arbeidsoppgavedokument, uverifiserte kildeattribusjoner og andre åpne originalkildepunkter er fortsatt dokumentert, ikke erklært ferdig rekonstruert.

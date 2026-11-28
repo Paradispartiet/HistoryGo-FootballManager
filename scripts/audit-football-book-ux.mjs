@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { getFootballBookGameText } from "../dist/index.js";
-import { buildClubBookChapters } from "../src/football-book-club-chapters.js";
+import { buildClubBookChapters, searchFootballBookEntries } from "../src/football-book-club-chapters.js";
 import { THEORY_CHAPTERS } from "../src/football-book-theory.js";
 import { SCHOOL_CHAPTERS } from "../src/football-book-schools.js";
 import { ROLE_CHAPTERS } from "../src/football-book-roles.js";
@@ -332,6 +332,20 @@ for(const [i,status] of ["perfekt","god","brukbar"].entries()){
   const value=getRoleFamiliarity(store,"book-example","balancing_six");
   check(roleGraph.rows[i][1]===value&&roleGraph.rows[i][2]===100-value,"Fortrolighetsgraf avviker fra eksisterende motor");
 }
+const allBookChapters=[...THEORY_CHAPTERS,...SCHOOL_CHAPTERS,...ROLE_CHAPTERS,...PHASE_CHAPTERS,...SET_PIECE_CHAPTERS,...TRAINING_CHAPTERS,...clubChapters];
+const allBookDetails=allBookChapters.flatMap(c=>c.sourceDetails||[]);
+check(allBookChapters.length===49,"Fotballboka: feil samlet kapitteltall");
+check(allBookChapters.reduce((n,c)=>n+c.diagrams.length,0)===83,"Fotballboka: feil samlet figurtall");
+check(allBookDetails.length===287&&new Set(allBookDetails.map(d=>d.id)).size===287,"Fotballboka: manglende eller duplikate fagavsnitt");
+const searchable=allBookChapters.map(c=>({c}));
+for(const [query,id] of [["Godfoten","method_eggen"],["Seirullo","method_seirullo"],["Pirlo","onenote_directors"],["droppunkt",""],["stormpress","onenote_selective_press"]]){
+  if(!id)continue;
+  check(searchFootballBookEntries(searchable,query).some(hit=>hit.matching.some(d=>d.id===id)),query+": globalt søk finner ikke fagavsnitt");
+}
+check(searchFootballBookEntries(searchable,"Rosenborg").some(hit=>hit.c.id==="rosenborg"),"Globalt søk finner ikke klubb");
+check(searchFootballBookEntries(searchable,"   ").length===0,"Tomt søk skal ikke vise alle resultater");
+check(searchFootballBookEntries(searchable,"zzzzingenfotballtreffzzzz").length===0,"Ukjent søk gir treff");
+check(bookHtml.includes('id="footballBookSearch"'),"Globalt boksøk mangler i appen");
 console.log("Fotballboka UX QA Audit");
 console.log(`Principles: ${principles.length}`);
 console.log(`Scenarios: ${scenarios.map((scenario) => scenario.code).join(", ")}, no_matching_weak_point`);
