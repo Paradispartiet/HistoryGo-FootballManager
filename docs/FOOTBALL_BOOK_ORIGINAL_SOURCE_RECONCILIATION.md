@@ -35,7 +35,7 @@ De nye avsnittene er redaksjonelle sammenfatninger av originalmaterialet, ikke o
 - Droppunkt: Fotballnotater råtekst ved byte 0x000f2da4; kontekst og koordinatsystem må avklares før bruk.
 - Kommunikasjon og kampanalyse/-strategi: første detaljerte PDF-integrasjon i bolk 7–8; separat arbeidsoppgavedokument, uutfylt kampforberedelse og OneNote-dekning gjenstår.
 - Pedagogikk, øvelsesidéer, kritikk av tidlig spesialisering og sosial tilgang: første PDF-integrasjon i bolk 9; Frade, Seirul·lo, Godfoten, Dreier og Descamps krever ytterligere kilder. Sportsvitenskap: første PDF-integrasjon i bolk 10. Fysiologidisposisjonen er bevart, men den detaljerte fysiologiblokken gjenstår. Psykologi og mental trening er delvis integrert i bolk 11; full mental hovedblokk gjenstår.
-- Fotballhistorie, kultur, spiller- og trenereksempler; historiske påstander og sitater kildekontrolleres før publisering.
+- Fotballhistorie: første integrasjon i bolk 14; kultur, filosofi og øvrige spiller-/trenercaser gjenstår. Historiske påstander og sitater kontrolleres før publisering.
 - Full eksport av begge OneNote-seksjonene med sider, bilder og gjeldende revisjoner; deretter linje-/avsnittsbasert dekningsregister. Ikke anta at binæruttrekk er komplette.
 
 Eksisterende spillmotor er fortsatt source of truth. Koble ny kunnskap til eksisterende mekanismer før eventuelle endringer vurderes. Ingen flere kapitler før dekningskontroll er gjennomført.
@@ -310,3 +310,24 @@ På brukerens bestilling om å fullføre fysiologi er 15 nye fagavsnitt lagt til
 | collective_training | mental_winning |
 | exercise_constraints | mental_pressure_practice |
 | exercise_constraints | mental_reset_practice |
+
+## Bolk 14 – fotballhistorie: fra kaos til kollektiv intelligens
+
+14 søkbare fagavsnitt i seks eksisterende teori- og skolekapitler. PDF Del I, Del II (linje 1–390), Kognitive ferdigheter / Kvinnefotball (4170–4264) og Del V (4519–4650). Historiske holdepunkter kontrollert mot Scottish Football Museum, FIFA, UEFA, FC Barcelona og FIFA Training Centre der lenker er angitt. Originalarkivet endres ikke. Uverifiserte sitater og detaljerte årsaksforklaringer er utelatt. Offsideformuleringen om 1866, etableringen av La Masia og påstanden om den første ballspillende keeperen avgrenses eller korrigeres eksplisitt. Kontinentale påvirkningslinjer og WM-historie er ikke fullt kildeverifisert. Klasse, teknologi, estetikk, kultur, filosofi og biografiske case behandles separat. Ingen nye hovedkapitler, figurer eller motorregler. Full CI og OneNote-kontroll gjenstår.
+
+| Kapittel | Underavsnitt | Kildeanker |
+|---|---|---|
+| formations | history_chaos | Del I – Fra kaos til form / Overgang fra individer til systemer |
+| formations | history_combination | Del I – Skottland mot England; Scottish Football Museum, https://www.scottishfootballmuseum.org.uk/football-for-all/scotlands-football-origins/ |
+| formations | history_rules | Del I – Regelendringer som katalysator |
+| formations | history_continent | Del I – Kontinentale impulser: Østerrike, Sveits, Ungarn |
+| formations | history_wm | Del I – Formasjoner og tidlige systemer / WM-formasjonen og moderniseringen |
+| formations | history_brazil | Del I – Brasils 4-2-4; FIFA, https://www.fifa.com/pt/news/articles/morre-zagallo-homenagem-fifa |
+| formations | history_women | Sportsvitenskap og fysiologi – Kvinnefotball og alternative perspektiver; FIFA, https://www.fifa.com/en/tournaments/womens/womensworldcup/articles/facts-history-launch-start |
+| false_nine_inverted_back | history_hungary | Del I – Ungarn på 50-tallet; FIFA, https://www.fifa.com/en/news/articles/hungary-magical-magyars-puskas-hidegkuti-england-wembley-1953-six-three ; https://inside.fifa.com/tournaments/mens/worldcup/qatar2022/news/are-england-s-years-of-hurt-about-to-come-to-an-end |
+| total_football | history_total | Del I – Cruyff og totalfotballen; UEFA, https://www.uefa.com/uefachampionsleague/news/0230-0e94a8068d01-a93b114660e2-1000--in-profile-rinus-michels/ |
+| total_football | history_collective_cognition | Sportsvitenskap og fysiologi – Kognitive ferdigheter og psykologiske krav |
+| catenaccio | history_catenaccio | Del I – Italiensk catenaccio og sweeper-logikken; UEFA, https://www.uefa.com/uefachampionsleague/news/0231-0e94dd0ff999-827e03392bff-1000--in-profile-helenio-herrera/ |
+| positional_play | history_cruyff_barca | Del I – Cruyff og totalfotballen / Del II – Totalfotball og moderne kollektivitet; FC Barcelona, https://www.fcbarcelona.com/en/news/1457129/la-masia-is-40-years-old/amp |
+| positional_play | history_keeper | Del V – Guardiola og positional play 2.0; FIFA Training Centre, https://www.fifatrainingcentre.com/en/practice/elite-sessions/goalkeeper/goalkeepersbuildup.php ; FIFA, https://www.fifa.com/en/articles/gyula-grosics-hungary-goalkeeping-legacy |
+| gegenpress | history_intensity | Del V – Moderne krav / Klopp og gegenpressing; FIFA Training Centre, https://www.fifatrainingcentre.com/en/practice/elite-sessions/transition-to-defending/counter-pressing.php |

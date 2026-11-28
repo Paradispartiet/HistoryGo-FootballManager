@@ -101,6 +101,20 @@ export const SCHOOL_CHAPTERS = [
           "Ingen overtakelse → ubalanse"
         ]
       }
+    ],
+    "sourceDetails": [
+      {
+        "id": "history_total",
+        "title": "Totalfotball – kollektiv intelligens og rollebytter",
+        "text": "Manuset beskriver laget som en levende organisme: når en back går frem, overtar en medspiller rommet; når spissen møter, kan en kant angripe boksen. Cruyff er et eksempel på teknikk, orientering og rolleflyt. UEFA knytter Michels og Cruyff til Ajax og Nederlands totalfotball på 1970-tallet og nevner Ungarns magiske lag og Jack Reynolds' Ajax som forløpere. Rollebytter forutsetter fortsatt balanse, bredde og dybde. Friheten er organisert, ikke tilfeldig.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Cruyff og totalfotballen; UEFA, https://www.uefa.com/uefachampionsleague/news/0230-0e94a8068d01-a93b114660e2-1000--in-profile-rinus-michels/"
+      },
+      {
+        "id": "history_collective_cognition",
+        "title": "Fra individuell briljans til kollektiv intelligens",
+        "text": "Manuset fremhever at spillere må tolke medspillernes intensjoner, overvåke motstanderen og samordne rollebytter, pasninger og press. Teknikk, hukommelse, sansing og reaksjon knyttes til rytme, timing og rom. Taktiske systemer stiller krav til teknikk, men gjør også ferdighetene mer anvendelige når medspillerne skaper alternativer. Dette er manusets samlende tese, ikke en påstand om at tidligere spillere manglet spilleforståelse eller at historien har én entydig utviklingsretning.",
+        "source": "Fotballdokumentet v1.pdf – Sportsvitenskap og fysiologi – Kognitive ferdigheter og psykologiske krav"
+      }
     ]
   },
   {
@@ -199,6 +213,14 @@ export const SCHOOL_CHAPTERS = [
             62
           ]
         ]
+      }
+    ],
+    "sourceDetails": [
+      {
+        "id": "history_catenaccio",
+        "title": "Catenaccio – kontroll og kontring",
+        "text": "Manuset bruker Herreras Inter som eksempel på stram organisering kombinert med raske kontringer. UEFA beskriver hvordan laget utnyttet tekniske midtbanespillere og hurtige angripere i overgang. Sikring kan forberede en presis offensiv overgang; forsvar er ikke nødvendigvis passivitet. Dette viderefører bokas skille mellom libero- og markeringsstrukturen i catenaccio og en moderne lav soneblokk. Kilden gir ikke grunnlag for bestemte oppspillsruter eller kvantitative kampverdier.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Italiensk catenaccio og sweeper-logikken; UEFA, https://www.uefa.com/uefachampionsleague/news/0231-0e94dd0ff999-827e03392bff-1000--in-profile-helenio-herrera/"
       }
     ]
   },
@@ -309,6 +331,14 @@ export const SCHOOL_CHAPTERS = [
           "Ja → steng utveiene",
           "Nei → forsink og samle laget"
         ]
+      }
+    ],
+    "sourceDetails": [
+      {
+        "id": "history_intensity",
+        "title": "Moderne fotball – teknikk under press",
+        "text": "Originalmanuset knytter Klopps lag til umiddelbar gjenvinning og intensitet. Mottak, pasninger, vendinger og orientering må fungere i fart og trange rom. FIFA Training Centre beskriver gjenvinningspress som en mulighet til å starte et nytt angrep før motstanderen organiserer seg. Støtteavstand og restforsvar før balltap påvirker om gjenvinning er realistisk. Dette innebærer ikke at Klopp oppfant gjenvinningspress eller at det alltid er riktig. Stormpress og selektivt press står som fordypningstemaer i manusets disposisjon.",
+        "source": "Fotballdokumentet v1.pdf – Del V – Moderne krav / Klopp og gegenpressing; FIFA Training Centre, https://www.fifatrainingcentre.com/en/practice/elite-sessions/transition-to-defending/counter-pressing.php"
       }
     ]
   },
@@ -544,6 +574,20 @@ export const SCHOOL_CHAPTERS = [
             90
           ]
         ]
+      }
+    ],
+    "sourceDetails": [
+      {
+        "id": "history_cruyff_barca",
+        "title": "Fra Cruyff til Barcelona – kontinuitet og endring",
+        "text": "Manuset fører en linje fra nederlandsk totalfotball til Barcelonas posisjonsspill. Cruyffs trenerarbeid er viktig, men påstanden om at han etablerte La Masia er korrigert: Barcelonas egen historie dokumenterer at spillerboligen åpnet i 1979, før han ble trener. Taktisk kontinuitet handler om orientering, rom, pasningsvinkler og kollektiv bevegelse. Totalfotball, tiki-taka og juego de posición er ikke identiske, og klubbens institusjonelle historie må skilles fra trenernes bidrag.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Cruyff og totalfotballen / Del II – Totalfotball og moderne kollektivitet; FC Barcelona, https://www.fcbarcelona.com/en/news/1457129/la-masia-is-40-years-old/amp"
+      },
+      {
+        "id": "history_keeper",
+        "title": "Positional play 2.0 – keeper som aktivt oppspillsledd",
+        "text": "Manuset fremhever keeperens pasningsferdighet, orientering og evne til å åpne rom bak press, med Ederson som eksempel. FIFA Training Centre beskriver moderne keeperstøtte, mottak og pasninger gjennom press. Positional play 2.0 beholdes som manusets analytiske betegnelse. Påstanden om at Guardiola først integrerte keeperen i oppbyggingen tas ikke videre: FIFA beskriver eksempelvis Ungarns Gyula Grosics som en tidligere nyskapende ballspillende keeper.",
+        "source": "Fotballdokumentet v1.pdf – Del V – Guardiola og positional play 2.0; FIFA Training Centre, https://www.fifatrainingcentre.com/en/practice/elite-sessions/goalkeeper/goalkeepersbuildup.php ; FIFA, https://www.fifa.com/en/articles/gyula-grosics-hungary-goalkeeping-legacy"
       }
     ]
   },

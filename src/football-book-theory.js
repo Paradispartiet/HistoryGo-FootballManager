@@ -862,6 +862,48 @@ export const THEORY_CHAPTERS = [
         "title": "4-3-3, 4-4-2 og 3-4-2-1 – manusets avveininger",
         "text": "I 4-3-3 beskriver manuset tre fremre spillere med samordnede møte- og strekkbevegelser, én sentral spiller foran stopperne og krevende omstillinger for tre på midten. 4-4-2 fremheves for gode muligheter til vingspill, med risiko for åpent mellomrom mellom forsvar og midtbane. 3-4-2-1 gir vingbackene korridoransvar; tre stoppere kan gi dekning mot innlegg og god balanse ved balltap, men kan også gi lave ballbrudd, svakere oppbygging hvis sidestopperne ikke deltar, og vanskeligere bredde eller 2v1 på kant. Manuset skiller en mer defensiv trebacksløsning fra en pressfokusert variant. Dette er taktiske avveininger, ikke en rangering av systemene.",
         "source": "Fotballdokumentet v1.pdf – 5.5 4-3-3 / 5.6 4-4-2 / 5.7 3-4-2-1, linje 3800–3918"
+      },
+      {
+        "id": "history_chaos",
+        "title": "Fra kaos til form – de tidlige angrepssystemene",
+        "text": "Originalmanusets første utviklingslinje går fra balljakt og individuell dribling til organisert romfordeling. Det nevner 1-2-7 og 1-1-8 som tidlige formasjonseksempler og 2-3-5 som den senere pyramiden. Tallene beskriver fordeling av utespillere, ikke nødvendigvis faste rekker i kamp. Overgangen er fra å samle mange rundt ballen til å skape pasningsalternativer, støtte og defensivt ansvar. Manusets detaljerte Wilson-henvisninger er ikke kontrollert mot bokutgaven.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Fra kaos til form / Overgang fra individer til systemer"
+      },
+      {
+        "id": "history_combination",
+        "title": "Dribbling game og combination game",
+        "text": "Manuset setter engelsk dribletradisjon opp mot skotsk kombinasjonsspill. Queen’s Park i Glasgow er et sentralt eksempel. Scottish Football Museum dokumenterer klubbens bidrag til å utvikle og spre kortpasningsspillet og organisere den første offisielle landskampen i 1872. En dribler kan skape en fordel alene, mens pasning og bevegelse lar flere skape en fordel sammen. Begge ferdighetene har verdi; dette er ikke en absolutt motsetning mellom nasjoner.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Skottland mot England; Scottish Football Museum, https://www.scottishfootballmuseum.org.uk/football-for-all/scotlands-football-origins/"
+      },
+      {
+        "id": "history_rules",
+        "title": "Regelendringer som katalysator",
+        "text": "Originalmanuset fremhever offside, corner, frispark og målvaktens rolle som rammer for taktisk utvikling. Offsidereglene påvirker forholdet mellom forsvarslinje, dybde og fremoverpasninger. Når spillerne kan motta lenger fremme, må forsvaret håndtere andre trusler. Manusets formulering om tre motspillere før 1866 er upresis og gjengis ikke som regelhistorie. De detaljerte tidlige dateringene krever særskilt kildekontroll. Hovedpoenget beholdes: regelendringer skaper nye taktiske problemer.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Regelendringer som katalysator"
+      },
+      {
+        "id": "history_continent",
+        "title": "Kontinentale impulser og transnasjonal utvikling",
+        "text": "Manuset beskriver Østerrike, Sveits og Ungarn som miljøer for taktiske eksperimenter. Hugo Meisls Wunderteam fremheves i den kontinentale tradisjonen. Kombinasjonsspill og formasjonstenkning kan spres mellom land og tilpasses lokale forhold. Dette er manusets historiske tolkningsramme, ikke en ferdig dokumentert årsakskjede mellom enkelttrenere og klubber.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Kontinentale impulser: Østerrike, Sveits, Ungarn"
+      },
+      {
+        "id": "history_wm",
+        "title": "WM – omorganisering av ansvar",
+        "text": "Manuset navngir Herbert Chapman og Arsenal i mellomkrigstiden som sentrale for WM-formasjonen. Den eksisterende boka forklarer WM som en annen organisering av markering, støtte og sikring enn 2-3-5. Manusets korte avsnitt fremhever defensiv struktur kombinert med offensiv fleksibilitet. Det gir ikke en full historisk rekonstruksjon av Chapmans konkrete kampmønstre; heller ikke grunnlag for å påstå at han alene oppfant systemet.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Formasjoner og tidlige systemer / WM-formasjonen og moderniseringen"
+      },
+      {
+        "id": "history_brazil",
+        "title": "Brasils 4-2-4 – frihet og struktur",
+        "text": "I manusets utviklingslinje representerer Brasil et møte mellom individuell kreativitet og kollektiv organisering. FIFA bekrefter at verdensmesterlaget fra 1958 spilte 4-2-4. Det taktiske spørsmålet er hvordan fire fremre spillere kan true flere rom samtidig uten å isolere midtbanen. Manusets poeng er balansen mellom frihet og struktur, ikke at alle brasilianske lag opptrer likt. Detaljerte bevegelser fra bestemte kamper krever kampkilder.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Brasils 4-2-4; FIFA, https://www.fifa.com/pt/news/articles/morre-zagallo-homenagem-fifa"
+      },
+      {
+        "id": "history_women",
+        "title": "Kvinnefotball – parallelle utviklingslinjer",
+        "text": "Manuset fremhever at kvinnefotball og regionale turneringer må inngå i historien om kollektivt spill. Norge og USA på 1980- og 1990-tallet nevnes. FIFA dokumenterer at USA vant finalen mot Norge i det første offisielle kvinne-VM i 1991, og at Norge vant i 1995. Manusets refleksjon om ressurser, treningsmiljø og kollektiv samhandling beholdes. Detaljerte taktiske ruter i bestemte kamper krever ytterligere kilder.",
+        "source": "Fotballdokumentet v1.pdf – Sportsvitenskap og fysiologi – Kvinnefotball og alternative perspektiver; FIFA, https://www.fifa.com/en/tournaments/womens/womensworldcup/articles/facts-history-launch-start"
       }
     ]
   },
@@ -1008,6 +1050,14 @@ export const THEORY_CHAPTERS = [
             15
           ]
         ]
+      }
+    ],
+    "sourceDetails": [
+      {
+        "id": "history_hungary",
+        "title": "Ungarns magiske lag – den møtende spissen",
+        "text": "Manuset bruker Ungarn til å vise hvordan en spiss som forlater forventet posisjon endrer forsvarernes beslutningsproblem. Hidegkuti møter lavere slik at en stopper må velge mellom å følge eller holde linjen; en medspiller kan utnytte rommet. Puskás fremheves som offensiv spiller. FIFA bekrefter 6–3-seieren på Wembley i 1953 og det senere 7–1-resultatet. Dette knytter historien til falsk nier-prinsippet uten å hevde at betegnelsen var samtidens egen eller at Hidegkuti var den første.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Ungarn på 50-tallet; FIFA, https://www.fifa.com/en/news/articles/hungary-magical-magyars-puskas-hidegkuti-england-wembley-1953-six-three ; https://inside.fifa.com/tournaments/mens/worldcup/qatar2022/news/are-england-s-years-of-hurt-about-to-come-to-an-end"
       }
     ]
   }
