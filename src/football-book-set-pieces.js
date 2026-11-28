@@ -174,6 +174,20 @@ export const SET_PIECE_CHAPTERS = [
           ]
         ]
       }
+    ],
+    "sourceDetails": [
+      {
+        "id": "corner_low_delivery",
+        "title": "Offensiv corner – lav bue og målrettet levering",
+        "text": "Originalmanuset fremhever en lav innleggskurve som et mulig middel til å gjøre ballbanen vanskeligere for keeperen å bedømme. Dette er en leveringspreferanse, ikke en regel om at alle cornere skal slås lavt. Vurder leveringen sammen med løpene, forsvarernes plassering og hvor mottakeren kan møte ballen. Manuset beskriver dødballangrepet som en egen angrepstype og en mulighet til å skape sjanser mot et etablert, lavt forsvar. Den eksisterende bokas nærstolpe-, bakre sone- og kortcornervarianter beholdes.",
+        "source": "Fotballdokumentet v1.pdf – Offensiv dødball – Corner, linje 3316–3333 / Tre angrepstyper"
+      },
+      {
+        "id": "corner_disguise",
+        "title": "Corner – oppstilling, bevegelse og kamuflering",
+        "text": "Manuset fremhever startposisjoner, avvik fra vanlige mønstre og kamuflering av hensikten. Det nevner også plassering foran keeper og forsvarere på streken. Dette må forstås innenfor lovlig plassering og bevegelse: spillere kan velge utgangsposisjon og endre løp for å skape rom, men skal ikke holde eller ulovlig hindre motstanderens bevegelse. Tren koordinert timing mellom leveringen og løpene, slik at forsvareren må reagere på flere muligheter. Manusets forslag om fysisk sperring gjengis ikke som en tillatt taktisk instruks.",
+        "source": "Fotballdokumentet v1.pdf – Offensiv dødball – Corner, linje 3322–3346; IFAB regel 12, https://www.theifab.com/laws/latest/fouls-and-misconduct/"
+      }
     ]
   },
   {
@@ -288,6 +302,38 @@ export const SET_PIECE_CHAPTERS = [
           "Nei → innlegg eller kort kombinasjon"
         ]
       }
+    ],
+    "sourceDetails": [
+      {
+        "id": "free_kick_targets",
+        "title": "Offensivt frispark – tre leveringsmål og skjulte varianter",
+        "text": "Manuset fremhever presisjon og avtaler ved frispark. Innlegget kan siktes mot bakrommet, den primære avslutningssonen eller bakre stolpe, med kraft og tydelig retning. Ved frispark nær mål nevnes direkte skudd og skjulte kombinasjoner. Det taktiske poenget er å samordne levering og løp slik at forsvaret må reagere. Ved frispark gjelder ordinær offsidevurdering; når tre eller flere forsvarere danner mur, må angrepsspillerne holde minst én meters avstand til muren til ballen er i spill. Manusets leveringsmål er alternativer, ikke en fast prioriteringsrekkefølge.",
+        "source": "Fotballdokumentet v1.pdf – Offensiv dødball – Frispark, linje 3334–3346; IFAB regel 11 og 13, https://www.theifab.com/laws/latest/offside/ ; https://www.theifab.com/laws/latest/free-kicks/"
+      },
+      {
+        "id": "penalty_kicker",
+        "title": "Straffespark – avslutningsvalg og ro",
+        "text": "I avslutningsdelen anbefaler originalmanuset å velge lav eller høy plassering fremfor halvhøy. Påstanden om at halvhøye straffer reddes oftest er ikke verifisert i manusets kildegrunnlag og brukes derfor ikke som statistisk fasit. De tilhørende mentale rådene er å stole på ferdighetene, akseptere bom og handle rolig og besluttsomt. Skytteren må forholde seg til regelverket for straffespark, herunder at ballen sparkes fremover. Teksten beskriver et avslutningsprinsipp, ikke en ny beregning av sannsynlighet for scoring.",
+        "source": "Fotballdokumentet v1.pdf – Angrepsavslutning – Mentale faktorer / Straffe, linje 2487–2495 og 2521–2525; IFAB regel 14, https://www.theifab.com/laws/latest/the-penalty-kick/"
+      },
+      {
+        "id": "penalty_keeper",
+        "title": "Straffespark – keeperens observasjon og timing",
+        "text": "Manusets keeperdel anbefaler å studere tidligere straffer og observere tilløp, hofter og fotstilling. Keeperen må avveie hvor lenge han venter mot behovet for å rekke ballen. Manusets generalisering om naturlig hjørne for høyre- og venstrebente er ikke kontrollert og er ingen sikker prediksjon for en enkelt skytter. Historiske keeperanekdoter om forstyrrelser er ikke instruksjoner: keeperen skal ikke distrahere skytteren på en usportslig måte. Ved balltreff må minst en del av én fot berøre mållinjen, være på linje med den eller bak den. Vurder observasjon og lovlig utgangsstilling fremfor å innføre faste redningssannsynligheter.",
+        "source": "Fotballdokumentet v1.pdf – Keeper – Straffer, linje 1089–1104; IFAB regel 14, https://www.theifab.com/laws/latest/the-penalty-kick/"
+      },
+      {
+        "id": "portrait_juninho_beckham_pirlo",
+        "title": "Juninho, Beckham og Pirlo – frispark som teknisk spesialisering",
+        "text": "UEFAs samling av historiske frispark og kampreferatet fra Lyon dokumenterer Juninho Pernambucano som frisparkspesialist. I et intervju beskriver Juninho selv sin tekniske utvikling. Bruk Juninho, Beckham og Pirlo, som alle er nevnt i originaldisposisjonen, til å undersøke ulike leveringsbaner: skrudd ball, varierende rotasjon og målrettet plassering. Observer tilløp, treffpunkt, mur, avstand og keeperposisjon. Teknisk variant må velges ut fra situasjonen, ikke spillerens berømmelse. Ingen fast frisparksannsynlighet eller rangering av spillerne legges inn.",
+        "source": "Faglig tillegg – UEFA, https://www.uefa.com/uefachampionsleague/news/0271-142ab5eaac54-565b3cc3cec4-1000--the-best-free-kicks-in-uefa-champions-league-history/ ; https://www.uefa.com/uefachampionsleague/news/01b2-0e6d65fc4647-b5a0bb928927-1000--juninho-strike-leaves-lyon-on-top/ ; FourFourTwo, https://www.fourfourtwo.com/features/best-free-kick-taker-ever-juninho-pernambucano-how-he-got-so-good; personnavn fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_rivelino",
+        "title": "Rivelino – frisparkets leveringsbane",
+        "text": "FIFAs historiske videomateriale dokumenterer Rivelinos frisparkmål i VM 1974. Originalmanuset nevner ham sammen med Beckham, Juninho og Pirlo. Bruk klippet som utgangspunkt for å undersøke ballens bane, skuddretning, murens plassering og keeperens reaksjon. Skytteren kan søke en direkte avslutning eller velge en pasning dersom situasjonen tilsier det. Ikke utled nøyaktige fysiske treffverdier fra en enkelt video. Formålet er å forstå hvordan teknikk og situasjonsvalg henger sammen, ikke å kopiere en berømt skuddrutine uten tilpasning.",
+        "source": "Faglig tillegg – FIFA, https://collect.fifa.com/collectible/182425449578756; personnavn fra Fotballdokumentet v1.pdf"
+      }
     ]
   },
   {
@@ -384,6 +430,14 @@ export const SET_PIECE_CHAPTERS = [
             21
           ]
         ]
+      }
+    ],
+    "sourceDetails": [
+      {
+        "id": "restart_lock",
+        "title": "Lås av ved motstanderens igangsetting",
+        "text": "Manuset beskriver lås av ved målspark, innkast og frispark på motstanderens tredel: dekk tilgjengelige mottakere og styr oppspillet mot en spiller som kan presses, eksempelvis sidebacken. Det er en kollektiv pressidé, ikke at alle spillere alltid skal mannsmarkere. Midtbanens nøyaktige posisjonering står som et spørsmål i manusets tekst. Ved innkast gjelder dessuten reglene for igangsetting, og en mottaker kan ikke være offside direkte fra innkastet. Originalmanuset beskriver ikke en full offensiv innkastvariant; bokas eksisterende støttetrekant beholdes.",
+        "source": "Fotballdokumentet v1.pdf – 2. Defensivt – Lås av, linje 1594–1601; IFAB regel 11, https://www.theifab.com/laws/latest/offside/"
       }
     ]
   },
@@ -581,6 +635,26 @@ export const SET_PIECE_CHAPTERS = [
           ]
         ]
       }
+    ],
+    "sourceDetails": [
+      {
+        "id": "corner_defence_posts",
+        "title": "Defensiv corner – mann-mot-mann og stolpeansvar",
+        "text": "Originalmanusets defensive cornervariant er mann-mot-mann, med én spiller ved første stolpe og én ved andre stolpe med ansvar for rommet der. Dette er én navngitt organisering, ikke et krav ved alle cornere. Avtal hvem som følger motstanderens løp, hvem som har stolpeansvar og hvem som dekker ledige rom. Manusets korte uttrykk om kroppskontakt må avgrenses til lovlig posisjonering og duellspill. Bokas eksisterende sone- og blandingsalternativer beholdes, slik at manageren kan sammenligne organiseringene.",
+        "source": "Fotballdokumentet v1.pdf – Defensiv Dødball – Defensiv corner, linje 1855–1860; IFAB regel 12, https://www.theifab.com/laws/latest/fouls-and-misconduct/"
+      },
+      {
+        "id": "restart_organize",
+        "title": "Defensive dødballer – keeperens organisering og konkrete beskjeder",
+        "text": "Keeperdelen fremhever tidlig organisering av mur, spillermarkeringer og høyt press på andreballer. Keeperen vurderer om han kan gå ut og angripe ballen eller bør holde posisjonen nærmere linjen. Kommunikasjonsdelen anbefaler konkrete avklaringer av hvem som har hvilken motstander, for eksempel spørsmålet Har du han? En felles beskjed kan utløse press. Den separate overskriften Defensiv frispark har ingen utfylt forklaring i originalmanuset; den eksisterende bokas frisparkkapittel gir derfor supplerende fagstoff, ikke en rekonstruert originalbeskrivelse.",
+        "source": "Fotballdokumentet v1.pdf – Keeper 1.5 Dødball, linje 1199–1203 / Situasjonsavhengig posisjonering, 958–963 / Kommunikasjon, 3707–3712 / Defensiv frispark, 1866"
+      },
+      {
+        "id": "portrait_ramos",
+        "title": "Sergio Ramos – stopperens offensive dødballoppgave",
+        "text": "Real Madrid dokumenterer Ramos' utligning med heading i europacupfinalen i 2014. Den historiske hendelsen kan brukes til å undersøke en stoppers offensive arbeidsoppgave ved dødball: startposisjon, timing, ballbane og lovlig duell. Avklar samtidig hvem som sikrer bak angrepet. En avgjørende scoring er ikke i seg selv en måling av vinnermentalitet eller bevis for at en bestemt risikostrategi er optimal. Caset plasseres derfor i dødballkapitlet fremfor å brukes som psykologisk karakteristikk.",
+        "source": "Faglig tillegg – Real Madrid, https://www.realmadrid.com/en-US/news/club/latest-news/la-decima-cumple-diez-anos-24-05-2024; personnavn fra Fotballdokumentet v1.pdf"
+      }
     ]
   },
   {
@@ -708,6 +782,20 @@ export const SET_PIECE_CHAPTERS = [
           "Ja → første kontakt kan true målet",
           "Nei → klarering; nedfallet må fortsatt sikres"
         ]
+      }
+    ],
+    "sourceDetails": [
+      {
+        "id": "offensive_marking_restart",
+        "title": "Offensiv markering – sikring mens eget lag har ballen",
+        "text": "Manusets begrep offensiv markering beskriver at en sikringsspiller tar hensyn til motstanderens spiss også mens eget lag er i angrep. Eksemplet er igangsetting fra egen keeper, der forsvarere ellers kan bli stående alene. Plasseringen må gi mulighet til å håndtere en overgang hvis ballen tapes, samtidig som laget kan bygge opp angrepet. Dette viderefører bokas restforsvar og kontringssikring, ikke en regel om fast antall spillere bak ballen. Keeperens anbefaling om å presse andreballen må sees sammen med laget i balanse.",
+        "source": "Fotballdokumentet v1.pdf – Defensiv Dødball – Offensiv markering, linje 1859–1866 / Keeper 1.5 Dødball"
+      },
+      {
+        "id": "clearance_counter_restart",
+        "title": "Klarering etter dødball – fra forsvar til angrep",
+        "text": "Manuset beskriver en klareringsvariant som også gjelder dødballer: spissen møter mot ballside, motsatt back går på løp, ballsidens ving holder bredt og motsatt ving skjærer inn. Spissen kan legge igjen til midtbane eller vende opp hvis det er tid. En senere pasning kan frigjøre backen eller en ving, eventuelt et tilbakespill fra skrå vinkel til en spiller på løp. Spørsmålet om spissen alltid bør møte mot venstre står åpent i originalen. Dette er en avtalt omstillingsvariant, ikke en fast angrepsrute eller garanti for gjennombrudd; ved manglende kontroll må laget sikre ball og rom.",
+        "source": "Fotballdokumentet v1.pdf – Klarering, linje 3775–3792"
       }
     ]
   }

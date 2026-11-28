@@ -101,6 +101,62 @@ export const SCHOOL_CHAPTERS = [
           "Ingen overtakelse → ubalanse"
         ]
       }
+    ],
+    "sourceDetails": [
+      {
+        "id": "history_total",
+        "title": "Totalfotball – kollektiv intelligens og rollebytter",
+        "text": "Manuset beskriver laget som en levende organisme: når en back går frem, overtar en medspiller rommet; når spissen møter, kan en kant angripe boksen. Cruyff er et eksempel på teknikk, orientering og rolleflyt. UEFA knytter Michels og Cruyff til Ajax og Nederlands totalfotball på 1970-tallet og nevner Ungarns magiske lag og Jack Reynolds' Ajax som forløpere. Rollebytter forutsetter fortsatt balanse, bredde og dybde. Friheten er organisert, ikke tilfeldig.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Cruyff og totalfotballen; UEFA, https://www.uefa.com/uefachampionsleague/news/0230-0e94a8068d01-a93b114660e2-1000--in-profile-rinus-michels/"
+      },
+      {
+        "id": "history_collective_cognition",
+        "title": "Fra individuell briljans til kollektiv intelligens",
+        "text": "Manuset fremhever at spillere må tolke medspillernes intensjoner, overvåke motstanderen og samordne rollebytter, pasninger og press. Teknikk, hukommelse, sansing og reaksjon knyttes til rytme, timing og rom. Taktiske systemer stiller krav til teknikk, men gjør også ferdighetene mer anvendelige når medspillerne skaper alternativer. Dette er manusets samlende tese, ikke en påstand om at tidligere spillere manglet spilleforståelse eller at historien har én entydig utviklingsretning.",
+        "source": "Fotballdokumentet v1.pdf – Sportsvitenskap og fysiologi – Kognitive ferdigheter og psykologiske krav"
+      },
+      {
+        "id": "culture_art_results",
+        "title": "Estetikk og resultater – kunst og nytte",
+        "text": "Originalmanuset åpner filosofidelen med spenningen mellom futebol d’arte og futebol de resultados: å spille vakkert eller å vinne. Zidane, Ronaldinho og Maradona illustrerer i manuset den uttrykksfulle teknikken; Xavi, Kroos og Busquets representerer rytme, funksjon og kollektiv kontroll. Dette er analytiske poler, ikke en rangering av spillerne. En elegant kombinasjon kan samtidig være effektiv, og en presis defensiv bevegelse kan også ha estetisk verdi. Manusets sentrale tese er at fotballens skjønnhet oppstår i spenningen mellom frihet og struktur, ikke utenfor taktikken.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Estetikk og resultater / Avslutning: Estetikk som grunnvilkår"
+      },
+      {
+        "id": "culture_adorno",
+        "title": "Adorno – kunstens autonomi og instrumentell rasjonalitet",
+        "text": "Manuset anvender Adornos estetiske tenkning på fotballens spenning mellom kunstnerisk frihet og instrumentell nytte. Futebol d’arte får representere rom for uttrykk som ikke kan reduseres til resultat alene, mens futebol de resultados fremhever virkemidler for å oppnå seier. Adornos faktiske teori om kunstens autonomi er mer sammensatt enn dette skillet. Det er derfor uttrykkelig en fotballfilosofisk anvendelse i manuset, ikke et sitat eller en påstand om at Adorno selv analyserte disse spillestilene. Trenerens dilemma blir hvor mye frihet en kollektiv struktur kan romme.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Filosofi og estetikk; Stanford Encyclopedia of Philosophy, https://plato.stanford.edu/entries/adorno/"
+      },
+      {
+        "id": "culture_eco",
+        "title": "Eco – det åpne verket og publikums fortolkning",
+        "text": "Med utgangspunkt i Ecos idé om det åpne verket drøfter manuset hvordan fotballens mening oppstår også i møtet med publikum. En bevegelse, pasning eller kamp kan forstås forskjellig av ulike tilskuere, og får videre mening gjennom kommentarer og erindring. Estetikk er dermed ikke bare en objektiv egenskap ved en teknisk handling. Dette er manusets analogi mellom kunst og fotball, ikke en gjengivelse av Ecos egne analyser av bestemte kamper. Den åpne fortolkningen opphever heller ikke spillets regler eller det faktiske kampresultatet.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Teoretiske perspektiver / Umberto Eco"
+      },
+      {
+        "id": "culture_gadamer",
+        "title": "Gadamer – lekens egenverdi",
+        "text": "Manuset bruker Gadamers forståelse av lek for å drøfte fotballens estetiske erfaring. Spillerne deltar i et spill som har egen dynamikk og som ikke fullt ut kan kontrolleres av individet. Tilskuerne deltar på en annen måte gjennom opplevelse og fortolkning. Gadamers estetikk knytter lek til erfaringen av kunst og forståelse; koblingen til fotball er manusets egen anvendelse. Å vinne er fortsatt et reelt mål, men opplevelsen av spillet kan ha verdi utover sluttresultatet. Lek må derfor ikke forveksles med mangel på alvor eller disiplin.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Filosofiske utdypinger / Gadamer; Stanford Encyclopedia of Philosophy, https://plato.stanford.edu/entries/gadamer-aesthetics/"
+      },
+      {
+        "id": "culture_aristotle",
+        "title": "Aristoteles – poiesis og praxis",
+        "text": "Manuset bruker poiesis og praxis som analogi for skapende uttrykk og målrettet handling i fotball. Filosofisk må skillet presiseres: poiesis viser til frembringelse eller produksjon, mens praxis betegner handling; det er ikke en enkel motsetning mellom egenverdi og seier. Manusets kobling av futebol d’arte til poiesis og futebol de resultados til praxis bevares som en fortolkningsidé, ikke som en bokstavelig definisjon hos Aristoteles. Fotball kan romme både skapende handlinger og målrettede prestasjoner samtidig.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Filosofiske utdypinger / Aristoteles; Stanford Encyclopedia of Philosophy, https://plato.stanford.edu/entries/episteme-techne/"
+      },
+      {
+        "id": "culture_synthesis",
+        "title": "Estetikk som grunnvilkår – struktur og brudd",
+        "text": "Originalmanusets avslutning samler perspektivene: kunstens egenverdi, publikums fortolkning, sosialt formet teknikk, regulert konkurranse og lek. Tesen er at estetikk ikke bare er et tillegg til taktikk, men en del av fotballens indre spenning mellom frihet og kontroll, individ og kollektiv, kunst og nytte. Dette er bokas normative og filosofiske refleksjon, ikke et empirisk bevist krav for alle kamper. En manager kan derfor både spørre hvordan laget kan vinne, og hvilken måte å spille på laget ønsker å utvikle. De to spørsmålene kan besvares ulikt uten at det ene nødvendigvis opphever det andre.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Avslutning: Estetikk som grunnvilkår / Del V – System vs. individ / Arven"
+      },
+      {
+        "id": "portrait_cruyff_michels",
+        "title": "Cruyff og Michels – spiller og trener i samme taktiske tradisjon",
+        "text": "Originalmanuset beskriver Cruyff som symbol på rolleflyt, oversikt og rytme. UEFA dokumenterer Michels' trenerarbeid og Cruyffs sentrale rolle i Ajax' totalfotball. Den praktiske lærdommen er å se hvordan laget overtar et rom som en spiller forlater; en spiller kan bryte forventet posisjon uten at hele organiseringen bryter sammen. Det er forskjell på Michels' arbeid som trener og Cruyffs senere trenerarv. Manusets uverifiserte personanekdoter er ikke tatt inn som biografiske fakta.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Cruyff og totalfotballen; UEFA, https://www.uefa.com/uefachampionsleague/news/0253-0d7ff54908f6-5927d0a16600-1000--the-greatest-teams-of-all-time-ajax-1971-73/"
+      }
     ]
   },
   {
@@ -199,6 +255,32 @@ export const SCHOOL_CHAPTERS = [
             62
           ]
         ]
+      }
+    ],
+    "sourceDetails": [
+      {
+        "id": "history_catenaccio",
+        "title": "Catenaccio – kontroll og kontring",
+        "text": "Manuset bruker Herreras Inter som eksempel på stram organisering kombinert med raske kontringer. UEFA beskriver hvordan laget utnyttet tekniske midtbanespillere og hurtige angripere i overgang. Sikring kan forberede en presis offensiv overgang; forsvar er ikke nødvendigvis passivitet. Dette viderefører bokas skille mellom libero- og markeringsstrukturen i catenaccio og en moderne lav soneblokk. Kilden gir ikke grunnlag for bestemte oppspillsruter eller kvantitative kampverdier.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Italiensk catenaccio og sweeper-logikken; UEFA, https://www.uefa.com/uefachampionsleague/news/0231-0e94dd0ff999-827e03392bff-1000--in-profile-helenio-herrera/"
+      },
+      {
+        "id": "culture_pragmatism",
+        "title": "Resultatfotball og estetikkens historiske dilemma",
+        "text": "Manuset stiller den brasilianske angrepstradisjonen og Nederlands totalfotball opp mot mer resultatorienterte systemer, særlig italiensk catenaccio. Det bruker Brasils VM i 1982 og de nederlandske finaletapene i 1974 og 1978 som historiske refleksjonspunkter. Slike kampresultater kan illustrere at estetisk appell ikke garanterer seier, men alene forklarer de ikke hvorfor et lag taper. Å organisere sikring, vente på riktig overgang og forvalte risiko kan være en avansert fotballfaglig praksis. Skillet er manusets drøfting av verdier, ikke en universell klassifisering av nasjoner eller trenere.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Estetikk og resultater"
+      },
+      {
+        "id": "portrait_herrera",
+        "title": "Helenio Herrera – organisering og overgang",
+        "text": "Originalmanuset fremhever Herreras Inter som eksempel på defensiv struktur og raske kontringer. Den faglige analysen bør undersøke hvordan markering og en fri sikringsspiller henger sammen med muligheten til å starte angrep etter ballvinning. Herrera er allerede plassert i bokas catenaccio-kapittel; dette portrettet presiserer trenerens funksjon som case, ikke en påstand om at han oppfant alle prinsippene. Manusets planlagte sitat om vinnermentalitet er ikke dokumentert i den bevarte teksten.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Italiensk catenaccio / 7. Det mentale aspektet"
+      },
+      {
+        "id": "portrait_mourinho",
+        "title": "José Mourinho – kampbilde, risiko og overgang",
+        "text": "Manuset navngir Mourinho ved kontroll og kontring. UEFA dokumenterer to forskjellige kampbilder fra Inters semifinale mot Barcelona i 2010: hjemmeseier 3–1 og et 0–1-tap på bortebane etter utvisning, som likevel ga avansement. Det første oppgjøret viser at organisering kan kombineres med offensiv overgang; det andre viser hvordan kampstilling, samlet resultat og numerisk undertall kan endre risikovalget. Undersøk hvilke rom laget beskytter, hvilken støtte det har ved ballvinning og når det er mulig å true bakrom. En moderne defensiv blokk er ikke automatisk historisk catenaccio. Caset begrunner ikke en fast defensiv spillestil for alle Mourinhos lag.",
+        "source": "Faglig tillegg – UEFA, https://www.uefa.com/uefachampionsleague/news/01e4-0e745dd6d8b8-559388d26824-1000--impressive-inter-leave-barca-on-the-ropes/ ; https://www.uefa.com/uefachampionsleague/news/01e4-0e746dee4629-e22f0b2f81cf-1000--barcelona-dethroned-by-resilient-inter/; navn og tema fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -309,6 +391,32 @@ export const SCHOOL_CHAPTERS = [
           "Ja → steng utveiene",
           "Nei → forsink og samle laget"
         ]
+      }
+    ],
+    "sourceDetails": [
+      {
+        "id": "history_intensity",
+        "title": "Moderne fotball – teknikk under press",
+        "text": "Originalmanuset knytter Klopps lag til umiddelbar gjenvinning og intensitet. Mottak, pasninger, vendinger og orientering må fungere i fart og trange rom. FIFA Training Centre beskriver gjenvinningspress som en mulighet til å starte et nytt angrep før motstanderen organiserer seg. Støtteavstand og restforsvar før balltap påvirker om gjenvinning er realistisk. Dette innebærer ikke at Klopp oppfant gjenvinningspress eller at det alltid er riktig. Stormpress og selektivt press står som fordypningstemaer i manusets disposisjon.",
+        "source": "Fotballdokumentet v1.pdf – Del V – Moderne krav / Klopp og gegenpressing; FIFA Training Centre, https://www.fifatrainingcentre.com/en/practice/elite-sessions/transition-to-defending/counter-pressing.php"
+      },
+      {
+        "id": "portrait_klopp",
+        "title": "Jürgen Klopp – kollektiv gjenvinning og teknikk under press",
+        "text": "Originalmanuset knytter Klopp til Borussia Dortmund og Liverpool og beskriver koordinert press umiddelbart etter balltap. Det understreker at pasning, mottak og orientering må fungere i fart og under motstand. Trenercaset brukes til å undersøke nærmeste spilleres press og resten av lagets dekning, ikke til å gi én trener æren for å oppfinne gjenvinningspress. Ralf Rangnick og Thomas Tuchel er navngitt som planlagte fordypninger, men kilden gir ikke tilsvarende utførlige portretter av dem.",
+        "source": "Fotballdokumentet v1.pdf – Del V – Klopp og gegenpressing / Moderne mestre, linje 4557–4623"
+      },
+      {
+        "id": "portrait_rangnick",
+        "title": "Ralf Rangnick – kollektiv intensitet og høyt press",
+        "text": "Originaldisposisjonen plasserer Rangnick som en moderne trenerarkitekt knyttet til presskolen. UEFA omtaler hans betydning for gegenpressing og fremhever Østerrikes effektive høye press i gruppespillet i EM 2024. Høyt press mot etablert oppbygging må skilles fra umiddelbar gjenvinning etter eget balltap. Begge forutsetter at spillere nær ballen og spillere lenger unna samordner sine arbeidsoppgaver. Observer hvem som setter press, hvilke pasningsalternativer som dekkes og hvordan laget beskytter rom bak presset. Ved manglende sikring kan en lavere utgangsposisjon være mer hensiktsmessig. Det innføres ingen fast tidsgrense eller pressverdi knyttet til Rangnick.",
+        "source": "Faglig tillegg – UEFA, https://www.uefa.com/uefaeuro/history/news/028d-1b058a1a388d-5665645fc203-1000--uefa-euro-2024-meet-the-24-teams/ ; https://www.uefa.com/uefaeuro/history/news/028e-1b3f9d965e00-3ec1a6f8adb9-1000--euro-2024-group-stage-uefa-technical-observers-tactical-r/; navn og tema fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "onenote_selective_press",
+        "title": "Stormpress og selektivt press – når presset selv åpner rom",
+        "text": "I den utvidede teoriteksten argumenteres det mot ukritisk stormpress: flere spillere som går samtidig kan både stenge og åpne rom. Den fremhever feiltouch, bakoverpasning og feilvendt ballfører som signaler for selektivt press. Den beskriver også hvordan en motstander kan utnytte rom som oppstår når flere forlater sine posisjoner. Dette er manusets kritiske perspektiv på systemfotball, ikke dokumentasjon av at alle navngitte historiske lag alltid presset selektivt. Bruk perspektivet sammen med bokas eksisterende regler for press, sikring og gjenvinning.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00067614, 0x00073bd4 og 0x000751cc"
       }
     ]
   },
@@ -545,6 +653,38 @@ export const SCHOOL_CHAPTERS = [
           ]
         ]
       }
+    ],
+    "sourceDetails": [
+      {
+        "id": "history_cruyff_barca",
+        "title": "Fra Cruyff til Barcelona – kontinuitet og endring",
+        "text": "Manuset fører en linje fra nederlandsk totalfotball til Barcelonas posisjonsspill. Cruyffs trenerarbeid er viktig, men påstanden om at han etablerte La Masia er korrigert: Barcelonas egen historie dokumenterer at spillerboligen åpnet i 1979, før han ble trener. Taktisk kontinuitet handler om orientering, rom, pasningsvinkler og kollektiv bevegelse. Totalfotball, tiki-taka og juego de posición er ikke identiske, og klubbens institusjonelle historie må skilles fra trenernes bidrag.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Cruyff og totalfotballen / Del II – Totalfotball og moderne kollektivitet; FC Barcelona, https://www.fcbarcelona.com/en/news/1457129/la-masia-is-40-years-old/amp"
+      },
+      {
+        "id": "history_keeper",
+        "title": "Positional play 2.0 – keeper som aktivt oppspillsledd",
+        "text": "Manuset fremhever keeperens pasningsferdighet, orientering og evne til å åpne rom bak press, med Ederson som eksempel. FIFA Training Centre beskriver moderne keeperstøtte, mottak og pasninger gjennom press. Positional play 2.0 beholdes som manusets analytiske betegnelse. Påstanden om at Guardiola først integrerte keeperen i oppbyggingen tas ikke videre: FIFA beskriver eksempelvis Ungarns Gyula Grosics som en tidligere nyskapende ballspillende keeper.",
+        "source": "Fotballdokumentet v1.pdf – Del V – Guardiola og positional play 2.0; FIFA Training Centre, https://www.fifatrainingcentre.com/en/practice/elite-sessions/goalkeeper/goalkeepersbuildup.php ; FIFA, https://www.fifa.com/en/articles/gyula-grosics-hungary-goalkeeping-legacy"
+      },
+      {
+        "id": "portrait_guardiola_ederson",
+        "title": "Guardiola og Ederson – romkontroll med elleve spillere",
+        "text": "Manuset bruker Guardiolas posisjonsspill og Ederson som eksempel på keeperens rolle i pasningsstrukturen. Manchester City beskriver keeperens evne til å starte angrep både kort og langt. Fotballfaglig kan keeperens involvering gi en ekstra pasningsmulighet og tvinge motstanderen til å velge hvilke rom den skal dekke. Det betyr ikke at oppbygging alltid må være kort. Manuset omtaler dette som positional play 2.0; uttrykket beholdes som manusets egen analytiske betegnelse. Ingen nye spillerverdier eller faste oppspill utledes av trenercaset.",
+        "source": "Fotballdokumentet v1.pdf – Del V – Guardiola og positional play 2.0, linje 4591–4617; Manchester City, https://www.mancity.com/news/mens/ederson-fulham-preview-premier-league-63863644"
+      },
+      {
+        "id": "onenote_structure_break",
+        "title": "Systemkritikk – når den skapende spilleren bryter mønsteret",
+        "text": "Den utvidede OneNote-teksten utdyper spenningen mellom en kollektiv pasningsstruktur og den kreative midtbanespilleren. Den argumenterer for at spilleren må kunne se når et mønster bør brytes, og fremhever stopp i rytmen, vending inn i press og uventede handlinger. Manusets vurderinger av konkrete treneres begrensning av kreativiteten er fortolkninger, ikke selvstendig dokumenterte årsakspåstander. Faglig beholdes dilemmaet: en struktur skaper forutsigbare støttepunkter, samtidig som spilleren kan oppdage en bedre løsning enn den avtalte. Det er ingen ny instruks om å avvike fra lagets plan i alle situasjoner.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00067d24, 0x000683fc, 0x000754d4 og 0x00075c94"
+      },
+      {
+        "id": "onenote_rhythm_space",
+        "title": "Rom og rytme – kontroll gjennom skiftende tempo",
+        "text": "En kort teoriblokk kontrasterer totalfotballens fleksible rom med moderne fotballs rytmiske rom, der tempo må varieres og ikke bare strukturen kontrolleres. Dette er manusets analytiske bilde, ikke en uttømmende historisk forskjell mellom epokene. Det gir et spørsmål til kampobservasjonen: når bør ballen sirkuleres for å flytte motstanderen, når bør laget akselerere mot en åpning, og når er det riktig å holde igjen? Perspektivet knyttes til bokas eksisterende ballbesittelses- og romkontrollprinsipper, uten å innføre faste tempovekter.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00032d94"
+      }
     ]
   },
   {
@@ -661,6 +801,14 @@ export const SCHOOL_CHAPTERS = [
             50
           ]
         ]
+      }
+    ],
+    "sourceDetails": [
+      {
+        "id": "culture_identity",
+        "title": "Futebol d’arte – estetikk, identitet og kulturell selvhevdelse",
+        "text": "Manuset drøfter futebol d’arte som mer enn en estetisk stil: det kan fungere som uttrykk for identitet og kulturell selvhevdelse i møte med andre fotballidealer. Brasil og Latin-Amerika brukes i refleksjonen, mens tysk fotball og Sommermärchen i 2006 står som kontrast. Dette er kulturelle fortellinger, ikke uttømmende beskrivelser av hele kontinenter. Manuset antyder at nasjonale selvbilder og verdsetting av spillestil kan endres. Det er ikke dokumentert her at tysk estetisk fotball først oppstod i 2006; den bastante påstanden gjengis derfor ikke. Relasjonisme er et eget nyere taktisk begrep, ikke synonymt med brasiliansk estetikk.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Sosiokulturelle dimensjoner"
       }
     ]
   }

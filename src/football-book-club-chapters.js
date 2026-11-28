@@ -1145,9 +1145,78 @@ function chapterCard(c){
   section.append(el("h5","Managerens motspill"));const ul=el("ul");for(const hint of c.hints)ul.append(el("li",hint));section.append(ul,el("p",c.scope,"muted-text"),el("h5","Registrerte kilder"));
   const sources=el("ul");for(const source of c.sources){const li=el("li");let href;try{const u=new URL(source.url);if(["http:","https:"].includes(u.protocol))href=u.href;}catch{}if(href){const link=el("a",source.title||source.publisher||href);link.href=href;link.target="_blank";link.rel="noopener noreferrer";li.append(link);}else li.append(el("span",source.title||source.publisher||"Kilde"));if(source.locator)li.append(el("p",source.locator));sources.append(li);}section.append(sources);return section;
 }
+// Search chapter prose and subheadings; ignore source URL noise in the global search.
+const normalizeBookSearch=value=>String(value??"").normalize("NFKD").replace(/\p{M}/gu,"").toLocaleLowerCase("nb").replace(/·/g,"").replace(/ø/g,"o").replace(/æ/g,"ae");
+export function searchFootballBookEntries(entries,query){
+  const terms=normalizeBookSearch(query).trim().split(/\s+/).filter(Boolean);
+  if(!terms.length)return [];
+  const hits=[];
+  for(const entry of entries){
+    const c=entry.c;
+    const base=normalizeBookSearch([c.name,c.title,c.era,c.concept,c.dilemma,c.manager,c.practice,c.historicalNote,c.interpretation,...(c.shapes||[]),...(c.hints||[]),...(c.strengths||[]),...(c.roles||[]).map(x=>x.description)].filter(Boolean).join(" "));
+    const details=(c.sourceDetails||[]).map(d=>({d,text:normalizeBookSearch(d.title+" "+d.text)}));
+    const matching=details.filter(x=>terms.every(t=>(normalizeBookSearch(c.title)+" "+x.text).includes(t))).map(x=>x.d);
+    if(matching.length||terms.every(t=>base.includes(t)))hits.push({...entry,matching});
+  }
+  return hits;
+}
+const bookEntries=[];
+function jumpToBookEntry(entry,detailId){
+  const {root,node}=entry;
+  root.open=true;
+  const input=root.querySelector("input");
+  if(input&&input.value){input.value="";input.dispatchEvent(new Event("input"));}
+  node.open=true;
+  const target=detailId?node.querySelector('[data-book-detail="'+detailId+'"]'):node.querySelector("summary");
+  if(!target)return;
+  target.scrollIntoView({block:"start"});
+  target.focus({preventScroll:true});
+}
+function initWholeBookSearch(){
+  const root=document.getElementById("footballBookSearch");if(!root)return;
+  const input=root.querySelector("input"),status=root.querySelector(".book-search-status"),results=root.querySelector(".book-search-results"),nav=root.querySelector(".book-section-nav");
+  for(const panel of new Set(bookEntries.map(e=>e.root))){
+    const button=el("button",panel.querySelector("summary").textContent.replace(/^Fotballboka – /,""));button.type="button";
+    button.addEventListener("click",()=>{panel.open=true;panel.querySelector("summary").scrollIntoView({block:"start"});panel.querySelector("summary").focus({preventScroll:true});});
+    nav.append(button);
+  }
+  const render=()=>{
+    results.replaceChildren();
+    if(!input.value.trim()){status.textContent=bookEntries.length+" kapitler · søk etter emne, spiller eller trener";return;}
+    const hits=searchFootballBookEntries(bookEntries,input.value);
+    status.textContent=hits.length+" av "+bookEntries.length+" kapitler";
+    for(const entry of hits){
+      const li=el("li"),button=el("button",(entry.c.name?entry.c.name+" – ":"")+entry.c.title,"book-search-result");button.type="button";
+      button.append(el("small",entry.label+(entry.matching.length?" · "+entry.matching.length+" fagavsnitt":"")));
+      button.addEventListener("click",()=>jumpToBookEntry(entry,entry.matching[0]?.id));li.append(button);
+      // More specific hits stay accessible without overwhelming broad searches.
+      if(entry.matching.length){
+        const matches=el("details",null,"book-search-matches");
+        matches.append(el("summary",entry.matching.length===1?"Gå til fagavsnitt":"Vis "+entry.matching.length+" fagavsnitt"));
+        const list=el("ul");for(const detail of entry.matching){const item=el("li"),b=el("button",detail.title);b.type="button";b.addEventListener("click",()=>jumpToBookEntry(entry,detail.id));item.append(b);list.append(item);}matches.append(list);li.append(matches);
+      }
+      results.append(li);
+    }
+    if(!hits.length)status.textContent+=" · Prøv et annet søkeord.";
+  };
+  input.addEventListener("input",render);render();
+}
 function theoryCard(chapter,principles,clubs,roles=[]){
   const section=el("details",null,"club-book-chapter");
   section.append(el("summary",chapter.title));if(chapter.era)section.append(el("p",chapter.era,"muted-text"));section.append(el("h5","Prinsippet"),el("p",chapter.concept));
+  const details=chapter.sourceDetails||[];
+  if(details.length>3){
+    const toc=el("details",null,"book-chapter-toc"),links=el("ul");
+    toc.append(el("summary","Innhold · "+details.length+" fagavsnitt"));
+    for(const detail of details){const li=el("li"),button=el("button",detail.title);button.type="button";button.addEventListener("click",()=>{const heading=section.querySelector('[data-book-detail="'+detail.id+'"]');heading.scrollIntoView({block:"start"});heading.focus({preventScroll:true});});li.append(button);links.append(li);}
+    toc.append(links);section.append(toc);
+  }
+  for(const detail of chapter.sourceDetails||[]){
+    const heading=el("h5",detail.title);heading.dataset.bookDetail=detail.id;heading.tabIndex=-1;
+    const source=el("details",null,"book-detail-source");
+    source.append(el("summary","Kilde"),el("p",detail.source,"muted-text"));
+    section.append(heading,el("p",detail.text),source);
+  }
   if(chapter.roles?.length){
     section.append(el("h5","Rollene i spillet"));
     const roleList=el("ul");
@@ -1176,8 +1245,8 @@ async function initTheory(clubs){
   const renderSection=(root,chapters,label)=>{
     if(!root)return;
     const list=root.querySelector(".club-book-list"),status=root.querySelector(".club-book-status"),search=root.querySelector("input");
-    const cards=chapters.map(c=>({c,node:theoryCard(c,principles,clubs,roles)}));list.append(...cards.map(x=>x.node));
-    const filter=()=>{const q=search.value.trim().toLocaleLowerCase("nb");let count=0;for(const {c,node} of cards){node.hidden=!(c.title+" "+(c.era||"")+" "+c.concept+" "+c.dilemma+" "+(c.roles||[]).map(entry=>(roles.find(r=>r.id===entry.id)?.name||entry.id)+" "+entry.description).join(" ")).toLocaleLowerCase("nb").includes(q);if(!node.hidden)count++;}status.textContent=count+" av "+cards.length+" "+label+(!principles.length?" · grunntekster utilgjengelige":"");};
+    const cards=chapters.map(c=>({c,node:theoryCard(c,principles,clubs,roles),root,label}));list.append(...cards.map(x=>x.node));bookEntries.push(...cards);
+    const filter=()=>{const q=search.value.trim().toLocaleLowerCase("nb");let count=0;for(const {c,node} of cards){node.hidden=!(c.title+" "+(c.era||"")+" "+c.concept+" "+c.dilemma+" "+(c.sourceDetails||[]).map(detail=>detail.title+" "+detail.text+" "+detail.source).join(" ")+" "+(c.roles||[]).map(entry=>(roles.find(r=>r.id===entry.id)?.name||entry.id)+" "+entry.description).join(" ")).toLocaleLowerCase("nb").includes(q);if(!node.hidden)count++;}status.textContent=count+" av "+cards.length+" "+label+(!principles.length?" · grunntekster utilgjengelige":"");};
     search.addEventListener("input",filter);filter();
   };
   renderSection(root,THEORY_CHAPTERS,"teorikapitler");
@@ -1193,10 +1262,11 @@ async function init(){
   try{
     const response=await fetch(new URL("../data/football_league_club_profiles.json",import.meta.url));if(!response.ok)throw Error("HTTP "+response.status);
     const chapters=buildClubBookChapters((await response.json()).profiles);
-    const cards=chapters.map(c=>({c,node:chapterCard(c)}));for(const {c,node} of cards)node.id="club-book-"+c.id;list.append(...cards.map(x=>x.node));
+    const cards=chapters.map(c=>({c,node:chapterCard(c),root,label:"klubbkapitler"}));for(const {c,node} of cards)node.id="club-book-"+c.id;list.append(...cards.map(x=>x.node));bookEntries.push(...cards);
     const filter=()=>{const q=search.value.trim().toLocaleLowerCase("nb");let count=0;for(const {c,node} of cards){node.hidden=!(c.name+" "+c.title+" "+c.era).toLocaleLowerCase("nb").includes(q);if(!node.hidden)count++;}status.textContent=count+" av "+chapters.length+" klubbkapitler";};
     search.addEventListener("input",filter);filter();
     await initTheory(chapters);
   }catch{status.textContent="Klubbkapitlene kunne ikke lastes. Åpne spillet på nytt for å prøve igjen.";await initTheory([]);}
+  initWholeBookSearch();
 }
 if(typeof document!=="undefined")init();
