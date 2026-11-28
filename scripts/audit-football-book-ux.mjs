@@ -337,6 +337,24 @@ const allBookDetails=allBookChapters.flatMap(c=>c.sourceDetails||[]);
 check(allBookChapters.length===49,"Fotballboka: feil samlet kapitteltall");
 check(allBookChapters.reduce((n,c)=>n+c.diagrams.length,0)===83,"Fotballboka: feil samlet figurtall");
 check(allBookDetails.length===287&&new Set(allBookDetails.map(d=>d.id)).size===287,"Fotballboka: manglende eller duplikate fagavsnitt");
+// Every added book detail must have a review entry; new details cannot silently disappear.
+const coverage=readJson(join(root,"docs/football-book-tactical-coverage.json"));
+const detailIndex=new Map(allBookChapters.flatMap(c=>(c.sourceDetails||[]).map(d=>[d.id,{chapterId:c.id,title:d.title}])));
+check(coverage.entries.length===detailIndex.size&&new Set(coverage.entries.map(e=>e.id)).size===detailIndex.size,"Taktisk dekningsregister: ID-dekning");
+for(const entry of coverage.entries){
+  const expected=detailIndex.get(entry.id);
+  check(expected?.chapterId===entry.chapterId&&expected.title===entry.title,entry.id+": feil kapittel eller tittel i dekningsregister");
+  check(Object.hasOwn(coverage.statusDefinitions,entry.status),entry.id+": ukjent status");
+  if(entry.status!=="pending"){
+    check(Boolean(entry.implemented&&entry.nextCheck&&Array.isArray(entry.evidence)),entry.id+": mangler vurdering");
+    for(const key of entry.evidence||[])check(Object.hasOwn(coverage.evidence,key),entry.id+": ukjent evidens");
+  }
+  if(["covered","partial"].includes(entry.status))check(entry.evidence?.length>0,entry.id+": motorevidens mangler");
+}
+for(const [key,ref] of Object.entries(coverage.evidence)){
+  check(readFileSync(join(root,ref.file),"utf8").includes("function "+ref.symbol+"("),key+": motorfunksjon finnes ikke");
+  if(ref.test)check(readFileSync(join(root,ref.test),"utf8").includes("assert"),key+": regresjonstest mangler");
+}
 const searchable=allBookChapters.map(c=>({c}));
 for(const [query,id] of [["Godfoten","method_eggen"],["Seirullo","method_seirullo"],["Pirlo","onenote_directors"],["droppunkt",""],["stormpress","onenote_selective_press"]]){
   if(!id)continue;

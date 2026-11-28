@@ -1,0 +1,1954 @@
+{
+  "schema": "historygo-football-manager.football-book-tactical-coverage.v1",
+  "baselineCommit": "d382816ad602efefb9a64f6125c9d94df0c32321",
+  "scope": "Alle sourceDetails i de 37 ikke-klubbkapitlene; 12 klubbkapitler kartlegges senere separat. Vurdering per fagavsnitt, ikke per atomisk motorregel.",
+  "statusDefinitions": {
+    "covered": "Hele det avgrensede fagavsnittets relevante mekanikk dokumentert og testet.",
+    "partial": "Noe motorstøtte dokumentert; konkrete delvalg eller generalisering ikke bekreftet.",
+    "missing": "Bekreftet manglende mekanikk etter gjennomgang av relevante motorer.",
+    "unverified": "Gjennomgått angrepsstoff uten tilstrekkelig motorevidens; ikke bekreftet fravær.",
+    "explanatory": "Pedagogisk/historisk stoff uten krav om egen mekanikk.",
+    "pending": "Indeksert, ikke faglig vurdert ennå."
+  },
+  "evidence": {
+    "H": {
+      "file": "src/football-matchday-high-press-v6.js",
+      "symbol": "resolveHighPressBuildUp",
+      "test": "scripts/simulate-high-press-v6.mjs",
+      "scope": "Oppspill mot høyt press: tredjemann, spillvending, direkte oppspill; rollefit og kjent pasningsdekning."
+    },
+    "C": {
+      "file": "src/football-matchday-compact-block-v6.js",
+      "symbol": "resolveCompactBlockAttack",
+      "test": "scripts/simulate-compact-block-v6.mjs",
+      "scope": "Kompakt lav blokk: breddeovertall, innlegg, avlegg og slutttrykk; kjent romdekning og restforsvar."
+    },
+    "D": {
+      "file": "src/football-matchday-compact-block-v6.js",
+      "symbol": "resolveSourcedCreativeBreakthrough",
+      "test": "scripts/simulate-compact-block-v6.mjs",
+      "scope": "Kreatør med dokumenterte dribling/vision-egenskaper; utfordring og frigjøring har separate porter i én simulert hendelse."
+    },
+    "S": {
+      "file": "src/football-matchday-sequence-v8.js",
+      "symbol": "resolveAuthoredSequencePeriod",
+      "scope": "Kanonisk firetrinnskjede med verifisert ellever, lagprofil og kjent motgrep; fallback før xG."
+    },
+    "R": {
+      "file": "src/engine/calculateRoleRelationships.ts",
+      "symbol": "calculateRoleRelationships",
+      "scope": "Rollepar og strukturell støtte; ikke observerte individuelle løp."
+    },
+    "T": {
+      "file": "src/football-matchday-control-v6.js",
+      "symbol": "resolveGameControlPhase",
+      "test": "scripts/simulate-game-control-v6.mjs",
+      "scope": "Kontroll/avlastning under spesifikke kampplaner; ikke kontinuerlig posisjonssimulering."
+    }
+  },
+  "entries": [
+    {
+      "id": "first_defender",
+      "chapterId": "press_cover_shift",
+      "title": "Førsteforsvarer – kroppsstilling og avstand",
+      "status": "pending"
+    },
+    {
+      "id": "steering",
+      "chapterId": "press_cover_shift",
+      "title": "Lede og styre",
+      "status": "pending"
+    },
+    {
+      "id": "marking",
+      "chapterId": "press_cover_shift",
+      "title": "Markering – nær ballen og nær mål",
+      "status": "pending"
+    },
+    {
+      "id": "blocking",
+      "chapterId": "press_cover_shift",
+      "title": "Blokkering av skudd og innlegg",
+      "status": "pending"
+    },
+    {
+      "id": "cover",
+      "chapterId": "press_cover_shift",
+      "title": "Andre- og tredjeforsvarer – vinkel, dybde og orientering",
+      "status": "pending"
+    },
+    {
+      "id": "duels",
+      "chapterId": "press_cover_shift",
+      "title": "Dueller – én mot én, to mot én og tre mot to",
+      "status": "pending"
+    },
+    {
+      "id": "back_to_goal",
+      "chapterId": "press_cover_shift",
+      "title": "Feilvendt mottaker og overlapping",
+      "status": "pending"
+    },
+    {
+      "id": "interception",
+      "chapterId": "press_cover_shift",
+      "title": "Gå når ballen går – snappe, fronte og finte",
+      "status": "pending"
+    },
+    {
+      "id": "risk_balance",
+      "chapterId": "rest_defence",
+      "title": "Angrepsrisiko og offensiv markering",
+      "status": "pending"
+    },
+    {
+      "id": "support_angles",
+      "chapterId": "third_man",
+      "title": "Støtte, trekanter og vinklede pasninger",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C"
+      ],
+      "implemented": "Støttevinkel og blokkert utvei inngår i kjeden.",
+      "nextCheck": "Kontroller faktisk alternative støttepunkter og vinkel under press."
+    },
+    {
+      "id": "passing_shadow",
+      "chapterId": "third_man",
+      "title": "Pasningsskygge, mellom porten og motsatte bevegelser",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "R"
+      ],
+      "implemented": "Kjent sentral/bred pasningsdekning og dybderelasjoner endrer utfall.",
+      "nextCheck": "Kontroller at mottaker kan bevege seg ut av pasningsskygge; ikke inferer posisjoner fra tagger."
+    },
+    {
+      "id": "run_patterns",
+      "chapterId": "third_man",
+      "title": "Lureløp, bueløp, blindside og samordnede løp",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "R"
+      ],
+      "implemented": "Tredjemann og dybde-/boksløp finnes på kjedenivå.",
+      "nextCheck": "Kontroller konkrete avledningsløp, blindside, kryssløp og timing mot offside."
+    },
+    {
+      "id": "build_up_patterns",
+      "chapterId": "third_man",
+      "title": "Oppspill – feilvendt spiss og opp–tilbake–gjennom",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "R"
+      ],
+      "implemented": "Opp–tilbake–gjennom, spillvending, direkte oppspill og andreball er representert.",
+      "nextCheck": "Kontroller spissens valg mellom vending, stuss og avlegg som situasjonsavhengige utveier."
+    },
+    {
+      "id": "portrait_bergkamp_henry_debruyne_haaland",
+      "chapterId": "third_man",
+      "title": "Rollepar – møtende spiss og gjennomløper kontra pasningslegger og boksangriper",
+      "status": "explanatory",
+      "evidence": [
+        "H",
+        "C",
+        "R"
+      ],
+      "implemented": "Pedagogisk sammenligning; generiske mønstre dekkes av andre rader.",
+      "nextCheck": "Ingen navnebasert bonus; ikke rekonstruer historiske kamper uten belegg."
+    },
+    {
+      "id": "portrait_wenger",
+      "chapterId": "third_man",
+      "title": "Arsène Wenger – utvikling og relasjonelt kombinasjonsspill",
+      "status": "explanatory",
+      "evidence": [
+        "R"
+      ],
+      "implemented": "Historisk/pedagogisk eksempel på utvikling og relasjoner.",
+      "nextCheck": "Knytt trening til generisk prinsipp, ikke trenernavnbonus."
+    },
+    {
+      "id": "support_runs",
+      "chapterId": "overlap_underlap",
+      "title": "Medløpspasning og samhandling bak ballfører",
+      "status": "partial",
+      "evidence": [
+        "C",
+        "R"
+      ],
+      "implemented": "Kant og overlapp er representert i modell og rolleforbindelser.",
+      "nextCheck": "Kontroller medløpspasning, underlapp og støttevalg ved feilvendt ballfører."
+    },
+    {
+      "id": "space_timing",
+      "chapterId": "overloads_space",
+      "title": "Rom – ikke bruk opp rommet",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C"
+      ],
+      "implemented": "Bredde, spillvending og motstanderdekning påvirker resultat.",
+      "nextCheck": "Kontroller tidspunkt for ankomst i rom, avledning og fri mottakers neste handling."
+    },
+    {
+      "id": "two_against_one",
+      "chapterId": "overloads_space",
+      "title": "To mot én – skape og utnytte lokalt overtall",
+      "status": "partial",
+      "evidence": [
+        "C",
+        "D",
+        "R"
+      ],
+      "implemented": "Breddeovertall, veggspill og kreativ utfordring har kjeder.",
+      "nextCheck": "Kontroller 2v1-valg mot faktisk forsvarerreaksjon, ikke bare valg av plan."
+    },
+    {
+      "id": "proactive_reactive",
+      "chapterId": "formations",
+      "title": "Spillmodell – reaktiv og proaktiv strategi",
+      "status": "pending"
+    },
+    {
+      "id": "formation_choices",
+      "chapterId": "formations",
+      "title": "4-3-3, 4-4-2 og 3-4-2-1 – manusets avveininger",
+      "status": "pending"
+    },
+    {
+      "id": "history_chaos",
+      "chapterId": "formations",
+      "title": "Fra kaos til form – de tidlige angrepssystemene",
+      "status": "pending"
+    },
+    {
+      "id": "history_combination",
+      "chapterId": "formations",
+      "title": "Dribbling game og combination game",
+      "status": "pending"
+    },
+    {
+      "id": "history_rules",
+      "chapterId": "formations",
+      "title": "Regelendringer som katalysator",
+      "status": "pending"
+    },
+    {
+      "id": "history_continent",
+      "chapterId": "formations",
+      "title": "Kontinentale impulser og transnasjonal utvikling",
+      "status": "pending"
+    },
+    {
+      "id": "history_wm",
+      "chapterId": "formations",
+      "title": "WM – omorganisering av ansvar",
+      "status": "pending"
+    },
+    {
+      "id": "history_brazil",
+      "chapterId": "formations",
+      "title": "Brasils 4-2-4 – frihet og struktur",
+      "status": "pending"
+    },
+    {
+      "id": "history_women",
+      "chapterId": "formations",
+      "title": "Kvinnefotball – parallelle utviklingslinjer",
+      "status": "pending"
+    },
+    {
+      "id": "culture_elias",
+      "chapterId": "formations",
+      "title": "Elias – sivilisasjonsprosessen og regulert konkurranse",
+      "status": "pending"
+    },
+    {
+      "id": "culture_regional_examples",
+      "chapterId": "formations",
+      "title": "Internasjonale fotballmiljøer – læringsbetingelser og konkrete eksempler",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_meredith_mcgregor",
+      "chapterId": "formations",
+      "title": "Billy Meredith og William McGregor – spillerprofil og fotballens institusjoner",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_pozzo",
+      "chapterId": "formations",
+      "title": "Vittorio Pozzo – metodo og balanse mellom ledd",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_chapman",
+      "chapterId": "formations",
+      "title": "Herbert Chapman – WM som svar på et nytt romproblem",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_tuchel",
+      "chapterId": "formations",
+      "title": "Thomas Tuchel – formasjonsskifte som kampjustering",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_ferguson",
+      "chapterId": "formations",
+      "title": "Alex Ferguson – bredde og fleksibilitet innenfor 4-4-2",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_history_wm_space",
+      "chapterId": "formations",
+      "title": "WM – rombevissthet, struktur og fleksibilitet",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_history_skill_collective",
+      "chapterId": "formations",
+      "title": "Historiske utviklingslinjer – fra individuell teknikk til kollektiv romforståelse",
+      "status": "pending"
+    },
+    {
+      "id": "history_hungary",
+      "chapterId": "false_nine_inverted_back",
+      "title": "Ungarns magiske lag – den møtende spissen",
+      "status": "explanatory",
+      "evidence": [
+        "R"
+      ],
+      "implemented": "Historisk inngang til møtende spiss; generisk false_nine-relasjon finnes.",
+      "nextCheck": "Ingen egen historisk bonus; konkret stopperbeslutning må vurderes i rolle/angrepsaudit."
+    },
+    {
+      "id": "history_total",
+      "chapterId": "total_football",
+      "title": "Totalfotball – kollektiv intelligens og rollebytter",
+      "status": "pending"
+    },
+    {
+      "id": "history_collective_cognition",
+      "chapterId": "total_football",
+      "title": "Fra individuell briljans til kollektiv intelligens",
+      "status": "pending"
+    },
+    {
+      "id": "culture_art_results",
+      "chapterId": "total_football",
+      "title": "Estetikk og resultater – kunst og nytte",
+      "status": "pending"
+    },
+    {
+      "id": "culture_adorno",
+      "chapterId": "total_football",
+      "title": "Adorno – kunstens autonomi og instrumentell rasjonalitet",
+      "status": "pending"
+    },
+    {
+      "id": "culture_eco",
+      "chapterId": "total_football",
+      "title": "Eco – det åpne verket og publikums fortolkning",
+      "status": "pending"
+    },
+    {
+      "id": "culture_gadamer",
+      "chapterId": "total_football",
+      "title": "Gadamer – lekens egenverdi",
+      "status": "pending"
+    },
+    {
+      "id": "culture_aristotle",
+      "chapterId": "total_football",
+      "title": "Aristoteles – poiesis og praxis",
+      "status": "pending"
+    },
+    {
+      "id": "culture_synthesis",
+      "chapterId": "total_football",
+      "title": "Estetikk som grunnvilkår – struktur og brudd",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_cruyff_michels",
+      "chapterId": "total_football",
+      "title": "Cruyff og Michels – spiller og trener i samme taktiske tradisjon",
+      "status": "pending"
+    },
+    {
+      "id": "history_catenaccio",
+      "chapterId": "catenaccio",
+      "title": "Catenaccio – kontroll og kontring",
+      "status": "pending"
+    },
+    {
+      "id": "culture_pragmatism",
+      "chapterId": "catenaccio",
+      "title": "Resultatfotball og estetikkens historiske dilemma",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_herrera",
+      "chapterId": "catenaccio",
+      "title": "Helenio Herrera – organisering og overgang",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_mourinho",
+      "chapterId": "catenaccio",
+      "title": "José Mourinho – kampbilde, risiko og overgang",
+      "status": "pending"
+    },
+    {
+      "id": "history_intensity",
+      "chapterId": "gegenpress",
+      "title": "Moderne fotball – teknikk under press",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_klopp",
+      "chapterId": "gegenpress",
+      "title": "Jürgen Klopp – kollektiv gjenvinning og teknikk under press",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_rangnick",
+      "chapterId": "gegenpress",
+      "title": "Ralf Rangnick – kollektiv intensitet og høyt press",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_selective_press",
+      "chapterId": "gegenpress",
+      "title": "Stormpress og selektivt press – når presset selv åpner rom",
+      "status": "pending"
+    },
+    {
+      "id": "history_cruyff_barca",
+      "chapterId": "positional_play",
+      "title": "Fra Cruyff til Barcelona – kontinuitet og endring",
+      "status": "pending"
+    },
+    {
+      "id": "history_keeper",
+      "chapterId": "positional_play",
+      "title": "Positional play 2.0 – keeper som aktivt oppspillsledd",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_guardiola_ederson",
+      "chapterId": "positional_play",
+      "title": "Guardiola og Ederson – romkontroll med elleve spillere",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_structure_break",
+      "chapterId": "positional_play",
+      "title": "Systemkritikk – når den skapende spilleren bryter mønsteret",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_rhythm_space",
+      "chapterId": "positional_play",
+      "title": "Rom og rytme – kontroll gjennom skiftende tempo",
+      "status": "pending"
+    },
+    {
+      "id": "culture_identity",
+      "chapterId": "relationism",
+      "title": "Futebol d’arte – estetikk, identitet og kulturell selvhevdelse",
+      "status": "pending"
+    },
+    {
+      "id": "keeper_positioning",
+      "chapterId": "keepers",
+      "title": "Keeper – posisjonering og romkontroll",
+      "status": "pending"
+    },
+    {
+      "id": "keeper_saves",
+      "chapterId": "keepers",
+      "title": "Keeper – skuddstopping, returer og straffespark",
+      "status": "pending"
+    },
+    {
+      "id": "keeper_distribution",
+      "chapterId": "keepers",
+      "title": "Keeper – distribusjon, styring og dødball",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_keeper_depth",
+      "chapterId": "keepers",
+      "title": "Neuer, Higuita og Alisson – rommet bak forsvarslinjen",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_keeper_angles",
+      "chapterId": "keepers",
+      "title": "Schmeichel, Banks og Zoff – vinkel, dybde og reaksjon",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_keeper_saves",
+      "chapterId": "keepers",
+      "title": "Yashin, Buffon, Casillas, Kahn og De Gea – forskjellige redningsoppgaver",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_keeper_distribution",
+      "chapterId": "keepers",
+      "title": "Ter Stegen, Casillas, Schmeichel, Alisson og Ederson – tempo i igangsettingen",
+      "status": "pending"
+    },
+    {
+      "id": "centre_back_defence",
+      "chapterId": "centre_backs",
+      "title": "Stopper – defensive arbeidsoppgaver",
+      "status": "pending"
+    },
+    {
+      "id": "centre_back_attack",
+      "chapterId": "centre_backs",
+      "title": "Stopper – oppbygging og pasningsvalg",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_maldini",
+      "chapterId": "centre_backs",
+      "title": "Paolo Maldini – levetid, posisjonering og tilpasning",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_beckenbauer",
+      "chapterId": "centre_backs",
+      "title": "Franz Beckenbauer – liberoens offensive ansvar",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_desailly_rijkaard_mascherano",
+      "chapterId": "centre_backs",
+      "title": "Desailly, Rijkaard og Mascherano – mellom bakre ledd og midtbane",
+      "status": "pending"
+    },
+    {
+      "id": "fullback_defence",
+      "chapterId": "fullbacks",
+      "title": "Back – timing av støt, sikring og sideforskyvning",
+      "status": "pending"
+    },
+    {
+      "id": "fullback_attack",
+      "chapterId": "fullbacks",
+      "title": "Back – bredde, overlapp og pasningsvalg",
+      "status": "pending"
+    },
+    {
+      "id": "wingback_corridor",
+      "chapterId": "fullbacks",
+      "title": "Vingback – korridoransvar med tre stoppere",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_lahm",
+      "chapterId": "fullbacks",
+      "title": "Philipp Lahm – rollefortrolighet på back og midtbane",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_zambrotta_luis_enrique",
+      "chapterId": "fullbacks",
+      "title": "Zambrotta og Luis Enrique – allsidighet og endrede rollekrav",
+      "status": "pending"
+    },
+    {
+      "id": "central_midfield_defence",
+      "chapterId": "six_regista",
+      "title": "Sentral midtbane – skjerming, andreball og balanse",
+      "status": "pending"
+    },
+    {
+      "id": "central_midfield_attack",
+      "chapterId": "six_regista",
+      "title": "Sentral midtbane – spillbarhet og rytmekontroll",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_scanning",
+      "chapterId": "six_regista",
+      "title": "Xavi, Iniesta og andre orienteringssterke midtbanespillere",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_makelele",
+      "chapterId": "six_regista",
+      "title": "Claude Makélélé – posisjonell sikring og arbeidsøkonomi",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_directors",
+      "chapterId": "six_regista",
+      "title": "Regissørene – Pirlo, Xavi og Modrić",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_pirlo_architect",
+      "chapterId": "six_regista",
+      "title": "Pirlo – arkitekten og den lange pasningens funksjon",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_workers_protectors",
+      "chapterId": "six_regista",
+      "title": "Arbeidsmaurene og beskytterne – skjult kollektiv verdi",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_gattuso_pirlo",
+      "chapterId": "six_regista",
+      "title": "Gattuso og Pirlo – komplementære midtbaneoppgaver",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_van_bommel_jeremies",
+      "chapterId": "six_regista",
+      "title": "Van Bommel og Jeremies – rytmebrudd innenfor reglene",
+      "status": "pending"
+    },
+    {
+      "id": "eight_defence",
+      "chapterId": "eight_press",
+      "title": "Indreløper – sikring ved sideangrep",
+      "status": "pending"
+    },
+    {
+      "id": "eight_attack",
+      "chapterId": "eight_press",
+      "title": "Indreløper – møte, stikke og fylle feltet",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_leonhardsen",
+      "chapterId": "eight_press",
+      "title": "Øyvind Leonhardsen – indreløperens løp og timing",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_kante",
+      "chapterId": "eight_press",
+      "title": "N'Golo Kanté – arbeidskapasitet, gjenvinning og ballbruk",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_matthaus",
+      "chapterId": "eight_press",
+      "title": "Lothar Matthäus – allrounderen fra midtbane til libero",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_modric",
+      "chapterId": "eight_press",
+      "title": "Luka Modrić – rytmekontroll og langvarig prestasjon",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_yaya_toure",
+      "chapterId": "eight_press",
+      "title": "Yaya Touré – midtbanespilleren som også truer mål",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_nakata_park",
+      "chapterId": "eight_press",
+      "title": "Hidetoshi Nakata og Park Ji-sung – forskjellige midtbaneoppgaver",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_xavi_modric",
+      "chapterId": "eight_press",
+      "title": "Xavi og Modrić – rytme, mottak og neste handling",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_cambiasso_vieira_redondo",
+      "chapterId": "eight_press",
+      "title": "Cambiasso, Vieira og Redondo – arbeid med og uten ball",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_essien_bridge",
+      "chapterId": "eight_press",
+      "title": "Michael Essien – broen mellom arbeidsmaur og allrounder",
+      "status": "pending"
+    },
+    {
+      "id": "supporting_forward",
+      "chapterId": "ten_creator",
+      "title": "Hengende spiss – mellomrom, støtte og overgangsspill",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_creative",
+      "chapterId": "ten_creator",
+      "title": "Zidane, Ronaldinho og Maradona – den kreative handlingen",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_tom_lund",
+      "chapterId": "ten_creator",
+      "title": "Tom Lund – teknikk, oversikt og kreativitet",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_de_bruyne",
+      "chapterId": "ten_creator",
+      "title": "Kevin De Bruyne – halvrom, ballbane og gjennombrudd",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_messi",
+      "chapterId": "ten_creator",
+      "title": "Lionel Messi – kreativitet, ballnær støtte og brudd med strukturen",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_zico_baggio_zola",
+      "chapterId": "ten_creator",
+      "title": "Zico, Roberto Baggio og Gianfranco Zola – den skapende angriperen",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_savicevic_kaka",
+      "chapterId": "ten_creator",
+      "title": "Savićević og Kaká – høydepunkter og kreative arbeidsoppgaver",
+      "status": "pending"
+    },
+    {
+      "id": "winger_defence",
+      "chapterId": "wingers",
+      "title": "Ving – pressretning og ansvar for motstanderens back",
+      "status": "pending"
+    },
+    {
+      "id": "winger_attack",
+      "chapterId": "wingers",
+      "title": "Ving – bredde, bakrom og avslutning på motsatt side",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_mathews_garrincha",
+      "chapterId": "wingers",
+      "title": "Stanley Matthews og Garrincha – dribling som taktisk virkemiddel",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_okocha",
+      "chapterId": "wingers",
+      "title": "Jay-Jay Okocha – finter, dribling og neste pasning",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_neymar",
+      "chapterId": "wingers",
+      "title": "Neymar – improvisasjon og kombinasjoner i trangt rom",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_mbappe",
+      "chapterId": "wingers",
+      "title": "Kylian Mbappé – brems, akselerasjon og bueløp",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_son",
+      "chapterId": "wingers",
+      "title": "Son Heung-min – gjennombrudd og avslutning med begge føtter",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_gamst_gronkjaer",
+      "chapterId": "wingers",
+      "title": "Morten Gamst Pedersen og Jesper Grønkjær – bredde og innlegg",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_waddle_pop",
+      "chapterId": "wingers",
+      "title": "Chris Waddle – kantspill og popkultur",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_beckham_deep_cross",
+      "chapterId": "wingers",
+      "title": "David Beckham – tidlig innlegg og globalt fotballikon",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_best_icon",
+      "chapterId": "wingers",
+      "title": "George Best – driblekunst og fotballens kjendisfortelling",
+      "status": "pending"
+    },
+    {
+      "id": "meeting_forward",
+      "chapterId": "link_strikers",
+      "title": "Møtende spiss – oppspill og bevegelse etter avlegg",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_hidegkuti",
+      "chapterId": "link_strikers",
+      "title": "Nándor Hidegkuti – den møtende spissens beslutningsproblem",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_pele",
+      "chapterId": "link_strikers",
+      "title": "Pelé – kreativitet og avslutning i et kollektiv",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_bergkamp",
+      "chapterId": "link_strikers",
+      "title": "Dennis Bergkamp – førsteberøring og opp–tilbake–gjennom",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_drogba_lukaku",
+      "chapterId": "link_strikers",
+      "title": "Didier Drogba og Romelu Lukaku – fysisk kapasitet i spissens støtteoppgave",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_di_stefano",
+      "chapterId": "link_strikers",
+      "title": "Alfredo Di Stéfano – leder og forbindelsesspiller",
+      "status": "pending"
+    },
+    {
+      "id": "striker_defence",
+      "chapterId": "finishing_press",
+      "title": "Midtspiss – lede press og gjøre laget kontringsklart",
+      "status": "pending"
+    },
+    {
+      "id": "striker_attack",
+      "chapterId": "finishing_press",
+      "title": "Midtspiss – sentral strekk, første stolpe og rom for andre",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_puskas",
+      "chapterId": "finishing_press",
+      "title": "Ferenc Puskás – avslutning i en kollektiv angrepsstruktur",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_strandli",
+      "chapterId": "finishing_press",
+      "title": "Frank Strandli – spissens avslutningsoppgave",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_meazza_eusebio",
+      "chapterId": "finishing_press",
+      "title": "Giuseppe Meazza og Eusébio – avslutninger i forskjellige epoker",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_van_basten",
+      "chapterId": "finishing_press",
+      "title": "Marco van Basten – avslutning før forsvar og keeper rekker å justere",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_shearer",
+      "chapterId": "finishing_press",
+      "title": "Alan Shearer – gjentatte løp, duell og avslutningsberedskap",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_haaland",
+      "chapterId": "finishing_press",
+      "title": "Erling Braut Haaland – bakromstrussel og angrep av avslutningssoner",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_henry",
+      "chapterId": "finishing_press",
+      "title": "Thierry Henry – fart, venstresidig utgangsposisjon og gjennombrudd",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_ronaldo_nazario",
+      "chapterId": "finishing_press",
+      "title": "Ronaldo Nazário – avslutningsteknikk og tilbakekomst",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_cristiano_heading",
+      "chapterId": "finishing_press",
+      "title": "Cristiano Ronaldo – spenst, tilløp og timing ved heading",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_romario",
+      "chapterId": "finishing_press",
+      "title": "Romário – avslutning med begrenset tid og rom",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_kanu_ravanelli",
+      "chapterId": "finishing_press",
+      "title": "Kanu og Fabrizio Ravanelli – avslutning når kampbildet endres",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_owen_torres",
+      "chapterId": "finishing_press",
+      "title": "Michael Owen og Fernando Torres – gjennombrudd og avslutningsvalg",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_rossi_shevchenko_adriano",
+      "chapterId": "finishing_press",
+      "title": "Paolo Rossi, Sjevtsjenko og Adriano – karrierens dokumenterte holdepunkter",
+      "status": "pending"
+    },
+    {
+      "id": "attack_principles",
+      "chapterId": "in_possession",
+      "title": "Spilleprinsippmodellen – gjennombrudd og rom",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "S"
+      ],
+      "implemented": "Leddgjennombrudd og støtte har virkning i avgrensede kjeder.",
+      "nextCheck": "Kontroller progresjon per ledd og romvalg utenfor spesialistplanene."
+    },
+    {
+      "id": "carrying",
+      "chapterId": "in_possession",
+      "title": "Føring – valg av retning, tempo og berøringer",
+      "status": "partial",
+      "evidence": [
+        "D"
+      ],
+      "implemented": "Kreatør kan utfordre før frigjøring av medspiller.",
+      "nextCheck": "Kontroller føring versus pasning, retning, fart og ballberøringer som selvstendige valg."
+    },
+    {
+      "id": "dribbling",
+      "chapterId": "in_possession",
+      "title": "Dribling – timing, taktskifte og ubalanse",
+      "status": "partial",
+      "evidence": [
+        "D"
+      ],
+      "implemented": "Separat dribleport og neste frigjøringsport.",
+      "nextCheck": "Kontroller om forsvarerubalanse, timing og fintevalg faktisk endrer utfallet."
+    },
+    {
+      "id": "cuts",
+      "chapterId": "in_possession",
+      "title": "Retningsforandringer – cuts og vendinger",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Detaljerte cuts og finter er ikke dokumentert som egne handlinger i undersøkte angrepskjeder.",
+      "nextCheck": "Avklar riktig abstraksjonsnivå: vending/retning og press, ikke en motor for hver navngitte finte."
+    },
+    {
+      "id": "receiving",
+      "chapterId": "in_possession",
+      "title": "Mottak og medtak – gjør neste trekk mulig",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C"
+      ],
+      "implemented": "Oppspill og mottak inngår i kjeden, med rollefit.",
+      "nextCheck": "Kontroller særskilt mottak, ballbane, førsteberøring og neste handling under press."
+    },
+    {
+      "id": "turning",
+      "chapterId": "in_possession",
+      "title": "Vending – 90 grader, 180 grader og press i ryggen",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Ingen selvstendig vending/skjerming-port dokumentert i gjennomgåtte kjeder.",
+      "nextCheck": "Undersøk mottakerens orientering og mulighet til vending kontra avlegg."
+    },
+    {
+      "id": "passing",
+      "chapterId": "in_possession",
+      "title": "Pasningsgeometri – fot eller rom, presisjon og kamuflering",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C"
+      ],
+      "implemented": "Støttepasning og pasningsdekning påvirker gjennombrudd.",
+      "nextCheck": "Kontroller pasning på fot/i rom, mottaksvinkel og kamuflering."
+    },
+    {
+      "id": "passing_types",
+      "chapterId": "in_possession",
+      "title": "Innside, utside, halvt liggende vrist og tåpasning",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "De fire fot-/treffteknikkene er ikke dokumentert som separate motorvalg her.",
+      "nextCheck": "Vurder situasjonsbestemt kort/lang og direkte pasning fremfor animasjon av fotteknikk."
+    },
+    {
+      "id": "shooting",
+      "chapterId": "in_possession",
+      "title": "Skuddteknikk – vrist, halvt liggende vrist og volley",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "xG-utfall er påvist for angrepskjeder, ikke valg av vrist/volley i avslutningsmotoren.",
+      "nextCheck": "Revider avslutningsmotor separat før manglende mekanikk erklæres."
+    },
+    {
+      "id": "heading",
+      "chapterId": "in_possession",
+      "title": "Heading – opphopp, treff og retning",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Innleggsrom er modellert; headingens treff og ballbane er ikke kontrollert.",
+      "nextCheck": "Undersøk luftdueller og valg av heading som avslutning/klarering."
+    },
+    {
+      "id": "finishing",
+      "chapterId": "in_possession",
+      "title": "Angrepsavslutning – blindside, bueløp og orientering",
+      "status": "partial",
+      "evidence": [
+        "C",
+        "R"
+      ],
+      "implemented": "Boksløp, innleggsrom og avslutningsvindu påvirker kjeden.",
+      "nextCheck": "Kontroller blindside, offside, avslutterens valg og keeperens posisjon."
+    },
+    {
+      "id": "one_on_one",
+      "chapterId": "in_possession",
+      "title": "Alene med keeper – valg fra spiss vinkel og sentralt",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Keeperduellens konkrete valg er ikke kontrollert.",
+      "nextCheck": "Undersøk eksisterende sjanse-/keeperberegning før ny mekanikk."
+    },
+    {
+      "id": "perception",
+      "chapterId": "in_possession",
+      "title": "Persepsjon – aktiv registrering før og etter mottak",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Ingen eksplisitt registreringsport før mottak dokumentert i de undersøkte angrepskjeder.",
+      "nextCheck": "Kartlegg eksisterende vision/beslutningsdata; aldri oppfinn manglende spillerattributter."
+    },
+    {
+      "id": "open_body",
+      "chapterId": "in_possession",
+      "title": "Åpen kropp og half-turn",
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Rettvendt tredjemann beskrives; kroppsstilling er ikke påvist som separat beslutningsvariabel.",
+      "nextCheck": "Kontroller om mottaksvinkel påvirker vending/avlegg."
+    },
+    {
+      "id": "reading_game",
+      "chapterId": "in_possession",
+      "title": "Observer – seks spørsmål om spillebildet",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "D",
+        "S"
+      ],
+      "implemented": "Motoren bruker kjent motstanderdekning, rollefit og struktur.",
+      "nextCheck": "Kontroller situasjonsvalg per ballfører: rom, støtte, kroppsstilling og neste løp."
+    },
+    {
+      "id": "passing_timing",
+      "chapterId": "in_possession",
+      "title": "Pasningstempo, timing og spill på fot eller i rom",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "R"
+      ],
+      "implemented": "Rekkefølge og relasjoner gir gjennombruddsvinduer.",
+      "nextCheck": "Kontroller for tidlig/sent løp og pasning på fot kontra i rom."
+    },
+    {
+      "id": "penetration",
+      "chapterId": "in_possession",
+      "title": "Gjennombrudd – passere ledd og motta i fart",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "S"
+      ],
+      "implemented": "Simulert leddbrudd kan gi xG; brutt kjede har konsekvens.",
+      "nextCheck": "Kontroller mottak i fart og forskjell mellom å passere ett og siste ledd."
+    },
+    {
+      "id": "crossing",
+      "chapterId": "in_possession",
+      "title": "Innlegg – tidspunkt, avslutningssoner og løpsfordeling",
+      "status": "partial",
+      "evidence": [
+        "C"
+      ],
+      "implemented": "Innleggsrom, løp inn i boks, returdekning og motstanderens boksdekning.",
+      "nextCheck": "Kontroller valg mellom tidlig lavt innlegg, tilbakespill og bakre stolpe."
+    },
+    {
+      "id": "possession_cycle",
+      "chapterId": "in_possession",
+      "title": "Ballbesittelse og konservering – rytme og tålmodighet",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "T"
+      ],
+      "implemented": "Spillvending og kontrollkjeder er implementert for spesifikke planer.",
+      "nextCheck": "Kontroller gjentatt kort–lang syklus og rytmeskifte som valgbare handlinger."
+    },
+    {
+      "id": "established_model",
+      "chapterId": "in_possession",
+      "title": "Etablert angrep – gjenskaping av bredde og strekk–møte",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C",
+        "R",
+        "D"
+      ],
+      "implemented": "Tredjemann, møtende spiss, bredde og kreativ frigjøring inngår.",
+      "nextCheck": "Kontroller gjenskaping av bredde, strekk–møte og støvsuging med reelt alternativvalg."
+    },
+    {
+      "id": "corridor_to_centre",
+      "chapterId": "in_possession",
+      "title": "Fra korridor til sentralt gjennombrudd",
+      "status": "partial",
+      "evidence": [
+        "C",
+        "R"
+      ],
+      "implemented": "Bred støtte og spissrelasjoner er representert, men ikke denne konkrete back–spiss–motsatt side-kjeden.",
+      "nextCheck": "Finn eksisterende korridorplan og vurder eksplisitt timing/utvei."
+    },
+    {
+      "id": "centre_to_corridor",
+      "chapterId": "in_possession",
+      "title": "Fra sentralt til bredt gjennombrudd",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C"
+      ],
+      "implemented": "Spillvending og bredt gjennombrudd har resultat.",
+      "nextCheck": "Kontroller vingens valg mellom bredde, bakrom, møte og backens fremrykk."
+    },
+    {
+      "id": "signal_triangle",
+      "chapterId": "in_possession",
+      "title": "Signalpasning og trekanten inn–ut–inn",
+      "status": "partial",
+      "evidence": [
+        "H",
+        "C"
+      ],
+      "implemented": "Avlegg/tredjemann og vending finnes som separate ruter.",
+      "nextCheck": "Kontroller bakoverpasning som avtalt signal, valget mellom fire utveier og inn–ut–inn."
+    },
+    {
+      "id": "press_height",
+      "chapterId": "out_of_possession",
+      "title": "Presshøyder og pressbølger",
+      "status": "pending"
+    },
+    {
+      "id": "lock_press",
+      "chapterId": "out_of_possession",
+      "title": "Lås av – høyt press eller sentral skjerming",
+      "status": "pending"
+    },
+    {
+      "id": "press_triggers",
+      "chapterId": "out_of_possession",
+      "title": "Presstidspunkt – aktivering, hvile og falskt press",
+      "status": "pending"
+    },
+    {
+      "id": "pump_and_drop",
+      "chapterId": "out_of_possession",
+      "title": "Push opp, pumping, fall av og kompakte ledd",
+      "status": "pending"
+    },
+    {
+      "id": "marking_models",
+      "chapterId": "out_of_possession",
+      "title": "Markeringstyper og kollektivt press",
+      "status": "pending"
+    },
+    {
+      "id": "counter_signal",
+      "chapterId": "transition_attack",
+      "title": "Overgang og kontring – signal, tidsmål og relativ bredde",
+      "status": "pending"
+    },
+    {
+      "id": "counter_3v3",
+      "chapterId": "transition_attack",
+      "title": "Kontringsmønster 1 – tre mot tre",
+      "status": "pending"
+    },
+    {
+      "id": "counter_4v2",
+      "chapterId": "transition_attack",
+      "title": "Kontringsmønster 2 – fire mot to",
+      "status": "pending"
+    },
+    {
+      "id": "counter_width_clearance",
+      "chapterId": "transition_attack",
+      "title": "Kontringsmønster 3 – bredde og klareringsmønster",
+      "status": "pending"
+    },
+    {
+      "id": "first_after_win",
+      "chapterId": "transition_attack",
+      "title": "Første handling etter ballvinning",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_drillo",
+      "chapterId": "transition_attack",
+      "title": "Egil Olsen – direkte overgangsspill som analysemodell",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_ranieri",
+      "chapterId": "transition_attack",
+      "title": "Claudio Ranieri – kompakt 4-4-2 og kontringsorganisering",
+      "status": "pending"
+    },
+    {
+      "id": "recalibrate",
+      "chapterId": "transition_defend",
+      "title": "Omstilling – rekalibrering, gjenvinning eller fall i ramme",
+      "status": "pending"
+    },
+    {
+      "id": "corner_low_delivery",
+      "chapterId": "attacking_corners",
+      "title": "Offensiv corner – lav bue og målrettet levering",
+      "status": "pending"
+    },
+    {
+      "id": "corner_disguise",
+      "chapterId": "attacking_corners",
+      "title": "Corner – oppstilling, bevegelse og kamuflering",
+      "status": "pending"
+    },
+    {
+      "id": "free_kick_targets",
+      "chapterId": "free_kicks",
+      "title": "Offensivt frispark – tre leveringsmål og skjulte varianter",
+      "status": "pending"
+    },
+    {
+      "id": "penalty_kicker",
+      "chapterId": "free_kicks",
+      "title": "Straffespark – avslutningsvalg og ro",
+      "status": "pending"
+    },
+    {
+      "id": "penalty_keeper",
+      "chapterId": "free_kicks",
+      "title": "Straffespark – keeperens observasjon og timing",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_juninho_beckham_pirlo",
+      "chapterId": "free_kicks",
+      "title": "Juninho, Beckham og Pirlo – frispark som teknisk spesialisering",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_rivelino",
+      "chapterId": "free_kicks",
+      "title": "Rivelino – frisparkets leveringsbane",
+      "status": "pending"
+    },
+    {
+      "id": "restart_lock",
+      "chapterId": "throw_ins",
+      "title": "Lås av ved motstanderens igangsetting",
+      "status": "pending"
+    },
+    {
+      "id": "corner_defence_posts",
+      "chapterId": "marking_blocks",
+      "title": "Defensiv corner – mann-mot-mann og stolpeansvar",
+      "status": "pending"
+    },
+    {
+      "id": "restart_organize",
+      "chapterId": "marking_blocks",
+      "title": "Defensive dødballer – keeperens organisering og konkrete beskjeder",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_ramos",
+      "chapterId": "marking_blocks",
+      "title": "Sergio Ramos – stopperens offensive dødballoppgave",
+      "status": "pending"
+    },
+    {
+      "id": "offensive_marking_restart",
+      "chapterId": "second_ball_security",
+      "title": "Offensiv markering – sikring mens eget lag har ballen",
+      "status": "pending"
+    },
+    {
+      "id": "clearance_counter_restart",
+      "chapterId": "second_ball_security",
+      "title": "Klarering etter dødball – fra forsvar til angrep",
+      "status": "pending"
+    },
+    {
+      "id": "analysis_before_after",
+      "chapterId": "training_problem",
+      "title": "Før og etter kamp – avtal arbeidsoppgaver og evaluer",
+      "status": "pending"
+    },
+    {
+      "id": "analysis_01_possession",
+      "chapterId": "training_problem",
+      "title": "1. Possession – ballbesittelse og risiko",
+      "status": "pending"
+    },
+    {
+      "id": "analysis_02_support",
+      "chapterId": "training_problem",
+      "title": "2. Støtte – spillbarhet rundt og bak ballfører",
+      "status": "pending"
+    },
+    {
+      "id": "analysis_03_communication",
+      "chapterId": "training_problem",
+      "title": "3. Kommunikasjon – felles beskjeder",
+      "status": "pending"
+    },
+    {
+      "id": "analysis_04_delay",
+      "chapterId": "training_problem",
+      "title": "4. Forsinkelse i forsvar – ikke selg deg",
+      "status": "pending"
+    },
+    {
+      "id": "analysis_05_penetration",
+      "chapterId": "training_problem",
+      "title": "5. Gjennombrudd – gjennombruddshissighet og taktisk justering",
+      "status": "pending"
+    },
+    {
+      "id": "analysis_06_concentration",
+      "chapterId": "training_problem",
+      "title": "6. Konsentrering i forsvar",
+      "status": "pending"
+    },
+    {
+      "id": "analysis_07_width",
+      "chapterId": "training_problem",
+      "title": "7. Bredde i angrep",
+      "status": "pending"
+    },
+    {
+      "id": "analysis_08_movement",
+      "chapterId": "training_problem",
+      "title": "8. Bevegelse i angrep",
+      "status": "pending"
+    },
+    {
+      "id": "analysis_09_balance",
+      "chapterId": "training_problem",
+      "title": "9. Balanse i forsvar",
+      "status": "pending"
+    },
+    {
+      "id": "opponent_attack",
+      "chapterId": "training_problem",
+      "title": "Motstanderanalyse – angrepsrisiko, oppbygging og gjennombruddsvalg",
+      "status": "pending"
+    },
+    {
+      "id": "opponent_defence",
+      "chapterId": "training_problem",
+      "title": "Motstanderanalyse – press, markering og formasjonsendringer",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_data_analysis",
+      "chapterId": "training_problem",
+      "title": "Dataanalyse – romkontroll, pasningsnettverk og expected threat",
+      "status": "pending"
+    },
+    {
+      "id": "constraints_led",
+      "chapterId": "exercise_constraints",
+      "title": "Constraints-Led Approach – utform problemet",
+      "status": "pending"
+    },
+    {
+      "id": "rondo_practice",
+      "chapterId": "exercise_constraints",
+      "title": "Firkantspill – presisjon, orientering og veggspill",
+      "status": "pending"
+    },
+    {
+      "id": "duel_practice",
+      "chapterId": "exercise_constraints",
+      "title": "Én mot én – velg finte etter forsvarerens kroppsstilling",
+      "status": "pending"
+    },
+    {
+      "id": "scanning_practice",
+      "chapterId": "exercise_constraints",
+      "title": "Orienteringsøvelse – registrer før mottak",
+      "status": "pending"
+    },
+    {
+      "id": "restriction_practice",
+      "chapterId": "exercise_constraints",
+      "title": "Småspill med restriksjoner – teknisk fleksibilitet",
+      "status": "pending"
+    },
+    {
+      "id": "phys_play_snipp",
+      "chapterId": "exercise_constraints",
+      "title": "Hurtighetslek – snipp og snapp",
+      "status": "pending"
+    },
+    {
+      "id": "phys_play_soldat",
+      "chapterId": "exercise_constraints",
+      "title": "Hurtighetslek – soldat og røver (ny variant)",
+      "status": "pending"
+    },
+    {
+      "id": "phys_play_number",
+      "chapterId": "exercise_constraints",
+      "title": "Hurtighetslek – nummerkappløp (ny variant)",
+      "status": "pending"
+    },
+    {
+      "id": "phys_play_pair",
+      "chapterId": "exercise_constraints",
+      "title": "Hurtighetslek – hest og kjerre (ny kontaktfri variant)",
+      "status": "pending"
+    },
+    {
+      "id": "mental_pressure_practice",
+      "chapterId": "exercise_constraints",
+      "title": "Øvelse – beslutning under gradvis økende press",
+      "status": "pending"
+    },
+    {
+      "id": "mental_reset_practice",
+      "chapterId": "exercise_constraints",
+      "title": "Øvelse – neste handling etter feil",
+      "status": "pending"
+    },
+    {
+      "id": "culture_material_conditions",
+      "chapterId": "exercise_constraints",
+      "title": "Materielle forhold – bane, ball og treningsmetoder",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_cone_gate",
+      "chapterId": "exercise_constraints",
+      "title": "Pasningsøvelse – kjegleport og returbevegelse",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_waiting_groups",
+      "chapterId": "exercise_constraints",
+      "title": "Organisering av økten – aktiv ventetid",
+      "status": "pending"
+    },
+    {
+      "id": "method_seirullo",
+      "chapterId": "exercise_constraints",
+      "title": "Paco Seirul·lo – strukturert trening og preferensielle simuleringssituasjoner",
+      "status": "pending"
+    },
+    {
+      "id": "communication_purpose",
+      "chapterId": "coaching_transfer",
+      "title": "Kommunikasjon – informasjon før oppmuntring og korrigering",
+      "status": "pending"
+    },
+    {
+      "id": "communication_timing",
+      "chapterId": "coaching_transfer",
+      "title": "Kommunikativ timing og kampklima",
+      "status": "pending"
+    },
+    {
+      "id": "feedback_culture",
+      "chapterId": "coaching_transfer",
+      "title": "Tilbakemeldingskultur – kompis, ikke kjeft",
+      "status": "pending"
+    },
+    {
+      "id": "match_periodization",
+      "chapterId": "coaching_transfer",
+      "title": "Kampstrategi – styring av kampdynamikken",
+      "status": "pending"
+    },
+    {
+      "id": "match_balance_choices",
+      "chapterId": "coaching_transfer",
+      "title": "Kampstrategi – avtal risiko og rollefordeling",
+      "status": "pending"
+    },
+    {
+      "id": "match_adjustments",
+      "chapterId": "coaching_transfer",
+      "title": "Taktiske justeringer – les og påvirk motstanderens struktur",
+      "status": "pending"
+    },
+    {
+      "id": "play_practice",
+      "chapterId": "coaching_transfer",
+      "title": "Deliberate play og deliberate practice",
+      "status": "pending"
+    },
+    {
+      "id": "guided_discovery",
+      "chapterId": "coaching_transfer",
+      "title": "Guided discovery – spilleren finner løsningen",
+      "status": "pending"
+    },
+    {
+      "id": "contextual_technique",
+      "chapterId": "coaching_transfer",
+      "title": "Kontekstualisert teknikk – fra showtriks til kampferdighet",
+      "status": "pending"
+    },
+    {
+      "id": "mental_reset",
+      "chapterId": "coaching_transfer",
+      "title": "Mental omstilling – ikke dvele ved feil",
+      "status": "pending"
+    },
+    {
+      "id": "mental_match_climate",
+      "chapterId": "coaching_transfer",
+      "title": "Stress, ro og kampklima",
+      "status": "pending"
+    },
+    {
+      "id": "style_psychology",
+      "chapterId": "coaching_transfer",
+      "title": "Spillets estetikk og psykologiske dimensjon",
+      "status": "pending"
+    },
+    {
+      "id": "mental_arousal",
+      "chapterId": "coaching_transfer",
+      "title": "Nerver, stress og spenningsregulering",
+      "status": "pending"
+    },
+    {
+      "id": "mental_preparation",
+      "chapterId": "coaching_transfer",
+      "title": "Kampforberedelse – rutine før første aksjon",
+      "status": "pending"
+    },
+    {
+      "id": "mental_effort",
+      "chapterId": "coaching_transfer",
+      "title": "Å prøve hardt og å prøve maksimalt – hensiktsmessig innsats",
+      "status": "pending"
+    },
+    {
+      "id": "mental_reflection",
+      "chapterId": "coaching_transfer",
+      "title": "Mentalt treningsarbeid – plan, gjennomføring og refleksjon",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_ball_path",
+      "chapterId": "coaching_transfer",
+      "title": "Ballens bane og oppmerksomhet på treffpunkt",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_free_play",
+      "chapterId": "coaching_transfer",
+      "title": "Fritt spill, arbeidsoppgaver og kreativ utfoldelse",
+      "status": "pending"
+    },
+    {
+      "id": "method_dreier",
+      "chapterId": "coaching_transfer",
+      "title": "Sverre Dreier – individuell og relasjonell fotballferdighet",
+      "status": "pending"
+    },
+    {
+      "id": "method_comparison",
+      "chapterId": "coaching_transfer",
+      "title": "Fem metodiske perspektiver – fra spillidé til samhandling",
+      "status": "pending"
+    },
+    {
+      "id": "early_specialization",
+      "chapterId": "individual_development",
+      "title": "Tidlig spesialisering og press på unge spillere",
+      "status": "pending"
+    },
+    {
+      "id": "learning_environment",
+      "chapterId": "individual_development",
+      "title": "Habitus og læringsmiljø – teknikkens sosiale rammer",
+      "status": "pending"
+    },
+    {
+      "id": "physical_resources",
+      "chapterId": "individual_development",
+      "title": "Fire fysiske ressurser – manusets inndeling",
+      "status": "pending"
+    },
+    {
+      "id": "motor_learning",
+      "chapterId": "individual_development",
+      "title": "Motorisk læring – variasjon og overføring",
+      "status": "pending"
+    },
+    {
+      "id": "neuromuscular_control",
+      "chapterId": "individual_development",
+      "title": "Nevromuskulær kontroll – muskler, sanser og kognisjon",
+      "status": "pending"
+    },
+    {
+      "id": "balance_proprioception",
+      "chapterId": "individual_development",
+      "title": "Balanse, holdning og propriosepsjon",
+      "status": "pending"
+    },
+    {
+      "id": "mental_development_outline",
+      "chapterId": "individual_development",
+      "title": "Det mentale aspektet – utvikle menneske og spiller",
+      "status": "pending"
+    },
+    {
+      "id": "confidence_finishing",
+      "chapterId": "individual_development",
+      "title": "Selvtillit og besluttsomhet ved avslutning",
+      "status": "pending"
+    },
+    {
+      "id": "mental_images",
+      "chapterId": "individual_development",
+      "title": "Mentale bilder, fokus og spilleforståelse",
+      "status": "pending"
+    },
+    {
+      "id": "goals_effort_outline",
+      "chapterId": "individual_development",
+      "title": "Målsetting, relativ suksess og innsats – bevarte temaer",
+      "status": "pending"
+    },
+    {
+      "id": "phys_energy",
+      "chapterId": "individual_development",
+      "title": "Fysiologi – energi og fotballens arbeidskrav",
+      "status": "pending"
+    },
+    {
+      "id": "phys_endurance",
+      "chapterId": "individual_development",
+      "title": "Utholdenhet – aerob kapasitet og gjentatte aksjoner",
+      "status": "pending"
+    },
+    {
+      "id": "phys_strength",
+      "chapterId": "individual_development",
+      "title": "Styrke – kraft, bremsing og duellspill",
+      "status": "pending"
+    },
+    {
+      "id": "phys_power",
+      "chapterId": "individual_development",
+      "title": "Spenst og eksplosivitet – sats, landing og retningsskifte",
+      "status": "pending"
+    },
+    {
+      "id": "phys_mobility",
+      "chapterId": "individual_development",
+      "title": "Bevegelighet – funksjonelt bevegelsesutslag",
+      "status": "pending"
+    },
+    {
+      "id": "phys_proprio",
+      "chapterId": "individual_development",
+      "title": "Propriosepsjon og balanse – kroppens eget informasjonssystem",
+      "status": "pending"
+    },
+    {
+      "id": "mental_motivation",
+      "chapterId": "individual_development",
+      "title": "Motivasjon – autonomi, kompetanse og tilhørighet",
+      "status": "pending"
+    },
+    {
+      "id": "mental_relative_success",
+      "chapterId": "individual_development",
+      "title": "Målsetting og relativ suksess – resultat, prestasjon og prosess",
+      "status": "pending"
+    },
+    {
+      "id": "mental_self_efficacy",
+      "chapterId": "individual_development",
+      "title": "Selvtillit, mestringstro og formsvikt",
+      "status": "pending"
+    },
+    {
+      "id": "mental_imagery_practice",
+      "chapterId": "individual_development",
+      "title": "Visualisering – øv på situasjonen, ikke bare suksessen",
+      "status": "pending"
+    },
+    {
+      "id": "mental_attention",
+      "chapterId": "individual_development",
+      "title": "Konsentrasjon og oppmerksomhet – skifte mellom oversikt og handling",
+      "status": "pending"
+    },
+    {
+      "id": "mental_self_talk",
+      "chapterId": "individual_development",
+      "title": "Indre dialog – korte signaler som støtter neste handling",
+      "status": "pending"
+    },
+    {
+      "id": "culture_habitus_field",
+      "chapterId": "individual_development",
+      "title": "Bourdieu – habitus, felt og teknikk",
+      "status": "pending"
+    },
+    {
+      "id": "culture_symbolic_capital",
+      "chapterId": "individual_development",
+      "title": "Estetikk som symbolsk kapital",
+      "status": "pending"
+    },
+    {
+      "id": "culture_access_class",
+      "chapterId": "individual_development",
+      "title": "Klasse, profesjonalisering og tilgang til fotball",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_zlatan_longevity",
+      "chapterId": "individual_development",
+      "title": "Zlatan Ibrahimović – levetid og individuell tilpasning",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_physical_role_comparison",
+      "chapterId": "individual_development",
+      "title": "Fysiske spesialister – samme ressurs, forskjellige arbeidsoppgaver",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_motivation_conversation",
+      "chapterId": "individual_development",
+      "title": "Motivasjon – samtale om hensikt og innsats",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_duncan_edwards",
+      "chapterId": "individual_development",
+      "title": "Duncan Edwards – en avbrutt karriere",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_peak_narratives",
+      "chapterId": "individual_development",
+      "title": "Når heltene brått falt – prestasjon, vendepunkt og erindring",
+      "status": "pending"
+    },
+    {
+      "id": "defensive_language",
+      "chapterId": "collective_training",
+      "title": "Defensive beskjeder – lagets felles ordliste",
+      "status": "pending"
+    },
+    {
+      "id": "offensive_language",
+      "chapterId": "collective_training",
+      "title": "Offensive beskjeder – lagets felles ordliste",
+      "status": "pending"
+    },
+    {
+      "id": "communication_relations",
+      "chapterId": "collective_training",
+      "title": "Relasjoner – hvem har oversikt og hvem gir beskjed?",
+      "status": "pending"
+    },
+    {
+      "id": "possession_counter_practice",
+      "chapterId": "collective_training",
+      "title": "Spillnær samhandling – possession og kontringsøvelse",
+      "status": "pending"
+    },
+    {
+      "id": "team_spirit_outline",
+      "chapterId": "collective_training",
+      "title": "Vinnermentalitet, lagånd og verdier",
+      "status": "pending"
+    },
+    {
+      "id": "mental_team_cohesion",
+      "chapterId": "collective_training",
+      "title": "Lagånd – oppgavekohesjon og sosial kohesjon",
+      "status": "pending"
+    },
+    {
+      "id": "mental_winning",
+      "chapterId": "collective_training",
+      "title": "Vinnermentalitet – konkurranse, ansvar og lagets verdier",
+      "status": "pending"
+    },
+    {
+      "id": "culture_socrates",
+      "chapterId": "collective_training",
+      "title": "Sócrates og Corinthians-demokratiet – fotball som samfunnshandling",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_keane_deschamps",
+      "chapterId": "collective_training",
+      "title": "Roy Keane og Didier Deschamps – ledelse gjennom arbeidsoppgaven",
+      "status": "pending"
+    },
+    {
+      "id": "portrait_weah_romario_civic",
+      "chapterId": "collective_training",
+      "title": "George Weah og Romário – fotballens samfunnsstemmer",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_shared_perception",
+      "chapterId": "collective_training",
+      "title": "Delt persepsjon – samhandling uten verbal beskjed",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_pop_icons",
+      "chapterId": "collective_training",
+      "title": "Pop- og kultikonene – sportslig og symbolsk verdi",
+      "status": "pending"
+    },
+    {
+      "id": "method_eggen",
+      "chapterId": "collective_training",
+      "title": "Nils Arne Eggen – Godfoten og samhandling",
+      "status": "pending"
+    },
+    {
+      "id": "training_periodization",
+      "chapterId": "load_recovery",
+      "title": "Periodisering og treningsfilosofier – helhet fremfor isolasjon",
+      "status": "pending"
+    },
+    {
+      "id": "speed_training_outline",
+      "chapterId": "load_recovery",
+      "title": "Hurtighet – disposisjon for oppvarming, drag og pauser",
+      "status": "pending"
+    },
+    {
+      "id": "speed_play_outline",
+      "chapterId": "load_recovery",
+      "title": "Hurtighet gjennom lek – fire navngitte øvelsesidéer",
+      "status": "pending"
+    },
+    {
+      "id": "phys_acceleration",
+      "chapterId": "load_recovery",
+      "title": "Hurtighet – akselerasjon, toppfart og reaksjon",
+      "status": "pending"
+    },
+    {
+      "id": "phys_speed_session",
+      "chapterId": "load_recovery",
+      "title": "Hurtighetsøkt – oppvarming, drag, pauser og serier",
+      "status": "pending"
+    },
+    {
+      "id": "phys_injury_prevention",
+      "chapterId": "load_recovery",
+      "title": "Skadeforebygging – kontroll, styrke og gradvis belastning",
+      "status": "pending"
+    },
+    {
+      "id": "phys_monitoring",
+      "chapterId": "load_recovery",
+      "title": "Belastningsstyring – forskjellen på hva spilleren gjør og hvordan han reagerer",
+      "status": "pending"
+    },
+    {
+      "id": "phys_recovery",
+      "chapterId": "load_recovery",
+      "title": "Restitusjon og kampuke – kapasitet må være tilgjengelig",
+      "status": "pending"
+    },
+    {
+      "id": "onenote_injury_interruptions",
+      "chapterId": "load_recovery",
+      "title": "Gascoigne, Van Basten, Giuseppe Rossi og Falcao – skadeavbrudd",
+      "status": "pending"
+    },
+    {
+      "id": "method_frade",
+      "chapterId": "load_recovery",
+      "title": "Vítor Frade – taktisk periodisering",
+      "status": "pending"
+    },
+    {
+      "id": "method_verheijen",
+      "chapterId": "load_recovery",
+      "title": "Raymond Verheijen – fotballhandlinger, kvalitet og belastning",
+      "status": "pending"
+    }
+  ]
+}
