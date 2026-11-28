@@ -260,6 +260,10 @@ for(const c of SET_PIECE_CHAPTERS){
 check(SET_PIECE_CHAPTERS.reduce((n,c)=>n+c.diagrams.length,0)===9,"Dødballfigurer mangler");
 check(bookHtml.includes('id="footballBookSetPieces"'),"Dødballer ikke tilgjengelige i spillet");
 check(TRAINING_CHAPTERS.length===6,"Treningskapitler mangler");
+for(const [id,expected] of Object.entries({"load_recovery":["method_frade","method_verheijen"],"exercise_constraints":["method_seirullo"],"collective_training":["method_eggen"],"coaching_transfer":["method_dreier","method_comparison"],"formations":["onenote_history_wm_space","onenote_history_skill_collective"]})){
+  const sections=[...TRAINING_CHAPTERS,...THEORY_CHAPTERS].find(c=>c.id===id)?.sourceDetails||[];
+  for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&(key.startsWith("onenote_")?d.source.startsWith("OneNote – ")&&d.source.includes("0x"):d.source.startsWith("Faglig tillegg – ")),key+": metodikk eller historisk OneNote-anker mangler");}
+}
 for(const [id,expected] of Object.entries({"exercise_constraints":["onenote_cone_gate","onenote_waiting_groups"],"coaching_transfer":["onenote_ball_path","onenote_free_play"],"individual_development":["onenote_motivation_conversation"],"gegenpress":["onenote_selective_press"],"positional_play":["onenote_structure_break","onenote_rhythm_space"],"collective_training":["onenote_shared_perception"],"training_problem":["onenote_data_analysis"]})){
   const sections=[...TRAINING_CHAPTERS,...SCHOOL_CHAPTERS].find(c=>c.id===id)?.sourceDetails||[];
   for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("OneNote – ")&&d.source.includes("0x"),key+": OneNote-kildeanker mangler");}

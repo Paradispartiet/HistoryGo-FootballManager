@@ -958,6 +958,18 @@ export const THEORY_CHAPTERS = [
         "title": "Alex Ferguson – bredde og fleksibilitet innenfor 4-4-2",
         "text": "Originaldisposisjonen knytter Ferguson til kultur og periodisering av spillestil. Premier Leagues taktiske forklaring av 4-4-2 beskriver hvordan hans Manchester United kunne angripe rundt forsvarslinjen med brede midtbanespillere, eller bruke dem i indre korridorer i kombinasjon med indreløpende midtbanespillere. Dette er forskjellige løsninger innenfor samme grunnformasjon. Observer om bredden binder motstanderens back, og hvem som tilbyr støtte når kantspilleren går inn. Den konkrete rollefordelingen må vurderes mot lagets tilgjengelige spillere og motstanderens press. Manusets henvisning til periodisering gir ikke grunnlag for en bestemt historisk treningsuke; portrettet avgrenser seg til dokumentert taktisk variasjon.",
         "source": "Faglig tillegg – Premier League, https://www.premierleague.com/en/news/4243787/the-4-4-2-football-tactics-explained; navn og tema fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "onenote_history_wm_space",
+        "title": "WM – rombevissthet, struktur og fleksibilitet",
+        "text": "OneNotes utvidede historietekst drøfter WM som en endring i hvordan rom, kontroll og risiko organiseres. Den beskriver den tilbaketrukne centre-half, forbindelsene mellom leddene og vingens betydning for bredde og overgang. Dette utdyper PDF-manusets korte omtale av Chapmans Arsenal, uten å erstatte de eksisterende avsnittene om Pozzo og Chapman. Råteksten hevder enkelte steder at WM var historiens første romlige system og opphavet til alle senere systemer. Slike absolutte påstander behandles som manusets historiefortolkning, ikke etablerte fakta. Behold det faglige spørsmålet: hvordan endrer en ekstra spiller bakre ledd lagets mulighet til å beskytte rom og angripe raskt?",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x0003c4c4, 0x0003f694–0x00040bec, 0x0005bfe4–0x0005cdec"
+      },
+      {
+        "id": "onenote_history_skill_collective",
+        "title": "Historiske utviklingslinjer – fra individuell teknikk til kollektiv romforståelse",
+        "text": "OneNote beskriver hvordan utviklingen av systemer gjør bevegelse uten ball, koordinert press og hurtige overganger til deler av fotballferdigheten. Denne tematikken knytter historiekapitlet til bokas pedagogiske avsnitt om samhandling. Manuset bruker også klasse, banekvalitet og kulturelle forhold som mulige forklaringsrammer. Slike rammer må ikke bli faste beskrivelser av hele nasjoners eller samfunnsgruppers spillere. Historiske systemer har endret hvilke ferdigheter og relasjoner som etterspørres, men utviklingen er ikke en enkel, lineær overgang fra individuell improvisasjon til kollektiv intelligens. De navngitte forfatternes fotnoter og direkte sitater i råuttrekket er ikke kontrollert i primærlitteraturen og gjengis ikke som sitater.",
+        "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00046cec, 0x00050c1c, 0x0005165c, 0x001b0fac og 0x007c9ebc"
       }
     ]
   },

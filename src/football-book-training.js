@@ -312,6 +312,12 @@ export const TRAINING_CHAPTERS = [
         "title": "Organisering av økten – aktiv ventetid",
         "text": "Et praktisk notat foreslår at hjelpetrenere holder telling og organiserer en skuddkonkurranse for spillerne som venter. Det sier også at det kan avtales spesialtrening, mens andre kan arbeide med andre oppgaver. Dette er organisatoriske ideer, ikke en ferdig øktplan. Treneren må sørge for at sideaktiviteten ikke kommer i konflikt med hovedøvelsen, og at ansvaret for organisering er tydelig. Notatets personnavn og praktiske meldingsdetaljer er utelatt.",
         "source": "OneNote – Fotballnotater (Den 16.05.2026).one, råuttrekk 0x00005ae4, 0x00005bac og 0x000daf3c"
+      },
+      {
+        "id": "method_seirullo",
+        "title": "Paco Seirul·lo – strukturert trening og preferensielle simuleringssituasjoner",
+        "text": "Barcelonas metodiske fremstilling av strukturert trening beskriver hvordan oppgaver kan utformes med utgangspunkt i spillets konkrete situasjoner og samtidig vektlegge en bestemt del av spillerens utvikling. Begrepet preferensielle simuleringssituasjoner viser til at én type utfordring prioriteres uten å isoleres helt fra resten av spillet. For eksempel kan et retningsbestemt spill gjøre mottak under press til hovedtema samtidig som pasningsvalg, kroppsstilling, relasjoner og fysisk aktivitet inngår. Øvelsen må justeres hvis den ikke skaper situasjonene som skal trenes. Dette er bokas pedagogiske eksempel, ikke en rekonstruert Barcelona-økt. Strukturert trening kan også suppleres med særskilt fysisk arbeid; kampnær trening betyr ikke at alle individuelle øvelser er overflødige.",
+        "source": "Faglig tillegg – Barça Innovation Hub, https://barcainnovationhub.fcbarcelona.com/blog/paco-seirul%C2%B7los-proposal-for-team-sports-training-structured-training-game-spaces-and-preferential-simulation-situations/ ; https://barcainnovationhub.fcbarcelona.com/blog/the-coadjuvant-training-methodology-used-by-fc-barcelona/ ; navn fra Fotballteori.one 0x001a3590"
       }
     ]
   },
@@ -463,6 +469,18 @@ export const TRAINING_CHAPTERS = [
         "title": "Fritt spill, arbeidsoppgaver og kreativ utfoldelse",
         "text": "Trenernotatene kombinerer tydelige arbeidsoppgaver med fri utfoldelse. De fremhever kreativitet, skudd og kantspillernes én-mot-én-muligheter i siste tredel, og sier at fritt spill kan avgrenses når spillerne ikke lenger mestrer oppgaven. Dette er en treneridé om forholdet mellom frihet og veiledning. I gjennomføringen bør det avklares hva spillerne skal løse selv, og når treneren skal gripe inn for å gjøre oppgaven forståelig. Ingen fast terskel for å avbryte fritt spill er angitt i notatene.",
         "source": "OneNote – Fotballnotater (Den 16.05.2026).one, råuttrekk 0x000f9a40, 0x000fa3a8 og 0x00102580"
+      },
+      {
+        "id": "method_dreier",
+        "title": "Sverre Dreier – individuell og relasjonell fotballferdighet",
+        "text": "Boka Fotballferdigheten av Sverre Dreier, Andreas Morisbak og Terje Skarsfjord (2009) behandler individuelle og relasjonelle dimensjoner ved fotballferdighet. I PDF-manusets spillmodell står dessuten en henvisning til Dreier 2009:50 ved spill opp på en møtende spiller. Manuset beskriver avlegg, vending, veggspill og stuss som forskjellige muligheter. Sidehenvisningen er ikke kontrollert i selve læreboka, og formuleringene presenteres derfor som manusets egen bruk av referansen. Den praktiske lærdommen er å vurdere mottakerens valg i sammenheng med pasningsleggeren og tredjemann: en teknisk god handling må også passe medspillernes bevegelse. Treneren kan la spillerne velge mellom løsningene fremfor å kreve samme mønster hver gang.",
+        "source": "Faglig tillegg – bokopplysninger, https://www.akademika.no/hjem-og-fritid/sport-og-friluft/fotballferdigheten/9788272862199 ; https://fotballtreneren.no/2025/10/17/nff-borster-stovet-av-delferdighetene/ ; Fotballteori.one 0x001a3590; Fotballdokumentet v1.pdf, Klarering / Spill opp – på!"
+      },
+      {
+        "id": "method_comparison",
+        "title": "Fem metodiske perspektiver – fra spillidé til samhandling",
+        "text": "Frade, Seirul·lo, Verheijen, Eggen og Dreier gir ulike innganger til treningsarbeidet. En pedagogisk sammenligning kan begynne med én situasjon: laget mister ballen når en indreløper har gått frem. Frades perspektiv gir et spørsmål om hvordan øvelsen uttrykker lagets spillidé; Seirul·los om hvordan rammene fremhever problemet i en representativ situasjon; Verheijens om spillerne kan gjenta handlingene med ønsket kvalitet; Eggens om hvem som gjør medspillernes oppgaver lettere; og Dreiers om individuelle valg og relasjonelle ferdigheter. Dette er bokas redaksjonelle sammenstilling, ikke et felles program utviklet av de fem. Modellene brukes som spørsmål for treneren, ikke som gjensidig utelukkende doktriner eller automatiske prestasjonsbonuser.",
+        "source": "Faglig tillegg – redaksjonell sammenstilling av de fem kildebelagte metodeavsnittene; OneNote-disposisjonen 0x000089ac og 0x001a3590"
       }
     ]
   },
@@ -952,6 +970,12 @@ export const TRAINING_CHAPTERS = [
         "title": "Pop- og kultikonene – sportslig og symbolsk verdi",
         "text": "Manuset setter Gamst Pedersen, Waddle, Beckham, Ibrahimović, Best, Okocha, Neymar og Pogba inn i en fortelling om fotballens popkultur. Det fremhever blant annet reklame, frisyrer, musikk og selviscenesettelse. Dette er en egen tematisk gruppe i originalen, ikke en rangering av sportslige prestasjoner. Skillet mellom spillerens funksjon i laget, publikums identifikasjon og kommersiell synlighet knyttes til bokas drøfting av symbolsk kapital. Detaljer om enkeltavtaler og tilskrevne motiver er ikke selvstendig kontrollert. Spørsmålet for manageren er hvordan man verdsetter både synlige og mindre synlige bidrag uten å forveksle popularitet med fotballfaglig effekt.",
         "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x00280308–0x00284cdc"
+      },
+      {
+        "id": "method_eggen",
+        "title": "Nils Arne Eggen – Godfoten og samhandling",
+        "text": "Godfoten tar utgangspunkt i at spillernes styrker skal komme fellesskapet til gode. Rosenborgs egen omtale av Eggens filosofi fremhever samhandling, å unne medspillere suksess og å dyrke styrkene hos hver enkelt. Fotballfaglig er en relasjon mer enn summen av to individuelle ferdigheter: en god pasningslegger trenger en medspiller som registrerer og utnytter pasningsmuligheten. Tren derfor en konkret forbindelse mellom spillere, for eksempel kantens bredde, indreløperens løp og backens støtte. Evaluer hvordan spillerne gjorde hverandres oppgaver lettere, også når de ikke fikk ballen. Eksemplet er et nytt pedagogisk opplegg basert på filosofien, ikke en historisk Eggen-øvelse eller en ny motorbonus.",
+        "source": "Faglig tillegg – Rosenborg BK, https://www.rbk.no/nyheter/trondheim-bys-hederspris-til-nils-arne-eggen ; Eggen og Nyrønning, Godfoten (1999), https://aschehoug.no/godfoten-1 ; navn fra Fotballteori.one 0x000089ac"
       }
     ]
   },
@@ -1051,6 +1075,18 @@ export const TRAINING_CHAPTERS = [
         "title": "Gascoigne, Van Basten, Giuseppe Rossi og Falcao – skadeavbrudd",
         "text": "Manuset bruker disse karrierene til å reflektere over avbrudd i sportslig utvikling. Tottenham dokumenterer Gascoignes alvorlige kneskade i FA-cupfinalen 1991. Van Basten har selv beskrevet plagene som gjorde at han avsluttet karrieren tidlig. UEFA dokumenterer Giuseppe Rossis skadefravær i 2011 og 2014, mens FIFA bekrefter at Falcao mistet VM i 2014 etter en kneskade. Historiene viser forskjellige forløp, ikke en felles medisinsk forklaring. I Fotballboka knyttes de til forsvarlig belastningsstyring, individuell oppfølging og usikkerheten rundt tilbakekomst. Ingen diagnose utover dokumenterte opplysninger, rehabiliteringsprotokoll eller prognose utledes.",
         "source": "OneNote – Fotballteori (Den 12.06.2026).one, råuttrekk 0x001a4e04–0x001a510c, 0x001a808c–0x001a8f8c, 0x001aaa3c–0x001aae24; Tottenham, https://www.tottenhamhotspur.com/news/989049/spurs-vs-newcastle-boot-in-both-camps-paul-gascoigne ; BBC, https://www.bbc.co.uk/sport/football/54816131 ; UEFA, https://www.uefa.com/uefaeuropaleague/news/0219-0e8c152c8589-8809a1eacaaf-1000--fiorentina-lose-rossi-to-another-knee-injury/ ; FIFA, https://inside.fifa.com/news/five-captains-in-the-spotlight"
+      },
+      {
+        "id": "method_frade",
+        "title": "Vítor Frade – taktisk periodisering",
+        "text": "Taktisk periodisering tar utgangspunkt i hvordan laget ønsker å spille. Frade beskriver spillideen som det styrende utgangspunktet for treningsprosessen: øvelsenes detaljer skal bidra til den ønskede helheten. Fysisk, teknisk, taktisk og mental forberedelse ses derfor i sammenheng. En praktisk anvendelse kan være å velge et problem i eget restforsvar og utforme en spilløvelse som gjentar nettopp dette problemet med relevante motstandere og medspillere. Belastningen må samtidig tilpasses kampkalender og spillernes tilstand. En systematisk oversikt fra 2020 fant ikke eksperimentelle studier som dokumenterte metodens effekt; dette er en begrensning i kunnskapsgrunnlaget, ikke bevis for at metoden er ineffektiv. Ingen bestemt ukesyklus eller overlegen effekt tilskrives Frade her.",
+        "source": "Faglig tillegg – Frades egen redegjørelse, https://www.tacticalperiodisation.com/2024/04/24/professor-vitor-frade-clarifica-professor-vitor-frade-clarifies-3/ ; systematisk oversikt (2020), https://doi.org/10.5114/hm.2020.95329 ; navn fra Fotballteori.one 0x000089ac og 0x001a3590"
+      },
+      {
+        "id": "method_verheijen",
+        "title": "Raymond Verheijen – fotballhandlinger, kvalitet og belastning",
+        "text": "Verheijen beskriver fotballform gjennom handlinger i spillet, blant annet eksplosive handlinger og hyppigheten av dem. Han fremhever sammenhengen mellom treningskvalitet, tretthet og muligheten til å gjenta krevende handlinger. I en fotballøvelse bør treneren derfor følge både om spillerne løser den taktiske oppgaven og om utførelsen svekkes når belastningen øker. Kortere serier eller lengre pauser kan være aktuelle justeringer når kvaliteten faller; avgjørelsen må bygge på øvelsens mål og individuell belastning. Dette er en faglig anvendelse av perspektivet, ikke Verheijens komplette periodiseringsprogram. OneNote-manusets kritikk av repetisjoner uten kampoverføring beholdes som en metodisk problemstilling, ikke som en dokumentert avvisning av all isolert ferdighetstrening.",
+        "source": "Faglig tillegg – Verheijen-intervju, https://timesofindia.indiatimes.com/sports/football/interviews/everything-has-to-be-football-related-raymond-verheijen/articleshow/18517603.cms ; https://offsiderulepodcast.com/2015/07/16/interview-fitness-coach-raymond-verheijen-on-why-chelsea-are-better-prepared-than-manchester-united-or-arsenal/ ; Fotballteori.one 0x00078f44 og 0x001a3590"
       }
     ]
   }
