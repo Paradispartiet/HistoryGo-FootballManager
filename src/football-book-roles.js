@@ -746,6 +746,18 @@ export const ROLE_CHAPTERS = [
         "title": "Tom Lund – teknikk, oversikt og kreativitet",
         "text": "Lillestrøm beskriver Tom Lund som en spiller med fremragende teknikk, oversikt og spilleglede. Han vant både serie- og cupmesterskap med klubben. Faglig brukes han her til å undersøke hvordan en skapende spiller kan kombinere egen ballbehandling med vurdering av medspillernes muligheter. Ved analyse av historisk kampfilm: registrer hvilke alternativer som er tilgjengelige før mottak, hvordan førsteberøringen endrer situasjonen, og om neste handling gir laget gjennombrudd. Dette er et nytt observasjonsopplegg, ikke dokumenterte kampmønstre for Lund.",
         "source": "Faglig tillegg – Lillestrøm SK, https://www.lsk.no/nyheter/tusen-takk-for-alt-tommy ; Store norske leksikon, https://snl.no/Tom_Lund; personnavn fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_de_bruyne",
+        "title": "Kevin De Bruyne – halvrom, ballbane og gjennombrudd",
+        "text": "Originalmanuset beskriver Guardiolas brede sidespisser som et middel til å åpne rom for De Bruyne og Silva som to tiere. Premier Leagues taktiske analyser av Manchester City viser hvordan De Bruyne finner rom utenfor sentrum, og kan levere gjennombruddspasninger og innlegg fra disse posisjonene. Faglig ligger utfordringen i forholdet mellom pasningsvinkel, ballbane og mottakerens fart: en tidlig pasning bak linjen har en annen funksjon enn et hardt innlegg gjennom målområdet. Observasjonsoppgave: når en kant binder backen bredt og De Bruyne får ball i halvrommet, vurder om stopperen må støte, om spissen kan angripe mellomrommet, og om det finnes sikring ved balltap. Dette er en analyseramme, ikke en fast rute for Guardiola-lag.",
+        "source": "Faglig tillegg – PDF linje 3899–3903; Premier League, https://www.premierleague.com/en/news/2915555 ; https://www.premierleague.com/en/news/4019681; personnavn og eventuelle mønstre fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_messi",
+        "title": "Lionel Messi – kreativitet, ballnær støtte og brudd med strukturen",
+        "text": "Manuset plasserer Messi sammen med Maradona og Zidane i drøftingen av geniet innenfor en struktur. FIFA Training Centres analyser av Argentina i VM 2022 viser hvordan Messi og midtbanespillerne kunne søke mot ballen, samtidig som andre opprettholdt bredde og dybde; hans assist mot Nederland og Kroatia er eksempler på dribling og pasningsvalg. Faglig er det avgjørende å skille mellom lokal overtallsskaping og rommet som frigjøres lenger unna. En kreativ spiller kan møte, binde en forsvarer eller føre ballen fremover, men trenger samtidige tilbud for neste handling. Observer hvem som holder bredden, hvem som truer bakrom, og hvem som sikrer når en dribling mislykkes. Dette er ikke et krav om å kopiere Messis individuelle bevegelsesmønster.",
+        "source": "Faglig tillegg – PDF Del V, linje 4624–4645; FIFA Training Centre, https://www.fifatrainingcentre.com/en/game/game-analysis/world-class-tactics/argentina--ball-proximity-in-possession.php ; https://www.fifatrainingcentre.com/en/fwc2022/physical-analysis/using-case-studies-to-reveal-the-reasons-why-various-tactical-roles-exert-themselves-physically-during-world-cup-matches.php; personnavn og eventuelle mønstre fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -858,6 +870,18 @@ export const ROLE_CHAPTERS = [
         "title": "Stanley Matthews og Garrincha – dribling som taktisk virkemiddel",
         "text": "UEFA fremhever Matthews' dribleferdigheter som kantspiller, mens FIFA har kampklipp av Garrincha i VM 1962. Bruk disse historiske casene til å undersøke når dribling skaper overtall eller åpner en pasningsvinkel. Se etter forsvarerens tyngdeoverføring, tempoendring, avstanden til støtte og muligheten for innlegg eller videre gjennombrudd. Dette er en analyseoppgave, ikke et utsagn om at begge spillerne utførte identiske finter. Den videre kollektive handlingen avgjør hvor nyttig en vellykket dribling blir.",
         "source": "Faglig tillegg – UEFA, https://www.uefa.com/news-media/news/021e-0f8a84ac44d9-bf9f306f255c-1000--the-wizard-of-dribble-sir-stanley-matthews/ ; FIFA, https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/garrincha-goal-brazil-chile-1962; personnavn fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_okocha",
+        "title": "Jay-Jay Okocha – finter, dribling og neste pasning",
+        "text": "Okocha står som teknisk spesialist i originaldisposisjonen. FIFA dokumenterer hans dribleprestasjon mot Italia i VM 1994 og har publisert kampklipp der dribling følges av en vektet pasning. Bruk caset til å skille mellom finte som endrer forsvarerens forventning, retningsforandring som skaper separasjon, og neste handling som faktisk utnytter fordelen. I en læringsøvelse kan en kant få valg mellom å passere en forsvarer, spille en støttepasning eller lokke press før en gjennombruddspasning. Evaluer situasjonen som oppstår etter finten, ikke antall finter i seg selv. Det finnes ingen måling av Okochas tekniske egenskaper i originalmanuset.",
+        "source": "Faglig tillegg – PDF Del II og linje 735–737; FIFA, https://www.fifa.com/en/news/articles/jay-jay-okocha-usa-1994-nigeria-italy ; https://collect.fifa.com/collectible/2843034856; personnavn og eventuelle mønstre fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_neymar",
+        "title": "Neymar – improvisasjon og kombinasjoner i trangt rom",
+        "text": "Manuset nevner Neymar ved improvisasjon og kulturelle læringsmiljøer, men dokumenterer ikke hele treningsbakgrunnen hans. FIFA viser målet mot Kroatia i VM 2022 som et eksempel på et kollektivt angrep avsluttet av Neymar etter kombinasjoner og en passering av keeperen. Faglig illustrerer dette at en dyktig dribler også må kunne spille fra seg ballen og fortsette bevegelsen. Observer hvordan korte støttepasninger endrer forsvarernes posisjoner, når en spiller kan akselerere videre, og om ballføreren bør velge pasning, finte eller egen avslutning. Det redaksjonelle eksemplet er ikke bevis for at en bestemt oppvekstform alene skaper kreativitet.",
+        "source": "Faglig tillegg – PDF linje 4050–4058 og 4155–4160; FIFA, https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/neymar-goal-brazil-2022-croatia?searchOverlay=1 ; https://collect.fifa.com/collectible/1093913151; personnavn og eventuelle mønstre fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -965,6 +989,12 @@ export const ROLE_CHAPTERS = [
         "title": "Pelé – kreativitet og avslutning i et kollektiv",
         "text": "FIFA dokumenterer Pelés gjennombrudd som 17-åring i VM 1958. Originalmanuset navngir ham som epokeikon og eksempel ved blant annet spenst og heading. En analyse av historisk kampfilm kan undersøke hvordan han posisjonerer seg i forhold til medspillerne, hvordan mottak og ballbehandling forbereder neste handling, og når han beveger seg inn i avslutningsrom. Dette er en ny faglig analyseoppgave, ikke en måling av Pelés fysiske kapasitet. Caset knytter individuell kreativitet til bokas historiske drøfting av Brasils kollektive organisering.",
         "source": "Faglig tillegg – FIFA, https://www.fifa.com/pt/tournaments/mens/worldcup/articles/brasil-suecia-final-copa-1958 ; https://www.fifa.com/en/articles/a-tribute-to-pele-brazil-santos-new-york-cosmos-legend-fifa-world-cup; personnavn fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_bergkamp",
+        "title": "Dennis Bergkamp – førsteberøring og opp–tilbake–gjennom",
+        "text": "Originalmanuset bruker Bergkamp i Wengers Arsenal som eksempel på opp–tilbake–gjennom: spissen møter, legger igjen til en medspiller og frigjør muligheten for Henrys gjennomløp. Den konkrete historiske sekvensen er ikke uavhengig dokumentert her. Premier Leagues portrett av Bergkamp og hans egen forklaring av målet mot Leicester i 1997 gir et separat kildebelagt eksempel på samordning av løp, kontroll og avslutning. Førsteberøringen kan enten beskytte ballen, legge den til rette for neste pasning eller fjerne en forsvarer. Observasjonsoppgave: vurder forsvarerens avstand og retning før mottak, muligheten for støtte og om neste handling bør være egen vending eller pasning videre. I en opp–tilbake–gjennom-kombinasjon er den møtende spilleren ikke nødvendigvis den som får siste pasning.",
+        "source": "Faglig tillegg – PDF linje 3458–3467; Premier League, https://www.premierleague.com/en/news/2147353 ; https://www.premierleague.com/en/news/2737302; personnavn og eventuelle mønstre fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -1153,6 +1183,24 @@ export const ROLE_CHAPTERS = [
         "title": "Giuseppe Meazza og Eusébio – avslutninger i forskjellige epoker",
         "text": "Det italienske fotballforbundet dokumenterer Meazza som verdensmester i 1934 og 1938. FIFA beskriver Eusébios ni mål i VM 1966, inkludert fire i kvartfinalen mot Nord-Korea. Bruk de historiske holdepunktene til å velge kampmateriale for analyse av avslutningsrom, bevegelse og teknikk. Målrekorder kan ikke alene vise om spilleren var best til å løpe i bakrom, kombinere eller avslutte under press. Sammenligning på tvers av epoker må også ta hensyn til lagets organisering og kampens betingelser.",
         "source": "Faglig tillegg – FIGC, https://www.figc.it/it/full-html?path=%2Fmuseo-del-calcio%2Fhall-of-fame%2Friconoscimenti-alla-memoria%2Fgiuseppe-meazza ; FIFA, https://www.fifa.com/en/tournaments/mens/worldcup/articles/portugal-korea-dpr-eusebio-england-1966; personnavn fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_van_basten",
+        "title": "Marco van Basten – avslutning før forsvar og keeper rekker å justere",
+        "text": "Originalmanuset nevner Van Basten som avslutter og som mottaker ved tredjemannsbevegelse i Sacchis Milan. Den konkrete historiske pasningssekvensen er ikke verifisert. UEFA dokumenterer derimot volleyavslutningen fra skrå vinkel etter Arnold Mührens innlegg i EM-finalen 1988. Van Basten beskriver selv avveiningen mellom å kontrollere ballen og avslutte direkte. Faglig er caset egnet til å undersøke om ballbanen, kroppsstillingen, keeperens posisjon og forsvarspresset gir grunnlag for direkte skudd eller om mottak først er bedre. En vanskelig vellykket avslutning er ikke ensbetydende med at det samme valget alltid har høyest forventet verdi.",
+        "source": "Faglig tillegg – PDF linje 3443–3447; UEFA, https://www.uefa.com/uefaeuro/history/news/0252-0ce2a8e3dd0f-2b753b1365a3-1000--marco-van-basten-on-euro-1988-and-that-volley/ ; https://www.uefa.com/uefaeuro/history/news/025d-0f859f66fcba-c8d3aa08dfa3-1000--classics-soviet-union-vs-netherlands-1988/; personnavn og eventuelle mønstre fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_shearer",
+        "title": "Alan Shearer – gjentatte løp, duell og avslutningsberedskap",
+        "text": "Manuset fremhever løp uten ball, blindside og angrep av rom bak linjen ved å vise til Shearer. Det oppgir imidlertid 13 løp per sjanse ett sted og 13 løp per ballkontakt et annet sted. Tallet er derfor utelatt som empirisk påstand. Premier Leagues historiske kampklipp viser blant annet en scoring mot Portsmouth der Shearer vinner en luftduell, mottar retur fra en medspiller og kontrollerer ballen før avslutning. Caset kan brukes til å studere hvordan en spiss forbereder neste handling allerede i duellen. I analysen bør også løp som ikke får pasning registreres, dersom de binder forsvarere eller skaper rom for andre. Ingen fast norm for antall løp eller spissverdi innføres.",
+        "source": "Faglig tillegg – PDF linje 2199–2205 og 2446–2451; Premier League, https://www.premierleague.com/en/news/846527 ; https://www.premierleague.com/en/news/845999; personnavn og eventuelle mønstre fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_haaland",
+        "title": "Erling Braut Haaland – bakromstrussel og angrep av avslutningssoner",
+        "text": "Haaland er navngitt i originaldisposisjonen uten et utfylt portrett. Premier Leagues analyse fra 2022 beskriver hvordan Manchester City tilpasset oppbygging og leveringer etter at Haaland ble lagets spiss, blant annet gjennom De Bruynes innlegg. FIFA Training Centre beskriver løp bak siste forsvarsledd som et eget mottaksmønster. Faglig er trusselen todelt: spissen kan selv motta bak linjen, eller påvirke forsvarslinjens dybde slik at en medspiller får rom foran den. Ved innlegg må han vurdere leveringsbane, stopperens orientering og tidspunktet for å angripe rommet. Observer løp mot første eller bakre sone og om spilleren justerer seg etter ballførerens muligheter. Dette er en ny analyseoppgave, ikke dokumentasjon av alle Haalands individuelle løpsmønstre.",
+        "source": "Faglig tillegg – PDF Del II, linje 273–276; Premier League, https://www.premierleague.com/en/news/2915555 ; FIFA Training Centre, https://www.fifatrainingcentre.com/en/resources-tools/football-language/in-possession/movement-to-receive/index.php; personnavn og eventuelle mønstre fra Fotballdokumentet v1.pdf"
       }
     ]
   }

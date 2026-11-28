@@ -219,6 +219,10 @@ for(const c of PHASE_CHAPTERS){
 }
 check(bookHtml.includes('id="footballBookPhases"'),"Kampfasene ikke tilgjengelige i spillet");
 check(SET_PIECE_CHAPTERS.length===5,"Dødballkapitler mangler");
+for(const [id,expected] of Object.entries({"link_strikers":["portrait_bergkamp"],"ten_creator":["portrait_de_bruyne","portrait_messi"],"wingers":["portrait_okocha","portrait_neymar"],"finishing_press":["portrait_van_basten","portrait_shearer","portrait_haaland"],"third_man":["portrait_bergkamp_henry_debruyne_haaland"]})){
+  const sections=[...ROLE_CHAPTERS,...THEORY_CHAPTERS].find(c=>c.id===id)?.sourceDetails||[];
+  for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("Faglig tillegg – ")&&d.source.includes("https://"),key+": teknisk personcase mangler");}
+}
 for(const [id,expected] of Object.entries({"ten_creator":["portrait_tom_lund"],"eight_press":["portrait_leonhardsen"],"finishing_press":["portrait_strandli","portrait_meazza_eusebio"],"wingers":["portrait_mathews_garrincha"],"formations":["portrait_meredith_mcgregor"],"link_strikers":["portrait_pele"],"free_kicks":["portrait_juninho_beckham_pirlo"],"transition_attack":["portrait_drillo"]})){
   const sections=[...ROLE_CHAPTERS,...THEORY_CHAPTERS,...SET_PIECE_CHAPTERS,...PHASE_CHAPTERS].find(c=>c.id===id)?.sourceDetails||[];
   for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("Faglig tillegg – ")&&d.source.includes("https://"),key+": faglig personcase mangler");}

@@ -416,3 +416,19 @@ Dette er en prioritert oversikt over uutfylte eksempler, ikke komplette nye port
 | link_strikers | portrait_pele | FIFA, https://www.fifa.com/pt/tournaments/mens/worldcup/articles/brasil-suecia-final-copa-1958 ; https://www.fifa.com/en/articles/a-tribute-to-pele-brazil-santos-new-york-cosmos-legend-fifa-world-cup |
 | free_kicks | portrait_juninho_beckham_pirlo | UEFA, https://www.uefa.com/uefachampionsleague/news/0271-142ab5eaac54-565b3cc3cec4-1000--the-best-free-kicks-in-uefa-champions-league-history/ ; https://www.uefa.com/uefachampionsleague/news/01b2-0e6d65fc4647-b5a0bb928927-1000--juninho-strike-leaves-lyon-on-top/ ; FourFourTwo, https://www.fourfourtwo.com/features/best-free-kick-taker-ever-juninho-pernambucano-how-he-got-so-good |
 | transition_attack | portrait_drillo | Store norske leksikon, https://snl.no/Egil_Olsen ; UEFA, https://www.uefa.com/european-qualifiers/news/01d5-0f85a69d71f2-db2bcddf3c1c-1000--olsen-returns-hungry-for-more/ |
+
+## Bolk 19 – tekniske og taktiske angrepsprofiler
+
+9 fagtillegg i eksisterende rolle- og teorikapitler. Åtte navngitte spillerprofiler samt én sammenligning av rollepar. Originalmanusets konkrete opp–tilbake–gjennom (Bergkamp), to tiere (De Bruyne), tredjemannsbevegelse (Van Basten) og Shearers løp er åpnet på nytt. Den motstridende Shearer-statistikken (13 løp per sjanse / per ballkontakt) brukes ikke som fakta. Historiske eksempler avgrenses mot observerbare kampklipp og analyser fra FIFA, FIFA Training Centre, UEFA og Premier League. Observasjonsoppgaver og rolleparsammenligning er nye pedagogiske anvendelser, ikke motorregler eller dokumenterte historiske ruter. Originalavsnitt og eksisterende illustrasjoner er beholdt. Full CI og OneNote-kontroll gjenstår.
+
+| Kapittel | Underavsnitt | Kildeanker |
+|---|---|---|
+| link_strikers | portrait_bergkamp | PDF linje 3458–3467; Premier League, https://www.premierleague.com/en/news/2147353 ; https://www.premierleague.com/en/news/2737302 |
+| ten_creator | portrait_de_bruyne | PDF linje 3899–3903; Premier League, https://www.premierleague.com/en/news/2915555 ; https://www.premierleague.com/en/news/4019681 |
+| ten_creator | portrait_messi | PDF Del V, linje 4624–4645; FIFA Training Centre, https://www.fifatrainingcentre.com/en/game/game-analysis/world-class-tactics/argentina--ball-proximity-in-possession.php ; https://www.fifatrainingcentre.com/en/fwc2022/physical-analysis/using-case-studies-to-reveal-the-reasons-why-various-tactical-roles-exert-themselves-physically-during-world-cup-matches.php |
+| wingers | portrait_okocha | PDF Del II og linje 735–737; FIFA, https://www.fifa.com/en/news/articles/jay-jay-okocha-usa-1994-nigeria-italy ; https://collect.fifa.com/collectible/2843034856 |
+| wingers | portrait_neymar | PDF linje 4050–4058 og 4155–4160; FIFA, https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/neymar-goal-brazil-2022-croatia?searchOverlay=1 ; https://collect.fifa.com/collectible/1093913151 |
+| finishing_press | portrait_van_basten | PDF linje 3443–3447; UEFA, https://www.uefa.com/uefaeuro/history/news/0252-0ce2a8e3dd0f-2b753b1365a3-1000--marco-van-basten-on-euro-1988-and-that-volley/ ; https://www.uefa.com/uefaeuro/history/news/025d-0f859f66fcba-c8d3aa08dfa3-1000--classics-soviet-union-vs-netherlands-1988/ |
+| finishing_press | portrait_shearer | PDF linje 2199–2205 og 2446–2451; Premier League, https://www.premierleague.com/en/news/846527 ; https://www.premierleague.com/en/news/845999 |
+| finishing_press | portrait_haaland | PDF Del II, linje 273–276; Premier League, https://www.premierleague.com/en/news/2915555 ; FIFA Training Centre, https://www.fifatrainingcentre.com/en/resources-tools/football-language/in-possession/movement-to-receive/index.php |
+| third_man | portrait_bergkamp_henry_debruyne_haaland | PDF linje 3458–3467; Premier League, https://www.premierleague.com/en/news/2785853 ; https://www.premierleague.com/en/news/2915555 |

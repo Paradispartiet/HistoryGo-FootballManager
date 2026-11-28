@@ -360,6 +360,12 @@ export const THEORY_CHAPTERS = [
         "title": "Oppspill – feilvendt spiss og opp–tilbake–gjennom",
         "text": "En feilvendt spiss har i manuset tre hovedvalg: vende unna motstanderen, flikke eller stusse videre i bakrom, eller legge igjen ballen. Når dyp sentral midtbane spiller på møtende spiss, må indreløperne gi støttevinkler. Opp–tilbake–gjennom betyr at støttespilleren spiller videre til bakrom eller kantløp; opp–tilbake–vende betyr vinklet spillvending mot motsatt side. Manuset omtaler også Flo-pasningen som en høy, luftig ball mot lavt forsvar, som gir medspillere tid til å posisjonere seg. Dette er manusets beskrevne variant, ikke en historisk dokumentasjon av Drillos Flo-pasning.",
         "source": "Fotballdokumentet v1.pdf – 3.2 Relasjonelle angrepsferdigheter / Oppspill / Spill av press"
+      },
+      {
+        "id": "portrait_bergkamp_henry_debruyne_haaland",
+        "title": "Rollepar – møtende spiss og gjennomløper kontra pasningslegger og boksangriper",
+        "text": "Originalmanusets Bergkamp–Henry-eksempel og Premier Leagues analyse av De Bruyne–Haaland gir to ulike utgangspunkter for å studere angrepsrelasjoner. I opp–tilbake–gjennom møter en spiller og neste pasning kan frigjøre en gjennomløper. I en innleggssituasjon kan en pasningslegger fra halvrommet finne en spiss som angriper målområdet. Mønstrene har felles krav til timing, støtte og forsvarerens beslutning, men er ikke identiske. Tren begge mot en aktiv forsvarslinje: la ballfører velge mellom å spille tidlig, bruke støtte eller beholde ballen. Vurder om spillere uten ball skaper en reell fordel, og om laget har balanse ved tap. Eksemplene er pedagogiske sammenligninger, ikke nye historiske kamprekonstruksjoner eller relasjonsbonuser.",
+        "source": "Faglig tillegg – PDF linje 3458–3467; Premier League, https://www.premierleague.com/en/news/2785853 ; https://www.premierleague.com/en/news/2915555; personnavn og eventuelle mønstre fra Fotballdokumentet v1.pdf"
       }
     ]
   },
