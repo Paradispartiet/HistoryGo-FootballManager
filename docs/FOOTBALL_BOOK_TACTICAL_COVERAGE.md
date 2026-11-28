@@ -46,3 +46,14 @@ Ni avsnitt i `transition_attack`, `transition_defend` og `rest_defence`: fem del
 - Prioriter en felles beslutning om egen første handling etter dokumentert ballvinning, først der relevant rom- og motspillgrunnlag finnes. Deretter konkrete lokale overtall og rekalibrering. Ingen ny parallell fase, ingen påtvunget 15-sekunders kontring eller universell 5–7-sekunders gjenvinningsregel. Manglende data skal ikke gi en ny bonus eller straff.
 
 Eksisterende overgangs- og kontrolltesters assertions er inspisert, ikke kjørt på nytt i denne bolken. Ingen motorendring. Neste bolk: dødballer, inkludert eget og motstanders angrep, leveringsvarianter og andreball.
+
+## Bolk 4 – dødballer
+
+13 fagavsnitt i fem dødballkapitler vurdert: fem delvis dekket, fem uavklarte, tre forklarende spillerportretter. Samlet vurdert 68/287.
+
+- `resolveOpponentSetPiece` har tre terminalutfall: første kontakt for motstander (+0,08 xG mot), andreball (+0,04) eller avverget (-0,03). Dette er avgrensede spillheuristikker, ikke empiriske sannsynligheter. Keeper/stoppere inngår i første port, midtbaneskjerm og restforsvar i andre. Etter klarering er første port eksplisitt utelatt. Én trekning og ett terminalt faseutfall. Kampmotorens dødballfase har prioritet fremfor andre spesialistfaser.
+- Eksisterende managerhendelser har valg om disiplin, tett markering, kompakt boks, presse ut og rask kontring. De er generiske beslutninger; de beviser ikke egen, detaljert dødballorganisering. `getTacticalKnowledgeForTactic` omtaler korte cornere ved possession/structured_build_up; det er et forklaringslag, ikke et cornerleveringsvalg.
+- Undersøkt `football_tactics.json`, `football-tactical-sequences.js`, `football-matchday-engine.js`, `football-player-stats.js`, `football-tactical-knowledge.js` og dødballspesialistfasen. Ingen dokumentert egen valgbare nærstolpe/bakre stolpe/kortcorner-varianter, separate frisparkleveringer, straffesparkduell eller offensiv innkasttrekant i disse filene. Dette er ikke en uttømmende negativ søkekontroll av hele repoet. Status er derfor unverified, ikke missing.
+- Prioriter verifisert dødballhendelse og enkel, konkret oppgavefordeling for begge lag, før leveringsvarianter og sekundære utveier. Viderefør første kontakt → nedfall → eventuell kontrollert overgang uten dobbel xG. Før keeper-/straffesparkvalg må eksisterende data og regelgrunnlag verifiseres. Ingen personnavnbonus, ulovlig sperring eller fast straffesparkfordel basert på manusets preferanser.
+
+Ingen motorendring, ingen ny sjanseberegning. Ingen eksterne kilde-URL-er i boka verifisert i denne bolken. Neste bolk: spillerroller og relasjoner, deretter trening og spillerutvikling, historie og kultur. Basistekst og klubbkapitler kartlegges separat.

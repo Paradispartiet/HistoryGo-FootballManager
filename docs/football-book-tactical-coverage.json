@@ -115,6 +115,11 @@
       "symbol": "resolveRegainCounterpress",
       "test": "scripts/simulate-own-press-v6.mjs",
       "scope": "Egen ballvinning mot dokumentert kollektivt motpress: støtte, bredde og fremre mottaker avgjør om ballen beholdes eller mistes igjen, uten ny trekning."
+    },
+    "K": {
+      "file": "src/football-matchday-sequence-v8.js",
+      "symbol": "resolveOpponentSetPiece",
+      "scope": "Motstanderens dokumenterte generelle dødballmønster ved eksisterende kamphendelser: keeper/stoppere påvirker første kontakt, sentral skjerm påvirker nedfall. Etter klarering spilles ikke første duell på nytt. Én trekning, ett terminalt utfall."
     }
   },
   "entries": [
@@ -1482,79 +1487,135 @@
       "id": "corner_low_delivery",
       "chapterId": "attacking_corners",
       "title": "Offensiv corner – lav bue og målrettet levering",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Bokas leveringspreferanse og korte cornere er forklaringsstoff; undersøkt taktikkdata har ikke egne cornervarianter. Motstanderens generelle dødballfase skiller ikke lav bue, inn-/utskru eller nær/bakre stolpe.",
+      "nextCheck": "Kontroller egne dødballutløsere, leverings- og mottakerdata før eventuell mekanikk. Lav bue skal ikke gi automatisk bonus."
     },
     {
       "id": "corner_disguise",
       "chapterId": "attacking_corners",
       "title": "Corner – oppstilling, bevegelse og kamuflering",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Ingen dokumentert separat corneroppstilling eller kamuflert løpsvariant i de undersøkte motorene.",
+      "nextCheck": "Kartlegg spilleroppgaver og motstanders dekning før variantvalg. Lovlig bevegelse og separasjon; ikke ulovlig sperring som taktisk fordel."
     },
     {
       "id": "free_kick_targets",
       "chapterId": "free_kicks",
       "title": "Offensivt frispark – tre leveringsmål og skjulte varianter",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Motstanderens generelle dødballfase omfatter bokslevering, men ikke dokumenterte valg mellom direkte skudd, kort pasning og tre leveringsmål ved egne frispark.",
+      "nextCheck": "Undersøk om en egen frisparkhendelse kan knyttes til eksisterende sjanseflyt med avstand/vinkel og direkte/indirekte status. Ikke anta mål fra indirekte frispark uten ny berøring."
     },
     {
       "id": "penalty_kicker",
       "chapterId": "free_kicks",
       "title": "Straffespark – avslutningsvalg og ro",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Sjansegeneratoren bruker xG og trekning; det er ikke påvist en separat straffesparkrute med skyttervalg og dokumentert keeperdata i de undersøkte filene.",
+      "nextCheck": "Kontroller egne og motstanders straffehendelser samt valg av skytter, avslutning og keeper. Ingen fast fordel for høy/lav plassering uten underlag."
     },
     {
       "id": "penalty_keeper",
       "chapterId": "free_kicks",
       "title": "Straffespark – keeperens observasjon og timing",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Keeperfit påvirker generell dødballkontakt, men straffesparkets særskilte reaksjon/timing er ikke påvist.",
+      "nextCheck": "Kontroller eksisterende keeper-/straffesparkdata. Ikke prediker hjørne fra fot eller bruk udokumenterte redningsprosentverdier."
     },
     {
       "id": "portrait_juninho_beckham_pirlo",
       "chapterId": "free_kicks",
       "title": "Juninho, Beckham og Pirlo – frispark som teknisk spesialisering",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Pedagogisk spillergruppe for å studere leveringsbane og spesialisering. Ingen egen historisk bonus er nødvendig.",
+      "nextCheck": "Koble til generiske frisparkvalg dersom de implementeres; ikke bruk spillerens navn som ferdighetsbevis."
     },
     {
       "id": "portrait_rivelino",
       "chapterId": "free_kicks",
       "title": "Rivelino – frisparkets leveringsbane",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Historisk/pedagogisk eksempel på frisparkets leveringsbane.",
+      "nextCheck": "Ingen rekonstruksjon av fysisk treff eller automatisk bonus. Generiske situasjonsvalg undersøkes i free_kick_targets."
     },
     {
       "id": "restart_lock",
       "chapterId": "throw_ins",
       "title": "Lås av ved motstanderens igangsetting",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "P",
+        "G"
+      ],
+      "implemented": "Frontpress, kollektiv sikring og midtbanefelle er simulert for avgrensede kampplaner. Ikke påvist som egen målspark-/innkast-/frisparkutløser.",
+      "nextCheck": "Undersøk igangsettingstyper, mottakeralternativer og press ved sidelinje; skille generell presskjede fra konkret innkastregel."
     },
     {
       "id": "corner_defence_posts",
       "chapterId": "marking_blocks",
       "title": "Defensiv corner – mann-mot-mann og stolpeansvar",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "K"
+      ],
+      "implemented": "Keeper og to stoppere påvirker første kontakt; midtbane påvirker andreball. Manager kan velge tett markering i generell dødballhendelse.",
+      "nextCheck": "Kontroller egne valg mellom sone, mann og blanding, stolpeansvar og faktisk løpsdekning. Ingen slik eksplisitt organisering påvist i dødballfasen."
     },
     {
       "id": "restart_organize",
       "chapterId": "marking_blocks",
       "title": "Defensive dødballer – keeperens organisering og konkrete beskjeder",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "K",
+        "A"
+      ],
+      "implemented": "Keeperfit har effekt i dødballkontakt og relevante dokumenterte reaksjonsegenskaper påvirker avgrensede forsvarsoppgaver andre steder.",
+      "nextCheck": "Undersøk keeperens konkrete valg om å gå ut/holde linje, mur og kommunikasjon. Ikke likestill keeperfit med organisering."
     },
     {
       "id": "portrait_ramos",
       "chapterId": "marking_blocks",
       "title": "Sergio Ramos – stopperens offensive dødballoppgave",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [],
+      "implemented": "Pedagogisk spillerportrett om stopperens offensive løp og heading.",
+      "nextCheck": "Koble til generisk dødballrolle og restforsvar, ikke personnavnbonus eller vinnermentalitet."
     },
     {
       "id": "offensive_marking_restart",
       "chapterId": "second_ball_security",
       "title": "Offensiv markering – sikring mens eget lag har ballen",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "K",
+        "U",
+        "M"
+      ],
+      "implemented": "Restforsvar og sentral nedfallsdekning påvirker avgrensede motorutfall; dedikert skjerm kan holde rom i andre faser.",
+      "nextCheck": "Undersøk hvem som markerer motstanderens fremre utløp under egen dødball og keeperigangsetting; ikke bruk rollefit som bevis for konkret posisjon."
     },
     {
       "id": "clearance_counter_restart",
       "chapterId": "second_ball_security",
       "title": "Klarering etter dødball – fra forsvar til angrep",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "K",
+        "B",
+        "Q",
+        "T"
+      ],
+      "implemented": "Dødballforsvaret skiller første kontakt fra nedfall. Generisk managerhendelse kan velge rask kontring; kontring etter avverget innlegg og vunnet andreball finnes separat.",
+      "nextCheck": "Koble en bekreftet dødballklarering til kontrollert frigjøring med eksisterende overgangslogikk. K gir ikke egen xG-for-kontring; B/Q er ikke bevis for dødballspesifikk kontring. Kontroller manusets konkrete spiss/back/vingmønster."
     },
     {
       "id": "analysis_before_after",
