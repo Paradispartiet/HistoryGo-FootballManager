@@ -562,6 +562,12 @@ export const PHASE_CHAPTERS = [
         "title": "Første handling etter ballvinning",
         "text": "Manuset fremhever at ballvinneren kan ha begrenset oversikt etter duellen. En støttepasning til en spiller med bedre utsyn kan derfor forberede gjennombruddet. Det beskriver også en alternativ handling: før ballen inn i rommet foran deg og la diagonalløp komme opp på siden. Når motstanderen faller av og komprimerer, kan korridorene og bakrommet på sidene bli tilgjengelige. Begge utveier står i originalmaterialet; de skal ikke erstattes av en absolutt regel om støttepasning eller direkte gjennombrudd.",
         "source": "Fotballdokumentet v1.pdf – 2. Defensivt – Omstilling / Ballvinning, linje 1635–1654"
+      },
+      {
+        "id": "portrait_drillo",
+        "title": "Egil Olsen – direkte overgangsspill som analysemodell",
+        "text": "Store norske leksikon og UEFA dokumenterer Egil Olsens periode som norsk landslagstrener og kvalifiseringene til VM 1994 og 1998. Originalmanuset navngir Drillo ved direkte overgangsspill. Det faglige spørsmålet er ikke om alle pasninger skal slås langt, men når laget kan utnytte motstanderens ubalanse raskere enn den rekker å reorganisere seg. Undersøk første handling etter ballvinning, hvilke spillere som kan løpe foran ballen, og når en støttepasning er et bedre valg. Dette er en analysemodell knyttet til manusets tema og bokas eksisterende overgangskapittel, ikke en rekonstruksjon av alle Olsens kampavtaler.",
+        "source": "Faglig tillegg – Store norske leksikon, https://snl.no/Egil_Olsen ; UEFA, https://www.uefa.com/european-qualifiers/news/01d5-0f85a69d71f2-db2bcddf3c1c-1000--olsen-returns-hungry-for-more/; personnavn fra Fotballdokumentet v1.pdf"
       }
     ]
   },

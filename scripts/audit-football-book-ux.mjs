@@ -172,7 +172,7 @@ const canonicalRoles=readJson(join(root,"data","football_roles.json")).roles;
 const bookRoleIds=ROLE_CHAPTERS.flatMap(c=>c.roles.map(r=>r.id));
 check(ROLE_CHAPTERS.length===9,"Rollekapitler mangler");
 for(const [id,expected] of Object.entries({"keepers":["keeper_positioning","keeper_saves","keeper_distribution","portrait_keeper_depth","portrait_keeper_angles","portrait_keeper_saves","portrait_keeper_distribution"],"centre_backs":["centre_back_defence","centre_back_attack"],"fullbacks":["fullback_defence","fullback_attack","wingback_corridor"],"six_regista":["central_midfield_defence","central_midfield_attack","portrait_scanning"],"eight_press":["eight_defence","eight_attack"],"ten_creator":["supporting_forward","portrait_creative"],"wingers":["winger_defence","winger_attack"],"link_strikers":["meeting_forward","portrait_hidegkuti"],"finishing_press":["striker_defence","striker_attack","portrait_puskas"]})){
-  const sections=ROLE_CHAPTERS.find(c=>c.id===id)?.sourceDetails||[];
+  const sections=ROLE_CHAPTERS.find(c=>c.id===id)(?.sourceDetails||[]).filter(d=>d.source.startsWith("Fotballdokumentet v1.pdf"));
   check(sections.map(d=>d.id).join(",")===expected.join(","),id+": originalmanusets posisjonelle arbeidsoppgaver mangler");
   for(const d of sections)check(d.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),d.id+": mangler fagtekst eller kilde");
 }
@@ -202,7 +202,7 @@ for(const [id,expected] of Object.entries({"third_man":["support_angles","passin
 for(const d of attackDetails)check(d.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),d.id+": mangler fagtekst eller kilde");
 check(new Set(PHASE_CHAPTERS.map(c=>c.id)).size===4,"Duplikate kampfaser");
 for(const [id,expected] of Object.entries({"out_of_possession":["press_height","lock_press","press_triggers","pump_and_drop","marking_models"],"transition_attack":["counter_signal","counter_3v3","counter_4v2","counter_width_clearance","first_after_win"],"transition_defend":["recalibrate"],"formations":["proactive_reactive","formation_choices","history_chaos","history_combination","history_rules","history_continent","history_wm","history_brazil","history_women","culture_elias","culture_regional_examples"],"rest_defence":["risk_balance"]})){
-  const sections=[...PHASE_CHAPTERS,...THEORY_CHAPTERS].find(c=>c.id===id)?.sourceDetails||[];
+  const sections=[...PHASE_CHAPTERS,...THEORY_CHAPTERS].find(c=>c.id===id)(?.sourceDetails||[]).filter(d=>d.source.startsWith("Fotballdokumentet v1.pdf"));
   check(sections.map(d=>d.id).join(",")===expected.join(","),id+": originalmanusets spillmodell mangler");
   for(const d of sections)check(d.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),d.id+": mangler fagtekst eller kilde");
 }
@@ -219,8 +219,12 @@ for(const c of PHASE_CHAPTERS){
 }
 check(bookHtml.includes('id="footballBookPhases"'),"Kampfasene ikke tilgjengelige i spillet");
 check(SET_PIECE_CHAPTERS.length===5,"Dødballkapitler mangler");
+for(const [id,expected] of Object.entries({"ten_creator":["portrait_tom_lund"],"eight_press":["portrait_leonhardsen"],"finishing_press":["portrait_strandli","portrait_meazza_eusebio"],"wingers":["portrait_mathews_garrincha"],"formations":["portrait_meredith_mcgregor"],"link_strikers":["portrait_pele"],"free_kicks":["portrait_juninho_beckham_pirlo"],"transition_attack":["portrait_drillo"]})){
+  const sections=[...ROLE_CHAPTERS,...THEORY_CHAPTERS,...SET_PIECE_CHAPTERS,...PHASE_CHAPTERS].find(c=>c.id===id)?.sourceDetails||[];
+  for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("Faglig tillegg – ")&&d.source.includes("https://"),key+": faglig personcase mangler");}
+}
 for(const [id,expected] of Object.entries({"attacking_corners":["corner_low_delivery","corner_disguise"],"free_kicks":["free_kick_targets","penalty_kicker","penalty_keeper"],"throw_ins":["restart_lock"],"marking_blocks":["corner_defence_posts","restart_organize"],"second_ball_security":["offensive_marking_restart","clearance_counter_restart"]})){
-  const sections=SET_PIECE_CHAPTERS.find(c=>c.id===id)?.sourceDetails||[];
+  const sections=SET_PIECE_CHAPTERS.find(c=>c.id===id)(?.sourceDetails||[]).filter(d=>d.source.startsWith("Fotballdokumentet v1.pdf"));
   check(JSON.stringify(sections.map(d=>d.id))===JSON.stringify(expected),id+": dødballavsnittene fra originalmanuset mangler");
   for(const d of sections)check(d.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),d.id+": kilde mangler");
 }

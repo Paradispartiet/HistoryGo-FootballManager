@@ -916,6 +916,12 @@ export const THEORY_CHAPTERS = [
         "title": "Internasjonale fotballmiljøer – læringsbetingelser og konkrete eksempler",
         "text": "Originalmanuset nevner Kamerun og Nigeria på 1990-tallet, Japan og Sør-Korea samt nordiske miljøer. FIFA bekrefter Kameruns seier mot Argentina i VM-åpningen i 1990 og Sør-Koreas vei til semifinalen i 2002 via Italia og Spania. Eksemplene brukes her til å vise at ulike treningsmiljøer og organisasjoner kan utvikle konkurransedyktige løsninger. De beviser ikke at afrikanske spillere er mindre taktiske eller at asiatiske spillere har en iboende kollektiv disiplin. Manusets brede regionale karakteristikker behandles som historiske fortellinger som må undersøkes, ikke som egenskaper knyttet til opprinnelse. Nordiske særpreg og spillerportretter står som videre fordypning.",
         "source": "Fotballdokumentet v1.pdf – Del II – Ferdigheter i kultur og kontekst; FIFA, https://www.fifa.com/en/articles/world-cup-qatar-2022-surprises-that-shook-the-world ; https://www.fifa.com/en/tournaments/mens/worldcup/articles/asia-best-moments"
+      },
+      {
+        "id": "portrait_meredith_mcgregor",
+        "title": "Billy Meredith og William McGregor – spillerprofil og fotballens institusjoner",
+        "text": "Billy Meredith var en tidlig walisisk fotballstjerne med karriere i begge Manchester-klubbene, dokumentert av Welsh Sports Hall of Fame. William McGregor var derimot en organisator, ikke en spillerprofil: EFL knytter ham til etableringen av Football League i 1888. Originalmanusets to epokeikoner illustrerer ulike sider av fotballhistorien. Spillernes individuelle ferdigheter utvikles i institusjonelle rammer som gjør regelmessig konkurranse mulig. Dette avsnittet skiller derfor mellom teknisk fotballarv og ligaorganisering, uten å tilskrive McGregor en taktisk spillerrolle.",
+        "source": "Faglig tillegg – Welsh Sports Hall of Fame, https://welsh-sports-hall-of-fame.wales/hall-of-fame/billy-meredith/ ; EFL, https://www.efl.com/about-the-efl/history/; personnavn fra Fotballdokumentet v1.pdf"
       }
     ]
   },

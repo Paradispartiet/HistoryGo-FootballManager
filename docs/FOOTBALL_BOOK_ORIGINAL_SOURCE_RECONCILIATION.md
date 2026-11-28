@@ -400,3 +400,19 @@ Dette er en prioritert oversikt over uutfylte eksempler, ikke komplette nye port
 | catenaccio | portrait_herrera | Del I – Italiensk catenaccio / 7. Det mentale aspektet |
 | gegenpress | portrait_klopp | Del V – Klopp og gegenpressing / Moderne mestre, linje 4557–4623 |
 | positional_play | portrait_guardiola_ederson | Del V – Guardiola og positional play 2.0, linje 4591–4617; Manchester City, https://www.mancity.com/news/mens/ederson-fulham-preview-premier-league-63863644 |
+
+## Bolk 18 – kildebelagte faglige personcase (tillegg)
+
+9 nye avsnitt om navn fra originaldisposisjonen, med eksterne kilder og tydelig merking «Faglig tillegg». Historiske fakta kontrollert mot SNL, LSK, Brann, FIFA, UEFA, EFL, FIGC og Welsh Sports Hall of Fame; pedagogiske observasjonsoppgaver er nye anvendelser, ikke dokumenterte kampsekvenser. Navngitte personer uten egne avsnitt står fortsatt i bolk 17 sitt register; dette er ikke full portrettdekning. Ingen illustrasjoner, kapitler eller motorverdier endret. Full CI og OneNote-gjennomgang gjenstår.
+
+| Kapittel | Underavsnitt | Ekstern kilde |
+|---|---|---|
+| ten_creator | portrait_tom_lund | Lillestrøm SK, https://www.lsk.no/nyheter/tusen-takk-for-alt-tommy ; Store norske leksikon, https://snl.no/Tom_Lund |
+| eight_press | portrait_leonhardsen | Store norske leksikon, https://snl.no/%C3%98yvind_Leonhardsen |
+| finishing_press | portrait_strandli | SK Brann Historie, https://historie.brann.no/spillere/frank-strandli/ |
+| wingers | portrait_mathews_garrincha | UEFA, https://www.uefa.com/news-media/news/021e-0f8a84ac44d9-bf9f306f255c-1000--the-wizard-of-dribble-sir-stanley-matthews/ ; FIFA, https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/garrincha-goal-brazil-chile-1962 |
+| formations | portrait_meredith_mcgregor | Welsh Sports Hall of Fame, https://welsh-sports-hall-of-fame.wales/hall-of-fame/billy-meredith/ ; EFL, https://www.efl.com/about-the-efl/history/ |
+| finishing_press | portrait_meazza_eusebio | FIGC, https://www.figc.it/it/full-html?path=%2Fmuseo-del-calcio%2Fhall-of-fame%2Friconoscimenti-alla-memoria%2Fgiuseppe-meazza ; FIFA, https://www.fifa.com/en/tournaments/mens/worldcup/articles/portugal-korea-dpr-eusebio-england-1966 |
+| link_strikers | portrait_pele | FIFA, https://www.fifa.com/pt/tournaments/mens/worldcup/articles/brasil-suecia-final-copa-1958 ; https://www.fifa.com/en/articles/a-tribute-to-pele-brazil-santos-new-york-cosmos-legend-fifa-world-cup |
+| free_kicks | portrait_juninho_beckham_pirlo | UEFA, https://www.uefa.com/uefachampionsleague/news/0271-142ab5eaac54-565b3cc3cec4-1000--the-best-free-kicks-in-uefa-champions-league-history/ ; https://www.uefa.com/uefachampionsleague/news/01b2-0e6d65fc4647-b5a0bb928927-1000--juninho-strike-leaves-lyon-on-top/ ; FourFourTwo, https://www.fourfourtwo.com/features/best-free-kick-taker-ever-juninho-pernambucano-how-he-got-so-good |
+| transition_attack | portrait_drillo | Store norske leksikon, https://snl.no/Egil_Olsen ; UEFA, https://www.uefa.com/european-qualifiers/news/01d5-0f85a69d71f2-db2bcddf3c1c-1000--olsen-returns-hungry-for-more/ |

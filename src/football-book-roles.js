@@ -623,6 +623,12 @@ export const ROLE_CHAPTERS = [
         "title": "Indreløper – møte, stikke og fylle feltet",
         "text": "Tilpass bevegelsen til backen på samme side: noen ganger møte, andre ganger stikke. Når stopper har ball, kan indreløper gå bredt for å gi vinkel; når back har ball, kan indreløper trekke smalere for å åpne kantrommet. Ikke bruk opp mellomrommet før pasningen kan slås. I siste tredjedel beskriver manuset at minst én indreløper tar dypt løp inn i feltet, mens den andre må vurdere balansen. Dette gir vertikal trussel uten at begge nødvendigvis forlater samme rom.",
         "source": "Fotballdokumentet v1.pdf – 3.3 Posisjonelle oppgaver og valg i angrep – Indreløper / Bevegelser uten ball"
+      },
+      {
+        "id": "portrait_leonhardsen",
+        "title": "Øyvind Leonhardsen – indreløperens løp og timing",
+        "text": "Store norske leksikon beskriver Leonhardsen som en løpssterk, anvendelig og målfarlig midtbanespiller, og dokumenterer rollen som venstre indreløper da Norge slo Brasil i 1998. Caset knytter fysisk kapasitet til taktisk timing: indreløperen må både kunne tilby støtte og true rom foran ballen, uten at midtbanens sikring nødvendigvis forsvinner. Studer når løpet starter i forhold til ballførerens handlingsrom, og hvem som overtar rommet spilleren forlater. Dette er bokas analytiske anvendelse, ikke en påstand om en bestemt historisk løpsrute.",
+        "source": "Faglig tillegg – Store norske leksikon, https://snl.no/%C3%98yvind_Leonhardsen; personnavn fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -734,6 +740,12 @@ export const ROLE_CHAPTERS = [
         "title": "Zidane, Ronaldinho og Maradona – den kreative handlingen",
         "text": "Originalmanuset bruker disse spillerne til å drøfte uttrykksfull teknikk og forholdet mellom struktur og brudd. En vending, finte eller pasning kan skape en fordel når den endrer motstanderens forventninger og gjør en medspiller spillbar. Den kreative spilleren bør derfor studeres sammen med bevegelsene rundt ballen, ikke som et isolert repertoar av triks. Manuset gir et filosofisk perspektiv, ikke detaljerte kampsekvenser eller grunnlag for å sammenligne de tre spillernes psykologiske egenskaper.",
         "source": "Fotballdokumentet v1.pdf – Del IV – Estetikk og resultater / Del V – System vs. individ"
+      },
+      {
+        "id": "portrait_tom_lund",
+        "title": "Tom Lund – teknikk, oversikt og kreativitet",
+        "text": "Lillestrøm beskriver Tom Lund som en spiller med fremragende teknikk, oversikt og spilleglede. Han vant både serie- og cupmesterskap med klubben. Faglig brukes han her til å undersøke hvordan en skapende spiller kan kombinere egen ballbehandling med vurdering av medspillernes muligheter. Ved analyse av historisk kampfilm: registrer hvilke alternativer som er tilgjengelige før mottak, hvordan førsteberøringen endrer situasjonen, og om neste handling gir laget gjennombrudd. Dette er et nytt observasjonsopplegg, ikke dokumenterte kampmønstre for Lund.",
+        "source": "Faglig tillegg – Lillestrøm SK, https://www.lsk.no/nyheter/tusen-takk-for-alt-tommy ; Store norske leksikon, https://snl.no/Tom_Lund; personnavn fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -840,6 +852,12 @@ export const ROLE_CHAPTERS = [
         "title": "Ving – bredde, bakrom og avslutning på motsatt side",
         "text": "Hold høy bredde på ballside i manusets etablerte angrep; den konkrete instruksen er å ikke møte når egen back har ball i denne varianten. I 4-3-3 beskrives samtidig en annen avtalt bevegelse der vingen møter og backen går forbi. Begge er mulige mønstre, og må avtales. Rettvendt utfordres én-mot-én med fart når rom og sikring tillater det. På overgang kan vingen skjære inn motsatt; ved innlegg fra andre siden angripes bakre stolpe eller målrommet. Vingen skal true bakrom, kunne bytte side ved behov og være tålmodig når ballen er på motsatt side. Profilen vektlegger fart, dribling, avslutning og kombinasjoner med spiss, back og midtbane.",
         "source": "Fotballdokumentet v1.pdf – 3.3 Posisjonelle oppgaver og valg i angrep – Ving / 5.5 4-3-3"
+      },
+      {
+        "id": "portrait_mathews_garrincha",
+        "title": "Stanley Matthews og Garrincha – dribling som taktisk virkemiddel",
+        "text": "UEFA fremhever Matthews' dribleferdigheter som kantspiller, mens FIFA har kampklipp av Garrincha i VM 1962. Bruk disse historiske casene til å undersøke når dribling skaper overtall eller åpner en pasningsvinkel. Se etter forsvarerens tyngdeoverføring, tempoendring, avstanden til støtte og muligheten for innlegg eller videre gjennombrudd. Dette er en analyseoppgave, ikke et utsagn om at begge spillerne utførte identiske finter. Den videre kollektive handlingen avgjør hvor nyttig en vellykket dribling blir.",
+        "source": "Faglig tillegg – UEFA, https://www.uefa.com/news-media/news/021e-0f8a84ac44d9-bf9f306f255c-1000--the-wizard-of-dribble-sir-stanley-matthews/ ; FIFA, https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/garrincha-goal-brazil-chile-1962; personnavn fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -941,6 +959,12 @@ export const ROLE_CHAPTERS = [
         "title": "Nándor Hidegkuti – den møtende spissens beslutningsproblem",
         "text": "Originalmanuset presenterer Hidegkuti som en spiss som trekker seg ned og endrer forsvarernes oppgave. FIFA dokumenterer hans rolle i Ungarns 6–3-seier mot England i 1953. Faglig er poenget ikke bare at han møter, men hvordan stopperens reaksjon påvirker rommet rundt og bak ham. I bokas eksisterende modell kan en stopper holde linjen eller følge; den møtende spilleren og en medspiller må lese valget sammen. Betegnelsen falsk nier brukes som moderne analysebegrep, ikke som et bevis på at han oppfant rollen.",
         "source": "Fotballdokumentet v1.pdf – Del I – Ungarn på 50-tallet; FIFA, https://www.fifa.com/en/news/articles/hungary-magical-magyars-puskas-hidegkuti-england-wembley-1953-six-three"
+      },
+      {
+        "id": "portrait_pele",
+        "title": "Pelé – kreativitet og avslutning i et kollektiv",
+        "text": "FIFA dokumenterer Pelés gjennombrudd som 17-åring i VM 1958. Originalmanuset navngir ham som epokeikon og eksempel ved blant annet spenst og heading. En analyse av historisk kampfilm kan undersøke hvordan han posisjonerer seg i forhold til medspillerne, hvordan mottak og ballbehandling forbereder neste handling, og når han beveger seg inn i avslutningsrom. Dette er en ny faglig analyseoppgave, ikke en måling av Pelés fysiske kapasitet. Caset knytter individuell kreativitet til bokas historiske drøfting av Brasils kollektive organisering.",
+        "source": "Faglig tillegg – FIFA, https://www.fifa.com/pt/tournaments/mens/worldcup/articles/brasil-suecia-final-copa-1958 ; https://www.fifa.com/en/articles/a-tribute-to-pele-brazil-santos-new-york-cosmos-legend-fifa-world-cup; personnavn fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -1117,6 +1141,18 @@ export const ROLE_CHAPTERS = [
         "title": "Ferenc Puskás – avslutning i en kollektiv angrepsstruktur",
         "text": "Manuset fremhever Puskás' venstrefot og avslutningsferdighet i det magiske ungarske laget. FIFA bekrefter hans sentrale plass i laget som møtte England i 1953. Bruk caset til å undersøke sammenhengen mellom avslutningsrom, medspillernes løp og teknisk utførelse, heller enn å tilskrive resultatet skuddkraft alene. Manusets formulering om skudd på 25 meter er en karakteristikk, ikke målt treffsikkerhet. Det tillagte Bernabéu-sitatet er ikke kontrollert og gjengis ikke som autentisk.",
         "source": "Fotballdokumentet v1.pdf – Del I – Puskás og Hidegkuti, linje 139–150; FIFA, https://www.fifa.com/en/news/articles/hungary-magical-magyars-puskas-hidegkuti-england-wembley-1953-six-three"
+      },
+      {
+        "id": "portrait_strandli",
+        "title": "Frank Strandli – spissens avslutningsoppgave",
+        "text": "Branns historiske spillerregister dokumenterer Strandlis målbidrag i klubben: 13 mål på 30 kamper i to sesonger. Bruk caset til å skille mellom spissens registrerte resultat og de handlingene som skaper avslutningsmuligheter. Kampfilm kan undersøkes for startposisjon, bevegelse mot ball eller bakrom, plassering ved innlegg og valg av avslutningsteknikk. Målstatistikken alene dokumenterer ikke hvordan disse situasjonene ble løst, og brukes derfor ikke til å fastsette duellstyrke eller en bestemt spissprofil i motoren.",
+        "source": "Faglig tillegg – SK Brann Historie, https://historie.brann.no/spillere/frank-strandli/; personnavn fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_meazza_eusebio",
+        "title": "Giuseppe Meazza og Eusébio – avslutninger i forskjellige epoker",
+        "text": "Det italienske fotballforbundet dokumenterer Meazza som verdensmester i 1934 og 1938. FIFA beskriver Eusébios ni mål i VM 1966, inkludert fire i kvartfinalen mot Nord-Korea. Bruk de historiske holdepunktene til å velge kampmateriale for analyse av avslutningsrom, bevegelse og teknikk. Målrekorder kan ikke alene vise om spilleren var best til å løpe i bakrom, kombinere eller avslutte under press. Sammenligning på tvers av epoker må også ta hensyn til lagets organisering og kampens betingelser.",
+        "source": "Faglig tillegg – FIGC, https://www.figc.it/it/full-html?path=%2Fmuseo-del-calcio%2Fhall-of-fame%2Friconoscimenti-alla-memoria%2Fgiuseppe-meazza ; FIFA, https://www.fifa.com/en/tournaments/mens/worldcup/articles/portugal-korea-dpr-eusebio-england-1966; personnavn fra Fotballdokumentet v1.pdf"
       }
     ]
   }

@@ -321,6 +321,12 @@ export const SET_PIECE_CHAPTERS = [
         "title": "Straffespark – keeperens observasjon og timing",
         "text": "Manusets keeperdel anbefaler å studere tidligere straffer og observere tilløp, hofter og fotstilling. Keeperen må avveie hvor lenge han venter mot behovet for å rekke ballen. Manusets generalisering om naturlig hjørne for høyre- og venstrebente er ikke kontrollert og er ingen sikker prediksjon for en enkelt skytter. Historiske keeperanekdoter om forstyrrelser er ikke instruksjoner: keeperen skal ikke distrahere skytteren på en usportslig måte. Ved balltreff må minst en del av én fot berøre mållinjen, være på linje med den eller bak den. Vurder observasjon og lovlig utgangsstilling fremfor å innføre faste redningssannsynligheter.",
         "source": "Fotballdokumentet v1.pdf – Keeper – Straffer, linje 1089–1104; IFAB regel 14, https://www.theifab.com/laws/latest/the-penalty-kick/"
+      },
+      {
+        "id": "portrait_juninho_beckham_pirlo",
+        "title": "Juninho, Beckham og Pirlo – frispark som teknisk spesialisering",
+        "text": "UEFAs samling av historiske frispark og kampreferatet fra Lyon dokumenterer Juninho Pernambucano som frisparkspesialist. I et intervju beskriver Juninho selv sin tekniske utvikling. Bruk Juninho, Beckham og Pirlo, som alle er nevnt i originaldisposisjonen, til å undersøke ulike leveringsbaner: skrudd ball, varierende rotasjon og målrettet plassering. Observer tilløp, treffpunkt, mur, avstand og keeperposisjon. Teknisk variant må velges ut fra situasjonen, ikke spillerens berømmelse. Ingen fast frisparksannsynlighet eller rangering av spillerne legges inn.",
+        "source": "Faglig tillegg – UEFA, https://www.uefa.com/uefachampionsleague/news/0271-142ab5eaac54-565b3cc3cec4-1000--the-best-free-kicks-in-uefa-champions-league-history/ ; https://www.uefa.com/uefachampionsleague/news/01b2-0e6d65fc4647-b5a0bb928927-1000--juninho-strike-leaves-lyon-on-top/ ; FourFourTwo, https://www.fourfourtwo.com/features/best-free-kick-taker-ever-juninho-pernambucano-how-he-got-so-good; personnavn fra Fotballdokumentet v1.pdf"
       }
     ]
   },
