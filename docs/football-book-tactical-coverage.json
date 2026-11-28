@@ -87,6 +87,34 @@
       "file": "src/football-matchday-sequence-v8.js",
       "symbol": "resolveOpponentThreeSpaceCombination",
       "scope": "Kjent motstanders tre-romsangrep: side-, mellomroms-, dybde- og senløpsforsvar; dedikert sikringsrolle påvirker avledningsrisiko."
+    },
+    "U": {
+      "file": "src/football-matchday-turnover-v6.js",
+      "symbol": "resolveTurnoverTransition",
+      "test": "scripts/simulate-turnovers-v6.mjs",
+      "scope": "Eget balltap i oppspill mot høyt press: første fremoverpasning kan brytes, deretter vurderes restforsvaret. Terminal overgang erstatter tidligere balltapsrisiko."
+    },
+    "V": {
+      "file": "src/football-matchday-sequence-v8.js",
+      "symbol": "resolveOpponentSelectiveTransition",
+      "scope": "Kjent motstandermønster selective_break_or_retain: gjenvinning, vurdering av gjennombruddsvindu, behold ballen eller forsøk gjennombrudd. Avgrenset motstanderfase, ikke generell egen overgangsmotor."
+    },
+    "B": {
+      "file": "src/football-matchday-own-press-v6.js",
+      "symbol": "secondBallReleaseFor",
+      "test": "scripts/simulate-own-press-v6.mjs",
+      "scope": "Egen gjenvunnet andreball: verifisert sekser, forbindelsesspiller og dybdeløper; dokumentert motpress kan blokkere sentral utvei eller utløse bredt svar."
+    },
+    "Q": {
+      "file": "src/football-matchday-sequence-v8.js",
+      "symbol": "crossRecoveryRelease",
+      "scope": "Et avverget innlegg kan bli egen kontring når kjent motstandereksponering, riktig tempo og verifiserte komplementære roller foreligger. Samme hendelse og trekning."
+    },
+    "Y": {
+      "file": "src/football-matchday-own-press-v6.js",
+      "symbol": "resolveRegainCounterpress",
+      "test": "scripts/simulate-own-press-v6.mjs",
+      "scope": "Egen ballvinning mot dokumentert kollektivt motpress: støtte, bredde og fremre mottaker avgjør om ballen beholdes eller mistes igjen, uten ny trekning."
     }
   },
   "entries": [
@@ -201,7 +229,16 @@
       "id": "risk_balance",
       "chapterId": "rest_defence",
       "title": "Angrepsrisiko og offensiv markering",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "U",
+        "P",
+        "C",
+        "M",
+        "V"
+      ],
+      "implemented": "Restforsvar og balanse samt verifiserte stopper-/midtbaneroller påvirker konsekvensen ved balltap og motstanderens gjennombruddsvindu. Dedikert skjerm har betydning i avgrensede kjeder.",
+      "nextCheck": "Kontroller antall foran/bak ballen, hvilke rom og motspillere som dekkes, offensiv markering og risiko per sone. Rollefit og lagscore er ikke identisk med numerisk eller posisjonell geometri."
     },
     {
       "id": "support_angles",
@@ -1349,49 +1386,97 @@
       "id": "counter_signal",
       "chapterId": "transition_attack",
       "title": "Overgang og kontring – signal, tidsmål og relativ bredde",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "T",
+        "V",
+        "Q"
+      ],
+      "implemented": "Kontring fra lav blokk og etter innlegg, samt motstanderens selektive gjennombrudd eller kontroll, er avgrensede motorfaser.",
+      "nextCheck": "Kontroller et generelt eget valg etter ballvinning, faktisk ballvinningssone og tids-/breddeobservasjon. 15 sekunder og to tredeler av bredden er manusets treningsmål, ikke automatisk bonus."
     },
     {
       "id": "counter_3v3",
       "chapterId": "transition_attack",
       "title": "Kontringsmønster 1 – tre mot tre",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "De kontrollerte overgangsrutene bruker rollegrupper og lagscore; den konkrete tre-mot-tre-situasjonen med sentral ballfører og to brede utveier er ikke påvist som egen modell.",
+      "nextCheck": "Undersøk om eksisterende fasegrunnlag kan representere tre angripere mot tre forsvarere og forsvarerens reaksjon på ballfører. Ikke anta lokal numerisk balanse fra formasjonen alene."
     },
     {
       "id": "counter_4v2",
       "chapterId": "transition_attack",
       "title": "Kontringsmønster 2 – fire mot to",
-      "status": "pending"
+      "status": "unverified",
+      "evidence": [],
+      "implemented": "Høy gjenvinning og fremoverstøtte finnes, men fire mot to som konkret lokalt overtall er ikke dokumentert i de undersøkte overgangsrutene.",
+      "nextCheck": "Undersøk om lokal numerisk balanse er tilgjengelig ved høy ballvinning. Skill bredde/dybdevalg og binding av forsvarer fra et automatisk overtallsbonus."
     },
     {
       "id": "counter_width_clearance",
       "chapterId": "transition_attack",
       "title": "Kontringsmønster 3 – bredde og klareringsmønster",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "B",
+        "Q",
+        "T",
+        "H"
+      ],
+      "implemented": "Gjenvunnet andreball kan frigjøres sentralt eller bredt; avverget innlegg kan utløse kontring via midtbanestøtte og bakromsspiss; langt oppspill og andreball finnes.",
+      "nextCheck": "Kontroller den konkrete koordineringen med motsatt back, bred ballnær ving, motsatt ving inn, spissens vending/avlegg og kryssløp eller tilbakespill. Ikke lås mønsteret mot venstre."
     },
     {
       "id": "first_after_win",
       "chapterId": "transition_attack",
       "title": "Første handling etter ballvinning",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "V",
+        "B",
+        "Y",
+        "Q"
+      ],
+      "implemented": "Motstanderen kan velge kontroll eller gjennombrudd; eget lag kan frigjøre gjenvunnet ball gjennom dokumentert støtte, bredt svar eller tidlig pasning, og miste ballen på nytt under motpress.",
+      "nextCheck": "Undersøk om eget lag kan velge støttepasning, føring eller direkte gjennombrudd fra samme ballvinning ut fra kjent rom, press og mottaker. Ikke gi automatisk xG for ballvinning."
     },
     {
       "id": "portrait_drillo",
       "chapterId": "transition_attack",
       "title": "Egil Olsen – direkte overgangsspill som analysemodell",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [
+        "T",
+        "Q"
+      ],
+      "implemented": "Historisk og pedagogisk analyseeksempel for generiske overgangsprinsipper.",
+      "nextCheck": "Ingen trenernavnbonus eller antatt historisk pasningsfordeling. Koble til generisk gjennombrudd/kontroll."
     },
     {
       "id": "portrait_ranieri",
       "chapterId": "transition_attack",
       "title": "Claudio Ranieri – kompakt 4-4-2 og kontringsorganisering",
-      "status": "pending"
+      "status": "explanatory",
+      "evidence": [
+        "T",
+        "V"
+      ],
+      "implemented": "Pedagogisk eksempel på sammenheng mellom kompakt forsvar og overgang. Generiske avgrensede kontroll- og kontringsruter finnes.",
+      "nextCheck": "Ingen bonus for trenernavn eller 4-4-2 alene. Undersøk forhold mellom ballvinningssted og faktisk overgangsmulighet."
     },
     {
       "id": "recalibrate",
       "chapterId": "transition_defend",
       "title": "Omstilling – rekalibrering, gjenvinning eller fall i ramme",
-      "status": "pending"
+      "status": "partial",
+      "evidence": [
+        "U",
+        "P",
+        "Y"
+      ],
+      "implemented": "Eget balltap i høyt press følges av gjenvinningsforsøk, deretter sikring eller åpent kontringsrom. Motpress kan også bryte egen nylig gjenvunnet ball.",
+      "nextCheck": "Kontroller situasjonsavhengig valg mellom press, forsinkelse og fall i ramme ved ulike balltap. Tidsregelen på 5–7 sekunder er trenerens eksempel; dynamisk reaktivering av press er ikke bekreftet."
     },
     {
       "id": "corner_low_delivery",

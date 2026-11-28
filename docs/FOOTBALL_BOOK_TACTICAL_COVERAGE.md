@@ -34,3 +34,15 @@ Neste bolk: etablert forsvar, deretter overganger og dødballer; roller, trening
 - Prioriter forsinkelse kontra aktivt press betinget av sikring, deretter eksplisitte signaler/pressrytme og dynamisk pumping. Fullt markeringsvalg må undersøkes videre. Kunnskapslaget har forklaringer som ikke nødvendigvis er motorvalg.
 
 Kildene er bokas eksisterende fagavsnitt og de kontrollerte motorfunksjonene. Testskriptets assertions for egne presskjeder og dokumenterte reaksjonsegenskaper er inspisert, ikke kjørt i denne bolken. Ingen motorendring eller nye xG-verdier. Neste bolk: offensive og defensive overganger, inkludert restforsvar. Deretter dødballer.
+
+## Bolk 3 – offensive og defensive overganger, restforsvar
+
+Ni avsnitt i `transition_attack`, `transition_defend` og `rest_defence`: fem delvis dekket, to uavklarte (konkrete 3v3- og 4v2-mønstre), to forklarende personcase. Samlet vurdert 55/287.
+
+- Balltap i oppspill mot høyt press har allerede en kausal overgang: første fremoverpasning kan brytes, og dersom den lykkes, vurderes stopper og midtbanedekning. Tre terminale utfall: gjenvunnet, inneholdt eller kontring. Sluttutfallet erstatter tidligere risiko i `football-matchday-engine.js`; ingen dobbeltprising.
+- Den eksisterende motstanderfasen `resolveOpponentSelectiveTransition` kan eksplisitt velge å beholde ballen ved lite gjennombruddsvindu. Den er bundet til verifisert XI og dokumentert motstandermønster, ikke en generell beslutning for alle egne ballvinninger.
+- Egen gjenvunnet andreball har allerede en avgrenset sentral frigjøring med alternativ bredde ved kjent motpress. Etter avverget innlegg finnes en egen frigjøringskjede med riktig tempo og tre komplementære roller. Egen gjenvinning kan også mistes igjen mot dokumentert kollektivt motpress.
+- `resolveTacticalPossession` beskriver et allerede priset managerutfall; forklarende trinn er ikke nye ballhendelser eller ekstra xG. Dette er ikke bevis for en generell 3v3- eller 4v2-modell.
+- Prioriter en felles beslutning om egen første handling etter dokumentert ballvinning, først der relevant rom- og motspillgrunnlag finnes. Deretter konkrete lokale overtall og rekalibrering. Ingen ny parallell fase, ingen påtvunget 15-sekunders kontring eller universell 5–7-sekunders gjenvinningsregel. Manglende data skal ikke gi en ny bonus eller straff.
+
+Eksisterende overgangs- og kontrolltesters assertions er inspisert, ikke kjørt på nytt i denne bolken. Ingen motorendring. Neste bolk: dødballer, inkludert eget og motstanders angrep, leveringsvarianter og andreball.
