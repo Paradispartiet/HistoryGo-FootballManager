@@ -108,6 +108,30 @@ export const ROLE_CHAPTERS = [
         "title": "Keeper – distribusjon, styring og dødball",
         "text": "Spill kort og presist til stoppere eller backer, eller sett i gang tidlig med kast eller utspark når det finnes kontringsrom. Etter langvarig press kan laget trenge tid til å flytte ut, innenfor spillets regler. Manuset beskriver innsidespark i kort oppbygging, halvhøye kast som kan passere et pressledd, halvvolley mot kant eller spiss og lange utspark der retning og lengde må samordnes. Gi tydelige beskjeder, særlig i undertall: meld når laget er i balanse slik at forsvarer kan støte, diriger blokkering og signaliser langt utspill. Organiser mur og markering tidlig ved dødball, og forbered laget på andreballen. I manusets 4-3-3-profil skal keeper være god med ballen, offensiv i feltet og kunne sette i gang hurtig og kaste langt.",
         "source": "Fotballdokumentet v1.pdf – 1.3 Distribuering / 1.4 Kommunikasjon / 1.5 Dødball / 5.5 4-3-3"
+      },
+      {
+        "id": "portrait_keeper_depth",
+        "title": "Neuer, Higuita og Alisson – rommet bak forsvarslinjen",
+        "text": "Originalmanuset bruker Manuel Neuer, René Higuita og Alisson som eksempler på keeperens aktive posisjon bak backrekken. Det taktiske dilemmaet er å kunne avskjære gjennomspill uten å åpne for avslutninger over keeperen. Se på avstanden til forsvarslinjen, ballførerens mulighet til å slå i bakrom og keeperens startposisjon. Manuset kontrasterer dette med Buffon og Zoff som linjeorienterte eksempler. Kategoriene beskriver ulike vektlegginger, ikke uttømmende eller uforanderlige karakteristikker av keepernes karrierer.",
+        "source": "Fotballdokumentet v1.pdf – 1.1 Posisjonering / Linjekeepere vs sweeper-keepere, linje 838–949"
+      },
+      {
+        "id": "portrait_keeper_angles",
+        "title": "Schmeichel, Banks og Zoff – vinkel, dybde og reaksjon",
+        "text": "Manuset bruker Peter Schmeichels brede blokkering i én-mot-én, Gordon Banks' redning mot Pelé og Dino Zoffs dybdejustering som læringseksempler. Studer hvordan keeperens utgangsstilling påvirker muligheten til å dekke målrommet, og hvordan siste forflytning må samordnes med skuddet. UEFA dokumenterer Schmeichels betydelige rolle i Danmarks EM-triumf i 1992. Kildene gir ikke grunnlag for påstanden om at han oppfant stjerneblokkeringen, eller at Banks' redning alene kan forklares med vinkelkontroll.",
+        "source": "Fotballdokumentet v1.pdf – 1.1 Vinkelkontroll / Dybdejustering / 1.2 Grunnprinsipper; UEFA, https://www.uefa.com/uefaeuro/history/news/025d-0f6f811b9339-3bdefd2fd076-1000--euro-92-spotlight-how-brilliant-was-denmark-s-peter-schme/"
+      },
+      {
+        "id": "portrait_keeper_saves",
+        "title": "Yashin, Buffon, Casillas, Kahn og De Gea – forskjellige redningsoppgaver",
+        "text": "Manusets keeperteknikk bruker Yashin til å illustrere sideforflytning og vinkel, Buffon grep og parering, Casillas reaksjon og retur, Kahn blokkering og De Gea beinparader. Van der Sar nevnes ved rekkevidde og sideforflytning. Kahn og Alisson brukes også ved innlegg. Disse eksemplene gir en observasjonsramme: kunne keeperen holde ballen, styre den bort fra fare eller komme raskt tilbake i stilling? Manusets absolutte beskrivelser av enkeltkeepere er ikke målt eller uavhengig kontrollert; navnene fungerer her som faglige casepekere.",
+        "source": "Fotballdokumentet v1.pdf – 1.1 Sideforflytning / Posisjonering mot innlegg / 1.2 Skuddstopping, linje 880–1087"
+      },
+      {
+        "id": "portrait_keeper_distribution",
+        "title": "Ter Stegen, Casillas, Schmeichel, Alisson og Ederson – tempo i igangsettingen",
+        "text": "Manuset setter kort oppbygging, rask kontring og roligere distribusjon opp som ulike keeperoppgaver. Ter Stegen brukes ved korte pasninger, Casillas og Schmeichel ved utkast, Alisson ved lange oppspill og Buffon ved å organisere laget før igangsetting. Ederson er et utdypet eksempel på kort og lang distribusjon under Guardiola; Manchester Citys egne intervjuer beskriver hans rolle i oppbyggingen. Observer ikke bare pasningslengde, men motstanderens press, medspillernes posisjon og risiko ved balltap. Manusets historiske enkeltpasninger er ikke alle verifisert; keeperen må følge gjeldende tidsregler ved ballkontroll.",
+        "source": "Fotballdokumentet v1.pdf – 1.3 Distribuering, linje 1110–1183 / Del V – Ederson; Manchester City, https://www.mancity.com/news/mens/ederson-fulham-preview-premier-league-63863644"
       }
     ]
   },
@@ -498,6 +522,12 @@ export const ROLE_CHAPTERS = [
         "title": "Sentral midtbane – spillbarhet og rytmekontroll",
         "text": "Vær spillbar i igangsettingen og når laget utfordrer på sidene. Motta under press, se etter bakrom, behersk lengre pasninger og posisjoner deg slik at angrepet kan få fart. Støtt møtende spiss; når dyp midtbane spiller opp på ham, må indreløperne gi støttevinkler. Søk returrommet ved innlegg dersom lagets balanse tillater det. Manusets instrukser gjelder sentral midtbane generelt, ikke en egen dokumentert regista-spesifikasjon.",
         "source": "Fotballdokumentet v1.pdf – 3.3 Posisjonelle oppgaver og valg i angrep – Midtbane / Oppspill"
+      },
+      {
+        "id": "portrait_scanning",
+        "title": "Xavi, Iniesta og andre orienteringssterke midtbanespillere",
+        "text": "I persepsjonsdelen nevner manuset Xavi, Iniesta, Fàbregas, Van der Vaart, Sneijder, Lampard og Özil som eksempler ved orientering før og etter mottak. Oppgaven er å registrere press, støtte og rom, ikke bare å bevege hodet. For en dyp midtbanespiller skal orienteringen også gi informasjon om motstanderens bakre linje og muligheten for bakrom. Disse navnene beholdes som manusets observasjonsforslag; det finnes ikke individuelle scanningmålinger i materialet som gir grunnlag for rangering.",
+        "source": "Fotballdokumentet v1.pdf – 3.2 Persepsjon, linje 2537–2570"
       }
     ]
   },
@@ -698,6 +728,12 @@ export const ROLE_CHAPTERS = [
         "title": "Hengende spiss – mellomrom, støtte og overgangsspill",
         "text": "Manuset beskriver den hengende spissen som en mobil, teknisk og taktisk sterk spiller som lever mellom motstanderens midtbane og forsvar. Når midtspissen møter og trekker en stopper ut, kan den hengende spissen angripe bakrommet; han skal gi støtte på siden, ta bakromsløp og være en ekstra avslutter på innlegg. I en omvendt diamant vektlegges løpskapasitet, oversikt, kommunikasjon og evne til å orkestrere overgangsspillet ut fra medangripernes bevegelser. Denne posisjonsbeskrivelsen utdyper tierkapitlet, men er ikke identisk med enhver klassisk tier eller fri skaper.",
         "source": "Fotballdokumentet v1.pdf – 3.3 Posisjonelle oppgaver og valg i angrep – Hengende spiss / 5.5 4-3-3"
+      },
+      {
+        "id": "portrait_creative",
+        "title": "Zidane, Ronaldinho og Maradona – den kreative handlingen",
+        "text": "Originalmanuset bruker disse spillerne til å drøfte uttrykksfull teknikk og forholdet mellom struktur og brudd. En vending, finte eller pasning kan skape en fordel når den endrer motstanderens forventninger og gjør en medspiller spillbar. Den kreative spilleren bør derfor studeres sammen med bevegelsene rundt ballen, ikke som et isolert repertoar av triks. Manuset gir et filosofisk perspektiv, ikke detaljerte kampsekvenser eller grunnlag for å sammenligne de tre spillernes psykologiske egenskaper.",
+        "source": "Fotballdokumentet v1.pdf – Del IV – Estetikk og resultater / Del V – System vs. individ"
       }
     ]
   },
@@ -899,6 +935,12 @@ export const ROLE_CHAPTERS = [
         "title": "Møtende spiss – oppspill og bevegelse etter avlegg",
         "text": "Når en spiss møter ballfører, kan sidevendt mottak gi mulighet for direkte spill mot ving eller fremover. Ved feilvendt mottak beskriver manuset fire konkrete utveier: legge igjen eller vinkle til siden og starte ny bevegelse, vende opp og utfordre, fungere som vegg eller stusse videre til en gjennomløpende medspiller. Ved klarering beskrives møte mot ballside fra lengste stopper mot nærmeste. Støtte til midtbane kan åpne ny pasning i rom; dersom stopperen følger spissen ut, kan spissen selv angripe rommet etter avlegget. Dette er oppgaven til møtende spiss i manusets spillmodell, ikke en definisjon av alle falske niere.",
         "source": "Fotballdokumentet v1.pdf – Oppspill / Spillmodell – Klarering / Spill opp – på! / Åpen kropp"
+      },
+      {
+        "id": "portrait_hidegkuti",
+        "title": "Nándor Hidegkuti – den møtende spissens beslutningsproblem",
+        "text": "Originalmanuset presenterer Hidegkuti som en spiss som trekker seg ned og endrer forsvarernes oppgave. FIFA dokumenterer hans rolle i Ungarns 6–3-seier mot England i 1953. Faglig er poenget ikke bare at han møter, men hvordan stopperens reaksjon påvirker rommet rundt og bak ham. I bokas eksisterende modell kan en stopper holde linjen eller følge; den møtende spilleren og en medspiller må lese valget sammen. Betegnelsen falsk nier brukes som moderne analysebegrep, ikke som et bevis på at han oppfant rollen.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Ungarn på 50-tallet; FIFA, https://www.fifa.com/en/news/articles/hungary-magical-magyars-puskas-hidegkuti-england-wembley-1953-six-three"
       }
     ]
   },
@@ -1069,6 +1111,12 @@ export const ROLE_CHAPTERS = [
         "title": "Midtspiss – sentral strekk, første stolpe og rom for andre",
         "text": "Strekk sentralt når ballen går på kant, angrip første stolpe ved innlegg og skap rom for indreløpernes dype løp. Identifiser om motstanderen har sikring: dersom den mangler, kan spissen vende opp og utfordre direkte. Manusets 4-3-3-profil vektlegger evnen til å spille feilvendt, luftstyrke, fysisk kapasitet og mobilitet. En av de tre fremste kan gjøre møtebevegelse, mens andre opprettholder strekk og bakromstrussel. Oppgavene må samordnes med kant, hengende spiss og indreløper, slik at alle ikke søker samme rom.",
         "source": "Fotballdokumentet v1.pdf – 3.3 Posisjonelle oppgaver og valg i angrep – Midtspiss / 5.5 4-3-3"
+      },
+      {
+        "id": "portrait_puskas",
+        "title": "Ferenc Puskás – avslutning i en kollektiv angrepsstruktur",
+        "text": "Manuset fremhever Puskás' venstrefot og avslutningsferdighet i det magiske ungarske laget. FIFA bekrefter hans sentrale plass i laget som møtte England i 1953. Bruk caset til å undersøke sammenhengen mellom avslutningsrom, medspillernes løp og teknisk utførelse, heller enn å tilskrive resultatet skuddkraft alene. Manusets formulering om skudd på 25 meter er en karakteristikk, ikke målt treffsikkerhet. Det tillagte Bernabéu-sitatet er ikke kontrollert og gjengis ikke som autentisk.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Puskás og Hidegkuti, linje 139–150; FIFA, https://www.fifa.com/en/news/articles/hungary-magical-magyars-puskas-hidegkuti-england-wembley-1953-six-three"
       }
     ]
   }

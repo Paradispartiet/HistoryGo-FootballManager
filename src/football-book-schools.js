@@ -150,6 +150,12 @@ export const SCHOOL_CHAPTERS = [
         "title": "Estetikk som grunnvilkår – struktur og brudd",
         "text": "Originalmanusets avslutning samler perspektivene: kunstens egenverdi, publikums fortolkning, sosialt formet teknikk, regulert konkurranse og lek. Tesen er at estetikk ikke bare er et tillegg til taktikk, men en del av fotballens indre spenning mellom frihet og kontroll, individ og kollektiv, kunst og nytte. Dette er bokas normative og filosofiske refleksjon, ikke et empirisk bevist krav for alle kamper. En manager kan derfor både spørre hvordan laget kan vinne, og hvilken måte å spille på laget ønsker å utvikle. De to spørsmålene kan besvares ulikt uten at det ene nødvendigvis opphever det andre.",
         "source": "Fotballdokumentet v1.pdf – Del IV – Avslutning: Estetikk som grunnvilkår / Del V – System vs. individ / Arven"
+      },
+      {
+        "id": "portrait_cruyff_michels",
+        "title": "Cruyff og Michels – spiller og trener i samme taktiske tradisjon",
+        "text": "Originalmanuset beskriver Cruyff som symbol på rolleflyt, oversikt og rytme. UEFA dokumenterer Michels' trenerarbeid og Cruyffs sentrale rolle i Ajax' totalfotball. Den praktiske lærdommen er å se hvordan laget overtar et rom som en spiller forlater; en spiller kan bryte forventet posisjon uten at hele organiseringen bryter sammen. Det er forskjell på Michels' arbeid som trener og Cruyffs senere trenerarv. Manusets uverifiserte personanekdoter er ikke tatt inn som biografiske fakta.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Cruyff og totalfotballen; UEFA, https://www.uefa.com/uefachampionsleague/news/0253-0d7ff54908f6-5927d0a16600-1000--the-greatest-teams-of-all-time-ajax-1971-73/"
       }
     ]
   },
@@ -263,6 +269,12 @@ export const SCHOOL_CHAPTERS = [
         "title": "Resultatfotball og estetikkens historiske dilemma",
         "text": "Manuset stiller den brasilianske angrepstradisjonen og Nederlands totalfotball opp mot mer resultatorienterte systemer, særlig italiensk catenaccio. Det bruker Brasils VM i 1982 og de nederlandske finaletapene i 1974 og 1978 som historiske refleksjonspunkter. Slike kampresultater kan illustrere at estetisk appell ikke garanterer seier, men alene forklarer de ikke hvorfor et lag taper. Å organisere sikring, vente på riktig overgang og forvalte risiko kan være en avansert fotballfaglig praksis. Skillet er manusets drøfting av verdier, ikke en universell klassifisering av nasjoner eller trenere.",
         "source": "Fotballdokumentet v1.pdf – Del IV – Estetikk og resultater"
+      },
+      {
+        "id": "portrait_herrera",
+        "title": "Helenio Herrera – organisering og overgang",
+        "text": "Originalmanuset fremhever Herreras Inter som eksempel på defensiv struktur og raske kontringer. Den faglige analysen bør undersøke hvordan markering og en fri sikringsspiller henger sammen med muligheten til å starte angrep etter ballvinning. Herrera er allerede plassert i bokas catenaccio-kapittel; dette portrettet presiserer trenerens funksjon som case, ikke en påstand om at han oppfant alle prinsippene. Manusets planlagte sitat om vinnermentalitet er ikke dokumentert i den bevarte teksten.",
+        "source": "Fotballdokumentet v1.pdf – Del I – Italiensk catenaccio / 7. Det mentale aspektet"
       }
     ]
   },
@@ -381,6 +393,12 @@ export const SCHOOL_CHAPTERS = [
         "title": "Moderne fotball – teknikk under press",
         "text": "Originalmanuset knytter Klopps lag til umiddelbar gjenvinning og intensitet. Mottak, pasninger, vendinger og orientering må fungere i fart og trange rom. FIFA Training Centre beskriver gjenvinningspress som en mulighet til å starte et nytt angrep før motstanderen organiserer seg. Støtteavstand og restforsvar før balltap påvirker om gjenvinning er realistisk. Dette innebærer ikke at Klopp oppfant gjenvinningspress eller at det alltid er riktig. Stormpress og selektivt press står som fordypningstemaer i manusets disposisjon.",
         "source": "Fotballdokumentet v1.pdf – Del V – Moderne krav / Klopp og gegenpressing; FIFA Training Centre, https://www.fifatrainingcentre.com/en/practice/elite-sessions/transition-to-defending/counter-pressing.php"
+      },
+      {
+        "id": "portrait_klopp",
+        "title": "Jürgen Klopp – kollektiv gjenvinning og teknikk under press",
+        "text": "Originalmanuset knytter Klopp til Borussia Dortmund og Liverpool og beskriver koordinert press umiddelbart etter balltap. Det understreker at pasning, mottak og orientering må fungere i fart og under motstand. Trenercaset brukes til å undersøke nærmeste spilleres press og resten av lagets dekning, ikke til å gi én trener æren for å oppfinne gjenvinningspress. Ralf Rangnick og Thomas Tuchel er navngitt som planlagte fordypninger, men kilden gir ikke tilsvarende utførlige portretter av dem.",
+        "source": "Fotballdokumentet v1.pdf – Del V – Klopp og gegenpressing / Moderne mestre, linje 4557–4623"
       }
     ]
   },
@@ -630,6 +648,12 @@ export const SCHOOL_CHAPTERS = [
         "title": "Positional play 2.0 – keeper som aktivt oppspillsledd",
         "text": "Manuset fremhever keeperens pasningsferdighet, orientering og evne til å åpne rom bak press, med Ederson som eksempel. FIFA Training Centre beskriver moderne keeperstøtte, mottak og pasninger gjennom press. Positional play 2.0 beholdes som manusets analytiske betegnelse. Påstanden om at Guardiola først integrerte keeperen i oppbyggingen tas ikke videre: FIFA beskriver eksempelvis Ungarns Gyula Grosics som en tidligere nyskapende ballspillende keeper.",
         "source": "Fotballdokumentet v1.pdf – Del V – Guardiola og positional play 2.0; FIFA Training Centre, https://www.fifatrainingcentre.com/en/practice/elite-sessions/goalkeeper/goalkeepersbuildup.php ; FIFA, https://www.fifa.com/en/articles/gyula-grosics-hungary-goalkeeping-legacy"
+      },
+      {
+        "id": "portrait_guardiola_ederson",
+        "title": "Guardiola og Ederson – romkontroll med elleve spillere",
+        "text": "Manuset bruker Guardiolas posisjonsspill og Ederson som eksempel på keeperens rolle i pasningsstrukturen. Manchester City beskriver keeperens evne til å starte angrep både kort og langt. Fotballfaglig kan keeperens involvering gi en ekstra pasningsmulighet og tvinge motstanderen til å velge hvilke rom den skal dekke. Det betyr ikke at oppbygging alltid må være kort. Manuset omtaler dette som positional play 2.0; uttrykket beholdes som manusets egen analytiske betegnelse. Ingen nye spillerverdier eller faste oppspill utledes av trenercaset.",
+        "source": "Fotballdokumentet v1.pdf – Del V – Guardiola og positional play 2.0, linje 4591–4617; Manchester City, https://www.mancity.com/news/mens/ederson-fulham-preview-premier-league-63863644"
       }
     ]
   },

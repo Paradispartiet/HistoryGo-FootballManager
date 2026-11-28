@@ -370,3 +370,33 @@ På brukerens bestilling om å fullføre fysiologi er 15 nye fagavsnitt lagt til
 | marking_blocks | restart_organize | Keeper 1.5 Dødball, linje 1199–1203 / Situasjonsavhengig posisjonering, 958–963 / Kommunikasjon, 3707–3712 / Defensiv frispark, 1866 |
 | second_ball_security | offensive_marking_restart | Defensiv Dødball – Offensiv markering, linje 1859–1866 / Keeper 1.5 Dødball |
 | second_ball_security | clearance_counter_restart | Klarering, linje 3775–3792 |
+
+## Bolk 17 – spiller- og trenercase (første integrasjon)
+
+12 søkbare fagavsnitt i eksisterende rolle- og skolekapitler. Gjenbruker konkrete beskrivelser i PDF Del I, 1.1–1.3 Keeper, 3.2 Persepsjon, Del IV og Del V. FIFA, UEFA og Manchester City kontrolleres der eksterne lenker angis. Faglige eksempler fra manus er ikke bevis for rangering eller fullstendig biografi. Personcaser om Sócrates, Bourdieu-eksemplene, historisk WM og øvrige skoler finnes allerede i bolk 14–15. Ingen nye motorverdier eller hovedkapitler. Uverifiserte personanekdoter, psykologiske og kriminelle merkelapper samt tillagte sitater publiseres ikke som fakta.
+
+### Navn i disposisjonen som krever egen fordypning
+
+- Epokeikoner: Billy Meredith, William McGregor, Giuseppe Meazza, Stanley Matthews, Garrincha, Pelé, Eusébio.
+- Arkitekter og ledere: Herbert Chapman, Vittorio Pozzo, Di Stéfano, Beckenbauer, Matthäus, Lahm.
+- Grunnferdigheter og spesialister: Bergkamp, De Bruyne, Okocha, Neymar, Messi, Van Basten, Shearer, Haaland, Beckham, Juninho Pernambucano, Pirlo, Rivelino.
+- Fysiske ferdigheter: Henry, Mbappé, Ronaldo Fenomenet, Drogba, Lukaku, Kanté, Makélélé, Cristiano Ronaldo, Maldini, Modrić, Zlatan.
+- Kultur, kreativitet og regionale eksempler: Romário, Weah, Yaya Touré, Nakata, Park Ji-sung, Son Heung-min, Tom Lund, Gamst Pedersen, Jesper Grønkjær, Baggio, Zola, Ravanelli, Kanu, Strandli, Leonhardsen.
+- Trenerfordypning: Rangnick, Tuchel, Mourinho, Wenger, Ferguson, Ranieri, Drillo. Eksisterende klubb- og skolekapitler kan dekke deler av disse; navn alene er ikke fullstendig kildedekning.
+
+Dette er en prioritert oversikt over uutfylte eksempler, ikke komplette nye portretter. Originalens øvrige navnelister bevares i arkivet. Full OneNote-eksport og CI gjenstår.
+
+| Kapittel | Underavsnitt | Kildeanker |
+|---|---|---|
+| keepers | portrait_keeper_depth | 1.1 Posisjonering / Linjekeepere vs sweeper-keepere, linje 838–949 |
+| keepers | portrait_keeper_angles | 1.1 Vinkelkontroll / Dybdejustering / 1.2 Grunnprinsipper; UEFA, https://www.uefa.com/uefaeuro/history/news/025d-0f6f811b9339-3bdefd2fd076-1000--euro-92-spotlight-how-brilliant-was-denmark-s-peter-schme/ |
+| keepers | portrait_keeper_saves | 1.1 Sideforflytning / Posisjonering mot innlegg / 1.2 Skuddstopping, linje 880–1087 |
+| keepers | portrait_keeper_distribution | 1.3 Distribuering, linje 1110–1183 / Del V – Ederson; Manchester City, https://www.mancity.com/news/mens/ederson-fulham-preview-premier-league-63863644 |
+| link_strikers | portrait_hidegkuti | Del I – Ungarn på 50-tallet; FIFA, https://www.fifa.com/en/news/articles/hungary-magical-magyars-puskas-hidegkuti-england-wembley-1953-six-three |
+| finishing_press | portrait_puskas | Del I – Puskás og Hidegkuti, linje 139–150; FIFA, https://www.fifa.com/en/news/articles/hungary-magical-magyars-puskas-hidegkuti-england-wembley-1953-six-three |
+| six_regista | portrait_scanning | 3.2 Persepsjon, linje 2537–2570 |
+| ten_creator | portrait_creative | Del IV – Estetikk og resultater / Del V – System vs. individ |
+| total_football | portrait_cruyff_michels | Del I – Cruyff og totalfotballen; UEFA, https://www.uefa.com/uefachampionsleague/news/0253-0d7ff54908f6-5927d0a16600-1000--the-greatest-teams-of-all-time-ajax-1971-73/ |
+| catenaccio | portrait_herrera | Del I – Italiensk catenaccio / 7. Det mentale aspektet |
+| gegenpress | portrait_klopp | Del V – Klopp og gegenpressing / Moderne mestre, linje 4557–4623 |
+| positional_play | portrait_guardiola_ederson | Del V – Guardiola og positional play 2.0, linje 4591–4617; Manchester City, https://www.mancity.com/news/mens/ederson-fulham-preview-premier-league-63863644 |

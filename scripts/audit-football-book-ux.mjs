@@ -142,6 +142,10 @@ for(const c of THEORY_CHAPTERS){
 check(THEORY_CHAPTERS.reduce((n,c)=>n+c.diagrams.length,0)===12,"Teorifigurer mangler");
 check(bookHtml.includes('id="footballBookTheory"'),"Teoridelen er ikke tilgjengelig i spillet");
 check(SCHOOL_CHAPTERS.length===6,"Fotballskoler mangler");
+for(const [id,expected] of Object.entries({"keepers":["portrait_keeper_depth","portrait_keeper_angles","portrait_keeper_saves","portrait_keeper_distribution"],"link_strikers":["portrait_hidegkuti"],"finishing_press":["portrait_puskas"],"six_regista":["portrait_scanning"],"ten_creator":["portrait_creative"],"total_football":["portrait_cruyff_michels"],"catenaccio":["portrait_herrera"],"gegenpress":["portrait_klopp"],"positional_play":["portrait_guardiola_ederson"]})){
+  const sections=[...ROLE_CHAPTERS,...SCHOOL_CHAPTERS].find(c=>c.id===id)?.sourceDetails||[];
+  for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),key+": personcase mangler");}
+}
 for(const [id,expected] of Object.entries({"total_football":["culture_art_results","culture_adorno","culture_eco","culture_gadamer","culture_aristotle","culture_synthesis"],"catenaccio":["culture_pragmatism"],"individual_development":["culture_habitus_field","culture_symbolic_capital","culture_access_class"],"exercise_constraints":["culture_material_conditions"],"formations":["culture_elias","culture_regional_examples"],"relationism":["culture_identity"],"collective_training":["culture_socrates"]})){
   const sections=[...THEORY_CHAPTERS,...SCHOOL_CHAPTERS,...TRAINING_CHAPTERS].find(c=>c.id===id)?.sourceDetails||[];
   for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),key+": originalmanusets kultur og filosofi mangler");}
@@ -167,7 +171,7 @@ check(bookHtml.includes('id="footballBookSchools"'),"Fotballskoler ikke tilgjeng
 const canonicalRoles=readJson(join(root,"data","football_roles.json")).roles;
 const bookRoleIds=ROLE_CHAPTERS.flatMap(c=>c.roles.map(r=>r.id));
 check(ROLE_CHAPTERS.length===9,"Rollekapitler mangler");
-for(const [id,expected] of Object.entries({"keepers":["keeper_positioning","keeper_saves","keeper_distribution"],"centre_backs":["centre_back_defence","centre_back_attack"],"fullbacks":["fullback_defence","fullback_attack","wingback_corridor"],"six_regista":["central_midfield_defence","central_midfield_attack"],"eight_press":["eight_defence","eight_attack"],"ten_creator":["supporting_forward"],"wingers":["winger_defence","winger_attack"],"link_strikers":["meeting_forward"],"finishing_press":["striker_defence","striker_attack"]})){
+for(const [id,expected] of Object.entries({"keepers":["keeper_positioning","keeper_saves","keeper_distribution","portrait_keeper_depth","portrait_keeper_angles","portrait_keeper_saves","portrait_keeper_distribution"],"centre_backs":["centre_back_defence","centre_back_attack"],"fullbacks":["fullback_defence","fullback_attack","wingback_corridor"],"six_regista":["central_midfield_defence","central_midfield_attack","portrait_scanning"],"eight_press":["eight_defence","eight_attack"],"ten_creator":["supporting_forward","portrait_creative"],"wingers":["winger_defence","winger_attack"],"link_strikers":["meeting_forward","portrait_hidegkuti"],"finishing_press":["striker_defence","striker_attack","portrait_puskas"]})){
   const sections=ROLE_CHAPTERS.find(c=>c.id===id)?.sourceDetails||[];
   check(sections.map(d=>d.id).join(",")===expected.join(","),id+": originalmanusets posisjonelle arbeidsoppgaver mangler");
   for(const d of sections)check(d.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),d.id+": mangler fagtekst eller kilde");
