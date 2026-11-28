@@ -33,7 +33,7 @@ De nye avsnittene er redaksjonelle sammenfatninger av originalmaterialet, ikke o
 - Keeperens detaljerte teknikk og dødballorganisering: første PDF-integrasjon gjennomført (bolk 5). Full OneNote-kontroll gjenstår.
 - Spillmodell: første detaljerte PDF-integrasjon gjennomført i bolk 6; separat Ready-materiale, dødballer, OneNote-dekning og motorvalidering gjenstår.
 - Droppunkt: Fotballnotater råtekst ved byte 0x000f2da4; kontekst og koordinatsystem må avklares før bruk.
-- Kommunikasjon: første detaljerte PDF-integrasjon i bolk 7; kampforberedelser og komplett analysemetode gjenstår.
+- Kommunikasjon og kampanalyse/-strategi: første detaljerte PDF-integrasjon i bolk 7–8; separat arbeidsoppgavedokument, uutfylt kampforberedelse og OneNote-dekning gjenstår.
 - Fysiologi, mental trening, pedagogikk, kritikk av tidlig spesialisering og sosial tilgang.
 - Fotballhistorie, kultur, spiller- og trenereksempler; historiske påstander og sitater kildekontrolleres før publisering.
 - Full eksport av begge OneNote-seksjonene med sider, bilder og gjeldende revisjoner; deretter linje-/avsnittsbasert dekningsregister. Ikke anta at binæruttrekk er komplette.
@@ -163,3 +163,25 @@ Seks kildeforankrede, søkbare fagavsnitt i coaching_transfer og collective_trai
 | collective_training | defensive_language | 4.1 Defensive beskjeder, linje 3697–3715 |
 | collective_training | offensive_language | 4.2 Offensive beskjeder / Kampanalyse – Kommunikasjon, linje 3716–3726 og 3928–3936 |
 | collective_training | communication_relations | Kommunikasjon / 1.4 Keeperkommunikasjon / Orientering–registrering / Øyekontakt, linje 1188–1200, 1375–1393, 2650–2668 og 3690–3696 |
+
+## Bolk 8 – kampstrategi og kampanalyse
+
+15 søkbare fagavsnitt i training_problem og coaching_transfer fra PDF 6. Kapmpanalyse og 5.3 Strategi (linje 3917–4027), med uttrykkelig forankring i tidligere forsvars- og angrepskapitler for de kortfattede punktene. Den nummererte listen har ni prinsipper selv om overskriften sier seks; alle ni er bevart i rekkefølge. Oppfølgingsspørsmål i punkt 2, 4, 6–9 er redaksjonelle konkretiseringer av originalens prinsipper, ikke nye måledata. Manusets åpne strategispørsmål om hvile med ball og antall spillere bak ballen er ikke gjort om til fasit. Uverifisert 71-prosentpåstand og trenerattribusjoner brukes ikke som dokumentert statistikk eller historiske fakta. 5.1 Kampforberedelse er uutfylt; 5.2 henviser til et separat dokument som ikke er funnet. Ingen nye hovedkapitler, illustrasjoner, spillmotorregler eller statistikkfelt. Full CI og OneNote-gjennomgang gjenstår.
+
+| Kapittel-ID | Underavsnitt-ID | Kildeanker |
+|---|---|---|
+| training_problem | analysis_before_after | 6. Kapmpanalyse / 5.1 Kampforberedelse / 5.2 Arbeidsoppgaver, linje 3917–3920 og 3988–3992 |
+| training_problem | analysis_01_possession | 6. Kapmpanalyse – 1 Possession |
+| training_problem | analysis_02_support | 6. Kapmpanalyse – 2 Støtte |
+| training_problem | analysis_03_communication | 6. Kapmpanalyse – 3 Kommunikasjon |
+| training_problem | analysis_04_delay | 6. Kapmpanalyse – 4 Forsinkelse i forsvar / 2. Defensivt – Forsink |
+| training_problem | analysis_05_penetration | 6. Kapmpanalyse – 5 Gjennombrudd |
+| training_problem | analysis_06_concentration | 6. Kapmpanalyse – 6 Konsentrering i forsvar / 2. Defensivt – Komprimering/Sideforskyvning |
+| training_problem | analysis_07_width | 6. Kapmpanalyse – 7 Bredde i angrep / Etablert angrep |
+| training_problem | analysis_08_movement | 6. Kapmpanalyse – 8 Bevegelse i angrep |
+| training_problem | analysis_09_balance | 6. Kapmpanalyse – 9 Balanse i forsvar / 2. Defensivt – Risiko og balanse |
+| training_problem | opponent_attack | 6. Kapmpanalyse – Hvordan identifisere motsanders karakteristika |
+| training_problem | opponent_defence | 6. Kapmpanalyse – Hvordan identifisere motsanders karakteristika / Formasjonen |
+| coaching_transfer | match_periodization | 5.3 Strategi, linje 3993–4010 |
+| coaching_transfer | match_balance_choices | 5.3 Strategi – Bestem / Back og innoverving, linje 3998–4007 |
+| coaching_transfer | match_adjustments | 5.3 Strategi – Spillalternativer i.f.t. motstander, linje 4010–4027 |

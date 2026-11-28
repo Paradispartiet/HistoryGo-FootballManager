@@ -223,6 +223,12 @@ for(const c of SET_PIECE_CHAPTERS){
 check(SET_PIECE_CHAPTERS.reduce((n,c)=>n+c.diagrams.length,0)===9,"Dødballfigurer mangler");
 check(bookHtml.includes('id="footballBookSetPieces"'),"Dødballer ikke tilgjengelige i spillet");
 check(TRAINING_CHAPTERS.length===6,"Treningskapitler mangler");
+for(const [id,expected] of Object.entries({"training_problem":["analysis_before_after","analysis_01_possession","analysis_02_support","analysis_03_communication","analysis_04_delay","analysis_05_penetration","analysis_06_concentration","analysis_07_width","analysis_08_movement","analysis_09_balance","opponent_attack","opponent_defence"],"coaching_transfer":["match_periodization","match_balance_choices","match_adjustments"]})){
+  const sections=TRAINING_CHAPTERS.find(c=>c.id===id)?.sourceDetails||[];
+  for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),key+": originalmanusets kampanalyse eller kampstrategi mangler");}
+}
+const numberedAnalysis=(TRAINING_CHAPTERS.find(c=>c.id==="training_problem")?.sourceDetails||[]).filter(d=>/^analysis_0[1-9]_/.test(d.id));
+check(numberedAnalysis.length===9&&numberedAnalysis.every((d,i)=>d.title.startsWith((i+1)+". ")), "Originalmanusets ni nummererte analyseprinsipper må beholdes i rekkefølge");
 for(const [id,expected] of Object.entries({"coaching_transfer":["communication_purpose","communication_timing","feedback_culture"],"collective_training":["defensive_language","offensive_language","communication_relations"]})){
   const sections=TRAINING_CHAPTERS.find(c=>c.id===id)?.sourceDetails||[];
   for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),key+": originalmanusets kommunikasjon mangler");}
