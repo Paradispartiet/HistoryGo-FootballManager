@@ -247,6 +247,12 @@ export const ROLE_CHAPTERS = [
         "title": "Stopper – oppbygging og pasningsvalg",
         "text": "I manusets oppbygging står stopperen gjerne ved hjørnet av sekstenmeteren, sidestilt for å kunne se flere alternativer. Han styrer rytmen og kan føre gjennom et ledd for å skape overtall. Vurder ni utveier: spiss i bakrom, møtende spiss, kant i bakrom, møtende kant, indreløper i medløp, direkte gjennombrudd, sentral midtbane, back eller stopper i støtte. Søk øyekontakt, bruk blikket aktivt og vurder hvilket rom pasningen åpner. Når ballen føres frem, må andre ivareta sikringen.",
         "source": "Fotballdokumentet v1.pdf – 3.3 Posisjonelle oppgaver og valg i angrep – Stopper"
+      },
+      {
+        "id": "portrait_maldini",
+        "title": "Paolo Maldini – levetid, posisjonering og tilpasning",
+        "text": "AC Milan dokumenterer Maldinis lange spillerkarriere fra debuten i januar 1985, mens UEFA allerede i 2005 fremhevet hans vedvarende prestasjoner på høyt nivå. Originalmanuset nevner ham ved robusthet og levetid. En lang karriere kan brukes til å studere hvordan spillere løser defensive problemer gjennom plassering, timing og samhandling, og hvordan arbeidsoppgavene kan endres over tid. Den dokumenterer ikke at én bestemt treningsmetode eller posisjoneringsstil hindrer skade. I managerens analyse bør kampbelastning, tilgjengelighet og rollekrav vurderes individuelt fremfor å utlede robusthet fra alder eller karrierelengde alene.",
+        "source": "Faglig tillegg – AC Milan, https://www.acmilan.com/en/club/legends/player/paolo-maldini ; UEFA, https://www.uefa.com/uefachampionsleague/news/01a9-0e6cc45febef-9f10f83f46b9-1000--dutch-style-wins-maldini-over/; personnavn og tematikk fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -407,6 +413,12 @@ export const ROLE_CHAPTERS = [
         "title": "Vingback – korridoransvar med tre stoppere",
         "text": "I manusets 3-4-2-1 har vingbackene ansvar for sidekorridoren. Når laget forsvarer i en femmer, kan ballnær vingback støte tidlig ut for å hindre kant eller back i å vende opp. Motsatt vingback kan da ligge noe høyere enn de tre stopperne, slik at bakre ledd ser ut som tre eller fire. Tre stoppere kan dekke innlegg og sentrale rom, men laget kan bli baktungt og få lave ballbrudd. Dersom sidestopperne ikke bidrar i ballfordelingen, blir det færre oppspillspunkter. Fordelingen av bredde og sikring må derfor avtales; tre stoppere alene betyr ikke nødvendigvis en defensiv spillestil.",
         "source": "Fotballdokumentet v1.pdf – 5.7 3-4-2-1 / Spill med tre bak"
+      },
+      {
+        "id": "portrait_lahm",
+        "title": "Philipp Lahm – rollefortrolighet på back og midtbane",
+        "text": "Bayern Münchens historiske portrett dokumenterer Lahms bruk som høyreback, venstreback og tidvis midtbanespiller. Det gir et eksempel på forskjellen mellom posisjonsnavn og arbeidsoppgaver. På back må spilleren ofte forholde seg til sidelinjen, kantspilleren og rom bak seg; sentralt må han registrere press fra flere retninger og tilby støttevinkler. Observer hvilke ferdigheter som kan overføres, som orientering og kroppsstilling, og hvilke relasjoner som må læres på nytt. Allsidighet betyr ikke at enhver spiller automatisk behersker alle roller. Denne fagteksten endrer ikke motorens eksisterende rollefortrolighet.",
+        "source": "Faglig tillegg – FC Bayern, https://fcbayern.com/en/club/hall-of-fame/philipp-lahm; personnavn og tematikk fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -528,6 +540,12 @@ export const ROLE_CHAPTERS = [
         "title": "Xavi, Iniesta og andre orienteringssterke midtbanespillere",
         "text": "I persepsjonsdelen nevner manuset Xavi, Iniesta, Fàbregas, Van der Vaart, Sneijder, Lampard og Özil som eksempler ved orientering før og etter mottak. Oppgaven er å registrere press, støtte og rom, ikke bare å bevege hodet. For en dyp midtbanespiller skal orienteringen også gi informasjon om motstanderens bakre linje og muligheten for bakrom. Disse navnene beholdes som manusets observasjonsforslag; det finnes ikke individuelle scanningmålinger i materialet som gir grunnlag for rangering.",
         "source": "Fotballdokumentet v1.pdf – 3.2 Persepsjon, linje 2537–2570"
+      },
+      {
+        "id": "portrait_makelele",
+        "title": "Claude Makélélé – posisjonell sikring og arbeidsøkonomi",
+        "text": "Chelsea beskriver Makélélé-rollen som en midtbanespiller som beskytter bakre ledd og ofte lar andre ta mer offensive posisjoner. Faglig er forskjellen mellom å løpe for å reparere et åpent rom og å plassere seg slik at rommet allerede er beskyttet, viktig. En sekser kan flytte seg sideveis, stenge pasningslinjen mot spissen og være tilgjengelig for en enkel pasning etter gjenvinning. Observer når han holder posisjonen i stedet for å følge ballen. Det er ikke grunnlag for å fastsette individuelle utholdenhetsverdier eller anta at Makélélé alltid handlet på samme måte. Caset utfyller originalens refleksjon om mindre synlige bidrag.",
+        "source": "Faglig tillegg – Chelsea FC, https://www.chelseafc.com/en/news/article/how-claude-makelele-changed-english-football; personnavn og tematikk fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -629,6 +647,24 @@ export const ROLE_CHAPTERS = [
         "title": "Øyvind Leonhardsen – indreløperens løp og timing",
         "text": "Store norske leksikon beskriver Leonhardsen som en løpssterk, anvendelig og målfarlig midtbanespiller, og dokumenterer rollen som venstre indreløper da Norge slo Brasil i 1998. Caset knytter fysisk kapasitet til taktisk timing: indreløperen må både kunne tilby støtte og true rom foran ballen, uten at midtbanens sikring nødvendigvis forsvinner. Studer når løpet starter i forhold til ballførerens handlingsrom, og hvem som overtar rommet spilleren forlater. Dette er bokas analytiske anvendelse, ikke en påstand om en bestemt historisk løpsrute.",
         "source": "Faglig tillegg – Store norske leksikon, https://snl.no/%C3%98yvind_Leonhardsen; personnavn fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_kante",
+        "title": "N'Golo Kanté – arbeidskapasitet, gjenvinning og ballbruk",
+        "text": "UEFAs tekniske analyse av Chelsea mot Lille i 2022 trekker frem Kantés gjenvinninger, teknikk og ballbruk i samme kamp. Caset viser hvorfor høy arbeidskapasitet ikke bør vurderes uavhengig av oppgaven. En midtbanespiller må lese når han kan støte, om han har sikring, og hva første pasning skal gjøre etter ballvinning. Løpsmengde uten kontroll over rom er ikke nødvendigvis produktiv. Observer både gjenvinningen og den påfølgende handlingen: om spilleren kan vende opp, spille en støttepasning eller starte et gjennombrudd. Én kampanalyse gir ikke et fullstendig mål på spillerens utholdenhet.",
+        "source": "Faglig tillegg – UEFA, https://www.uefa.com/uefachampionsleague/news/0272-1487ed26f300-a4989534e012-1000--in-the-zone-chelsea-2-0-losc/; personnavn og tematikk fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_matthaus",
+        "title": "Lothar Matthäus – allrounderen fra midtbane til libero",
+        "text": "FIFA dokumenterer Matthäus' karriere som sentral midtbanespiller og libero. Hans rolle i Vest-Tysklands VM-seier i 1990 og mål med begge føtter fra utenfor boksen mot Jugoslavia gir konkrete historiske holdepunkter. En allrounder kan løse flere oppgaver, men rollen bestemmer hvilke ferdigheter som prioriteres i situasjonen. Som midtbanespiller kan han støtte og true fremover, mens en libero må ivareta sikring og oppbygging fra en annen startposisjon. Sammenlign informasjonsbehov og bevegelsesrom i de to rollene. Overgangen mellom roller dokumenterer anvendelighet, ikke at alle fysiske egenskaper var uforandret gjennom karrieren.",
+        "source": "Faglig tillegg – FIFA, https://www.fifa.com/en/articles/bayern-munich-club-profile-history-players-qualified ; https://www.fifa.com/en/tournaments/mens/worldcup/articles/west-germany-champions-stats; personnavn og tematikk fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_modric",
+        "title": "Luka Modrić – rytmekontroll og langvarig prestasjon",
+        "text": "UEFAs analyse av Kroatia–Italia i EM 2024 fremhever Modrićs pasning til mottakerens bakre fot, slik at neste handling kan gå fremover. UEFA omtaler også hans betydning for Kroatia som 37-åring i VM 2022. Caset knytter teknisk presisjon til spilleforståelse: en god pasning er ikke bare en pasning som når frem, men en som gir medspilleren en gunstig kroppsstilling og tid. Vurder hvordan tempo og støtte endres når spilleren møter press. Lang karriere er et historisk holdepunkt, ikke grunnlag for å fastsette biologisk alder, treningsdose eller skadeprognose.",
+        "source": "Faglig tillegg – UEFA, https://www.uefa.com/uefaeuro/history/news/028e-1b37474f637b-9784d3f1e6e4-1000--croatia-1-1-italy-analysis-the-magic-of-modric/ ; https://www.uefa.com/news/027b-169a7169dd60-6148d39469f8-1000--croatia-at-the-2022-world-cup/; personnavn og tematikk fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -882,6 +918,12 @@ export const ROLE_CHAPTERS = [
         "title": "Neymar – improvisasjon og kombinasjoner i trangt rom",
         "text": "Manuset nevner Neymar ved improvisasjon og kulturelle læringsmiljøer, men dokumenterer ikke hele treningsbakgrunnen hans. FIFA viser målet mot Kroatia i VM 2022 som et eksempel på et kollektivt angrep avsluttet av Neymar etter kombinasjoner og en passering av keeperen. Faglig illustrerer dette at en dyktig dribler også må kunne spille fra seg ballen og fortsette bevegelsen. Observer hvordan korte støttepasninger endrer forsvarernes posisjoner, når en spiller kan akselerere videre, og om ballføreren bør velge pasning, finte eller egen avslutning. Det redaksjonelle eksemplet er ikke bevis for at en bestemt oppvekstform alene skaper kreativitet.",
         "source": "Faglig tillegg – PDF linje 4050–4058 og 4155–4160; FIFA, https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/neymar-goal-brazil-2022-croatia?searchOverlay=1 ; https://collect.fifa.com/collectible/1093913151; personnavn og eventuelle mønstre fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_mbappe",
+        "title": "Kylian Mbappé – brems, akselerasjon og bueløp",
+        "text": "FIFA Training Centre analyserer hvordan Mbappé reduserer farten for å binde forsvareren før han øker den igjen, og hvordan han bruker buede løp og retningsendringer bak forsvarslinjen. Fotballhurtighet er dermed ikke bare en rettlinjet sprint. Når forsvareren nærmer seg, kan en kontrollert oppbremsing gjøre en ny akselerasjon vanskeligere å følge. Observer ballens avstand fra foten, forsvarerens tyngdeoverføring og rommet som åpnes. En treningsvariant er å møte en aktiv forsvarer og velge mellom å akselerere, endre retning og spille videre. Dette er et pedagogisk forslag, ikke en måling av spillerens kapasitet.",
+        "source": "Faglig tillegg – FIFA Training Centre, https://www.fifatrainingcentre.com/en/game/individual-qualities/world-class-skills/mbappe-deceleration-to-acceleration2.php ; https://www.fifatrainingcentre.com/en/fwc2022/physical-analysis/using-case-studies-to-reveal-the-reasons-why-various-tactical-roles-exert-themselves-physically-during-world-cup-matches.php; personnavn og tematikk fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -995,6 +1037,12 @@ export const ROLE_CHAPTERS = [
         "title": "Dennis Bergkamp – førsteberøring og opp–tilbake–gjennom",
         "text": "Originalmanuset bruker Bergkamp i Wengers Arsenal som eksempel på opp–tilbake–gjennom: spissen møter, legger igjen til en medspiller og frigjør muligheten for Henrys gjennomløp. Den konkrete historiske sekvensen er ikke uavhengig dokumentert her. Premier Leagues portrett av Bergkamp og hans egen forklaring av målet mot Leicester i 1997 gir et separat kildebelagt eksempel på samordning av løp, kontroll og avslutning. Førsteberøringen kan enten beskytte ballen, legge den til rette for neste pasning eller fjerne en forsvarer. Observasjonsoppgave: vurder forsvarerens avstand og retning før mottak, muligheten for støtte og om neste handling bør være egen vending eller pasning videre. I en opp–tilbake–gjennom-kombinasjon er den møtende spilleren ikke nødvendigvis den som får siste pasning.",
         "source": "Faglig tillegg – PDF linje 3458–3467; Premier League, https://www.premierleague.com/en/news/2147353 ; https://www.premierleague.com/en/news/2737302; personnavn og eventuelle mønstre fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_drogba_lukaku",
+        "title": "Didier Drogba og Romelu Lukaku – fysisk kapasitet i spissens støtteoppgave",
+        "text": "Premier League fremhever Drogbas kombinasjon av kraft, fart og ferdigheter, og beskriver Lukakus evne til å holde forsvarere unna ballen i boksen. Casene brukes til å skille mellom å skjerme ballen, vinne en duell og gjøre neste handling tilgjengelig for en medspiller. En spiss kan ta imot under press, vende dersom rommet åpnes eller legge igjen ballen dersom støtte er tilgjengelig. Styrke er et fysisk grunnlag; valg av kroppsstilling, timing og lovlig kontakt avgjør hvordan den anvendes. I kampanalyse bør man skille mellom mottak med forsvarer i ryggen og mottak på løp. Dette er ikke identiske spillerprofiler eller en rangering av duellstyrke.",
+        "source": "Faglig tillegg – Premier League, https://www.premierleague.com/en/events/hall-of-fame/inductees/didier-drogba ; https://www.premierleague.com/en/news/2211857; personnavn og tematikk fra Fotballdokumentet v1.pdf"
       }
     ]
   },
@@ -1201,6 +1249,24 @@ export const ROLE_CHAPTERS = [
         "title": "Erling Braut Haaland – bakromstrussel og angrep av avslutningssoner",
         "text": "Haaland er navngitt i originaldisposisjonen uten et utfylt portrett. Premier Leagues analyse fra 2022 beskriver hvordan Manchester City tilpasset oppbygging og leveringer etter at Haaland ble lagets spiss, blant annet gjennom De Bruynes innlegg. FIFA Training Centre beskriver løp bak siste forsvarsledd som et eget mottaksmønster. Faglig er trusselen todelt: spissen kan selv motta bak linjen, eller påvirke forsvarslinjens dybde slik at en medspiller får rom foran den. Ved innlegg må han vurdere leveringsbane, stopperens orientering og tidspunktet for å angripe rommet. Observer løp mot første eller bakre sone og om spilleren justerer seg etter ballførerens muligheter. Dette er en ny analyseoppgave, ikke dokumentasjon av alle Haalands individuelle løpsmønstre.",
         "source": "Faglig tillegg – PDF Del II, linje 273–276; Premier League, https://www.premierleague.com/en/news/2915555 ; FIFA Training Centre, https://www.fifatrainingcentre.com/en/resources-tools/football-language/in-possession/movement-to-receive/index.php; personnavn og eventuelle mønstre fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_henry",
+        "title": "Thierry Henry – fart, venstresidig utgangsposisjon og gjennombrudd",
+        "text": "Premier League beskriver hvordan Wenger gjorde Henry til spiss etter at han hadde spilt på kanten, og hvordan han fortsatte å true fra venstre. Originalmanusets Bergkamp–Henry-eksempel viser hvorfor fart må ses sammen med pasning og løp. En spiss som starter utenfor stopperen kan angripe diagonalt når ballføreren får tid, mens en møtende medspiller skaper et alternativ foran linjen. Observer om løpet gir separasjon før pasningen og om førsteberøringen bevarer farten. Ren toppfart forklarer ikke alene gjennombruddet; startposisjon, forsvarerens orientering og timing er også viktige.",
+        "source": "Faglig tillegg – PDF 3458–3467; Premier League, https://www.premierleague.com/en/events/hall-of-fame/inductees/thierry-henry; personnavn og tematikk fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_ronaldo_nazario",
+        "title": "Ronaldo Nazário – avslutningsteknikk og tilbakekomst",
+        "text": "FIFA beskriver Ronaldo som en teknisk og spilleintelligent spiss og dokumenterer hans to mål i VM-finalen i 2002. Ved det andre målet lot Rivaldo pasningen passere, før Ronaldo kontrollerte og avsluttet. Studer hvordan den første handlingen etter ballmottak skaper en brukbar skuddvinkel og hvordan medspillerens bevegelse påvirker forsvaret. Lagkameraten Kleberson beskriver også arbeidet for å få Ronaldo fysisk klar til turneringen. Det illustrerer at tilgjengelig fysisk kapasitet og fotballteknikk må fungere sammen, men gir ikke grunnlag for å kopiere et individuelt rehabiliteringsopplegg eller forklare tilbakekomsten med mentalitet alene.",
+        "source": "Faglig tillegg – FIFA, https://inside.fifa.com/tournaments/mens/worldcup/2018russia/news/march-30-countdown-76-days-2935205 ; https://www.fifa.com/pt/tournaments/mens/worldcup/canadamexicousa2026/articles/seis-herois-das-finais-das-copas-do-mundo ; https://www.fifa.com/en/articles/kleberson-brazil-2002-fifa-world-cup-interview; personnavn og tematikk fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_cristiano_heading",
+        "title": "Cristiano Ronaldo – spenst, tilløp og timing ved heading",
+        "text": "Originalmanuset nevner Cristiano Ronaldo særskilt ved spenst. UEFA dokumenterer headingen i EM-semifinalen mot Wales i 2016 og fremhever hoppet ved scoringen. Caset kan brukes til å analysere hvordan en angriper finner plass for sats, følger ballbanen og møter ballen i riktig øyeblikk. Spenst alene avgjør ikke luftduellen: innleggets kvalitet, forsvarerens plassering og spillerens timing må vurderes sammen. Det innføres ingen udokumenterte målinger av hopphøyde eller faste headingverdier. Praktisk trening skal følge gjeldende aldersregler og klubbens sikkerhetsrutiner.",
+        "source": "Faglig tillegg – UEFA, https://www.uefa.com/uefaeuro/match/2017905--portugal-vs-wales/events/; personnavn og tematikk fra Fotballdokumentet v1.pdf"
       }
     ]
   }

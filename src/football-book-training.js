@@ -723,6 +723,18 @@ export const TRAINING_CHAPTERS = [
         "title": "Klasse, profesjonalisering og tilgang til fotball",
         "text": "Manuset knytter fotballens utvikling til sosiale og klassemessige forhold, profesjonalisering og tilgang til trening. Muligheten til å bruke tid på systematisk trening påvirkes av materielle og institusjonelle betingelser. Også i ressurssterke land kan kostnader til akademier, utstyr og ekstra økter begrense deltakelsen. Dermed er teknikkutvikling både et individuelt og et sosialt spørsmål. Manusets kontrast mellom tidlige amatør- og arbeiderklubber er en historisk tolkning som trenger nærmere kildearbeid, ikke en regel om sosial klasses spillestil.",
         "source": "Fotballdokumentet v1.pdf – Del I – Klasse, kultur og profesjonalisering / 2.7 Sosiale og økonomiske skjevheter"
+      },
+      {
+        "id": "portrait_zlatan_longevity",
+        "title": "Zlatan Ibrahimović – levetid og individuell tilpasning",
+        "text": "AC Milan dokumenterer Ibrahimovićs avslutning av spillerkarrieren 4. juni 2023. Originalmanuset nevner ham i forbindelse med robusthet og levetid, men gir ingen fysiologisk forklaring. Bruk derfor karrieren som utgangspunkt for et faglig spørsmål: hvordan kan arbeidsoppgaver, treningsbelastning og restitusjon tilpasses når en spiller ikke har de samme forutsetningene som tidligere? En erfaren spiss kan fortsatt bidra gjennom teknikk, posisjonering og relasjoner, men det må vurderes ut fra observerbar prestasjon. Dette er et redaksjonelt perspektiv, ikke en påstand om Ibrahimovićs konkrete medisinske eller fysiske treningsprogram.",
+        "source": "Faglig tillegg – AC Milan, https://www.acmilan.com/en/news/articles/club/2023-12-11/redbird-capital-partners-press-release; personnavn og tematikk fra Fotballdokumentet v1.pdf"
+      },
+      {
+        "id": "portrait_physical_role_comparison",
+        "title": "Fysiske spesialister – samme ressurs, forskjellige arbeidsoppgaver",
+        "text": "Sammenlign de fysiske ressursene i originalmanuset med rollekravene: en kant trenger ofte akselerasjon når et siderom åpnes; en spiss trenger kraft og kontroll i mottak under press; en indreløper må gjenta forflytninger mellom arbeidsrom; en sekser kan beskytte rom ved tidlig posisjonering. FIFA Training Centres VM-analyse viser at ulike taktiske roller og kampoppgaver påvirker fysisk belastning. Observer derfor ikke bare hvor mye en spiller løper, men når, hvor og hvorfor han løper. Eksemplene i denne bolken er faglige observasjonsmodeller, ikke en sammenlignbar fysisk test av historiske spillere. Ingen spillerverdier, aldersterskler eller simulerte treningsbonuser endres.",
+        "source": "Faglig tillegg – FIFA Training Centre, https://www.fifatrainingcentre.com/en/fwc2022/physical-analysis/using-case-studies-to-reveal-the-reasons-why-various-tactical-roles-exert-themselves-physically-during-world-cup-matches.php; personnavn og tematikk fra Fotballdokumentet v1.pdf"
       }
     ]
   },

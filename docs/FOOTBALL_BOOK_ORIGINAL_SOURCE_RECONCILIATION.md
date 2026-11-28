@@ -432,3 +432,23 @@ Dette er en prioritert oversikt over uutfylte eksempler, ikke komplette nye port
 | finishing_press | portrait_shearer | PDF linje 2199–2205 og 2446–2451; Premier League, https://www.premierleague.com/en/news/846527 ; https://www.premierleague.com/en/news/845999 |
 | finishing_press | portrait_haaland | PDF Del II, linje 273–276; Premier League, https://www.premierleague.com/en/news/2915555 ; FIFA Training Centre, https://www.fifatrainingcentre.com/en/resources-tools/football-language/in-possession/movement-to-receive/index.php |
 | third_man | portrait_bergkamp_henry_debruyne_haaland | PDF linje 3458–3467; Premier League, https://www.premierleague.com/en/news/2785853 ; https://www.premierleague.com/en/news/2915555 |
+
+## Bolk 20 – fysiske spesialister og allroundere
+
+13 nye fagtillegg i rolle- og treningskapitler. Originalens liste over fysiske eksempler (PDF 392–400) er nå tematisk dekket, inkludert Pelé fra bolk 18. Henry, Mbappé, Ronaldo Nazário, Drogba, Lukaku, Kanté, Makélélé, Cristiano Ronaldo, Maldini, Modrić og Zlatan; Matthäus og Lahm fra allrounderlisten (390). Kildene til nye historiske og taktiske holdepunkter er FIFA, FIFA Training Centre, UEFA, Premier League og klubbene. Observasjonsoppgaver og rollekrav er redaksjonelle anvendelser, ikke dokumenterte individuelle fysiske målinger eller fullstendige biografier. Ingen motorverdier, fysiske terskler, medisinske prognoser, øvelses-ID-er eller illustrasjoner endres. Originalavsnitt bevart; andre personnavn i bolk 17, full OneNote-kontroll og CI gjenstår.
+
+| Kapittel | Underavsnitt | Ekstern kilde |
+|---|---|---|
+| finishing_press | portrait_henry | PDF 3458–3467; Premier League, https://www.premierleague.com/en/events/hall-of-fame/inductees/thierry-henry |
+| wingers | portrait_mbappe | FIFA Training Centre, https://www.fifatrainingcentre.com/en/game/individual-qualities/world-class-skills/mbappe-deceleration-to-acceleration2.php ; https://www.fifatrainingcentre.com/en/fwc2022/physical-analysis/using-case-studies-to-reveal-the-reasons-why-various-tactical-roles-exert-themselves-physically-during-world-cup-matches.php |
+| finishing_press | portrait_ronaldo_nazario | FIFA, https://inside.fifa.com/tournaments/mens/worldcup/2018russia/news/march-30-countdown-76-days-2935205 ; https://www.fifa.com/pt/tournaments/mens/worldcup/canadamexicousa2026/articles/seis-herois-das-finais-das-copas-do-mundo ; https://www.fifa.com/en/articles/kleberson-brazil-2002-fifa-world-cup-interview |
+| link_strikers | portrait_drogba_lukaku | Premier League, https://www.premierleague.com/en/events/hall-of-fame/inductees/didier-drogba ; https://www.premierleague.com/en/news/2211857 |
+| eight_press | portrait_kante | UEFA, https://www.uefa.com/uefachampionsleague/news/0272-1487ed26f300-a4989534e012-1000--in-the-zone-chelsea-2-0-losc/ |
+| six_regista | portrait_makelele | Chelsea FC, https://www.chelseafc.com/en/news/article/how-claude-makelele-changed-english-football |
+| eight_press | portrait_matthaus | FIFA, https://www.fifa.com/en/articles/bayern-munich-club-profile-history-players-qualified ; https://www.fifa.com/en/tournaments/mens/worldcup/articles/west-germany-champions-stats |
+| fullbacks | portrait_lahm | FC Bayern, https://fcbayern.com/en/club/hall-of-fame/philipp-lahm |
+| centre_backs | portrait_maldini | AC Milan, https://www.acmilan.com/en/club/legends/player/paolo-maldini ; UEFA, https://www.uefa.com/uefachampionsleague/news/01a9-0e6cc45febef-9f10f83f46b9-1000--dutch-style-wins-maldini-over/ |
+| eight_press | portrait_modric | UEFA, https://www.uefa.com/uefaeuro/history/news/028e-1b37474f637b-9784d3f1e6e4-1000--croatia-1-1-italy-analysis-the-magic-of-modric/ ; https://www.uefa.com/news/027b-169a7169dd60-6148d39469f8-1000--croatia-at-the-2022-world-cup/ |
+| finishing_press | portrait_cristiano_heading | UEFA, https://www.uefa.com/uefaeuro/match/2017905--portugal-vs-wales/events/ |
+| individual_development | portrait_zlatan_longevity | AC Milan, https://www.acmilan.com/en/news/articles/club/2023-12-11/redbird-capital-partners-press-release |
+| individual_development | portrait_physical_role_comparison | FIFA Training Centre, https://www.fifatrainingcentre.com/en/fwc2022/physical-analysis/using-case-studies-to-reveal-the-reasons-why-various-tactical-roles-exert-themselves-physically-during-world-cup-matches.php |
