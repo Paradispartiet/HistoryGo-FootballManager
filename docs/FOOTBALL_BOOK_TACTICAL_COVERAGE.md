@@ -57,3 +57,15 @@ Eksisterende overgangs- og kontrolltesters assertions er inspisert, ikke kjørt 
 - Prioriter verifisert dødballhendelse og enkel, konkret oppgavefordeling for begge lag, før leveringsvarianter og sekundære utveier. Viderefør første kontakt → nedfall → eventuell kontrollert overgang uten dobbel xG. Før keeper-/straffesparkvalg må eksisterende data og regelgrunnlag verifiseres. Ingen personnavnbonus, ulovlig sperring eller fast straffesparkfordel basert på manusets preferanser.
 
 Ingen motorendring, ingen ny sjanseberegning. Ingen eksterne kilde-URL-er i boka verifisert i denne bolken. Neste bolk: spillerroller og relasjoner, deretter trening og spillerutvikling, historie og kultur. Basistekst og klubbkapitler kartlegges separat.
+
+## Bolk 5 – spillerroller, individuelle ferdigheter og relasjoner
+
+Alle 27 rolle-ID-er i bokas ni rollekapitler er sammenlignet mot `data/football_roles.json`: identisk ID-sett, ingen nye eller dupliserte roller. 76 fagavsnitt vurdert: 17 delvis dekket, 1 uavklart, 58 forklarende spillerportretter og tematiske personcase. Samlet vurdert 144/287.
+
+- `calculatePlayerMatchFit` vurderer rolle, posisjon og taktikk; `calculateTeamFit` bruker også rolleforbindelser og begrensede bidrag fra dokumenterte individuelle styrker. Eksisterende test `simulate-sourced-player-team-fit.mjs` sammenligner en pasningssterk stopper med en hurtig, spillforståelsessterk stopper, kontrollerer TS/JS-paritet og ulik oppbyggings-/restforsvarsscore. Testens assertions er inspisert, ikke kjørt i denne bolken. Rollefit er ikke en selvstendig beslutningsmotor.
+- Relasjonsmotoren har blant annet kant + overlapp, møtende spiss + dybdeløper, regista + dybdeløper, keeper + ballspillende forsvar, og pressende spiss + pressende midtbane. Den registrerer også manglende komplementære roller og kontinuitet. Den leser ikke kontinuerlige posisjoner for disse relasjonene. Rollefortrolighet er allerede en separat, begrenset utviklingsmekanikk.
+- Mål og assists fordeles etter at sjansegeneratoren har produsert mål. `attributeGoal` vekter rolle/posisjon/fit, men dette er ikke bevis for at avslutterens skuddteknikk eller keeperens konkrete redning avgjorde hendelsen. Keeperens boksdekning har mekanikk i dødballfasen, mens grep/parering/blokk/returvalg er uavklart.
+- Spillerportretter og OneNote-personcase klassifisert som pedagogiske observasjoner; de overlapper generiske handlingsprinsipper. Ingen ny historisk spillerdata, automatisk personbonus eller ekstern kildeverifisering. Dette er en gjennomgang av den publiserte bokteksten, ikke ny kontroll av originalarkivets komplette kildeinnhold.
+- Første kandidat til motorutvidelse er den møtende spissens utveivalg: bygge videre på eksisterende tredjemann/avlegg, med verifiserte alternative mottakere og motspill. Deretter individuell førsteberøring/orientering og forsvarsvalg. Hold samme kampfase, ikke dobbel xG eller ny generell rating.
+
+Ingen motorendringer eller nye rolle-ID-er. Neste bolk: treningsmetodikk, spillerutvikling, fysiologi og psykologi. Deretter fotballskoler, historie og kultur. Klubbkapitler og basistekst er fortsatt separat arbeid.
