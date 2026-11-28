@@ -223,6 +223,10 @@ for(const c of SET_PIECE_CHAPTERS){
 check(SET_PIECE_CHAPTERS.reduce((n,c)=>n+c.diagrams.length,0)===9,"Dødballfigurer mangler");
 check(bookHtml.includes('id="footballBookSetPieces"'),"Dødballer ikke tilgjengelige i spillet");
 check(TRAINING_CHAPTERS.length===6,"Treningskapitler mangler");
+for(const [id,expected] of Object.entries({"individual_development":["physical_resources","motor_learning","neuromuscular_control","balance_proprioception"],"load_recovery":["speed_training_outline","speed_play_outline"]})){
+  const sections=TRAINING_CHAPTERS.find(c=>c.id===id)?.sourceDetails||[];
+  for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),key+": originalmanusets fysiologi eller sportsvitenskap mangler");}
+}
 for(const [id,expected] of Object.entries({"exercise_constraints":["constraints_led","rondo_practice","duel_practice","scanning_practice","restriction_practice"],"coaching_transfer":["play_practice","guided_discovery","contextual_technique"],"individual_development":["early_specialization","learning_environment"],"collective_training":["possession_counter_practice"],"load_recovery":["training_periodization"]})){
   const sections=TRAINING_CHAPTERS.find(c=>c.id===id)?.sourceDetails||[];
   for(const key of expected){const d=sections.find(x=>x.id===key);check(d?.title&&d.text.length>100&&d.source.startsWith("Fotballdokumentet v1.pdf"),key+": originalmanusets treningsmetodikk mangler");}

@@ -34,7 +34,7 @@ De nye avsnittene er redaksjonelle sammenfatninger av originalmaterialet, ikke o
 - Spillmodell: første detaljerte PDF-integrasjon gjennomført i bolk 6; separat Ready-materiale, dødballer, OneNote-dekning og motorvalidering gjenstår.
 - Droppunkt: Fotballnotater råtekst ved byte 0x000f2da4; kontekst og koordinatsystem må avklares før bruk.
 - Kommunikasjon og kampanalyse/-strategi: første detaljerte PDF-integrasjon i bolk 7–8; separat arbeidsoppgavedokument, uutfylt kampforberedelse og OneNote-dekning gjenstår.
-- Pedagogikk, øvelsesidéer, kritikk av tidlig spesialisering og sosial tilgang: første PDF-integrasjon i bolk 9; Frade, Seirul·lo, Godfoten, Dreier og Descamps krever ytterligere kilder. Fysiologi og mental trening gjenstår.
+- Pedagogikk, øvelsesidéer, kritikk av tidlig spesialisering og sosial tilgang: første PDF-integrasjon i bolk 9; Frade, Seirul·lo, Godfoten, Dreier og Descamps krever ytterligere kilder. Sportsvitenskap: første PDF-integrasjon i bolk 10. Fysiologidisposisjonen er bevart, men den detaljerte fysiologiblokken og mental trening gjenstår.
 - Fotballhistorie, kultur, spiller- og trenereksempler; historiske påstander og sitater kildekontrolleres før publisering.
 - Full eksport av begge OneNote-seksjonene med sider, bilder og gjeldende revisjoner; deretter linje-/avsnittsbasert dekningsregister. Ikke anta at binæruttrekk er komplette.
 
@@ -204,3 +204,18 @@ Seks kildeforankrede, søkbare fagavsnitt i coaching_transfer og collective_trai
 | individual_development | learning_environment | 2.7 Sosiale og økonomiske skjevheter / 3.4 Sosiologi – Kulturelle læringsmiljøer |
 | collective_training | possession_counter_practice | Ballbesittelse / Konservering / Overgang–Kontring |
 | load_recovery | training_periodization | 3.3 Pedagogiske modeller – Periodisering & treningsfilosofier / 3.4 Pedagogiske modeller |
+
+## Bolk 10 – sportsvitenskap og fysiologi (delvis dekning)
+
+Seks søkbare fagavsnitt i individual_development og load_recovery. PDF linje 392–400, 780–787, 4105–4167 samt relevante tidligere teknikk-, motorisk læring- og pressavsnitt. Motorisk læring og nevromuskulær samordning har sammenhengende fagtekst i PDF-en; de øvrige fysiologiavsnittene er uttrykkelig disposisjonsbaserte. Kontroll mot arkivets delvise OneNote-uttrekk fra Fotballteori (Den 12.06.2026).one bekrefter disposisjonene ved byte 0x00007b84, 0x00008d04, 0x0000e434 og 0x001b05f8, samt nevromuskulær tekst ved 0x001af314. Ingen utførlig fysiologiblokk identifisert i de tilgjengelige uttrekkene. Dette utelukker ikke at den finnes i ulesbare eller ikke-ekstraherte OneNote-data. Notasjonen restitusjon <70 % mangler målereferanse og er ikke en anbefaling. De fire hurtighetslekene registreres som navn, ikke ferdig øvelsesinnhold. Tønnesen/Olympiatoppen, Hargreaves og Okwonga er kildepekere, ikke selvstendig verifiserte referanser. Ingen nye motorverdier, medisinske råd, dosering, treningsøvelses-ID-er, figurer eller kapitler.
+
+| Kapittel-ID | Underavsnitt-ID | Kildeanker |
+|---|---|---|
+| individual_development | physical_resources | 6. Fysiologi / 4. Fysiske ferdigheter / Sportsvitenskap og fysiologi |
+| individual_development | motor_learning | 3.0 Ballkontroll og restriksjoner / 3.4 Sportsvitenskapelige perspektiver |
+| individual_development | neuromuscular_control | 3.4 Sportsvitenskapelige perspektiver / Nevromuskulær forskning |
+| individual_development | balance_proprioception | 6. Fysiologi – Balanse / Sportsvitenskap og fysiologi / 3.1 Individuelle angrepsferdigheter |
+| load_recovery | speed_training_outline | 6. Fysiologi – Hurtighet / 2. Defensivt – Pressbølger |
+| load_recovery | speed_play_outline | 6. Fysiologi – Hurtighet / Lek |
+
+**Åpent:** Full fysiologiblokk med utholdenhet, spenst/hurtighet, styrke, bevegelighet, balanse, skadeforebygging, konkrete hurtighetsdrag og lekregler; avklar måleenhet for restitusjonsnotasjonen. Full CI og OneNote-gjennomgang gjenstår.

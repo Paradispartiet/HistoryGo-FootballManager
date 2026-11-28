@@ -501,6 +501,30 @@ export const TRAINING_CHAPTERS = [
         "title": "Habitus og læringsmiljø – teknikkens sosiale rammer",
         "text": "Manuset bruker Bourdieus habitus som begrep for kroppsliggjort erfaring og fremhever hvordan miljø og oppvekst former teknikk. Det stiller uorganisert lek og futsal på små flater opp mot systematisk akademi- og klubbtrening, med ulike muligheter for improvisasjon, presisjon og kollektive mønstre. Samtidig fremheves ulik tilgang til baner, utstyr og trenerkompetanse, også for barn som ikke har råd til ekstra økter. Disse eksemplene beskriver manusets sosiologiske perspektiv; de skal ikke brukes som nasjonale stereotypier eller som automatiske spillerverdier.",
         "source": "Fotballdokumentet v1.pdf – 2.7 Sosiale og økonomiske skjevheter / 3.4 Sosiologi – Kulturelle læringsmiljøer"
+      },
+      {
+        "id": "physical_resources",
+        "title": "Fire fysiske ressurser – manusets inndeling",
+        "text": "Fysiologidisposisjonen deler spillerens fysiske ressurser inn i utholdenhet, spenst/hurtighet, styrke og bevegelighet. En annen oversikt i manuset navngir hurtighet, styrke og utholdenhet, spenst og heading samt robusthet og levetid. Disse kategoriene bevares som originalens faglige struktur. Den tilgjengelige PDF-en og det delvise OneNote-uttrekket inneholder disposisjonen, men den detaljerte fysiologiblokken den viser til er ikke gjenfunnet. Derfor fastsettes det ikke nye treningsdoser, fysiske krav for hver rolle eller terskler for spillerverdier.",
+        "source": "Fotballdokumentet v1.pdf – 6. Fysiologi / 4. Fysiske ferdigheter / Sportsvitenskap og fysiologi"
+      },
+      {
+        "id": "motor_learning",
+        "title": "Motorisk læring – variasjon og overføring",
+        "text": "Manusets sportsvitenskapelige perspektiv knytter motorisk læring til variasjon og overførbarhet. En pasning trenes under forskjellige betingelser, med ulik fart, ulikt press og ulikt rom. Målet er at ferdigheten kan brukes fleksibelt når kampsituasjonen forandrer seg. Manuset viser til Schmidt og Lee og fremhever smålagsspill som en mulig måte å knytte teknisk utførelse til valg. Dette supplerer øvelseskapitlets beskrivelser av restriksjoner, uten å påstå at enhver isolert teknikkøvelse har mindre verdi eller å innføre en målt læringsrate.",
+        "source": "Fotballdokumentet v1.pdf – 3.0 Ballkontroll og restriksjoner / 3.4 Sportsvitenskapelige perspektiver"
+      },
+      {
+        "id": "neuromuscular_control",
+        "title": "Nevromuskulær kontroll – muskler, sanser og kognisjon",
+        "text": "Manuset beskriver teknikk som mer enn bevegelse: den bygger på samordning av muskler, sanser og kognisjon. Presisjon knyttes til repetisjon i realistisk tempo og under press. Spilleren må både oppfatte situasjonen, tolke den og utføre handlingen. I mottak betyr dette at en teknisk god førsteberøring må knyttes til orientering og den neste mulige handlingen. Manuset gir ikke et separat nevromuskulært treningsprogram, konkrete doser eller fysiologiske målemetoder. De oppgitte forskningshenvisningene er ikke kontrollert uavhengig her.",
+        "source": "Fotballdokumentet v1.pdf – 3.4 Sportsvitenskapelige perspektiver / Nevromuskulær forskning"
+      },
+      {
+        "id": "balance_proprioception",
+        "title": "Balanse, holdning og propriosepsjon",
+        "text": "I fysiologidisposisjonen er balanse knyttet til mage, holdning, proprioception, skadeforebygging og et planlagt George Best-eksempel. Propriosepsjon er også navngitt i sportsvitenskapens disposisjon. I de bevarte teknikkdelene beskrives balanse blant annet ved dribling, pasning og skudd, og lavt tyngdepunkt ved vending under press. Dette viser hvor balanse inngår i manusets praktiske fotballstoff. Den utførlige teorien om propriosepsjon og det nevnte spillereksemplet er ikke gjenfunnet i den tilgjengelige teksten. De er derfor registrert som uavklarte, ikke rekonstruert med antakelser.",
+        "source": "Fotballdokumentet v1.pdf – 6. Fysiologi – Balanse / Sportsvitenskap og fysiologi / 3.1 Individuelle angrepsferdigheter"
       }
     ]
   },
@@ -673,6 +697,18 @@ export const TRAINING_CHAPTERS = [
         "title": "Periodisering og treningsfilosofier – helhet fremfor isolasjon",
         "text": "Manuset fremhever at teknikktrening skal integreres i helhetlige, spillnære sammenhenger med realistisk tempo og motstand. Raymond Verheijen nevnes i forbindelse med periodisering. Disposisjonen navngir dessuten Vítor Frade (Tactical Periodization), Paco Seirul·lo, Nils Arne Eggen (Godfoten), Dreier og Descamps, men gir ikke her en fullstendig redegjørelse for hver metodikk. Disse navnene beholdes som planlagte faglige fordypninger. Det legges ikke til en egen ukemodell, belastningsdosering eller påstått trenerfilosofi som manusavsnittet ikke beskriver.",
         "source": "Fotballdokumentet v1.pdf – 3.3 Pedagogiske modeller – Periodisering & treningsfilosofier / 3.4 Pedagogiske modeller"
+      },
+      {
+        "id": "speed_training_outline",
+        "title": "Hurtighet – disposisjon for oppvarming, drag og pauser",
+        "text": "Originalmanusets fysiologidisposisjon nevner oppvarming, drag, pauser, serier, restitusjon og løpsteknikk med henvisning til Tønnesen og Olympiatoppen. Notasjonen «restitusjon <70 %» står uten forklaring av hva prosenten måler. Den er dokumentert som et uavklart kildepunkt, ikke som en treningsinstruks. Den detaljerte blokken med eventuelle distanser, intensiteter og pauselengder er ikke funnet. Manusets andre kapitler knytter løpskapasitet til valg av pressbølger og kampintensitet, men beskriver ikke et komplett fysisk treningsprogram.",
+        "source": "Fotballdokumentet v1.pdf – 6. Fysiologi – Hurtighet / 2. Defensivt – Pressbølger"
+      },
+      {
+        "id": "speed_play_outline",
+        "title": "Hurtighet gjennom lek – fire navngitte øvelsesidéer",
+        "text": "Under hurtighet navngir originaldisposisjonen fire lekformer: snipp og snapp, soldat og røver, nummerkappløp og hest og kjerre. De bevares som manusets øvelsesidéer. Reglene, organiseringen, antall spillere, distansene, pausene og tilpasningen til aldersgruppe er ikke beskrevet i den tilgjengelige fysiologiblokken. Dette er derfor et register over kildens navngitte aktiviteter, ikke fire ferdige øvelser eller nye oppføringer i treningsmotoren.",
+        "source": "Fotballdokumentet v1.pdf – 6. Fysiologi – Hurtighet / Lek"
       }
     ]
   }
